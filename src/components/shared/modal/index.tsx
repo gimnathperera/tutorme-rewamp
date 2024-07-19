@@ -1,5 +1,6 @@
 "use client";
 import { Dialog, Transition } from "@headlessui/react";
+import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, ReactNode } from "react";
 
@@ -9,6 +10,7 @@ type Props = {
   children: ReactNode;
   title: string;
   description?: string;
+  imagePath?: string;
 };
 const Modal: FC<Props> = ({
   isOpen,
@@ -16,6 +18,7 @@ const Modal: FC<Props> = ({
   children,
   title,
   description,
+  imagePath,
 }) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -56,9 +59,19 @@ const Modal: FC<Props> = ({
                     </Link>
                   </div>
                   {description && (
-                    <p className="mb-8 lg:mb-16 mt-8 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
+                    <p className="mb-4 lg:mb-8 mt-8 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
                       {description}
                     </p>
+                  )}
+                  {imagePath && (
+                    <div className="flex justify-center mb-4">
+                      <Image
+                        src={imagePath}
+                        alt="hero-image"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
                   )}
 
                   {children}

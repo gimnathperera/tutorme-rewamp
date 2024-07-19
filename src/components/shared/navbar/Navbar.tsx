@@ -40,6 +40,7 @@ const Navbar = () => {
 
   const handleOnChangeSignUpModalVisibility = () => {
     setIsSignUpModalOpen((show) => !show);
+    setCurrentForm(FormType.Login);
   };
 
   const handleOnChangeForm = () => {
@@ -120,6 +121,11 @@ const Navbar = () => {
           currentForm === FormType.Login
             ? "Login to access to your account"
             : "Sign up to create an account"
+        }
+        imagePath={
+          currentForm === FormType.Login
+            ? "/images/auth/login.svg"
+            : "/images/auth/signup.svg"
         }
       >
         {currentForm === FormType.Login ? (
