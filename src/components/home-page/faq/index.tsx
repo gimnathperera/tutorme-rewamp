@@ -26,7 +26,7 @@ const FaqPill = () => (
   </div>
 );
 
-const FAQ = () => {
+const Faqs = () => {
   return (
     <div
       id="faq-section"
@@ -50,4 +50,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ;
+export default Faqs;

@@ -1,6 +1,6 @@
+import NavBar from "@/src/components/shared/navbar";
+import Footer from "@/src/components/shared/footer";
 import "./globals.css";
-import Navbar from "../components/Navbar/index";
-import Footer from "../components/Footer/index";
 
 export const metadata = {
   title: "Tutor Me",
@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <main>
-          <Navbar />
+          <NavBar />
           {children}
           <Footer />
         </main>

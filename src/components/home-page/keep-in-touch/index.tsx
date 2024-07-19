@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "../modal";
+import Modal from "../../shared/modal";
 
-const ContactUs = () => {
+const KeepInTouch = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
   const handleModalVisibility = () => {
@@ -44,4 +44,4 @@ const ContactUs = () => {
   );
 };
 
-export default ContactUs;
+export default KeepInTouch;

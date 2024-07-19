@@ -1,25 +1,25 @@
-import Aboutus from "@/src/components/Aboutus";
-import Banner from "@/src/components/Banner";
-import Beliefs from "@/src/components/Beliefs";
-import Digital from "@/src/components/Digital";
-import FAQ from "@/src/components/FAQ";
-import Joinus from "@/src/components/Joinus";
-import Ourteam from "@/src/components/Ourteam";
-import Testimonials from "@/src/components/Testimonials";
-import Wework from "@/src/components/Wework";
+import Banner from "@/src/components/home-page/banner";
+import Beliefs from "@/src/components/home-page/beliefs";
+import KeepInTouch from "@/src/components/home-page/keep-in-touch";
+import Testimonials from "@/src/components/home-page/testimonials";
+import AboutUs from "@/src/components/home-page/about-us";
+import OurTeam from "@/src/components/home-page/our-team";
+import WeWork from "@/src/components/home-page/we-work";
+import Faqs from "@/src/components/home-page/faq";
+import Digital from "@/src/components/home-page/digital";
 
 export default function Home() {
   return (
     <>
       <Banner />
-      <Aboutus />
+      <AboutUs />
       <Digital />
       <Beliefs />
-      <Wework />
-      <Ourteam />
-      <FAQ />
+      <WeWork />
+      <OurTeam />
+      <Faqs />
       <Testimonials />
-      <Joinus />
+      <KeepInTouch />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import Aboutus from "@/src/components/Aboutus";
-import Banner from "@/src/components/Banner";
+import Aboutus from "@/src/components/home-page/about-us";
+import Banner from "@/src/components/home-page/banner";
 import { FC } from "react";
 
 const Blogs: FC = () => {
