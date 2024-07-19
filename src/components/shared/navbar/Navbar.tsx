@@ -1,16 +1,23 @@
 "use client";
 import { Disclosure } from "@headlessui/react";
-import Link from "next/link";
-import React from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
+import Link from "next/link";
+import { useState } from "react";
+import FormLogin from "../../auth/form-login";
+import Modal from "../modal";
 import Drawer from "./Drawer";
 import Drawerdata from "./Drawerdata";
-import Contactusform from "./Contactus";
+import FormSignUp from "../../auth/form-sign-up";
 
 interface NavigationItem {
   name: string;
   href: string;
   current: boolean;
+}
+
+enum FormType {
+  Login = "Login",
+  SignUp = "SignUp",
 }
 
 const navigation: NavigationItem[] = [
@@ -27,7 +34,21 @@ function classNames(...classes: string[]) {
 }
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
+  const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
+
+  const handleOnChangeSignUpModalVisibility = () => {
+    setIsSignUpModalOpen((show) => !show);
+  };
+
+  const handleOnChangeForm = () => {
+    if (currentForm === FormType.Login) {
+      setCurrentForm(FormType.SignUp);
+    } else {
+      setCurrentForm(FormType.Login);
+    }
+  };
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -63,7 +84,17 @@ const Navbar = () => {
                   ))}
                 </div>
               </div>
-              <Contactusform />
+              <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
+                <div className="hidden lg:block">
+                  <button
+                    type="button"
+                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+                    onClick={handleOnChangeSignUpModalVisibility}
+                  >
+                    Login
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div className="block lg:hidden">
@@ -80,6 +111,23 @@ const Navbar = () => {
           </div>
         </div>
       </>
+
+      <Modal
+        isOpen={isSignUpModalOpen}
+        title={currentForm === FormType.Login ? "Login" : "Sign Up"}
+        closeModal={handleOnChangeSignUpModalVisibility}
+        description={
+          currentForm === FormType.Login
+            ? "Login to access to your account"
+            : "Sign up to create an account"
+        }
+      >
+        {currentForm === FormType.Login ? (
+          <FormLogin onRegisterClick={handleOnChangeForm} />
+        ) : (
+          <FormSignUp onLoginClick={handleOnChangeForm} />
+        )}
+      </Modal>
     </Disclosure>
   );
 };

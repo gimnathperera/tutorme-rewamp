@@ -45,7 +45,9 @@ const Modal: FC<Props> = ({
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
-                  <div className="flex flex-shrink-0 items-center justify-center">
+                  <div
+                    className={`flex flex-shrink-0 items-center justify-center`}
+                  >
                     <Link
                       href="/"
                       className="text-2xl sm:text-4xl font-semibold text-black"
@@ -55,7 +57,7 @@ const Modal: FC<Props> = ({
                   </div>
                   {description && (
                     <p className="mb-8 lg:mb-16 mt-8 font-light text-center text-gray-500 dark:text-gray-400 sm:text-xl">
-                      Contact us now? Want to send us a feedback?
+                      {description}
                     </p>
                   )}
 
