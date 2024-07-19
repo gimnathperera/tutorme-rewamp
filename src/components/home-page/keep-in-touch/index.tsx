@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Modal from "../../shared/modal";
+import FormContactUs from "../form-contact-us";
 
 const KeepInTouch = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -37,8 +38,13 @@ const KeepInTouch = () => {
           </button>
         </div>
       </div>
-      <Modal isOpen={isOpenModal} closeModal={handleModalVisibility}>
-        <div>Modal content</div>
+      <Modal
+        isOpen={isOpenModal}
+        closeModal={handleModalVisibility}
+        title="Contact Us"
+        description="Contact us now? Want to send us a feedback?"
+      >
+        <FormContactUs />
       </Modal>
     </div>
   );
