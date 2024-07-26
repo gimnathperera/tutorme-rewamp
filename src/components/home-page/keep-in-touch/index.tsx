@@ -43,6 +43,7 @@ const KeepInTouch = () => {
         closeModal={handleModalVisibility}
         title="Contact Us"
         description="Contact us now? Want to send us a feedback?"
+        imagePath="/images/contactus/contactus.svg"
       >
         <FormContactUs />
       </Modal>

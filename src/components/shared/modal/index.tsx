@@ -12,6 +12,7 @@ type Props = {
   description?: string;
   imagePath?: string;
 };
+
 const Modal: FC<Props> = ({
   isOpen,
   closeModal,
@@ -36,7 +37,7 @@ const Modal: FC<Props> = ({
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
+          <div className="flex min-h-full items-center justify-center p-4 text-center relative">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -46,7 +47,13 @@ const Modal: FC<Props> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all relative">
+                <button
+                  onClick={closeModal}
+                  className="absolute top-0 right-0 m-4 p-2 bg-transparent text-gray-400 hover:text-gray-600 focus:outline-none"
+                >
+                  X
+                </button>
                 <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
                   <div
                     className={`flex flex-shrink-0 items-center justify-center`}
@@ -73,7 +80,6 @@ const Modal: FC<Props> = ({
                       />
                     </div>
                   )}
-
                   {children}
                 </div>
               </Dialog.Panel>
