@@ -1,6 +1,7 @@
 "use client";
 import React, { FC } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type Blog = {
   id: string;
