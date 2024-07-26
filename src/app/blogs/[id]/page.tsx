@@ -26,11 +26,7 @@ const BlogDetailedPage = () => {
                       Graphic Designer, educator & CEO Flowbite
                     </p>
                     <p className="text-base text-gray-500 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-02-08"
-                        title="February 8th, 2022"
-                      >
+                      <time dateTime="2022-02-08" title="February 8th, 2022">
                         Feb. 8, 2022
                       </time>
                     </p>
@@ -90,8 +86,8 @@ const BlogDetailedPage = () => {
               purge and minify the generated CSS.
             </p>
             <p>
-              You'll also receive a lot of useful application UI, marketing UI,
-              and e-commerce pages that can help you get started with your
+              You will also receive a lot of useful application UI, marketing
+              UI, and e-commerce pages that can help you get started with your
               projects even faster. You can check out this{" "}
               <a href="https://flowbite.com/docs/components/tables/">
                 comparison table
@@ -136,7 +132,7 @@ const BlogDetailedPage = () => {
               before committing to an actual design project.
             </p>
             <p>
-              Let's start by including the CSS file inside the <code>head</code>{" "}
+              Lets start by including the CSS file inside the <code>head</code>{" "}
               tag of your HTML.
             </p>
             <h3>Understanding typography</h3>
@@ -201,25 +197,7 @@ const BlogDetailedPage = () => {
               the following:
             </p>
             <pre>
-              <code className="language-html">
-                &lt;dl className="grid grid-cols-2 gap-8 max-w-screen-md
-                text-gray-900 sm:grid-cols-3 "&gt; &lt;div className="flex
-                flex-col justify-center items-center"&gt; &lt;dt className="mb-2
-                text-3xl font-extrabold"&gt;73M+&lt;/dt&gt; &lt;dd
-                className="text-lg font-normal text-gray-500
-                dark:text-gray-400"&gt;developers&lt;/dd&gt; &lt;/div&gt;
-                &lt;div className="flex flex-col justify-center
-                items-center"&gt; &lt;dt className="mb-2 text-3xl
-                font-extrabold"&gt;1B+&lt;/dt&gt; &lt;dd className="text-lg
-                font-normal text-gray-500
-                dark:text-gray-400"&gt;contributors&lt;/dd&gt; &lt;/div&gt;
-                &lt;div className="flex flex-col justify-center
-                items-center"&gt; &lt;dt className="mb-2 text-3xl
-                font-extrabold"&gt;4M+&lt;/dt&gt; &lt;dd className="text-lg
-                font-normal text-gray-500
-                dark:text-gray-400"&gt;organizations&lt;/dd&gt; &lt;/div&gt;
-                &lt;/dl&gt;
-              </code>
+              <code className="language-html">some code here</code>
             </pre>
             <h4>Table example</h4>
             <p>
@@ -348,11 +326,7 @@ const BlogDetailedPage = () => {
                       Michael Gough
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-02-08"
-                        title="February 8th, 2022"
-                      >
+                      <time dateTime="2022-02-08" title="February 8th, 2022">
                         Feb. 8, 2022
                       </time>
                     </p>
@@ -445,11 +419,7 @@ const BlogDetailedPage = () => {
                       Jese Leos
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-02-12"
-                        title="February 12th, 2022"
-                      >
+                      <time dateTime="2022-02-12" title="February 12th, 2022">
                         Feb. 12, 2022
                       </time>
                     </p>
@@ -537,11 +507,7 @@ const BlogDetailedPage = () => {
                       Bonnie Green
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-03-12"
-                        title="March 12th, 2022"
-                      >
+                      <time dateTime="2022-03-12" title="March 12th, 2022">
                         Mar. 12, 2022
                       </time>
                     </p>
@@ -633,11 +599,7 @@ const BlogDetailedPage = () => {
                       Helene Engels
                     </p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <time
-                        pubdate
-                        datetime="2022-06-23"
-                        title="June 23rd, 2022"
-                      >
+                      <time dateTime="2022-06-23" title="June 23rd, 2022">
                         Jun. 23, 2022
                       </time>
                     </p>
