@@ -3,9 +3,9 @@ import React from "react";
 const BlogDetailedPage = () => {
   return (
     <>
-      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white dark:bg-gray-900 antialiased">
+      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 bg-white  antialiased">
         <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
-          <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue dark:format-invert">
+          <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
             <header className="mb-4 lg:mb-6 not-format">
               <address className="flex items-center mb-6 not-italic">
                 <div className="inline-flex items-center mr-3 text-sm text-gray-900 ">
@@ -15,17 +15,13 @@ const BlogDetailedPage = () => {
                     alt="Jese Leos"
                   />
                   <div>
-                    <a
-                      href="#"
-                      rel="author"
-                      className="text-xl font-bold text-gray-900 "
-                    >
+                    <a href="#" rel="author" className="text-xl font-bold  ">
                       Jese Leos
                     </a>
-                    <p className="text-base text-gray-500 dark:text-gray-400">
+                    <p className="text-base text-gray-500">
                       Graphic Designer, educator & CEO Flowbite
                     </p>
-                    <p className="text-base text-gray-500 dark:text-gray-400">
+                    <p className="text-base text-gray-500">
                       <time dateTime="2022-02-08" title="February 8th, 2022">
                         Feb. 8, 2022
                       </time>
@@ -295,26 +291,26 @@ const BlogDetailedPage = () => {
                 </h2>
               </div>
               <form className="mb-6">
-                <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
+                <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg border border-gray-200 ">
                   <label htmlFor="comment" className="sr-only">
                     Your comment
                   </label>
                   <textarea
                     id="comment"
                     rows={6}
-                    className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0  dark:placeholder-gray-400 dark:bg-gray-800"
+                    className="px-0 w-full text-sm text-gray-900 border-0 focus:ring-0"
                     placeholder="Write a comment..."
                     required
                   ></textarea>
                 </div>
                 <button
                   type="submit"
-                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 dark:focus:ring-primary-900 hover:bg-primary-800"
+                  className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
                 >
                   Post comment
                 </button>
               </form>
-              <article className="p-6 mb-6 text-base bg-white rounded-lg dark:bg-gray-900">
+              <article className="p-6 mb-6 text-base bg-white rounded-lg ">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 ">
@@ -325,7 +321,7 @@ const BlogDetailedPage = () => {
                       />
                       Michael Gough
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       <time dateTime="2022-02-08" title="February 8th, 2022">
                         Feb. 8, 2022
                       </time>
@@ -334,7 +330,7 @@ const BlogDetailedPage = () => {
                   <button
                     id="dropdownComment1Button"
                     data-dropdown-toggle="dropdownComment1"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
                     type="button"
                   >
                     <svg
@@ -350,16 +346,16 @@ const BlogDetailedPage = () => {
                   </button>
                   <div
                     id="dropdownComment1"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow "
                   >
                     <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                      className="py-1 text-sm text-gray-700"
                       aria-labelledby="dropdownMenuIconHorizontalButton"
                     >
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Edit
                         </a>
@@ -367,7 +363,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Remove
                         </a>
@@ -375,7 +371,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Report
                         </a>
@@ -392,7 +388,7 @@ const BlogDetailedPage = () => {
                 <div className="flex items-center mt-4 space-x-4">
                   <button
                     type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    className="flex items-center font-medium text-sm text-gray-500 hover:underline"
                   >
                     <svg
                       className="mr-1.5 w-3 h-3"
@@ -407,7 +403,7 @@ const BlogDetailedPage = () => {
                   </button>
                 </div>
               </article>
-              <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg dark:bg-gray-900">
+              <article className="p-6 mb-6 ml-6 lg:ml-12 text-base bg-white rounded-lg ">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 ">
@@ -418,7 +414,7 @@ const BlogDetailedPage = () => {
                       />
                       Jese Leos
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       <time dateTime="2022-02-12" title="February 12th, 2022">
                         Feb. 12, 2022
                       </time>
@@ -427,7 +423,7 @@ const BlogDetailedPage = () => {
                   <button
                     id="dropdownComment2Button"
                     data-dropdown-toggle="dropdownComment2"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
                     type="button"
                   >
                     <svg
@@ -443,16 +439,16 @@ const BlogDetailedPage = () => {
                   </button>
                   <div
                     id="dropdownComment2"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow "
                   >
                     <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                      className="py-1 text-sm text-gray-700"
                       aria-labelledby="dropdownMenuIconHorizontalButton"
                     >
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Edit
                         </a>
@@ -460,7 +456,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Remove
                         </a>
@@ -468,7 +464,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Report
                         </a>
@@ -480,7 +476,7 @@ const BlogDetailedPage = () => {
                 <div className="flex items-center mt-4 space-x-4">
                   <button
                     type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    className="flex items-center font-medium text-sm text-gray-500 hover:underline"
                   >
                     <svg
                       className="mr-1.5 w-3 h-3"
@@ -495,7 +491,7 @@ const BlogDetailedPage = () => {
                   </button>
                 </div>
               </article>
-              <article className="p-6 mb-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+              <article className="p-6 mb-6 text-base bg-white border-t border-gray-200">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 ">
@@ -506,7 +502,7 @@ const BlogDetailedPage = () => {
                       />
                       Bonnie Green
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       <time dateTime="2022-03-12" title="March 12th, 2022">
                         Mar. 12, 2022
                       </time>
@@ -515,7 +511,7 @@ const BlogDetailedPage = () => {
                   <button
                     id="dropdownComment3Button"
                     data-dropdown-toggle="dropdownComment3"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
                     type="button"
                   >
                     <svg
@@ -531,16 +527,16 @@ const BlogDetailedPage = () => {
                   </button>
                   <div
                     id="dropdownComment3"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow "
                   >
                     <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                      className="py-1 text-sm text-gray-700"
                       aria-labelledby="dropdownMenuIconHorizontalButton"
                     >
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Edit
                         </a>
@@ -548,7 +544,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Remove
                         </a>
@@ -556,7 +552,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Report
                         </a>
@@ -572,7 +568,7 @@ const BlogDetailedPage = () => {
                 <div className="flex items-center mt-4 space-x-4">
                   <button
                     type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    className="flex items-center font-medium text-sm text-gray-500 hover:underline"
                   >
                     <svg
                       className="mr-1.5 w-3 h-3"
@@ -587,7 +583,7 @@ const BlogDetailedPage = () => {
                   </button>
                 </div>
               </article>
-              <article className="p-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+              <article className="p-6 text-base bg-white border-t border-gray-200">
                 <footer className="flex justify-between items-center mb-2">
                   <div className="flex items-center">
                     <p className="inline-flex items-center mr-3 font-semibold text-sm text-gray-900 ">
@@ -598,7 +594,7 @@ const BlogDetailedPage = () => {
                       />
                       Helene Engels
                     </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-sm text-gray-600">
                       <time dateTime="2022-06-23" title="June 23rd, 2022">
                         Jun. 23, 2022
                       </time>
@@ -607,7 +603,7 @@ const BlogDetailedPage = () => {
                   <button
                     id="dropdownComment4Button"
                     data-dropdown-toggle="dropdownComment4"
-                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:text-gray-400 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50"
                     type="button"
                   >
                     <svg
@@ -622,16 +618,16 @@ const BlogDetailedPage = () => {
                   </button>
                   <div
                     id="dropdownComment4"
-                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                    className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow "
                   >
                     <ul
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200"
+                      className="py-1 text-sm text-gray-700"
                       aria-labelledby="dropdownMenuIconHorizontalButton"
                     >
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Edit
                         </a>
@@ -639,7 +635,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Remove
                         </a>
@@ -647,7 +643,7 @@ const BlogDetailedPage = () => {
                       <li>
                         <a
                           href="#"
-                          className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                          className="block py-2 px-4 hover:bg-gray-100  "
                         >
                           Report
                         </a>
@@ -663,7 +659,7 @@ const BlogDetailedPage = () => {
                 <div className="flex items-center mt-4 space-x-4">
                   <button
                     type="button"
-                    className="flex items-center font-medium text-sm text-gray-500 hover:underline dark:text-gray-400"
+                    className="flex items-center font-medium text-sm text-gray-500 hover:underline"
                   >
                     <svg
                       className="mr-1.5 w-3 h-3"
@@ -683,10 +679,7 @@ const BlogDetailedPage = () => {
         </div>
       </main>
 
-      <aside
-        aria-label="Related articles"
-        className="py-8 lg:py-24 bg-gray-50 dark:bg-gray-800"
-      >
+      <aside aria-label="Related articles" className="py-8 lg:py-24 bg-gray-50">
         <div className="px-4 mx-auto max-w-screen-xl">
           <h2 className="mb-8 text-2xl font-bold text-gray-900 ">
             Related articles
@@ -703,13 +696,13 @@ const BlogDetailedPage = () => {
               <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 ">
                 <a href="#">Our first office</a>
               </h2>
-              <p className="mb-4 text-gray-500 dark:text-gray-400">
+              <p className="mb-4 text-gray-500">
                 Over the past year, Volosoft has undergone many changes! After
                 months of preparation.
               </p>
               <a
                 href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 hover:no-underline"
               >
                 Read in 2 minutes
               </a>
@@ -725,13 +718,13 @@ const BlogDetailedPage = () => {
               <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 ">
                 <a href="#">Enterprise design tips</a>
               </h2>
-              <p className="mb-4  text-gray-500 dark:text-gray-400">
+              <p className="mb-4  text-gray-500">
                 Over the past year, Volosoft has undergone many changes! After
                 months of preparation.
               </p>
               <a
                 href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 hover:no-underline"
               >
                 Read in 12 minutes
               </a>
@@ -747,13 +740,13 @@ const BlogDetailedPage = () => {
               <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 ">
                 <a href="#">We partnered with Google</a>
               </h2>
-              <p className="mb-4  text-gray-500 dark:text-gray-400">
+              <p className="mb-4  text-gray-500">
                 Over the past year, Volosoft has undergone many changes! After
                 months of preparation.
               </p>
               <a
                 href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 hover:no-underline"
               >
                 Read in 8 minutes
               </a>
@@ -769,13 +762,13 @@ const BlogDetailedPage = () => {
               <h2 className="mb-2 text-xl font-bold leading-tight text-gray-900 ">
                 <a href="#">Our first project with React</a>
               </h2>
-              <p className="mb-4  text-gray-500 dark:text-gray-400">
+              <p className="mb-4  text-gray-500">
                 Over the past year, Volosoft has undergone many changes! After
                 months of preparation.
               </p>
               <a
                 href="#"
-                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 dark:text-primary-500 hover:no-underline"
+                className="inline-flex items-center font-medium underline underline-offset-4 text-primary-600 hover:no-underline"
               >
                 Read in 4 minutes
               </a>
