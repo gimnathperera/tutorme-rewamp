@@ -23,7 +23,7 @@ export const grades: Grade[] = [
   { id: 8, attributes: { title: "Advanced Level" } },
 ];
 
-const Grades: FC = () => {
+const GradesPage: FC = () => {
   const router = useRouter();
 
   const onHandleGradeClick = (id: number) => {
@@ -69,4 +69,4 @@ const Grades: FC = () => {
   );
 };
 
-export default Grades;
+export default GradesPage;
