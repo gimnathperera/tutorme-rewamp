@@ -1,5 +1,5 @@
-import NavBar from "@/src/components/shared/navbar";
 import Footer from "@/src/components/shared/footer";
+import NavBar from "@/src/components/shared/navbar";
 import "./globals.css";
 
 export const metadata = {
@@ -17,7 +17,7 @@ export default function RootLayout({
       <body>
         <main>
           <NavBar />
-          {children}
+          <div className="container mx-auto">{children}</div>
           <Footer />
         </main>
       </body>

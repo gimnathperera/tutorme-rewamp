@@ -4,7 +4,7 @@ type Props = {};
 
 const FormContactUs = ({}: Props) => {
   return (
-    <form action="#" className="space-y-8">
+    <form action="#" className="space-y-4">
       <div>
         <label
           htmlFor="text"

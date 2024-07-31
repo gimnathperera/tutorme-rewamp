@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import Navbar from "./navbar";
+import Header from "./header";
 
 const NavBar: React.FC = () => {
   useEffect(() => {
@@ -36,7 +36,7 @@ const NavBar: React.FC = () => {
     // Update scroll position for first time
     storeScroll();
   }, []);
-  return <Navbar />;
+  return <Header />;
 };
 
 export default NavBar;
