@@ -3,7 +3,6 @@
 import { useMotionValue, motion, useSpring, useTransform } from "framer-motion";
 import React, { FC, useRef } from "react";
 import { FiArrowRight } from "react-icons/fi";
-import { grades } from "../page"; // Ensure grades is correctly imported
 
 type Subject = {
   subjectId: number;
@@ -14,6 +13,17 @@ type Subject = {
     link: string;
   };
 };
+
+const grades: any[] = [
+  { id: 1, attributes: { title: "Grade 1" } },
+  { id: 2, attributes: { title: "Grade 2" } },
+  { id: 3, attributes: { title: "Grade 3" } },
+  { id: 4, attributes: { title: "Grade 4" } },
+  { id: 5, attributes: { title: "Grade 5" } },
+  { id: 6, attributes: { title: "Grade 6" } }, // Fixed title here
+  { id: 7, attributes: { title: "Ordinary Level" } },
+  { id: 8, attributes: { title: "Advanced Level" } },
+];
 
 const subjectDetails: Subject[] = [
   {

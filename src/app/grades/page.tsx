@@ -12,13 +12,13 @@ type Grade = {
   };
 };
 
-export const grades: Grade[] = [
+const grades: Grade[] = [
   { id: 1, attributes: { title: "Grade 1" } },
   { id: 2, attributes: { title: "Grade 2" } },
   { id: 3, attributes: { title: "Grade 3" } },
   { id: 4, attributes: { title: "Grade 4" } },
   { id: 5, attributes: { title: "Grade 5" } },
-  { id: 6, attributes: { title: "Grade " } },
+  { id: 6, attributes: { title: "Grade 6" } }, // Fixed title here
   { id: 7, attributes: { title: "Ordinary Level" } },
   { id: 8, attributes: { title: "Advanced Level" } },
 ];
@@ -50,7 +50,7 @@ const GradesPage: FC = () => {
               <>
                 <Image
                   src="/images/grades/image.png"
-                  alt="girldoodle"
+                  alt="Grade image"
                   width={200}
                   height={200}
                 />
