@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// MIDDLE LINKS DATA
 interface ProductType {
   id: number;
   section: string;
@@ -34,7 +33,7 @@ const products: ProductType[] = [
 const footer = () => {
   return (
     <div className="bg-black" id="first-section">
-      <div className="mx-auto max-w-2xl pt-48 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-2xl pt-4 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-24 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
 
@@ -101,17 +100,15 @@ const footer = () => {
         </div>
       </div>
 
-      {/* All Rights Reserved */}
-
       <div className="mx-auto max-w-2xl lg:max-w-7xl">
         <div className="pt-5 pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
           <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <h3 className="text-center md:text-start text-offwhite text-lg">
-                @2023 - All Rights Reserved by{" "}
-                <Link href="https://adminmart.com/" target="_blank">
+                @2024 - All Rights Reserved by{" "}
+                <Link href="https://tutor-me.com/" target="_blank">
                   {" "}
-                  Adminmart.com
+                  tutor-me.com
                 </Link>
               </h3>
             </div>

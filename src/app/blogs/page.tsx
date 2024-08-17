@@ -32,7 +32,7 @@ const BlogCard: FC<Blog> = ({
         </div>
         <div>
           {date && (
-            <span className="mb-5 inline-block rounded bg-blue px-4 py-1 text-center text-xs font-semibold leading-loose text-white">
+            <span className="mb-5 inline-block rounded bg-primary-700 px-4 py-1 text-center text-xs font-semibold leading-loose text-white">
               {date}
             </span>
           )}

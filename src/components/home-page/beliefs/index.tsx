@@ -17,7 +17,7 @@ const Beliefs = () => {
             maecenas accumsan lacus vel facilisis.
           </h5>
           <div className="text-center sm:text-start">
-            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-blue border border-blue hover:bg-hoblue">
+            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-hoblue">
               Get Started
             </button>
           </div>
@@ -38,7 +38,7 @@ const Beliefs = () => {
             maecenas accumsan lacus vel facilisis.
           </h5>
           <div className="text-center sm:text-start">
-            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-blue border border-blue hover:bg-hoblue">
+            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-hoblue">
               Learn more
             </button>
           </div>
