@@ -58,11 +58,7 @@ const TestPapers = () => {
             </select>
           </div>
 
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-300 ease-in-out">
-            Download Papers
-          </button>
-
-          <div className="mt-8">
+          <div className="mt-20">
             <h3 className="text-lg font-semibold mb-4 text-gray-700">
               Available Test Papers
             </h3>
