@@ -31,7 +31,7 @@ const KeepInTouch = () => {
         <div className="mx-auto max-w-4xl pt-5 flex justify-center">
           <button
             type="button"
-            className="justify-end text-xl font-semibold text-white  py-4 px-6 lg:px-12  rounded-full  bg-blue hover:bg-btnblue"
+            className="justify-end text-xl font-semibold text-white  py-4 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue"
             onClick={handleModalVisibility}
           >
             Contact Us
