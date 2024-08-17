@@ -15,7 +15,7 @@ const TutionRates = () => {
         </div>
         <div className="space-y-8 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0">
           {/* <!-- Pricing Card --> */}
-          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow xl:p-8 dark:bg-gray-800 dark:text-black">
+          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow-2xl xl:p-8 dark:bg-gray-800 dark:text-black">
             <h3 className="mb-4 text-2xl font-semibold">Starter</h3>
             <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
               Best option for personal use & for your next project.
@@ -122,7 +122,7 @@ const TutionRates = () => {
             </a>
           </div>
           {/* <!-- Pricing Card --> */}
-          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-black">
+          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow-2xl dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-black">
             <h3 className="mb-4 text-2xl font-semibold">Company</h3>
             <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
               Relevant for multiple users, extended & premium support.
@@ -230,7 +230,7 @@ const TutionRates = () => {
             </a>
           </div>
           {/* <!-- Pricing Card --> */}
-          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-black">
+          <div className="flex flex-col p-6 mx-auto max-w-lg text-center text-gray-900 bg-white rounded-lg shadow-2xl dark:border-gray-600 xl:p-8 dark:bg-gray-800 dark:text-black">
             <h3 className="mb-4 text-2xl font-semibold">Enterprise</h3>
             <p className="font-light text-gray-500 sm:text-lg dark:text-gray-400">
               Best for large scale uses and extended redistribution rights.
