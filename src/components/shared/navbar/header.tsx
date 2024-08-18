@@ -25,7 +25,7 @@ export enum FormType {
 const navigation: NavigationItem[] = [
   { name: "Find a Tutor", href: "/find-a-tutor", current: false },
   { name: "Grades", href: "/grades", current: false },
-  { name: "Test Papers", href: "#faq-section", current: false },
+  { name: "Test Papers", href: "/test-papers", current: false },
   { name: "FAQ", href: "#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
 ];
