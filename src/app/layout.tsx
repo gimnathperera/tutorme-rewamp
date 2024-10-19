@@ -1,6 +1,6 @@
-import Footer from "@/src/components/shared/footer";
-import NavBar from "@/src/components/shared/navbar";
+import NavBar from "@/components/shared/navbar";
 import "./globals.css";
+import Footer from "@/components/shared/footer";
 
 export const metadata = {
   title: "Tutor Me",
