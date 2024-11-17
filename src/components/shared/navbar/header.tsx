@@ -3,7 +3,7 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Modal from "../modal";
-import Drawer from "./drawer";
+import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
 import { useAuthModalState } from "./hooks";
 

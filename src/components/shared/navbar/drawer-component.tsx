@@ -31,7 +31,6 @@ const Drawer = ({
         }
       >
         <article className="relative w-340px max-w-lg h-full flex flex-col">
-          {/* Header */}
           <header className="px-4 py-4 flex items-center">
             <div className="flex flex-shrink-0 items-center border-right">
               <Link href="/" className="text-2xl font-semibold text-black">
