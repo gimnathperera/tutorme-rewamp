@@ -1,8 +1,10 @@
 "use client";
+
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, ReactNode } from "react";
+import Icon from "../icon";
 
 type Props = {
   isOpen: boolean;
@@ -52,7 +54,7 @@ const Modal: FC<Props> = ({
                   onClick={closeModal}
                   className="absolute top-0 right-0 m-4 p-2 bg-transparent text-gray-400 hover:text-gray-600 focus:outline-none"
                 >
-                  X
+                  <Icon name="CircleX" />
                 </button>
                 <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
                   <div

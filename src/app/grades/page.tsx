@@ -3,6 +3,7 @@
 import { FC } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import Icon from "@/components/shared/icon";
 
 type Grade = {
   id: number;
@@ -76,24 +77,8 @@ const GradesPage: FC = () => {
         {grades.map(({ id, title, description }) => (
           <Card key={id} className="flex flex-col m-2 bg-white">
             <CardContent className="flex-grow p-6">
-              <div className="w-16 h-16 mb-4 mx-auto">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="w-full h-full text-primary"
-                >
-                  <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z" />
-                  <path d="M6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
-                  <path d="M6 12h4" />
-                  <path d="M6 16h4" />
-                  <path d="M14 12h2" />
-                  <path d="M14 16h2" />
-                </svg>
+              <div className="h-16 flex items-center justify-center">
+                <Icon name="ScrollText" size={32} />
               </div>
               <h2 className="text-xl font-semibold text-center mb-2">
                 {title}
@@ -102,7 +87,7 @@ const GradesPage: FC = () => {
             </CardContent>
             <CardFooter className="p-6 pt-0">
               <button
-                className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:opacity-90"
                 onClick={() => onHandleGradeClick(id)}
               >
                 Start Learning
