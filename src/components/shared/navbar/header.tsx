@@ -28,6 +28,7 @@ const navigation: NavigationItem[] = [
   { name: "Test Papers", href: "/test-papers", current: false },
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
+  { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
 ];
 
 function classNames(...classes: string[]) {
