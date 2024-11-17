@@ -18,7 +18,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const Data = () => {
+const DrawerContent = () => {
   return (
     <div className="rounded-md max-w-sm w-full mx-auto">
       <div className="flex-1 space-y-4 py-1">
@@ -46,4 +46,4 @@ const Data = () => {
   );
 };
 
-export default Data;
+export default DrawerContent;

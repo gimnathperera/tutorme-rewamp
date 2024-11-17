@@ -1,14 +1,20 @@
-import React, { ReactNode } from "react";
 import Link from "next/link";
+import { ReactNode } from "react";
 import Icon from "../icon";
 
 interface DrawerProps {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  handleOnChangeSignUpModalVisibility: () => void;
 }
 
-const Drawer = ({ children, isOpen, setIsOpen }: DrawerProps) => {
+const Drawer = ({
+  children,
+  isOpen,
+  setIsOpen,
+  handleOnChangeSignUpModalVisibility,
+}: DrawerProps) => {
   return (
     <main
       className={
@@ -42,7 +48,6 @@ const Drawer = ({ children, isOpen, setIsOpen }: DrawerProps) => {
             </button>
           </header>
 
-          {/* Scrollable Content */}
           <div
             className="flex-1 overflow-y-auto"
             onClick={() => {
@@ -53,7 +58,10 @@ const Drawer = ({ children, isOpen, setIsOpen }: DrawerProps) => {
           </div>
 
           <footer className="p-4">
-            <button className="w-full block bg-purple-600 text-white hover:bg-purple-700 py-2 rounded-md text-center text-base font-medium">
+            <button
+              className="w-full block bg-purple-600 text-white hover:bg-purple-700 py-2 rounded-md text-center text-base font-medium"
+              onClick={handleOnChangeSignUpModalVisibility}
+            >
               Login
             </button>
           </footer>
