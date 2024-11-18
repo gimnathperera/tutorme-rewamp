@@ -10,30 +10,24 @@ const FormSignUp = ({ onLoginClick }: Props) => {
   return (
     <form action="#">
       <div className="space-y-4">
-        <div>
-          <InputText
-            label="Email"
-            name="email"
-            placeholder="jhon@xyz.com"
-            type="email"
-          />
-        </div>
-        <div>
-          <InputText
-            label="Password"
-            name="password"
-            placeholder="*******"
-            type="password"
-          />
-        </div>
-        <div>
-          <InputText
-            label="Confirm Password"
-            placeholder="*******"
-            type="password"
-            name="confirmPassword"
-          />
-        </div>
+        <InputText
+          label="Email"
+          name="email"
+          placeholder="jhon@xyz.com"
+          type="email"
+        />
+        <InputText
+          label="Password"
+          name="password"
+          placeholder="*******"
+          type="password"
+        />
+        <InputText
+          label="Confirm Password"
+          placeholder="*******"
+          type="password"
+          name="confirmPassword"
+        />
       </div>
       <div className="space-y-2 mt-8">
         <SubmitButton title="Register" type="submit" />

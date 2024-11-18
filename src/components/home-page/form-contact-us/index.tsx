@@ -5,17 +5,9 @@ import InputText from "@/components/shared/input-text";
 const FormContactUs = () => {
   return (
     <form action="#" className="space-y-4">
-      <div>
-        <InputText label="Your name" name="name" placeholder="Jhon Doe" />
-      </div>
+      <InputText label="Your name" name="name" placeholder="Jhon Doe" />
 
-      <div>
-        <InputText
-          label="Your email"
-          name="email"
-          placeholder="xyz@email.com"
-        />
-      </div>
+      <InputText label="Your email" name="email" placeholder="xyz@email.com" />
       <div className="sm:col-span-2">
         <InputMultiLineText
           label="Your message"
