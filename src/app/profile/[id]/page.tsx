@@ -15,7 +15,7 @@ const ProfilePage = (props: Props) => {
               <img
                 className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
                 src="/images/users/bonnie-green-2x.png"
-                alt="Jese picture"
+                alt="profile-image"
               />
               <div>
                 <h3 className="mb-1 text-xl font-bold text-gray-900 ">
