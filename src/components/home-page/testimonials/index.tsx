@@ -64,7 +64,6 @@ export default class Testimonials extends Component {
       dots: false,
       infinite: true,
       slidesToShow: 3,
-      // centerMode: true,
       slidesToScroll: 2,
       arrows: false,
       autoplay: false,

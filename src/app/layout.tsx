@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main>
+        <main className="bg-lightwhite">
           <NavBar />
           <div className="container mx-auto">{children}</div>
           <Footer />
