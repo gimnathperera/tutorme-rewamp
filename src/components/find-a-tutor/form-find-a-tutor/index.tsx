@@ -1,10 +1,10 @@
-import { FC, ReactNode } from "react";
-import { PersonalInfoComponent } from "../personal-info";
-import LessonDetails from "../lesson-details";
-import TutorTypeComponent from "../tutor-type";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FC, ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
+import { PersonalInfoComponent } from "../personal-info";
+import TutorTypeComponent from "../tutor-type";
 import { TutorSchema, tutorSchema } from "./schema";
+import LessonDetails from "../lesson-details";
 
 type FormCardProps = {
   children: ReactNode;
