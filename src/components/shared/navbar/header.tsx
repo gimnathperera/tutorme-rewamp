@@ -41,71 +41,69 @@ const Navbar = () => {
 
   return (
     <Disclosure as="nav" className="navbar">
-      <>
-        <div className="mx-auto max-w-7xl p-3 md:p-4 lg:px-8">
-          <div className="relative flex h-12 sm:h-20 items-center">
-            <div className="flex flex-1 items-center sm:justify-between">
-              <div className="flex flex-shrink-0 items-center border-right">
-                <Link
-                  href="/"
-                  className="text-2xl sm:text-4xl font-semibold text-black"
-                >
-                  Tutor Me
-                </Link>
-              </div>
+      <div className="mx-auto max-w-7xl p-3 md:p-4 lg:px-8">
+        <div className="relative flex h-12 sm:h-20 items-center">
+          <div className="flex flex-1 items-center sm:justify-between">
+            <div className="flex flex-shrink-0 items-center border-right">
+              <Link
+                href="/"
+                className="text-2xl sm:text-4xl font-semibold text-black"
+              >
+                Tutor Me
+              </Link>
+            </div>
 
-              <div className="hidden lg:flex items-center border-right ">
-                <div className="flex justify-end space-x-4">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={classNames(
-                        item.current
-                          ? "bg-gray-900"
-                          : "navlinks hover:text-black",
-                        "px-3 py-4 rounded-md text-lg font-normal"
-                      )}
-                      aria-current={item.href ? "page" : undefined}
-                    >
-                      {item.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
-                <div className="hidden lg:block">
-                  <button
-                    type="button"
-                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
-                    onClick={handleOnChangeSignUpModalVisibility}
+            <div className="hidden lg:flex items-center border-right ">
+              <div className="flex justify-end space-x-4">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={classNames(
+                      item.current
+                        ? "bg-gray-900"
+                        : "navlinks hover:text-black",
+                      "px-3 py-4 rounded-md text-lg font-normal"
+                    )}
+                    aria-current={item.href ? "page" : undefined}
                   >
-                    Login
-                  </button>
-                </div>
+                    {item.name}
+                  </Link>
+                ))}
               </div>
             </div>
-
-            <div className="block lg:hidden">
-              <Bars3Icon
-                className="block h-6 w-6"
-                aria-hidden="true"
-                onClick={handleOnChangeDrawerVisibility}
-              />
+            <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
+              <div className="hidden lg:block">
+                <button
+                  type="button"
+                  className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+                  onClick={handleOnChangeSignUpModalVisibility}
+                >
+                  Login
+                </button>
+              </div>
             </div>
-
-            <Drawer
-              isOpen={isOpen}
-              setIsOpen={handleOnChangeDrawerVisibility}
-              handleOnChangeSignUpModalVisibility={
-                handleOnChangeSignUpModalVisibility
-              }
-            >
-              <DrawerContent />
-            </Drawer>
           </div>
+
+          <div className="block lg:hidden">
+            <Bars3Icon
+              className="block h-6 w-6"
+              aria-hidden="true"
+              onClick={handleOnChangeDrawerVisibility}
+            />
+          </div>
+
+          <Drawer
+            isOpen={isOpen}
+            setIsOpen={handleOnChangeDrawerVisibility}
+            handleOnChangeSignUpModalVisibility={
+              handleOnChangeSignUpModalVisibility
+            }
+          >
+            <DrawerContent />
+          </Drawer>
         </div>
-      </>
+      </div>
 
       <Modal
         isOpen={isSignUpModalOpen}
