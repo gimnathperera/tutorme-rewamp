@@ -1,3 +1,4 @@
+import SubmitButton from "@/components/shared/submit-button";
 import React from "react";
 
 type Props = {
@@ -55,12 +56,8 @@ const FormSignUp = ({ onLoginClick }: Props) => {
         </div>
       </div>
       <div className="space-y-2 mt-8">
-        <button
-          type="submit"
-          className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        >
-          Register
-        </button>
+        <SubmitButton title="Register" type="submit" />
+
         <div className="text-center">
           <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
             Already have an account?{" "}
