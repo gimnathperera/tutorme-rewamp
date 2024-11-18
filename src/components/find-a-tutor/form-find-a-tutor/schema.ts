@@ -12,17 +12,17 @@ export const tutorSchema = z.object({
   state: z.string().min(1, "State is required"),
   region: z.string().min(1, "Region is required"),
   zip: z.string().regex(/^\d{5}$/, "Zip must be a valid 5-digit number"),
-
   tutorType: z.string().min(1, "Tutor type is required"),
   school: z.string().min(1, "School is required"),
   genderPreference: z.enum(["Male", "Female", "None"]),
   bilingualTutor: z.enum(["Yes", "No"]),
-
-  tutorCount: z.preprocess(
-    (a) => parseInt(z.string().parse(a), 10),
-    z.number().min(1, "Tutor count must be at least 1")
-  ),
-
+  tutorCount: z
+    .string()
+    .min(1, "Tutor count is required")
+    .transform((value) => parseInt(value, 10))
+    .refine((value) => value >= 1, {
+      message: "Tutor count must be at least 1",
+    }),
   tutors: z
     .array(
       z.object({
