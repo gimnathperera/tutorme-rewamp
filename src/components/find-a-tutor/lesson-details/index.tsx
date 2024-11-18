@@ -32,12 +32,8 @@ const tutorCountOptions = [
 ];
 
 const LessonDetails: FC = () => {
-  const { watch, control, formState } = useFormContext();
+  const { watch, control } = useFormContext();
   const tutorCount = watch("tutorCount");
-
-  // get errors
-  const { errors } = formState;
-  console.log("🚀 ~ errors:", errors);
 
   const { fields, append, remove } = useFieldArray({
     control,
