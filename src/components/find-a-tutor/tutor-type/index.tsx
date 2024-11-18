@@ -45,9 +45,9 @@ const TutorTypeComponent = () => {
           label="Gender Preference"
           name="genderPreference"
           options={[
-            { label: "Male", value: "male" },
-            { label: "Female", value: "female" },
-            { label: "No Gender Preference", value: "none" },
+            { label: "Male", value: "Male" },
+            { label: "Female", value: "Female" },
+            { label: "No Gender Preference", value: "None" },
           ]}
         />
 
@@ -55,8 +55,8 @@ const TutorTypeComponent = () => {
           label="Is Bilingual Tutor Required?"
           name="bilingualTutor"
           options={[
-            { label: "Yes", value: "yes" },
-            { label: "No", value: "no" },
+            { label: "Yes", value: "Yes" },
+            { label: "No", value: "No" },
           ]}
         />
       </div>

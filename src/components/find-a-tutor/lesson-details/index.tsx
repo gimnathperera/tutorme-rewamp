@@ -1,9 +1,8 @@
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
-import { FC } from "react";
-
 import Image from "next/image";
-
+import { FC, useEffect } from "react";
+import { useFieldArray, useFormContext } from "react-hook-form";
 import lesson from "../../../../public/images/findTutor/lesson.png";
 
 const subjectsOptions = [
@@ -25,7 +24,41 @@ const frequencyOptions = [
   { value: "Daily", label: "Daily" },
 ];
 
+const tutorCountOptions = [
+  { label: "1", value: 1 },
+  { label: "2", value: 2 },
+  { label: "3", value: 3 },
+  { label: "4", value: 4 },
+];
+
 const LessonDetails: FC = () => {
+  const { watch, control, formState } = useFormContext();
+  const tutorCount = watch("tutorCount");
+
+  // get errors
+  const { errors } = formState;
+  console.log("🚀 ~ errors:", errors);
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "tutors",
+  });
+
+  useEffect(() => {
+    const count = parseInt(tutorCount || 0);
+    const currentLength = fields.length;
+
+    if (count > currentLength) {
+      for (let i = currentLength; i < count; i++) {
+        append({ subjects: [], duration: "", frequency: "" });
+      }
+    } else if (count < currentLength) {
+      for (let i = currentLength; i > count; i--) {
+        remove(i - 1);
+      }
+    }
+  }, [tutorCount, fields.length, append, remove]);
+
   return (
     <div className="pb-12 space-y-8">
       <div className="flex items-center">
@@ -50,36 +83,33 @@ const LessonDetails: FC = () => {
           className="sm:w-1/3"
           label="How many tutors do you need?"
           name="tutorCount"
-          options={[
-            { label: "1", value: "1" },
-            { label: "2", value: "2" },
-            { label: "3", value: "3" },
-            { label: "4", value: "4" },
-          ]}
+          options={tutorCountOptions}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="flex flex-col gap-3">
-            <p className="font-bold">Tutor {1 + 1}</p>
+          {fields.map((field, index) => (
+            <div key={field.id} className="flex flex-col gap-3">
+              <p className="font-bold">Tutor {index + 1}</p>
 
-            <InputMultiSelect
-              label="Subjects"
-              name="subjects"
-              options={subjectsOptions}
-            />
+              <InputMultiSelect
+                label="Subjects"
+                name={`tutors.${index}.subjects`}
+                options={subjectsOptions}
+              />
 
-            <InputSelect
-              label="Duration"
-              name="duration"
-              options={durationOptions}
-            />
+              <InputSelect
+                label="Duration"
+                name={`tutors.${index}.duration`}
+                options={durationOptions}
+              />
 
-            <InputSelect
-              label="Frequency"
-              name="frequency"
-              options={frequencyOptions}
-            />
-          </div>
+              <InputSelect
+                label="Frequency"
+                name={`tutors.${index}.frequency`}
+                options={frequencyOptions}
+              />
+            </div>
+          ))}
         </div>
       </div>
     </div>
