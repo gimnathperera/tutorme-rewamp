@@ -55,7 +55,7 @@ export const PersonalInfoComponent = () => {
           name="phoneNumber"
           type="tel"
         />
-        <InputText label="City" placeholder="City" name="city" type="text" />
+        <InputText label="City" placeholder="Colombo" name="city" type="text" />
         <InputText
           label="State / Province"
           placeholder="State / Province"

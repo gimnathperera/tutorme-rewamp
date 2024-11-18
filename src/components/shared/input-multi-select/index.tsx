@@ -1,5 +1,6 @@
 import React from "react";
 import Select from "react-select";
+import { Controller, useFormContext } from "react-hook-form";
 
 interface Option {
   label: string;
@@ -10,7 +11,6 @@ interface MultiSelectProps {
   label?: string;
   name: string;
   options: Option[];
-  error?: string;
   helperText?: string;
   className?: string;
 }
@@ -19,10 +19,13 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   label,
   name,
   options,
-  error,
   helperText,
   className = "",
 }) => {
+  const { control, formState } = useFormContext();
+
+  const error = formState.errors[name]?.message?.toString();
+
   return (
     <div className="flex flex-col gap-2">
       {label && (
@@ -34,15 +37,28 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
         </label>
       )}
 
-      <div>
-        <Select
-          name={name}
-          isMulti
-          options={options}
-          className={`basic-multi-select ${className}`}
-          classNamePrefix="select"
-        />
-      </div>
+      <Controller
+        name={name}
+        control={control}
+        render={({ field }) => (
+          <Select
+            {...field}
+            isMulti
+            options={options}
+            className={`basic-multi-select ${
+              error ? "ring-red-500" : "ring-gray-300"
+            } ${className}`}
+            classNamePrefix="select"
+            onChange={
+              (selected) =>
+                field.onChange(selected.map((option) => option.value)) // Sync with form state
+            }
+            value={options.filter((option) =>
+              field.value?.includes(option.value)
+            )}
+          />
+        )}
+      />
 
       {(error || helperText) && (
         <span className={`text-xs ${error ? "text-red-500" : "text-gray-500"}`}>

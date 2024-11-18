@@ -1,6 +1,6 @@
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
-import React from "react";
+import { FC } from "react";
 
 import Image from "next/image";
 
@@ -25,7 +25,7 @@ const frequencyOptions = [
   { value: "Daily", label: "Daily" },
 ];
 
-const LessonDetails: React.FC = () => {
+const LessonDetails: FC = () => {
   return (
     <div className="pb-12 space-y-8">
       <div className="flex items-center">
@@ -49,7 +49,7 @@ const LessonDetails: React.FC = () => {
         <InputSelect
           className="sm:w-1/3"
           label="How many tutors do you need?"
-          name="numTutors"
+          name="tutorCount"
           options={[
             { label: "1", value: "1" },
             { label: "2", value: "2" },
@@ -70,7 +70,7 @@ const LessonDetails: React.FC = () => {
 
             <InputSelect
               label="Duration"
-              name="subjects"
+              name="duration"
               options={durationOptions}
             />
 
