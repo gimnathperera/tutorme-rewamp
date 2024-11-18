@@ -6,6 +6,7 @@ import Modal from "../modal";
 import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
 import { useAuthModalState } from "./hooks";
+import SubmitButton from "../submit-button";
 
 interface NavigationItem {
   name: string;
