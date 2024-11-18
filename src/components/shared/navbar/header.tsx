@@ -2,24 +2,15 @@
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useState } from "react";
-import FormLogin from "../../auth/form-login";
 import Modal from "../modal";
-import Drawer from "./Drawer";
-import Drawerdata from "./Drawerdata";
-import FormSignUp from "../../auth/form-sign-up";
-import FormForgotPassword from "../../auth/form-forgot-password";
+import Drawer from "./drawer-component";
+import DrawerContent from "./drawer-content";
+import { useAuthModalState } from "./hooks";
 
 interface NavigationItem {
   name: string;
   href: string;
   current: boolean;
-}
-
-export enum FormType {
-  Login = "Login",
-  SignUp = "SignUp",
-  ForgotPassword = "ForgotPassword",
 }
 
 const navigation: NavigationItem[] = [
@@ -28,6 +19,7 @@ const navigation: NavigationItem[] = [
   { name: "Test Papers", href: "/test-papers", current: false },
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
+  { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
 ];
 
 function classNames(...classes: string[]) {
@@ -35,75 +27,17 @@ function classNames(...classes: string[]) {
 }
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
-  const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
+  const {
+    isOpen,
+    isSignUpModalOpen,
+    formTitle,
+    fromDescription,
+    formImage,
+    AuthForm,
+    handleOnChangeSignUpModalVisibility,
+    handleOnChangeDrawerVisibility,
+  } = useAuthModalState();
 
-  const handleOnChangeSignUpModalVisibility = () => {
-    setIsSignUpModalOpen((show) => !show);
-    setCurrentForm(FormType.Login);
-  };
-
-  const handleOnChangeForm = (formType: FormType) => {
-    setCurrentForm(formType);
-  };
-
-  const showAuthForm = () => {
-    switch (currentForm) {
-      case FormType.Login:
-        return (
-          <FormLogin
-            onRegisterClick={() => handleOnChangeForm(FormType.SignUp)}
-            onForgotPasswordClick={() =>
-              handleOnChangeForm(FormType.ForgotPassword)
-            }
-          />
-        );
-      case FormType.SignUp:
-        return (
-          <FormSignUp onLoginClick={() => handleOnChangeForm(FormType.Login)} />
-        );
-      default:
-        return (
-          <FormForgotPassword
-            onLoginClick={() => handleOnChangeForm(FormType.Login)}
-          />
-        );
-    }
-  };
-
-  const getFormTitle = () => {
-    switch (currentForm) {
-      case FormType.Login:
-        return "Login";
-      case FormType.SignUp:
-        return "Sign Up";
-      default:
-        return "Forgot Password";
-    }
-  };
-
-  const getFormDescription = () => {
-    switch (currentForm) {
-      case FormType.Login:
-        return "Login to access to your account";
-      case FormType.SignUp:
-        return "Sign up to create an account";
-      default:
-        return "Please enter your email to reset your password";
-    }
-  };
-
-  const getFormImage = () => {
-    switch (currentForm) {
-      case FormType.Login:
-        return "/images/auth/login.svg";
-      case FormType.SignUp:
-        return "/images/auth/signup.svg";
-      default:
-        return "/images/auth/forgotpassword.svg";
-    }
-  };
   return (
     <Disclosure as="nav" className="navbar">
       <>
@@ -155,12 +89,18 @@ const Navbar = () => {
               <Bars3Icon
                 className="block h-6 w-6"
                 aria-hidden="true"
-                onClick={() => setIsOpen(true)}
+                onClick={handleOnChangeDrawerVisibility}
               />
             </div>
 
-            <Drawer isOpen={isOpen} setIsOpen={setIsOpen}>
-              <Drawerdata />
+            <Drawer
+              isOpen={isOpen}
+              setIsOpen={handleOnChangeDrawerVisibility}
+              handleOnChangeSignUpModalVisibility={
+                handleOnChangeSignUpModalVisibility
+              }
+            >
+              <DrawerContent />
             </Drawer>
           </div>
         </div>
@@ -168,12 +108,12 @@ const Navbar = () => {
 
       <Modal
         isOpen={isSignUpModalOpen}
-        title={getFormTitle()}
+        title={formTitle}
         closeModal={handleOnChangeSignUpModalVisibility}
-        description={getFormDescription()}
-        imagePath={getFormImage()}
+        description={fromDescription}
+        imagePath={formImage}
       >
-        {showAuthForm()}
+        <AuthForm />
       </Modal>
     </Disclosure>
   );
