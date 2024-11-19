@@ -37,7 +37,6 @@ export const PersonalInfoComponent = () => {
           label="Grade/Level"
           name="grade"
           options={[
-            { label: "--Select--", value: "" },
             { label: "Grade 5", value: "5" },
             { label: "Grade 6", value: "6" },
             { label: "Grade 7", value: "7" },

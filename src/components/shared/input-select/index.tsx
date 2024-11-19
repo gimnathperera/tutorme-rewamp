@@ -42,7 +42,7 @@ const InputSelect: FC<InputSelectProps> = ({
             } focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${className}`}
             {...props}
           >
-            <option value="">--Select--</option>
+            <option value="">Select an option</option>
             {options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}
