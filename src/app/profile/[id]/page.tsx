@@ -10,11 +10,11 @@ const ProfilePage = (props: Props) => {
           </h1>
         </div>
         <div className="col-span-full xl:col-auto">
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
+          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
             <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
               <img
                 className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0"
-                src="/images/users/bonnie-green-2x.png"
+                src="/images/profile/pp.png"
                 alt="profile-image"
               />
               <div>
@@ -50,7 +50,7 @@ const ProfilePage = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
+          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">Language & Time</h3>
             <div className="mb-4">
               <label
@@ -100,7 +100,7 @@ const ProfilePage = (props: Props) => {
               </button>
             </div>
           </div>
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
+          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2 sm:p-6">
             <div className="flow-root">
               <h3 className="text-xl font-semibold ">Social accounts</h3>
               <ul className="divide-y divide-gray-200 ">
@@ -266,151 +266,9 @@ const ProfilePage = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
-            <div className="flow-root">
-              <h3 className="text-xl font-semibold ">Other accounts</h3>
-              <ul className="mb-6 divide-y divide-gray-200 ">
-                <li className="py-4">
-                  <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
-                    <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
-                      <div>
-                        <img
-                          className="w-6 h-6 rounded-full"
-                          src="/images/users/bonnie-green.png"
-                          alt="Bonnie image"
-                        />{" "}
-                        /
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold text-gray-900 leading-none truncate mb-0.5 ">
-                          Bonnie Green
-                        </p>
-                        <p className="mb-1 text-sm font-normal truncate text-primary-700 ">
-                          New York, USA
-                        </p>
-                        <p className="text-xs font-medium text-gray-500 ">
-                          Last seen: 1 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center w-auto xl:w-full 2xl:w-auto">
-                      <a
-                        href="#"
-                        className="w-full px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Disconnect
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
-                    <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
-                      <div>
-                        <img
-                          className="w-6 h-6 rounded-full"
-                          src="/images/users/jese-leos.png"
-                          alt="Jese image"
-                        />{" "}
-                        /
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold text-gray-900 leading-none truncate mb-0.5 ">
-                          Jese Leos
-                        </p>
-                        <p className="mb-1 text-sm font-normal truncate text-primary-700 ">
-                          California, USA
-                        </p>
-                        <p className="text-xs font-medium text-gray-500 ">
-                          Last seen: 2 min ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center w-auto xl:w-full 2xl:w-auto">
-                      <a
-                        href="#"
-                        className="w-full px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Disconnect
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <li className="py-4">
-                  <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
-                    <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
-                      <div>
-                        <img
-                          className="w-6 h-6 rounded-full"
-                          src="/images/users/thomas-lean.png"
-                          alt="Thomas image"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold text-gray-900 leading-none truncate mb-0.5 ">
-                          Thomas Lean
-                        </p>
-                        <p className="mb-1 text-sm font-normal truncate text-primary-700 ">
-                          Texas, USA
-                        </p>
-                        <p className="text-xs font-medium text-gray-500 ">
-                          Last seen: 1 hour ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center w-auto xl:w-full 2xl:w-auto">
-                      <a
-                        href="#"
-                        className="w-full px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Disconnect
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <li className="pt-4">
-                  <div className="flex justify-between xl:block 2xl:flex align-center 2xl:space-x-4">
-                    <div className="flex space-x-4 xl:mb-4 2xl:mb-0">
-                      <div>
-                        <img
-                          className="w-6 h-6 rounded-full"
-                          src="/images/users/lana-byrd.png"
-                          alt="Lana image"
-                        />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold text-gray-900 leading-none truncate mb-0.5 ">
-                          Lana Byrd
-                        </p>
-                        <p className="mb-1 text-sm font-normal truncate text-primary-700 ">
-                          Texas, USA
-                        </p>
-                        <p className="text-xs font-medium text-gray-500 ">
-                          Last seen: 1 hour ago
-                        </p>
-                      </div>
-                    </div>
-                    <div className="inline-flex items-center w-auto xl:w-full 2xl:w-auto">
-                      <a
-                        href="#"
-                        className="w-full px-3 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Disconnect
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <div>
-                <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
-                  Save all
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
         <div className="col-span-2">
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
+          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">General information</h3>
             <form action="#">
               <div className="grid grid-cols-6 gap-6">
@@ -617,7 +475,7 @@ const ProfilePage = (props: Props) => {
               </div>
             </form>
           </div>
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
+          <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">
               Password information
             </h3>
@@ -752,294 +610,6 @@ const ProfilePage = (props: Props) => {
                 </div>
               </div>
             </form>
-          </div>
-          <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm 2xl:col-span-2  sm:p-6">
-            <div className="flow-root">
-              <h3 className="text-xl font-semibold ">Sessions</h3>
-              <ul className="divide-y divide-gray-200 ">
-                <li className="py-4">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg
-                        className="w-6 h-6 "
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-base font-semibold text-gray-900 truncate ">
-                        California 123.123.123.123
-                      </p>
-                      <p className="text-sm font-normal text-gray-500 truncate ">
-                        Chrome on macOS
-                      </p>
-                    </div>
-                    <div className="inline-flex items-center">
-                      <a
-                        href="#"
-                        className="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Revoke
-                      </a>
-                    </div>
-                  </div>
-                </li>
-                <li className="pt-4 pb-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex-shrink-0">
-                      <svg
-                        className="w-6 h-6 "
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
-                        ></path>
-                      </svg>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-base font-semibold text-gray-900 truncate ">
-                        Rome 24.456.355.98
-                      </p>
-                      <p className="text-sm font-normal text-gray-500 truncate ">
-                        Safari on iPhone
-                      </p>
-                    </div>
-                    <div className="inline-flex items-center">
-                      <a
-                        href="#"
-                        className="px-3 py-2 mb-3 mr-3 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 "
-                      >
-                        Revoke
-                      </a>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-              <div>
-                <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
-                  See more
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-1 px-4 xl:grid-cols-2 xl:gap-4">
-        <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm  sm:p-6 xl:mb-0">
-          <div className="flow-root">
-            <h3 className="text-xl font-semibold ">Alerts & Notifications</h3>
-            <p className="text-sm font-normal text-gray-500 ">
-              You can set up Themesberg to get notifications
-            </p>
-            <div className="divide-y divide-gray-200 ">
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Company News
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Get Themesberg news, announcements, and product updates
-                  </div>
-                </div>
-                <label
-                  htmlFor="company-news"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="company-news"
-                    className="sr-only"
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Account Activity
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Get important notifications about you or activity youve
-                    missed
-                  </div>
-                </div>
-                <label
-                  htmlFor="account-activity"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="account-activity"
-                    className="sr-only"
-                    checked
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Meetups Near You
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Get an email when a Dribbble Meetup is posted close to my
-                    location
-                  </div>
-                </div>
-                <label
-                  htmlFor="meetups"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="meetups"
-                    className="sr-only"
-                    checked
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    New Messages
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Get Themsberg news, announcements, and product updates
-                  </div>
-                </div>
-                <label
-                  htmlFor="new-messages"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="new-messages"
-                    className="sr-only"
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-            </div>
-            <div className="mt-6">
-              <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
-                Save all
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 mb-4 bg-white border border-gray-200 rounded-lg shadow-sm  sm:p-6 xl:mb-0">
-          <div className="flow-root">
-            <h3 className="text-xl font-semibold ">Email Notifications</h3>
-            <p className="text-sm font-normal text-gray-500 ">
-              You can set up Themesberg to get email notifications{" "}
-            </p>
-            <div className="divide-y divide-gray-200 ">
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Rating reminders
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Send an email reminding me to rate an item a week after
-                    purchase
-                  </div>
-                </div>
-                <label
-                  htmlFor="rating-reminders"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="rating-reminders"
-                    className="sr-only"
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Item update notifications
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Send user and product notifications htmlFor you
-                  </div>
-                </div>
-                <label
-                  htmlFor="item-update"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="item-update"
-                    className="sr-only"
-                    checked
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between py-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Item comment notifications
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Send me an email when someone comments on one of my items
-                  </div>
-                </div>
-                <label
-                  htmlFor="item-comment"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    id="item-comment"
-                    className="sr-only"
-                    checked
-                  />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-              <div className="flex items-center justify-between pt-4">
-                <div className="flex flex-col flex-grow">
-                  <div className="text-lg font-semibold text-gray-900 ">
-                    Buyer review notifications
-                  </div>
-                  <div className="text-base font-normal text-gray-500 ">
-                    Send me an email when someone leaves a review with their
-                    rating
-                  </div>
-                </div>
-                <label
-                  htmlFor="buyer-rev"
-                  className="relative flex items-center cursor-pointer"
-                >
-                  <input type="checkbox" id="buyer-rev" className="sr-only" />
-                  <span className="h-6 bg-gray-200 border border-gray-200 rounded-full w-11 toggle-bg "></span>
-                </label>
-              </div>
-            </div>
-            <div className="mt-6">
-              <button className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   ">
-                Save all
-              </button>
-            </div>
           </div>
         </div>
       </div>
