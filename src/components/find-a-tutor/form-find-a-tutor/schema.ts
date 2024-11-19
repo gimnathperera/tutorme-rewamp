@@ -16,13 +16,7 @@ export const tutorSchema = z.object({
   school: z.string().min(1, "School is required"),
   genderPreference: z.enum(["Male", "Female", "None"]),
   bilingualTutor: z.enum(["Yes", "No"]),
-  tutorCount: z
-    .string()
-    .min(1, "Tutor count is required")
-    .transform((value) => parseInt(value, 10))
-    .refine((value) => value >= 1, {
-      message: "Tutor count must be at least 1",
-    }),
+  tutorCount: z.string().min(1, "Tutor count is required"),
   tutors: z
     .array(
       z.object({
@@ -35,5 +29,28 @@ export const tutorSchema = z.object({
     )
     .nonempty("There must be at least one tutor"),
 });
+export const initialFormValues = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  grade: "",
+  phoneNumber: "",
+  city: "",
+  state: "",
+  region: "",
+  zip: "",
+  tutorType: "",
+  school: "",
+  genderPreference: "",
+  bilingualTutor: "",
+  tutorCount: "1",
+  tutors: [
+    {
+      subjects: [""],
+      duration: "",
+      frequency: "",
+    },
+  ],
+};
 
 export type TutorSchema = z.infer<typeof tutorSchema>;

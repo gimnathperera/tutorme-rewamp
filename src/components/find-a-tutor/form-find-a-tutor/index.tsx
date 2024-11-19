@@ -3,7 +3,7 @@ import { FC, ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { PersonalInfoComponent } from "../personal-info";
 import TutorTypeComponent from "../tutor-type";
-import { TutorSchema, tutorSchema } from "./schema";
+import { initialFormValues, TutorSchema, tutorSchema } from "./schema";
 import LessonDetails from "../lesson-details";
 
 type FormCardProps = {
@@ -17,17 +17,24 @@ const FormCard: FC<FormCardProps> = ({ children }) => {
 const FormFindATutor: FC = () => {
   const findATutorForm = useForm({
     resolver: zodResolver(tutorSchema),
-    defaultValues: {} as TutorSchema,
+    defaultValues: initialFormValues as TutorSchema,
     mode: "onChange",
   });
+
+  const { handleSubmit, reset } = findATutorForm;
 
   const onSubmit = (data: TutorSchema) => {
     console.log("Form Submitted", data);
   };
 
+  const onReset = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    reset();
+  };
+
   return (
     <FormProvider {...findATutorForm}>
-      <form onSubmit={findATutorForm.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-12">
           <FormCard>
             <PersonalInfoComponent />
@@ -45,6 +52,7 @@ const FormFindATutor: FC = () => {
             <button
               type="button"
               className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+              onClick={onReset}
             >
               Cancel
             </button>
