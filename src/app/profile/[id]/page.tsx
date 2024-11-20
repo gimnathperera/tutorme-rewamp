@@ -1,3 +1,5 @@
+import FormPasswordInfo from "@/components/profile/form-password-information";
+
 type Props = {};
 
 const ProfilePage = (props: Props) => {
@@ -475,7 +477,8 @@ const ProfilePage = (props: Props) => {
               </div>
             </form>
           </div>
-          <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
+          <FormPasswordInfo />
+          {/* <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">
               Password information
             </h3>
@@ -610,7 +613,7 @@ const ProfilePage = (props: Props) => {
                 </div>
               </div>
             </form>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
