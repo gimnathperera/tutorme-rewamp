@@ -1,5 +1,6 @@
 import InputText from "@/components/shared/input-text";
 import { FormProvider, useForm } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PasswordInfoSchema, passwordInfoSchema } from "./schema";
 import { FC } from "react";
@@ -20,16 +21,28 @@ const FormPasswordInfo: FC = () => {
       <h3 className="mb-4 text-xl font-semibold ">Password information</h3>
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-6 sm:col-span-3">
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
               <InputText
                 label="Current password"
-                name="Current password"
+                name="currentPassword"
+                placeholder="*******"
+                type="password"
+              />
+              <InputText
+                label="New password"
+                name="newPassword"
+                placeholder="*******"
+                type="password"
+              />
+              <InputText
+                label="Confirm password"
+                name="confirmPassword"
                 placeholder="*******"
                 type="password"
               />
             </div>
-            <div className="col-span-6 sm:col-span-3">
+            {/* <div className="col-span-6 sm:col-span-3">
               <InputText
                 label="New password"
                 name="New password"
@@ -44,10 +57,10 @@ const FormPasswordInfo: FC = () => {
                 placeholder="*******"
                 type="password"
               />
-            </div>
+            </div> */}
             <div className="col-span-6 sm:col-full">
               <button
-                className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center   "
+                className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center   "
                 type="submit"
               >
                 Save all
