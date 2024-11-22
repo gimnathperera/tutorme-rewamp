@@ -1,4 +1,5 @@
 "use client";
+import FormGeneralInfo from "@/components/profile/form-general-information";
 import FormPasswordInfo from "@/components/profile/form-password-information";
 
 type Props = {};
@@ -271,7 +272,7 @@ const ProfilePage = (props: Props) => {
           </div>
         </div>
         <div className="col-span-2">
-          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
+          {/* <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">General information</h3>
             <form action="#">
               <div className="grid grid-cols-6 gap-6">
@@ -477,7 +478,8 @@ const ProfilePage = (props: Props) => {
                 </div>
               </div>
             </form>
-          </div>
+          </div> */}
+          <FormGeneralInfo />
           {/* <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">
               Password information

@@ -2,9 +2,7 @@ import { z } from "zod";
 
 export const passwordInfoSchema = z
   .object({
-    currentPassword: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters long" }),
+    currentPassword: z.string().min(1, { message: "Password is required" }),
     newPassword: z
       .string()
       .min(6, { message: "Password must be at least 6 characters long" })
