@@ -43,7 +43,7 @@ const Navbar = () => {
       <div className="mx-auto max-w-7xl p-3 md:p-4 lg:px-8">
         <div className="relative flex h-12 sm:h-20 items-center">
           <div className="flex flex-1 items-center sm:justify-between">
-            <div className="flex flex-shrink-0 items-center border-right">
+            <div className="flex flex-shrink-0 items-center">
               <Link
                 href="/"
                 className="text-2xl sm:text-4xl font-semibold text-black"
@@ -52,7 +52,7 @@ const Navbar = () => {
               </Link>
             </div>
 
-            <div className="hidden lg:flex items-center border-right ">
+            <div className="hidden lg:flex items-center">
               <div className="flex justify-end space-x-4">
                 {navigation.map((item) => (
                   <Link
