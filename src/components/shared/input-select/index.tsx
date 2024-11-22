@@ -1,3 +1,4 @@
+import { getNestedError } from "@/util/form";
 import { FC, SelectHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -23,7 +24,7 @@ const InputSelect: FC<InputSelectProps> = ({
 }) => {
   const { control, formState } = useFormContext();
 
-  const error = formState.errors[name]?.message?.toString();
+  const error = getNestedError(formState.errors, name);
 
   return (
     <div className="flex flex-col gap-1">

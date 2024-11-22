@@ -1,3 +1,4 @@
+import { getNestedError } from "@/util/form";
 import React, { TextareaHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -17,7 +18,7 @@ const InputMultiLineText: React.FC<InputMultiLineTextProps> = ({
 }) => {
   const { control, formState } = useFormContext();
 
-  const error = formState.errors[name]?.message?.toString();
+  const error = getNestedError(formState.errors, name);
 
   return (
     <div className="flex flex-col gap-1">
