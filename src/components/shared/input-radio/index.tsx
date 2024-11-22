@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { getNestedError } from "@/util/form";
 import { FC, InputHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
@@ -24,7 +25,7 @@ const RadioGroup: FC<RadioGroupProps> = ({
 }) => {
   const { control, formState } = useFormContext();
 
-  const error = formState.errors[name]?.message?.toString();
+  const error = getNestedError(formState.errors, name);
 
   return (
     <div className="flex flex-col gap-4">

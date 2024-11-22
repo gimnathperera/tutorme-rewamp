@@ -1,6 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { Controller, useFormContext } from "react-hook-form";
+import { getNestedError } from "@/util/form";
 
 interface Option {
   label: string;
@@ -24,7 +25,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
 }) => {
   const { control, formState } = useFormContext();
 
-  const error = formState.errors[name]?.message?.toString();
+  const error = getNestedError(formState.errors, name);
 
   return (
     <div className="flex flex-col gap-2">
@@ -44,14 +45,14 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
           <Select
             {...field}
             isMulti
+            placeholder="Select an option"
             options={options}
             className={`basic-multi-select ${
               error ? "ring-red-500" : "ring-gray-300"
             } ${className}`}
             classNamePrefix="select"
-            onChange={
-              (selected) =>
-                field.onChange(selected.map((option) => option.value)) // Sync with form state
+            onChange={(selected) =>
+              field.onChange(selected.map((option) => option.value))
             }
             value={options.filter((option) =>
               field.value?.includes(option.value)
