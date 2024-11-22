@@ -1,5 +1,6 @@
 "use client";
 import FormGeneralInfo from "@/components/profile/form-general-information";
+import FormLanguageTime from "@/components/profile/form-language-time";
 import FormPasswordInfo from "@/components/profile/form-password-information";
 
 type Props = {};
@@ -54,7 +55,7 @@ const ProfilePage = (props: Props) => {
               </div>
             </div>
           </div>
-          <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
+          {/* <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
             <h3 className="mb-4 text-xl font-semibold ">Language & Time</h3>
             <div className="mb-4">
               <label
@@ -103,7 +104,8 @@ const ProfilePage = (props: Props) => {
                 Save all
               </button>
             </div>
-          </div>
+          </div> */}
+          <FormLanguageTime />
           <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2 sm:p-6">
             <div className="flow-root">
               <h3 className="text-xl font-semibold ">Social accounts</h3>

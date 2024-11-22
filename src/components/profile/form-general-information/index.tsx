@@ -142,7 +142,6 @@ const FormGeneralInfo: FC = () => {
                 name="duration"
                 options={durationOptions}
               />
-
               <InputSelect
                 label="Frequency"
                 name="frequency"
