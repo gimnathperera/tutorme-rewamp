@@ -16,17 +16,17 @@ export const tutorSchema = z.object({
   school: z.string().min(1, "School is required"),
   genderPreference: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
-    .refine((val) => val !== "", { message: "Gender Preference Required" }),
+    .refine((val) => val !== "", { message: "Gender Preference is required" }),
   bilingualTutor: z
     .union([z.enum(["Yes", "No"]), z.literal("")])
-    .refine((val) => val !== "", { message: "Bilingual Tutor Required" }),
+    .refine((val) => val !== "", { message: "Bilingual Tutor is required" }),
   tutorCount: z.string().min(1, "Tutor count is required"),
   tutors: z
     .array(
       z.object({
         subjects: z.array(z.never()).nonempty("Subjects array cannot be empty"),
-        duration: z.string().min(1, "Duration Required"),
-        frequency: z.string().min(1, "Frequency Required"),
+        duration: z.string().min(1, "Duration is required"),
+        frequency: z.string().min(1, "Frequency is required"),
       })
     )
     .nonempty("There must be at least one tutor"),

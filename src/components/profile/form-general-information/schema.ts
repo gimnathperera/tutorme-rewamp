@@ -15,9 +15,9 @@ export const generalInfoSchema = z.object({
   address: z.string().min(1, "Address is required"),
   birthday: z.string().min(1, "Birthday is required"),
   grade: z.string().min(1, "Grade is required"),
-  gender: z.enum(["Male", "Female", "None"], {
-    required_error: "Gender is required",
-  }),
+  gender: z
+    .union([z.enum(["Male", "Female", "None"]), z.literal("")])
+    .refine((val) => val !== "", { message: "Gender is required" }),
   tutorType: z.string().min(1, "Tutor type is required"),
   subjects: z.array(z.string()).nonempty("At least one subject is required"),
   duration: z.string().min(1, "Duration is required"),
@@ -38,8 +38,8 @@ export const initialFormValues = {
   birthday: "",
   grade: "",
   tutorType: "",
-  gender: "None",
-  subjects: [""],
+  gender: "",
+  subjects: [],
   duration: "",
   frequency: "",
 };
