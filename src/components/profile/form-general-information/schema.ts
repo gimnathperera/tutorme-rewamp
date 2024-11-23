@@ -19,7 +19,7 @@ export const generalInfoSchema = z.object({
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
     .refine((val) => val !== "", { message: "Gender is required" }),
   tutorType: z.string().min(1, "Tutor type is required"),
-  subjects: z.array(z.string()).nonempty("At least one subject is required"),
+  subjects: z.array(z.never()).nonempty("At least one subject is required"),
   duration: z.string().min(1, "Duration is required"),
   frequency: z.string().min(1, "Frequency is required"),
 });
