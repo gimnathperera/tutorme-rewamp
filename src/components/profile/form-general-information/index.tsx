@@ -71,14 +71,14 @@ const FormGeneralInfo: FC = () => {
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
               <InputText
-                label="First name"
-                placeholder="First name"
+                label="First Name"
+                placeholder="First Name"
                 name="firstName"
                 type="text"
               />
               <InputText
-                label="Last name"
-                placeholder="Last name"
+                label="Last Name"
+                placeholder="Last Name"
                 name="lastName"
                 type="text"
               />
