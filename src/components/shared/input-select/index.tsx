@@ -38,12 +38,14 @@ const InputSelect: FC<InputSelectProps> = ({
         render={({ field }) => (
           <select
             {...field}
-            className={`block w-full rounded-md border px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ${
-              error ? "ring-red-500" : "ring-gray-300"
-            } focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${className}`}
+            className={`relative block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm ${
+              error ? "border-red-500" : "border-linegrey"
+            } sm:leading-6 ${className}`}
             {...props}
           >
-            <option value="">Select an option</option>
+            <option value="" className="text-gray-500">
+              Select an option
+            </option>
             {options.map((option, index) => (
               <option key={index} value={option.value}>
                 {option.label}
