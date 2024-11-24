@@ -48,15 +48,33 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
             placeholder="Select an option"
             options={options}
             className={`basic-multi-select ${
-              error ? "ring-red-500" : "ring-gray-300"
+              error ? "border-red-500" : "border-gray-300"
             } ${className}`}
-            classNamePrefix="select"
             onChange={(selected) =>
               field.onChange(selected.map((option) => option.value))
             }
             value={options.filter((option) =>
               field.value?.includes(option.value)
             )}
+            styles={{
+              placeholder: (base) => ({
+                ...base,
+                color: "#000",
+                fontSize: "0.875rem",
+              }),
+              control: (base) => ({
+                ...base,
+                borderColor: error ? "#EF4444" : "#D1D5DB",
+                "&:hover": {
+                  borderColor: error ? "#EF4444" : "#D1D5DB",
+                },
+                padding: "0.2rem",
+              }),
+              dropdownIndicator: (base) => ({
+                ...base,
+                color: "#6A7280",
+              }),
+            }}
           />
         )}
       />
