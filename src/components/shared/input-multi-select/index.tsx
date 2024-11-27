@@ -28,7 +28,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   const error = getNestedError(formState.errors, name);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {label && (
         <label
           htmlFor={name}
