@@ -66,8 +66,8 @@ export default class Testimonials extends Component {
       slidesToShow: 3,
       slidesToScroll: 2,
       arrows: false,
-      autoplay: false,
-      speed: 500,
+      autoplay: true,
+      speed: 700,
       autoplaySpeed: 2000,
       cssEase: "linear",
       responsive: [

@@ -11,22 +11,22 @@ const products: ProductType[] = [
   {
     id: 1,
     section: "Menu",
-    link: ["Home", "Popular", "About", "Contact"],
+    link: ["Home", "Courses", "About Us", "Contact Us"],
   },
   {
     id: 2,
-    section: "Category",
-    link: ["Design", "Mockup", "View all", "Log In"],
+    section: "Resources",
+    link: ["Blog", "FAQs", "Support", "Community"],
   },
   {
     id: 3,
-    section: "Pages",
-    link: ["404", "Instructions", "License"],
+    section: "Legal",
+    link: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
   },
   {
     id: 4,
-    section: "Others",
-    link: ["Styleguide", "Changelog"],
+    section: "Company",
+    link: ["Careers", "Press", "Partners"],
   },
 ];
 

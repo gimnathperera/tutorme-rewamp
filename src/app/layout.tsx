@@ -1,6 +1,7 @@
 import NavBar from "@/components/shared/navbar";
 import "./globals.css";
 import Footer from "@/components/shared/footer";
+import BackToTop from "@/components/shared/back-to-top";
 
 export const metadata = {
   title: "Tutor Me",
@@ -20,6 +21,7 @@ export default function RootLayout({
           <div className="container mx-auto">{children}</div>
           <Footer />
         </main>
+        <BackToTop />
       </body>
     </html>
   );
