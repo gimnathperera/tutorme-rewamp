@@ -1,7 +1,9 @@
 export type ContactUsRequest = {
-  name: string;
-  email: string;
   message: string;
+  sender: {
+    name: string;
+    email: string;
+  };
 };
 
 export type UserRegisterRequest = {

@@ -1,5 +1,3 @@
-"use client";
-
 import InputText from "@/components/shared/input-text";
 import SubmitButton from "@/components/shared/submit-button";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,20 +26,17 @@ const FormSignUp = ({ onLoginClick }: Props) => {
     const result = await registerUser(omit(data, ["confirmPassword"]));
     const error = getErrorInApiResult(result);
     if (error) {
-      signupForm.setError("email", {
-        type: "manual",
-        message: error,
-      });
+      return toast.error(error);
     }
 
     if (result.data) {
-      toast.success("User registered successfully");
       onRegisterSuccess();
     }
   };
 
   const onRegisterSuccess = () => {
     signupForm.reset();
+    toast.success("User registered successfully");
     onLoginClick();
   };
 

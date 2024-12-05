@@ -7,3 +7,9 @@ export const contactUsSchema = z.object({
 });
 
 export type ContactUsSchema = z.infer<typeof contactUsSchema>;
+
+export const initialFormValues = {
+  name: "",
+  email: "",
+  message: "",
+};
