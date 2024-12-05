@@ -11,3 +11,8 @@ export type UserRegisterRequest = {
   password: string;
   name: string;
 };
+
+export type FetchFaqRequest = {
+  page: number;
+  limit: number;
+};

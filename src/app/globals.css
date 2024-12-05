@@ -375,6 +375,10 @@ html {
   color: #747474;
 }
 
+.slick-dots li button:before {
+  color: #ffffff !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

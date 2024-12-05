@@ -1,11 +1,14 @@
 import { AuthTokens } from "./auth-types";
 
-type Response<T> = {
-  data: T;
-  success: boolean;
-};
-
 export type AuthTokensResponse = AuthTokens;
+
+export type Faq = {
+  answer: string;
+  question: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
 
 export type ContactUsResponse = {
   message: string;
@@ -42,3 +45,11 @@ export type UserRegisterResponse = {
     };
   };
 };
+
+export interface PaginatedResponse<T> {
+  results: T[];
+  page: number;
+  limit: number;
+  totalPages: number;
+  totalResults: number;
+}
