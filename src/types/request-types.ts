@@ -16,3 +16,8 @@ export type FetchFaqRequest = {
   page: number;
   limit: number;
 };
+
+export type FetchTestimonialsRequest = {
+  page: number;
+  limit: number;
+};

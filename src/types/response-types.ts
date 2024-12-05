@@ -10,6 +10,19 @@ export type Faq = {
   id: string;
 };
 
+export type Testimonial = {
+  content: string;
+  rating: number;
+  owner: {
+    name: string;
+    role: string;
+    avatar: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 export type ContactUsResponse = {
   message: string;
   sender: {
