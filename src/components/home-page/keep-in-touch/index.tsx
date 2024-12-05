@@ -12,7 +12,7 @@ const KeepInTouch = () => {
   };
 
   return (
-    <div className="bg-joinus my-32" id="keep-in-touch-section">
+    <div className="bg-joinus mb-32 mt-0" id="keep-in-touch-section">
       <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8">
         <div className="text-center">
           <h3 className="text-blue text-lg font-normal tracking-widest">

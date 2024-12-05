@@ -57,10 +57,7 @@ const Testimonials: FC = () => {
   const postData = data?.results ?? [];
 
   return (
-    <div
-      className="bg-testimonial pt-40 pb-32 lg:py-32"
-      id="testimonial-section"
-    >
+    <div className="bg-testimonial pt-40 pb-16 lg:py-32">
       <div className="mx-auto max-w-7xl sm:py-4 lg:px-8 ">
         <div className="text-center">
           <h3 className="text-4xl sm:text-6xl font-bold text-black my-3">
