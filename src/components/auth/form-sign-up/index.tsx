@@ -9,6 +9,7 @@ import { useRegisterUserMutation } from "@/store/api/splits/user";
 import { getErrorInApiResult } from "@/utils/api";
 import { omit } from "lodash-es";
 import toast from "react-hot-toast";
+import InputPassword from "@/components/shared/input-password";
 
 type Props = {
   onLoginClick: () => void;
@@ -60,16 +61,16 @@ const FormSignUp = ({ onLoginClick }: Props) => {
             placeholder="jhon@xyz.com"
             type="email"
           />
-          <InputText
+
+          <InputPassword
             label="Password"
             name="password"
             placeholder="*******"
-            type="password"
           />
-          <InputText
+
+          <InputPassword
             label="Confirm Password"
             placeholder="*******"
-            type="password"
             name="confirmPassword"
           />
         </div>
