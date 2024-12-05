@@ -1,7 +1,7 @@
 import React from "react";
 import Select from "react-select";
 import { Controller, useFormContext } from "react-hook-form";
-import { getNestedError } from "@/util/form";
+import { getNestedError } from "@/utils/form";
 
 interface Option {
   label: string;

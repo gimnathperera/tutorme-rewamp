@@ -1,4 +1,4 @@
-import { getNestedError } from "@/util/form";
+import { getNestedError } from "@/utils/form";
 import React, { InputHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 

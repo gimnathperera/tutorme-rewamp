@@ -1,7 +1,7 @@
 import NavBar from "@/components/shared/navbar";
-import "./globals.css";
 import Footer from "@/components/shared/footer";
 import BackToTop from "@/components/shared/back-to-top";
+import "./globals.css";
 
 export const metadata = {
   title: "Tutor Me",

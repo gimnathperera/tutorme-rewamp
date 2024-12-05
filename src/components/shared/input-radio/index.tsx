@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { getNestedError } from "@/util/form";
+import { getNestedError } from "@/utils/form";
 import { FC, InputHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
