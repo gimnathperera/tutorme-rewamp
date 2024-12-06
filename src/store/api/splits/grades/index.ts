@@ -23,4 +23,8 @@ export const ProductsApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useFetchGradesQuery, useFetchGradeByIdQuery } = ProductsApi;
+export const {
+  useFetchGradesQuery,
+  useFetchGradeByIdQuery,
+  useLazyFetchGradeByIdQuery,
+} = ProductsApi;
