@@ -10,6 +10,23 @@ export type Faq = {
   id: string;
 };
 
+export type Subject = {
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
+export type Grade = {
+  subjects: Subject[];
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 export type Testimonial = {
   content: string;
   rating: number;
