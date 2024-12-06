@@ -2,6 +2,7 @@ import { useAuthContext } from "@/contexts";
 import { useState, useRef, MutableRefObject, useEffect, FC } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import ConfirmationAlert from "../confirm-alert";
 
 type Props = {
   isLoading: boolean;
@@ -10,9 +11,12 @@ type Props = {
 };
 
 const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
-  const { logout } = useAuthContext();
+  const { logout, isUserLogoutLoading } = useAuthContext();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] =
+    useState(false);
+
   const dropdownRef = useRef(
     null
   ) as unknown as MutableRefObject<HTMLInputElement>;
@@ -38,6 +42,11 @@ const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
     closeDropdown();
     logout();
   };
+
+  const handleLogoutConfirmationVisibility = () => {
+    setIsLogoutConfirmationOpen((show) => !show);
+  };
+
   return (
     <div className="relative">
       {isLoading ? (
@@ -86,7 +95,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
             <li>
               <button
                 className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                onClick={handleLogoutUser}
+                onClick={handleLogoutConfirmationVisibility}
               >
                 Logout
               </button>
@@ -94,6 +103,17 @@ const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
           </ul>
         </div>
       )}
+
+      <ConfirmationAlert
+        isOpen={isLogoutConfirmationOpen}
+        closeModal={handleLogoutConfirmationVisibility}
+        onConfirm={handleLogoutUser}
+        title="Logout"
+        description="Are you sure you want to logout?"
+        cancelText="Cancel"
+        confirmText="Logout"
+        loading={isUserLogoutLoading}
+      />
     </div>
   );
 };
