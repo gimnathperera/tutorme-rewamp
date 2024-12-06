@@ -1,4 +1,4 @@
-import { AuthUserData } from "@/types/auth-types";
+import { AuthUserData, Tokens } from "@/types/auth-types";
 import { JWTPayload, createRemoteJWKSet, jwtVerify } from "jose";
 import { z } from "zod";
 import { LocalStorageKey, getLocalStorageItem } from "./local-storage";
@@ -22,12 +22,13 @@ export const getValidatedJWTPayload = (
 };
 
 export const shouldRefreshTokenBeReFetched = (): boolean => {
-  const userData = getLocalStorageItem<AuthUserData>(LocalStorageKey.USER_DATA);
-  if (!userData) return false;
+  const tokens = getLocalStorageItem<Tokens>(LocalStorageKey.TOKENS);
 
-  const threshold = 60 * 60 * 1000; // 1 hour
-  const tokenExpirationDate = new Date(userData.exp * 1000);
-  const expirationThresholdDate = new Date(Date.now() + threshold);
+  if (!tokens) return false;
+
+  const tokenExpirationDate = new Date(tokens.access.expires);
+
+  const expirationThresholdDate = new Date(Date.now());
 
   return tokenExpirationDate < expirationThresholdDate;
 };

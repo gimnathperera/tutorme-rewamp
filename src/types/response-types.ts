@@ -1,7 +1,3 @@
-import { AuthTokens } from "./auth-types";
-
-export type AuthTokensResponse = AuthTokens;
-
 export type Faq = {
   answer: string;
   question: string;
@@ -68,6 +64,31 @@ export type UserRegisterResponse = {
     role: "admin";
     status: "active";
     isEmailVerified: false;
+    grades: [];
+    subjects: [];
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+  };
+  tokens: {
+    access: {
+      token: string;
+      expires: string;
+    };
+    refresh: {
+      token: string;
+      expires: string;
+    };
+  };
+};
+
+export type UserLoginResponse = {
+  user: {
+    role: string;
+    status: string;
+    isEmailVerified: boolean;
     grades: [];
     subjects: [];
     name: string;

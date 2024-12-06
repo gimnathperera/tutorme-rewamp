@@ -25,7 +25,7 @@ const staggeredBaseQuery = retry(
     baseUrl: env.urls.apiUrl,
 
     prepareHeaders: (headers, api) => {
-      checkIfRefreshTokenToBeFetched(api.endpoint);
+      checkIfAccessTokenToBeFetched(api.endpoint);
 
       if (accessToken) {
         headers.set("Authorization", `Bearer ${accessToken}`);
@@ -95,13 +95,13 @@ if (typeof window !== "undefined") {
   setApiAccessToken(storedToken);
 }
 
-const checkIfRefreshTokenToBeFetched = debounce(
+const checkIfAccessTokenToBeFetched = debounce(
   (endpoint: string): void => {
     if (typeof window === "undefined") return;
     if (endpoint === "getRefreshToken") return;
 
     if (shouldRefreshTokenBeReFetched()) {
-      triggerCustomAppEvent(CustomAppEvent.TriggerRefreshToken);
+      // fetch a new access token
     }
   },
   2000,
