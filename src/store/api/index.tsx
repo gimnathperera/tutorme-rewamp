@@ -1,6 +1,6 @@
 import { env } from "@/configs/env";
+import { Tokens } from "@/types/auth-types";
 import { shouldRefreshTokenBeReFetched } from "@/utils/auth";
-import { CustomAppEvent, triggerCustomAppEvent } from "@/utils/custom-events";
 import {
   LocalStorageKey,
   getLocalStorageItem,
@@ -15,19 +15,21 @@ import {
   retry,
 } from "@reduxjs/toolkit/query/react";
 import { debounce } from "lodash-es";
+import { Endpoints } from "./endpoints";
 
 let accessToken: string | null = null;
 
-const endpointsURLsToAvoidRetry = ["/v1/admin/auth/token"];
+const endpointsURLsToAvoidRetry = [Endpoints.AuthTokens];
 
 const staggeredBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: env.urls.apiUrl,
 
     prepareHeaders: (headers, api) => {
-      checkIfAccessTokenToBeFetched(api.endpoint);
+      // checkIfRefreshTokenToBeFetched(api.endpoint);
 
       if (accessToken) {
+        console.log("*****************");
         headers.set("Authorization", `Bearer ${accessToken}`);
       }
 
@@ -67,8 +69,7 @@ const baseQueryWithAuth: BaseQueryFn<
           "Invalid token."))
   ) {
     removeLocalStorageItem(LocalStorageKey.USER_DATA);
-    removeLocalStorageItem(LocalStorageKey.ACCESS_TOKEN);
-    removeLocalStorageItem(LocalStorageKey.REFRESH_TOKEN);
+    removeLocalStorageItem(LocalStorageKey.TOKENS);
 
     window.sessionStorage.clear();
     setApiAccessToken(null);
@@ -88,22 +89,20 @@ export const setApiAccessToken = (token: string | null): void => {
 };
 
 if (typeof window !== "undefined") {
-  const storedToken = getLocalStorageItem<string>(
-    LocalStorageKey.ACCESS_TOKEN
-  )!;
+  const storedToken = getLocalStorageItem<Tokens>(LocalStorageKey.TOKENS)!;
 
-  setApiAccessToken(storedToken);
+  setApiAccessToken(storedToken?.access?.token);
 }
 
-const checkIfAccessTokenToBeFetched = debounce(
-  (endpoint: string): void => {
-    if (typeof window === "undefined") return;
-    if (endpoint === "getRefreshToken") return;
+// const checkIfRefreshTokenToBeFetched = debounce(
+//   (endpoint: string): void => {
+//     if (typeof window === "undefined") return;
+//     if (endpoint === "getRefreshToken") return;
 
-    if (shouldRefreshTokenBeReFetched()) {
-      // fetch a new access token
-    }
-  },
-  2000,
-  { leading: false, trailing: true }
-);
+//     if (shouldRefreshTokenBeReFetched()) {
+//       // fetch a new access token
+//     }
+//   },
+//   2000,
+//   { leading: false, trailing: true }
+// );

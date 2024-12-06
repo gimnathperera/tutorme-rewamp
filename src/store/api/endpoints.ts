@@ -10,4 +10,5 @@ export const Endpoints = {
   Grades: "/v1/grades",
   Subjects: "/v1/subjects",
   Papers: "/v1/papers",
+  Users: "/v1/users",
 };

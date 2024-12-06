@@ -1,5 +1,8 @@
-import { UserRegisterRequest } from "@/types/request-types";
-import { UserRegisterResponse } from "@/types/response-types";
+import {
+  FetchProfileRequest,
+  UserRegisterRequest,
+} from "@/types/request-types";
+import { ProfileResponse, UserRegisterResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -14,9 +17,17 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getProfile: build.query<ProfileResponse, FetchProfileRequest>({
+      query: ({ userId }) => {
+        return {
+          url: `${Endpoints.Users}/${userId}`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useRegisterUserMutation } = usersApi;
+export const { useRegisterUserMutation, useGetProfileQuery } = usersApi;

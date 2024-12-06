@@ -79,19 +79,11 @@ const Navbar = () => {
             <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
               <div className="hidden lg:block">
                 {user?.email ? (
-                  <ProfileDropdown
-                    isLoading={!isUserLoaded}
-                    userEmail={user?.email}
-                    userName={user?.name}
-                  />
+                  <ProfileDropdown isLoading={!isUserLoaded} user={user} />
                 ) : (
                   <>
                     {!isUserLoaded ? (
-                      <ProfileDropdown
-                        isLoading={!isUserLoaded}
-                        userEmail={user?.email}
-                        userName={user?.name}
-                      />
+                      <ProfileDropdown isLoading={!isUserLoaded} user={user!} />
                     ) : (
                       <button
                         type="button"

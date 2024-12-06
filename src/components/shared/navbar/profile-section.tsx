@@ -1,17 +1,21 @@
+"use client";
+
 import { useAuthContext } from "@/contexts";
 import { useState, useRef, MutableRefObject, useEffect, FC } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ConfirmationAlert from "../confirm-alert";
+import { useRouter } from "next/navigation";
+import { AuthUserData } from "@/types/auth-types";
 
 type Props = {
   isLoading: boolean;
-  userName?: string;
-  userEmail?: string;
+  user?: AuthUserData;
 };
 
-const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
+const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const { logout, isUserLogoutLoading } = useAuthContext();
+  const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] =
@@ -47,6 +51,13 @@ const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
     setIsLogoutConfirmationOpen((show) => !show);
   };
 
+  const handleOnClickProfile = () => {
+    if (!user?.id) return;
+
+    closeDropdown();
+    router.push(`/profile/${user?.id}`);
+  };
+
   return (
     <div className="relative">
       {isLoading ? (
@@ -76,17 +87,14 @@ const ProfileDropdown: FC<Props> = ({ isLoading, userName, userEmail }) => {
           className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
         >
           <div className="px-4 py-2 border-b border-gray-200">
-            <p className="text-gray-900 font-medium">{userName}</p>
-            <p className="text-gray-500 text-sm">{userEmail}</p>
+            <p className="text-gray-900 font-medium">{user?.name}</p>
+            <p className="text-gray-500 text-sm">{user?.email}</p>
           </div>
           <ul>
             <li>
               <button
                 className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
-                onClick={() => {
-                  closeDropdown();
-                  console.log("Profile clicked");
-                }}
+                onClick={handleOnClickProfile}
               >
                 Profile
               </button>

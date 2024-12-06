@@ -21,6 +21,10 @@ export type UserRegisterRequest = {
   name: string;
 };
 
+export type FetchProfileRequest = {
+  userId: string;
+};
+
 export type FetchFaqRequest = {
   page: number;
   limit: number;

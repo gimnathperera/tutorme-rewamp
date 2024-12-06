@@ -109,6 +109,19 @@ export type UserLoginResponse = {
   };
 };
 
+export type ProfileResponse = {
+  role: string;
+  status: string;
+  isEmailVerified: boolean;
+  grades: [];
+  subjects: [];
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 export interface PaginatedResponse<T> {
   results: T[];
   page: number;
