@@ -1,6 +1,15 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Digital = () => {
+  const route = useRouter();
+
+  const handleOnLearnMoreClick = () => {
+    route.push("/find-a-tutor");
+  };
+
   return (
     <div className="mx-2">
       <div className="mx-auto max-w-7xl px-4 my-40 pb-20 lg:pb-40 lg:px-8 bg-digital rounded-3xl bg-primary-700 relative">
@@ -15,13 +24,14 @@ const Digital = () => {
               Home tuition provides the convenience of studying at home.
             </h4>
             <div className="text-center lg:text-start">
-              <button className="text-xl font-semibold text-white bg-btnblue py-4 px-12 hover:bg-hoblue rounded-full">
+              <button
+                className="text-xl font-semibold text-white bg-btnblue py-4 px-12 hover:opacity-90 rounded-full"
+                onClick={handleOnLearnMoreClick}
+              >
                 Get started
               </button>
             </div>
           </div>
-
-          {/* COLUMN-2 */}
 
           <div>
             <div className="lg:absolute girldoodle">
