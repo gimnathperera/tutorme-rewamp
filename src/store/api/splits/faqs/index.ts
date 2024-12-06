@@ -3,7 +3,7 @@ import { Faq, PaginatedResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const ProductsApi = baseApi.injectEndpoints({
+export const FaqsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchFaqs: build.query<PaginatedResponse<Faq>, FetchFaqRequest>({
       query: (payload) => ({
@@ -17,4 +17,4 @@ export const ProductsApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useFetchFaqsQuery } = ProductsApi;
+export const { useFetchFaqsQuery } = FaqsApi;

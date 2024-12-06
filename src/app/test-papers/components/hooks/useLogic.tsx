@@ -6,13 +6,14 @@ import {
 } from "../form-test-papper-search/schema";
 import { Option } from "@/types/shared-types";
 import {
-  useFetchGradeByIdQuery,
   useFetchGradesQuery,
   useLazyFetchGradeByIdQuery,
 } from "@/store/api/splits/grades";
 import { useCallback, useEffect, useState } from "react";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
+import { Paper } from "@/types/response-types";
+import { useLazyFetchPapersQuery } from "@/store/api/splits/papers";
 
 type LogicReturnType = {
   forms: {
@@ -30,11 +31,14 @@ type LogicReturnType = {
     subjectOptions: Option[];
     isGradesLoading: boolean;
     isSubjectsLoading: boolean;
+    papers: Paper[];
   };
 };
 
+const PAPER_LIMIT = 100;
 const useLogic = (): LogicReturnType => {
   const [subjectOptions, setSubjectOptions] = useState<Option[]>([]);
+  const [papers, setPapers] = useState<Paper[]>([]);
 
   const testPaperSearchForm = useForm({
     resolver: zodResolver(paperSearchSchema),
@@ -42,7 +46,10 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const selectedGrade = testPaperSearchForm.watch("grade");
+  const [selectedGrade, selectedSubject] = testPaperSearchForm.watch([
+    "grade",
+    "subject",
+  ]);
 
   // TODO: options will be fetched from a different API endpoint in the future
   const { data: gradesRowData, isLoading: isGradesLoading } =
@@ -54,6 +61,9 @@ const useLogic = (): LogicReturnType => {
   // TODO: options will be fetched from a different API endpoint in the future
   const [fetchSubjectsByGrade, { isLoading: isSubjectsLoading }] =
     useLazyFetchGradeByIdQuery();
+
+  const [fetchPapers, { isLoading: isPapersLoading }] =
+    useLazyFetchPapersQuery();
 
   const fetchSubjects = useCallback(
     async (gradeId: string) => {
@@ -74,6 +84,31 @@ const useLogic = (): LogicReturnType => {
     },
     [fetchSubjectsByGrade]
   );
+
+  const fetchTestPapers = useCallback(
+    async (grade: string, subject: string) => {
+      const result = await fetchPapers({
+        grade,
+        subject,
+        limit: PAPER_LIMIT,
+        page: 1,
+      });
+      const error = getErrorInApiResult(result);
+      if (error) {
+        return toast.error(error);
+      }
+      if (result.data) {
+        setPapers(result.data.results);
+      }
+    },
+    [fetchPapers]
+  );
+
+  useEffect(() => {
+    if (selectedGrade && selectedSubject) {
+      fetchTestPapers(selectedGrade, selectedSubject);
+    }
+  }, [fetchTestPapers, selectedGrade, selectedSubject]);
 
   useEffect(() => {
     if (selectedGrade) {
@@ -99,6 +134,7 @@ const useLogic = (): LogicReturnType => {
       subjectOptions,
       isGradesLoading,
       isSubjectsLoading,
+      papers,
     },
   };
 };

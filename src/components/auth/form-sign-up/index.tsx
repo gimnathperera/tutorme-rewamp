@@ -3,7 +3,7 @@ import SubmitButton from "@/components/shared/submit-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { initialFormValues, SignUpSchema, signUpSchema } from "./schema";
-import { useRegisterUserMutation } from "@/store/api/splits/user";
+import { useRegisterUserMutation } from "@/store/api/splits/users";
 import { getErrorInApiResult } from "@/utils/api";
 import { omit } from "lodash-es";
 import toast from "react-hot-toast";

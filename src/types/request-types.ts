@@ -17,6 +17,13 @@ export type FetchFaqRequest = {
   limit: number;
 };
 
+export type FetchPapersRequest = {
+  page: number;
+  limit: number;
+  grade: string;
+  subject: string;
+};
+
 export type FetchGradesRequest = {
   page: number;
   limit: number;

@@ -3,7 +3,7 @@ import { PaginatedResponse, Testimonial } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const ProductsApi = baseApi.injectEndpoints({
+export const testimonialsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchTestimonials: build.query<
       PaginatedResponse<Testimonial>,
@@ -20,4 +20,4 @@ export const ProductsApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useFetchTestimonialsQuery } = ProductsApi;
+export const { useFetchTestimonialsQuery } = testimonialsApi;

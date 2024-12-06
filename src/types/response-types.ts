@@ -27,6 +27,18 @@ export type Grade = {
   id: string;
 };
 
+export type Paper = {
+  title: string;
+  description: string;
+  subject: Subject;
+  grade: Grade;
+  year: string;
+  url: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
 export type Testimonial = {
   content: string;
   rating: number;

@@ -3,7 +3,7 @@ import { Grade, PaginatedResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const ProductsApi = baseApi.injectEndpoints({
+export const GradesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchGrades: build.query<PaginatedResponse<Grade>, FetchGradesRequest>({
       query: (payload) => ({
@@ -27,4 +27,4 @@ export const {
   useFetchGradesQuery,
   useFetchGradeByIdQuery,
   useLazyFetchGradeByIdQuery,
-} = ProductsApi;
+} = GradesApi;

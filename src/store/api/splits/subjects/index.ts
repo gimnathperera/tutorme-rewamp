@@ -3,7 +3,7 @@ import { PaginatedResponse, Subject } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const ProductsApi = baseApi.injectEndpoints({
+export const SubjectsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchGrades: build.query<PaginatedResponse<Subject>, FetchSubjectsRequest>({
       query: (payload) => ({
@@ -17,4 +17,4 @@ export const ProductsApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useFetchGradesQuery } = ProductsApi;
+export const { useFetchGradesQuery } = SubjectsApi;

@@ -28,15 +28,12 @@ const TestPapperList: FC<Props> = ({ availablePapers }) => {
               >
                 {subject.downloadAll}
               </a>
-              <p className="text-gray-700 mt-1">{subject.fileType}</p>
               <ul className="mt-4 space-y-1">
-                {subject.years.map((year) => (
-                  <li key={year}>
-                    <a href="#" className="text-gray-700 hover:underline">
-                      {year} {subject.fileType}
-                    </a>
-                  </li>
-                ))}
+                <li>
+                  <a href="#" className="text-gray-700 hover:underline">
+                    2021 P1 English
+                  </a>
+                </li>
               </ul>
             </div>
           ))}

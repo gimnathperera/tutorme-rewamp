@@ -3,7 +3,7 @@ import { UserRegisterResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const authApi = baseApi.injectEndpoints({
+export const usersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     registerUser: build.mutation<UserRegisterResponse, UserRegisterRequest>({
       query: (payload) => {
@@ -19,4 +19,4 @@ export const authApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useRegisterUserMutation } = authApi;
+export const { useRegisterUserMutation } = usersApi;
