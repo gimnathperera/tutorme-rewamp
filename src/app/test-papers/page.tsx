@@ -5,27 +5,14 @@ import TestPapperList from "./components/test-papper-list";
 import useLogic from "./components/hooks/useLogic";
 
 const TestPapers = () => {
-  const availablePapers = [
-    {
-      title: "English",
-      downloadAll: "Download All",
-      fileType: "P1 English",
-      years: [2021, 2019, 2018, 2017, 2016, 2015, 2014, 2013],
-    },
-    {
-      title: "Maths",
-      downloadAll: "Download All",
-      fileType: "P1 Maths",
-      years: [2021, 2019, 2018, 2017, 2016, 2015, 2014, 2013],
-    },
-  ];
-
   const {
     derivedData: {
       gradesOptions,
       subjectOptions,
       isGradesLoading,
       isSubjectsLoading,
+      papers: availablePapers,
+      isPapersLoading,
     },
     forms: { testPaperSearchForm },
   } = useLogic();
@@ -59,7 +46,12 @@ const TestPapers = () => {
         />
       </div>
 
-      {isFormValid && <TestPapperList availablePapers={availablePapers} />}
+      {isFormValid && (
+        <TestPapperList
+          availablePapers={availablePapers}
+          isPapersLoading={isPapersLoading}
+        />
+      )}
     </div>
   );
 };

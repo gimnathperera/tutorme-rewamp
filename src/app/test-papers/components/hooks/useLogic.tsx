@@ -31,6 +31,7 @@ type LogicReturnType = {
     subjectOptions: Option[];
     isGradesLoading: boolean;
     isSubjectsLoading: boolean;
+    isPapersLoading: boolean;
     papers: Paper[];
   };
 };
@@ -134,6 +135,7 @@ const useLogic = (): LogicReturnType => {
       subjectOptions,
       isGradesLoading,
       isSubjectsLoading,
+      isPapersLoading,
       papers,
     },
   };
