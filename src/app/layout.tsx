@@ -1,6 +1,8 @@
 import NavBar from "@/components/shared/navbar";
-import "./globals.css";
 import Footer from "@/components/shared/footer";
+import BackToTop from "@/components/shared/back-to-top";
+import "./globals.css";
+import { WithProviders } from "@/hocs/with-providers";
 
 export const metadata = {
   title: "Tutor Me",
@@ -15,11 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <main className="bg-lightwhite">
-          <NavBar />
-          <div className="container mx-auto">{children}</div>
-          <Footer />
-        </main>
+        <WithProviders>
+          <main className="bg-lightwhite">
+            <NavBar />
+            <div className="container mx-auto">{children}</div>
+            <Footer />
+          </main>
+        </WithProviders>
+        <BackToTop />
       </body>
     </html>
   );

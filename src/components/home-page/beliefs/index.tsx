@@ -1,9 +1,16 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 const Beliefs = () => {
+  const route = useRouter();
+
+  const handleOnLearnMoreClick = () => {
+    route.push("/find-a-tutor");
+  };
   return (
     <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 rounded-3xl">
       <div className="grid grid-cols-1 lg:grid-cols-2 my-16 mx-5 gap-5">
-        {/* COLUMN-1 */}
-
         <div className="bg-darkblue bg-beliefs pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl">
           <h2 className="text-lg font-normal text-white tracking-widest mb-5 text-center sm:text-start">
             JOIN
@@ -17,13 +24,11 @@ const Beliefs = () => {
             maecenas accumsan lacus vel facilisis.
           </h5>
           <div className="text-center sm:text-start">
-            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-hoblue">
+            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90">
               Get Started
             </button>
           </div>
         </div>
-
-        {/* COLUMN-2 */}
 
         <div className="bg-build pt-12 px-10 sm:px-24 pb-52 md:pb-70 rounded-3xl">
           <h2 className="text-lg font-normal text-blue tracking-widest mb-5 text-center sm:text-start">
@@ -38,7 +43,10 @@ const Beliefs = () => {
             maecenas accumsan lacus vel facilisis.
           </h5>
           <div className="text-center sm:text-start">
-            <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-hoblue">
+            <button
+              className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90"
+              onClick={handleOnLearnMoreClick}
+            >
               Learn more
             </button>
           </div>

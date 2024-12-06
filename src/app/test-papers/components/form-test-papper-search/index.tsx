@@ -1,38 +1,36 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FC } from "react";
-import { FormProvider, useForm } from "react-hook-form";
-import { PaperSearchSchema, paperSearchSchema } from "./schema";
 import InputSelect from "@/components/shared/input-select";
+import { Option } from "@/types/shared-types";
+import { FC } from "react";
+import { FormProvider, UseFormReturn } from "react-hook-form";
+import { PaperSearchSchema } from "./schema";
 
-const gradesOptions = [
-  { label: "Grade 5", value: "5" },
-  { label: "Grade 6", value: "6" },
-  { label: "Grade 7", value: "7" },
-  { label: "Grade 8", value: "8" },
-  { label: "Grade 9", value: "9" },
-  { label: "Grade 10", value: "10" },
-  { label: "Grade 11", value: "11" },
-  { label: "Grade 12", value: "12" },
-  { label: "Grade 13", value: "13" },
-];
+type Props = {
+  gradesOptions: Option[];
+  subjectOptions: Option[];
+  testPaperSearchForm: UseFormReturn<
+    {
+      grade: string;
+      subject: string;
+    },
+    any,
+    undefined
+  >;
+  isGradesLoading: boolean;
+  isSubjectsLoading: boolean;
+};
 
-const subjectOptions = [
-  { label: "Mathematics", value: "math" },
-  { label: "Science", value: "science" },
-  { label: "English", value: "english" },
-  { label: "History", value: "history" },
-];
-
-const FormTestPaperSearch: FC = () => {
-  const testPaperSearchForm = useForm({
-    resolver: zodResolver(paperSearchSchema),
-    defaultValues: {} as PaperSearchSchema,
-    mode: "onChange",
-  });
-
+const FormTestPapperSearch: FC<Props> = ({
+  gradesOptions,
+  subjectOptions,
+  testPaperSearchForm,
+  isGradesLoading,
+  isSubjectsLoading,
+}) => {
   const onSubmit = (data: PaperSearchSchema) => {
     console.log("Form Submitted", data);
   };
+
+  const selectedGrade = testPaperSearchForm.watch("grade");
 
   return (
     <FormProvider {...testPaperSearchForm}>
@@ -42,6 +40,7 @@ const FormTestPaperSearch: FC = () => {
             label="Select Grade"
             name="grade"
             options={gradesOptions}
+            loading={isGradesLoading}
           />
         </div>
 
@@ -50,6 +49,8 @@ const FormTestPaperSearch: FC = () => {
             label="Select Subject"
             name="subject"
             options={subjectOptions}
+            disabled={!selectedGrade}
+            loading={isSubjectsLoading}
           />
         </div>
       </form>
@@ -57,4 +58,4 @@ const FormTestPaperSearch: FC = () => {
   );
 };
 
-export default FormTestPaperSearch;
+export default FormTestPapperSearch;

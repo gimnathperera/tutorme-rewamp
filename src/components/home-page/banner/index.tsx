@@ -1,6 +1,14 @@
+"use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const Banner = () => {
+  const route = useRouter();
+
+  const handleOnFindATutorClick = () => {
+    route.push("/find-a-tutor");
+  };
+
   return (
     <div className="mx-auto max-w-7xl my-10 sm:py-10 px-6 lg:px-8">
       <div className="grid grid-cols-1 lg:grid-cols-2 my-16">
@@ -17,13 +25,14 @@ const Banner = () => {
             </h1>
           </div>
           <div className="my-7 text-center lg:text-start">
-            <button className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary-700 text-white py-3 px-6 md:py-5 md:px-14 rounded-full hover:bg-hoblue">
-              Get Started
+            <button
+              className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary-700 text-white py-3 px-6 md:py-5 md:px-14 rounded-full hover:opacity-90"
+              onClick={handleOnFindATutorClick}
+            >
+              Find a tutor
             </button>
           </div>
         </div>
-
-        {/* COLUMN-2 */}
 
         <div className="lg:-m-24 lg:pt-20 hidden lg:block">
           <Image

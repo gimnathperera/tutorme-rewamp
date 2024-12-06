@@ -3,6 +3,7 @@ import SubmitButton from "@/components/shared/submit-button";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoginSchema, loginSchema } from "./schema";
+import InputPassword from "@/components/shared/input-password";
 
 type Props = {
   onRegisterClick: () => void;
@@ -30,11 +31,10 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             placeholder="jhon@xyz.com"
             type="email"
           />
-          <InputText
+          <InputPassword
             label="Password"
             name="password"
             placeholder="*******"
-            type="password"
           />
         </div>
         <div className="pt-1">

@@ -6,3 +6,8 @@ export const paperSearchSchema = z.object({
 });
 
 export type PaperSearchSchema = z.infer<typeof paperSearchSchema>;
+
+export const initialFormValues: PaperSearchSchema = {
+  grade: "",
+  subject: "",
+};
