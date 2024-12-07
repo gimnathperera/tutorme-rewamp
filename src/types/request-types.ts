@@ -43,7 +43,7 @@ export type UpdateProfileRequest = {
     address?: string;
     birthday?: string;
     tutorType?: string;
-    gender?: "Male" | "Female" | "None";
+    gender?: string;
     duration?: string;
   };
 };
