@@ -8,6 +8,7 @@ import { FC } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty, isNil } from "lodash-es";
+import InputDatePicker from "@/components/shared/input-date-picker";
 
 type Props = {
   dropdownOptionData: {
@@ -17,6 +18,7 @@ type Props = {
     frequencyOptions: Option[];
     tutorTypesOptions: Option[];
     genderOptions: Option[];
+    countryOptions: Option[];
   };
   form: ReturnType<any>;
   onFormSubmit: (data: GeneralInfoSchema) => void;
@@ -31,6 +33,7 @@ const FormGeneralInfo: FC<Props> = ({
     frequencyOptions,
     tutorTypesOptions,
     genderOptions,
+    countryOptions,
   },
   form,
   onFormSubmit,
@@ -71,11 +74,11 @@ const FormGeneralInfo: FC<Props> = ({
                 name="phoneNumber"
                 type="tel"
               />
-              <InputText
+              <InputSelect
                 label="Country"
                 placeholder="Country"
                 name="country"
-                type="text"
+                options={countryOptions}
               />
               <InputText
                 label="City"
@@ -107,12 +110,7 @@ const FormGeneralInfo: FC<Props> = ({
                 name="address"
                 type="text"
               />
-              <InputText
-                label="Birthday"
-                placeholder="Birthday"
-                name="birthday"
-                type="text"
-              />
+              <InputDatePicker label="Birthday" name="birthday" />
               <InputSelect
                 label="Grade/Level"
                 name="grade"

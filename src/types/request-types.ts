@@ -41,7 +41,7 @@ export type UpdateProfileRequest = {
     region?: string;
     zip?: string;
     address?: string;
-    birthday?: string;
+    birthday?: string | Date;
     tutorType?: string;
     gender?: string;
     duration?: string;

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { addYears, isBefore } from "date-fns";
 
 export const generalInfoSchema = z.object({
   name: z.string().min(1, "First Name is required"),
@@ -16,7 +17,19 @@ export const generalInfoSchema = z.object({
     .regex(/^\d{5}$/, "ZIP must be 5 digits")
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
-  birthday: z.string().min(1, "Birthday is required").optional(),
+  birthday: z
+    .date()
+    .optional()
+    .refine(
+      (date) => {
+        const today = new Date();
+        const minDate = addYears(today, -18);
+        return isBefore(date!, minDate);
+      },
+      {
+        message: "You must be at least 18 years old",
+      }
+    ),
   grade: z.string().min(1, "Grade is required").optional(),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
@@ -38,7 +51,7 @@ export const initialGeneralInfoFormValues = {
   region: "",
   zip: "",
   address: "",
-  birthday: "",
+  birthday: "" as any, //TODO: fix the type issue here
   grade: "",
   tutorType: "",
   gender: "",

@@ -27,6 +27,7 @@ import {
   frequencyOptions,
   tutorTypesOptions,
   genderOptions,
+  countryOptions,
 } from "./util";
 import { Option } from "@/types/shared-types";
 
@@ -101,7 +102,7 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm.setValue("region", region);
       generalInfoForm.setValue("zip", zip);
       generalInfoForm.setValue("address", address);
-      generalInfoForm.setValue("birthday", birthday);
+      generalInfoForm.setValue("birthday", new Date(birthday));
       generalInfoForm.setValue("duration", duration);
       generalInfoForm.setValue("frequency", frequency);
       generalInfoForm.setValue("gender", gender);
@@ -189,6 +190,7 @@ const useLogic = (): LogicReturnType => {
         frequencyOptions,
         tutorTypesOptions,
         genderOptions,
+        countryOptions,
       },
       loading: {
         isProfileDataLoading,

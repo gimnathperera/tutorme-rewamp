@@ -10,6 +10,7 @@ export type LogicReturnType = {
       frequencyOptions: Option[];
       tutorTypesOptions: Option[];
       genderOptions: Option[];
+      countryOptions: Option[];
     };
     loading: {
       isProfileDataLoading: boolean;
@@ -50,4 +51,28 @@ export const genderOptions = [
   { label: "Male", value: "Male" },
   { label: "Female", value: "Female" },
   { label: "No Gender Preference", value: "None" },
+];
+
+export const countryOptions: Option[] = [
+  { label: "United States", value: "US" },
+  { label: "Canada", value: "CA" },
+  { label: "United Kingdom", value: "GB" },
+  { label: "Australia", value: "AU" },
+  { label: "Germany", value: "DE" },
+  { label: "France", value: "FR" },
+  { label: "India", value: "IN" },
+  { label: "Brazil", value: "BR" },
+  { label: "South Africa", value: "ZA" },
+  { label: "Mexico", value: "MX" },
+  { label: "Italy", value: "IT" },
+  { label: "Spain", value: "ES" },
+  { label: "Russia", value: "RU" },
+  { label: "South Korea", value: "KR" },
+  { label: "New Zealand", value: "NZ" },
+  { label: "Netherlands", value: "NL" },
+  { label: "Sweden", value: "SE" },
+  { label: "Norway", value: "NO" },
+  { label: "Japan", value: "JP" },
+  { label: "China", value: "CN" },
+  { label: "Sri Lanka", value: "SL" },
 ];
