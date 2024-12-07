@@ -1,8 +1,7 @@
 import { z } from "zod";
 
 export const generalInfoSchema = z.object({
-  firstName: z.string().min(1, "First Name is required"),
-  lastName: z.string().min(1, "Last Name is required"),
+  name: z.string().min(1, "First Name is required"),
   email: z.string().email("Invalid email address"),
   phoneNumber: z
     .string()
@@ -24,9 +23,8 @@ export const generalInfoSchema = z.object({
   frequency: z.string().min(1, "Frequency is required"),
 });
 
-export const initialFormValues = {
-  firstName: "",
-  lastName: "",
+export const initialGeneralInfoFormValues = {
+  name: "",
   email: "",
   phoneNumber: "",
   country: "",

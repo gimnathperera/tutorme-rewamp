@@ -1,16 +1,31 @@
 "use client";
 
 import { useAuthContext } from "@/contexts";
+import {
+  useFetchGradesQuery,
+  useLazyFetchGradeByIdQuery,
+} from "@/store/api/splits/grades";
 import { useLazyGetProfileQuery } from "@/store/api/splits/users";
-import { ProfileResponse } from "@/types/response-types";
+import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-
-type LogicReturnType = {
-  derivedData: {};
-};
+import {
+  GeneralInfoSchema,
+  generalInfoSchema,
+  initialGeneralInfoFormValues,
+} from "../components/form-general-information/schema";
+import {
+  LogicReturnType,
+  durationOptions,
+  frequencyOptions,
+  tutorTypesOptions,
+  genderOptions,
+} from "./util";
+import { Option } from "@/types/shared-types";
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
@@ -18,9 +33,19 @@ const useLogic = (): LogicReturnType => {
   const userId = params?.id as string;
   const { user, isUserLoaded } = useAuthContext();
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
+  const [subjectsOptions, setSubjectsOptions] = useState<Option[]>([]);
 
   const [fetchProfileData, { isLoading: isProfileDataLoading }] =
     useLazyGetProfileQuery();
+
+  const { data: gradeRawData, isLoading: isGradeLoading } = useFetchGradesQuery(
+    {
+      limit: 100,
+      page: 1,
+    }
+  );
+
+  const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
 
   // TODO: may be find a better way to handle this
   const forceRedirectUser = useCallback(() => {
@@ -30,6 +55,57 @@ const useLogic = (): LogicReturnType => {
     }
   }, [isUserLoaded, router, user]);
 
+  const generalInfoForm = useForm<GeneralInfoSchema>({
+    resolver: zodResolver(generalInfoSchema),
+    defaultValues: initialGeneralInfoFormValues as GeneralInfoSchema,
+    mode: "onChange",
+  });
+
+  const [grade] = generalInfoForm.watch(["grade"]);
+
+  const prePopulateGeneralForm = useCallback(
+    (profile: ProfileResponse) => {
+      if (!userRawData) return;
+      const {
+        name,
+        email,
+        phoneNumber,
+        country,
+        city,
+        state,
+        region,
+        zip,
+        address,
+        birthday,
+        duration,
+        frequency,
+        gender,
+        tutorType,
+        grades,
+      } = profile;
+
+      // TODO: grade and subjects should be included
+      // TODO: country should be a dropdown
+
+      generalInfoForm.setValue("name", name);
+      generalInfoForm.setValue("email", email);
+      generalInfoForm.setValue("phoneNumber", phoneNumber);
+      generalInfoForm.setValue("country", country);
+      generalInfoForm.setValue("city", city);
+      generalInfoForm.setValue("state", state);
+      generalInfoForm.setValue("region", region);
+      generalInfoForm.setValue("zip", zip);
+      generalInfoForm.setValue("address", address);
+      generalInfoForm.setValue("birthday", birthday);
+      generalInfoForm.setValue("duration", duration);
+      generalInfoForm.setValue("frequency", frequency);
+      generalInfoForm.setValue("gender", gender);
+      generalInfoForm.setValue("tutorType", tutorType);
+      generalInfoForm.setValue("grade", grades?.[0]?.id);
+    },
+    [generalInfoForm, userRawData]
+  );
+
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
     const error = getErrorInApiResult(result);
@@ -37,13 +113,33 @@ const useLogic = (): LogicReturnType => {
       toast.error("Failed to load profile data. Please try again later.");
       return;
     }
-
-    console.log(result.data);
-  }, [fetchProfileData, userId]);
+    if (result.data) {
+      setUserRawData(result.data);
+      prePopulateGeneralForm(result.data);
+    }
+  }, [fetchProfileData, prePopulateGeneralForm, userId]);
 
   const init = useCallback(async () => {
     await getUserRawData();
   }, [getUserRawData]);
+
+  const handleOnGradeChangeSubjectFetch = useCallback(async () => {
+    const result = await fetchSubjectsByGrade(grade);
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      return toast.error(error);
+    }
+
+    if (result.data) {
+      setSubjectsOptions(
+        result.data.subjects.map(({ title, id }: Subject) => ({
+          label: title,
+          value: id,
+        }))
+      );
+    }
+  }, [fetchSubjectsByGrade, grade]);
 
   useEffect(() => {
     forceRedirectUser();
@@ -51,8 +147,35 @@ const useLogic = (): LogicReturnType => {
     init();
   }, [forceRedirectUser, init, user, userId]);
 
+  useEffect(() => {
+    if (!grade) return;
+    handleOnGradeChangeSubjectFetch();
+  }, [grade, handleOnGradeChangeSubjectFetch]);
+
+  const gradesOptions =
+    gradeRawData?.results.map((grade) => ({
+      label: grade.title,
+      value: grade.id.toString(),
+    })) || [];
+
   return {
-    derivedData: {},
+    derivedData: {
+      dropdownOptionData: {
+        gradesOptions,
+        subjectsOptions,
+        durationOptions,
+        frequencyOptions,
+        tutorTypesOptions,
+        genderOptions,
+      },
+      loading: {
+        isProfileDataLoading,
+        isGradeLoading,
+      },
+    },
+    forms: {
+      generalInfoForm,
+    },
   };
 };
 

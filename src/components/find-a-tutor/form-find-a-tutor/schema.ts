@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const tutorSchema = z.object({
-  firstName: z.string().min(1, "First Name is required"),
+  name: z.string().min(1, "First Name is required"),
   lastName: z.string().min(1, "Last Name is required"),
   email: z.string().email("Invalid email address"),
   grade: z.string().min(1, "Grade is required"),
@@ -33,7 +33,7 @@ export const tutorSchema = z.object({
 });
 
 export const initialFormValues = {
-  firstName: "",
+  name: "",
   lastName: "",
   email: "",
   grade: "",

@@ -25,6 +25,16 @@ export type UserRegisterRequest = {
   name: string;
 };
 
+export type UpdateProfileRequest = {
+  id: string;
+
+  payload: {
+    email: string;
+    password: string;
+    name: string;
+  };
+};
+
 export type FetchProfileRequest = {
   userId: string;
 };

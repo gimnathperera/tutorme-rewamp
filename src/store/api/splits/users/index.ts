@@ -1,5 +1,6 @@
 import {
   FetchProfileRequest,
+  UpdateProfileRequest,
   UserRegisterRequest,
 } from "@/types/request-types";
 import { ProfileResponse, UserRegisterResponse } from "@/types/response-types";
@@ -26,9 +27,22 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateProfile: build.mutation<ProfileResponse, UpdateProfileRequest>({
+      query: ({ id, payload }) => {
+        return {
+          url: `${Endpoints.Register}/${id}`,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useRegisterUserMutation, useLazyGetProfileQuery } = usersApi;
+export const {
+  useRegisterUserMutation,
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+} = usersApi;

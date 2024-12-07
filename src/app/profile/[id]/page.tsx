@@ -1,14 +1,17 @@
 "use client";
-import FormGeneralInfo from "@/components/profile/form-general-information";
-import FormLanguageTime from "@/components/profile/form-language-time";
-import FormPasswordInfo from "@/components/profile/form-password-information";
 import { FC } from "react";
-import ProfilePicSettings from "./components/profile-pic-settings";
-import SocialAccounts from "./components/social-accounts";
 import useLogic from "./hooks/useLogic";
+import ProfilePicSettings from "./components/form-profile-pic-settings";
+import FormLanguageTime from "./components/form-language-time";
+import SocialAccounts from "./components/form-social-accounts";
+import FormGeneralInfo from "./components/form-general-information";
+import FormPasswordInfo from "./components/form-password-information";
 
 const ProfilePage: FC = () => {
-  const { derivedData } = useLogic();
+  const {
+    derivedData: { dropdownOptionData },
+    forms: { generalInfoForm },
+  } = useLogic();
 
   return (
     <div className="container pb-8">
@@ -26,7 +29,10 @@ const ProfilePage: FC = () => {
           <SocialAccounts />
         </div>
         <div className="col-span-2">
-          <FormGeneralInfo />
+          <FormGeneralInfo
+            dropdownOptionData={dropdownOptionData}
+            form={generalInfoForm}
+          />
           <FormPasswordInfo />
         </div>
       </div>
