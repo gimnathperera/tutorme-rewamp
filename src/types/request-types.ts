@@ -1,3 +1,5 @@
+import { Grade, Subject } from "./response-types";
+
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -27,11 +29,22 @@ export type UserRegisterRequest = {
 
 export type UpdateProfileRequest = {
   id: string;
-
   payload: {
-    email: string;
-    password: string;
     name: string;
+    email: string;
+    grade?: string;
+    subjects?: string[];
+    country?: string;
+    phoneNumber?: string;
+    city?: string;
+    state?: string;
+    region?: string;
+    zip?: string;
+    address?: string;
+    birthday?: string;
+    tutorType?: string;
+    gender?: "Male" | "Female" | "None";
+    duration?: string;
   };
 };
 

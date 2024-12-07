@@ -114,7 +114,7 @@ export type ProfileResponse = {
   status: string;
   isEmailVerified: boolean;
   grades: Grade[];
-  subjects: [];
+  subjects: Subject[];
   name: string;
   email: string;
   country: string;

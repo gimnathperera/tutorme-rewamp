@@ -1,4 +1,5 @@
 import { Option } from "@/types/shared-types";
+import { GeneralInfoSchema } from "../components/form-general-information/schema";
 
 export type LogicReturnType = {
   derivedData: {
@@ -13,10 +14,14 @@ export type LogicReturnType = {
     loading: {
       isProfileDataLoading: boolean;
       isGradeLoading: boolean;
+      isGeneralFormSubmitting: boolean;
     };
   };
   forms: {
     generalInfoForm: ReturnType<any>;
+  };
+  handlers: {
+    onGeneralInfoFormSubmission: (data: GeneralInfoSchema) => void;
   };
 };
 

@@ -9,8 +9,12 @@ import FormPasswordInfo from "./components/form-password-information";
 
 const ProfilePage: FC = () => {
   const {
-    derivedData: { dropdownOptionData },
+    derivedData: {
+      dropdownOptionData,
+      loading: { isGeneralFormSubmitting },
+    },
     forms: { generalInfoForm },
+    handlers: { onGeneralInfoFormSubmission },
   } = useLogic();
 
   return (
@@ -32,6 +36,8 @@ const ProfilePage: FC = () => {
           <FormGeneralInfo
             dropdownOptionData={dropdownOptionData}
             form={generalInfoForm}
+            onFormSubmit={onGeneralInfoFormSubmission}
+            isSubmitting={isGeneralFormSubmitting}
           />
           <FormPasswordInfo />
         </div>

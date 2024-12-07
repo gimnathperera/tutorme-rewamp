@@ -30,8 +30,8 @@ export const usersApi = baseApi.injectEndpoints({
     updateProfile: build.mutation<ProfileResponse, UpdateProfileRequest>({
       query: ({ id, payload }) => {
         return {
-          url: `${Endpoints.Register}/${id}`,
-          method: "POST",
+          url: `${Endpoints.Users}/${id}`,
+          method: "PATCH",
           body: payload,
         };
       },

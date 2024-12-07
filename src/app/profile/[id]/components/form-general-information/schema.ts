@@ -5,22 +5,27 @@ export const generalInfoSchema = z.object({
   email: z.string().email("Invalid email address"),
   phoneNumber: z
     .string()
-    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
-  country: z.string().min(1, "Country is required"),
-  city: z.string().min(1, "City is required"),
-  state: z.string().min(1, "State is required"),
-  region: z.string().min(1, "Region is required"),
-  zip: z.string().regex(/^\d{5}$/, "ZIP must be 5 digits"),
-  address: z.string().min(1, "Address is required"),
-  birthday: z.string().min(1, "Birthday is required"),
-  grade: z.string().min(1, "Grade is required"),
+    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits")
+    .optional(),
+  country: z.string().min(1, "Country is required").optional(),
+  city: z.string().min(1, "City is required").optional(),
+  state: z.string().min(1, "State is required").optional(),
+  region: z.string().min(1, "Region is required").optional(),
+  zip: z
+    .string()
+    .regex(/^\d{5}$/, "ZIP must be 5 digits")
+    .optional(),
+  address: z.string().min(1, "Address is required").optional(),
+  birthday: z.string().min(1, "Birthday is required").optional(),
+  grade: z.string().min(1, "Grade is required").optional(),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
-    .refine((val) => val !== "", { message: "Gender is required" }),
-  tutorType: z.string().min(1, "Tutor type is required"),
-  subjects: z.array(z.never()).nonempty("At least one subject is required"),
-  duration: z.string().min(1, "Duration is required"),
-  frequency: z.string().min(1, "Frequency is required"),
+    .refine((val) => val !== "", { message: "Gender is required" })
+    .optional(),
+  tutorType: z.string().min(1, "Tutor type is required").optional(),
+  subjects: z.array(z.string()).optional(),
+  duration: z.string().min(1, "Duration is required").optional(),
+  frequency: z.string().min(1, "Frequency is required").optional(),
 });
 
 export const initialGeneralInfoFormValues = {
@@ -37,7 +42,7 @@ export const initialGeneralInfoFormValues = {
   grade: "",
   tutorType: "",
   gender: "",
-  subjects: [],
+  subjects: [] as unknown,
   duration: "",
   frequency: "",
 };

@@ -5,7 +5,10 @@ import {
   useFetchGradesQuery,
   useLazyFetchGradeByIdQuery,
 } from "@/store/api/splits/grades";
-import { useLazyGetProfileQuery } from "@/store/api/splits/users";
+import {
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+} from "@/store/api/splits/users";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -46,6 +49,8 @@ const useLogic = (): LogicReturnType => {
   );
 
   const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
+  const [handleGeneralInfoFormSubmit, { isLoading: isGeneralFormSubmitting }] =
+    useUpdateProfileMutation();
 
   // TODO: may be find a better way to handle this
   const forceRedirectUser = useCallback(() => {
@@ -124,6 +129,7 @@ const useLogic = (): LogicReturnType => {
   }, [getUserRawData]);
 
   const handleOnGradeChangeSubjectFetch = useCallback(async () => {
+    if (!grade) return;
     const result = await fetchSubjectsByGrade(grade);
     const error = getErrorInApiResult(result);
 
@@ -148,7 +154,6 @@ const useLogic = (): LogicReturnType => {
   }, [forceRedirectUser, init, user, userId]);
 
   useEffect(() => {
-    if (!grade) return;
     handleOnGradeChangeSubjectFetch();
   }, [grade, handleOnGradeChangeSubjectFetch]);
 
@@ -157,6 +162,23 @@ const useLogic = (): LogicReturnType => {
       label: grade.title,
       value: grade.id.toString(),
     })) || [];
+
+  const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
+    const result = await handleGeneralInfoFormSubmit({
+      id: userId,
+      payload: data,
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update settings");
+    }
+
+    if (result.data) {
+      toast.success("Settings updated successfully");
+    }
+  };
 
   return {
     derivedData: {
@@ -171,10 +193,14 @@ const useLogic = (): LogicReturnType => {
       loading: {
         isProfileDataLoading,
         isGradeLoading,
+        isGeneralFormSubmitting,
       },
     },
     forms: {
       generalInfoForm,
+    },
+    handlers: {
+      onGeneralInfoFormSubmission,
     },
   };
 };

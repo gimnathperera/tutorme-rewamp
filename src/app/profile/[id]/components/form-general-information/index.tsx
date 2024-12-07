@@ -6,6 +6,8 @@ import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { GeneralInfoSchema } from "./schema";
+import SubmitButton from "@/components/shared/submit-button";
+import { isEmpty, isNil } from "lodash-es";
 
 type Props = {
   dropdownOptionData: {
@@ -17,6 +19,8 @@ type Props = {
     genderOptions: Option[];
   };
   form: ReturnType<any>;
+  onFormSubmit: (data: GeneralInfoSchema) => void;
+  isSubmitting: boolean;
 };
 
 const FormGeneralInfo: FC<Props> = ({
@@ -29,10 +33,16 @@ const FormGeneralInfo: FC<Props> = ({
     genderOptions,
   },
   form,
+  onFormSubmit,
+  isSubmitting,
 }) => {
   const onSubmit = (data: GeneralInfoSchema) => {
-    console.log("Form Submitted", data);
+    onFormSubmit(data);
   };
+
+  const { isDirty, errors } = form.formState;
+  const [selectedGrade] = form.watch(["grade"]);
+  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 
   return (
     <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
@@ -53,6 +63,7 @@ const FormGeneralInfo: FC<Props> = ({
                 placeholder="Email"
                 name="email"
                 type="text"
+                disabled
               />
               <InputText
                 label="Phone Number"
@@ -111,6 +122,7 @@ const FormGeneralInfo: FC<Props> = ({
                 label="Subjects"
                 name="subjects"
                 options={subjectsOptions}
+                isDisabled={!selectedGrade}
               />
               <InputSelect
                 label="Duration"
@@ -134,12 +146,13 @@ const FormGeneralInfo: FC<Props> = ({
               />
             </div>
             <div className="col-span-6 sm:col-full">
-              <button
-                className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center"
+              <SubmitButton
+                className="peer font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="submit"
-              >
-                Save all
-              </button>
+                loading={isSubmitting}
+                title="Save all"
+                disabled={isButtonDisabled}
+              />
             </div>
           </div>
         </form>
