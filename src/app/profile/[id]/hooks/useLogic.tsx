@@ -90,8 +90,7 @@ const useLogic = (): LogicReturnType => {
         grades,
       } = profile;
 
-      // TODO: grade and subjects should be included
-      // TODO: country should be a dropdown
+      // TODO: grade should be a multi select
 
       generalInfoForm.setValue("name", name);
       generalInfoForm.setValue("email", email);

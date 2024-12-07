@@ -43,7 +43,7 @@ export const tutorTypesOptions = [
   { label: "Full Time Tutors", value: "full-time" },
   {
     label: "Ex / Current Government School Tutors",
-    value: "govt",
+    value: "gov",
   },
 ];
 
