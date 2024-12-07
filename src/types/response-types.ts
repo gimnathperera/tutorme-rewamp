@@ -122,6 +122,17 @@ export type ProfileResponse = {
   id: string;
 };
 
+export type TokenResponse = {
+  access: {
+    token: string;
+    expires: string;
+  };
+  refresh: {
+    token: string;
+    expires: string;
+  };
+};
+
 export interface PaginatedResponse<T> {
   results: T[];
   page: number;

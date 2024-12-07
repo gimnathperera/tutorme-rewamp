@@ -1,5 +1,9 @@
-import { UserLoginRequest, UserLogoutRequest } from "@/types/request-types";
-import { UserLoginResponse } from "@/types/response-types";
+import {
+  UserLoginRequest,
+  UserLogoutRequest,
+  UserRefreshTokenRequest,
+} from "@/types/request-types";
+import { TokenResponse, UserLoginResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -23,9 +27,22 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    fetchAccessToken: build.mutation<TokenResponse, UserRefreshTokenRequest>({
+      query: (payload) => {
+        return {
+          url: Endpoints.RefreshToken,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useLoginMutation, useLogoutMutation } = usersApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useFetchAccessTokenMutation,
+} = usersApi;

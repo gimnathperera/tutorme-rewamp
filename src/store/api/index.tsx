@@ -1,11 +1,9 @@
 import { env } from "@/configs/env";
-import { Tokens } from "@/types/auth-types";
-import { shouldRefreshTokenBeReFetched } from "@/utils/auth";
 import {
-  LocalStorageKey,
-  getLocalStorageItem,
-  removeLocalStorageItem,
-} from "@/utils/local-storage";
+  getAccessToken,
+  handleForceLogout,
+  handleRefreshTokenProcess,
+} from "@/utils/auth";
 import {
   BaseQueryFn,
   FetchArgs,
@@ -14,25 +12,18 @@ import {
   fetchBaseQuery,
   retry,
 } from "@reduxjs/toolkit/query/react";
-import { debounce } from "lodash-es";
 import { Endpoints } from "./endpoints";
 
-let accessToken: string | null = null;
-
-const endpointsURLsToAvoidRetry = [Endpoints.AuthTokens];
+const ENDPOINTS_TO_AVOID_RETRY = [Endpoints.RefreshToken];
 
 const staggeredBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: env.urls.apiUrl,
-
-    prepareHeaders: (headers, api) => {
-      // checkIfRefreshTokenToBeFetched(api.endpoint);
-
-      if (accessToken) {
-        console.log("*****************");
-        headers.set("Authorization", `Bearer ${accessToken}`);
+    prepareHeaders: (headers) => {
+      const token = getAccessToken();
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
       }
-
       return headers;
     },
   }),
@@ -42,14 +33,15 @@ const staggeredBaseQuery = retry(
       baseQueryArgs,
       { attempt }
     ) => {
-      if (endpointsURLsToAvoidRetry.includes(baseQueryArgs.url)) return false;
+      if (ENDPOINTS_TO_AVOID_RETRY.includes(baseQueryArgs.url)) return false;
       if (attempt > 5) return false;
 
-      if (error.status === "TIMEOUT_ERROR" || error.status === "FETCH_ERROR")
-        return true;
-      if (typeof error.status !== "number") return false;
-
-      return error.status === 429 || error.status > 500;
+      return (
+        error.status === "TIMEOUT_ERROR" ||
+        error.status === "FETCH_ERROR" ||
+        (typeof error.status === "number" &&
+          (error.status === 429 || error.status > 500))
+      );
     },
   }
 );
@@ -59,21 +51,21 @@ const baseQueryWithAuth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  const result = await staggeredBaseQuery(args, api, extraOptions);
+  let result = await staggeredBaseQuery(args, api, extraOptions);
 
-  if (
-    result.error &&
-    (result.error.status === 401 ||
-      (result.error.status === 403 &&
-        (result.error.data as { message: string } | undefined)?.message ===
-          "Invalid token."))
-  ) {
-    removeLocalStorageItem(LocalStorageKey.USER_DATA);
-    removeLocalStorageItem(LocalStorageKey.TOKENS);
+  if (result.error?.status === 401) {
+    console.log("Access token expired. Attempting to refresh token...");
 
-    window.sessionStorage.clear();
-    setApiAccessToken(null);
+    const isTokenRefreshed = await handleRefreshTokenProcess();
+    if (isTokenRefreshed) {
+      console.log("Retrying original request with new access token...");
+      result = await staggeredBaseQuery(args, api, extraOptions);
+    } else {
+      console.error("Refresh token expired or invalid. Forcing logout.");
+      handleForceLogout();
+    }
   }
+
   return result;
 };
 
@@ -83,26 +75,3 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithAuth,
   endpoints: () => ({}),
 });
-
-export const setApiAccessToken = (token: string | null): void => {
-  accessToken = token;
-};
-
-if (typeof window !== "undefined") {
-  const storedToken = getLocalStorageItem<Tokens>(LocalStorageKey.TOKENS)!;
-
-  setApiAccessToken(storedToken?.access?.token);
-}
-
-// const checkIfRefreshTokenToBeFetched = debounce(
-//   (endpoint: string): void => {
-//     if (typeof window === "undefined") return;
-//     if (endpoint === "getRefreshToken") return;
-
-//     if (shouldRefreshTokenBeReFetched()) {
-//       // fetch a new access token
-//     }
-//   },
-//   2000,
-//   { leading: false, trailing: true }
-// );
