@@ -1,4 +1,5 @@
 "use client";
+import { useAuthContext } from "@/contexts";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -7,7 +8,7 @@ import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
 import { useAuthModalState } from "./hooks";
 import ProfileDropdown from "./profile-section";
-import { useAppSelector } from "@/hooks/store/useAppSelector";
+import { useEffect } from "react";
 
 interface NavigationItem {
   name: string;
@@ -40,7 +41,7 @@ const Navbar = () => {
     handleOnChangeDrawerVisibility,
   } = useAuthModalState();
 
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { user, isUserLoaded } = useAuthContext();
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -77,16 +78,22 @@ const Navbar = () => {
             </div>
             <div className=" inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto md:ml-6 sm:pr-0">
               <div className="hidden lg:block">
-                {isAuthenticated ? (
-                  <ProfileDropdown />
+                {user?.email ? (
+                  <ProfileDropdown isLoading={!isUserLoaded} user={user} />
                 ) : (
-                  <button
-                    type="button"
-                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
-                    onClick={handleOnChangeSignUpModalVisibility}
-                  >
-                    Login
-                  </button>
+                  <>
+                    {!isUserLoaded ? (
+                      <ProfileDropdown isLoading={!isUserLoaded} user={user!} />
+                    ) : (
+                      <button
+                        type="button"
+                        className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+                        onClick={handleOnChangeSignUpModalVisibility}
+                      >
+                        Login
+                      </button>
+                    )}
+                  </>
                 )}
               </div>
             </div>

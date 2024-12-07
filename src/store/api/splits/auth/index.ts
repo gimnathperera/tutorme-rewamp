@@ -1,31 +1,48 @@
-import { AuthTokenParams } from "@/types/auth-types";
-
-import { AuthTokensResponse } from "@/types/response-types";
+import {
+  UserLoginRequest,
+  UserLogoutRequest,
+  UserRefreshTokenRequest,
+} from "@/types/request-types";
+import { TokenResponse, UserLoginResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
-export const authApi = baseApi.injectEndpoints({
+export const usersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    getAuthTokens: build.mutation<AuthTokensResponse[], AuthTokenParams>({
+    login: build.mutation<UserLoginResponse, UserLoginRequest>({
       query: (payload) => {
         return {
-          url: Endpoints.AuthTokens,
+          url: Endpoints.Login,
           method: "POST",
           body: payload,
         };
       },
     }),
-
-    getRefreshToken: build.mutation<AuthTokensResponse, string>({
-      query: (refreshToken) => ({
-        url: Endpoints.RefreshToken,
-        method: "POST",
-        body: { refreshToken },
-      }),
+    logout: build.mutation<void, UserLogoutRequest>({
+      query: (payload) => {
+        return {
+          url: Endpoints.Logout,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
+    fetchAccessToken: build.mutation<TokenResponse, UserRefreshTokenRequest>({
+      query: (payload) => {
+        return {
+          url: Endpoints.RefreshToken,
+          method: "POST",
+          body: payload,
+        };
+      },
     }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useGetAuthTokensMutation, useGetRefreshTokenMutation } = authApi;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useFetchAccessTokenMutation,
+} = usersApi;

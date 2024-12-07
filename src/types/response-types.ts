@@ -1,7 +1,3 @@
-import { AuthTokens } from "./auth-types";
-
-export type AuthTokensResponse = AuthTokens;
-
 export type Faq = {
   answer: string;
   question: string;
@@ -85,6 +81,67 @@ export type UserRegisterResponse = {
       token: string;
       expires: string;
     };
+  };
+};
+
+export type UserLoginResponse = {
+  user: {
+    role: string;
+    status: string;
+    isEmailVerified: boolean;
+    grades: [];
+    subjects: [];
+    name: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+    id: string;
+  };
+  tokens: {
+    access: {
+      token: string;
+      expires: string;
+    };
+    refresh: {
+      token: string;
+      expires: string;
+    };
+  };
+};
+
+export type ProfileResponse = {
+  role: string;
+  status: string;
+  isEmailVerified: boolean;
+  grades: Grade[];
+  subjects: Subject[];
+  name: string;
+  email: string;
+  country: string;
+  phoneNumber: string;
+  city: string;
+  state: string;
+  region: string;
+  zip: string;
+  address: string;
+  birthday: string;
+  tutorType: string;
+  gender: "Male" | "Female" | "None";
+  duration: string;
+  frequency: string;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};
+
+export type TokenResponse = {
+  access: {
+    token: string;
+    expires: string;
+  };
+  refresh: {
+    token: string;
+    expires: string;
   };
 };
 

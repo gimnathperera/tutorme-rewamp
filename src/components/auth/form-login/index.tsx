@@ -2,8 +2,9 @@ import InputText from "@/components/shared/input-text";
 import SubmitButton from "@/components/shared/submit-button";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginSchema, loginSchema } from "./schema";
+import { initialFormValues, LoginSchema, loginSchema } from "./schema";
 import InputPassword from "@/components/shared/input-password";
+import { useAuthContext } from "@/contexts";
 
 type Props = {
   onRegisterClick: () => void;
@@ -11,14 +12,21 @@ type Props = {
 };
 
 const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
+  const { login, isAuthError, setIsAuthError, isLoading } = useAuthContext();
+
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: {} as LoginSchema,
+    defaultValues: initialFormValues,
     mode: "onChange",
   });
 
+  const { watch } = loginForm;
+  watch(() => {
+    if (isAuthError) setIsAuthError(null);
+  });
+
   const onSubmit = (data: LoginSchema) => {
-    console.log("Form Submitted", data);
+    login(data);
   };
 
   return (
@@ -36,7 +44,11 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             name="password"
             placeholder="*******"
           />
+          {isAuthError && (
+            <span className="text-red-500 text-xs">{isAuthError}</span>
+          )}
         </div>
+
         <div className="pt-1">
           <p
             className="block mb-2 text-sm font-medium text-blue cursor-pointer hover:underline"
@@ -46,7 +58,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
           </p>
         </div>
         <div className="space-y-2 mt-8">
-          <SubmitButton title="Login" type="submit" />
+          <SubmitButton title="Login" type="submit" loading={isLoading} />
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900">

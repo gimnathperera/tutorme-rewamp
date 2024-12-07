@@ -1,7 +1,8 @@
 import FormForgotPassword from "@/components/auth/form-forgot-password";
 import FormLogin from "@/components/auth/form-login";
 import FormSignUp from "@/components/auth/form-sign-up";
-import { useState } from "react";
+import { useAuthContext } from "@/contexts";
+import { useEffect, useState } from "react";
 
 export enum FormType {
   Login = "Login",
@@ -24,6 +25,13 @@ const useAuthModalState = (): LogicReturnType => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    if (user) {
+      setIsSignUpModalOpen(false);
+    }
+  }, [user]);
 
   const handleOnChangeSignUpModalVisibility = () => {
     setIsSignUpModalOpen((show) => !show);

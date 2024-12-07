@@ -38,7 +38,6 @@ export const getLocalStorageKey = (key: LocalStorageKey): string => {
 };
 
 export enum LocalStorageKey {
-  ACCESS_TOKEN = "access-token",
   USER_DATA = "user-data",
-  REFRESH_TOKEN = "refresh-token",
+  TOKENS = "tokens",
 }

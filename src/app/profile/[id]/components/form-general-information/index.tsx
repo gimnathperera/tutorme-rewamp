@@ -1,92 +1,72 @@
 import InputText from "@/components/shared/input-text";
-import { FormProvider, useForm } from "react-hook-form";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  GeneralInfoSchema,
-  generalInfoSchema,
-  initialFormValues,
-} from "./schema";
-import { FC } from "react";
-import InputSelect from "@/components/shared/input-select";
-import RadioGroup from "@/components/shared/input-radio";
+import { FormProvider } from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
+import RadioGroup from "@/components/shared/input-radio";
+import InputSelect from "@/components/shared/input-select";
+import { Option } from "@/types/shared-types";
+import { FC } from "react";
+import { GeneralInfoSchema } from "./schema";
+import SubmitButton from "@/components/shared/submit-button";
+import { isEmpty, isNil } from "lodash-es";
+import InputDatePicker from "@/components/shared/input-date-picker";
 
-const gradesOptions = [
-  { label: "Grade 5", value: "5" },
-  { label: "Grade 6", value: "6" },
-  { label: "Grade 7", value: "7" },
-  { label: "Grade 8", value: "8" },
-  { label: "Grade 9", value: "9" },
-  { label: "Grade 10", value: "10" },
-  { label: "Grade 11", value: "11" },
-  { label: "Grade 12", value: "12" },
-  { label: "Grade 13", value: "13" },
-];
-
-const subjectsOptions = [
-  { value: "Math", label: "Math" },
-  { value: "Science", label: "Science" },
-  { value: "English", label: "English" },
-  { value: "History", label: "History" },
-];
-
-const durationOptions = [
-  { value: "30 minutes", label: "30 minutes" },
-  { value: "1 hour", label: "1 hour" },
-  { value: "2 hours", label: "2 hours" },
-];
-
-const frequencyOptions = [
-  { value: "Once a week", label: "Once a week" },
-  { value: "Twice a week", label: "Twice a week" },
-  { value: "Daily", label: "Daily" },
-];
-
-const tutorTypes = [
-  { label: "Part Time Tutors", value: "part-time" },
-  { label: "Full Time Tutors", value: "full-time" },
-  {
-    label: "Ex / Current Government School Tutors",
-    value: "govt",
-  },
-];
-
-const FormGeneralInfo: FC = () => {
-  const passwordInfoForm = useForm({
-    resolver: zodResolver(generalInfoSchema),
-    defaultValues: initialFormValues as GeneralInfoSchema,
-    mode: "onChange",
-  });
-
-  const onSubmit = (data: GeneralInfoSchema) => {
-    console.log("Form Submitted", data);
+type Props = {
+  dropdownOptionData: {
+    gradesOptions: Option[];
+    subjectsOptions: Option[];
+    durationOptions: Option[];
+    frequencyOptions: Option[];
+    tutorTypesOptions: Option[];
+    genderOptions: Option[];
+    countryOptions: Option[];
   };
+  form: ReturnType<any>;
+  onFormSubmit: (data: GeneralInfoSchema) => void;
+  isSubmitting: boolean;
+};
+
+const FormGeneralInfo: FC<Props> = ({
+  dropdownOptionData: {
+    gradesOptions,
+    subjectsOptions,
+    durationOptions,
+    frequencyOptions,
+    tutorTypesOptions,
+    genderOptions,
+    countryOptions,
+  },
+  form,
+  onFormSubmit,
+  isSubmitting,
+}) => {
+  const onSubmit = (data: GeneralInfoSchema) => {
+    onFormSubmit(data);
+  };
+
+  const { isDirty, errors } = form.formState;
+  const [selectedGrade] = form.watch(["grade"]);
+  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 
   return (
     <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
       <h3 className="mb-4 text-xl font-semibold ">General information</h3>
-      <FormProvider {...passwordInfoForm}>
-        <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
+      <FormProvider {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
               <InputText
-                label="First Name"
+                label="Full Name"
                 placeholder="First Name"
-                name="firstName"
+                name="name"
                 type="text"
               />
-              <InputText
-                label="Last Name"
-                placeholder="Last Name"
-                name="lastName"
-                type="text"
-              />
+
               <InputText
                 label="Email"
                 placeholder="Email"
                 name="email"
                 type="text"
+                disabled
               />
               <InputText
                 label="Phone Number"
@@ -94,11 +74,11 @@ const FormGeneralInfo: FC = () => {
                 name="phoneNumber"
                 type="tel"
               />
-              <InputText
+              <InputSelect
                 label="Country"
                 placeholder="Country"
                 name="country"
-                type="text"
+                options={countryOptions}
               />
               <InputText
                 label="City"
@@ -130,12 +110,7 @@ const FormGeneralInfo: FC = () => {
                 name="address"
                 type="text"
               />
-              <InputText
-                label="Birthday"
-                placeholder="Birthday"
-                name="birthday"
-                type="text"
-              />
+              <InputDatePicker label="Birthday" name="birthday" />
               <InputSelect
                 label="Grade/Level"
                 name="grade"
@@ -145,6 +120,7 @@ const FormGeneralInfo: FC = () => {
                 label="Subjects"
                 name="subjects"
                 options={subjectsOptions}
+                isDisabled={!selectedGrade}
               />
               <InputSelect
                 label="Duration"
@@ -159,25 +135,22 @@ const FormGeneralInfo: FC = () => {
               <InputSelect
                 label="Gender"
                 name="gender"
-                options={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
-                  { label: "No Gender Preference", value: "None" },
-                ]}
+                options={genderOptions}
               />
               <RadioGroup
                 label="Please select your preferred tutor type"
                 name="tutorType"
-                options={tutorTypes}
+                options={tutorTypesOptions}
               />
             </div>
             <div className="col-span-6 sm:col-full">
-              <button
-                className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center"
+              <SubmitButton
+                className="peer font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="submit"
-              >
-                Save all
-              </button>
+                loading={isSubmitting}
+                title="Save all"
+                disabled={isButtonDisabled}
+              />
             </div>
           </div>
         </form>

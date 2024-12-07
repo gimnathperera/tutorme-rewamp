@@ -1,49 +1,57 @@
-import { AuthUserData } from "@/types/auth-types";
-import { JWTPayload, createRemoteJWKSet, jwtVerify } from "jose";
-import { z } from "zod";
-import { LocalStorageKey, getLocalStorageItem } from "./local-storage";
+import { Tokens } from "@/types/auth-types";
+import {
+  getLocalStorageItem,
+  LocalStorageKey,
+  removeLocalStorageItem,
+  setLocalStorageItem,
+} from "./local-storage";
+import { env } from "@/configs/env";
+import { Endpoints } from "@/store/api/endpoints";
 
-export const getVerifiedJWT = async (
-  token: string,
-  jwks: ReturnType<typeof createRemoteJWKSet>
-): Promise<JWTPayload> => {
-  const { payload } = await jwtVerify(token, jwks, {});
-
-  return payload;
+export const handleForceLogout = () => {
+  removeLocalStorageItem(LocalStorageKey.USER_DATA);
+  removeLocalStorageItem(LocalStorageKey.TOKENS);
+  localStorage.clear();
+  window.location.href = "/";
 };
 
-export const getValidatedJWTPayload = (
-  token: JWTPayload
-): z.SafeParseSuccess<JWTValidatedPayload>["data"] => {
-  const result = jwtSchema.safeParse(token);
-  if (!result.success) throw new Error(result.error.message);
-
-  return result.data;
+export const getAccessToken = (): string | null => {
+  const storedToken = getLocalStorageItem<Tokens>(LocalStorageKey.TOKENS);
+  return storedToken?.access?.token || null;
 };
 
-export const shouldRefreshTokenBeReFetched = (): boolean => {
-  const userData = getLocalStorageItem<AuthUserData>(LocalStorageKey.USER_DATA);
-  if (!userData) return false;
+export const handleRefreshTokenProcess = async (): Promise<boolean> => {
+  const storedToken = getLocalStorageItem<Tokens>(LocalStorageKey.TOKENS);
+  const refreshToken = storedToken?.refresh?.token;
 
-  const threshold = 60 * 60 * 1000; // 1 hour
-  const tokenExpirationDate = new Date(userData.exp * 1000);
-  const expirationThresholdDate = new Date(Date.now() + threshold);
+  if (!refreshToken) {
+    console.warn("No refresh token available.");
+    return false;
+  }
 
-  return tokenExpirationDate < expirationThresholdDate;
+  try {
+    const response = await fetch(
+      `${env.urls.apiUrl}${Endpoints.RefreshToken}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ refreshToken }),
+      }
+    );
+
+    if (response.ok) {
+      const newTokens = await response.json();
+      setLocalStorageItem(LocalStorageKey.TOKENS, newTokens);
+      console.log("Token refreshed successfully.");
+      return true;
+    } else {
+      console.error("Failed to refresh token.");
+      return false;
+    }
+  } catch (error) {
+    console.error("Error while refreshing token:", error);
+    return false;
+  }
 };
-
-const jwtSchema = z.object({
-  sub: z.string(),
-  userId: z.number(),
-  userRole: z.string(),
-  name: z.string(),
-  preferred_username: z.string(),
-  email: z.string().email(),
-  iat: z.number(),
-  exp: z.number(),
-  mfaVerified: z.boolean(),
-  customerName: z.string().nullable(),
-  customerId: z.number().nullable(),
-});
-
-export type JWTValidatedPayload = z.infer<typeof jwtSchema>;

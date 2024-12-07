@@ -36,7 +36,7 @@ const FormLanguageTime: FC = () => {
 
   return (
     <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
-      <h3 className="mb-4 text-xl font-semibold ">Password information</h3>
+      <h3 className="mb-4 text-xl font-semibold ">Language & Time Settings </h3>
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
           <div>

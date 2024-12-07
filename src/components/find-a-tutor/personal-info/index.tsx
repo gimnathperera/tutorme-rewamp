@@ -23,7 +23,7 @@ export const PersonalInfoComponent = () => {
         <InputText
           label="First Name"
           placeholder="First Name"
-          name="firstName"
+          name="name"
           type="text"
         />
         <InputText

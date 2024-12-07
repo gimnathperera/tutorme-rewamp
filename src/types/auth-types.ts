@@ -6,17 +6,21 @@ export type AuthTokenParams = {
 export type ErrorCallback = (err: { [key: string]: string }) => void;
 
 export type AuthUserData = {
-  id: number;
+  id: number | string;
   role: string;
-  email?: string;
-  fullName?: string;
-  username?: string;
+  email: string;
+  name: string;
   avatar?: string;
-  iat: number;
-  exp: number;
+  status: string;
 };
 
-export type AuthTokens = {
-  accessToken: string;
-  refreshToken: string;
+export type Tokens = {
+  access: {
+    token: string;
+    expires: string;
+  };
+  refresh: {
+    token: string;
+    expires: string;
+  };
 };

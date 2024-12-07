@@ -14,6 +14,7 @@ interface MultiSelectProps {
   options: Option[];
   helperText?: string;
   className?: string;
+  isDisabled?: boolean;
 }
 
 const InputMultiSelect: React.FC<MultiSelectProps> = ({
@@ -22,6 +23,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   options,
   helperText,
   className = "",
+  isDisabled = false,
 }) => {
   const { control, formState } = useFormContext();
 
@@ -75,6 +77,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
                 color: "#6A7280",
               }),
             }}
+            isDisabled={isDisabled}
           />
         )}
       />

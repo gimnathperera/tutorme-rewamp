@@ -1,3 +1,5 @@
+import { Grade, Subject } from "./response-types";
+
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -6,10 +8,48 @@ export type ContactUsRequest = {
   };
 };
 
+export type UserLoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type UserRefreshTokenRequest = {
+  refreshToken: string;
+};
+
+export type UserLogoutRequest = {
+  refreshToken: string;
+};
+
 export type UserRegisterRequest = {
   email: string;
   password: string;
   name: string;
+};
+
+export type UpdateProfileRequest = {
+  id: string;
+  payload: {
+    name: string;
+    email: string;
+    grade?: string;
+    subjects?: string[];
+    country?: string;
+    phoneNumber?: string;
+    city?: string;
+    state?: string;
+    region?: string;
+    zip?: string;
+    address?: string;
+    birthday?: string | Date;
+    tutorType?: string;
+    gender?: string;
+    duration?: string;
+  };
+};
+
+export type FetchProfileRequest = {
+  userId: string;
 };
 
 export type FetchFaqRequest = {

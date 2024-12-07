@@ -1,5 +1,9 @@
-import { UserRegisterRequest } from "@/types/request-types";
-import { UserRegisterResponse } from "@/types/response-types";
+import {
+  FetchProfileRequest,
+  UpdateProfileRequest,
+  UserRegisterRequest,
+} from "@/types/request-types";
+import { ProfileResponse, UserRegisterResponse } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -14,9 +18,31 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    getProfile: build.query<ProfileResponse, FetchProfileRequest>({
+      query: ({ userId }) => {
+        // TODO: the api endpoint will be changed to a more secure and proper one [/profile/me]
+        return {
+          url: `${Endpoints.Users}/${userId}`,
+          method: "GET",
+        };
+      },
+    }),
+    updateProfile: build.mutation<ProfileResponse, UpdateProfileRequest>({
+      query: ({ id, payload }) => {
+        return {
+          url: `${Endpoints.Users}/${id}`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useRegisterUserMutation } = usersApi;
+export const {
+  useRegisterUserMutation,
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+} = usersApi;
