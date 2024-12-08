@@ -119,6 +119,7 @@ const useLogic = (): LogicReturnType => {
     [generalInfoForm, userRawData]
   );
 
+  // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
   useEffect(() => {
     if (userRawData && size(subjectsOptions) > 0) {
       const { subjects } = userRawData;
