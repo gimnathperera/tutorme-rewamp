@@ -1,21 +1,20 @@
 "use client";
 
-import InputText from "@/components/shared/input-text";
-import { FormProvider, useForm } from "react-hook-form";
+import InputPassword from "@/components/shared/input-password";
+import SubmitButton from "@/components/shared/submit-button";
+import { useUpdateUserPasswordMutation } from "@/store/api/splits/users";
+import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { isEmpty } from "lodash-es";
+import { useParams } from "next/navigation";
+import { FC } from "react";
+import { FormProvider, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import {
   initialFormValues,
   PasswordInfoSchema,
   passwordInfoSchema,
 } from "./schema";
-import { FC } from "react";
-import { useUpdateUserPasswordMutation } from "@/store/api/splits/users";
-import { useParams } from "next/navigation";
-import { getErrorInApiResult } from "@/utils/api";
-import toast from "react-hot-toast";
-import InputPassword from "@/components/shared/input-password";
-import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty } from "lodash-es";
 
 const FormPasswordInfo: FC = () => {
   const params = useParams();
