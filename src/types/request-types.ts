@@ -30,8 +30,8 @@ export type UserRegisterRequest = {
 export type UpdateProfileRequest = {
   id: string;
   payload: {
-    name: string;
-    email: string;
+    name?: string;
+    email?: string;
     grade?: string;
     subjects?: string[];
     country?: string;
@@ -45,6 +45,8 @@ export type UpdateProfileRequest = {
     tutorType?: string;
     gender?: string;
     duration?: string;
+    timeZone?: string;
+    language?: string;
   };
 };
 

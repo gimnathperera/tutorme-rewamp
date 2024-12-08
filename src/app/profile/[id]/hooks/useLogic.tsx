@@ -28,9 +28,16 @@ import {
   tutorTypesOptions,
   genderOptions,
   countryOptions,
+  languageOptions,
+  timeZoneOptions,
 } from "./util";
 import { Option } from "@/types/shared-types";
 import { isUndefined, size } from "lodash-es";
+import {
+  initialLanguageAndTimeFormValues,
+  LanguageOptionsSchema,
+  languageOptionsSchema,
+} from "../components/form-language-time/schema";
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
@@ -68,6 +75,12 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
+  const languageAndTimeForm = useForm({
+    resolver: zodResolver(languageOptionsSchema),
+    defaultValues: initialLanguageAndTimeFormValues as LanguageOptionsSchema,
+    mode: "onChange",
+  });
+
   const [grades] = generalInfoForm.watch(["grades"]);
 
   const prePopulateGeneralForm = useCallback(
@@ -101,7 +114,7 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm.setValue("region", region);
       generalInfoForm.setValue("zip", zip);
       generalInfoForm.setValue("address", address);
-      generalInfoForm.setValue("birthday", new Date(birthday));
+      generalInfoForm.setValue("birthday", birthday ? new Date(birthday) : "");
       generalInfoForm.setValue("duration", duration);
       generalInfoForm.setValue("frequency", frequency);
       generalInfoForm.setValue("gender", gender);
@@ -117,6 +130,17 @@ const useLogic = (): LogicReturnType => {
     },
 
     [generalInfoForm, userRawData]
+  );
+
+  const prePopulateLanguageAndTimeForm = useCallback(
+    (profile: ProfileResponse) => {
+      if (!userRawData) return;
+      const { timeZone, language } = profile;
+
+      languageAndTimeForm.setValue("timeZone", timeZone);
+      languageAndTimeForm.setValue("language", language);
+    },
+    [languageAndTimeForm, userRawData]
   );
 
   // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
@@ -145,6 +169,7 @@ const useLogic = (): LogicReturnType => {
     if (result.data) {
       setUserRawData(result.data);
       prePopulateGeneralForm(result.data);
+      prePopulateLanguageAndTimeForm(result.data);
     }
   }, [fetchProfileData, prePopulateGeneralForm, userId]);
 
@@ -221,6 +246,25 @@ const useLogic = (): LogicReturnType => {
     }
   };
 
+  const onLanguageAndTimeFormSubmission = async (
+    data: LanguageOptionsSchema
+  ) => {
+    const result = await handleGeneralInfoFormSubmit({
+      id: userId,
+      payload: data,
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update settings");
+    }
+
+    if (result.data) {
+      toast.success("Settings updated successfully");
+    }
+  };
+
   return {
     derivedData: {
       dropdownOptionData: {
@@ -231,6 +275,8 @@ const useLogic = (): LogicReturnType => {
         tutorTypesOptions,
         genderOptions,
         countryOptions,
+        languageOptions,
+        timeZoneOptions,
       },
       loading: {
         isProfileDataLoading,
@@ -240,9 +286,11 @@ const useLogic = (): LogicReturnType => {
     },
     forms: {
       generalInfoForm,
+      languageAndTimeForm,
     },
     handlers: {
       onGeneralInfoFormSubmission,
+      onLanguageAndTimeFormSubmission,
     },
   };
 };
