@@ -13,7 +13,7 @@ import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -28,8 +28,16 @@ import {
   tutorTypesOptions,
   genderOptions,
   countryOptions,
+  languageOptions,
+  timeZoneOptions,
 } from "./util";
 import { Option } from "@/types/shared-types";
+import { isUndefined, size } from "lodash-es";
+import {
+  initialLanguageAndTimeFormValues,
+  LanguageOptionsSchema,
+  languageOptionsSchema,
+} from "../components/form-language-time/schema";
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
@@ -67,7 +75,13 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const [grade] = generalInfoForm.watch(["grade"]);
+  const languageAndTimeForm = useForm({
+    resolver: zodResolver(languageOptionsSchema),
+    defaultValues: initialLanguageAndTimeFormValues as LanguageOptionsSchema,
+    mode: "onChange",
+  });
+
+  const [grades] = generalInfoForm.watch(["grades"]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -88,10 +102,8 @@ const useLogic = (): LogicReturnType => {
         gender,
         tutorType,
         grades,
+        subjects,
       } = profile;
-
-      // TODO: grade and subjects should be included
-      // TODO: country should be a dropdown
 
       generalInfoForm.setValue("name", name);
       generalInfoForm.setValue("email", email);
@@ -102,15 +114,50 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm.setValue("region", region);
       generalInfoForm.setValue("zip", zip);
       generalInfoForm.setValue("address", address);
-      generalInfoForm.setValue("birthday", new Date(birthday));
+      generalInfoForm.setValue("birthday", birthday ? new Date(birthday) : "");
       generalInfoForm.setValue("duration", duration);
       generalInfoForm.setValue("frequency", frequency);
       generalInfoForm.setValue("gender", gender);
+      generalInfoForm.setValue(
+        "subjects",
+        subjects.map((subject) => subject.id)
+      );
       generalInfoForm.setValue("tutorType", tutorType);
-      generalInfoForm.setValue("grade", grades?.[0]?.id);
+      generalInfoForm.setValue(
+        "grades",
+        grades.map((grade) => grade.id)
+      );
     },
+
     [generalInfoForm, userRawData]
   );
+
+  const prePopulateLanguageAndTimeForm = useCallback(
+    (profile: ProfileResponse) => {
+      if (!userRawData) return;
+      const { timeZone, language } = profile;
+
+      languageAndTimeForm.setValue("timeZone", timeZone);
+      languageAndTimeForm.setValue("language", language);
+    },
+    [languageAndTimeForm, userRawData]
+  );
+
+  // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
+  useEffect(() => {
+    if (userRawData && size(subjectsOptions) > 0) {
+      const { subjects } = userRawData;
+
+      generalInfoForm.setValue(
+        "subjects",
+        subjects
+          .filter(({ id }) =>
+            subjectsOptions.some((option) => option.value === id)
+          )
+          .map((subject) => subject.id)
+      );
+    }
+  }, [userRawData, subjectsOptions, generalInfoForm]);
 
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
@@ -122,6 +169,7 @@ const useLogic = (): LogicReturnType => {
     if (result.data) {
       setUserRawData(result.data);
       prePopulateGeneralForm(result.data);
+      prePopulateLanguageAndTimeForm(result.data);
     }
   }, [fetchProfileData, prePopulateGeneralForm, userId]);
 
@@ -129,24 +177,41 @@ const useLogic = (): LogicReturnType => {
     await getUserRawData();
   }, [getUserRawData]);
 
+  const fetchedGradesRef = useRef(new Set());
+  const subjectsSetRef = useRef(new Set());
+
   const handleOnGradeChangeSubjectFetch = useCallback(async () => {
-    if (!grade) return;
-    const result = await fetchSubjectsByGrade(grade);
-    const error = getErrorInApiResult(result);
+    if (size(grades) === 0 || isUndefined(grades)) return;
 
-    if (error) {
-      return toast.error(error);
-    }
+    for (const gradeId of grades) {
+      if (fetchedGradesRef.current.has(gradeId)) continue;
+      fetchedGradesRef.current.add(gradeId);
 
-    if (result.data) {
-      setSubjectsOptions(
-        result.data.subjects.map(({ title, id }: Subject) => ({
-          label: title,
-          value: id,
-        }))
-      );
+      const result = await fetchSubjectsByGrade(gradeId);
+      const error = getErrorInApiResult(result);
+
+      if (error) {
+        toast.error(error);
+        continue;
+      }
+
+      if (result.data) {
+        const newSubjects = result.data.subjects.filter(
+          ({ id }: Subject) => !subjectsSetRef.current.has(id)
+        );
+
+        newSubjects.forEach(({ id }) => subjectsSetRef.current.add(id));
+
+        setSubjectsOptions((prev) => [
+          ...prev,
+          ...newSubjects.map(({ title, id }: Subject) => ({
+            label: title,
+            value: id,
+          })),
+        ]);
+      }
     }
-  }, [fetchSubjectsByGrade, grade]);
+  }, [fetchSubjectsByGrade, grades]);
 
   useEffect(() => {
     forceRedirectUser();
@@ -156,7 +221,7 @@ const useLogic = (): LogicReturnType => {
 
   useEffect(() => {
     handleOnGradeChangeSubjectFetch();
-  }, [grade, handleOnGradeChangeSubjectFetch]);
+  }, [grades, handleOnGradeChangeSubjectFetch]);
 
   const gradesOptions =
     gradeRawData?.results.map((grade) => ({
@@ -165,6 +230,25 @@ const useLogic = (): LogicReturnType => {
     })) || [];
 
   const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
+    const result = await handleGeneralInfoFormSubmit({
+      id: userId,
+      payload: data,
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update settings");
+    }
+
+    if (result.data) {
+      toast.success("Settings updated successfully");
+    }
+  };
+
+  const onLanguageAndTimeFormSubmission = async (
+    data: LanguageOptionsSchema
+  ) => {
     const result = await handleGeneralInfoFormSubmit({
       id: userId,
       payload: data,
@@ -191,6 +275,8 @@ const useLogic = (): LogicReturnType => {
         tutorTypesOptions,
         genderOptions,
         countryOptions,
+        languageOptions,
+        timeZoneOptions,
       },
       loading: {
         isProfileDataLoading,
@@ -200,9 +286,11 @@ const useLogic = (): LogicReturnType => {
     },
     forms: {
       generalInfoForm,
+      languageAndTimeForm,
     },
     handlers: {
       onGeneralInfoFormSubmission,
+      onLanguageAndTimeFormSubmission,
     },
   };
 };

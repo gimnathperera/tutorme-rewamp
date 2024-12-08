@@ -1,9 +1,14 @@
 import {
   FetchProfileRequest,
+  UpdatePasswordRequest,
   UpdateProfileRequest,
   UserRegisterRequest,
 } from "@/types/request-types";
-import { ProfileResponse, UserRegisterResponse } from "@/types/response-types";
+import {
+  ProfileResponse,
+  UpdatePasswordResponse,
+  UserRegisterResponse,
+} from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -36,6 +41,18 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    updateUserPassword: build.mutation<
+      UpdatePasswordResponse,
+      UpdatePasswordRequest
+    >({
+      query: ({ id, payload }) => {
+        return {
+          url: `${Endpoints.ChangePassword}/${id}`,
+          method: "PATCH",
+          body: payload,
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
@@ -45,4 +62,5 @@ export const {
   useRegisterUserMutation,
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
+  useUpdateUserPasswordMutation,
 } = usersApi;

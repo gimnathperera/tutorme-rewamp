@@ -47,13 +47,13 @@ const staggeredBaseQuery = retry(
 );
 
 const baseQueryWithAuth: BaseQueryFn<
-  string | FetchArgs,
+  FetchArgs,
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await staggeredBaseQuery(args, api, extraOptions);
 
-  if (result.error?.status === 401) {
+  if (result.error?.status === 401 && args?.url !== Endpoints.Login) {
     console.log("Access token expired. Attempting to refresh token...");
 
     const isTokenRefreshed = await handleRefreshTokenProcess();
@@ -61,7 +61,7 @@ const baseQueryWithAuth: BaseQueryFn<
       console.log("Retrying original request with new access token...");
       result = await staggeredBaseQuery(args, api, extraOptions);
     } else {
-      console.error("Refresh token expired or invalid. Forcing logout.");
+      console.log("Refresh token expired or invalid. Forcing logout.");
       handleForceLogout();
     }
   }

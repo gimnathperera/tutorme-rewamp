@@ -132,6 +132,12 @@ export type ProfileResponse = {
   createdAt: string;
   updatedAt: string;
   id: string;
+  timeZone: string;
+  language: string;
+};
+
+export type UpdatePasswordResponse = {
+  message: string;
 };
 
 export type TokenResponse = {

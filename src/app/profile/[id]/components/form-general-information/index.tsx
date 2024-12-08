@@ -44,7 +44,8 @@ const FormGeneralInfo: FC<Props> = ({
   };
 
   const { isDirty, errors } = form.formState;
-  const [selectedGrade] = form.watch(["grade"]);
+  console.log("🚀 ~ errors:", errors);
+  const [selectedGrades] = form.watch(["grades"]);
   const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 
   return (
@@ -111,16 +112,16 @@ const FormGeneralInfo: FC<Props> = ({
                 type="text"
               />
               <InputDatePicker label="Birthday" name="birthday" />
-              <InputSelect
+              <InputMultiSelect
                 label="Grade/Level"
-                name="grade"
+                name="grades"
                 options={gradesOptions}
               />
               <InputMultiSelect
                 label="Subjects"
                 name="subjects"
                 options={subjectsOptions}
-                isDisabled={!selectedGrade}
+                isDisabled={isEmpty(selectedGrades)}
               />
               <InputSelect
                 label="Duration"
@@ -148,7 +149,7 @@ const FormGeneralInfo: FC<Props> = ({
                 className="peer font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="submit"
                 loading={isSubmitting}
-                title="Save all"
+                title="Update General Information"
                 disabled={isButtonDisabled}
               />
             </div>

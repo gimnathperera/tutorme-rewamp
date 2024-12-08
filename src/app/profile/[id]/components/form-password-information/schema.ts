@@ -22,3 +22,9 @@ export const passwordInfoSchema = z
   });
 
 export type PasswordInfoSchema = z.infer<typeof passwordInfoSchema>;
+
+export const initialFormValues: PasswordInfoSchema = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+};

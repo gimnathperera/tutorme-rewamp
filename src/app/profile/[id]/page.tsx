@@ -13,8 +13,8 @@ const ProfilePage: FC = () => {
       dropdownOptionData,
       loading: { isGeneralFormSubmitting },
     },
-    forms: { generalInfoForm },
-    handlers: { onGeneralInfoFormSubmission },
+    forms: { generalInfoForm, languageAndTimeForm },
+    handlers: { onGeneralInfoFormSubmission, onLanguageAndTimeFormSubmission },
   } = useLogic();
 
   return (
@@ -28,7 +28,13 @@ const ProfilePage: FC = () => {
         <div className="col-span-full xl:col-auto">
           <ProfilePicSettings />
 
-          <FormLanguageTime />
+          <FormLanguageTime
+            timeZoneOptions={dropdownOptionData.timeZoneOptions}
+            languageOptions={dropdownOptionData.languageOptions}
+            form={languageAndTimeForm}
+            onFormSubmit={onLanguageAndTimeFormSubmission}
+            isSubmitting={isGeneralFormSubmitting}
+          />
 
           <SocialAccounts />
         </div>

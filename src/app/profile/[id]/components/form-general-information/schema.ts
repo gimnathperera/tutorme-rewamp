@@ -18,24 +18,26 @@ export const generalInfoSchema = z.object({
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
   birthday: z
-    .date()
+    .union([z.string(), z.date()])
     .optional()
+    .transform((value) => (value === "" ? undefined : value))
     .refine(
       (date) => {
+        if (!date) return true; // Allow undefined values
         const today = new Date();
         const minDate = addYears(today, -18);
-        return isBefore(date!, minDate);
+        return isBefore(new Date(date), minDate);
       },
       {
         message: "You must be at least 18 years old",
       }
     ),
-  grade: z.string().min(1, "Grade is required").optional(),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
     .refine((val) => val !== "", { message: "Gender is required" })
     .optional(),
   tutorType: z.string().min(1, "Tutor type is required").optional(),
+  grades: z.array(z.string()).optional(),
   subjects: z.array(z.string()).optional(),
   duration: z.string().min(1, "Duration is required").optional(),
   frequency: z.string().min(1, "Frequency is required").optional(),
@@ -52,9 +54,9 @@ export const initialGeneralInfoFormValues = {
   zip: "",
   address: "",
   birthday: "" as any, //TODO: fix the type issue here
-  grade: "",
   tutorType: "",
   gender: "",
+  grades: [] as unknown,
   subjects: [] as unknown,
   duration: "",
   frequency: "",

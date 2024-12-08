@@ -1,5 +1,6 @@
 import { Option } from "@/types/shared-types";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
+import { LanguageOptionsSchema } from "../components/form-language-time/schema";
 
 export type LogicReturnType = {
   derivedData: {
@@ -11,6 +12,8 @@ export type LogicReturnType = {
       tutorTypesOptions: Option[];
       genderOptions: Option[];
       countryOptions: Option[];
+      languageOptions: Option[];
+      timeZoneOptions: Option[];
     };
     loading: {
       isProfileDataLoading: boolean;
@@ -20,9 +23,11 @@ export type LogicReturnType = {
   };
   forms: {
     generalInfoForm: ReturnType<any>;
+    languageAndTimeForm: ReturnType<any>;
   };
   handlers: {
     onGeneralInfoFormSubmission: (data: GeneralInfoSchema) => void;
+    onLanguageAndTimeFormSubmission: (data: LanguageOptionsSchema) => void;
   };
 };
 
@@ -43,7 +48,7 @@ export const tutorTypesOptions = [
   { label: "Full Time Tutors", value: "full-time" },
   {
     label: "Ex / Current Government School Tutors",
-    value: "govt",
+    value: "gov",
   },
 ];
 
@@ -75,4 +80,18 @@ export const countryOptions: Option[] = [
   { label: "Japan", value: "JP" },
   { label: "China", value: "CN" },
   { label: "Sri Lanka", value: "SL" },
+];
+
+export const languageOptions = [
+  { value: "en", label: "English" },
+  { value: "sp", label: "Spanish" },
+  { value: "fr", label: "French" },
+  { value: "sn", label: "Sinhala" },
+];
+
+export const timeZoneOptions = [
+  { value: "UTC-5", label: "Eastern Time (US & Canada)" },
+  { value: "UTC+1", label: "Central European Time" },
+  { value: "UTC+9", label: "Japan Standard Time" },
+  { value: "UTC+5:30", label: "Sri Lanka Standard Time" },
 ];

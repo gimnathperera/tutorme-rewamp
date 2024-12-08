@@ -6,6 +6,7 @@ import Faqs from "@/components/home-page/faq";
 import KeepInTouch from "@/components/home-page/keep-in-touch";
 import OurTeam from "@/components/home-page/our-team";
 import Testimonials from "@/components/home-page/testimonials";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 export default function Home() {
   return (
@@ -18,6 +19,7 @@ export default function Home() {
       <Faqs />
       <Testimonials />
       <KeepInTouch />
+      <WhatsAppButton />
     </>
   );
 }
