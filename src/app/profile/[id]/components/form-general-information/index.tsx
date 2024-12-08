@@ -44,7 +44,7 @@ const FormGeneralInfo: FC<Props> = ({
   };
 
   const { isDirty, errors } = form.formState;
-  const [selectedGrade] = form.watch(["grade"]);
+  const [selectedGrades] = form.watch(["grades"]);
   const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 
   return (
@@ -111,16 +111,16 @@ const FormGeneralInfo: FC<Props> = ({
                 type="text"
               />
               <InputDatePicker label="Birthday" name="birthday" />
-              <InputSelect
+              <InputMultiSelect
                 label="Grade/Level"
-                name="grade"
+                name="grades"
                 options={gradesOptions}
               />
               <InputMultiSelect
                 label="Subjects"
                 name="subjects"
                 options={subjectsOptions}
-                isDisabled={!selectedGrade}
+                isDisabled={isEmpty(selectedGrades)}
               />
               <InputSelect
                 label="Duration"

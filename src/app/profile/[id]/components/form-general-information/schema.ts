@@ -30,12 +30,12 @@ export const generalInfoSchema = z.object({
         message: "You must be at least 18 years old",
       }
     ),
-  grade: z.string().min(1, "Grade is required").optional(),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
     .refine((val) => val !== "", { message: "Gender is required" })
     .optional(),
   tutorType: z.string().min(1, "Tutor type is required").optional(),
+  grades: z.array(z.string()).optional(),
   subjects: z.array(z.string()).optional(),
   duration: z.string().min(1, "Duration is required").optional(),
   frequency: z.string().min(1, "Frequency is required").optional(),
@@ -52,9 +52,9 @@ export const initialGeneralInfoFormValues = {
   zip: "",
   address: "",
   birthday: "" as any, //TODO: fix the type issue here
-  grade: "",
   tutorType: "",
   gender: "",
+  grades: [] as unknown,
   subjects: [] as unknown,
   duration: "",
   frequency: "",

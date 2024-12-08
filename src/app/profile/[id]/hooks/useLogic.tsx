@@ -13,7 +13,7 @@ import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -30,6 +30,7 @@ import {
   countryOptions,
 } from "./util";
 import { Option } from "@/types/shared-types";
+import { isUndefined, size } from "lodash-es";
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
@@ -67,7 +68,7 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const [grade] = generalInfoForm.watch(["grade"]);
+  const [grades] = generalInfoForm.watch(["grades"]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -88,9 +89,8 @@ const useLogic = (): LogicReturnType => {
         gender,
         tutorType,
         grades,
+        subjects,
       } = profile;
-
-      // TODO: grade should be a multi select
 
       generalInfoForm.setValue("name", name);
       generalInfoForm.setValue("email", email);
@@ -105,11 +105,34 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm.setValue("duration", duration);
       generalInfoForm.setValue("frequency", frequency);
       generalInfoForm.setValue("gender", gender);
+      generalInfoForm.setValue(
+        "subjects",
+        subjects.map((subject) => subject.id)
+      );
       generalInfoForm.setValue("tutorType", tutorType);
-      generalInfoForm.setValue("grade", grades?.[0]?.id);
+      generalInfoForm.setValue(
+        "grades",
+        grades.map((grade) => grade.id)
+      );
     },
+
     [generalInfoForm, userRawData]
   );
+
+  useEffect(() => {
+    if (userRawData && size(subjectsOptions) > 0) {
+      const { subjects } = userRawData;
+
+      generalInfoForm.setValue(
+        "subjects",
+        subjects
+          .filter(({ id }) =>
+            subjectsOptions.some((option) => option.value === id)
+          )
+          .map((subject) => subject.id)
+      );
+    }
+  }, [userRawData, subjectsOptions, generalInfoForm]);
 
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
@@ -128,24 +151,41 @@ const useLogic = (): LogicReturnType => {
     await getUserRawData();
   }, [getUserRawData]);
 
+  const fetchedGradesRef = useRef(new Set());
+  const subjectsSetRef = useRef(new Set());
+
   const handleOnGradeChangeSubjectFetch = useCallback(async () => {
-    if (!grade) return;
-    const result = await fetchSubjectsByGrade(grade);
-    const error = getErrorInApiResult(result);
+    if (size(grades) === 0 || isUndefined(grades)) return;
 
-    if (error) {
-      return toast.error(error);
-    }
+    for (const gradeId of grades) {
+      if (fetchedGradesRef.current.has(gradeId)) continue;
+      fetchedGradesRef.current.add(gradeId);
 
-    if (result.data) {
-      setSubjectsOptions(
-        result.data.subjects.map(({ title, id }: Subject) => ({
-          label: title,
-          value: id,
-        }))
-      );
+      const result = await fetchSubjectsByGrade(gradeId);
+      const error = getErrorInApiResult(result);
+
+      if (error) {
+        toast.error(error);
+        continue;
+      }
+
+      if (result.data) {
+        const newSubjects = result.data.subjects.filter(
+          ({ id }: Subject) => !subjectsSetRef.current.has(id)
+        );
+
+        newSubjects.forEach(({ id }) => subjectsSetRef.current.add(id));
+
+        setSubjectsOptions((prev) => [
+          ...prev,
+          ...newSubjects.map(({ title, id }: Subject) => ({
+            label: title,
+            value: id,
+          })),
+        ]);
+      }
     }
-  }, [fetchSubjectsByGrade, grade]);
+  }, [fetchSubjectsByGrade, grades]);
 
   useEffect(() => {
     forceRedirectUser();
@@ -155,7 +195,7 @@ const useLogic = (): LogicReturnType => {
 
   useEffect(() => {
     handleOnGradeChangeSubjectFetch();
-  }, [grade, handleOnGradeChangeSubjectFetch]);
+  }, [grades, handleOnGradeChangeSubjectFetch]);
 
   const gradesOptions =
     gradeRawData?.results.map((grade) => ({
