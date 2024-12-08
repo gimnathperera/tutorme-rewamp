@@ -1,5 +1,3 @@
-import { Grade, Subject } from "./response-types";
-
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -47,6 +45,14 @@ export type UpdateProfileRequest = {
     duration?: string;
     timeZone?: string;
     language?: string;
+  };
+};
+
+export type UpdatePasswordRequest = {
+  id: string;
+  payload: {
+    currentPassword: string;
+    newPassword: string;
   };
 };
 

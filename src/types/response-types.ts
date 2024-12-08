@@ -136,6 +136,10 @@ export type ProfileResponse = {
   language: string;
 };
 
+export type UpdatePasswordResponse = {
+  message: string;
+};
+
 export type TokenResponse = {
   access: {
     token: string;

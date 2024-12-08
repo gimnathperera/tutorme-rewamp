@@ -1,19 +1,56 @@
+"use client";
+
 import InputText from "@/components/shared/input-text";
 import { FormProvider, useForm } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PasswordInfoSchema, passwordInfoSchema } from "./schema";
+import {
+  initialFormValues,
+  PasswordInfoSchema,
+  passwordInfoSchema,
+} from "./schema";
 import { FC } from "react";
+import { useUpdateUserPasswordMutation } from "@/store/api/splits/users";
+import { useParams } from "next/navigation";
+import { getErrorInApiResult } from "@/utils/api";
+import toast from "react-hot-toast";
+import InputPassword from "@/components/shared/input-password";
+import SubmitButton from "@/components/shared/submit-button";
+import { isEmpty } from "lodash-es";
 
 const FormPasswordInfo: FC = () => {
+  const params = useParams();
+  const userId = params?.id as string;
+
+  const [updateProfileUpdate, { isLoading }] = useUpdateUserPasswordMutation();
+
   const passwordInfoForm = useForm({
     resolver: zodResolver(passwordInfoSchema),
-    defaultValues: {} as PasswordInfoSchema,
+    defaultValues: initialFormValues,
     mode: "onChange",
   });
 
+  const { isDirty, errors } = passwordInfoForm.formState;
+  const isButtonDisabled = !isDirty || isLoading || !isEmpty(errors);
+
+  const handleOnPasswordChangeSubmit = async (data: PasswordInfoSchema) => {
+    const submitData = {
+      id: userId,
+      payload: {
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      },
+    };
+    const result = await updateProfileUpdate(submitData);
+    const error = getErrorInApiResult(result);
+    if (error) {
+      return toast.error(error);
+    }
+
+    toast.success("Password updated successfully");
+  };
+
   const onSubmit = (data: PasswordInfoSchema) => {
-    console.log("Form Submitted", data);
+    handleOnPasswordChangeSubmit(data);
   };
 
   return (
@@ -22,32 +59,30 @@ const FormPasswordInfo: FC = () => {
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
-            <InputText
+            <InputPassword
               label="Current password"
               name="currentPassword"
               placeholder="*******"
-              type="password"
             />
-            <InputText
+            <InputPassword
               label="New password"
               name="newPassword"
               placeholder="*******"
-              type="password"
             />
-            <InputText
+            <InputPassword
               label="Confirm password"
               name="confirmPassword"
               placeholder="*******"
-              type="password"
             />
           </div>
           <div className="col-span-6 sm:col-full">
-            <button
-              className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center"
+            <SubmitButton
+              className="peer font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
               type="submit"
-            >
-              Save all
-            </button>
+              loading={isLoading}
+              title="Change Password"
+              disabled={isButtonDisabled}
+            />
           </div>
         </form>
       </FormProvider>
