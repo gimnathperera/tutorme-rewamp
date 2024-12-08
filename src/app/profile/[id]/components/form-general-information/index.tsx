@@ -44,6 +44,7 @@ const FormGeneralInfo: FC<Props> = ({
   };
 
   const { isDirty, errors } = form.formState;
+  console.log("🚀 ~ errors:", errors);
   const [selectedGrades] = form.watch(["grades"]);
   const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 

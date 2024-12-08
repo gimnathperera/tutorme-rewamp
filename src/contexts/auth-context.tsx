@@ -1,7 +1,6 @@
 "use client";
 
 import { LoginSchema } from "@/components/auth/form-login/schema";
-import { useAuthModalState } from "@/components/shared/navbar/hooks";
 import { useLoginMutation, useLogoutMutation } from "@/store/api/splits/auth";
 import { AuthUserData, Tokens } from "@/types/auth-types";
 import { UserLoginResponse } from "@/types/response-types";

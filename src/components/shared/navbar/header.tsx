@@ -8,7 +8,6 @@ import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
 import { useAuthModalState } from "./hooks";
 import ProfileDropdown from "./profile-section";
-import { useEffect } from "react";
 
 interface NavigationItem {
   name: string;

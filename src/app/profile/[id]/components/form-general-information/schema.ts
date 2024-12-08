@@ -20,11 +20,13 @@ export const generalInfoSchema = z.object({
   birthday: z
     .union([z.string(), z.date()])
     .optional()
+    .transform((value) => (value === "" ? undefined : value))
     .refine(
       (date) => {
+        if (!date) return true; // Allow undefined values
         const today = new Date();
         const minDate = addYears(today, -18);
-        return date !== undefined && isBefore(new Date(date), minDate);
+        return isBefore(new Date(date), minDate);
       },
       {
         message: "You must be at least 18 years old",
