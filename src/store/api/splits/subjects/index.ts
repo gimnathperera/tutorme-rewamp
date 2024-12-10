@@ -5,7 +5,10 @@ import { Endpoints } from "../../endpoints";
 
 export const SubjectsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    fetchGrades: build.query<PaginatedResponse<Subject>, FetchSubjectsRequest>({
+    fetchSubjects: build.query<
+      PaginatedResponse<Subject>,
+      FetchSubjectsRequest
+    >({
       query: (payload) => ({
         url: Endpoints.Subjects,
         method: "GET",
@@ -17,4 +20,4 @@ export const SubjectsApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useFetchGradesQuery } = SubjectsApi;
+export const { useFetchSubjectsQuery } = SubjectsApi;

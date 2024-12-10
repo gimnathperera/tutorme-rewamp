@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import TutorImage from "../../../../public/images/findTutor/tutor.png";
+import TutorImage from "../../../../../public/images/findTutor/tutor.png";
 import RadioGroup from "@/components/shared/input-radio";
 import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";

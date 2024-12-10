@@ -158,3 +158,43 @@ export interface PaginatedResponse<T> {
   totalPages: number;
   totalResults: number;
 }
+
+type PersonalInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  city: string;
+  state: string;
+  zip: string;
+  region: string;
+  grade: string;
+};
+
+type LessonDetail = {
+  subjects: string[];
+  duration: string;
+  frequency: string;
+};
+
+type LessonInfo = {
+  tutorCount: string;
+  lessonDetails: LessonDetail[];
+};
+
+type TutorTypeInfo = {
+  isBilingualTutor: boolean;
+  tutorType: string;
+  studentSchool: string;
+  genderPreference: string;
+};
+
+export type FindMyTutorResponse = {
+  status: string;
+  personalInfo: PersonalInfo;
+  lessonInfo: LessonInfo;
+  tutorTypeInfo: TutorTypeInfo;
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+};

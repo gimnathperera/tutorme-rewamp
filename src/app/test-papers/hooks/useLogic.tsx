@@ -1,9 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
-import {
-  initialFormValues,
-  paperSearchSchema,
-} from "../form-test-papper-search/schema";
 import { Option } from "@/types/shared-types";
 import {
   useFetchGradesQuery,
@@ -14,6 +10,10 @@ import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import { Paper } from "@/types/response-types";
 import { useLazyFetchPapersQuery } from "@/store/api/splits/papers";
+import {
+  initialFormValues,
+  paperSearchSchema,
+} from "../components/form-test-papper-search/schema";
 
 type LogicReturnType = {
   forms: {

@@ -3,25 +3,19 @@ import InputSelect from "@/components/shared/input-select";
 import Image from "next/image";
 import { FC, useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import lesson from "../../../../public/images/findTutor/lesson.png";
-
-const subjectsOptions = [
-  { value: "Math", label: "Math" },
-  { value: "Science", label: "Science" },
-  { value: "English", label: "English" },
-  { value: "History", label: "History" },
-];
+import lesson from "../../../../../public/images/findTutor/lesson.png";
+import { Option } from "@/types/shared-types";
 
 const durationOptions = [
-  { value: "30 minutes", label: "30 minutes" },
-  { value: "1 hour", label: "1 hour" },
-  { value: "2 hours", label: "2 hours" },
+  { value: "30_min", label: "30 minutes" },
+  { value: "1_hour", label: "1 hour" },
+  { value: "2_hour", label: "2 hours" },
 ];
 
 const frequencyOptions = [
-  { value: "Once a week", label: "Once a week" },
-  { value: "Twice a week", label: "Twice a week" },
-  { value: "Daily", label: "Daily" },
+  { value: "1_week", label: "Once a week" },
+  { value: "2_week", label: "Twice a week" },
+  { value: "daily", label: "Daily" },
 ];
 
 const tutorCountOptions = [
@@ -31,7 +25,11 @@ const tutorCountOptions = [
   { label: "4", value: 4 },
 ];
 
-const LessonDetails: FC = () => {
+type Props = {
+  subjectsOptions: Option[];
+  isSubjectsLoading: boolean;
+};
+const LessonDetails: FC<Props> = ({ subjectsOptions, isSubjectsLoading }) => {
   const { watch, control } = useFormContext();
   const tutorCount = watch("tutorCount");
 
@@ -91,6 +89,7 @@ const LessonDetails: FC = () => {
                 label="Subjects"
                 name={`tutors.${index}.subjects`}
                 options={subjectsOptions}
+                isLoading={isSubjectsLoading}
               />
 
               <InputSelect

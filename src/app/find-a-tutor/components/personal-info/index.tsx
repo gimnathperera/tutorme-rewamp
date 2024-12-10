@@ -1,14 +1,26 @@
 import Image from "next/image";
-import React from "react";
-import Person from "../../../../public/images/findTutor/person.png";
+import React, { FC } from "react";
+import Person from "../../../../../public/images/findTutor/person.png";
 import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";
+import { Option } from "@/types/shared-types";
 
-export const PersonalInfoComponent = () => {
+type Props = {
+  gradesOptions: Option[];
+  isGradesLoading: boolean;
+};
+export const PersonalInfoComponent: FC<Props> = ({
+  gradesOptions,
+  isGradesLoading,
+}) => {
   return (
     <div className="border-gray-900/1 pb-12 space-y-8">
       <div className="flex items-center">
-        <Image src={Person} alt={""} className="h-[100px] w-[100px] mr-5" />
+        <Image
+          src={Person}
+          alt="person-image"
+          className="h-[100px] w-[100px] mr-5"
+        />
         <div>
           <h2 className="text-base font-semibold leading-7 text-gray-900">
             Personal Information
@@ -23,7 +35,7 @@ export const PersonalInfoComponent = () => {
         <InputText
           label="First Name"
           placeholder="First Name"
-          name="name"
+          name="firstName"
           type="text"
         />
         <InputText
@@ -36,17 +48,8 @@ export const PersonalInfoComponent = () => {
         <InputSelect
           label="Grade/Level"
           name="grade"
-          options={[
-            { label: "Grade 5", value: "5" },
-            { label: "Grade 6", value: "6" },
-            { label: "Grade 7", value: "7" },
-            { label: "Grade 8", value: "8" },
-            { label: "Grade 9", value: "9" },
-            { label: "Grade 10", value: "10" },
-            { label: "Grade 11", value: "11" },
-            { label: "Grade 12", value: "12" },
-            { label: "Grade 13", value: "13" },
-          ]}
+          options={gradesOptions}
+          loading={isGradesLoading}
         />
         <InputText
           label="Phone Number"

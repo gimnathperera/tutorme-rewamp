@@ -171,7 +171,12 @@ const useLogic = (): LogicReturnType => {
       prePopulateGeneralForm(result.data);
       prePopulateLanguageAndTimeForm(result.data);
     }
-  }, [fetchProfileData, prePopulateGeneralForm, userId]);
+  }, [
+    fetchProfileData,
+    prePopulateGeneralForm,
+    prePopulateLanguageAndTimeForm,
+    userId,
+  ]);
 
   const init = useCallback(async () => {
     await getUserRawData();
