@@ -4,6 +4,7 @@ import TutorImage from "../../../../../public/images/findTutor/tutor.png";
 import RadioGroup from "@/components/shared/input-radio";
 import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";
+import { tutorTypesOptions } from "../../hooks/utils";
 const TutorTypeComponent = () => {
   return (
     <div className="space-y-8">
@@ -27,11 +28,7 @@ const TutorTypeComponent = () => {
       <RadioGroup
         label="Please select your preferred tutor type"
         name="tutorType"
-        options={[
-          { label: "Part Time Tutors", value: "part-time" },
-          { label: "Full Time Tutors", value: "full-time" },
-          { label: "Ex / Current Government School Tutors", value: "govt" },
-        ]}
+        options={tutorTypesOptions}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
