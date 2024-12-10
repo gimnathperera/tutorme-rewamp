@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC, ReactNode } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -11,6 +12,7 @@ import { FindMyTutorRequest } from "@/types/request-types";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import SubmitButton from "@/components/shared/submit-button";
+import Celebrate from "@/components/shared/celebrate";
 
 type FormCardProps = {
   children: ReactNode;
@@ -21,6 +23,8 @@ const FormCard: FC<FormCardProps> = ({ children }) => {
 };
 
 const MainForm: FC = () => {
+  const [showCelebrate, setShowCelebrate] = useState(false);
+
   const {
     derivedData: { gradesOptions, subjectsOptions },
     loading: { isGradesLoading, isSubjectsLoading },
@@ -75,8 +79,10 @@ const MainForm: FC = () => {
       return;
     }
 
+    setShowCelebrate(true);
+    setTimeout(() => setShowCelebrate(false), 4000);
+
     reset();
-    // Since scrolling takes time, we need to wait for it to finish before resetting the form
     setTimeout(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 1000);
@@ -89,46 +95,47 @@ const MainForm: FC = () => {
   };
 
   return (
-    <FormProvider {...findATutorForm}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-12">
-          <FormCard>
-            <PersonalInfoComponent
-              gradesOptions={gradesOptions}
-              isGradesLoading={isGradesLoading}
-            />
-          </FormCard>
-
-          <FormCard>
-            <LessonDetails
-              subjectsOptions={subjectsOptions}
-              isSubjectsLoading={isSubjectsLoading}
-            />
-          </FormCard>
-
-          <FormCard>
-            <TutorTypeComponent />
-          </FormCard>
-
-          <div className="flex justify-end space-x-4 my-5 bg-white p-10 rounded-3xl">
-            <button
-              type="button"
-              className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
-              onClick={onReset}
-            >
-              Cancel
-            </button>
-            <SubmitButton
-              type="submit"
-              className="justify-end text-xl font-semibold text-white  py-4 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue  disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
-              loading={isLoading}
-              disabled={isSaveDisabled}
-              title="Request Tutor"
-            />
+    <>
+      <FormProvider {...findATutorForm}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-12">
+            <FormCard>
+              <PersonalInfoComponent
+                gradesOptions={gradesOptions}
+                isGradesLoading={isGradesLoading}
+              />
+            </FormCard>
+            <FormCard>
+              <LessonDetails
+                subjectsOptions={subjectsOptions}
+                isSubjectsLoading={isSubjectsLoading}
+              />
+            </FormCard>
+            <FormCard>
+              <TutorTypeComponent />
+            </FormCard>
+            {showCelebrate && <Celebrate show={showCelebrate} />}
+            {/* Conditional rendering of Celebrate */}
+            <div className="flex justify-end space-x-4 my-5 bg-white p-10 rounded-3xl">
+              <button
+                type="button"
+                className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+                onClick={onReset}
+              >
+                Cancel
+              </button>
+              <SubmitButton
+                type="submit"
+                className="justify-end text-xl font-semibold text-white  py-4 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue  disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                loading={isLoading}
+                disabled={isSaveDisabled}
+                title="Request Tutor"
+              />
+            </div>
           </div>
-        </div>
-      </form>
-    </FormProvider>
+        </form>
+      </FormProvider>
+    </>
   );
 };
 
