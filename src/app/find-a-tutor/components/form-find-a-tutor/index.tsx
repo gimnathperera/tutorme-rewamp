@@ -11,7 +11,6 @@ import { FindMyTutorRequest } from "@/types/request-types";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import SubmitButton from "@/components/shared/submit-button";
-import { useReward } from "react-rewards";
 
 type FormCardProps = {
   children: ReactNode;
