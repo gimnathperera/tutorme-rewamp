@@ -2,7 +2,7 @@
 
 import FormTestPapperSearch from "./components/form-test-papper-search";
 import TestPapperList from "./components/test-papper-list";
-import useLogic from "./components/hooks/useLogic";
+import useLogic from "./hooks/useLogic";
 
 const TestPapers = () => {
   const {

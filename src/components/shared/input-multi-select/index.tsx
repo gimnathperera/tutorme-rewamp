@@ -15,6 +15,7 @@ interface MultiSelectProps {
   helperText?: string;
   className?: string;
   isDisabled?: boolean;
+  isLoading?: boolean;
 }
 
 const InputMultiSelect: React.FC<MultiSelectProps> = ({
@@ -24,6 +25,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   helperText,
   className = "",
   isDisabled = false,
+  isLoading = false,
 }) => {
   const { control, formState } = useFormContext();
 
@@ -46,6 +48,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
         render={({ field }) => (
           <Select
             {...field}
+            isLoading={isLoading}
             isMulti
             placeholder="Select an option"
             options={options}

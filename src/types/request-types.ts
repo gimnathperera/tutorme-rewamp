@@ -80,10 +80,46 @@ export type FetchGradesRequest = {
 export type FetchSubjectsRequest = {
   page: number;
   limit: number;
-  gradeId: string;
+  gradeId?: string;
 };
 
 export type FetchTestimonialsRequest = {
   page: number;
   limit: number;
+};
+
+type PersonalInfo = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  city: string;
+  state: string;
+  zip: string;
+  region: string;
+  grade: string;
+};
+
+type LessonDetail = {
+  subjects: string[];
+  duration: string;
+  frequency: string;
+};
+
+type LessonInfo = {
+  tutorCount: string;
+  lessonDetails: LessonDetail[];
+};
+
+type TutorTypeInfo = {
+  tutorType: string;
+  studentSchool: string;
+  genderPreference: string;
+  isBilingualTutor: boolean;
+};
+
+export type FindMyTutorRequest = {
+  personalInfo: PersonalInfo;
+  lessonInfo: LessonInfo;
+  tutorTypeInfo: TutorTypeInfo;
 };

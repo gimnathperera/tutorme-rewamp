@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const tutorSchema = z.object({
-  name: z.string().min(1, "First Name is required"),
+  firstName: z.string().min(1, "First Name is required"),
   lastName: z.string().min(1, "Last Name is required"),
   email: z.string().email("Invalid email address"),
   grade: z.string().min(1, "Grade is required"),
@@ -24,7 +24,9 @@ export const tutorSchema = z.object({
   tutors: z
     .array(
       z.object({
-        subjects: z.array(z.never()).nonempty("Subjects array cannot be empty"),
+        subjects: z
+          .array(z.string())
+          .nonempty("Subjects array cannot be empty"),
         duration: z.string().min(1, "Duration is required"),
         frequency: z.string().min(1, "Frequency is required"),
       })
@@ -33,7 +35,7 @@ export const tutorSchema = z.object({
 });
 
 export const initialFormValues = {
-  name: "",
+  firstName: "",
   lastName: "",
   email: "",
   grade: "",
@@ -49,7 +51,7 @@ export const initialFormValues = {
   tutorCount: "1",
   tutors: [
     {
-      subjects: [],
+      subjects: [] as any,
       duration: "",
       frequency: "",
     },
