@@ -1,7 +1,8 @@
 {
   "name": "tutorme-revamp",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "private": true,
+  "author": "gimnathperera",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
