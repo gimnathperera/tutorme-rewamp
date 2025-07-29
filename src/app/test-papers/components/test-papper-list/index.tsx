@@ -3,7 +3,7 @@ import React, { FC } from "react";
 import Skeleton from "react-loading-skeleton";
 import { Paper } from "@/types/response-types";
 import "react-loading-skeleton/dist/skeleton.css";
-
+import Empty from "../../../../../public/images/shared/empty.png";
 type Props = {
   availablePapers: Paper[];
   isPapersLoading: boolean;
@@ -48,7 +48,7 @@ const TestPapperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
       ) : (
         <div className="text-center p-6 rounded-lg">
           <Image
-            src="/images/shared/empty.png"
+            src={Empty}
             alt="gaby"
             width={64}
             height={64}

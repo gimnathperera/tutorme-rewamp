@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
@@ -36,7 +35,7 @@ const AboutUs = () => {
   return (
     <div id="aboutus-section">
       <div className="mx-auto max-w-7xl px-4 py-24 my-32 lg:px-10 bg-lightgrey rounded-3xl relative">
-        <Image
+        <img
           src="/images/aboutus/dots.svg"
           width={100}
           height={100}
@@ -58,7 +57,7 @@ const AboutUs = () => {
               <h4 className="text-4xl font-semibold  text-black mb-5 group-hover:text-white">
                 {item.heading}
               </h4>
-              <Image
+              <img
                 src={item.imgSrc}
                 alt={item.imgSrc}
                 width={100}

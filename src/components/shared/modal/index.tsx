@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { FC, Fragment, ReactNode } from "react";
 import Icon from "../icon";
@@ -71,7 +70,7 @@ const Modal: FC<Props> = ({
                   )}
                   {imagePath && (
                     <div className="flex justify-center mb-4">
-                      <Image
+                      <img
                         src={imagePath}
                         alt="hero-image"
                         width={200}

@@ -2,8 +2,10 @@
 import Slider from "react-slick";
 import React, { Component } from "react";
 import Link from "next/link";
-import Image from "next/image";
-
+import Image, { StaticImageData } from "next/image";
+import Article1 from "../../../../public/images/articles/article.png";
+import Article2 from "../../../../public/images/articles/article2.png";
+import Article3 from "../../../../public/images/articles/article3.png";
 // CAROUSEL DATA
 
 interface DataType {
@@ -11,7 +13,7 @@ interface DataType {
   heading: string;
   heading2: string;
   date: string;
-  imgSrc: string;
+  imgSrc: StaticImageData;
   name: string;
 }
 
@@ -22,7 +24,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article.png",
+    imgSrc: Article1,
   },
   {
     time: "5 min",
@@ -30,7 +32,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article2.png",
+    imgSrc: Article2,
   },
   {
     time: "5 min",
@@ -38,7 +40,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article3.png",
+    imgSrc: Article3,
   },
   {
     time: "5 min",
@@ -46,7 +48,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article.png",
+    imgSrc: Article1,
   },
   {
     time: "5 min",
@@ -54,7 +56,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article2.png",
+    imgSrc: Article2,
   },
   {
     time: "5 min",
@@ -62,7 +64,7 @@ const postData: DataType[] = [
     heading2: "Webflow this Week!",
     name: "Published on Startupon",
     date: "August 19, 2021",
-    imgSrc: "/images/articles/article3.png",
+    imgSrc: Article3,
   },
 ];
 

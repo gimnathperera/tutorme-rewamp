@@ -1,4 +1,5 @@
 import Image from "next/image";
+import TeamImage from "../../../../public/images/team/teamimg.png";
 
 const OurTeam = () => {
   return (
@@ -11,12 +12,7 @@ const OurTeam = () => {
         eiusmod tempor.
       </h3>
       <div className="grid grid-cols-1 my-16">
-        <Image
-          src="/images/team/teamimg.png"
-          alt="office-image"
-          height={684}
-          width={1296}
-        />
+        <Image src={TeamImage} alt="office-image" height={684} width={1296} />
       </div>
     </div>
   );
