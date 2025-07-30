@@ -10,6 +10,7 @@ const nextConfig = {
   },
   images: {
     domains: ["i.ibb.co", "placeimg.com"],
+    //TODO: Please remove these in the future
     remotePatterns: [
       {
         protocol: "https",

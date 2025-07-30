@@ -25,10 +25,8 @@ const TuitionRatesPage = () => {
       </div>
       <TutorDetailsSection />
       <TutorRatesSection />
-      <KeepInTouch />
       <PrimaryLevelTuitionRates />
       <GradeSixToNineRates />
-      <AboutUs />
       <OrdinaryLevelRates />
       <AdvancedLevelRates />
     </div>

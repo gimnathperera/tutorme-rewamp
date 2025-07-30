@@ -19,7 +19,7 @@ const TutorDetailsSection = () => {
     <div>
       <div className="m-10">
         <div className="flex space-y-4 justify-center items-center flex-col mb-10">
-          <p className="text-[#FCA627]  text-[14px] font-bold">
+          <p className="text-[#FCA627] text-[18px] font-bold">
             Tutor Categories
           </p>
           <h2 className="text-3xl font-semibold">Types of Home Tutors</h2>

@@ -1,6 +1,8 @@
 "use client";
 import Slider from "react-slick";
 import React, { Component } from "react";
+import Image from "next/image";
+import LinkedInSvg from "../../../../public/images/wework/linkedin.svg";
 
 // CAROUSEL DATA
 
@@ -110,15 +112,15 @@ export default class WeWork extends Component {
             <div key={i}>
               <div className="bg-white m-3 py-14 my-10 text-center shadow-xl rounded-3xl">
                 <div className="relative">
-                  <img
+                  <Image
                     src={items.imgSrc}
                     alt="gaby"
                     width={182}
                     height={182}
                     className="inline-block m-auto"
                   />
-                  <img
-                    src={"/images/wework/linkedin.svg"}
+                  <Image
+                    src={LinkedInSvg}
                     alt="greenbg"
                     width={120}
                     height={120}

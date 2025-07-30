@@ -12,23 +12,29 @@ import PartTimeImage from "../../../../public/images/tuitionRates/part-time-2.pn
 import FullTimeImage from "../../../../public/images/tuitionRates/full-time-2.png";
 import GovTeacherImage from "../../../../public/images/tuitionRates/ex-teacher-2.png";
 import { tuitionRates } from "@/lib/data/tuition-rates/tuition-rates";
+import { aboutDetails } from "@/lib/data/tuition-rates/about-details";
 
 const TutorRatesSection = () => {
   const data = tuitionRates;
+  const about = aboutDetails;
+
+  const allLevelInfo = about.find(
+    (detail) => detail.name === "All Tuition Rates"
+  );
+
+  if (!allLevelInfo) {
+    return <div>Error: All Tuition Rates details not found.</div>;
+  }
+
   return (
     <div>
       <div className="space-y-4 m-10">
         <div className="flex justify-center items-center flex-col mb-10">
-          <p className="text-[#FCA627]  text-[14px] font-bold">
-            Affordable Tuition Rates
+          <p className="text-[#FCA627] text-[18px] font-bold">
+            {allLevelInfo.subTitle}
           </p>
-          <h2 className="text-3xl font-semibold">Tutor Me Tuition Rates</h2>
-          <p className="text-gray-600">
-            Our tuition rates are constantly updated based on tuition fees
-            quoted by home tutors in Sri Lanka. These rates reflect local market
-            averages for university students, graduate teachers, and government
-            school teachers.
-          </p>
+          <h2 className="text-3xl font-semibold">{allLevelInfo.title}</h2>
+          <p className="text-gray-600">{allLevelInfo.description}</p>
         </div>
 
         <Table>

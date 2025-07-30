@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductType {
   id: number;
@@ -44,7 +45,7 @@ const footer = () => {
             <div className="flex gap-4">
               <div className="footer-icons">
                 <Link href="https://facebook.com">
-                  <img
+                  <Image
                     src={"/images/footer/vec.svg"}
                     alt="facebook"
                     width={15}
@@ -54,8 +55,8 @@ const footer = () => {
               </div>
               <div className="footer-icons">
                 <Link href="https://twitter.com">
-                  <img
-                    src={"/images/footer/twitter.svg"}
+                  <Image
+                    src={"/images/footer/instagram.svg"}
                     alt="twitter"
                     width={20}
                     height={20}
@@ -64,7 +65,7 @@ const footer = () => {
               </div>
               <div className="footer-icons">
                 <Link href="https://instagram.com">
-                  <img
+                  <Image
                     src={"/images/footer/instagram.svg"}
                     alt="instagram"
                     width={20}

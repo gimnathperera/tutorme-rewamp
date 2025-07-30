@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import BannerSvg from "../../../../public/images/banner/banner.svg";
 
 const Banner = () => {
   const route = useRouter();
