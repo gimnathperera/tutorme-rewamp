@@ -37,7 +37,7 @@ const Subjects: FC = () => {
     );
   }
 
-  const subject = subjectData as Subject;
+  const subject = (subjectData?.results && subjectData.results[0]) as Subject;
 
   return (
     <div className="py-10">
