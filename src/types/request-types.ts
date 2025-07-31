@@ -78,9 +78,9 @@ export type FetchGradesRequest = {
 };
 
 export type FetchSubjectsRequest = {
-  page: number;
-  limit: number;
-  gradeId?: string;
+  page?: number;
+  limit?: number;
+  subjectId?: string;
 };
 
 export type FetchTestimonialsRequest = {

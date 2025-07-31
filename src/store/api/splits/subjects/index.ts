@@ -9,11 +9,14 @@ export const SubjectsApi = baseApi.injectEndpoints({
       PaginatedResponse<Subject>,
       FetchSubjectsRequest
     >({
-      query: (payload) => ({
-        url: Endpoints.Subjects,
-        method: "GET",
-        params: payload,
-      }),
+      query: (payload) => {
+        const { subjectId, ...rest } = payload;
+        return {
+          url: subjectId ? `${Endpoints.Subjects}/${subjectId}` : Endpoints.Subjects,
+          method: "GET",
+          params: rest,
+        };
+      },
       providesTags: ["Subjects"],
     }),
   }),
