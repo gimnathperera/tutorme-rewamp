@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 interface ProductType {
   id: number;
@@ -56,7 +56,7 @@ const footer = () => {
               <div className="footer-icons">
                 <Link href="https://twitter.com">
                   <Image
-                    src={"/images/footer/twitter.svg"}
+                    src={"/images/footer/instagram.svg"}
                     alt="twitter"
                     width={20}
                     height={20}

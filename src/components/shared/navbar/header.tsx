@@ -20,6 +20,7 @@ const navigation: NavigationItem[] = [
   { name: "Grades", href: "/grades", current: false },
   { name: "Subjects", href: "/subjects", current: false },
   { name: "Test Papers", href: "/test-papers", current: false },
+  { name: "Tuition Rates", href: "/tuition-rates", current: false },
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
   { name: "Contact Us", href: "/#keep-in-touch-section", current: false },

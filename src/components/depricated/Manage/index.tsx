@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
+import RightSvg from "../../../../public/images/manage/right.svg";
+import ToggleSvg from "../../../../public/images/manage/toggle.svg";
 import Image from "next/image";
 
 const names = [
@@ -100,30 +102,15 @@ const Manage = () => {
 
         <div className="md:flex md:justify-around mt-20">
           <div className="flex gap-5 justify-center md:justify-start">
-            <Image
-              src="/images/manage/right.svg"
-              alt="right-icon"
-              width={21}
-              height={14}
-            />
+            <Image src={RightSvg} alt="right-icon" width={21} height={14} />
             <h4 className="text-lg font-semibold">Free 15-day trial</h4>
           </div>
           <div className="flex gap-5 justify-center md:justify-start">
-            <Image
-              src="/images/manage/right.svg"
-              alt="right-icon"
-              width={21}
-              height={14}
-            />
+            <Image src={RightSvg} alt="right-icon" width={21} height={14} />
             <h4 className="text-lg font-semibold">Unlimited Team Members</h4>
           </div>
           <div className="flex gap-5 justify-center md:justify-start">
-            <Image
-              src="/images/manage/right.svg"
-              alt="right-icon"
-              width={21}
-              height={14}
-            />
+            <Image src={RightSvg} alt="right-icon" width={21} height={14} />
             <h4 className="text-lg font-semibold">Cancel Anytime</h4>
           </div>
         </div>
@@ -131,7 +118,7 @@ const Manage = () => {
         <div className="mt-6 relative">
           <div className="dance-text mb-5">get 3 months free</div>
           <Image
-            src="/images/manage/toggle.svg"
+            src={ToggleSvg}
             alt="toggle-image"
             width={24}
             height={24}

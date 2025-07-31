@@ -2,6 +2,7 @@
 import Slider from "react-slick";
 import React, { Component } from "react";
 import Image from "next/image";
+import LinkedInSvg from "../../../../public/images/wework/linkedin.svg";
 
 // CAROUSEL DATA
 
@@ -119,7 +120,7 @@ export default class WeWork extends Component {
                     className="inline-block m-auto"
                   />
                   <Image
-                    src={"/images/wework/linkedin.svg"}
+                    src={LinkedInSvg}
                     alt="greenbg"
                     width={120}
                     height={120}

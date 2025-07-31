@@ -1,7 +1,6 @@
 "use client";
 import { FC } from "react";
 import Slider from "react-slick";
-import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
 
@@ -75,7 +74,7 @@ const Testimonials: FC = () => {
             {postData.map(({ owner, content, rating }, i) => (
               <div key={i} className="relative">
                 <div className="bg-white test-sha m-3 p-10 my-20 rounded-3xl">
-                  <Image
+                  <img
                     src={owner?.avatar ?? ""}
                     alt="testimonial-avatar-image"
                     width={71}
