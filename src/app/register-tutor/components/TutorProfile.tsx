@@ -1,14 +1,13 @@
 "use client";
+import { useState } from "react";
 
-interface TutorProfileProps {
-  formData: any;
-  updateFormData: (section: string, data: any) => void;
-  errors: any;
-  updateErrors: (section: string, errors: any) => void;
-}
+const TutorProfile = () => {
+  const [formData, setFormData] = useState({
+    introduction: "",
+    experience: "",
+    results: ""
+  });
 
-export default function TutorProfile({ formData, updateFormData, errors, updateErrors }: TutorProfileProps) {
-  
   const profileQuestions = [
     {
       key: 'introduction',
@@ -35,91 +34,72 @@ export default function TutorProfile({ formData, updateFormData, errors, updateE
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    updateFormData('profile', { [name]: value });
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      updateErrors('profile', { ...errors, [name]: '' });
-    }
-  };
-
-  const validateField = (name: string, value: string) => {
-    let error = '';
-    
-    if (!value.trim()) {
-      error = 'This field is required';
-    } else if (value.length < 50) {
-      error = 'Please provide at least 50 characters for a meaningful response';
-    }
-    
-    updateErrors('profile', { ...errors, [name]: error });
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <section className="border-b border-gray-200 pb-8">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-        <span className="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">4</span>
-        Tutor's Profile (Extremely Important!)
-      </h2>
+    <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
+      <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="border-b border-gray-200 pb-8">
+          <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
+            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">4</span>
+            Tutor's Profile (Extremely Important!)
+          </h2>
 
-      <div className="bg-orange-50 border-l-4 border-orange-400 p-4 mb-8">
-        <p className="text-orange-800 font-medium">
-          <strong>Important:</strong> The following section will be a key factor in your success rate of assignment matching.
-        </p>
-        <p className="text-orange-700 text-sm mt-1">
-          For parents who wish to view immediate info for their students before making assignments which will be shown to our clients.
-        </p>
-        <p className="text-orange-700 text-sm mt-1">
-          For each section please using approximately from 50 to application. <strong>Excellent answer required</strong>
-        </p>
-      </div>
-
-      <div className="space-y-8">
-        {profileQuestions.map((question) => (
-          <div key={question.key}>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              {question.title}
-            </h3>
-            <p className="text-gray-600 text-sm mb-3">
-              {question.subtitle}
+          <div className="bg-lightblue border-l-4 border-primary-700 p-4 mb-8">
+            <p className="text-darkpurple font-medium">
+              <strong>Important:</strong> The following section will be a key factor in your success rate of assignment matching.
             </p>
-            <textarea
-              name={question.key}
-              value={formData[question.key] || ''}
-              onChange={handleChange}
-              onBlur={(e) => validateField(question.key, e.target.value)}
-              placeholder={question.placeholder}
-              maxLength={question.maxLength}
-              rows={6}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors resize-vertical ${
-                errors[question.key] ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            <div className="flex justify-between items-center mt-2">
-              <div>
-                {errors[question.key] && (
-                  <p className="text-red-500 text-sm">{errors[question.key]}</p>
-                )}
+            <p className="text-gray-700 text-sm mt-1">
+              For parents who wish to view immediate info for their students before making assignments which will be shown to our clients.
+            </p>
+            <p className="text-gray-700 text-sm mt-1">
+              For each section please using approximately from 50 to application. <strong>Excellent answer required</strong>
+            </p>
+          </div>
+
+          <div className="space-y-8">
+            {profileQuestions.map((question) => (
+              <div key={question.key}>
+                <h3 className="text-lg font-semibold text-darkpurple mb-2">
+                  {question.title}
+                </h3>
+                <p className="text-gray-600 text-sm mb-3">
+                  {question.subtitle}
+                </p>
+                <textarea
+                  name={question.key}
+                  value={formData[question.key as keyof typeof formData]}
+                  onChange={handleChange}
+                  placeholder={question.placeholder}
+                  maxLength={question.maxLength}
+                  rows={6}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical"
+                />
+                <div className="flex justify-end mt-2">
+                  <p className="text-sm text-gray-500">
+                    {(formData[question.key as keyof typeof formData] || '').length}/{question.maxLength}
+                  </p>
+                </div>
               </div>
-              <p className="text-sm text-gray-500">
-                {(formData[question.key] || '').length}/{question.maxLength}
-              </p>
+            ))}
+
+            {/* Additional Tips */}
+            <div className="bg-blue p-6 rounded-lg mt-8">
+              <h4 className="font-semibold text-darkpurple mb-3">💡 Tips for a Great Profile:</h4>
+              <ul className="text-darkpurple text-sm space-y-2">
+                <li>• <strong>Be specific:</strong> Include actual results, grade improvements, and number of students taught</li>
+                <li>• <strong>Show personality:</strong> Describe your teaching style and what makes you unique</li>
+                <li>• <strong>Highlight achievements:</strong> Academic awards, certifications, or special recognition</li>
+                <li>• <strong>Be honest:</strong> Authentic profiles build trust with parents and students</li>
+                <li>• <strong>Use examples:</strong> Concrete examples are more compelling than general statements</li>
+              </ul>
             </div>
           </div>
-        ))}
-
-        {/* Additional Tips */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-          <h4 className="font-semibold text-blue-800 mb-3">💡 Tips for a Great Profile:</h4>
-          <ul className="text-blue-700 text-sm space-y-2">
-            <li>• <strong>Be specific:</strong> Include actual results, grade improvements, and number of students taught</li>
-            <li>• <strong>Show personality:</strong> Describe your teaching style and what makes you unique</li>
-            <li>• <strong>Highlight achievements:</strong> Academic awards, certifications, or special recognition</li>
-            <li>• <strong>Be honest:</strong> Authentic profiles build trust with parents and students</li>
-            <li>• <strong>Use examples:</strong> Concrete examples are more compelling than general statements</li>
-          </ul>
         </div>
       </div>
-    </section>
+    </div>
   );
-}
+};
+
+export default TutorProfile;
