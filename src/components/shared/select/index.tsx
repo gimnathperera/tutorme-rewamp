@@ -31,7 +31,7 @@ export function SelectButton({ placeholder, selectLabel, selectItems, onChange }
         <SelectGroup>
           <SelectLabel>{selectLabel}</SelectLabel>
           {selectItems.map((item) => (
-            <SelectItem key={item.value} value={item.value}>
+            <SelectItem key={item.value} value={item.value} className="shadow-sm">
               {item.label}
             </SelectItem>
           ))}
