@@ -19,13 +19,25 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Find a Tutor", href: "/find-a-tutor", current: false },
-  { name: "Grades", href: "/grades", current: false },
-  { name: "Subjects", href: "/subjects", current: false },
-  { name: "Test Papers", href: "/test-papers", current: false },
-  { name: "Tuition Rates", href: "/tuition-rates", current: false },
-  { name: "FAQ", href: "/#faq-section", current: false },
-  { name: "Blog", href: "/blogs", current: false },
-  { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
+  {
+    name: "Academics",
+    href: "/",
+    current: false,
+    dropdown: [
+      { name: "Grades", href: "/grades" },
+      { name: "Subjects", href: "/subjects" },
+      { name: "Test Papers", href: "/test-papers" },
+    ],
+  },
+  {
+    name: "Tuition",
+    href: "/",
+    current: false,
+    dropdown: [
+      { name: "Tuition Rates", href: "/tuition-rates" },
+      { name: "Tuition Assignments", href: "/tuition-assignments" },
+    ],
+  },
   {
     name: "Levels and Exams",
     href: "/",
@@ -37,6 +49,9 @@ const navigation: NavigationItem[] = [
       { name: "GCE Advanced Level", href: "/level-and-exams/4" },
     ],
   },
+  { name: "FAQ", href: "/#faq-section", current: false },
+  { name: "Blog", href: "/blogs", current: false },
+  { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
 ];
 
 function classNames(...classes: string[]) {
