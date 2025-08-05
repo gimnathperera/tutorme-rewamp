@@ -183,7 +183,7 @@ const PersonalInfo = () => {
               {errors.reDob && <p className="text-red-500 text-sm mt-1">{errors.reDob}</p>}
             </div>
 
-            {/* Gender */}
+            {/* Gender - CHANGED TO NORMAL CASE */}
             <div>
               <label className="block text-sm font-medium text-darkpurple mb-2">
                 Gender *
@@ -193,23 +193,23 @@ const PersonalInfo = () => {
                   <input
                     type="radio"
                     name="gender"
-                    value="MALE"
-                    checked={formData.gender === 'MALE'}
+                    value="Male"
+                    checked={formData.gender === 'Male'}
                     onChange={handleChange}
                     className="mr-2 text-primary-700 focus:ring-primary-700"
                   />
-                  MALE
+                  Male
                 </label>
                 <label className="flex items-center">
                   <input
                     type="radio"
                     name="gender"
-                    value="FEMALE"
-                    checked={formData.gender === 'FEMALE'}
+                    value="Female"
+                    checked={formData.gender === 'Female'}
                     onChange={handleChange}
                     className="mr-2 text-primary-700 focus:ring-primary-700"
                   />
-                  FEMALE
+                  Female
                 </label>
               </div>
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
@@ -236,7 +236,7 @@ const PersonalInfo = () => {
               {errors.age && <p className="text-red-500 text-sm mt-1">{errors.age}</p>}
             </div>
 
-            {/* Nationality */}
+            {/* Nationality - CHANGED TO NORMAL CASE */}
             <div>
               <label className="block text-sm font-medium text-darkpurple mb-2">
                 Nationality *
@@ -246,46 +246,46 @@ const PersonalInfo = () => {
                   <input
                     type="radio"
                     name="nationality"
-                    value="SINGAPOREAN"
-                    checked={formData.nationality === 'SINGAPOREAN'}
+                    value="Singaporean"
+                    checked={formData.nationality === 'Singaporean'}
                     onChange={handleChange}
                     className="mr-2 text-primary-700 focus:ring-primary-700"
                   />
-                  SINGAPOREAN
+                  Singaporean
                 </label>
                 <label className="flex items-center">
                   <input
                     type="radio"
                     name="nationality"
-                    value="SINGAPORE PR"
-                    checked={formData.nationality === 'SINGAPORE PR'}
+                    value="Singapore PR"
+                    checked={formData.nationality === 'Singapore PR'}
                     onChange={handleChange}
                     className="mr-2 text-primary-700 focus:ring-primary-700"
                   />
-                  SINGAPORE PR
+                  Singapore PR
                 </label>
                 <label className="flex items-center">
                   <input
                     type="radio"
                     name="nationality"
-                    value="OTHERS"
-                    checked={formData.nationality === 'OTHERS'}
+                    value="Others"
+                    checked={formData.nationality === 'Others'}
                     onChange={handleChange}
                     className="mr-2 text-primary-700 focus:ring-primary-700"
                   />
-                  OTHERS
+                  Others
                 </label>
               </div>
               {errors.nationality && <p className="text-red-500 text-sm mt-1">{errors.nationality}</p>}
             </div>
 
-            {/* Race */}
+            {/* Race - CHANGED TO NORMAL CASE */}
             <div>
               <label className="block text-sm font-medium text-darkpurple mb-2">
                 Race *
               </label>
               <div className="grid grid-cols-2 gap-3 mt-2">
-                {['CHINESE', 'MALAY', 'INDIAN', 'EURASIAN', 'CAUCASIAN', 'PUNJABI', 'OTHERS'].map((race) => (
+                {['Chinese', 'Malay', 'Indian', 'Eurasian', 'Caucasian', 'Punjabi', 'Others'].map((race) => (
                   <label key={race} className="flex items-center">
                     <input
                       type="radio"

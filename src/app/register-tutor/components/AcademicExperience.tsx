@@ -8,25 +8,27 @@ const AcademicExperience = () => {
     educationLevel: ""
   });
 
+  // CHANGED TO TITLE CASE
   const tutorTypes = [
-    'FULL TIME STUDENT',
-    'UNDERGRADUATE',
-    'PART TIME TUTOR',
-    'FULL TIME TUTOR',
-    'EX/CURRENT MOE TEACHER',
-    'EX-MOE TEACHER',
-    'CURRENT MOE TEACHER'
+    'Full Time Student',
+    'Undergraduate',
+    'Part Time Tutor',
+    'Full Time Tutor',
+    'Ex/Current MOE Teacher',
+    'Ex-MOE Teacher',
+    'Current MOE Teacher'
   ];
 
+  // CHANGED TO TITLE CASE
   const educationLevels = [
-    'PHD DIPLOMA',
-    'MASTERS',
-    'UNDERGRADUATE',
-    'BACHELOR DEGREE',
-    'DIPLOMA AND PROFESSIONAL',
-    'JC/A LEVELS',
-    'POLY',
-    'OTHERS'
+    'PhD Diploma',
+    'Masters',
+    'Undergraduate',
+    'Bachelor Degree',
+    'Diploma and Professional',
+    'JC/A Levels',
+    'Poly',
+    'Others'
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

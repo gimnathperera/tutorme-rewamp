@@ -105,7 +105,7 @@ const TermsAndSubmit = () => {
             <div className="bg-lightblue border border-gray-200 rounded-lg p-4">
               <h4 className="font-semibold text-darkpurple mb-2">📋 Important Information:</h4>
               <ul className="text-gray-700 text-sm space-y-1">
-                <li>• By clicking accepting our Terms and Conditions, you are requested to Tutor Fee Commission of Tutor's first lesson fee following successful acceptance and assignment which must be paid within 7 days through online banking.</li>
+                <li>• By clicking accepting our Terms and Conditions, you are requested to Tutor Fee Commission of Tutor&apos;s first lesson fee following successful acceptance and assignment which must be paid within 7 days through online banking.</li>
                 <li>• All tutor information provided will remain strictly confidential</li>
                 <li>• You will receive assignment notifications via SMS and email</li>
                 <li>• Rates are subject to negotiation between tutor and client</li>
@@ -141,7 +141,7 @@ const TermsAndSubmit = () => {
             {/* Footer Note */}
             <div className="text-center text-sm text-gray-500 pt-4">
               <p>Thank you for joining our tutoring community! 🎓</p>
-              <p>We'll review your application and get back to you within 24 hours.</p>
+              <p>We&apos;ll review your application and get back to you within 24 hours.</p>
             </div>
           </div>
         </div>

@@ -32,7 +32,7 @@ const TutoringPreferences = () => {
   };
 
   const handleLocationChange = (location: string) => {
-    let updatedLocations;
+    let updatedLocations: string[];
     
     if (formData.locations.includes(location)) {
       updatedLocations = formData.locations.filter(l => l !== location);
@@ -118,7 +118,7 @@ const TutoringPreferences = () => {
                 <span className="font-medium text-darkpurple">No Preference</span>
               </label>
               <p className="text-sm text-gray-600 mt-1 ml-6">
-                Select this if you're willing to travel to any location in Singapore
+                Select this if you&apos;re willing to travel to any location in Singapore
               </p>
             </div>
           </div>

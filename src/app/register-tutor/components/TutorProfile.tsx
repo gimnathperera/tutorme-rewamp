@@ -11,21 +11,21 @@ const TutorProfile = () => {
   const profileQuestions = [
     {
       key: 'introduction',
-      title: '1. SUMMARY OF TEACHING EXPERIENCE & ACADEMIC ACHIEVEMENTS',
+      title: '1. Summary of Teaching Experience & Academic Achievements',
       subtitle: 'Achieve & Subject content taught, eg. Number of STUDENTS, etc.',
       placeholder: 'Academic Qualifications, Years and Conditions, etc.',
       maxLength: 750
     },
     {
       key: 'experience',
-      title: '2. RESULTS OF STUDENTS/TRACK RECORD',
+      title: '2. Results of Students/Track Record',
       subtitle: 'Past Grade Improvement Records of Previous Students.',
       placeholder: 'Please list results if you have records (exam all)',
       maxLength: 750
     },
     {
       key: 'results',
-      title: '3. OTHER SELLING POINTS AS A TUTOR',
+      title: '3. Other Selling Points as a Tutor',
       subtitle: 'Any interesting teaching methods and commitments etc. What makes you stand out?',
       placeholder: 'eg: Motivating teaching methods for encouraging students etc.',
       maxLength: 750
@@ -43,7 +43,7 @@ const TutorProfile = () => {
         <div className="border-b border-gray-200 pb-8">
           <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
             <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">4</span>
-            Tutor's Profile (Extremely Important!)
+            Tutor&apos;s Profile (Extremely Important!)
           </h2>
 
           <div className="bg-lightblue border-l-4 border-primary-700 p-4 mb-8">
