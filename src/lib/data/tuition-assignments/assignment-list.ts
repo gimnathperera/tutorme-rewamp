@@ -2,7 +2,7 @@ const assignmentList = [
     {
     id: "A001",
     subject: "Math",
-    level: "primary",
+    grade: "primary",
     tutorType: "full-time",
     gender: "female",
     location: "Bukit Panjang",
@@ -11,7 +11,7 @@ const assignmentList = [
     {
     id: "A002",
     subject: "Science",
-    level: "secondary",
+    grade: "secondary",
     tutorType: "part-time",
     gender: "male",
     location: "Yishun",
@@ -20,7 +20,7 @@ const assignmentList = [
     {
     id: "A003",
     subject: "English",
-    level: "jc",
+    grade: "jc",
     tutorType: "ex-teacher",
     gender: "any",
     location: "Jurong West",
@@ -29,7 +29,7 @@ const assignmentList = [
     {
     id: "A004",
     subject: "Math",
-    level: "secondary",
+    grade: "secondary",
     tutorType: "full-time",
     gender: "any",
     location: "Bedok",
@@ -38,7 +38,7 @@ const assignmentList = [
     {
     id: "A005",
     subject: "Science",
-    level: "primary",
+    grade: "primary",
     tutorType: "part-time",
     gender: "female",
     location: "Tampines",

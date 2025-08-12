@@ -109,6 +109,23 @@ export type UserLoginResponse = {
   };
 };
 
+export type TuitionAssignment = {
+  _id: string,
+  title: string,
+  assignmentNumber: string,
+  address: string,
+  duration: string,
+  gradeId: string,
+  tutorId: string,
+  assignmentPrice: string,
+  createdAt: string,
+  updatedAt: string,
+  __v: number,
+  gradeName: string,
+  tutorName: string,
+  tutorType: string
+}
+
 export type ProfileResponse = {
   role: string;
   status: string;
