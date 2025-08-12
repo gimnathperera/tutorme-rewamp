@@ -4,9 +4,13 @@ import BackToTop from "@/components/shared/back-to-top";
 import "./globals.css";
 import { WithProviders } from "@/hocs/with-providers";
 
+
 export const metadata = {
   title: "Tutor Me",
   description: "Change how you learn with a tutor",
+  icons: {
+     icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
