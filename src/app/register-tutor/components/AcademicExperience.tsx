@@ -1,47 +1,44 @@
 "use client";
-import { useState } from "react";
 
-const AcademicExperience = () => {
-  const [formData, setFormData] = useState({
-    tutorType: "",
-    yearsExperience: "",
-    educationLevel: ""
-  });
+import { FindMyTutorRequest } from "@/types/request-types";
 
-  // CHANGED TO TITLE CASE
+type Props = {
+  data: FindMyTutorRequest;
+  errors: Record<string, string>;
+  setField: (name: keyof FindMyTutorRequest, value: any) => void;
+  validateField: (name: keyof FindMyTutorRequest) => boolean;
+};
+
+const AcademicExperience = ({ data, errors, setField, validateField }: Props) => {
   const tutorTypes = [
-    'Full Time Student',
-    'Undergraduate',
-    'Part Time Tutor',
-    'Full Time Tutor',
-    'Ex/Current MOE Teacher',
-    'Ex-MOE Teacher',
-    'Current MOE Teacher'
+    "Full Time Student",
+    "Undergraduate",
+    "Part Time Tutor",
+    "Full Time Tutor",
+    "Ex/Current MOE Teacher",
+    "Ex-MOE Teacher",
+    "Current MOE Teacher",
   ];
 
-  // CHANGED TO TITLE CASE
   const educationLevels = [
-    'PhD Diploma',
-    'Masters',
-    'Undergraduate',
-    'Bachelor Degree',
-    'Diploma and Professional',
-    'JC/A Levels',
-    'Poly',
-    'Others'
+    "PhD Diploma",
+    "Masters",
+    "Undergraduate",
+    "Bachelor Degree",
+    "Diploma and Professional",
+    "JC/A Levels",
+    "Poly",
+    "Others",
   ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="border-b border-gray-200 pb-8">
           <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
-            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">3</span>
+            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">
+              3
+            </span>
             Academic Qualifications & Experience
           </h2>
 
@@ -53,19 +50,26 @@ const AcademicExperience = () => {
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {tutorTypes.map((type) => (
-                  <label key={type} className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
+                  <label
+                    key={type}
+                    className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                  >
                     <input
                       type="radio"
                       name="tutorType"
                       value={type}
-                      checked={formData.tutorType === type}
-                      onChange={handleChange}
+                      checked={data.tutorType === type}
+                      onChange={(e) => setField("tutorType", e.target.value)}
+                      onBlur={() => validateField("tutorType")}
                       className="mr-3 text-primary-700 focus:ring-primary-700"
                     />
                     <span className="text-sm font-medium">{type}</span>
                   </label>
                 ))}
               </div>
+              {errors.tutorType && (
+                <p className="text-red-500 text-sm mt-1">{errors.tutorType}</p>
+              )}
             </div>
 
             {/* Years of Teaching Experience */}
@@ -74,20 +78,39 @@ const AcademicExperience = () => {
                 Yrs of Teaching Experience *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'].map((years) => (
-                  <label key={years} className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
-                    <input
-                      type="radio"
-                      name="yearsExperience"
-                      value={years}
-                      checked={formData.yearsExperience === years}
-                      onChange={handleChange}
-                      className="mr-2 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="font-medium">{years}</span>
-                  </label>
-                ))}
+                {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"].map(
+                  (years) => (
+                    <label
+                      key={years}
+                      className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                    >
+                      <input
+                        type="radio"
+                        name="yearsExperience"
+                        value={years}
+                        checked={
+                          (years === "10+" && data.yearsExperience >= 10) ||
+                          String(data.yearsExperience) === years
+                        }
+                        onChange={(e) =>
+                          setField(
+                            "yearsExperience",
+                            e.target.value === "10+" ? 10 : Number(e.target.value)
+                          )
+                        }
+                        onBlur={() => validateField("yearsExperience")}
+                        className="mr-2 text-primary-700 focus:ring-primary-700"
+                      />
+                      <span className="font-medium">{years}</span>
+                    </label>
+                  )
+                )}
               </div>
+              {errors.yearsExperience && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.yearsExperience}
+                </p>
+              )}
             </div>
 
             {/* Highest Education Level */}
@@ -97,25 +120,58 @@ const AcademicExperience = () => {
               </label>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {educationLevels.map((level) => (
-                  <label key={level} className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
+                  <label
+                    key={level}
+                    className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                  >
                     <input
                       type="radio"
-                      name="educationLevel"
+                      name="highestEducation"
                       value={level}
-                      checked={formData.educationLevel === level}
-                      onChange={handleChange}
+                      checked={data.highestEducation === level}
+                      onChange={(e) =>
+                        setField("highestEducation", e.target.value)
+                      }
+                      onBlur={() => validateField("highestEducation")}
                       className="mr-3 text-primary-700 focus:ring-primary-700"
                     />
                     <span className="text-sm font-medium">{level}</span>
                   </label>
                 ))}
               </div>
+              {errors.highestEducation && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.highestEducation}
+                </p>
+              )}
             </div>
 
-            {/* Additional Info */}
+            {/* Academic details text area */}
+            <div>
+              <label className="block text-lg font-semibold text-darkpurple mb-4">
+                Academic Details *
+              </label>
+              <textarea
+                value={data.academicDetails}
+                onChange={(e) => setField("academicDetails", e.target.value)}
+                onBlur={() => validateField("academicDetails")}
+                rows={5}
+                placeholder="Field of study, university attended, academic achievements, etc."
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
+                  errors.academicDetails ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.academicDetails && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.academicDetails}
+                </p>
+              )}
+            </div>
+
             <div className="bg-blue p-4 rounded-lg">
               <p className="text-sm text-white">
-                <strong>Note:</strong> If you are above School Leaver, please kindly indicate your field of study, university attended, 
+                <strong>Note:</strong> If you are above School Leaver, please
+                kindly indicate your field of study, university attended,
                 academic achievements, etc.
               </p>
             </div>
