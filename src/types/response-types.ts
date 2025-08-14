@@ -14,6 +14,37 @@ export type Subject = {
   id: string;
 };
 
+export type Level ={
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+  details: string[];
+  challanges: string[];
+  subjects: Subject[];
+  title:string;
+};
+
+export type TuitionRateItem = {
+  _id: string;
+  title: string;
+  grade: Grade;
+  subject: Subject;
+  level: Level;
+  govTuitionRate: Rate[];
+  partTimeTuitionRate: Rate[];
+  fullTimeTuitionRate: Rate[];
+};
+export type Rate = {
+  minimumRate: string;
+  maximumRate: string;
+};
+export type TuitionRateGroup = {
+  grade: any;
+  subjects: any;
+  _id: string;
+  level: Level;
+  items: TuitionRateItem[];
+};
 export type Grade = {
   subjects: Subject[];
   title: string;
