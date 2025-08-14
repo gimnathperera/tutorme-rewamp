@@ -1,9 +1,8 @@
-// Shared base types
-export type CommonTypes = {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-};
+
+export type Id = { id: string };
+export type Timestamp = { createdAt: string; updatedAt: string };
+
+export type BaseEntity = Id & Timestamp;
 
 export type WithTitleDescription = {
   title: string;
@@ -19,49 +18,56 @@ export type PaginatedResponse<T> = {
 };
 
 // FAQ
-export type Faq = CommonTypes & {
+export type Faq = BaseEntity & {
   question: string;
   answer: string;
 };
 
 // Subject
-export type Subject = CommonTypes & WithTitleDescription;
+export type Subject = BaseEntity & WithTitleDescription;
 
 // Grade
-export type Grade = CommonTypes & WithTitleDescription & {
+export type Grade = BaseEntity & WithTitleDescription & {
   subjects: Subject[];
 };
 
 // Paper
-export type Paper = CommonTypes & WithTitleDescription & {
+export type Paper = BaseEntity & WithTitleDescription & {
   file: string;
   grade: Grade;
   subject: Subject;
 };
 
 // Testimonial
-export type Testimonial = CommonTypes & {
+export type Testimonial = BaseEntity & {
   studentName: string;
   comment: string;
 };
 
-export type ContactUsResponse = CommonTypes & {
+export type ContactUsResponse = {
   message: string;
   sender: {
     name: string;
     email: string;
   };
-};
+} & Id & Timestamp;
+
+
+export type UserBase = {
+  role: string;
+  status: string;
+  isEmailVerified: boolean;
+  grades: [];
+  subjects: [];
+  name: string;
+  email: string;
+} & Id & Timestamp;
 
 export type UserRegisterResponse = {
-  user: CommonTypes & {
+  user: Omit<UserBase, 'role' | 'status' | 'isEmailVerified'> & {
     role: "admin";
     status: "active";
     isEmailVerified: false;
-    grades: [];
-    subjects: [];
-    name: string;
-    email: string;
   };
   tokens: {
     access: {
@@ -76,15 +82,7 @@ export type UserRegisterResponse = {
 };
 
 export type UserLoginResponse = {
-  user: CommonTypes & {
-    role: string;
-    status: string;
-    isEmailVerified: boolean;
-    grades: [];
-    subjects: [];
-    name: string;
-    email: string;
-  };
+  user: UserBase;
   tokens: {
     access: {
       token: string;
@@ -97,7 +95,7 @@ export type UserLoginResponse = {
   };
 };
 
-export type TuitionAssignment = CommonTypes & {
+export type TuitionAssignment = {
   title: string,
   assignmentNumber: string,
   address: string,
@@ -109,9 +107,9 @@ export type TuitionAssignment = CommonTypes & {
   gradeName: string,
   tutorName: string,
   tutorType: string
-}
+} & Id & Timestamp;
 
-export type ProfileResponse = CommonTypes & {
+export type ProfileResponse = {
   role: string;
   status: string;
   isEmailVerified: boolean;
@@ -133,7 +131,7 @@ export type ProfileResponse = CommonTypes & {
   frequency: string;
   timeZone: string;
   language: string;
-};
+} & Id & Timestamp;
 
 export type UpdatePasswordResponse = {
   message: string;
@@ -180,12 +178,12 @@ type TutorTypeInfo = {
   genderPreference: string;
 };
 
-export type FindMyTutorResponse = CommonTypes & {
+export type FindMyTutorResponse = {
   status: string;
   personalInfo: PersonalInfo;
   lessonInfo: LessonInfo;
   tutorTypeInfo: TutorTypeInfo;
-};
+} & Id & Timestamp;
 
 export type FaqResponse = PaginatedResponse<Faq>;
 export type SubjectResponse = PaginatedResponse<Subject>;
