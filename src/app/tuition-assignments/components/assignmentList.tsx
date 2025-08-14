@@ -34,14 +34,14 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
     };
 
     const handleApply = () => {
-        const selectedAssignments = assignments.filter(a => selected.includes(a.id));
+        const selectedAssignments = assignments.filter(assignment => selected.includes(assignment.id));
         if (typeof window !== 'undefined') {
             sessionStorage.setItem('selectedAssignments', JSON.stringify(selectedAssignments));
         }
         router.push('/tuition-assignments/selected');
     };
 
-    console.log(assignments.map(a => a.id));
+    console.log(assignments.map(assignment => assignment.id));
 
     return (
         <div className='flex flex-col items-center w-full'>
@@ -61,22 +61,22 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                                 </TableCell>
                             </TableRow>
                         ) : (
-                            assignments.map((a) => (
-                                <TableRow key={a.id} className={selected.includes(a.id) ? 'bg-blue-50' : ''}>
+                            assignments.map((assignment) => (
+                                <TableRow key={assignment.id} className={selected.includes(assignment.id) ? 'bg-blue-50' : ''}>
                                     <TableCell>
                                         <input
                                             className='mr-2 border rounded border-gray-400'
                                             type="checkbox"
-                                            checked={selected.includes(a.id)}
-                                            onChange={() => handleSelect(a.id)}
+                                            checked={selected.includes(assignment.id)}
+                                            onChange={() => handleSelect(assignment.id)}
                                         />
                                         {[
-                                            a.assignmentNumber,
-                                            a.title,
-                                            a.gradeName,
-                                            a.tutorType,
-                                            a.address,
-                                            a.assignmentPrice
+                                            assignment.assignmentNumber,
+                                            assignment.title,
+                                            assignment.gradeName,
+                                            assignment.tutorType,
+                                            assignment.address,
+                                            assignment.assignmentPrice
                                         ].filter(Boolean).join(', ')}
                                     </TableCell>
                                 </TableRow>

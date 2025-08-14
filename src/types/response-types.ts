@@ -1,66 +1,60 @@
-export type Faq = {
-  answer: string;
+// Shared base types
+export type CommonTypes = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type WithTitleDescription = {
+  title: string;
+  description: string;
+};
+
+// Reusable response wrapper
+export type PaginatedResponse<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+};
+
+// FAQ
+export type Faq = CommonTypes & {
   question: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
+  answer: string;
 };
 
-export type Subject = {
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+// Subject
+export type Subject = CommonTypes & WithTitleDescription;
 
-export type Grade = {
+// Grade
+export type Grade = CommonTypes & WithTitleDescription & {
   subjects: Subject[];
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
 };
 
-export type Paper = {
-  title: string;
-  description: string;
-  subject: Subject;
+// Paper
+export type Paper = CommonTypes & WithTitleDescription & {
+  file: string;
   grade: Grade;
-  year: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
+  subject: Subject;
 };
 
-export type Testimonial = {
-  content: string;
-  rating: number;
-  owner: {
-    name: string;
-    role: string;
-    avatar: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-  id: string;
+// Testimonial
+export type Testimonial = CommonTypes & {
+  studentName: string;
+  comment: string;
 };
 
-export type ContactUsResponse = {
+export type ContactUsResponse = CommonTypes & {
   message: string;
   sender: {
     name: string;
     email: string;
   };
-  createdAt: string;
-  updatedAt: string;
-  id: string;
 };
 
 export type UserRegisterResponse = {
-  user: {
+  user: CommonTypes & {
     role: "admin";
     status: "active";
     isEmailVerified: false;
@@ -68,9 +62,6 @@ export type UserRegisterResponse = {
     subjects: [];
     name: string;
     email: string;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
   };
   tokens: {
     access: {
@@ -85,7 +76,7 @@ export type UserRegisterResponse = {
 };
 
 export type UserLoginResponse = {
-  user: {
+  user: CommonTypes & {
     role: string;
     status: string;
     isEmailVerified: boolean;
@@ -93,9 +84,6 @@ export type UserLoginResponse = {
     subjects: [];
     name: string;
     email: string;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
   };
   tokens: {
     access: {
@@ -109,8 +97,7 @@ export type UserLoginResponse = {
   };
 };
 
-export type TuitionAssignment = {
-  id: string,
+export type TuitionAssignment = CommonTypes & {
   title: string,
   assignmentNumber: string,
   address: string,
@@ -118,15 +105,13 @@ export type TuitionAssignment = {
   gradeId: string,
   tutorId: string,
   assignmentPrice: string,
-  createdAt: string,
-  updatedAt: string,
   __v: number,
   gradeName: string,
   tutorName: string,
   tutorType: string
 }
 
-export type ProfileResponse = {
+export type ProfileResponse = CommonTypes & {
   role: string;
   status: string;
   isEmailVerified: boolean;
@@ -146,9 +131,6 @@ export type ProfileResponse = {
   gender: "Male" | "Female" | "None";
   duration: string;
   frequency: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
   timeZone: string;
   language: string;
 };
@@ -167,14 +149,6 @@ export type TokenResponse = {
     expires: string;
   };
 };
-
-export interface PaginatedResponse<T> {
-  results: T[];
-  page: number;
-  limit: number;
-  totalPages: number;
-  totalResults: number;
-}
 
 type PersonalInfo = {
   firstName: string;
@@ -206,12 +180,16 @@ type TutorTypeInfo = {
   genderPreference: string;
 };
 
-export type FindMyTutorResponse = {
+export type FindMyTutorResponse = CommonTypes & {
   status: string;
   personalInfo: PersonalInfo;
   lessonInfo: LessonInfo;
   tutorTypeInfo: TutorTypeInfo;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
 };
+
+export type FaqResponse = PaginatedResponse<Faq>;
+export type SubjectResponse = PaginatedResponse<Subject>;
+export type GradeResponse = PaginatedResponse<Grade>;
+export type PaperResponse = PaginatedResponse<Paper>;
+export type TestimonialResponse = PaginatedResponse<Testimonial>;
+export type TuitionAssignmentResponse = PaginatedResponse<TuitionAssignment>;
