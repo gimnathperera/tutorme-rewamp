@@ -15,6 +15,7 @@ export type PaginatedResponse<T> = {
   next: string | null;
   previous: string | null;
   results: T[];
+  totalResults: number;
 };
 
 // FAQ
@@ -36,12 +37,19 @@ export type Paper = BaseEntity & WithTitleDescription & {
   file: string;
   grade: Grade;
   subject: Subject;
+  year: string;
+  url: string;
 };
 
 // Testimonial
 export type Testimonial = BaseEntity & {
-  studentName: string;
-  comment: string;
+  content: string,
+  rating: number,
+  owner: {
+      name: string,
+      role: string,
+      avatar: string
+  };
 };
 
 export type ContactUsResponse = {

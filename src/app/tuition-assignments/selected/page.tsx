@@ -40,7 +40,7 @@ const SelectedAssignmentsPage: React.FC = () => {
                 </TableRow>
               ) : (
                 selectedAssignments.map((a) => (
-                  <TableRow key={a._id}>
+                  <TableRow key={a.id}>
                     <TableCell className="font-semibold text-lg">
                       {[
                         a.assignmentNumber,
