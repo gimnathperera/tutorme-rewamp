@@ -32,12 +32,18 @@ const Filter = () => {
     return (
         <div className='flex flex-col items-center'>
             <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4 sm:gap-6 mb-6 w-full max-w-3xl px-4 py-4 rounded-lg">
-                <SelectButton
-                    placeholder="Tutor Type"
-                    selectLabel="Tutor Type"
-                    selectItems={tutorTypeOptions}
-                    onChange={setTutorType}
-                />
+                {isGradesLoading ? (
+                    <div className="w-full flex justify-center">
+                        <Skeleton height={50} width={200} borderRadius={10} />
+                    </div>
+                ) : (
+                    <SelectButton
+                        placeholder="Tutor Type"
+                        selectLabel="Tutor Type"
+                        selectItems={tutorTypeOptions}
+                        onChange={setTutorType}
+                    />
+                )}
                 {isGradesLoading ? (
                     <div className="w-full flex justify-center">
                         <Skeleton height={50} width={200} borderRadius={10} />
@@ -50,12 +56,18 @@ const Filter = () => {
                         onChange={setGradeId}
                     />
                 )}
-                <SelectButton
-                    placeholder="Gender"
-                    selectLabel="Gender"
-                    selectItems={genderOptions}
-                    onChange={setGender}
-                />
+                {isGradesLoading ? (
+                    <div className="w-full flex justify-center">
+                        <Skeleton height={50} width={200} borderRadius={10} />
+                    </div>
+                ) : (
+                    <SelectButton
+                        placeholder="Gender"
+                        selectLabel="Gender"
+                        selectItems={genderOptions}
+                        onChange={setGender}
+                    />
+                )}
             </div>
             <div className="flex justify-center w-full mb-6">
                 <button

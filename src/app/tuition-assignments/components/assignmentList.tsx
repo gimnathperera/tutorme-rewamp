@@ -34,12 +34,14 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
     };
 
     const handleApply = () => {
-        const selectedAssignments = assignments.filter(a => selected.includes(a._id));
+        const selectedAssignments = assignments.filter(a => selected.includes(a.id));
         if (typeof window !== 'undefined') {
             sessionStorage.setItem('selectedAssignments', JSON.stringify(selectedAssignments));
         }
         router.push('/tuition-assignments/selected');
     };
+
+    console.log(assignments.map(a => a.id));
 
     return (
         <div className='flex flex-col items-center w-full'>
@@ -60,13 +62,13 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                             </TableRow>
                         ) : (
                             assignments.map((a) => (
-                                <TableRow key={a._id} className={selected.includes(a._id) ? 'bg-blue-50' : ''}>
+                                <TableRow key={a.id} className={selected.includes(a.id) ? 'bg-blue-50' : ''}>
                                     <TableCell>
                                         <input
                                             className='mr-2 border rounded border-gray-400'
                                             type="checkbox"
-                                            checked={selected.includes(a._id)}
-                                            onChange={() => handleSelect(a._id)}
+                                            checked={selected.includes(a.id)}
+                                            onChange={() => handleSelect(a.id)}
                                         />
                                         {[
                                             a.assignmentNumber,
@@ -97,7 +99,6 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                     </TableFooter>
                 </Table>
             </div>
-            <TableCaption className="text-center mt-2">A list of available tuition assignments.</TableCaption>
         </div>
     );
 };

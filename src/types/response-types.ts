@@ -110,7 +110,7 @@ export type UserLoginResponse = {
 };
 
 export type TuitionAssignment = {
-  _id: string,
+  id: string,
   title: string,
   assignmentNumber: string,
   address: string,
