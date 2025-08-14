@@ -76,10 +76,14 @@ export default function TuitionRatesByLevel() {
         <Card key={levelGroup.level?.id || `level-${levelIdx}`} className="p-4">
           <CardContent>
             {/* Level Title */}
-            <h2 className="text-2xl font-bold">
-              {levelGroup.level?.title || "Unknown Level"}
-            </h2>
-            <p>{levelGroup.level?.title}</p>
+            <div className="flex flex-col justify-center items-center">
+              <h2 className="text-3xl font-semibold">
+                {levelGroup.level?.title || "Unknown Level"}
+              </h2>
+              <p className="text-[#EF4350] font-bold">
+                {levelGroup.level?.title || "Unknown Level"} Tuition Rates
+              </p>
+            </div>
 
             {/* Loop through grades in this level */}
             {Object.values(levelGroup.grades).map((gradeGroup, gradeIdx) => (

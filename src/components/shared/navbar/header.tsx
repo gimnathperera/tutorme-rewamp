@@ -40,14 +40,8 @@ const navigation: NavigationItem[] = [
   },
   {
     name: "Levels and Exams",
-    href: "/",
+    href: "/level-and-exams",
     current: false,
-    dropdown: [
-      { name: "Primary Level", href: "/level-and-exams/1" },
-      { name: "Grade 6 to 9 Level", href: "/level-and-exams/2" },
-      { name: "GCE Ordinary Level", href: "/level-and-exams/3" },
-      { name: "GCE Advanced Level", href: "/level-and-exams/4" },
-    ],
   },
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
