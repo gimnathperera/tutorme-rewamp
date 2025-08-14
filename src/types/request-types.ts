@@ -88,6 +88,16 @@ export type FetchTestimonialsRequest = {
   limit: number;
 };
 
+export type FetchTuitionAssignments = {
+  title: string,
+  assignmentNumber: string,
+  address: string,
+  duration: string,
+  gradeId: string,
+  tutorId: string,
+  assignmentPrice: string
+}
+
 type PersonalInfo = {
   firstName: string;
   lastName: string;
