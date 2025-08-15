@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Image from "next/image";
 import React from "react";
 import { advancedLevelRates } from "@/lib/data/tuition-rates/advanced-level";
 import { aboutDetails } from "@/lib/data/tuition-rates/about-details";

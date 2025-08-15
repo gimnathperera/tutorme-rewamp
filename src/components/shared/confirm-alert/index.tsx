@@ -3,7 +3,6 @@
 import { FC } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import Icon from "../icon";
 import SubmitButton from "../submit-button";
 
 type ConfirmationAlertProps = {

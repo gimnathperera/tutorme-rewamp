@@ -1,5 +1,5 @@
 import { FetchTuitionRatesRequest } from "@/types/request-types";
-import { PaginatedResponse, TuitionRateGroup, TuitionRateItem } from "@/types/response-types";
+import { PaginatedResponse, TuitionRateItem } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
