@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowBigRight, X } from "lucide-react"
+import { ChevronRight, X } from "lucide-react"
 
 const SelectedAssignmentsPage: React.FC = () => {
   const [selectedAssignments, setSelectedAssignments] = useState<TuitionAssignment[]>([])
@@ -84,7 +84,7 @@ const SelectedAssignmentsPage: React.FC = () => {
             View All Assignments
           </Button>
           <Button variant="outline" className="w-full bg-transparent bg-gray-200 hover:shadow-md">
-            Next <ArrowBigRight color="#808080" strokeWidth={2} />
+            Next <ChevronRight color="#808080" strokeWidth={2} />
           </Button>
         </CardFooter>
       </Card>
