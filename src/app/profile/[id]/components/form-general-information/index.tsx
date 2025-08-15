@@ -7,7 +7,7 @@ import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty, isNil } from "lodash-es";
+import { isEmpty } from "lodash-es";
 import InputDatePicker from "@/components/shared/input-date-picker";
 
 type Props = {

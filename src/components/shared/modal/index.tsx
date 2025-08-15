@@ -1,7 +1,6 @@
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
-import Link from "next/link";
 import { FC, Fragment, ReactNode } from "react";
 import Icon from "../icon";
 

@@ -1,5 +1,4 @@
 import React from "react";
-import AssignmentList from "./components/assignmentList";
 import Filter from "./components/filter";
 
 const TuitionAssignments = () => {
