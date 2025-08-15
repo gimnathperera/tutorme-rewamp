@@ -1,54 +1,146 @@
 "use client";
-import { useState } from "react";
 
-const TutoringPreferences = () => {
-  const [formData, setFormData] = useState({
-    levels: [] as string[],
-    locations: [] as string[],
-    noPreference: false
-  });
+import { FindMyTutorRequest } from "@/types/request-types";
+import { useMemo, useState } from "react";
+
+type Props = {
+  data: FindMyTutorRequest;
+  errors: Record<string, string>;
+  setField: (name: keyof FindMyTutorRequest, value: any) => void;
+  validateField: (name: keyof FindMyTutorRequest) => boolean;
+};
+
+const TutoringPreferences = ({
+  data,
+  errors,
+  setField,
+  validateField,
+}: Props) => {
+  const [noPreference, setNoPreference] = useState(false);
 
   const levels = [
-    'Pre-School', 'Primary School', 'Lower Secondary', 'Upper Secondary', 
-    'Junior College', 'IB/IGCSE', 'Diploma / Degree', 'Language', 
-    'Computing', 'Special Skills', 'Music'
+    "Pre-School",
+    "Primary School",
+    "Lower Secondary",
+    "Upper Secondary",
+    "Junior College",
+    "IB/IGCSE",
+    "Diploma / Degree",
+    "Language",
+    "Computing",
+    "Special Skills",
+    "Music",
   ];
 
-  const locationsByRegion = {
-    'North': ['Admiralty', 'Ang Mo Kio', 'Bishan', 'Boon Lay', 'Bukit Batok', 'Bukit Panjang', 'Choa Chu Kang', 'Clementi', 'Jurong East', 'Jurong West', 'Kranji', 'Marsiling', 'Sembawang', 'Sengkang', 'Woodlands', 'Yew Tee', 'Yishun'],
-    'East': ['Bedok', 'Changi', 'East Coast', 'Geylang', 'Hougang', 'Katong', 'Marine Parade', 'Pasir Ris', 'Punggol', 'Serangoon', 'Tampines', 'Ubi'],
-    'West': ['Boon Lay', 'Bukit Batok', 'Bukit Merah', 'Bukit Timah', 'Choa Chu Kang', 'Clementi', 'Dover', 'Holland Village', 'Jurong East', 'Jurong West', 'Newton', 'Queenstown', 'Toa Payoh', 'West Coast'],
-    'South': ['Boat Quay', 'Bugis', 'Chinatown', 'City Hall', 'Clarke Quay', 'Dhoby Ghaut', 'Marina Bay', 'Orchard', 'Raffles Place', 'Robertson Quay', 'Tanjong Pagar'],
-    'North-West': ['Bukit Panjang', 'Choa Chu Kang', 'Hillview', 'Keat Hong', 'Teck Whye'],
-    'Central': ['Ang Mo Kiao', 'Balestier', 'Bishan', 'Bras Basah', 'Farrer Park', 'Kallang', 'Lavender', 'Little India', 'MacPherson', 'Novena', 'Potong Pasir', 'Rochor', 'Serangoon', 'Thomson', 'Toa Payoh']
+  const locationsByRegion = useMemo(
+    () => ({
+      North: [
+        "Admiralty",
+        "Ang Mo Kio",
+        "Bishan",
+        "Boon Lay",
+        "Bukit Batok",
+        "Bukit Panjang",
+        "Choa Chu Kang",
+        "Clementi",
+        "Jurong East",
+        "Jurong West",
+        "Kranji",
+        "Marsiling",
+        "Sembawang",
+        "Sengkang",
+        "Woodlands",
+        "Yew Tee",
+        "Yishun",
+      ],
+      East: [
+        "Bedok",
+        "Changi",
+        "East Coast",
+        "Geylang",
+        "Hougang",
+        "Katong",
+        "Marine Parade",
+        "Pasir Ris",
+        "Punggol",
+        "Serangoon",
+        "Tampines",
+        "Ubi",
+      ],
+      West: [
+        "Boon Lay",
+        "Bukit Batok",
+        "Bukit Merah",
+        "Bukit Timah",
+        "Choa Chu Kang",
+        "Clementi",
+        "Dover",
+        "Holland Village",
+        "Jurong East",
+        "Jurong West",
+        "Newton",
+        "Queenstown",
+        "Toa Payoh",
+        "West Coast",
+      ],
+      South: [
+        "Boat Quay",
+        "Bugis",
+        "Chinatown",
+        "City Hall",
+        "Clarke Quay",
+        "Dhoby Ghaut",
+        "Marina Bay",
+        "Orchard",
+        "Raffles Place",
+        "Robertson Quay",
+        "Tanjong Pagar",
+      ],
+      "North-West": ["Bukit Panjang", "Choa Chu Kang", "Hillview", "Keat Hong", "Teck Whye"],
+      Central: [
+        "Ang Mo Kiao",
+        "Balestier",
+        "Bishan",
+        "Bras Basah",
+        "Farrer Park",
+        "Kallang",
+        "Lavender",
+        "Little India",
+        "MacPherson",
+        "Novena",
+        "Potong Pasir",
+        "Rochor",
+        "Serangoon",
+        "Thomson",
+        "Toa Payoh",
+      ],
+    }),
+    []
+  );
+
+  const toggleLevel = (level: string) => {
+    const updated = data.tutoringLevels.includes(level)
+      ? data.tutoringLevels.filter((l) => l !== level)
+      : [...data.tutoringLevels, level];
+    setField("tutoringLevels", updated);
+    // validate after change
+    if (updated.length > 0) validateField("tutoringLevels");
   };
 
-  const handleLevelChange = (level: string) => {
-    const updatedLevels = formData.levels.includes(level)
-      ? formData.levels.filter(l => l !== level)
-      : [...formData.levels, level];
-    
-    setFormData(prev => ({ ...prev, levels: updatedLevels }));
-  };
-
-  const handleLocationChange = (location: string) => {
-    let updatedLocations: string[];
-    
-    if (formData.locations.includes(location)) {
-      updatedLocations = formData.locations.filter(l => l !== location);
-    } else {
-      updatedLocations = [...formData.locations, location];
-    }
-    
-    setFormData(prev => ({ ...prev, locations: updatedLocations, noPreference: false }));
+  const toggleLocation = (loc: string) => {
+    if (noPreference) return;
+    const updated = data.preferredLocations.includes(loc)
+      ? data.preferredLocations.filter((l) => l !== loc)
+      : [...data.preferredLocations, loc];
+    setField("preferredLocations", updated);
   };
 
   const handleNoPreference = () => {
-    setFormData(prev => ({ 
-      ...prev,
-      noPreference: !prev.noPreference,
-      locations: !prev.noPreference ? [] : prev.locations
-    }));
+    const next = !noPreference;
+    setNoPreference(next);
+    if (next) {
+      setField("preferredLocations", []);
+    }
   };
 
   return (
@@ -56,7 +148,9 @@ const TutoringPreferences = () => {
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="border-b border-gray-200 pb-8">
           <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
-            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">2</span>
+            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">
+              2
+            </span>
             Tutoring Preferences
           </h2>
 
@@ -67,17 +161,24 @@ const TutoringPreferences = () => {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
               {levels.map((level) => (
-                <label key={level} className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
+                <label
+                  key={level}
+                  className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                >
                   <input
                     type="checkbox"
-                    checked={formData.levels.includes(level)}
-                    onChange={() => handleLevelChange(level)}
+                    checked={data.tutoringLevels.includes(level)}
+                    onChange={() => toggleLevel(level)}
+                    onBlur={() => validateField("tutoringLevels")}
                     className="mr-3 text-primary-700 focus:ring-primary-700 rounded"
                   />
                   <span className="text-sm">{level}</span>
                 </label>
               ))}
             </div>
+            {errors.tutoringLevels && (
+              <p className="text-red-500 text-sm mt-2">{errors.tutoringLevels}</p>
+            )}
           </div>
 
           {/* Preferred Tutoring Locations */}
@@ -85,21 +186,26 @@ const TutoringPreferences = () => {
             <h3 className="text-lg font-semibold text-primary-700 mb-4">
               Preferred Tutoring Locations:
             </h3>
-            
+
             {Object.entries(locationsByRegion).map(([region, locations]) => (
               <div key={region} className="mb-6">
                 <h4 className="font-semibold text-darkpurple mb-3">{region}:</h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {locations.map((location) => (
-                    <label key={location} className="flex items-center p-2 border rounded hover:bg-lightblue cursor-pointer transition-colors text-sm">
+                    <label
+                      key={location}
+                      className="flex items-center p-2 border rounded hover:bg-lightblue cursor-pointer transition-colors text-sm"
+                    >
                       <input
                         type="checkbox"
-                        checked={formData.locations.includes(location)}
-                        onChange={() => handleLocationChange(location)}
-                        disabled={formData.noPreference}
+                        checked={data.preferredLocations.includes(location)}
+                        onChange={() => toggleLocation(location)}
+                        disabled={noPreference}
                         className="mr-2 text-primary-700 focus:ring-primary-700 rounded"
                       />
-                      <span className={formData.noPreference ? 'text-gray-400' : ''}>{location}</span>
+                      <span className={noPreference ? "text-gray-400" : ""}>
+                        {location}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -111,7 +217,7 @@ const TutoringPreferences = () => {
               <label className="flex items-center cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={formData.noPreference}
+                  checked={noPreference}
                   onChange={handleNoPreference}
                   className="mr-3 text-primary-700 focus:ring-primary-700 rounded"
                 />
