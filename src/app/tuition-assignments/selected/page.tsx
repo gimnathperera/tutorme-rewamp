@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import type React from "react"
 import { useEffect, useState } from "react"
@@ -11,17 +11,27 @@ import { Label } from "@/components/ui/label"
 import { ChevronRight, X } from "lucide-react"
 
 const SelectedAssignmentsPage: React.FC = () => {
-  const [selectedAssignments, setSelectedAssignments] = useState<TuitionAssignment[]>([]);
-  const router = useRouter();
+  const [selectedAssignments, setSelectedAssignments] = useState<TuitionAssignment[]>([])
+  const router = useRouter()
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const data = sessionStorage.getItem('selectedAssignments');
+    if (typeof window !== "undefined") {
+      const data = sessionStorage.getItem("selectedAssignments")
       if (data) {
-        setSelectedAssignments(JSON.parse(data));
+        setSelectedAssignments(JSON.parse(data))
       }
     }
-  }, []);
+  }, [])
+
+  const removeAssignment = (assignmentId: string | number) => {
+    const updatedAssignments = selectedAssignments.filter((a) => a.id !== assignmentId)
+    setSelectedAssignments(updatedAssignments)
+
+    // Update sessionStorage
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("selectedAssignments", JSON.stringify(updatedAssignments))
+    }
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-gray-100 px-4 sm:px-8 md:px-16 lg:px-32 py-10">
@@ -79,7 +89,7 @@ const SelectedAssignmentsPage: React.FC = () => {
         </CardFooter>
       </Card>
     </div>
-  );
-};
+  )
+}
 
-export default SelectedAssignmentsPage;
+export default SelectedAssignmentsPage
