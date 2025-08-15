@@ -1,28 +1,15 @@
 "use client";
 
-import { FindMyTutorRequest } from "@/types/request-types";
+import { useFormContext } from "react-hook-form";
+import { FindMyTutorForm } from "../schema"; // adjust path
 
-type Props = {
-  data: FindMyTutorRequest;
-  errors: Record<string, string>;
-  setField: (name: keyof FindMyTutorRequest, value: any) => void;
-  validateField: (name: keyof FindMyTutorRequest) => boolean;
-  onSubmit: () => void;
-  submitting: boolean;
-};
+const TermsAndSubmit = ({ onSubmit, submitting }: { onSubmit: () => void; submitting: boolean }) => {
+  const { watch, setValue, formState } = useFormContext<FindMyTutorForm>();
+  const errors = formState.errors;
 
-const TermsAndSubmit = ({
-  data,
-  errors,
-  setField,
-  validateField,
-  onSubmit,
-  submitting,
-}: Props) => {
-  const canSubmit =
-    data.agreeTerms &&
-    data.agreeAssignmentInfo &&
-    !!data.captchaToken?.trim();
+  const agreeTerms = watch("agreeTerms");
+  const agreeAssignmentInfo = watch("agreeAssignmentInfo");
+  const canSubmit = agreeTerms && agreeAssignmentInfo;
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -43,9 +30,8 @@ const TermsAndSubmit = ({
                 <label className="flex items-start cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={data.agreeTerms}
-                    onChange={(e) => setField("agreeTerms", e.target.checked)}
-                    onBlur={() => validateField("agreeTerms")}
+                    checked={agreeTerms || false}
+                    onChange={(e) => setValue("agreeTerms", e.target.checked)}
                     className="mt-1 mr-3 text-primary-700 focus:ring-primary-700 rounded"
                   />
                   <div>
@@ -60,7 +46,7 @@ const TermsAndSubmit = ({
                     </p>
                     {errors.agreeTerms && (
                       <p className="text-red-500 text-sm mt-1">
-                        {errors.agreeTerms}
+                        {errors.agreeTerms.message as string}
                       </p>
                     )}
                   </div>
@@ -72,57 +58,28 @@ const TermsAndSubmit = ({
                 <label className="flex items-start cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={data.agreeAssignmentInfo}
-                    onChange={(e) =>
-                      setField("agreeAssignmentInfo", e.target.checked)
-                    }
-                    onBlur={() => validateField("agreeAssignmentInfo")}
+                    checked={agreeAssignmentInfo || false}
+                    onChange={(e) => setValue("agreeAssignmentInfo", e.target.checked)}
                     className="mt-1 mr-3 text-primary-700 focus:ring-primary-700 rounded"
                   />
                   <div>
                     <span className="font-medium text-darkpurple">
-                      * I AGREE TO RECEIVING ASSIGNMENT INFORMATION REGARDING NEW
-                      TUITION ASSIGNMENTS
+                      * I AGREE TO RECEIVING ASSIGNMENT INFORMATION REGARDING
+                      NEW TUITION ASSIGNMENTS
                     </span>
                     <p className="text-sm text-gray-600 mt-1">
                       By checking this box, you agree to receive SMS and email
-                      notifications about new tutoring assignments that match your
-                      preferences.
+                      notifications about new tutoring assignments that match
+                      your preferences.
                     </p>
                     {errors.agreeAssignmentInfo && (
                       <p className="text-red-500 text-sm mt-1">
-                        {errors.agreeAssignmentInfo}
+                        {errors.agreeAssignmentInfo.message as string}
                       </p>
                     )}
                   </div>
                 </label>
               </div>
-            </div>
-
-            {/* CAPTCHA Section */}
-            <div className="border border-gray-200 rounded-lg p-4">
-              <h3 className="font-semibold text-darkpurple mb-3">CAPTCHA</h3>
-              <div className="flex items-center space-x-4">
-                {/* Placeholder for real reCAPTCHA – store token in captchaToken */}
-                <input
-                  type="text"
-                  value={data.captchaToken}
-                  onChange={(e) => setField("captchaToken", e.target.value)}
-                  onBlur={() => validateField("captchaToken")}
-                  placeholder="Enter captcha token (placeholder)"
-                  className={`w-full md:w-1/2 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                    errors.captchaToken ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-              </div>
-              {errors.captchaToken && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.captchaToken}
-                </p>
-              )}
-              <p className="text-xs text-gray-500 mt-2">
-                Replace this input with real reCAPTCHA and store its token.
-              </p>
             </div>
 
             {/* Additional Information */}
@@ -132,8 +89,8 @@ const TermsAndSubmit = ({
               </h4>
               <ul className="text-gray-700 text-sm space-y-1">
                 <li>
-                  • By accepting our Terms and Conditions, you agree to Tutor Fee
-                  Commission of tutor&apos;s first lesson fee for successful
+                  • By accepting our Terms and Conditions, you agree to Tutor
+                  Fee Commission of tutor&apos;s first lesson fee for successful
                   assignments, payable within 7 days via online banking.
                 </li>
                 <li>• All tutor information provided will remain confidential</li>

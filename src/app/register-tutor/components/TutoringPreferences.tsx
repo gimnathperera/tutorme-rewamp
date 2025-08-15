@@ -1,21 +1,17 @@
 "use client";
 
-import { FindMyTutorRequest } from "@/types/request-types";
 import { useMemo, useState } from "react";
+import { useFormContext, Controller } from "react-hook-form";
+import { FindMyTutorForm } from "../schema"; // adjust the import if needed
 
-type Props = {
-  data: FindMyTutorRequest;
-  errors: Record<string, string>;
-  setField: (name: keyof FindMyTutorRequest, value: any) => void;
-  validateField: (name: keyof FindMyTutorRequest) => boolean;
-};
+const TutoringPreferences = () => {
+  const { control, watch, setValue, trigger, formState } =
+    useFormContext<FindMyTutorForm>();
+  const errors = formState.errors;
 
-const TutoringPreferences = ({
-  data,
-  errors,
-  setField,
-  validateField,
-}: Props) => {
+  const tutoringLevels: string[] = watch("tutoringLevels") || [];
+  const preferredLocations: string[] = watch("preferredLocations") || [];
+
   const [noPreference, setNoPreference] = useState(false);
 
   const levels = [
@@ -119,28 +115,25 @@ const TutoringPreferences = ({
   );
 
   const toggleLevel = (level: string) => {
-    const updated = data.tutoringLevels.includes(level)
-      ? data.tutoringLevels.filter((l) => l !== level)
-      : [...data.tutoringLevels, level];
-    setField("tutoringLevels", updated);
-    // validate after change
-    if (updated.length > 0) validateField("tutoringLevels");
+    const updated = tutoringLevels.includes(level)
+      ? tutoringLevels.filter((l) => l !== level)
+      : [...tutoringLevels, level];
+    setValue("tutoringLevels", updated);
+    if (updated.length > 0) trigger("tutoringLevels");
   };
 
   const toggleLocation = (loc: string) => {
     if (noPreference) return;
-    const updated = data.preferredLocations.includes(loc)
-      ? data.preferredLocations.filter((l) => l !== loc)
-      : [...data.preferredLocations, loc];
-    setField("preferredLocations", updated);
+    const updated = preferredLocations.includes(loc)
+      ? preferredLocations.filter((l) => l !== loc)
+      : [...preferredLocations, loc];
+    setValue("preferredLocations", updated);
   };
 
   const handleNoPreference = () => {
     const next = !noPreference;
     setNoPreference(next);
-    if (next) {
-      setField("preferredLocations", []);
-    }
+    if (next) setValue("preferredLocations", []);
   };
 
   return (
@@ -167,9 +160,8 @@ const TutoringPreferences = ({
                 >
                   <input
                     type="checkbox"
-                    checked={data.tutoringLevels.includes(level)}
+                    checked={tutoringLevels.includes(level)}
                     onChange={() => toggleLevel(level)}
-                    onBlur={() => validateField("tutoringLevels")}
                     className="mr-3 text-primary-700 focus:ring-primary-700 rounded"
                   />
                   <span className="text-sm">{level}</span>
@@ -177,7 +169,9 @@ const TutoringPreferences = ({
               ))}
             </div>
             {errors.tutoringLevels && (
-              <p className="text-red-500 text-sm mt-2">{errors.tutoringLevels}</p>
+              <p className="text-red-500 text-sm mt-2">
+                {errors.tutoringLevels.message as string}
+              </p>
             )}
           </div>
 
@@ -198,7 +192,7 @@ const TutoringPreferences = ({
                     >
                       <input
                         type="checkbox"
-                        checked={data.preferredLocations.includes(location)}
+                        checked={preferredLocations.includes(location)}
                         onChange={() => toggleLocation(location)}
                         disabled={noPreference}
                         className="mr-2 text-primary-700 focus:ring-primary-700 rounded"

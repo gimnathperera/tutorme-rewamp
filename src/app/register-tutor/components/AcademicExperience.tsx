@@ -1,15 +1,18 @@
 "use client";
 
-import { FindMyTutorRequest } from "@/types/request-types";
+import { useFormContext } from "react-hook-form";
+import { FindMyTutorForm } from "../schema"; // adjust the import if needed
 
-type Props = {
-  data: FindMyTutorRequest;
-  errors: Record<string, string>;
-  setField: (name: keyof FindMyTutorRequest, value: any) => void;
-  validateField: (name: keyof FindMyTutorRequest) => boolean;
-};
+const AcademicExperience = () => {
+  const { watch, setValue, trigger, formState } =
+    useFormContext<FindMyTutorForm>();
+  const errors = formState.errors;
 
-const AcademicExperience = ({ data, errors, setField, validateField }: Props) => {
+  const tutorType = watch("tutorType") || "";
+  const yearsExperience = watch("yearsExperience") || 0;
+  const highestEducation = watch("highestEducation") || "";
+  const academicDetails = watch("academicDetails") || "";
+
   const tutorTypes = [
     "Full Time Student",
     "Undergraduate",
@@ -30,6 +33,8 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
     "Poly",
     "Others",
   ];
+
+  const yearsOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"];
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -56,11 +61,10 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
                   >
                     <input
                       type="radio"
-                      name="tutorType"
                       value={type}
-                      checked={data.tutorType === type}
-                      onChange={(e) => setField("tutorType", e.target.value)}
-                      onBlur={() => validateField("tutorType")}
+                      checked={tutorType === type}
+                      onChange={() => setValue("tutorType", type)}
+                      onBlur={() => trigger("tutorType")}
                       className="mr-3 text-primary-700 focus:ring-primary-700"
                     />
                     <span className="text-sm font-medium">{type}</span>
@@ -68,7 +72,9 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
                 ))}
               </div>
               {errors.tutorType && (
-                <p className="text-red-500 text-sm mt-1">{errors.tutorType}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.tutorType.message as string}
+                </p>
               )}
             </div>
 
@@ -78,37 +84,31 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
                 Yrs of Teaching Experience *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"].map(
-                  (years) => (
-                    <label
-                      key={years}
-                      className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
-                    >
-                      <input
-                        type="radio"
-                        name="yearsExperience"
-                        value={years}
-                        checked={
-                          (years === "10+" && data.yearsExperience >= 10) ||
-                          String(data.yearsExperience) === years
-                        }
-                        onChange={(e) =>
-                          setField(
-                            "yearsExperience",
-                            e.target.value === "10+" ? 10 : Number(e.target.value)
-                          )
-                        }
-                        onBlur={() => validateField("yearsExperience")}
-                        className="mr-2 text-primary-700 focus:ring-primary-700"
-                      />
-                      <span className="font-medium">{years}</span>
-                    </label>
-                  )
-                )}
+                {yearsOptions.map((year) => (
+                  <label
+                    key={year}
+                    className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                  >
+                    <input
+                      type="radio"
+                      value={year}
+                      checked={
+                        (year === "10+" && yearsExperience >= 10) ||
+                        String(yearsExperience) === year
+                      }
+                      onChange={() =>
+                        setValue("yearsExperience", year === "10+" ? 10 : Number(year))
+                      }
+                      onBlur={() => trigger("yearsExperience")}
+                      className="mr-2 text-primary-700 focus:ring-primary-700"
+                    />
+                    <span className="font-medium">{year}</span>
+                  </label>
+                ))}
               </div>
               {errors.yearsExperience && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.yearsExperience}
+                  {errors.yearsExperience.message as string}
                 </p>
               )}
             </div>
@@ -126,13 +126,10 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
                   >
                     <input
                       type="radio"
-                      name="highestEducation"
                       value={level}
-                      checked={data.highestEducation === level}
-                      onChange={(e) =>
-                        setField("highestEducation", e.target.value)
-                      }
-                      onBlur={() => validateField("highestEducation")}
+                      checked={highestEducation === level}
+                      onChange={() => setValue("highestEducation", level)}
+                      onBlur={() => trigger("highestEducation")}
                       className="mr-3 text-primary-700 focus:ring-primary-700"
                     />
                     <span className="text-sm font-medium">{level}</span>
@@ -141,7 +138,7 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
               </div>
               {errors.highestEducation && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.highestEducation}
+                  {errors.highestEducation.message as string}
                 </p>
               )}
             </div>
@@ -152,9 +149,9 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
                 Academic Details *
               </label>
               <textarea
-                value={data.academicDetails}
-                onChange={(e) => setField("academicDetails", e.target.value)}
-                onBlur={() => validateField("academicDetails")}
+                value={academicDetails}
+                onChange={(e) => setValue("academicDetails", e.target.value)}
+                onBlur={() => trigger("academicDetails")}
                 rows={5}
                 placeholder="Field of study, university attended, academic achievements, etc."
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
@@ -163,7 +160,7 @@ const AcademicExperience = ({ data, errors, setField, validateField }: Props) =>
               />
               {errors.academicDetails && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.academicDetails}
+                  {errors.academicDetails.message as string}
                 </p>
               )}
             </div>

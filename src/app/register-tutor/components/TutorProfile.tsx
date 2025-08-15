@@ -1,15 +1,13 @@
 "use client";
 
-import { FindMyTutorRequest } from "@/types/request-types";
+import { useFormContext } from "react-hook-form";
+import { FindMyTutorForm } from "../schema"; // adjust the import path
 
-type Props = {
-  data: FindMyTutorRequest;
-  errors: Record<string, string>;
-  setField: (name: keyof FindMyTutorRequest, value: any) => void;
-  validateField: (name: keyof FindMyTutorRequest) => boolean;
-};
+const TutorProfile = () => {
+  const { watch, setValue, trigger, formState } =
+    useFormContext<FindMyTutorForm>();
+  const errors = formState.errors;
 
-const TutorProfile = ({ data, errors, setField, validateField }: Props) => {
   const profileQuestions = [
     {
       key: "teachingSummary",
@@ -29,10 +27,8 @@ const TutorProfile = ({ data, errors, setField, validateField }: Props) => {
     {
       key: "sellingPoints",
       title: "3. Other Selling Points as a Tutor",
-      subtitle:
-        "Teaching methods, commitments, what makes you stand out.",
-      placeholder:
-        "e.g., Motivating teaching style, strong conceptual focus, etc.",
+      subtitle: "Teaching methods, commitments, what makes you stand out.",
+      placeholder: "e.g., Motivating teaching style, strong conceptual focus, etc.",
       maxLength: 750,
     },
   ] as const;
@@ -63,35 +59,40 @@ const TutorProfile = ({ data, errors, setField, validateField }: Props) => {
           </div>
 
           <div className="space-y-8">
-            {profileQuestions.map((q) => (
-              <div key={q.key}>
-                <h3 className="text-lg font-semibold text-darkpurple mb-2">
-                  {q.title}
-                </h3>
-                <p className="text-gray-600 text-sm mb-3">{q.subtitle}</p>
-                <textarea
-                  value={(data as any)[q.key]}
-                  onChange={(e) => setField(q.key, e.target.value)}
-                  onBlur={() => validateField(q.key)}
-                  placeholder={q.placeholder}
-                  maxLength={q.maxLength}
-                  rows={6}
-                  className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
-                    errors[q.key] ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                <div className="flex justify-between mt-2">
-                  {errors[q.key] ? (
-                    <p className="text-red-500 text-sm">{errors[q.key]}</p>
-                  ) : (
-                    <span />
-                  )}
-                  <p className="text-sm text-gray-500">
-                    {String((data as any)[q.key] || "").length}/{q.maxLength}
-                  </p>
+            {profileQuestions.map((q) => {
+              const value = watch(q.key) || "";
+              return (
+                <div key={q.key}>
+                  <h3 className="text-lg font-semibold text-darkpurple mb-2">
+                    {q.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-3">{q.subtitle}</p>
+                  <textarea
+                    value={value}
+                    onChange={(e) => setValue(q.key, e.target.value)}
+                    onBlur={() => trigger(q.key)}
+                    placeholder={q.placeholder}
+                    maxLength={q.maxLength}
+                    rows={6}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
+                      errors[q.key] ? "border-red-500" : "border-gray-300"
+                    }`}
+                  />
+                  <div className="flex justify-between mt-2">
+                    {errors[q.key] ? (
+                      <p className="text-red-500 text-sm">
+                        {errors[q.key]?.message as string}
+                      </p>
+                    ) : (
+                      <span />
+                    )}
+                    <p className="text-sm text-gray-500">
+                      {value.length}/{q.maxLength}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
 
             <div className="bg-blue p-6 rounded-lg mt-8">
               <h4 className="font-semibold text-darkpurple mb-3">

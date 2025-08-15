@@ -1,15 +1,17 @@
 "use client";
 
-import { FindMyTutorRequest } from "@/types/request-types";
+import { useFormContext } from "react-hook-form";
+import { FindMyTutorForm } from "../schema";
 
-type Props = {
-  data: FindMyTutorRequest;
-  errors: Record<string, string>;
-  setField: (name: keyof FindMyTutorRequest, value: any) => void;
-  validateField: (name: keyof FindMyTutorRequest) => boolean;
-};
+const PersonalInfo = () => {
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<FindMyTutorForm>();
 
-const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
+  const data = watch(); // for conditional validation / dependent re-validation
+
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -29,17 +31,16 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="text"
-                name="fullName"
-                value={data.fullName}
-                onChange={(e) => setField("fullName", e.target.value)}
-                onBlur={() => validateField("fullName")}
+                {...register("fullName")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.fullName ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="Enter your full name"
               />
               {errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.fullName.message}
+                </p>
               )}
             </div>
 
@@ -50,16 +51,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="tel"
-                name="contactNumber"
-                value={data.contactNumber}
-                onChange={(e) => setField("contactNumber", e.target.value)}
-                onBlur={() => {
-                  validateField("contactNumber");
-                  // Re-validate confirm if already filled
-                  if (data.confirmContactNumber) {
-                    validateField("confirmContactNumber");
-                  }
-                }}
+                {...register("contactNumber")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.contactNumber ? "border-red-500" : "border-gray-300"
                 }`}
@@ -67,7 +59,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               />
               {errors.contactNumber && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.contactNumber}
+                  {errors.contactNumber.message}
                 </p>
               )}
             </div>
@@ -79,22 +71,15 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="tel"
-                name="confirmContactNumber"
-                value={data.confirmContactNumber}
-                onChange={(e) =>
-                  setField("confirmContactNumber", e.target.value)
-                }
-                onBlur={() => validateField("confirmContactNumber")}
+                {...register("confirmContactNumber")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.confirmContactNumber
-                    ? "border-red-500"
-                    : "border-gray-300"
+                  errors.confirmContactNumber ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="91234567"
               />
               {errors.confirmContactNumber && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmContactNumber}
+                  {errors.confirmContactNumber.message}
                 </p>
               )}
             </div>
@@ -106,17 +91,14 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="email"
-                name="email"
-                value={data.email}
-                onChange={(e) => setField("email", e.target.value)}
-                onBlur={() => validateField("email")}
+                {...register("email")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.email ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="your.email@example.com"
               />
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
 
@@ -127,21 +109,13 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="date"
-                name="dateOfBirth"
-                value={data.dateOfBirth}
-                onChange={(e) => setField("dateOfBirth", e.target.value)}
-                onBlur={() => {
-                  validateField("dateOfBirth");
-                  if (data.confirmDateOfBirth) validateField("confirmDateOfBirth");
-                }}
+                {...register("dateOfBirth")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.dateOfBirth ? "border-red-500" : "border-gray-300"
                 }`}
               />
               {errors.dateOfBirth && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.dateOfBirth}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth.message}</p>
               )}
             </div>
 
@@ -152,21 +126,14 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="date"
-                name="confirmDateOfBirth"
-                value={data.confirmDateOfBirth}
-                onChange={(e) =>
-                  setField("confirmDateOfBirth", e.target.value)
-                }
-                onBlur={() => validateField("confirmDateOfBirth")}
+                {...register("confirmDateOfBirth")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.confirmDateOfBirth
-                    ? "border-red-500"
-                    : "border-gray-300"
+                  errors.confirmDateOfBirth ? "border-red-500" : "border-gray-300"
                 }`}
               />
               {errors.confirmDateOfBirth && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmDateOfBirth}
+                  {errors.confirmDateOfBirth.message}
                 </p>
               )}
             </div>
@@ -181,11 +148,8 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                   <label key={g} className="flex items-center">
                     <input
                       type="radio"
-                      name="gender"
                       value={g}
-                      checked={data.gender === g}
-                      onChange={(e) => setField("gender", e.target.value)}
-                      onBlur={() => validateField("gender")}
+                      {...register("gender")}
                       className="mr-2 text-primary-700 focus:ring-primary-700"
                     />
                     {g}
@@ -193,7 +157,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                 ))}
               </div>
               {errors.gender && (
-                <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+                <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
               )}
             </div>
 
@@ -204,10 +168,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="number"
-                name="age"
-                value={data.age || ""}
-                onChange={(e) => setField("age", Number(e.target.value))}
-                onBlur={() => validateField("age")}
+                {...register("age", { valueAsNumber: true })}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.age ? "border-red-500" : "border-gray-300"
                 }`}
@@ -216,7 +177,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                 max={80}
               />
               {errors.age && (
-                <p className="text-red-500 text-sm mt-1">{errors.age}</p>
+                <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
               )}
             </div>
 
@@ -230,11 +191,8 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                   <label key={n} className="flex items-center">
                     <input
                       type="radio"
-                      name="nationality"
                       value={n}
-                      checked={data.nationality === n}
-                      onChange={(e) => setField("nationality", e.target.value)}
-                      onBlur={() => validateField("nationality")}
+                      {...register("nationality")}
                       className="mr-2 text-primary-700 focus:ring-primary-700"
                     />
                     {n}
@@ -242,9 +200,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                 ))}
               </div>
               {errors.nationality && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.nationality}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.nationality.message}</p>
               )}
             </div>
 
@@ -266,11 +222,8 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                   <label key={r} className="flex items-center">
                     <input
                       type="radio"
-                      name="race"
                       value={r}
-                      checked={data.race === r}
-                      onChange={(e) => setField("race", e.target.value)}
-                      onBlur={() => validateField("race")}
+                      {...register("race")}
                       className="mr-2 text-primary-700 focus:ring-primary-700"
                     />
                     {r}
@@ -278,7 +231,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                 ))}
               </div>
               {errors.race && (
-                <p className="text-red-500 text-sm mt-1">{errors.race}</p>
+                <p className="text-red-500 text-sm mt-1">{errors.race.message}</p>
               )}
             </div>
 
@@ -289,13 +242,7 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
               </label>
               <input
                 type="text"
-                name="last4NRIC"
-                value={data.last4NRIC}
-                onChange={(e) => {
-                  const val = e.target.value.replace(/\D/g, "").slice(0, 4);
-                  setField("last4NRIC", val);
-                }}
-                onBlur={() => validateField("last4NRIC")}
+                {...register("last4NRIC")}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.last4NRIC ? "border-red-500" : "border-gray-300"
                 }`}
@@ -304,14 +251,11 @@ const PersonalInfo = ({ data, errors, setField, validateField }: Props) => {
                 inputMode="numeric"
               />
               {errors.last4NRIC && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.last4NRIC}
-                </p>
+                <p className="text-red-500 text-sm mt-1">{errors.last4NRIC.message}</p>
               )}
               <p className="text-xs text-gray-500 mt-1">
                 Your identity is protected! This information is securely stored
-                and not displayed on clients. *For Tax / Admin purpose only
-                🔒🔒
+                and not displayed on clients. *For Tax / Admin purpose only 🔒🔒
               </p>
             </div>
           </div>
