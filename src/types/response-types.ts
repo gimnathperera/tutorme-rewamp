@@ -1,27 +1,36 @@
-export type Faq = {
-  answer: string;
-  question: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+export type Id = { id: string };
+export type Timestamp = { createdAt: string; updatedAt: string };
 
-export type Subject = {
+export type BaseEntity = Id & Timestamp;
+
+export type WithTitleDescription = {
   title: string;
   description: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
 };
 
-export type Level ={
+// Reusable response wrapper
+export type PaginatedResponse<T> = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+  totalResults: number;
+};
+
+// FAQ
+export type Faq = BaseEntity & {
+  question: string;
+  answer: string;
+};
+
+export type Level = {
   createdAt: string;
   updatedAt: string;
   id: string;
   details: string[];
   challanges: string[];
   subjects: Subject[];
-  title:string;
+  title: string;
 };
 
 export type TuitionRateItem = {
@@ -45,28 +54,27 @@ export type TuitionRateGroup = {
   level: Level;
   items: TuitionRateItem[];
 };
-export type Grade = {
-  subjects: Subject[];
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+// Subject
+export type Subject = BaseEntity & WithTitleDescription;
 
-export type Paper = {
-  title: string;
-  description: string;
-  subject: Subject;
-  grade: Grade;
-  year: string;
-  url: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+// Grade
+export type Grade = BaseEntity &
+  WithTitleDescription & {
+    subjects: Subject[];
+  };
 
-export type Testimonial = {
+// Paper
+export type Paper = BaseEntity &
+  WithTitleDescription & {
+    file: string;
+    grade: Grade;
+    subject: Subject;
+    year: string;
+    url: string;
+  };
+
+// Testimonial
+export type Testimonial = BaseEntity & {
   content: string;
   rating: number;
   owner: {
@@ -74,9 +82,6 @@ export type Testimonial = {
     role: string;
     avatar: string;
   };
-  createdAt: string;
-  updatedAt: string;
-  id: string;
 };
 
 export type ContactUsResponse = {
@@ -85,23 +90,25 @@ export type ContactUsResponse = {
     name: string;
     email: string;
   };
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+} & Id &
+  Timestamp;
+
+export type UserBase = {
+  role: string;
+  status: string;
+  isEmailVerified: boolean;
+  grades: [];
+  subjects: [];
+  name: string;
+  email: string;
+} & Id &
+  Timestamp;
 
 export type UserRegisterResponse = {
-  user: {
+  user: Omit<UserBase, "role" | "status" | "isEmailVerified"> & {
     role: "admin";
     status: "active";
     isEmailVerified: false;
-    grades: [];
-    subjects: [];
-    name: string;
-    email: string;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
   };
   tokens: {
     access: {
@@ -116,18 +123,7 @@ export type UserRegisterResponse = {
 };
 
 export type UserLoginResponse = {
-  user: {
-    role: string;
-    status: string;
-    isEmailVerified: boolean;
-    grades: [];
-    subjects: [];
-    name: string;
-    email: string;
-    createdAt: string;
-    updatedAt: string;
-    id: string;
-  };
+  user: UserBase;
   tokens: {
     access: {
       token: string;
@@ -139,6 +135,21 @@ export type UserLoginResponse = {
     };
   };
 };
+
+export type TuitionAssignment = {
+  title: string;
+  assignmentNumber: string;
+  address: string;
+  duration: string;
+  gradeId: string;
+  tutorId: string;
+  assignmentPrice: string;
+  __v: number;
+  gradeName: string;
+  tutorName: string;
+  tutorType: string;
+} & Id &
+  Timestamp;
 
 export type ProfileResponse = {
   role: string;
@@ -160,12 +171,10 @@ export type ProfileResponse = {
   gender: "Male" | "Female" | "None";
   duration: string;
   frequency: string;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
   timeZone: string;
   language: string;
-};
+} & Id &
+  Timestamp;
 
 export type UpdatePasswordResponse = {
   message: string;
@@ -181,14 +190,6 @@ export type TokenResponse = {
     expires: string;
   };
 };
-
-export interface PaginatedResponse<T> {
-  results: T[];
-  page: number;
-  limit: number;
-  totalPages: number;
-  totalResults: number;
-}
 
 type PersonalInfo = {
   firstName: string;
@@ -225,7 +226,12 @@ export type FindMyTutorResponse = {
   personalInfo: PersonalInfo;
   lessonInfo: LessonInfo;
   tutorTypeInfo: TutorTypeInfo;
-  createdAt: string;
-  updatedAt: string;
-  id: string;
-};
+} & Id &
+  Timestamp;
+
+export type FaqResponse = PaginatedResponse<Faq>;
+export type SubjectResponse = PaginatedResponse<Subject>;
+export type GradeResponse = PaginatedResponse<Grade>;
+export type PaperResponse = PaginatedResponse<Paper>;
+export type TestimonialResponse = PaginatedResponse<Testimonial>;
+export type TuitionAssignmentResponse = PaginatedResponse<TuitionAssignment>;

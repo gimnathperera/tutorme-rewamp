@@ -12,6 +12,7 @@ export const Endpoints = {
   Users: "/v1/users",
   ChangePassword: "/v1/users/change-password",
   FindATutor: "/v1/tutors",
-  TuitionRates:"/v1/tuitionRates",
-  Levels:"/v1/levels"
+  TuitionRates: "/v1/tuitionRates",
+  Levels: "/v1/levels",
+  TuitionAssignments: "/v1/tuition-assignments",
 };

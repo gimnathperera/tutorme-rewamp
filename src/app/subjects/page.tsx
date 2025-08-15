@@ -8,8 +8,6 @@ import { useFetchSubjectsQuery } from "@/store/api/splits/subjects";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const SUBJECT_LIMIT = 12;
-
 const SubjectsPage: FC = () => {
   const router = useRouter();
 
