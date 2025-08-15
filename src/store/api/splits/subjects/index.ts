@@ -5,12 +5,18 @@ import { Endpoints } from "../../endpoints";
 
 export const SubjectsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    fetchSubjects: build.query<PaginatedResponse<Subject>, FetchSubjectsRequest>({
-      query: (payload) => ({
-        url: Endpoints.Subjects,
-        method: "GET",
-        params: payload,
-      }),
+    fetchSubjects: build.query<
+      PaginatedResponse<Subject>,
+      FetchSubjectsRequest
+    >({
+      query: (payload) => {
+        const { subjectId, ...rest } = payload;
+        return {
+          url: Endpoints.Subjects,
+          method: "GET",
+          params: rest,
+        };
+      },
       providesTags: ["Subjects"],
     }),
     fetchSubjectById: build.query<Subject, string>({

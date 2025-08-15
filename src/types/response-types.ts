@@ -1,4 +1,3 @@
-
 export type Id = { id: string };
 export type Timestamp = { createdAt: string; updatedAt: string };
 
@@ -24,31 +23,64 @@ export type Faq = BaseEntity & {
   answer: string;
 };
 
+export type Level = {
+  createdAt: string;
+  updatedAt: string;
+  id: string;
+  details: string[];
+  challanges: string[];
+  subjects: Subject[];
+  title: string;
+};
+
+export type TuitionRateItem = {
+  _id: string;
+  title: string;
+  grade: Grade;
+  subject: Subject;
+  level: Level;
+  govTuitionRate: Rate[];
+  partTimeTuitionRate: Rate[];
+  fullTimeTuitionRate: Rate[];
+};
+export type Rate = {
+  minimumRate: string;
+  maximumRate: string;
+};
+export type TuitionRateGroup = {
+  grade: any;
+  subjects: any;
+  _id: string;
+  level: Level;
+  items: TuitionRateItem[];
+};
 // Subject
 export type Subject = BaseEntity & WithTitleDescription;
 
 // Grade
-export type Grade = BaseEntity & WithTitleDescription & {
-  subjects: Subject[];
-};
+export type Grade = BaseEntity &
+  WithTitleDescription & {
+    subjects: Subject[];
+  };
 
 // Paper
-export type Paper = BaseEntity & WithTitleDescription & {
-  file: string;
-  grade: Grade;
-  subject: Subject;
-  year: string;
-  url: string;
-};
+export type Paper = BaseEntity &
+  WithTitleDescription & {
+    file: string;
+    grade: Grade;
+    subject: Subject;
+    year: string;
+    url: string;
+  };
 
 // Testimonial
 export type Testimonial = BaseEntity & {
-  content: string,
-  rating: number,
+  content: string;
+  rating: number;
   owner: {
-      name: string,
-      role: string,
-      avatar: string
+    name: string;
+    role: string;
+    avatar: string;
   };
 };
 
@@ -58,8 +90,8 @@ export type ContactUsResponse = {
     name: string;
     email: string;
   };
-} & Id & Timestamp;
-
+} & Id &
+  Timestamp;
 
 export type UserBase = {
   role: string;
@@ -69,10 +101,11 @@ export type UserBase = {
   subjects: [];
   name: string;
   email: string;
-} & Id & Timestamp;
+} & Id &
+  Timestamp;
 
 export type UserRegisterResponse = {
-  user: Omit<UserBase, 'role' | 'status' | 'isEmailVerified'> & {
+  user: Omit<UserBase, "role" | "status" | "isEmailVerified"> & {
     role: "admin";
     status: "active";
     isEmailVerified: false;
@@ -104,18 +137,19 @@ export type UserLoginResponse = {
 };
 
 export type TuitionAssignment = {
-  title: string,
-  assignmentNumber: string,
-  address: string,
-  duration: string,
-  gradeId: string,
-  tutorId: string,
-  assignmentPrice: string,
-  __v: number,
-  gradeName: string,
-  tutorName: string,
-  tutorType: string
-} & Id & Timestamp;
+  title: string;
+  assignmentNumber: string;
+  address: string;
+  duration: string;
+  gradeId: string;
+  tutorId: string;
+  assignmentPrice: string;
+  __v: number;
+  gradeName: string;
+  tutorName: string;
+  tutorType: string;
+} & Id &
+  Timestamp;
 
 export type ProfileResponse = {
   role: string;
@@ -139,7 +173,8 @@ export type ProfileResponse = {
   frequency: string;
   timeZone: string;
   language: string;
-} & Id & Timestamp;
+} & Id &
+  Timestamp;
 
 export type UpdatePasswordResponse = {
   message: string;
@@ -191,7 +226,8 @@ export type FindMyTutorResponse = {
   personalInfo: PersonalInfo;
   lessonInfo: LessonInfo;
   tutorTypeInfo: TutorTypeInfo;
-} & Id & Timestamp;
+} & Id &
+  Timestamp;
 
 export type FaqResponse = PaginatedResponse<Faq>;
 export type SubjectResponse = PaginatedResponse<Subject>;
