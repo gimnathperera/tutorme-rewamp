@@ -1,13 +1,6 @@
 import React from "react";
-import { Separator } from "@/components/ui/separator";
-import TutorRatesSection from "./components/tutor-rates";
 import TutorDetailsSection from "./components/tutor-details-page";
-import KeepInTouch from "@/components/home-page/keep-in-touch";
-import PrimaryLevelTuitionRates from "./components/primary-level-rates";
-import GradeSixToNineRates from "./components/grade-six-to-ten-rates";
-import OrdinaryLevelRates from "./components/odinary-level-rates";
-import AdvancedLevelRates from "./components/advanced-level-rates";
-import AboutUs from "@/components/home-page/about-us";
+import TuitionRatesByLevel from "./components/all-tuition-rates";
 
 const TuitionRatesPage = () => {
   return (
@@ -24,11 +17,7 @@ const TuitionRatesPage = () => {
         </h3>
       </div>
       <TutorDetailsSection />
-      <TutorRatesSection />
-      <PrimaryLevelTuitionRates />
-      <GradeSixToNineRates />
-      <OrdinaryLevelRates />
-      <AdvancedLevelRates />
+      <TuitionRatesByLevel />
     </div>
   );
 };

@@ -1,3 +1,5 @@
+import { Level } from "./response-types";
+
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -64,6 +66,15 @@ export type FetchFaqRequest = {
   page: number;
   limit: number;
 };
+export type FetchLevelRequest = {
+  page: number;
+  limit: number;
+  title: string;
+  details: string[];
+  challenges?: string[];
+  subjects: string[];
+  levelId: string;
+};
 
 export type FetchPapersRequest = {
   page: number;
@@ -76,8 +87,20 @@ export type FetchGradesRequest = {
   page: number;
   limit: number;
 };
-
+export type FetchTuitionRatesRequest ={
+  tuitionRateId?: string;
+  title?: string;
+  tutorType?: string;
+  subject?: string;
+  grade?: string;
+  maximumRate?: string;
+  minimumRate?: string;
+  page?: number;
+  limit?: number;
+};
 export type FetchSubjectsRequest = {
+  title?: string;
+  description?:string;
   page?: number;
   limit?: number;
   subjectId?: string;
@@ -87,6 +110,16 @@ export type FetchTestimonialsRequest = {
   page: number;
   limit: number;
 };
+
+export type FetchTuitionAssignments = {
+  title: string,
+  assignmentNumber: string,
+  address: string,
+  duration: string,
+  gradeId: string,
+  tutorId: string,
+  assignmentPrice: string
+}
 
 type PersonalInfo = {
   firstName: string;

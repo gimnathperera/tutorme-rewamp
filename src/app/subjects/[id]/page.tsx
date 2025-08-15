@@ -2,16 +2,15 @@
 
 import { useFetchSubjectByIdQuery } from "@/store/api/splits/subjects";
 import { useParams } from "next/navigation";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Subject } from "@/types/response-types";
 
 const Subjects: FC = () => {
   const params = useParams();
   const subjectId = params?.id as string;
 
-  const { data: subject, error, isLoading } = useFetchSubjectByIdQuery({ subjectId });
+  const { data: subject, error, isLoading } = useFetchSubjectByIdQuery(subjectId);
 
   if (isLoading || subject === undefined) {
     return (
