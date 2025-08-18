@@ -12,8 +12,9 @@ import {
 import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
 import { Card } from "@/components/ui/card";
 
+// filter by level title
 interface TuitionRatesByLevelProps {
-  levelTitle: string; // filter by level title
+  levelTitle: string;
 }
 
 const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
@@ -26,7 +27,7 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
     return <p className="text-red-500">Failed to load tuition rates</p>;
   if (!data?.results?.length) return <p>No tuition rates found</p>;
 
-  // Filter by level title (case-insensitive)
+  // Filter by level title
   const levelResults = data.results.filter(
     (item: any) =>
       item.level &&
