@@ -86,9 +86,10 @@ export type FetchGradesRequest = {
   page: number;
   limit: number;
 };
-export type FetchTuitionRatesRequest ={
+export type FetchTuitionRatesRequest = {
   tuitionRateId?: string;
   title?: string;
+  levelId?: string;
   tutorType?: string;
   subject?: string;
   grade?: string;
@@ -99,7 +100,7 @@ export type FetchTuitionRatesRequest ={
 };
 export type FetchSubjectsRequest = {
   title?: string;
-  description?:string;
+  description?: string;
   page?: number;
   limit?: number;
   subjectId?: string;
@@ -111,14 +112,14 @@ export type FetchTestimonialsRequest = {
 };
 
 export type FetchTuitionAssignments = {
-  title: string,
-  assignmentNumber: string,
-  address: string,
-  duration: string,
-  gradeId: string,
-  tutorId: string,
-  assignmentPrice: string
-}
+  title: string;
+  assignmentNumber: string;
+  address: string;
+  duration: string;
+  gradeId: string;
+  tutorId: string;
+  assignmentPrice: string;
+};
 
 type PersonalInfo = {
   firstName: string;

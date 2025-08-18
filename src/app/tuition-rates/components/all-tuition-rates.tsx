@@ -121,15 +121,15 @@ export default function TuitionRatesByLevel() {
                           {subject.title}
                         </TableCell>
                         <TableCell className="bg-gray-100">
-                          {subject.fullTime?.[0]?.minimumRate || "N/A"} -{" "}
-                          {subject.fullTime?.[0]?.maximumRate || "N/A"}
+                          Rs. {subject.fullTime?.[0]?.minimumRate || "N/A"} -{" "}
+                          Rs. {subject.fullTime?.[0]?.maximumRate || "N/A"}
                         </TableCell>
                         <TableCell className="bg-gray-100">
-                          {subject.partTime?.[0]?.minimumRate || "N/A"} -{" "}
-                          {subject.partTime?.[0]?.maximumRate || "N/A"}
+                          Rs. {subject.partTime?.[0]?.minimumRate || "N/A"} -{" "}
+                          Rs. {subject.partTime?.[0]?.maximumRate || "N/A"}
                         </TableCell>
                         <TableCell className="bg-gray-100">
-                          {subject.gov?.[0]?.minimumRate || "N/A"} -{" "}
+                          Rs. {subject.gov?.[0]?.minimumRate || "N/A"} - Rs.{" "}
                           {subject.gov?.[0]?.maximumRate || "N/A"}
                         </TableCell>
                       </TableRow>

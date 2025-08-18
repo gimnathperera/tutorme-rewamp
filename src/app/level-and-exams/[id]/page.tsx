@@ -1,25 +1,26 @@
-'use client';
+"use client";
 
 import React, { FC } from "react";
 import { CheckCircleIcon } from "lucide-react";
 import WhatToExceptFromTutorMe from "@/components/shared/what-to-expect/page";
 import Image from "next/image";
 import ClassRoomImage from "../../../../public/images/level-and-exams/image.png";
-import PrimaryLevelTuitionRates from "@/app/tuition-rates/components/primary-level-rates";
-import GradeSixToNineRates from "@/app/tuition-rates/components/grade-six-to-ten-rates";
-import OrdinaryLevelRates from "@/app/tuition-rates/components/odinary-level-rates";
-import AdvancedLevelRates from "@/app/tuition-rates/components/advanced-level-rates";
 import { Card, CardHeader } from "@/components/ui/card";
 import TutorImage from "../../../../public/images/level-and-exams/tutor.png";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useFetchLevelsByIdQuery } from "@/store/api/splits/levels";
+import TuitionRatesByLevelComponent from "@/components/shared/tuition-rates";
 
 const LevelAndExams: FC = () => {
   const params = useParams();
   const levelId = params?.id as string;
 
-  const { data: level, error, isLoading } = useFetchLevelsByIdQuery({ levelId });
+  const {
+    data: level,
+    error,
+    isLoading,
+  } = useFetchLevelsByIdQuery({ levelId });
 
   if (isLoading) {
     return <div className="p-8 text-xl">Loading...</div>;
@@ -61,31 +62,21 @@ const LevelAndExams: FC = () => {
       </section>
 
       {/* Tuition Rates */}
-      <section>
-        {(() => {
-          switch (level.title) {
-            case "Primary Level":
-              return <PrimaryLevelTuitionRates />;
-            case "Grades 6 to 9 (Junior Secondary Level)":
-              return <GradeSixToNineRates />;
-            case "GCE Ordinary Level (O-Level)":
-              return <OrdinaryLevelRates />;
-            case "GCE Advanced Level (A-Level)":
-              return <AdvancedLevelRates />;
-            default:
-              return null;
-          }
-        })()}
-      </section>
+      <TuitionRatesByLevelComponent levelTitle={level.title} />
 
       {/* Challenges */}
       <section className="border rounded-2xl p-10 bg-gray-100 mt-10">
         <div className="flex gap-10 flex-row">
           <div className="space-y-4">
             <p className="text-3xl font-semibold text-[#28BBA3]">
-              What Are The Challenges Faced By {level.title} Students in Sri Lanka?
+              What Are The Challenges Faced By {level.title} Students in Sri
+              Lanka?
             </p>
-            <Image src={ClassRoomImage} alt="Classroom" className="rounded-2xl" />
+            <Image
+              src={ClassRoomImage}
+              alt="Classroom"
+              className="rounded-2xl"
+            />
           </div>
           <div>
             <h2 className="text-xl text-left font-semibold mb-2">
@@ -107,7 +98,8 @@ const LevelAndExams: FC = () => {
             Effective {level.title} Home Tuition
           </h1>
           <h1 className="text-3xl font-semibold text-center">
-            What Are The Topics and Subjects Covered By Tutor Me {level.title} Tutors?
+            What Are The Topics and Subjects Covered By Tutor Me {level.title}{" "}
+            Tutors?
           </h1>
         </div>
         <div className="mt-5">
@@ -115,10 +107,12 @@ const LevelAndExams: FC = () => {
             <Card className="flex justify-between flex-row" key={index}>
               <CardHeader>{sub?.title}</CardHeader>
               <Link
-                className="px-10 rounded-xl flex justify-center items-center text-white font-semibold bg-[#28BBA3]"
+                className="flex justify-center items-center"
                 href={`/subjects/${sub?.id}`}
               >
-                View Subject
+                <button className="m-5 p-2 rounded-xl text-white font-semibold bg-[#28BBA3]">
+                  View Subject
+                </button>
               </Link>
             </Card>
           ))}

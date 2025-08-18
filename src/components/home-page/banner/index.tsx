@@ -1,5 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
+import BannerSvg from "../../../../public/images/banner/banner.svg";
+import Image from "next/image";
 
 const Banner = () => {
   const route = useRouter();
@@ -34,8 +36,8 @@ const Banner = () => {
         </div>
 
         <div className="lg:-m-24 lg:pt-20 hidden lg:block">
-          <img
-            src="/images/banner/banner.svg"
+          <Image
+            src={"../../../../public/images/banner/banner.svg"}
             alt="hero-image"
             width={800}
             height={642}
