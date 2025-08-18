@@ -3,7 +3,7 @@
 import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema"; // adjust path
 
-const TermsAndSubmit = ({ onSubmit, submitting }: { onSubmit: () => void; submitting: boolean }) => {
+const TermsAndSubmit = ({ onSubmit, submitting, resetForm }: { onSubmit: () => void; submitting: boolean; resetForm?: () => void }) => {
   const { watch, setValue, formState } = useFormContext<FindMyTutorForm>();
   const errors = formState.errors;
 
@@ -99,8 +99,8 @@ const TermsAndSubmit = ({ onSubmit, submitting }: { onSubmit: () => void; submit
               </ul>
             </div>
 
-            {/* Submit Button */}
-            <div className="flex justify-center pt-6">
+            {/* Submit & Reset Buttons */}
+            <div className="flex justify-center pt-6 gap-4">
               <button
                 type="button"
                 onClick={onSubmit}
@@ -139,6 +139,16 @@ const TermsAndSubmit = ({ onSubmit, submitting }: { onSubmit: () => void; submit
                   "SUBMIT"
                 )}
               </button>
+              {resetForm && (
+                <button
+                  type="button"
+                  onClick={resetForm}
+                  disabled={submitting}
+                  className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-gray-200 text-darkpurple hover:bg-gray-300"
+                >
+                  RESET
+                </button>
+              )}
             </div>
 
             {/* Footer Note */}

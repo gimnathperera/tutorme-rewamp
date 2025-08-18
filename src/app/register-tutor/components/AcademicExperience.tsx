@@ -1,7 +1,9 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { FindMyTutorForm } from "../schema"; // adjust the import if needed
+import { FindMyTutorForm } from "../schema";
+import RadioGroup from "@/components/shared/input-radio";
+import InputMultiLineText from "@/components/shared/input-multi-line-text";
 
 const AcademicExperience = () => {
   const { watch, setValue, trigger, formState } =
@@ -50,32 +52,13 @@ const AcademicExperience = () => {
           <div className="space-y-8">
             {/* Type of Tutor */}
             <div>
-              <label className="block text-lg font-semibold text-darkpurple mb-4">
-                Type of Tutor *
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {tutorTypes.map((type) => (
-                  <label
-                    key={type}
-                    className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="radio"
-                      value={type}
-                      checked={tutorType === type}
-                      onChange={() => setValue("tutorType", type)}
-                      onBlur={() => trigger("tutorType")}
-                      className="mr-3 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="text-sm font-medium">{type}</span>
-                  </label>
-                ))}
-              </div>
-              {errors.tutorType && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.tutorType.message as string}
-                </p>
-              )}
+              <RadioGroup
+                label="Type of Tutor *"
+                name="tutorType"
+                options={tutorTypes.map(type => ({ label: type, value: type }))}
+                helperText={errors.tutorType?.message as string}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+              />
             </div>
 
             {/* Years of Teaching Experience */}
@@ -115,54 +98,25 @@ const AcademicExperience = () => {
 
             {/* Highest Education Level */}
             <div>
-              <label className="block text-lg font-semibold text-darkpurple mb-4">
-                Highest Education Level *
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {educationLevels.map((level) => (
-                  <label
-                    key={level}
-                    className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="radio"
-                      value={level}
-                      checked={highestEducation === level}
-                      onChange={() => setValue("highestEducation", level)}
-                      onBlur={() => trigger("highestEducation")}
-                      className="mr-3 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="text-sm font-medium">{level}</span>
-                  </label>
-                ))}
-              </div>
-              {errors.highestEducation && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.highestEducation.message as string}
-                </p>
-              )}
+              <RadioGroup
+                label="Highest Education Level *"
+                name="highestEducation"
+                options={educationLevels.map(level => ({ label: level, value: level }))}
+                helperText={errors.highestEducation?.message as string}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+              />
             </div>
 
             {/* Academic details text area */}
             <div>
-              <label className="block text-lg font-semibold text-darkpurple mb-4">
-                Academic Details *
-              </label>
-              <textarea
-                value={academicDetails}
-                onChange={(e) => setValue("academicDetails", e.target.value)}
-                onBlur={() => trigger("academicDetails")}
-                rows={5}
+              <InputMultiLineText
+                label="Academic Details *"
+                name="academicDetails"
                 placeholder="Field of study, university attended, academic achievements, etc."
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
-                  errors.academicDetails ? "border-red-500" : "border-gray-300"
-                }`}
+                rows={5}
+                helperText={errors.academicDetails?.message as string}
+                
               />
-              {errors.academicDetails && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.academicDetails.message as string}
-                </p>
-              )}
             </div>
 
             <div className="bg-blue p-4 rounded-lg">

@@ -1,7 +1,8 @@
 "use client";
 
 import { useFormContext } from "react-hook-form";
-import { FindMyTutorForm } from "../schema"; // adjust the import path
+import { FindMyTutorForm } from "../schema";
+import InputMultiLineText from "@/components/shared/input-multi-line-text";
 
 const TutorProfile = () => {
   const { watch, setValue, trigger, formState } =
@@ -21,14 +22,16 @@ const TutorProfile = () => {
       key: "studentResults",
       title: "2. Results of Students / Track Record",
       subtitle: "Past grade improvement records of previous students.",
-      placeholder: "List results if you have records (exams, improvements, etc.)",
+      placeholder:
+        "List results if you have records (exams, improvements, etc.)",
       maxLength: 750,
     },
     {
       key: "sellingPoints",
       title: "3. Other Selling Points as a Tutor",
       subtitle: "Teaching methods, commitments, what makes you stand out.",
-      placeholder: "e.g., Motivating teaching style, strong conceptual focus, etc.",
+      placeholder:
+        "e.g., Motivating teaching style, strong conceptual focus, etc.",
       maxLength: 750,
     },
   ] as const;
@@ -67,25 +70,15 @@ const TutorProfile = () => {
                     {q.title}
                   </h3>
                   <p className="text-gray-600 text-sm mb-3">{q.subtitle}</p>
-                  <textarea
-                    value={value}
-                    onChange={(e) => setValue(q.key, e.target.value)}
-                    onBlur={() => trigger(q.key)}
+                  <InputMultiLineText
+                    name={q.key}
+                    label={undefined}
                     placeholder={q.placeholder}
                     maxLength={q.maxLength}
                     rows={6}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors resize-vertical ${
-                      errors[q.key] ? "border-red-500" : "border-gray-300"
-                    }`}
+                    helperText={errors[q.key]?.message as string}
                   />
-                  <div className="flex justify-between mt-2">
-                    {errors[q.key] ? (
-                      <p className="text-red-500 text-sm">
-                        {errors[q.key]?.message as string}
-                      </p>
-                    ) : (
-                      <span />
-                    )}
+                  <div className="flex justify-end mt-2">
                     <p className="text-sm text-gray-500">
                       {value.length}/{q.maxLength}
                     </p>
@@ -100,7 +93,8 @@ const TutorProfile = () => {
               </h4>
               <ul className="text-darkpurple text-sm space-y-2">
                 <li>
-                  • <strong>Be specific:</strong> Include real results and counts.
+                  • <strong>Be specific:</strong> Include real results and
+                  counts.
                 </li>
                 <li>
                   • <strong>Show personality:</strong> Describe your style.

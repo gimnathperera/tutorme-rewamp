@@ -2,11 +2,14 @@
 
 import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema";
+import InputText from "@/components/shared/input-text";
+import RadioGroup from "@/components/shared/input-radio";
 
 const PersonalInfo = () => {
   const {
     register,
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext<FindMyTutorForm>();
 
@@ -26,139 +29,76 @@ const PersonalInfo = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Full Name */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Full Name (As Per NRIC) *
-              </label>
-              <input
-                type="text"
-                {...register("fullName")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.fullName ? "border-red-500" : "border-gray-300"
-                }`}
+              <InputText
+                label="Full Name (As Per NRIC) *"
+                name="fullName"
                 placeholder="Enter your full name"
+                helperText={errors.fullName?.message as string}
               />
-              {errors.fullName && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.fullName.message}
-                </p>
-              )}
             </div>
 
             {/* Contact Number */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Contact Number *
-              </label>
-              <input
+              <InputText
+                label="Contact Number *"
+                name="contactNumber"
                 type="tel"
-                {...register("contactNumber")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.contactNumber ? "border-red-500" : "border-gray-300"
-                }`}
                 placeholder="91234567"
+                helperText={errors.contactNumber?.message as string}
               />
-              {errors.contactNumber && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.contactNumber.message}
-                </p>
-              )}
             </div>
 
             {/* Re-Enter Contact Number */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Re-Enter Contact Number *
-              </label>
-              <input
+              <InputText
+                label="Re-Enter Contact Number *"
+                name="confirmContactNumber"
                 type="tel"
-                {...register("confirmContactNumber")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.confirmContactNumber ? "border-red-500" : "border-gray-300"
-                }`}
                 placeholder="91234567"
+                helperText={errors.confirmContactNumber?.message as string}
               />
-              {errors.confirmContactNumber && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmContactNumber.message}
-                </p>
-              )}
             </div>
 
             {/* Email */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Email *
-              </label>
-              <input
+              <InputText
+                label="Email *"
+                name="email"
                 type="email"
-                {...register("email")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.email ? "border-red-500" : "border-gray-300"
-                }`}
                 placeholder="your.email@example.com"
+                helperText={errors.email?.message as string}
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
-              )}
             </div>
 
             {/* Date of Birth */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Date of Birth *
-              </label>
-              <input
+              <InputText
+                label="Date of Birth *"
+                name="dateOfBirth"
                 type="date"
-                {...register("dateOfBirth")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.dateOfBirth ? "border-red-500" : "border-gray-300"
-                }`}
+                helperText={errors.dateOfBirth?.message as string}
               />
-              {errors.dateOfBirth && (
-                <p className="text-red-500 text-sm mt-1">{errors.dateOfBirth.message}</p>
-              )}
             </div>
 
             {/* Re-Enter Date of Birth */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Re-Enter Date of Birth *
-              </label>
-              <input
+              <InputText
+                label="Re-Enter Date of Birth *"
+                name="confirmDateOfBirth"
                 type="date"
-                {...register("confirmDateOfBirth")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.confirmDateOfBirth ? "border-red-500" : "border-gray-300"
-                }`}
+                helperText={errors.confirmDateOfBirth?.message as string}
               />
-              {errors.confirmDateOfBirth && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmDateOfBirth.message}
-                </p>
-              )}
             </div>
 
             {/* Gender */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Gender *
-              </label>
-              <div className="flex gap-6 mt-2">
-                {["Male", "Female"].map((g) => (
-                  <label key={g} className="flex items-center">
-                    <input
-                      type="radio"
-                      value={g}
-                      {...register("gender")}
-                      className="mr-2 text-primary-700 focus:ring-primary-700"
-                    />
-                    {g}
-                  </label>
-                ))}
-              </div>
-              {errors.gender && (
-                <p className="text-red-500 text-sm mt-1">{errors.gender.message}</p>
-              )}
+              <RadioGroup
+                label="Gender *"
+                name="gender"
+                options={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }]}
+                helperText={errors.gender?.message as string}
+                className="flex gap-6 mt-2"
+              />
             </div>
 
             {/* Age */}
@@ -168,7 +108,10 @@ const PersonalInfo = () => {
               </label>
               <input
                 type="number"
-                {...register("age", { valueAsNumber: true })}
+                {...register("age", {
+                  valueAsNumber: true,
+                  setValueAs: v => v === "" ? undefined : Number(v)
+                })}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.age ? "border-red-500" : "border-gray-300"
                 }`}
@@ -183,76 +126,37 @@ const PersonalInfo = () => {
 
             {/* Nationality */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Nationality *
-              </label>
-              <div className="flex flex-wrap gap-4 mt-2">
-                {["Singaporean", "Singapore PR", "Others"].map((n) => (
-                  <label key={n} className="flex items-center">
-                    <input
-                      type="radio"
-                      value={n}
-                      {...register("nationality")}
-                      className="mr-2 text-primary-700 focus:ring-primary-700"
-                    />
-                    {n}
-                  </label>
-                ))}
-              </div>
-              {errors.nationality && (
-                <p className="text-red-500 text-sm mt-1">{errors.nationality.message}</p>
-              )}
+              <RadioGroup
+                label="Nationality *"
+                name="nationality"
+                options={[{ label: "Singaporean", value: "Singaporean" }, { label: "Singapore PR", value: "Singapore PR" }, { label: "Others", value: "Others" }]}
+                helperText={errors.nationality?.message as string}
+                className="flex flex-wrap gap-4 mt-2"
+              />
             </div>
 
             {/* Race */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Race *
-              </label>
-              <div className="grid grid-cols-2 gap-3 mt-2">
-                {[
-                  "Chinese",
-                  "Malay",
-                  "Indian",
-                  "Eurasian",
-                  "Caucasian",
-                  "Punjabi",
-                  "Others",
-                ].map((r) => (
-                  <label key={r} className="flex items-center">
-                    <input
-                      type="radio"
-                      value={r}
-                      {...register("race")}
-                      className="mr-2 text-primary-700 focus:ring-primary-700"
-                    />
-                    {r}
-                  </label>
-                ))}
-              </div>
-              {errors.race && (
-                <p className="text-red-500 text-sm mt-1">{errors.race.message}</p>
-              )}
+              <RadioGroup
+                label="Race *"
+                name="race"
+                options={[{ label: "Chinese", value: "Chinese" }, { label: "Malay", value: "Malay" }, { label: "Indian", value: "Indian" }, { label: "Others", value: "Others" }]}
+                helperText={errors.race?.message as string}
+                className="flex flex-wrap gap-4 mt-2"
+              />
             </div>
 
             {/* Last 4 Digits of NRIC */}
             <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Last 4 Digits of NRIC *
-              </label>
-              <input
+              <InputText
+                label="Last 4 Digits of NRIC *"
+                name="last4NRIC"
                 type="text"
-                {...register("last4NRIC")}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.last4NRIC ? "border-red-500" : "border-gray-300"
-                }`}
                 placeholder="1234"
                 maxLength={4}
                 inputMode="numeric"
+                helperText={errors.last4NRIC?.message as string}
               />
-              {errors.last4NRIC && (
-                <p className="text-red-500 text-sm mt-1">{errors.last4NRIC.message}</p>
-              )}
               <p className="text-xs text-gray-500 mt-1">
                 Your identity is protected! This information is securely stored
                 and not displayed on clients. *For Tax / Admin purpose only 🔒🔒

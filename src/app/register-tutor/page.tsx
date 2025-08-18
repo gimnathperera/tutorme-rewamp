@@ -11,6 +11,7 @@ import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { findMyTutorSchema, FindMyTutorForm } from "./schema";
+import toast from "react-hot-toast";
 
 export default function RegisterTutorPage() {
   const [addTutor, { isLoading }] = useAddTutorRequestMutation();
@@ -47,10 +48,10 @@ export default function RegisterTutorPage() {
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
       await addTutor(data).unwrap();
-      alert("Registration submitted successfully!");
+      toast.success("Registration submitted successfully!");
       methods.reset();
     } catch (e: any) {
-      alert(
+      toast.error(
         e?.data?.message ||
           e?.error ||
           "There was an error submitting your registration."
@@ -67,9 +68,14 @@ export default function RegisterTutorPage() {
           <TutoringPreferences />
           <AcademicExperience />
           <TutorProfile />
+          {/* Add reset button next to submit in TermsAndSubmit */}
           <TermsAndSubmit
             submitting={isLoading}
             onSubmit={methods.handleSubmit(onSubmit)}
+            resetForm={() => {
+              methods.reset();
+              toast.success("Form has been reset.");
+            }}
           />
         </form>
       </FormProvider>
