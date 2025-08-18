@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema";
 import RadioGroup from "@/components/shared/input-radio";
 import InputMultiLineText from "@/components/shared/input-multi-line-text";
+import { tutorTypes, educationLevels, yearsOptions } from "../constants";
 
 const AcademicExperience = () => {
   const { watch, setValue, trigger, formState } =
@@ -15,28 +16,12 @@ const AcademicExperience = () => {
   const highestEducation = watch("highestEducation") || "";
   const academicDetails = watch("academicDetails") || "";
 
-  const tutorTypes = [
-    "Full Time Student",
-    "Undergraduate",
-    "Part Time Tutor",
-    "Full Time Tutor",
-    "Ex/Current MOE Teacher",
-    "Ex-MOE Teacher",
-    "Current MOE Teacher",
-  ];
-
-  const educationLevels = [
-    "PhD Diploma",
-    "Masters",
-    "Undergraduate",
-    "Bachelor Degree",
-    "Diploma and Professional",
-    "JC/A Levels",
-    "Poly",
-    "Others",
-  ];
-
-  const yearsOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10+"];
+  // Move inline onChange logic to a separate function
+  const handleYearsChange = (year: string) => {
+    const value = year === "10+" ? 10 : Number(year);
+    setValue("yearsExperience", value);
+    trigger("yearsExperience"); // re-validate after change
+  };
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -51,15 +36,13 @@ const AcademicExperience = () => {
 
           <div className="space-y-8">
             {/* Type of Tutor */}
-            <div>
-              <RadioGroup
-                label="Type of Tutor *"
-                name="tutorType"
-                options={tutorTypes.map(type => ({ label: type, value: type }))}
-                helperText={errors.tutorType?.message as string}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-              />
-            </div>
+            <RadioGroup
+              label="Type of Tutor *"
+              name="tutorType"
+              options={tutorTypes.map(type => ({ label: type, value: type }))}
+              helperText={errors.tutorType?.message as string}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            />
 
             {/* Years of Teaching Experience */}
             <div>
@@ -79,10 +62,7 @@ const AcademicExperience = () => {
                         (year === "10+" && yearsExperience >= 10) ||
                         String(yearsExperience) === year
                       }
-                      onChange={() =>
-                        setValue("yearsExperience", year === "10+" ? 10 : Number(year))
-                      }
-                      onBlur={() => trigger("yearsExperience")}
+                      onChange={() => handleYearsChange(year)}
                       className="mr-2 text-primary-700 focus:ring-primary-700"
                     />
                     <span className="font-medium">{year}</span>
@@ -97,27 +77,22 @@ const AcademicExperience = () => {
             </div>
 
             {/* Highest Education Level */}
-            <div>
-              <RadioGroup
-                label="Highest Education Level *"
-                name="highestEducation"
-                options={educationLevels.map(level => ({ label: level, value: level }))}
-                helperText={errors.highestEducation?.message as string}
-                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-              />
-            </div>
+            <RadioGroup
+              label="Highest Education Level *"
+              name="highestEducation"
+              options={educationLevels.map(level => ({ label: level, value: level }))}
+              helperText={errors.highestEducation?.message as string}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            />
 
-            {/* Academic details text area */}
-            <div>
-              <InputMultiLineText
-                label="Academic Details *"
-                name="academicDetails"
-                placeholder="Field of study, university attended, academic achievements, etc."
-                rows={5}
-                helperText={errors.academicDetails?.message as string}
-                
-              />
-            </div>
+            {/* Academic Details */}
+            <InputMultiLineText
+              label="Academic Details *"
+              name="academicDetails"
+              placeholder="Field of study, university attended, academic achievements, etc."
+              rows={5}
+              helperText={errors.academicDetails?.message as string}
+            />
 
             <div className="bg-blue p-4 rounded-lg">
               <p className="text-sm text-white">
