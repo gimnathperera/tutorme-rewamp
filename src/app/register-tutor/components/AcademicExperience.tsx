@@ -1,39 +1,26 @@
 "use client";
-import { useState } from "react";
+
+import { useFormContext } from "react-hook-form";
+import { FindMyTutorForm } from "../schema";
+import RadioGroup from "@/components/shared/input-radio";
+import InputMultiLineText from "@/components/shared/input-multi-line-text";
+import { tutorTypes, educationLevels, yearsOptions } from "../constants";
 
 const AcademicExperience = () => {
-  const [formData, setFormData] = useState({
-    tutorType: "",
-    yearsExperience: "",
-    educationLevel: ""
-  });
+  const { watch, setValue, trigger, formState } =
+    useFormContext<FindMyTutorForm>();
+  const errors = formState.errors;
 
-  // CHANGED TO TITLE CASE
-  const tutorTypes = [
-    'Full Time Student',
-    'Undergraduate',
-    'Part Time Tutor',
-    'Full Time Tutor',
-    'Ex/Current MOE Teacher',
-    'Ex-MOE Teacher',
-    'Current MOE Teacher'
-  ];
+  const tutorType = watch("tutorType") || "";
+  const yearsExperience = watch("yearsExperience") || 0;
+  const highestEducation = watch("highestEducation") || "";
+  const academicDetails = watch("academicDetails") || "";
 
-  // CHANGED TO TITLE CASE
-  const educationLevels = [
-    'PhD Diploma',
-    'Masters',
-    'Undergraduate',
-    'Bachelor Degree',
-    'Diploma and Professional',
-    'JC/A Levels',
-    'Poly',
-    'Others'
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  // Move inline onChange logic to a separate function
+  const handleYearsChange = (year: string) => {
+    const value = year === "10+" ? 10 : Number(year);
+    setValue("yearsExperience", value);
+    trigger("yearsExperience"); // re-validate after change
   };
 
   return (
@@ -41,32 +28,21 @@ const AcademicExperience = () => {
       <div className="bg-white rounded-2xl shadow-lg p-8">
         <div className="border-b border-gray-200 pb-8">
           <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
-            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">3</span>
+            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">
+              3
+            </span>
             Academic Qualifications & Experience
           </h2>
 
           <div className="space-y-8">
             {/* Type of Tutor */}
-            <div>
-              <label className="block text-lg font-semibold text-darkpurple mb-4">
-                Type of Tutor *
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {tutorTypes.map((type) => (
-                  <label key={type} className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
-                    <input
-                      type="radio"
-                      name="tutorType"
-                      value={type}
-                      checked={formData.tutorType === type}
-                      onChange={handleChange}
-                      className="mr-3 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="text-sm font-medium">{type}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <RadioGroup
+              label="Type of Tutor *"
+              name="tutorType"
+              options={tutorTypes.map(type => ({ label: type, value: type }))}
+              helperText={errors.tutorType?.message as string}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            />
 
             {/* Years of Teaching Experience */}
             <div>
@@ -74,48 +50,54 @@ const AcademicExperience = () => {
                 Yrs of Teaching Experience *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10+'].map((years) => (
-                  <label key={years} className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
+                {yearsOptions.map((year) => (
+                  <label
+                    key={year}
+                    className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
+                  >
                     <input
                       type="radio"
-                      name="yearsExperience"
-                      value={years}
-                      checked={formData.yearsExperience === years}
-                      onChange={handleChange}
+                      value={year}
+                      checked={
+                        (year === "10+" && yearsExperience >= 10) ||
+                        String(yearsExperience) === year
+                      }
+                      onChange={() => handleYearsChange(year)}
                       className="mr-2 text-primary-700 focus:ring-primary-700"
                     />
-                    <span className="font-medium">{years}</span>
+                    <span className="font-medium">{year}</span>
                   </label>
                 ))}
               </div>
+              {errors.yearsExperience && (
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.yearsExperience.message as string}
+                </p>
+              )}
             </div>
 
             {/* Highest Education Level */}
-            <div>
-              <label className="block text-lg font-semibold text-darkpurple mb-4">
-                Highest Education Level *
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {educationLevels.map((level) => (
-                  <label key={level} className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors">
-                    <input
-                      type="radio"
-                      name="educationLevel"
-                      value={level}
-                      checked={formData.educationLevel === level}
-                      onChange={handleChange}
-                      className="mr-3 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="text-sm font-medium">{level}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <RadioGroup
+              label="Highest Education Level *"
+              name="highestEducation"
+              options={educationLevels.map(level => ({ label: level, value: level }))}
+              helperText={errors.highestEducation?.message as string}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            />
 
-            {/* Additional Info */}
+            {/* Academic Details */}
+            <InputMultiLineText
+              label="Academic Details *"
+              name="academicDetails"
+              placeholder="Field of study, university attended, academic achievements, etc."
+              rows={5}
+              helperText={errors.academicDetails?.message as string}
+            />
+
             <div className="bg-blue p-4 rounded-lg">
               <p className="text-sm text-white">
-                <strong>Note:</strong> If you are above School Leaver, please kindly indicate your field of study, university attended, 
+                <strong>Note:</strong> If you are above School Leaver, please
+                kindly indicate your field of study, university attended,
                 academic achievements, etc.
               </p>
             </div>
