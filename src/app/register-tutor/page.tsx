@@ -1,20 +1,84 @@
 "use client";
+
+import RegisterHero from "./components/RegisterHero";
 import PersonalInfo from "./components/PersonalInfo";
 import TutoringPreferences from "./components/TutoringPreferences";
 import AcademicExperience from "./components/AcademicExperience";
 import TutorProfile from "./components/TutorProfile";
 import TermsAndSubmit from "./components/TermsAndSubmit";
-import RegisterHero from "./components/RegisterHero";
 
-export default function RegisterTutor() {
+import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+import { FormProvider, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { findMyTutorSchema, FindMyTutorForm } from "./schema";
+import toast from "react-hot-toast";
+
+export default function RegisterTutorPage() {
+  const [addTutor, { isLoading }] = useAddTutorRequestMutation();
+
+  const methods = useForm<FindMyTutorForm>({
+    resolver: zodResolver(findMyTutorSchema),
+    defaultValues: {
+      fullName: "",
+      contactNumber: "",
+      confirmContactNumber: "",
+      email: "",
+      dateOfBirth: "",
+      confirmDateOfBirth: "",
+      gender: "Male",
+      age: 16,
+      nationality: "Singaporean",
+      race: "Chinese",
+      last4NRIC: "",
+      tutoringLevels: [],
+      preferredLocations: [],
+      tutorType: "",
+      yearsExperience: 0,
+      highestEducation: "",
+      academicDetails: "",
+      teachingSummary: "",
+      studentResults: "",
+      sellingPoints: "",
+      agreeTerms: false,
+      agreeAssignmentInfo: false,
+    },
+    mode: "onChange",
+  });
+
+  const onSubmit = async (data: FindMyTutorForm) => {
+    try {
+      await addTutor(data).unwrap();
+      toast.success("Registration submitted successfully!");
+      methods.reset();
+    } catch (e: any) {
+      toast.error(
+        e?.data?.message ||
+          e?.error ||
+          "There was an error submitting your registration."
+      );
+    }
+  };
+
   return (
     <>
       <RegisterHero />
-      <PersonalInfo />
-      <TutoringPreferences />
-      <AcademicExperience />
-      <TutorProfile />
-      <TermsAndSubmit />
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <PersonalInfo />
+          <TutoringPreferences />
+          <AcademicExperience />
+          <TutorProfile />
+          {/* Add reset button next to submit in TermsAndSubmit */}
+          <TermsAndSubmit
+            submitting={isLoading}
+            onSubmit={methods.handleSubmit(onSubmit)}
+            resetForm={() => {
+              methods.reset();
+              toast.success("Form has been reset.");
+            }}
+          />
+        </form>
+      </FormProvider>
     </>
   );
 }
