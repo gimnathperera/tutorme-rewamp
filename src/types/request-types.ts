@@ -1,4 +1,3 @@
-import { Level } from "./response-types";
 
 export type ContactUsRequest = {
   message: string;
