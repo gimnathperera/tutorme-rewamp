@@ -21,10 +21,10 @@ export default function RegisterTutorPage() {
     defaultValues: {
       fullName: "",
       contactNumber: "",
-      confirmContactNumber: "",
+
       email: "",
       dateOfBirth: "",
-      confirmDateOfBirth: "",
+
       gender: "Male",
       age: 16,
       nationality: "Singaporean",

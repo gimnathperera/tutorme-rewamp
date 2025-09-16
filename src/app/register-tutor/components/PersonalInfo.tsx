@@ -48,19 +48,7 @@ const PersonalInfo = () => {
               />
             </div>
 
-            {/* Re-Enter Contact Number */}
             <div>
-              <InputText
-                label="Re-Enter Contact Number *"
-                name="confirmContactNumber"
-                type="tel"
-                placeholder="91234567"
-                helperText={errors.confirmContactNumber?.message as string}
-              />
-            </div>
-
-            {/* Email */}
-            <div className="md:col-span-2">
               <InputText
                 label="Email *"
                 name="email"
@@ -71,7 +59,7 @@ const PersonalInfo = () => {
             </div>
 
             {/* Date of Birth */}
-            <div>
+            <div className="md:col-span-2">
               <InputText
                 label="Date of Birth *"
                 name="dateOfBirth"
@@ -80,22 +68,15 @@ const PersonalInfo = () => {
               />
             </div>
 
-            {/* Re-Enter Date of Birth */}
-            <div>
-              <InputText
-                label="Re-Enter Date of Birth *"
-                name="confirmDateOfBirth"
-                type="date"
-                helperText={errors.confirmDateOfBirth?.message as string}
-              />
-            </div>
-
             {/* Gender */}
             <div>
               <RadioGroup
                 label="Gender *"
                 name="gender"
-                options={[{ label: "Male", value: "Male" }, { label: "Female", value: "Female" }]}
+                options={[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                ]}
                 helperText={errors.gender?.message as string}
                 className="flex gap-6 mt-2"
               />
@@ -110,7 +91,7 @@ const PersonalInfo = () => {
                 type="number"
                 {...register("age", {
                   valueAsNumber: true,
-                  setValueAs: v => v === "" ? undefined : Number(v)
+                  setValueAs: (v) => (v === "" ? undefined : Number(v)),
                 })}
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
                   errors.age ? "border-red-500" : "border-gray-300"
@@ -120,7 +101,9 @@ const PersonalInfo = () => {
                 max={80}
               />
               {errors.age && (
-                <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.age.message}
+                </p>
               )}
             </div>
 
@@ -129,7 +112,11 @@ const PersonalInfo = () => {
               <RadioGroup
                 label="Nationality *"
                 name="nationality"
-                options={[{ label: "Singaporean", value: "Singaporean" }, { label: "Singapore PR", value: "Singapore PR" }, { label: "Others", value: "Others" }]}
+                options={[
+                  { label: "Singaporean", value: "Singaporean" },
+                  { label: "Singapore PR", value: "Singapore PR" },
+                  { label: "Others", value: "Others" },
+                ]}
                 helperText={errors.nationality?.message as string}
                 className="flex flex-wrap gap-4 mt-2"
               />
@@ -140,7 +127,12 @@ const PersonalInfo = () => {
               <RadioGroup
                 label="Race *"
                 name="race"
-                options={[{ label: "Chinese", value: "Chinese" }, { label: "Malay", value: "Malay" }, { label: "Indian", value: "Indian" }, { label: "Others", value: "Others" }]}
+                options={[
+                  { label: "Chinese", value: "Chinese" },
+                  { label: "Malay", value: "Malay" },
+                  { label: "Indian", value: "Indian" },
+                  { label: "Others", value: "Others" },
+                ]}
                 helperText={errors.race?.message as string}
                 className="flex flex-wrap gap-4 mt-2"
               />

@@ -1,4 +1,3 @@
-
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -151,14 +150,13 @@ type TutorTypeInfo = {
   isBilingualTutor: boolean;
 };
 
-
 export type FindMyTutorRequest = {
   fullName: string;
   contactNumber: string;
-  confirmContactNumber: string;
+
   email: string;
   dateOfBirth: string; // YYYY-MM-DD format
-  confirmDateOfBirth: string; // YYYY-MM-DD format
+
   gender: string;
   age: number;
   nationality: string;
@@ -175,5 +173,4 @@ export type FindMyTutorRequest = {
   sellingPoints: string;
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
-
 };
