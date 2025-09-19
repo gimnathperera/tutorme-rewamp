@@ -1,5 +1,3 @@
-import { Level } from "./response-types";
-
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -164,7 +162,26 @@ type TutorTypeInfo = {
 };
 
 export type FindMyTutorRequest = {
-  personalInfo: PersonalInfo;
-  lessonInfo: LessonInfo;
-  tutorTypeInfo: TutorTypeInfo;
+  fullName: string;
+  contactNumber: string;
+
+  email: string;
+  dateOfBirth: string; // YYYY-MM-DD format
+
+  gender: string;
+  age: number;
+  nationality: string;
+  race: string;
+  last4NRIC: string;
+  tutoringLevels: string[]; // e.g., ["Primary School", "Upper Secondary"]
+  preferredLocations: string[]; // e.g., ["Bukit Timah", "Toa Payoh"]
+  tutorType: string; // Full Time Tutor / Part Time Tutor
+  yearsExperience: number;
+  highestEducation: string;
+  academicDetails: string;
+  teachingSummary: string;
+  studentResults: string;
+  sellingPoints: string;
+  agreeTerms: boolean;
+  agreeAssignmentInfo: boolean;
 };

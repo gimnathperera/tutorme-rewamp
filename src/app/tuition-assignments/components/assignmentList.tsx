@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableRow,
@@ -63,9 +62,9 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                         ) : (
                             assignments.map((assignment) => (
                                 <TableRow key={assignment.id} className={selected.includes(assignment.id) ? 'bg-blue-50' : ''}>
-                                    <TableCell>
+                                    <TableCell className='p-4 font-semibold text-base'>
                                         <input
-                                            className='mr-2 border rounded border-gray-400'
+                                            className='mr-3 border rounded border-gray-400'
                                             type="checkbox"
                                             checked={selected.includes(assignment.id)}
                                             onChange={() => handleSelect(assignment.id)}
