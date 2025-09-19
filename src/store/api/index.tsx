@@ -74,6 +74,7 @@ export const baseApi = createApi({
   tagTypes: [
     "Faqs",
     "Testimonials",
+    "Blogs",
     "Grades",
     "Subjects",
     "Papers",

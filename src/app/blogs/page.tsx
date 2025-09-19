@@ -1,6 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
+import { AddBlog } from "./components/create-blog/page";
+import BlogsPage from "./components/ViewBlogs";
 
 type Blog = {
   id: string;
@@ -53,6 +55,9 @@ const BlogListPage = () => {
   return (
     <section className="pt-8 pb-16 lg:pt-16 lg:pb-24 px-4 sm:px-8 md:px-16 lg:px-32 mb-8">
       <div className="container">
+        <div>
+          <AddBlog />
+        </div>
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
@@ -68,27 +73,7 @@ const BlogListPage = () => {
         </div>
 
         <div className="-mx-4 flex flex-wrap">
-          <BlogCard
-            id="1"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Cnwd4q6/image-01.jpg"
-          />
-          <BlogCard
-            id="2"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Y23YC07/image-02.jpg"
-          />
-          <BlogCard
-            id="3"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/7jdcnwn/image-03.jpg"
-          />
+          <BlogsPage />
         </div>
       </div>
     </section>
