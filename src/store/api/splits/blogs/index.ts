@@ -1,6 +1,7 @@
 import {
   FetchBlogsRequest,
   FetchTuitionRatesRequest,
+  UpdateBlogRequest,
 } from "@/types/request-types";
 import { PaginatedResponse, Blogs } from "@/types/response-types";
 import { baseApi } from "../..";
@@ -37,14 +38,14 @@ export const BlogsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Blogs"],
     }),
 
-    // updateTuitionRate: build.mutation<Blogs, UpdateTuitionRateRequest>({
-    //   query: ({ id, ...payload }) => ({
-    //     url: `${Endpoints.TuitionRates}/${id}`,
-    //     method: "PATCH",
-    //     body: payload,
-    //   }),
-    //   invalidatesTags: ["TuitionRates"],
-    // }),
+    updateBlog: build.mutation<Blogs, UpdateBlogRequest>({
+      query: ({ id, ...payload }) => ({
+        url: `${Endpoints.Blogs}/${id}`,
+        method: "PATCH",
+        body: payload,
+      }),
+      invalidatesTags: ["Blogs"],
+    }),
 
     deleteBlog: build.mutation<void, string>({
       query: (id) => ({
@@ -60,6 +61,7 @@ export const BlogsApi = baseApi.injectEndpoints({
 export const {
   useFetchBlogsQuery,
   useFetchBlogByIdQuery,
+  useUpdateBlogMutation,
   useLazyFetchBlogByIdQuery,
   useCreateBlogMutation,
   useDeleteBlogMutation,

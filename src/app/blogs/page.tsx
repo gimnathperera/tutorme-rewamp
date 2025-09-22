@@ -1,8 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
-import { AddBlog } from "./components/create-blog/page";
 import BlogsPage from "./components/ViewBlogs";
+import Link from "next/link";
 
 type Blog = {
   id: string;
@@ -55,8 +55,13 @@ const BlogListPage = () => {
   return (
     <section className="pt-8 pb-16 lg:pt-16 lg:pb-24 px-4 sm:px-8 md:px-16 lg:px-32 mb-8">
       <div className="container">
-        <div>
-          <AddBlog />
+        <div className="flex justify-end items-end">
+          <Link
+            className="bg-black text-white py-4 px-8 rounded-lg font-semibold"
+            href={"/blogs/components/create-blog"}
+          >
+            Add Blog
+          </Link>
         </div>
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">

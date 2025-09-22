@@ -5,14 +5,10 @@ import {
   useFetchBlogByIdQuery,
   useFetchBlogsQuery,
 } from "@/store/api/splits/blogs";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { useAuthContext } from "@/contexts";
+import Link from "next/link";
 
 export default function ViewBlogPage() {
   const params = useParams();
@@ -20,8 +16,12 @@ export default function ViewBlogPage() {
   const { data: blog, isLoading, error } = useFetchBlogByIdQuery(blogId);
   const { data: allBlogs } = useFetchBlogsQuery({});
 
+  const { user } = useAuthContext();
+
   const relatedArticles =
-    allBlogs?.results.filter((b) => blog?.relatedArticles.includes(b.id)) || [];
+    allBlogs?.results.filter((b) =>
+      blog?.relatedArticles?.some((ra) => ra.id === b.id)
+    ) || [];
 
   const router = useRouter();
 
@@ -39,73 +39,78 @@ export default function ViewBlogPage() {
 
   return (
     <div className="max-w-7xl mx-auto">
-      <div>
-        <div className="font-bold text-4xl py-4">
-          {capitalizeWords(blog.title)}
-        </div>
-        <div className="flex items-center space-x-4">
-          <Avatar>
-            <AvatarImage src={blog.author.avatar} />
-            <AvatarFallback>{blog.author.name[0]}</AvatarFallback>
-          </Avatar>
-          <div>
-            <div>
-              By {blog.author.name} - {blog.author.role}
-            </div>
-            <p className="text-sm text-gray-500">
-              Created at: {new Date(blog.createdAt).toLocaleDateString()},{" "}
-              {new Date(blog.createdAt).toLocaleTimeString()}
-            </p>
+      <div className="space-y-5">
+        {imageContent?.src && (
+          <div className="mt-4">
+            <img
+              src={imageContent.src}
+              alt={imageContent.caption || blog.title}
+              className="rounded-md w-full h-96 object-cover"
+            />
+            {imageContent.caption && (
+              <p className="text-sm flex justify-end items-end text-gray-500 mt-1">
+                {imageContent.caption}
+              </p>
+            )}
           </div>
-        </div>
-
-        <div className="space-y-5 my-4">
-          {imageContent?.src && (
-            <div className="mt-4">
-              <img
-                src={imageContent.src}
-                alt={imageContent.caption || blog.title}
-                className="rounded-md w-full h-96 object-cover"
-              />
-              {imageContent.caption && (
-                <p className="text-sm flex justify-end items-end text-gray-500 mt-1">
-                  {imageContent.caption}
-                </p>
-              )}
-            </div>
-          )}
-          {headingContent && (
-            <h2 className="text-xl mt-2 font-semibold">{headingContent}</h2>
-          )}
-          {paragraphContent && <p>{paragraphContent}</p>}
+        )}
+      </div>
+      <div className="flex items-center space-x-2">
+        <Avatar>
+          <AvatarImage src={blog.author.avatar} />
+          <AvatarFallback>{blog.author.name[0]}</AvatarFallback>
+        </Avatar>
+        <div>
+          <div>
+            By {blog.author.name} - {blog.author.role}
+          </div>
+          <p className="text-sm text-gray-500">
+            Created at: {new Date(blog.createdAt).toLocaleDateString()},{" "}
+            {new Date(blog.createdAt).toLocaleTimeString()}
+          </p>
         </div>
       </div>
-
-      {/* Related Articles */}
-      {relatedArticles.length > 0 && (
-        <div className="mt-10">
-          <h3 className="text-xl font-semibold mb-4">Related Articles</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {relatedArticles.map((rel) => (
-              <Card
-                key={rel.id}
-                onClick={() => router.push(`/blogs/${rel.id}`)}
-                className="cursor-pointer hover:shadow-lg transition-shadow"
-              >
-                <CardContent>
-                  <CardTitle>{rel.title}</CardTitle>
-                  <p>
-                    {rel.content
-                      .find((c) => c.type === "paragraph")
-                      ?.text?.slice(0, 100)}
-                    ...
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+      <div className="mt-6">
+        <div className="font-bold text-4xl py-2">
+          {capitalizeWords(blog.title)}
         </div>
-      )}
+
+        {/* Related Articles as badges */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {relatedArticles.map((rel) => (
+            <Badge
+              key={rel.id}
+              variant="outline"
+              className="cursor-pointer bg-gray-200"
+              onClick={() => router.push(`/blogs/${rel.id}`)}
+            >
+              #{rel.title}
+            </Badge>
+          ))}
+        </div>
+      </div>
+      <div>
+        {headingContent && (
+          <h2 className="text-xl mt-4 font-semibold">{headingContent}</h2>
+        )}
+        {paragraphContent && (
+          <p className="my-4 text-justify">{paragraphContent}</p>
+        )}
+      </div>
+      <div className="my-10">
+        {blog.author.name === user?.name ? (
+          <>
+            <Link
+              className="px-8 py-4 bg-black text-white rounded-lg"
+              href={`/blogs/components/edit-blog/${blog.id}`}
+            >
+              Edit Blog
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
     </div>
   );
 }
