@@ -17,6 +17,11 @@ export default function ViewBlogPage() {
   const { data: allBlogs } = useFetchBlogsQuery({});
 
   const { user } = useAuthContext();
+  function decodeHtml(html: string) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
 
   const relatedArticles =
     allBlogs?.results.filter((b) =>
@@ -94,7 +99,10 @@ export default function ViewBlogPage() {
           <h2 className="text-xl mt-4 font-semibold">{headingContent}</h2>
         )}
         {paragraphContent && (
-          <p className="my-4 text-justify">{paragraphContent}</p>
+          <div
+            className="prose dark:prose-invert my-4 text-justify"
+            dangerouslySetInnerHTML={{ __html: decodeHtml(paragraphContent) }}
+          />
         )}
       </div>
       <div className="my-10">

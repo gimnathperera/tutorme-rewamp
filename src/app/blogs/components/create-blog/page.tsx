@@ -21,6 +21,10 @@ import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -33,6 +37,11 @@ const AddBlog = () => {
     defaultValues: initialFormValues,
     mode: "onChange",
   });
+  function decodeHtml(html: string) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
 
   const { formState, watch, control, reset, register, handleSubmit } =
     createBlogForm;
@@ -148,12 +157,26 @@ const AddBlog = () => {
                   value="paragraph"
                   {...register("content.0.type")}
                 />
-                <textarea
-                  id="content.0.text"
-                  placeholder="Write your post content here..."
-                  className="w-full resize-none border-none focus:ring-0 text-base placeholder-gray-500"
-                  rows={6}
-                  {...register("content.0.text")}
+                <Controller
+                  name="content.0.text"
+                  control={control}
+                  render={({ field }) => (
+                    <ReactQuill
+                      theme="snow"
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      placeholder="Write your post content here..."
+                      className="
+                      bg-white rounded-lg
+                      [&_.ql-toolbar]:border-0
+                      [&_.ql-toolbar]:rounded-t-lg
+                      [&_.ql-container]:border-0
+                      [&_.ql-container]:rounded-b-lg
+                      [&_.ql-editor.ql-blank::before]:text-gray-400
+                      [&_.ql-editor.ql-blank::before]:italic
+                    "
+                    />
+                  )}
                 />
                 {formState.errors.content?.[0]?.text && (
                   <p className="text-sm text-red-500">
@@ -225,9 +248,15 @@ const AddBlog = () => {
               </h2>
             )}
             <p className="text-justify">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {watch("content.0.text") || "Nothing to preview yet..."}
-              </ReactMarkdown>
+              <div
+                className="prose dark:prose-invert max-w-none text-justify"
+                dangerouslySetInnerHTML={{
+                  __html: decodeHtml(
+                    watch("content.0.text") ||
+                      "<p>Nothing to preview yet...</p>"
+                  ),
+                }}
+              />
             </p>
 
             {watch("content.2.src") && (

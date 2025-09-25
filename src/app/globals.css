@@ -434,3 +434,23 @@ html {
     --chart-5: 340 75% 55%;
   }
 }
+.ql-toolbar {
+  border: none !important;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: #f9fafb;
+}
+
+.ql-container {
+  border: none !important;
+  border-radius: 0 0 0.5rem 0.5rem;
+  min-height: 200px;
+}
+
+.ql-editor {
+  padding: 1rem;
+}
+.ql-editor.ql-blank::before {
+  font-family: "Urbanist", sans-serif;
+  font-style: normal;
+  font-size: 11px;
+}

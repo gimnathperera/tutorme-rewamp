@@ -21,6 +21,10 @@ import { useAuthContext } from "@/contexts";
 import { useParams, useRouter } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import dynamic from "next/dynamic";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -49,6 +53,11 @@ export default function EditBlogPage() {
 
   const blogOptions: Option[] =
     blogsData?.results.map((b) => ({ value: b.id, text: b.title })) || [];
+  function decodeHtml(html: string) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
 
   useEffect(() => {
     if (blog && user) {
@@ -64,7 +73,7 @@ export default function EditBlogPage() {
         relatedArticles: blog.relatedArticles.map((ra) => ra.id),
         content: blog.content.map((c) => ({
           type: c.type,
-          text: "text" in c ? c.text : "",
+          text: "text" in c ? decodeHtml(c.text) : "",
           src: "src" in c ? c.src : "",
           caption: "caption" in c ? c.caption : "",
           level: "level" in c ? c.level : 1,
@@ -164,10 +173,26 @@ export default function EditBlogPage() {
                       value="paragraph"
                       {...register(`content.${idx}.type` as const)}
                     />
-                    <textarea
-                      placeholder="Paragraph text"
-                      className="w-full border rounded-md p-2"
-                      {...register(`content.${idx}.text` as const)}
+                    <Controller
+                      name={`content.${idx}.text` as const}
+                      control={control}
+                      render={({ field }) => (
+                        <ReactQuill
+                          theme="snow"
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="Write your paragraph..."
+                          className="
+                      bg-white rounded-lg
+                      [&_.ql-toolbar]:border-0
+                      [&_.ql-toolbar]:rounded-t-lg
+                      [&_.ql-container]:border-0
+                      [&_.ql-container]:rounded-b-lg
+                      [&_.ql-editor.ql-blank::before]:text-gray-400
+                      [&_.ql-editor.ql-blank::before]:italic
+                    "
+                        />
+                      )}
                     />
                     {formState.errors.content?.[idx]?.text && (
                       <p className="text-red-500">
@@ -242,9 +267,15 @@ export default function EditBlogPage() {
               </h2>
             )}
             <p className="text-justify">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {watch("content.0.text") || "Nothing to preview yet..."}
-              </ReactMarkdown>
+              <div
+                className="prose dark:prose-invert max-w-none text-justify"
+                dangerouslySetInnerHTML={{
+                  __html: decodeHtml(
+                    watch("content.0.text") ||
+                      "<p>Nothing to preview yet...</p>"
+                  ),
+                }}
+              />
             </p>
 
             {watch("content.2.src") && (
