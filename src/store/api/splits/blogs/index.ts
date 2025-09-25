@@ -1,8 +1,4 @@
-import {
-  FetchBlogsRequest,
-  FetchTuitionRatesRequest,
-  UpdateBlogRequest,
-} from "@/types/request-types";
+import { FetchBlogsRequest, UpdateBlogRequest } from "@/types/request-types";
 import { PaginatedResponse, Blogs } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";

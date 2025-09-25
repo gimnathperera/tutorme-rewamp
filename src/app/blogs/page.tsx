@@ -12,45 +12,6 @@ type Blog = {
   image: string;
 };
 
-const BlogCard: FC<Blog> = ({
-  id,
-  image,
-  date,
-  CardTitle,
-  CardDescription,
-}) => {
-  const router = useRouter();
-
-  const onHandleBlogClick = () => {
-    router.push(`/blogs/${id}`);
-  };
-
-  return (
-    <div className="w-full px-4 md:w-1/2 lg:w-1/3" onClick={onHandleBlogClick}>
-      <div className="mb-10 w-full cursor-pointer">
-        <div className="mb-8 overflow-hidden rounded">
-          <img src={image} alt="" className="w-full" />
-        </div>
-        <div>
-          {date && (
-            <span className="mb-5 inline-block rounded bg-primary-700 px-4 py-1 text-center text-xs font-semibold leading-loose text-white">
-              {date}
-            </span>
-          )}
-          <h3>
-            <span className="cursor-pointer mb-4 inline-block text-xl font-semibold text-dark hover:text-blue sm:text-2xl lg:text-xl xl:text-2xl">
-              {CardTitle}
-            </span>
-          </h3>
-          <p className="text-base text-body-color dark:text-dark-6">
-            {CardDescription}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
-
 const BlogListPage = () => {
   return (
     <section className="pt-8 pb-16 lg:pt-16 lg:pb-24 px-4 sm:px-8 md:px-16 lg:px-32 mb-8">
