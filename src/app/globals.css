@@ -451,6 +451,7 @@ html {
 }
 .ql-editor.ql-blank::before {
   font-family: "Urbanist", sans-serif;
-  font-style: normal;
-  font-size: 11px;
+  font-style: initial;
+  font-size: 14px;
+  color: #747474;
 }
