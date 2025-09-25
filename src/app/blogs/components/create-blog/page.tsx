@@ -19,8 +19,6 @@ import {
 import MultiSelect, { Option } from "@/components/MultiSelect";
 import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -95,7 +93,9 @@ const AddBlog = () => {
     toast.success("Blog created successfully");
     redirect.push("/blogs");
   };
-
+  const onClear = () => {
+    reset(initialFormValues);
+  };
   return (
     <div className="flex flex-col bg-white m-5 md:flex-row gap-8">
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
@@ -274,8 +274,10 @@ const AddBlog = () => {
           </div>
         )}
 
-        <div className="flex justify-between items-center mt-8">
-          <Button variant="outline">Save draft</Button>
+        <div className="flex justify-between items-center mt-6 px-6 mb-4">
+          <Button onClick={onClear} variant="outline">
+            Clear
+          </Button>
           <Button
             type="submit"
             className="bg-blue-700 text-white hover:bg-blue-500"

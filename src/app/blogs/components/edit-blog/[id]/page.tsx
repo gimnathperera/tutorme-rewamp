@@ -19,8 +19,6 @@ import {
 import MultiSelect, { Option } from "@/components/MultiSelect";
 import { useAuthContext } from "@/contexts";
 import { useParams, useRouter } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -293,7 +291,7 @@ export default function EditBlogPage() {
           </div>
         )}
 
-        <div className="flex justify-between items-center mt-8 px-6">
+        <div className="flex justify-end items-end mt-8 px-6 mb-4">
           <Button
             type="submit"
             className="bg-blue-700 text-white hover:bg-blue-500"
