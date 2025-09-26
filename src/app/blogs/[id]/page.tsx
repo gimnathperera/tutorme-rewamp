@@ -52,15 +52,10 @@ export default function ViewBlogPage() {
               alt={imageContent.caption || blog.title}
               className="rounded-md w-full h-96 object-cover"
             />
-            {imageContent.caption && (
-              <p className="text-sm flex justify-end items-end text-gray-500 mt-1">
-                {imageContent.caption}
-              </p>
-            )}
           </div>
         )}
       </div>
-      <div className="flex items-center space-x-2">
+      <div className="flex mt-4 items-center space-x-2">
         <Avatar>
           <AvatarImage src={blog.author.avatar} />
           <AvatarFallback>{blog.author.name[0]}</AvatarFallback>

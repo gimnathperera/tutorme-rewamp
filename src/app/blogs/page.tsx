@@ -1,16 +1,7 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FC } from "react";
+
 import BlogsPage from "./components/ViewBlogs";
 import Link from "next/link";
-
-type Blog = {
-  id: string;
-  date: string;
-  CardTitle: string;
-  CardDescription: string;
-  image: string;
-};
 
 const BlogListPage = () => {
   return (

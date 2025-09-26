@@ -73,7 +73,7 @@ export default function EditBlogPage() {
           type: c.type,
           text: "text" in c ? decodeHtml(c.text) : "",
           src: "src" in c ? c.src : "",
-          caption: "caption" in c ? c.caption : "",
+          caption: "caption" in c ? c.caption : "Cover Image",
           level: "level" in c ? c.level : 1,
         })),
       });
@@ -239,6 +239,8 @@ export default function EditBlogPage() {
                     />
                     <Input
                       placeholder="Caption"
+                      type="hidden"
+                      value="cover image"
                       className="border rounded-md mt-1"
                       {...register(`content.${idx}.caption` as const)}
                     />
@@ -275,19 +277,17 @@ export default function EditBlogPage() {
                 }}
               />
             </p>
-
-            {watch("content.2.src") && (
-              <figure>
-                <img
-                  className="mt-5 h-[400px]"
-                  src={watch("content.2.src")}
-                  alt={watch("content.2.caption") || "Image"}
-                />
-                {watch("content.2.caption") && (
-                  <figcaption>{watch("content.2.caption")}</figcaption>
-                )}
-              </figure>
-            )}
+            <div className="flex justify-center items-center">
+              {watch("content.2.src") && (
+                <figure>
+                  <img
+                    className="mt-5 h-[400px]"
+                    src={watch("content.2.src")}
+                    alt={watch("content.2.caption") || "Image"}
+                  />
+                </figure>
+              )}
+            </div>
           </div>
         )}
 

@@ -23,6 +23,7 @@ import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import { Label } from "@/components/ui/label";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -66,6 +67,10 @@ const AddBlog = () => {
     })) || [];
 
   const onSubmit = async (data: CreateArticleSchema) => {
+    if (!user) {
+      toast.error("Please authenticate");
+      return;
+    }
     const imageContent = data.content.find((c) => c.type === "image");
     const payload = {
       ...data,
@@ -75,6 +80,9 @@ const AddBlog = () => {
         role: user?.role || data.author.role,
       },
       image: imageContent?.src || "",
+      content: data.content.map((c) =>
+        c.type === "image" ? { type: c.type, src: c.src } : c
+      ),
     };
 
     try {
@@ -103,7 +111,7 @@ const AddBlog = () => {
         <div className="flex gap-2 mt-6 px-6">
           <Button
             type="button"
-            className="bg-green-500"
+            className="border bg-gray-200"
             variant={isPreview ? "outline" : "default"}
             onClick={() => setIsPreview(false)}
           >
@@ -111,7 +119,7 @@ const AddBlog = () => {
           </Button>
           <Button
             type="button"
-            className="bg-blue-500"
+            className="bg-black text-white"
             variant={isPreview ? "default" : "outline"}
             onClick={() => setIsPreview(true)}
           >
@@ -132,23 +140,6 @@ const AddBlog = () => {
                 {formState.errors.title.message}
               </p>
             )}
-
-            <div className="">
-              <Controller
-                name="relatedArticles"
-                control={control}
-                render={({ field }) => (
-                  <MultiSelect
-                    label="Add Up Related Articles"
-                    options={blogOptions}
-                    defaultSelected={field.value || []}
-                    onChange={field.onChange}
-                    value={field.value || []}
-                    placeholder="Add up related articles"
-                  />
-                )}
-              />
-            </div>
 
             <div className="shadow-sm ">
               <div>
@@ -198,8 +189,8 @@ const AddBlog = () => {
                 />
                 <Input
                   id="content.1.text"
-                  placeholder="Add blog title"
-                  className="mt-2 border rounded-md"
+                  placeholder="Add Blog Sub Title"
+                  className="mt-2 border-none rounded-md"
                   {...register("content.1.text")}
                 />
                 {formState.errors.content?.[1]?.text && (
@@ -209,16 +200,17 @@ const AddBlog = () => {
                 )}
               </div>
 
-              <div>
+              <div className="">
                 <Input
                   type="hidden"
                   value="image"
+                  className="border-none"
                   {...register("content.2.type")}
                 />
                 <Input
                   id="content.2.src"
                   placeholder="Add Cover Image Url"
-                  className="border rounded-md"
+                  className="border-none rounded-md"
                   {...register("content.2.src")}
                 />
                 {formState.errors.content?.[2]?.src && (
@@ -227,14 +219,27 @@ const AddBlog = () => {
                   </p>
                 )}
                 <Input
-                  id="content.2.caption"
-                  placeholder="Caption for the cover image"
-                  className="mt-2 border rounded-md"
+                  type="hidden"
+                  value="Cover Image"
                   {...register("content.2.caption")}
                 />
               </div>
             </div>
-
+            <div className="text-gray-500 border-none rounded-lg">
+              <Label className="mx-1">Related Articles</Label>
+              <Controller
+                name="relatedArticles"
+                control={control}
+                render={({ field }) => (
+                  <MultiSelect
+                    options={blogOptions}
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    value={field.value || []}
+                  />
+                )}
+              />
+            </div>
             <input type="hidden" value="pending" {...register("status")} />
           </div>
         ) : (
@@ -259,18 +264,17 @@ const AddBlog = () => {
               />
             </p>
 
-            {watch("content.2.src") && (
-              <figure>
-                <img
-                  className="mt-5 h-[400px]"
-                  src={watch("content.2.src")}
-                  alt={watch("content.2.caption") || "Image"}
-                />
-                {watch("content.2.caption") && (
-                  <figcaption>{watch("content.2.caption")}</figcaption>
-                )}
-              </figure>
-            )}
+            <div className="flex justify-center items-center ">
+              {watch("content.2.src") && (
+                <figure>
+                  <img
+                    className="mt-5 h-[400px]"
+                    src={watch("content.2.src")}
+                    alt={watch("content.2.caption") || "Image"}
+                  />
+                </figure>
+              )}
+            </div>
           </div>
         )}
 

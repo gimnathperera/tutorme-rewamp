@@ -47,7 +47,7 @@ export const initialFormValues: CreateArticleSchema = {
   content: [
     { type: "paragraph", text: "" },
     { type: "heading", text: "", level: 2 },
-    { type: "image", src: "", caption: "" },
+    { type: "image", src: "", caption: "Cover Image" },
   ],
   relatedArticles: [""],
   status: "pending",
