@@ -97,6 +97,32 @@ export type FetchTuitionRatesRequest = {
   page?: number;
   limit?: number;
 };
+export type UpdateBlogRequest = {
+  id: string;
+  blogId: string;
+  name: string;
+  avatar: string;
+  role: string;
+  image?: string;
+  relatedArticles: string[];
+  status?: "pending" | "approved" | "rejected";
+  authorName?: string;
+  title?: string;
+  sortBy?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type FetchBlogsRequest = {
+  blogId?: string;
+  image?: string;
+  status?: "pending" | "published" | "draft";
+  authorName?: string;
+  title?: string;
+  page?: number;
+  limit?: number;
+};
+
 export type FetchSubjectsRequest = {
   title?: string;
   description?: string;
