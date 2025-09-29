@@ -77,10 +77,9 @@ const Testimonials: FC = () => {
                   <img
                     src={owner?.avatar ?? ""}
                     alt="testimonial-avatar-image"
-                    width={71}
-                    height={71}
-                    className="inline-block m-auto absolute test-pos"
+                    className="inline-block m-auto absolute test-pos object-cover rounded-full border-4 border-white w-[80px] h-[80px]"
                   />
+
                   <h4 className="text-base font-medium text-testColor my-4">
                     {content ?? "-"}
                   </h4>
