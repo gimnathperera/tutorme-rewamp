@@ -74,7 +74,7 @@ const Faqs = () => {
       <h2 className="text-4xl lg:text-6xl font-semibold text-center text-white mb-12">
         Frequently asked <br /> questions.
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 lg:px-0">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 px-4 lg:px-0 items-start">
         {isFetching && page === 1
           ? Array.from({ length: FAQ_LIMIT }, (_, index) => (
               <FaqSkeleton key={index} />
