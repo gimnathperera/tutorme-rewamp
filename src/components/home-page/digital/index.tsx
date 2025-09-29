@@ -1,6 +1,5 @@
 "use client";
 import { useRouter } from "next/navigation";
-import GirlDoodleSvg from "../../../../public/images/digital/girldoodle.svg";
 import Image from "next/image";
 
 const Digital = () => {
@@ -36,7 +35,7 @@ const Digital = () => {
           <div>
             <div className="lg:absolute girldoodle">
               <Image
-                src={GirlDoodleSvg}
+                src={"/images/digital/girldoodle.svg"}
                 alt="girldoodle"
                 width={815}
                 height={691}
