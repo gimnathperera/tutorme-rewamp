@@ -1,58 +1,20 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { FC } from "react";
 
-type Blog = {
-  id: string;
-  date: string;
-  CardTitle: string;
-  CardDescription: string;
-  image: string;
-};
-
-const BlogCard: FC<Blog> = ({
-  id,
-  image,
-  date,
-  CardTitle,
-  CardDescription,
-}) => {
-  const router = useRouter();
-
-  const onHandleBlogClick = () => {
-    router.push(`/blogs/${id}`);
-  };
-
-  return (
-    <div className="w-full px-4 md:w-1/2 lg:w-1/3" onClick={onHandleBlogClick}>
-      <div className="mb-10 w-full cursor-pointer">
-        <div className="mb-8 overflow-hidden rounded">
-          <img src={image} alt="" className="w-full" />
-        </div>
-        <div>
-          {date && (
-            <span className="mb-5 inline-block rounded bg-primary-700 px-4 py-1 text-center text-xs font-semibold leading-loose text-white">
-              {date}
-            </span>
-          )}
-          <h3>
-            <span className="cursor-pointer mb-4 inline-block text-xl font-semibold text-dark hover:text-blue sm:text-2xl lg:text-xl xl:text-2xl">
-              {CardTitle}
-            </span>
-          </h3>
-          <p className="text-base text-body-color dark:text-dark-6">
-            {CardDescription}
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-};
+import BlogsPage from "./components/ViewBlogs";
+import Link from "next/link";
 
 const BlogListPage = () => {
   return (
     <section className="pt-8 pb-16 lg:pt-16 lg:pb-24 px-4 sm:px-8 md:px-16 lg:px-32 mb-8">
       <div className="container">
+        <div className="flex justify-end items-end">
+          <Link
+            className="bg-black text-white py-4 px-8 rounded-lg font-semibold"
+            href={"/blogs/components/create-blog"}
+          >
+            Add Blog
+          </Link>
+        </div>
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full px-4">
             <div className="mx-auto mb-[60px] max-w-[510px] text-center lg:mb-20">
@@ -68,27 +30,7 @@ const BlogListPage = () => {
         </div>
 
         <div className="-mx-4 flex flex-wrap">
-          <BlogCard
-            id="1"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Cnwd4q6/image-01.jpg"
-          />
-          <BlogCard
-            id="2"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/Y23YC07/image-02.jpg"
-          />
-          <BlogCard
-            id="3"
-            date="Dec 22, 2023"
-            CardTitle="Meet AutoManage, the best AI management tools"
-            CardDescription="Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-            image="https://i.ibb.co/7jdcnwn/image-03.jpg"
-          />
+          <BlogsPage />
         </div>
       </div>
     </section>

@@ -73,6 +73,26 @@ export type Paper = BaseEntity &
     url: string;
   };
 
+// Blogs
+export type Blogs = BaseEntity &
+  WithTitleDescription & {
+    _id: string;
+    title: string;
+    image: string;
+    author: {
+      name: string;
+      avatar: string;
+      role: string;
+    };
+    content: Array<
+      | { type: "paragraph"; text: string }
+      | { type: "heading"; text: string; level: number }
+      | { type: "image"; src: string; caption?: string }
+    >;
+    relatedArticles: string[];
+    status: "pending" | "published" | "draft";
+  };
+
 // Testimonial
 export type Testimonial = BaseEntity & {
   content: string;

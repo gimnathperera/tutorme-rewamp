@@ -1,31 +1,119 @@
-import ArticleContent from "./components/article-content";
-import ArticleHeader from "./components/article-header";
-import Discussion from "./components/discussion";
-import RelatedArticles from "./components/related-articles";
+"use client";
 
-const BlogDetailedPage = () => {
+import { useParams, useRouter } from "next/navigation";
+import {
+  useFetchBlogByIdQuery,
+  useFetchBlogsQuery,
+} from "@/store/api/splits/blogs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { useAuthContext } from "@/contexts";
+import Link from "next/link";
+
+export default function ViewBlogPage() {
+  const params = useParams();
+  const blogId = params?.id as string;
+  const { data: blog, isLoading, error } = useFetchBlogByIdQuery(blogId);
+  const { data: allBlogs } = useFetchBlogsQuery({});
+
+  const { user } = useAuthContext();
+  function decodeHtml(html: string) {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  }
+
+  const relatedArticles =
+    allBlogs?.results.filter((b) =>
+      blog?.relatedArticles?.some((ra) => ra.id === b.id)
+    ) || [];
+
+  const router = useRouter();
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error || !blog) return <p>Blog not found.</p>;
+
+  const paragraphContent = blog.content.find(
+    (c) => c.type === "paragraph"
+  )?.text;
+  const headingContent = blog.content.find((c) => c.type === "heading")?.text;
+  const imageContent = blog.content.find((c) => c.type === "image");
+  function capitalizeWords(str: string) {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
   return (
-    <>
-      <main className="pt-8 pb-16 lg:pt-16 lg:pb-24 antialiased">
-        <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
-          <article className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
-            <ArticleHeader
-              avatar="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
-              author="Jese Leos"
-              role="Graphic Designer, educator & CEO Flowbite"
-              date="Feb. 8, 2022"
-              title="How to get started with Flowbite"
+    <div className="max-w-7xl mx-auto">
+      <div className="space-y-5">
+        {imageContent?.src && (
+          <div className="mt-4">
+            <img
+              src={imageContent.src}
+              alt={imageContent.caption || blog.title}
+              className="rounded-md w-full h-96 object-cover"
             />
-            <ArticleContent />
-
-            <Discussion />
-          </article>
+          </div>
+        )}
+      </div>
+      <div className="flex mt-4 items-center space-x-2">
+        <Avatar>
+          <AvatarImage src={blog.author.avatar} />
+          <AvatarFallback>{blog.author.name[0]}</AvatarFallback>
+        </Avatar>
+        <div>
+          <div>
+            By {blog.author.name} - {blog.author.role}
+          </div>
+          <p className="text-sm text-gray-500">
+            Created at: {new Date(blog.createdAt).toLocaleDateString()},{" "}
+            {new Date(blog.createdAt).toLocaleTimeString()}
+          </p>
         </div>
-      </main>
+      </div>
+      <div className="mt-6">
+        <div className="font-bold text-4xl py-2">
+          {capitalizeWords(blog.title)}
+        </div>
 
-      <RelatedArticles />
-    </>
+        {/* Related Articles as badges */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {relatedArticles.map((rel) => (
+            <Badge
+              key={rel.id}
+              variant="outline"
+              className="cursor-pointer bg-gray-200"
+              onClick={() => router.push(`/blogs/${rel.id}`)}
+            >
+              #{rel.title}
+            </Badge>
+          ))}
+        </div>
+      </div>
+      <div>
+        {headingContent && (
+          <h2 className="text-xl mt-4 font-semibold">{headingContent}</h2>
+        )}
+        {paragraphContent && (
+          <div
+            className="prose dark:prose-invert my-4 text-justify"
+            dangerouslySetInnerHTML={{ __html: decodeHtml(paragraphContent) }}
+          />
+        )}
+      </div>
+      <div className="my-10">
+        {blog.author.name === user?.name ? (
+          <>
+            <Link
+              className="px-8 py-4 bg-black text-white rounded-lg"
+              href={`/blogs/components/edit-blog/${blog.id}`}
+            >
+              Edit Blog
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
+      </div>
+    </div>
   );
-};
-
-export default BlogDetailedPage;
+}
