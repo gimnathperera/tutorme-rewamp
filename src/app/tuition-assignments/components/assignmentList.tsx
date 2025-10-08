@@ -21,7 +21,6 @@ interface AssignmentListProps {
 const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gender }) => {
   const router = useRouter();
 
-  // ✅ Pagination states
   const [page, setPage] = useState(1);
   const limit = 10;
 
@@ -74,7 +73,6 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
     router.push('/tuition-assignments/selected');
   };
 
-  // ✅ Pagination controls
   const handleNextPage = () => {
     if (page < totalPages) setPage((prev) => prev + 1);
   };
@@ -143,7 +141,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
               </TableCell>
             </TableRow>
 
-            {/* ✅ Pagination Controls */}
+            {/* Pagination Controls */}
             <TableRow>
               <TableCell colSpan={8} className="text-center py-4">
                 <div className="flex items-center justify-center gap-4">
