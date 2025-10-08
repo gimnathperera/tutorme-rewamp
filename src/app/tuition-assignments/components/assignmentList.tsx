@@ -28,11 +28,11 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
   if (gradeId && gradeId !== 'all') queryParams.gradeId = gradeId;
 
   const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
-  const allAssignments = data?.results || [];
   const totalCount = data?.totalResults || 0;
   const totalPages = Math.ceil(totalCount / limit);
 
   const assignments = useMemo(() => {
+    const allAssignments = data?.results || [];
     let filtered = allAssignments;
 
     if (tutorType && tutorType !== 'all') {
@@ -50,7 +50,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
     }
 
     return filtered;
-  }, [allAssignments, tutorType, gender]);
+  }, [data?.results, tutorType, gender]);
 
   const [selected, setSelected] = useState<string[]>([]);
 
