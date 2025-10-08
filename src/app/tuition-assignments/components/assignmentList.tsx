@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Table,
@@ -19,11 +19,38 @@ interface AssignmentListProps {
 
 const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gender }) => {
     const router = useRouter();
+    
+    // Only send gradeId to the API if it's not "all"
     const queryParams: any = {};
-    if (gradeId) queryParams.gradeId = gradeId;
+    if (gradeId && gradeId !== 'all') queryParams.gradeId = gradeId;
 
     const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
-    const assignments = data?.results || [];
+    const allAssignments = data?.results || [];
+    
+    // Apply client-side filtering
+    // Assuming the API populates tutor data with tutorType and gender fields
+    const assignments = useMemo(() => {
+        let filtered = allAssignments;
+        
+        if (tutorType && tutorType !== 'all') {
+            filtered = filtered.filter(assignment => {
+                // Check if tutorType exists directly on assignment (if populated)
+                const assignmentTutorType = (assignment as any).tutorType;
+                return assignmentTutorType?.toLowerCase() === tutorType.toLowerCase();
+            });
+        }
+        
+        if (gender && gender !== 'all') {
+            filtered = filtered.filter(assignment => {
+                // Check if gender exists on assignment or nested tutor object
+                const assignmentGender = (assignment as any).gender || (assignment as any).tutor?.gender;
+                return assignmentGender?.toLowerCase() === gender.toLowerCase();
+            });
+        }
+        
+        return filtered;
+    }, [allAssignments, tutorType, gender]);
+    
     const [selected, setSelected] = useState<string[]>([]);
 
     const handleSelect = (id: string) => {
