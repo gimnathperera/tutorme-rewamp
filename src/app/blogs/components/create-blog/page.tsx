@@ -71,18 +71,13 @@ const AddBlog = () => {
       toast.error("Please authenticate");
       return;
     }
-    const imageContent = data.content.find((c) => c.type === "image");
-    const payload = {
+    const payload: CreateArticleSchema = {
       ...data,
       author: {
         name: user?.name || data.author.name,
         avatar: user?.avatar || "https://example.com/default-avatar.png",
         role: user?.role || data.author.role,
       },
-      image: imageContent?.src || "",
-      content: data.content.map((c) =>
-        c.type === "image" ? { type: c.type, src: c.src } : c
-      ),
     };
 
     try {
@@ -169,9 +164,9 @@ const AddBlog = () => {
                     />
                   )}
                 />
-                {formState.errors.content?.[0]?.text && (
+                {formState.errors.content?.[0] && 'text' in formState.errors.content[0] && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[0]?.text?.message}
+                    {(formState.errors.content[0] as any).text?.message}
                   </p>
                 )}
               </div>
@@ -193,9 +188,9 @@ const AddBlog = () => {
                   className="mt-2 border-none rounded-md"
                   {...register("content.1.text")}
                 />
-                {formState.errors.content?.[1]?.text && (
+                {formState.errors.content?.[1] && 'text' in formState.errors.content[1] && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[1]?.text?.message}
+                    {(formState.errors.content[1] as any).text?.message}
                   </p>
                 )}
               </div>
@@ -213,9 +208,9 @@ const AddBlog = () => {
                   className="border-none rounded-md"
                   {...register("content.2.src")}
                 />
-                {formState.errors.content?.[2]?.src && (
+                {formState.errors.content?.[2] && 'src' in formState.errors.content[2] && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[2]?.src?.message}
+                    {(formState.errors.content[2] as any).src?.message}
                   </p>
                 )}
                 <Input
@@ -232,10 +227,10 @@ const AddBlog = () => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Related Articles"
                     options={blogOptions}
                     defaultSelected={field.value || []}
                     onChange={field.onChange}
-                    value={field.value || []}
                   />
                 )}
               />
