@@ -7,7 +7,7 @@ const Banner = () => {
   const route = useRouter();
 
   const handleOnFindATutorClick = () => {
-    route.push("/find-a-tutor");
+    route.push("/request-for-tutors");
   };
 
   return (

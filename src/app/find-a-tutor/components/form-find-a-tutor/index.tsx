@@ -7,12 +7,13 @@ import TutorTypeComponent from "../tutor-type";
 import { initialFormValues, TutorSchema, tutorSchema } from "./schema";
 import LessonDetails from "../lesson-details";
 import useLogic from "../../hooks/useLogic";
-import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+
 import { FindMyTutorRequest } from "@/types/request-types";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import SubmitButton from "@/components/shared/submit-button";
 import Celebrate from "@/components/shared/celebrate";
+import { useCreateTutorRequestsMutation } from "@/store/api/splits/request-tutor";
 
 type FormCardProps = {
   children: ReactNode;
@@ -30,7 +31,7 @@ const MainForm: FC = () => {
     loading: { isGradesLoading, isSubjectsLoading },
   } = useLogic();
 
-  const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
+  const [addTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
 
   const findATutorForm = useForm({
     resolver: zodResolver(tutorSchema),
