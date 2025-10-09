@@ -177,26 +177,25 @@ type TutorTypeInfo = {
 };
 
 export type FindMyTutorRequest = {
-  fullName: string;
-  contactNumber: string;
-
-  email: string;
-  dateOfBirth: string; // YYYY-MM-DD format
-
-  gender: string;
-  age: number;
-  nationality: string;
-  race: string;
-  last4NRIC: string;
-  tutoringLevels: string[]; // e.g., ["Primary School", "Upper Secondary"]
-  preferredLocations: string[]; // e.g., ["Bukit Timah", "Toa Payoh"]
-  tutorType: string; // Full Time Tutor / Part Time Tutor
-  yearsExperience: number;
-  highestEducation: string;
-  academicDetails: string;
-  teachingSummary: string;
-  studentResults: string;
-  sellingPoints: string;
-  agreeTerms: boolean;
-  agreeAssignmentInfo: boolean;
+  personalInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    city: string;
+    state: string;
+    zip: string;
+    region: string;
+    grade: string;
+  };
+  lessonInfo: {
+    tutorCount: string;
+    lessonDetails: any[]; // adjust if you have a specific type
+  };
+  tutorTypeInfo: {
+    tutorType: string;
+    studentSchool: string;
+    genderPreference: string;
+    isBilingualTutor: boolean;
+  };
 };

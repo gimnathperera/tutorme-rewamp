@@ -22,7 +22,6 @@ import { useParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -68,7 +67,7 @@ export default function EditBlogPage() {
             blog.author.avatar || "https://example.com/default-avatar.png",
           role: blog.author.role,
         },
-        relatedArticles: blog.relatedArticles.map((ra) => ra.id),
+        relatedArticles: blog.relatedArticles,
         content: blog.content.map((c) => ({
           type: c.type,
           text: "text" in c ? decodeHtml(c.text) : "",
@@ -82,20 +81,21 @@ export default function EditBlogPage() {
 
   const onSubmit = async (data: CreateArticleSchema) => {
     try {
-      const imageContent = data.content.find((c) => c.type === "image");
+      const imageContent = data.content.find(
+        (c): c is { type: "image"; src: string; caption?: string } => c.type === "image"
+      );
 
       const payload = {
         id: blogId,
+        blogId: blogId,
         title: data.title,
-        author: {
-          name: user?.name || data.author.name,
-          avatar: user?.avatar || "https://example.com/default-avatar.png",
-          role: user?.role || data.author.role,
-        },
-        image: imageContent?.src || "",
+        name: user?.name || data.author.name,
+        avatar: user?.avatar || "https://example.com/default-avatar.png",
+        role: user?.role || data.author.role,
+        image: imageContent?.src ?? "",
         content: data.content,
         relatedArticles: data.relatedArticles,
-        status: "pending",
+        status: "pending" as "pending",
       };
 
       const result = await updateBlog(payload);
@@ -155,7 +155,7 @@ export default function EditBlogPage() {
                 <MultiSelect
                   label="Related Articles"
                   options={blogOptions}
-                  value={field.value || []}
+                  defaultSelected={field.value || []}
                   onChange={field.onChange}
                 />
               )}
@@ -192,9 +192,9 @@ export default function EditBlogPage() {
                         />
                       )}
                     />
-                    {formState.errors.content?.[idx]?.text && (
+                    {formState.errors.content?.[idx]?.message && (
                       <p className="text-red-500">
-                        {formState.errors.content[idx]?.text?.message}
+                        {formState.errors.content[idx]?.message}
                       </p>
                     )}
                   </div>
@@ -217,9 +217,9 @@ export default function EditBlogPage() {
                       className="border rounded-md"
                       {...register(`content.${idx}.text` as const)}
                     />
-                    {formState.errors.content?.[idx]?.text && (
+                    {formState.errors.content?.[idx]?.message && (
                       <p className="text-red-500">
-                        {formState.errors.content[idx]?.text?.message}
+                        {formState.errors.content[idx]?.message}
                       </p>
                     )}
                   </div>
@@ -244,9 +244,9 @@ export default function EditBlogPage() {
                       className="border rounded-md mt-1"
                       {...register(`content.${idx}.caption` as const)}
                     />
-                    {formState.errors.content?.[idx]?.src && (
+                    {formState.errors.content?.[idx]?.message && (
                       <p className="text-red-500">
-                        {formState.errors.content[idx]?.src?.message}
+                        {formState.errors.content[idx]?.message}
                       </p>
                     )}
                   </div>

@@ -12,7 +12,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 const LevelAndExamsPage: FC = () => {
   const router = useRouter();
 
-  const { data, isLoading } = useFetchLevelsQuery({});
+  const { data, isLoading } = useFetchLevelsQuery();
 
   const subjects = data?.results || [];
 

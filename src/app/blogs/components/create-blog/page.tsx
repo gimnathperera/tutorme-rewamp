@@ -22,7 +22,6 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-import "react-quill/dist/quill.snow.css";
 import { Label } from "@/components/ui/label";
 
 const AddBlog = () => {
@@ -71,7 +70,22 @@ const AddBlog = () => {
       toast.error("Please authenticate");
       return;
     }
-    const imageContent = data.content.find((c) => c.type === "image");
+    const imageContent = data.content.find(
+      (c): c is { type: "image"; src: string; caption?: string } => c.type === "image"
+    );
+
+    const contentTuple = [
+      data.content[0],
+      ...data.content.slice(1),
+    ] as [
+      { type: "paragraph"; text: string } | { type: "heading"; text: string; level: number } | { type: "image"; src: string; caption?: string },
+      ...(
+        | { type: "paragraph"; text: string }
+        | { type: "heading"; text: string; level: number }
+        | { type: "image"; src: string; caption?: string }
+      )[]
+    ];
+
     const payload = {
       ...data,
       author: {
@@ -79,10 +93,8 @@ const AddBlog = () => {
         avatar: user?.avatar || "https://example.com/default-avatar.png",
         role: user?.role || data.author.role,
       },
-      image: imageContent?.src || "",
-      content: data.content.map((c) =>
-        c.type === "image" ? { type: c.type, src: c.src } : c
-      ),
+      image: imageContent?.src ?? "",
+      content: contentTuple,
     };
 
     try {
@@ -169,9 +181,9 @@ const AddBlog = () => {
                     />
                   )}
                 />
-                {formState.errors.content?.[0]?.text && (
+                {formState.errors.content?.[0] && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[0]?.text?.message}
+                    {formState.errors.content[0]?.message}
                   </p>
                 )}
               </div>
@@ -193,9 +205,9 @@ const AddBlog = () => {
                   className="mt-2 border-none rounded-md"
                   {...register("content.1.text")}
                 />
-                {formState.errors.content?.[1]?.text && (
+                {formState.errors.content?.[1] && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[1]?.text?.message}
+                    {formState.errors.content[1]?.message}
                   </p>
                 )}
               </div>
@@ -213,9 +225,12 @@ const AddBlog = () => {
                   className="border-none rounded-md"
                   {...register("content.2.src")}
                 />
-                {formState.errors.content?.[2]?.src && (
+                {"src" in (formState.errors.content?.[2] ?? {}) && (
                   <p className="text-sm text-red-500">
-                    {formState.errors.content[2]?.src?.message}
+                    {
+                      // @ts-expect-error: TypeScript can't infer the type here, but we know src exists
+                      formState.errors.content[2]?.src?.message
+                    }
                   </p>
                 )}
                 <Input
@@ -232,10 +247,10 @@ const AddBlog = () => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    label="Related Articles"
                     options={blogOptions}
                     defaultSelected={field.value || []}
                     onChange={field.onChange}
-                    value={field.value || []}
                   />
                 )}
               />

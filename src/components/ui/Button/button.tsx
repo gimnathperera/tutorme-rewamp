@@ -44,7 +44,10 @@ interface ButtonProps
   isLoading?: boolean;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+const Button = React.forwardRef<
+  HTMLButtonElement,
+  ButtonProps & React.ComponentPropsWithoutRef<"button">
+>(
   (
     {
       className,
@@ -62,8 +65,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         data-slot="button"
-        className={cn(buttonVariants({ variant, size, className }))}
+        // @ts-expect-error -- Slot can render different element types, ref typing is safely handled
         ref={ref}
+        className={cn(buttonVariants({ variant, size, className }))}
         disabled={isLoading || props.disabled}
         {...props}
       >

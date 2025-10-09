@@ -76,7 +76,7 @@ export type Paper = BaseEntity &
 // Blogs
 export type Blogs = BaseEntity &
   WithTitleDescription & {
-    _id: string;
+    id: string;
     title: string;
     image: string;
     author: {

@@ -47,8 +47,10 @@ export default function BlogsPage() {
     <div className=" mx-auto">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {blogs.map((blog) => {
-          const imageSrc =
-            blog.image || blog.content.find((c) => c.type === "image")?.src;
+          const imageItem = blog.content.find(
+            (c): c is { type: "image"; src: string; caption?: string } => c.type === "image"
+          );
+          const imageSrc = blog.image || imageItem?.src;
 
           return (
             <Card

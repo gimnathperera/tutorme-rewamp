@@ -7,13 +7,13 @@ import { Endpoints } from "../../endpoints";
 export const LevelsApi = baseApi.injectEndpoints({
 
   endpoints: (build) => ({
-    fetchLevels: build.query<PaginatedResponse<Level>, FetchLevelRequest>({
+    fetchLevels: build.query<PaginatedResponse<Level>, FetchLevelRequest | void>({
       query: (payload) => {
-        const { levelId, ...rest } = payload;
+        const { levelId, ...rest } = payload || {};
         return {
           url: Endpoints.Levels,
           method: "GET",
-          params: rest
+          params: rest,
         };
       },
       providesTags: ["LevelAndExams"],
