@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useFormContext, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema"; // adjust the import if needed
 
 const TutoringPreferences = () => {

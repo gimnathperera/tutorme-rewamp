@@ -36,7 +36,7 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
   );
 
   if (!levelResults.length)
-    return <p>No tuition rates available for "{levelTitle}"</p>;
+    return <p>No tuition rates available for &quot;{levelTitle}&quot;</p>;
 
   // Group by grade
   const groupedByGrade = levelResults.reduce((acc: any, item: any) => {

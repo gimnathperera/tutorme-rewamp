@@ -25,7 +25,7 @@ export default function ViewBlogPage() {
 
   const relatedArticles =
     allBlogs?.results.filter((b) =>
-      blog?.relatedArticles?.some((ra) => ra.id === b.id)
+      blog?.relatedArticles?.some((ra) => ra === b.id)
     ) || [];
 
   const router = useRouter();
@@ -34,10 +34,14 @@ export default function ViewBlogPage() {
   if (error || !blog) return <p>Blog not found.</p>;
 
   const paragraphContent = blog.content.find(
-    (c) => c.type === "paragraph"
+    (c): c is { type: "paragraph"; text: string } => c.type === "paragraph"
   )?.text;
-  const headingContent = blog.content.find((c) => c.type === "heading")?.text;
-  const imageContent = blog.content.find((c) => c.type === "image");
+  const headingContent = blog.content.find(
+    (c): c is { type: "heading"; text: string; level: number } => c.type === "heading"
+  )?.text;
+  const imageContent = blog.content.find(
+    (c): c is { type: "image"; src: string; caption?: string } => c.type === "image"
+  );
   function capitalizeWords(str: string) {
     return str.replace(/\b\w/g, (char) => char.toUpperCase());
   }
@@ -84,7 +88,7 @@ export default function ViewBlogPage() {
               className="cursor-pointer bg-gray-200"
               onClick={() => router.push(`/blogs/${rel.id}`)}
             >
-              #{rel.title}
+              # {rel.title}
             </Badge>
           ))}
         </div>
