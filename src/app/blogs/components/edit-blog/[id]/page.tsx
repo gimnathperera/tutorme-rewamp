@@ -68,7 +68,7 @@ export default function EditBlogPage() {
             blog.author.avatar || "https://example.com/default-avatar.png",
           role: blog.author.role,
         },
-        relatedArticles: blog.relatedArticles.map((ra) => ra.id),
+        relatedArticles: blog.relatedArticles,
         content: blog.content.map((c) => ({
           type: c.type,
           text: "text" in c ? decodeHtml(c.text) : "",
@@ -82,20 +82,21 @@ export default function EditBlogPage() {
 
   const onSubmit = async (data: CreateArticleSchema) => {
     try {
-      const imageContent = data.content.find((c) => c.type === "image");
+      const imageContent = data.content.find(
+        (c): c is { type: "image"; src: string; caption?: string } =>
+          c.type === "image"
+      );
 
       const payload = {
         id: blogId,
+        blogId: blogId,
+        name: user?.name || data.author.name,
+        avatar: user?.avatar || "https://example.com/default-avatar.png",
+        role: user?.role || data.author.role,
         title: data.title,
-        author: {
-          name: user?.name || data.author.name,
-          avatar: user?.avatar || "https://example.com/default-avatar.png",
-          role: user?.role || data.author.role,
-        },
         image: imageContent?.src || "",
-        content: data.content,
         relatedArticles: data.relatedArticles,
-        status: "pending",
+        status: "pending" as const,
       };
 
       const result = await updateBlog(payload);
@@ -155,7 +156,7 @@ export default function EditBlogPage() {
                 <MultiSelect
                   label="Related Articles"
                   options={blogOptions}
-                  value={field.value || []}
+                  defaultSelected={field.value || []}
                   onChange={field.onChange}
                 />
               )}
@@ -192,11 +193,12 @@ export default function EditBlogPage() {
                         />
                       )}
                     />
-                    {formState.errors.content?.[idx]?.text && (
-                      <p className="text-red-500">
-                        {formState.errors.content[idx]?.text?.message}
-                      </p>
-                    )}
+                    {formState.errors.content?.[idx] &&
+                      "text" in formState.errors.content[idx] && (
+                        <p className="text-red-500">
+                          {(formState.errors.content[idx] as any).text?.message}
+                        </p>
+                      )}
                   </div>
                 );
               if (c.type === "heading")
@@ -217,11 +219,12 @@ export default function EditBlogPage() {
                       className="border rounded-md"
                       {...register(`content.${idx}.text` as const)}
                     />
-                    {formState.errors.content?.[idx]?.text && (
-                      <p className="text-red-500">
-                        {formState.errors.content[idx]?.text?.message}
-                      </p>
-                    )}
+                    {formState.errors.content?.[idx] &&
+                      "text" in formState.errors.content[idx] && (
+                        <p className="text-red-500">
+                          {(formState.errors.content[idx] as any).text?.message}
+                        </p>
+                      )}
                   </div>
                 );
               if (c.type === "image")
