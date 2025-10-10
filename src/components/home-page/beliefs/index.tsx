@@ -6,7 +6,7 @@ const Beliefs = () => {
   const route = useRouter();
 
   const handleOnLearnMoreClick = () => {
-    route.push("/find-a-tutor");
+    route.push("/request-for-tutors");
   };
   return (
     <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 rounded-3xl">

@@ -200,3 +200,4 @@ export type FindMyTutorRequest = {
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
 };
+export type FetchTutorRequests = {};

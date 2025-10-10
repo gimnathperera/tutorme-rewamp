@@ -16,4 +16,5 @@ export const Endpoints = {
   TuitionRates: "/v1/tuitionRates",
   Levels: "/v1/levels",
   TuitionAssignments: "/v1/tuition-assignments",
+  RequestTutors: "/v1/requestTutor",
 };
