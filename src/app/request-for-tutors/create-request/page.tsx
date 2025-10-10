@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/Button/button";
 import { useFetchSubjectsQuery } from "@/store/api/splits/subjects";
+import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import { useCreateTutorRequestsMutation } from "@/store/api/splits/request-tutor";
 import { getErrorInApiResult } from "@/utils/api";
 import Person from "../../../../public/images/findTutor/person.png";
@@ -46,6 +47,17 @@ export default function AddRequestForTutor() {
     subjectData?.results.map((s) => ({
       value: s.id,
       text: s.title,
+      selected: false,
+    })) || [];
+
+  const { data: GradeData, isLoading: gradesLoading } = useFetchGradesQuery({
+    page: 1,
+    limit: 100,
+  });
+  const gradeOptions =
+    GradeData?.results.map((g) => ({
+      value: g.id,
+      text: g.title,
       selected: false,
     })) || [];
 
@@ -190,7 +202,7 @@ export default function AddRequestForTutor() {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
-                    options={subjectOptions}
+                    options={gradeOptions}
                     defaultSelected={field.value || []}
                     onChange={(vals) => field.onChange(vals)}
                     label={""}
