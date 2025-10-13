@@ -11,7 +11,7 @@ const ENV_VARIABLES = {
 const envSchema = z
   .object({
     NEXT_PUBLIC_API_URL: z.string().url(),
-    NODE_ENV: z-
+    NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().min(10).max(15),
