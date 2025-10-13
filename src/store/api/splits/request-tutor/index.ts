@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { CreateRequestTutorSchema } from "../../../../app/request-for-tutors/create-request/schema";
 import { RequestTutors } from "@/types/response-types";
 import { baseApi } from "../..";
