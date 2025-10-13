@@ -29,7 +29,7 @@ export const createArticleSchema = z.object({
     .nonempty("Content cannot be empty"),
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
-    .nonempty("At least one related article is required"),
+    .optional(),
   status: z.enum(["pending", "published", "draft"]),
 });
 
@@ -49,6 +49,6 @@ export const initialFormValues: CreateArticleSchema = {
     { type: "heading", text: "", level: 2 },
     { type: "image", src: "", caption: "Cover Image" },
   ],
-  relatedArticles: [""],
+  relatedArticles: [],
   status: "pending",
 };

@@ -72,7 +72,7 @@ const Subjects: FC = () => {
             subjects.map(({ id, title, description }) => (
               <Link
                 key={id}
-                href={`/grades/${gradeId}/subject/${id}`}
+                href={`/subjects/${id}`}
                 className="block p-4 shadow-md bg-white rounded-lg hover:shadow-lg transition-shadow m-10"
               >
                 <div className="flex justify-between items-center">
