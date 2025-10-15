@@ -71,17 +71,34 @@ const AddBlog = () => {
       toast.error("Please authenticate");
       return;
     }
-    const payload: CreateArticleSchema = {
-      ...data,
+
+    // Extract image from content
+    const imageContent = data.content.find((item) => item.type === "image");
+    const imageUrl =
+      imageContent && "src" in imageContent ? imageContent.src : "";
+
+    // Validate image is provided
+    if (!imageUrl) {
+      toast.error("Cover image is required");
+      return;
+    }
+
+    // ✅ Keep author as nested object - backend expects it this way
+    const payload = {
+      title: data.title,
       author: {
         name: user?.name || data.author.name,
-        avatar: user?.avatar || "https://example.com/default-avatar.png",
+        avatar: user?.avatar || data.author.avatar,
         role: user?.role || data.author.role,
       },
+      content: data.content,
+      image: imageUrl,
+      relatedArticles: data.relatedArticles || [],
+      status: data.status,
     };
 
     try {
-      const result = await createBlog(payload);
+      const result = await createBlog(payload as any);
       const error = getErrorInApiResult(result);
       if (error) return toast.error(error);
       if ("data" in result) onRegisterSuccess();
@@ -164,11 +181,12 @@ const AddBlog = () => {
                     />
                   )}
                 />
-                {formState.errors.content?.[0] && 'text' in formState.errors.content[0] && (
-                  <p className="text-sm text-red-500">
-                    {(formState.errors.content[0] as any).text?.message}
-                  </p>
-                )}
+                {formState.errors.content?.[0] &&
+                  "text" in formState.errors.content[0] && (
+                    <p className="text-sm text-red-500">
+                      {(formState.errors.content[0] as any).text?.message}
+                    </p>
+                  )}
               </div>
 
               <div className="mb-2">
@@ -188,11 +206,12 @@ const AddBlog = () => {
                   className="mt-2 border-none rounded-md"
                   {...register("content.1.text")}
                 />
-                {formState.errors.content?.[1] && 'text' in formState.errors.content[1] && (
-                  <p className="text-sm text-red-500">
-                    {(formState.errors.content[1] as any).text?.message}
-                  </p>
-                )}
+                {formState.errors.content?.[1] &&
+                  "text" in formState.errors.content[1] && (
+                    <p className="text-sm text-red-500">
+                      {(formState.errors.content[1] as any).text?.message}
+                    </p>
+                  )}
               </div>
 
               <div className="">
@@ -208,11 +227,12 @@ const AddBlog = () => {
                   className="border-none rounded-md"
                   {...register("content.2.src")}
                 />
-                {formState.errors.content?.[2] && 'src' in formState.errors.content[2] && (
-                  <p className="text-sm text-red-500">
-                    {(formState.errors.content[2] as any).src?.message}
-                  </p>
-                )}
+                {formState.errors.content?.[2] &&
+                  "src" in formState.errors.content[2] && (
+                    <p className="text-sm text-red-500">
+                      {(formState.errors.content[2] as any).src?.message}
+                    </p>
+                  )}
                 <Input
                   type="hidden"
                   value="Cover Image"
