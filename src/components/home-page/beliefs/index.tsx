@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 
 const Beliefs = () => {
   const route = useRouter();
-
+  const handleRegisterTutor = () => {
+    route.push("/register-tutor");
+  };
   const handleOnLearnMoreClick = () => {
     route.push("/request-for-tutors");
   };
