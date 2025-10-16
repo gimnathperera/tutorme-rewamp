@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 
 const Beliefs = () => {
   const route = useRouter();
-
+  const handleRegisterTutor = () => {
+    route.push("/register-tutor");
+  };
   const handleOnLearnMoreClick = () => {
     route.push("/request-for-tutors");
   };
@@ -16,16 +18,18 @@ const Beliefs = () => {
             JOIN
           </h2>
           <h3 className="text-4xl sm:text-65xl font-bold text-white leading-snug mb-5 text-center sm:text-start">
-            Honesty{" "}
-            <span className="text-grey">and hard work are our beliefs.</span>
+            Share{" "}
+            <span className="text-grey">
+              knowledge and inspire students worldwide.
+            </span>
           </h3>
           <h5 className="text-offwhite pt-2 mb-5 text-center sm:text-start">
-            Quis ipsum suspendisse ultrices gravida risus commodo viverra
-            maecenas accumsan lacus vel facilisis.
+            Join our community of passionate tutors who make learning personal,
+            flexible, and effective.
           </h5>
           <div className="text-center sm:text-start">
             <button className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90">
-              Get Started
+              Become a Tutor
             </button>
           </div>
         </div>
@@ -35,19 +39,19 @@ const Beliefs = () => {
             FIND
           </h2>
           <h3 className="text-4xl sm:text-65xl font-bold text-black leading-snug mb-5 text-center sm:text-start">
-            <span className="text-blue">Build</span> that great idea that you
-            have.
+            <span className="text-blue">Find</span> the perfect tutor for any
+            subject, anytime.
           </h3>
           <h5 className="bluish pt-2 mb-5 text-center sm:text-start">
-            Quis ipsum suspendisse ultrices gravida risus commodo viverra
-            maecenas accumsan lacus vel facilisis.
+            Discover experienced tutors who match your learning goals and
+            schedule.
           </h5>
           <div className="text-center sm:text-start">
             <button
               className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90"
               onClick={handleOnLearnMoreClick}
             >
-              Learn more
+              Find a Tutor
             </button>
           </div>
         </div>

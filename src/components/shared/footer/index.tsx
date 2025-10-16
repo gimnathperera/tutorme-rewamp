@@ -4,29 +4,44 @@ import Image from "next/image";
 interface ProductType {
   id: number;
   section: string;
-  link: string[];
+  link: { label: string; url: string }[];
 }
 
 const products: ProductType[] = [
   {
     id: 1,
     section: "Menu",
-    link: ["Home", "Courses", "About Us", "Contact Us"],
+    link: [
+      { label: "Home", url: "/" },
+      { label: "Find A Tutor", url: "/request-for-tutors" },
+      { label: "Level and Exams Us", url: "/level-and-exams" },
+      { label: "Contact Us", url: "/#keep-in-touch-section" },
+    ],
   },
   {
     id: 2,
     section: "Resources",
-    link: ["Blog", "FAQs", "Support", "Community"],
+    link: [
+      { label: "Blog", url: "/blogs" },
+      { label: "FAQs", url: "/#faq-section" },
+    ],
   },
   {
     id: 3,
-    section: "Legal",
-    link: ["Privacy Policy", "Terms of Service", "Cookie Policy"],
+    section: "Academics",
+    link: [
+      { label: "Grades", url: "/grades" },
+      { label: "Subjects", url: "/subjects" },
+      { label: "Test Papers", url: "/test-papers" },
+    ],
   },
   {
     id: 4,
-    section: "Company",
-    link: ["Careers", "Press", "Partners"],
+    section: "Tuition",
+    link: [
+      { label: "Tuition Rates", url: "/tuition-rates" },
+      { label: "Tuition Assignments", url: "/tuition-assignments" },
+    ],
   },
 ];
 
@@ -84,13 +99,13 @@ const footer = () => {
                 {product.section}
               </p>
               <ul>
-                {product.link.map((link: string, index: number) => (
+                {product.link.map((linkObj, index) => (
                   <li key={index} className="mb-5">
                     <Link
-                      href="/"
-                      className="text-white text-lg font-normal mb-6 space-links"
+                      href={linkObj.url}
+                      className="text-white text-lg font-normal mb-6 hover:text-gray-300 transition"
                     >
-                      {link}
+                      {linkObj.label}
                     </Link>
                   </li>
                 ))}

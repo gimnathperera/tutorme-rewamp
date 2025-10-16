@@ -19,12 +19,15 @@ const KeepInTouch = () => {
             KEEP IN TOUCH
           </h3>
           <h2 className="text-4xl sm:text-6xl font-bold my-6 leading-10">
-            Take your business to <br /> the new level.
+            Take your learning or teaching journey
+            <br /> to the next level.
           </h2>
           <p className="text-lightblack text-base font-normal">
-            Craven omni memoria patriae zombieland clairvius narcisse religionis
-            sunt diri undead <br /> historiarum. Golums, zombies unrelenting et
-            Raimi fascinati beheading.
+            Stay connected with us for updates, tips, and the latest tutoring
+            opportunities. <br />
+            Whether you&apos;re a tutor sharing knowledge or a student chasing
+            goals, our community is here to support your growth every step of
+            the way.
           </p>
         </div>
 
