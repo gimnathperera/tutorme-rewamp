@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, FieldError } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
   CreateArticleSchema,
@@ -36,11 +36,29 @@ const AddBlog = () => {
     defaultValues: initialFormValues,
     mode: "onChange",
   });
+
   function decodeHtml(html: string) {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;
     return txt.value;
   }
+
+  // ✅ Helper function for content errors
+  const getContentError = (
+    index: number,
+    field: "text" | "src"
+  ): string | undefined => {
+    const contentError = formState.errors.content?.[index];
+    if (
+      contentError &&
+      typeof contentError === "object" &&
+      field in contentError
+    ) {
+      const fieldError = (contentError as Record<string, FieldError>)[field];
+      return fieldError?.message;
+    }
+    return undefined;
+  };
 
   const { formState, watch, control, reset, register, handleSubmit } =
     createBlogForm;
@@ -71,23 +89,20 @@ const AddBlog = () => {
       toast.error("Please authenticate");
       return;
     }
-    const payload: CreateArticleSchema = {
-      ...data,
-      author: {
-        name: user?.name || data.author.name,
-        avatar: user?.avatar || "https://example.com/default-avatar.png",
-        role: user?.role || data.author.role,
-      },
-    };
 
     try {
-      const result = await createBlog(payload);
+      console.log("Submitting blog:", data);
+
+      const result = await createBlog(data);
       const error = getErrorInApiResult(result);
       if (error) return toast.error(error);
-      if ("data" in result) onRegisterSuccess();
+
+      if ("data" in result) {
+        onRegisterSuccess();
+      }
     } catch (error) {
-      console.error(error);
-      toast.error("Unexpected error while creating the blog");
+      console.error("Unexpected error during blog creation:", error);
+      toast.error("An unexpected error occurred while creating the blog.");
     }
   };
 
@@ -96,9 +111,11 @@ const AddBlog = () => {
     toast.success("Blog created successfully");
     redirect.push("/blogs");
   };
+
   const onClear = () => {
     reset(initialFormValues);
   };
+
   return (
     <div className="flex flex-col bg-white m-5 md:flex-row gap-8">
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
@@ -164,9 +181,9 @@ const AddBlog = () => {
                     />
                   )}
                 />
-                {formState.errors.content?.[0] && 'text' in formState.errors.content[0] && (
+                {getContentError(0, "text") && (
                   <p className="text-sm text-red-500">
-                    {(formState.errors.content[0] as any).text?.message}
+                    {getContentError(0, "text")}
                   </p>
                 )}
               </div>
@@ -188,14 +205,16 @@ const AddBlog = () => {
                   className="mt-2 border-none rounded-md"
                   {...register("content.1.text")}
                 />
-                {formState.errors.content?.[1] && 'text' in formState.errors.content[1] && (
+                {getContentError(1, "text") && (
                   <p className="text-sm text-red-500">
-                    {(formState.errors.content[1] as any).text?.message}
+                    {getContentError(1, "text")}
                   </p>
                 )}
               </div>
 
               <div className="">
+                <Label htmlFor="image">Blog Image URL</Label>
+
                 <Input
                   type="hidden"
                   value="image"
@@ -204,13 +223,13 @@ const AddBlog = () => {
                 />
                 <Input
                   id="content.2.src"
-                  placeholder="Add Cover Image Url"
+                  placeholder="Add Blog Image Url"
                   className="border-none rounded-md"
                   {...register("content.2.src")}
                 />
-                {formState.errors.content?.[2] && 'src' in formState.errors.content[2] && (
+                {getContentError(2, "src") && (
                   <p className="text-sm text-red-500">
-                    {(formState.errors.content[2] as any).src?.message}
+                    {getContentError(2, "src")}
                   </p>
                 )}
                 <Input
@@ -220,14 +239,30 @@ const AddBlog = () => {
                 />
               </div>
             </div>
-            <div className="text-gray-500 border-none rounded-lg">
+
+            <div className="">
+              <Label htmlFor="image">Cover Image URL</Label>
+              <Input
+                id="image"
+                placeholder="Add Cover Image Url"
+                className="rounded-md"
+                {...register("image")}
+              />
+              {formState.errors.image && (
+                <p className="text-sm text-red-500">
+                  {formState.errors.image.message}
+                </p>
+              )}
+            </div>
+
+            <div className=" border-none rounded-lg">
               <Label className="mx-1">Related Articles</Label>
               <Controller
                 name="relatedArticles"
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
-                    label="Related Articles"
+                    label=""
                     options={blogOptions}
                     defaultSelected={field.value || []}
                     onChange={field.onChange}
@@ -260,12 +295,12 @@ const AddBlog = () => {
             </p>
 
             <div className="flex justify-center items-center ">
-              {watch("content.2.src") && (
+              {watch("image") && (
                 <figure>
                   <img
                     className="mt-5 h-[400px]"
-                    src={watch("content.2.src")}
-                    alt={watch("content.2.caption") || "Image"}
+                    src={watch("image")}
+                    alt="Cover Image"
                   />
                 </figure>
               )}
