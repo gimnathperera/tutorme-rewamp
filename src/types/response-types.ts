@@ -112,24 +112,53 @@ export type Paper = BaseEntity &
     url: string;
   };
 
-// Blogs
 export type Blogs = BaseEntity &
   WithTitleDescription & {
     _id: string;
+    id: string;
     title: string;
     image: string;
+    type: string;
+    status: "pending" | "published" | "draft";
     author: {
       name: string;
       avatar: string;
       role: string;
     };
+    relatedArticles: Array<{
+      id: string;
+      title: string;
+      image: string;
+      author: {
+        name: string;
+        avatar: string;
+        role: string;
+      };
+    }>;
+    tags: Array<{
+      id: string;
+      name: string;
+    }>;
     content: Array<
       | { type: "paragraph"; text: string }
       | { type: "heading"; text: string; level: number }
       | { type: "image"; src: string; caption?: string }
     >;
-    relatedArticles: string[];
-    status: "pending" | "published" | "draft";
+    faqs: Array<{
+      _id: string;
+      question: string;
+      answer: string;
+    }>;
+    createdAt: string;
+    updatedAt: string;
+    name: string;
+  };
+
+export type Tags = BaseEntity &
+  WithTitleDescription & {
+    _id: string;
+    name: string;
+    description: string;
   };
 
 // Testimonial

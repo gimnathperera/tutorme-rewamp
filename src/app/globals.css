@@ -455,3 +455,35 @@ html {
   font-size: 14px;
   color: #747474;
 }
+.blog-content h1 {
+  @apply text-4xl font-bold mt-8 mb-4 text-gray-900;
+}
+
+.blog-content h2 {
+  @apply text-3xl font-semibold mt-6 mb-3 text-gray-800;
+}
+
+.blog-content h3 {
+  @apply text-2xl font-semibold mt-4 mb-2 text-gray-700;
+}
+
+.blog-content p {
+  @apply text-gray-700 leading-relaxed mb-4;
+}
+
+.blog-content ul,
+.blog-content ol {
+  @apply list-disc list-inside mb-4 pl-6 text-gray-700;
+}
+
+.blog-content strong {
+  @apply font-semibold text-gray-900;
+}
+
+.blog-content a {
+  @apply text-blue-600 hover:underline;
+}
+
+.blog-content img {
+  @apply rounded-lg my-6;
+}
