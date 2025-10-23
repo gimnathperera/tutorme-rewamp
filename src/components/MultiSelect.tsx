@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 export interface Option {
   value: string;
@@ -21,14 +21,13 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   onChange,
   disabled = false,
 }) => {
-  // ✅ Initialize state using either defaultSelected or `selected` from options
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     defaultSelected.length > 0
       ? defaultSelected
       : options.filter((o) => o.selected).map((o) => o.value)
   );
-
   const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => {
     if (disabled) return;
@@ -37,103 +36,104 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   const handleSelect = (optionValue: string) => {
     const newSelectedOptions = selectedOptions.includes(optionValue)
-      ? selectedOptions.filter((value) => value !== optionValue)
+      ? selectedOptions.filter((v) => v !== optionValue)
       : [...selectedOptions, optionValue];
 
     setSelectedOptions(newSelectedOptions);
     if (onChange) onChange(newSelectedOptions);
   };
 
-  const removeOption = (index: number, value: string) => {
-    const newSelectedOptions = selectedOptions.filter((opt) => opt !== value);
+  const removeOption = (value: string) => {
+    const newSelectedOptions = selectedOptions.filter((v) => v !== value);
     setSelectedOptions(newSelectedOptions);
     if (onChange) onChange(newSelectedOptions);
   };
 
   const selectedValuesText = selectedOptions.map(
-    (value) => options.find((option) => option.value === value)?.text || ""
+    (value) => options.find((o) => o.value === value)?.text || ""
   );
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="w-full">
+    <div className="w-full overflow-visible" ref={dropdownRef}>
       <label className="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
         {label}
       </label>
 
-      <div className="relative z-20 inline-block w-full">
-        <div className="relative flex flex-col items-center">
-          <div onClick={toggleDropdown} className="w-full">
-            <div className="mb-2 flex h-11 rounded-lg border border-gray-300 py-1.5 pl-3 pr-3 shadow-theme-xs outline-hidden transition focus:border-brand-300 focus:shadow-focus-ring dark:border-gray-700 dark:bg-gray-900 dark:focus:border-brand-300">
-              <div className="flex flex-wrap flex-auto gap-2">
-                {selectedValuesText.length > 0 ? (
-                  selectedValuesText.map((text, index) => (
-                    <div
-                      key={index}
-                      className="group flex items-center justify-center rounded-full border-[0.7px] border-transparent bg-gray-100 py-1 pl-2.5 pr-2 text-sm text-gray-800 hover:border-gray-200 dark:bg-gray-800 dark:text-white/90 dark:hover:border-gray-800"
-                    >
-                      <span className="flex-initial max-w-full">{text}</span>
-                      <div className="flex flex-row-reverse flex-auto">
-                        <div
-                          onClick={() =>
-                            removeOption(index, selectedOptions[index])
-                          }
-                          className="pl-2 text-gray-500 cursor-pointer group-hover:text-gray-400 dark:text-gray-400"
-                        >
-                          ✕
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <input
-                    placeholder="Select option"
-                    className="w-full h-full p-1 pr-2 text-sm bg-transparent border-0 outline-hidden appearance-none placeholder:text-gray-800 focus:border-0 focus:outline-hidden focus:ring-0 dark:placeholder:text-white/90"
-                    readOnly
-                    value="Select option"
-                  />
-                )}
-              </div>
-              <div className="flex items-center py-1 pl-1 pr-1 w-7">
+      <div className="relative w-full">
+        <div
+          className={`flex flex-wrap items-center gap-2 w-full cursor-pointer border rounded-lg py-1.5 pl-3 pr-2 shadow-sm ${
+            disabled
+              ? "bg-gray-100 cursor-not-allowed dark:bg-gray-800"
+              : "bg-white dark:bg-gray-900"
+          }`}
+          onClick={toggleDropdown}
+        >
+          {selectedValuesText.length > 0 ? (
+            selectedValuesText.map((text, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-1 rounded-full bg-gray-100 py-1 px-2 text-sm text-gray-800 dark:bg-gray-800 dark:text-white"
+              >
+                <span>{text}</span>
                 <button
                   type="button"
-                  onClick={toggleDropdown}
-                  className="w-5 h-5 text-gray-700 outline-hidden cursor-pointer focus:outline-hidden dark:text-gray-400"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    removeOption(selectedOptions[index]);
+                  }}
+                  className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white"
                 >
-                  ▼
+                  ✕
                 </button>
               </div>
-            </div>
-          </div>
-
-          {isOpen && (
-            <div
-              className="absolute left-0 z-40 w-full max-h-60 overflow-y-auto bg-white rounded-lg shadow-sm top-full dark:bg-gray-900"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex flex-col">
-                {options.map((option, index) => (
-                  <div
-                    key={index}
-                    className={`hover:bg-primary/5 w-full cursor-pointer border-b border-gray-200 dark:border-gray-800`}
-                    onClick={() => handleSelect(option.value)}
-                  >
-                    <div
-                      className={`relative flex w-full items-center p-2 pl-2 ${
-                        selectedOptions.includes(option.value)
-                          ? "bg-primary/10"
-                          : ""
-                      }`}
-                    >
-                      <div className="mx-2 leading-6 text-gray-800 dark:text-white/90">
-                        {option.text}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))
+          ) : (
+            <span className="text-gray-400">Select option</span>
           )}
+
+          <div className="ml-auto">
+            <button
+              type="button"
+              className="w-5 h-5 text-gray-700 dark:text-gray-400"
+            >
+              ▼
+            </button>
+          </div>
         </div>
+
+        {isOpen && (
+          <div className="absolute left-0 top-full z-50 mt-1 w-full max-h-60 overflow-y-auto rounded-lg border bg-white shadow-lg dark:border-gray-700 dark:bg-gray-900">
+            {options.map((option) => (
+              <div
+                key={option.value}
+                onClick={() => handleSelect(option.value)}
+                className={`cursor-pointer p-2 text-gray-800 dark:text-white hover:bg-primary/10 dark:hover:bg-gray-800 ${
+                  selectedOptions.includes(option.value)
+                    ? "bg-primary/20 dark:bg-gray-700"
+                    : ""
+                }`}
+              >
+                {option.text}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

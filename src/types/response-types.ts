@@ -10,6 +10,7 @@ export type WithTitleDescription = {
 
 // Reusable response wrapper
 export type PaginatedResponse<T> = {
+  relatedArticles: any;
   count: number;
   next: string | null;
   previous: string | null;

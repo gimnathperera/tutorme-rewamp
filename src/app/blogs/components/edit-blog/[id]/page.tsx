@@ -2,32 +2,29 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/Button/button";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Controller,
-  useForm,
-  FieldError,
-  useFieldArray,
-} from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
-import dynamic from "next/dynamic";
-import MultiSelect, { Option } from "@/components/MultiSelect";
+import { Button } from "@/components/ui/Button/button";
 
-import { CreateArticleSchema, createArticleSchema } from "../schema";
+import { useAuthContext } from "@/contexts";
 import {
   useFetchBlogByIdQuery,
   useFetchBlogsQuery,
   useUpdateBlogMutation,
 } from "@/store/api/splits/blogs";
-import { useAuthContext } from "@/contexts";
+import { useFetchTagsQuery } from "@/store/api/splits/tabs";
+import { CreateArticleSchema, createArticleSchema } from "../schema";
+
+import MultiSelect, { Option } from "@/components/MultiSelect";
 import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -35,10 +32,12 @@ export default function EditBlogPage() {
   const router = useRouter();
   const { user } = useAuthContext();
 
-  const { data: blog, isLoading } = useFetchBlogByIdQuery(blogId);
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagsData } = useFetchTagsQuery({});
+  const { data: blog, isLoading, refetch } = useFetchBlogByIdQuery(blogId);
+
   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
+
   const [isPreview, setIsPreview] = useState(false);
 
   const form = useForm<CreateArticleSchema>({
@@ -56,20 +55,11 @@ export default function EditBlogPage() {
   });
 
   const { register, handleSubmit, control, reset, watch, formState } = form;
-
   const {
     fields: faqFields,
     append: appendFaq,
     remove: removeFaq,
-  } = useFieldArray({
-    control,
-    name: "faqs",
-  });
-
-  const blogOptions: Option[] =
-    blogsData?.results.map((b) => ({ value: b.id, text: b.title })) || [];
-  const tagsOptions: Option[] =
-    tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
+  } = useFieldArray({ control, name: "faqs" });
 
   const decodeHtml = (html: string) => {
     const txt = document.createElement("textarea");
@@ -77,8 +67,21 @@ export default function EditBlogPage() {
     return txt.value;
   };
 
+  const blogOptions: Option[] =
+    blogsData?.results.map((b) => ({ value: b.id, text: b.title })) || [];
+  const tagsOptions: Option[] =
+    tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
+
   useEffect(() => {
-    if (blog && user) {
+    if (blog && user && blogsData && tagsData) {
+      const relatedIds = (blog.relatedArticles || [])
+        .map((r) => blogsData.results.find((b) => b.id === r.id)?.id)
+        .filter(Boolean) as string[];
+
+      const tagIds = (blog.tags || [])
+        .map((t) => tagsData.results.find((tag) => tag.id === t.id)?.id)
+        .filter(Boolean) as string[];
+
       reset({
         title: blog.title,
         image: blog.image,
@@ -88,8 +91,8 @@ export default function EditBlogPage() {
           avatar: user.avatar || "https://example.com/default-avatar.png",
           role: user.role,
         },
-        relatedArticles: blog.relatedArticles?.map((r) => r.id) || [],
-        tags: blog.tags?.map((t) => t.id) || [],
+        relatedArticles: relatedIds,
+        tags: tagIds,
         content: blog.content.map((c) => ({
           type: c.type,
           text: "text" in c ? decodeHtml(c.text) : "",
@@ -103,7 +106,7 @@ export default function EditBlogPage() {
         })),
       });
     }
-  }, [blog, user, reset]);
+  }, [blog, user, blogsData, tagsData, reset]);
 
   const getContentError = (index: number, field: "text" | "src") => {
     const contentError = formState.errors.content?.[index];
@@ -111,9 +114,8 @@ export default function EditBlogPage() {
       contentError &&
       typeof contentError === "object" &&
       field in contentError
-    ) {
-      return (contentError as Record<string, FieldError>)[field]?.message;
-    }
+    )
+      return (contentError as any)[field]?.message;
     return undefined;
   };
 
@@ -137,9 +139,10 @@ export default function EditBlogPage() {
         faqs: data.faqs,
         status: data.status,
       };
-      const result = await updateBlog(payload);
-      if ("error" in result) return toast.error("Failed to update blog");
 
+      // Correctly call the mutation function
+      await updateBlog(payload).unwrap();
+      await refetch(); // refetch blog data to immediately update preview
       toast.success("Blog updated successfully");
       router.push(`/blogs/${blogId}`);
     } catch (err) {
@@ -164,7 +167,6 @@ export default function EditBlogPage() {
           </Button>
           <Button
             type="button"
-            className="bg-black  text-white"
             variant={isPreview ? "default" : "outline"}
             onClick={() => setIsPreview(true)}
           >
@@ -175,116 +177,58 @@ export default function EditBlogPage() {
         {!isPreview ? (
           <div className="p-6 space-y-6">
             <input
+              id="title"
               placeholder="Blog Title"
-              className="text-[30pt] w-full font-semibold focus:outline-none placeholder-gray-400"
+              className="text-[30pt] h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
               {...register("title")}
             />
             {formState.errors.title && (
-              <p className="text-red-500">{formState.errors.title.message}</p>
+              <p className="text-sm text-red-500 mt-1">
+                {formState.errors.title.message}
+              </p>
             )}
+
+            {/* Content */}
             {watch("content").map((c, idx) => {
-              if (c.type === "heading")
-                return (
-                  <div key={idx}>
-                    <Label htmlFor="heading">Subtitle</Label>
-                    <Input
-                      type="hidden"
-                      value="heading"
-                      {...register(`content.${idx}.type` as const)}
-                    />
-                    <Input
-                      type="hidden"
-                      value={c.level}
-                      {...register(`content.${idx}.level` as const)}
-                    />
-                    <Input
-                      placeholder="Heading text"
-                      className="border rounded-md"
-                      {...register(`content.${idx}.text` as const)}
-                    />
-                    {getContentError(idx, "text") && (
-                      <p className="text-red-500">
-                        {getContentError(idx, "text")}
-                      </p>
-                    )}
-                  </div>
-                );
               if (c.type === "paragraph")
                 return (
-                  <div key={idx}>
-                    <Input
-                      type="hidden"
-                      value="paragraph"
-                      {...register(`content.${idx}.type` as const)}
-                    />
-                    <Controller
-                      name={`content.${idx}.text` as const}
-                      control={control}
-                      render={({ field }) => (
-                        <ReactQuill
-                          theme="snow"
-                          value={field.value || ""}
-                          onChange={field.onChange}
-                          placeholder="Write your paragraph..."
-                          className="bg-white rounded-lg [&_.ql-toolbar]:border-0 [&_.ql-container]:border-0 [&_.ql-editor.ql-blank::before]:text-gray-400 [&_.ql-editor.ql-blank::before]:italic"
-                        />
-                      )}
-                    />
-                    {getContentError(idx, "text") && (
-                      <p className="text-red-500">
-                        {getContentError(idx, "text")}
-                      </p>
+                  <Controller
+                    key={idx}
+                    name={`content.${idx}.text` as const}
+                    control={control}
+                    render={({ field }) => (
+                      <ReactQuill
+                        theme="snow"
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        placeholder="Write paragraph..."
+                        className="mb-4"
+                      />
                     )}
-                  </div>
+                  />
                 );
-
               if (c.type === "image")
                 return (
-                  <div key={idx}>
-                    <Label htmlFor="image">Content Image URL</Label>
+                  <div key={idx} className="mb-4">
+                    <Label>Image URL</Label>
                     <Input
-                      type="hidden"
-                      value="image"
-                      {...register(`content.${idx}.type` as const)}
-                    />
-                    <Input
-                      placeholder="Image URL"
-                      className="border rounded-md"
                       {...register(`content.${idx}.src` as const)}
+                      placeholder="Image URL"
                     />
-                    <Input
-                      type="hidden"
-                      value={c.caption}
-                      {...register(`content.${idx}.caption` as const)}
-                    />
-                    {getContentError(idx, "src") && (
-                      <p className="text-red-500">
-                        {getContentError(idx, "src")}
-                      </p>
-                    )}
                   </div>
                 );
               return null;
             })}
 
-            <div className="">
-              <Label htmlFor="image">Cover Image URL</Label>
-              <Input
-                id="image"
-                placeholder="Add Cover Image Url"
-                className="rounded-md"
-                {...register("image")}
-              />
-              {formState.errors.image && (
-                <p className="text-sm text-red-500">
-                  {formState.errors.image.message}
-                </p>
-              )}
+            {/* Cover Image */}
+            <div>
+              <Label>Cover Image URL</Label>
+              <Input {...register("image")} placeholder="Cover Image URL" />
             </div>
 
-            {/* Related Articles & Tags */}
-            <div className="border-none rounded-lg">
-              <Label className="mx-1">Related Articles</Label>
+            {/* Related Articles */}
+            <div>
+              <Label>Related Articles</Label>
               <Controller
                 name="relatedArticles"
                 control={control}
@@ -292,15 +236,16 @@ export default function EditBlogPage() {
                   <MultiSelect
                     label=""
                     options={blogOptions}
-                    defaultSelected={field.value || []}
+                    selected={field.value}
                     onChange={field.onChange}
                   />
                 )}
               />
             </div>
 
-            <div className="border-none rounded-lg">
-              <Label className="mx-1">Tags</Label>
+            {/* Tags */}
+            <div>
+              <Label>Tags</Label>
               <Controller
                 name="tags"
                 control={control}
@@ -308,12 +253,14 @@ export default function EditBlogPage() {
                   <MultiSelect
                     label=""
                     options={tagsOptions}
-                    defaultSelected={field.value || []}
+                    selected={field.value}
                     onChange={field.onChange}
                   />
                 )}
               />
             </div>
+
+            {/* FAQs */}
             <div className="p-4 border rounded-lg space-y-4">
               <Label>FAQs</Label>
               {faqFields.map((faq, index) => (
@@ -323,10 +270,20 @@ export default function EditBlogPage() {
                       placeholder="Question"
                       {...register(`faqs.${index}.question` as const)}
                     />
+                    {formState.errors.faqs?.[index]?.question && (
+                      <p className="text-sm text-red-500">
+                        {formState.errors.faqs[index]?.question?.message}
+                      </p>
+                    )}
                     <Input
                       placeholder="Answer"
                       {...register(`faqs.${index}.answer` as const)}
                     />
+                    {formState.errors.faqs?.[index]?.answer && (
+                      <p className="text-sm text-red-500">
+                        {formState.errors.faqs[index]?.answer?.message}
+                      </p>
+                    )}
                   </div>
                   <Button
                     type="button"
@@ -342,12 +299,11 @@ export default function EditBlogPage() {
                 type="button"
                 onClick={() => appendFaq({ question: "", answer: "" })}
                 variant="default"
-                className="bg-black text-white"
+                className="bg-black text-white hover:transition-opacity"
               >
                 Add FAQ
               </Button>
             </div>
-            <input type="hidden" value="pending" {...register("status")} />
           </div>
         ) : (
           <>
@@ -398,7 +354,7 @@ export default function EditBlogPage() {
                   }}
                 />
 
-                {/* FAQs */}
+                {/* Preview FAQs */}
                 {watch("faqs")?.length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">FAQs</h3>
@@ -416,7 +372,6 @@ export default function EditBlogPage() {
                 )}
               </div>
 
-              {/* Sidebar: Related Articles */}
               <aside className="w-full md:w-[30%] border rounded-lg p-4 bg-white shadow-sm h-fit">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">
                   Related Articles
@@ -458,10 +413,10 @@ export default function EditBlogPage() {
           </>
         )}
 
-        <div className="flex justify-end items-end mt-6 px-6 mb-4">
+        <div className="flex justify-end mt-6">
           <Button
             type="submit"
-            className="bg-blue-700 hover:bg-blue-500 text-lg p-5 text-white"
+            className="bg-blue-700 text-white hover:bg-blue-500"
             isLoading={isUpdating}
           >
             Update Blog

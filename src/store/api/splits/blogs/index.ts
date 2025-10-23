@@ -23,6 +23,7 @@ export const BlogsApi = baseApi.injectEndpoints({
         url: `${Endpoints.Blogs}/${id}`,
         method: "GET",
       }),
+      providesTags: (result, error, id) => [{ type: "Blogs" as const, id }],
     }),
 
     createBlog: build.mutation<Blogs, CreateArticleSchema>({
@@ -40,7 +41,7 @@ export const BlogsApi = baseApi.injectEndpoints({
         method: "PATCH",
         body: payload,
       }),
-      invalidatesTags: ["Blogs"],
+      invalidatesTags: (result, error, { id }) => [{ type: "Blogs", id }],
     }),
 
     deleteBlog: build.mutation<void, string>({
