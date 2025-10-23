@@ -86,29 +86,33 @@ export default function BlogsDashboard() {
         </div>
         <div className="flex flex-wrap gap-3">
           <Button
-            variant={!activeTag ? "default" : "outline"}
             size="sm"
-            className="bg-black text-white"
             onClick={() => setActiveTag(null)}
+            className={`rounded-full px-4 py-1 text-sm font-medium transition-all duration-200 ${
+              !activeTag
+                ? "bg-blue-600 text-white shadow-md scale-105"
+                : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+            }`}
           >
             All
           </Button>
+
           {tags.map((tag) => (
             <Button
               key={tag.id}
-              variant={activeTag === tag.id ? "default" : "outline"}
               size="sm"
-              className={
-                activeTag === tag.id
-                  ? "bg-blue-600 text-white"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
-              }
               onClick={() => setActiveTag(tag.id)}
+              className={`rounded-full px-4 py-1 text-sm font-medium transition-all duration-200 ${
+                activeTag === tag.id
+                  ? "bg-blue-600 text-white shadow-md scale-105"
+                  : "bg-gray-200 text-gray-800 hover:bg-blue-100"
+              }`}
             >
               {tag.name}
             </Button>
           ))}
         </div>
+
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {paginatedFilteredBlogs.map((blog) => {
             const imageSrc =
