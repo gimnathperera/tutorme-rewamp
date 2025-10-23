@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createArticleSchema = z.object({
+export const updateArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.object({
     name: z.string().min(1, "Author name is required"),
@@ -43,9 +43,9 @@ export const createArticleSchema = z.object({
   status: z.enum(["pending", "published", "draft"]),
 });
 
-export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
+export type UpdateArticleSchema = z.infer<typeof updateArticleSchema>;
 
-export const initialFormValues: CreateArticleSchema = {
+export const initialFormValues: UpdateArticleSchema = {
   title: "",
   author: {
     name: "",

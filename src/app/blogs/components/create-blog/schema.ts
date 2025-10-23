@@ -65,8 +65,6 @@ export const initialFormValues: CreateArticleSchema = {
   image: "",
   relatedArticles: [],
   tags: [],
-  faqs: [
-    { question: "", answer: "" }, // initial empty FAQ
-  ],
+  faqs: [{ question: "", answer: "" }],
   status: "pending",
 };

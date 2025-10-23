@@ -24,12 +24,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Sync internal state when selected prop changes
   useEffect(() => {
     setSelectedOptions(selected);
   }, [selected]);
-
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

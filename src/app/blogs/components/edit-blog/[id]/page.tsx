@@ -18,7 +18,7 @@ import {
   useUpdateBlogMutation,
 } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
-import { CreateArticleSchema, createArticleSchema } from "../schema";
+import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
 import MultiSelect, { Option } from "@/components/MultiSelect";
 import TableOfContents from "../../table-of-content/TableOfContent";
@@ -40,8 +40,8 @@ export default function EditBlogPage() {
 
   const [isPreview, setIsPreview] = useState(false);
 
-  const form = useForm<CreateArticleSchema>({
-    resolver: zodResolver(createArticleSchema),
+  const form = useForm<UpdateArticleSchema>({
+    resolver: zodResolver(updateArticleSchema),
     defaultValues: {
       title: "",
       author: { name: "", avatar: "", role: "" },
@@ -119,7 +119,7 @@ export default function EditBlogPage() {
     return undefined;
   };
 
-  const onSubmit = async (data: CreateArticleSchema) => {
+  const onSubmit = async (data: UpdateArticleSchema) => {
     if (!user) return toast.error("Please authenticate");
 
     try {
@@ -140,9 +140,8 @@ export default function EditBlogPage() {
         status: data.status,
       };
 
-      // Correctly call the mutation function
       await updateBlog(payload).unwrap();
-      await refetch(); // refetch blog data to immediately update preview
+      await refetch();
       toast.success("Blog updated successfully");
       router.push(`/blogs/${blogId}`);
     } catch (err) {
@@ -156,7 +155,6 @@ export default function EditBlogPage() {
   return (
     <div className="flex flex-col bg-white m-5 md:flex-row gap-8">
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
-        {/* Edit/Preview Toggle */}
         <div className="flex gap-2 mt-6 px-6">
           <Button
             type="button"
@@ -187,8 +185,6 @@ export default function EditBlogPage() {
                 {formState.errors.title.message}
               </p>
             )}
-
-            {/* Content */}
             {watch("content").map((c, idx) => {
               if (c.type === "paragraph")
                 return (
@@ -219,14 +215,10 @@ export default function EditBlogPage() {
                 );
               return null;
             })}
-
-            {/* Cover Image */}
             <div>
               <Label>Cover Image URL</Label>
               <Input {...register("image")} placeholder="Cover Image URL" />
             </div>
-
-            {/* Related Articles */}
             <div>
               <Label>Related Articles</Label>
               <Controller
@@ -236,14 +228,12 @@ export default function EditBlogPage() {
                   <MultiSelect
                     label=""
                     options={blogOptions}
-                    selected={field.value}
+                    defaultSelected={field.value}
                     onChange={field.onChange}
                   />
                 )}
               />
             </div>
-
-            {/* Tags */}
             <div>
               <Label>Tags</Label>
               <Controller
@@ -253,14 +243,12 @@ export default function EditBlogPage() {
                   <MultiSelect
                     label=""
                     options={tagsOptions}
-                    selected={field.value}
+                    defaultSelected={field.value}
                     onChange={field.onChange}
                   />
                 )}
               />
             </div>
-
-            {/* FAQs */}
             <div className="p-4 border rounded-lg space-y-4">
               <Label>FAQs</Label>
               {faqFields.map((faq, index) => (
@@ -353,8 +341,6 @@ export default function EditBlogPage() {
                     ),
                   }}
                 />
-
-                {/* Preview FAQs */}
                 {watch("faqs")?.length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">FAQs</h3>
