@@ -72,7 +72,7 @@ export default function ViewBlogPage() {
       <div className="m-10">
         {blog.author?.name === user?.name && (
           <div className="flex flex-row justify-end items-end my-2">
-            <Button className="p-5 text-white bg-black text-lg">
+            <Button className="justify-end text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue">
               <Link
                 href={`/blogs/components/edit-blog/${blog.id}`}
                 className=""

@@ -12,7 +12,7 @@ const BlogListPage = () => {
         {user?.role == "admin" ? (
           <div className="flex justify-end items-end">
             <Link
-              className="bg-black text-white py-4 px-8 rounded-lg font-semibold"
+              className="justify-end text-xl font-semibold text-white  py-4 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue"
               href={"/blogs/components/create-blog"}
             >
               Add Blog

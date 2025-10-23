@@ -453,13 +453,13 @@ const AddBlog = () => {
           <Button
             onClick={onClear}
             variant="outline"
-            className=" hover:bg-gray-300 text-lg p-5 "
+            className="text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue"
           >
             Clear
           </Button>
           <Button
             type="submit"
-            className="bg-blue-700 hover:bg-blue-500 text-lg p-5 text-white"
+            className="text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-black hover:bg-white hover:text-black hover:border"
             isLoading={isLoading}
             onClick={handleSubmit(onSubmit)}
           >

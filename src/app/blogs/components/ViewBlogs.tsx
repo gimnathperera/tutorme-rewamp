@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Card, CardTitle, CardContent } from "@/components/ui/card";
@@ -14,24 +14,17 @@ export default function BlogsDashboard() {
   const pageSize = 9;
   const router = useRouter();
 
-  // 1️⃣ Fetch paginated blogs (for the grid)
   const {
-    data: blogsData,
+    data: allBlogsData,
     isLoading: isBlogsLoading,
     isError: isBlogsError,
-  } = useFetchBlogsQuery({ page, limit: pageSize });
-
-  // 2️⃣ Fetch all blogs once (for sorting + sidebar)
-  const { data: allBlogsData } = useFetchBlogsQuery({ limit: 9999 });
+  } = useFetchBlogsQuery({ limit: 9999 });
 
   const { data: tagsData, isLoading: isTagsLoading } = useFetchTagsQuery({});
 
-  // Make sure arrays are safe to use
-  const paginatedBlogs = blogsData?.results || [];
   const allBlogsRaw = allBlogsData?.results || [];
   const tags = tagsData?.results || [];
 
-  // 3️⃣ Sort all blogs (newest first)
   const allBlogs = useMemo(() => {
     return [...allBlogsRaw].sort(
       (a, b) =>
@@ -39,20 +32,27 @@ export default function BlogsDashboard() {
     );
   }, [allBlogsRaw]);
 
-  // 4️⃣ Filter by active tag (applies to paginated data)
-  const filteredBlogs = useMemo(() => {
-    if (!activeTag) return paginatedBlogs;
-    return paginatedBlogs.filter((blog) =>
+  const filteredAllBlogs = useMemo(() => {
+    if (!activeTag) return allBlogs;
+    return allBlogs.filter((blog) =>
       blog.tags?.some((t: any) => t.id === activeTag)
     );
-  }, [activeTag, paginatedBlogs]);
+  }, [activeTag, allBlogs]);
 
-  // 5️⃣ Get top 5 recent articles from *all blogs*
+  const startIndex = (page - 1) * pageSize;
+  const paginatedFilteredBlogs = filteredAllBlogs.slice(
+    startIndex,
+    startIndex + pageSize
+  );
+
+  const totalPages = Math.ceil(filteredAllBlogs.length / pageSize);
+
+  useEffect(() => {
+    setPage(1);
+  }, [activeTag]);
+
   const recentArticles = allBlogs.slice(0, 5);
 
-  const totalPages = Math.ceil((blogsData?.totalResults || 0) / pageSize);
-
-  // 🧩 Loading state
   if (isBlogsLoading || isTagsLoading)
     return (
       <div className="flex flex-col items-center gap-4 py-10">
@@ -71,10 +71,8 @@ export default function BlogsDashboard() {
       <div className="text-red-500 py-10 text-center">Failed to load blogs</div>
     );
 
-  // 🧠 Main Render
   return (
     <div className="p-6 flex flex-col md:flex-row gap-8">
-      {/* Left: Blog Grid */}
       <div className="flex-1 flex flex-col gap-6">
         <div className="relative h-52 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl text-white p-10 flex flex-col md:flex-row items-center justify-between">
           <div>
@@ -86,8 +84,6 @@ export default function BlogsDashboard() {
             </p>
           </div>
         </div>
-
-        {/* Filter Buttons */}
         <div className="flex flex-wrap gap-3">
           <Button
             variant={!activeTag ? "default" : "outline"}
@@ -99,20 +95,22 @@ export default function BlogsDashboard() {
           </Button>
           {tags.map((tag) => (
             <Button
-              className="bg-blue-500 text-white"
               key={tag.id}
               variant={activeTag === tag.id ? "default" : "outline"}
               size="sm"
+              className={
+                activeTag === tag.id
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-500 text-white hover:bg-blue-600"
+              }
               onClick={() => setActiveTag(tag.id)}
             >
               {tag.name}
             </Button>
           ))}
         </div>
-
-        {/* Blog Cards */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredBlogs.map((blog) => {
+          {paginatedFilteredBlogs.map((blog) => {
             const imageSrc =
               blog.image || blog.content.find((c) => c.type === "image")?.src;
             const blogDate = new Date(blog.createdAt);
@@ -158,6 +156,7 @@ export default function BlogsDashboard() {
                   <CardTitle className="text-lg font-semibold">
                     {blog.title}
                   </CardTitle>
+
                   {blog.tags?.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1">
                       {blog.tags.map((t: any) => (
@@ -175,34 +174,32 @@ export default function BlogsDashboard() {
             );
           })}
 
-          {filteredBlogs.length === 0 && (
+          {paginatedFilteredBlogs.length === 0 && (
             <p className="col-span-full text-center text-gray-500">
               No blogs found for this tag.
             </p>
           )}
         </div>
-
-        {/* Pagination */}
-        <div className="flex justify-center gap-2 mt-8">
-          <Button
-            disabled={page === 1}
-            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          >
-            Previous
-          </Button>
-          <span className="flex items-center px-4">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            disabled={page === totalPages}
-            onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          >
-            Next
-          </Button>
-        </div>
+        {totalPages > 1 && (
+          <div className="flex justify-center gap-2 mt-8">
+            <Button
+              disabled={page === 1}
+              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            >
+              Previous
+            </Button>
+            <span className="flex items-center px-4">
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              disabled={page === totalPages}
+              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
-
-      {/* Right Sidebar */}
       <aside className="w-full md:w-[20%] flex flex-col gap-6">
         <h3 className="text-xl font-semibold border-b pb-2">Recent Articles</h3>
         <div className="flex flex-col gap-4">
