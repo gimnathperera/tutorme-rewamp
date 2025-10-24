@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { initialFormValues, LoginSchema, loginSchema } from "./schema";
 import InputPassword from "@/components/shared/input-password";
 import { useAuthContext } from "@/contexts";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 type Props = {
   onRegisterClick: () => void;
@@ -17,13 +19,23 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: initialFormValues,
-    mode: "onChange",
+    mode: "onSubmit", // Only validate on submit
   });
 
-  const { watch } = loginForm;
-  watch(() => {
-    if (isAuthError) setIsAuthError(null);
-  });
+  // Clear auth error when user types
+  useEffect(() => {
+    const subscription = loginForm.watch(() => {
+      if (isAuthError) setIsAuthError(null);
+    });
+    return () => subscription.unsubscribe();
+  }, [isAuthError, loginForm, setIsAuthError]);
+
+  // Show toast for backend authentication errors
+  useEffect(() => {
+    if (isAuthError) {
+      toast.error("Invalid credentials. Email or password wrong.");
+    }
+  }, [isAuthError]);
 
   const onSubmit = (data: LoginSchema) => {
     login(data);
@@ -44,9 +56,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             name="password"
             placeholder="*******"
           />
-          {isAuthError && (
-            <span className="text-red-500 text-xs">{isAuthError}</span>
-          )}
+          {/* Removed inline error display - backend errors now show in toast */}
         </div>
 
         <div className="pt-1">
