@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {  useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema"; // adjust the import if needed
-
+import { levels, locationsByRegion } from "../../../components/register-tutor";
 const TutoringPreferences = () => {
   const { control, watch, setValue, trigger, formState } =
     useFormContext<FindMyTutorForm>();
@@ -13,106 +13,6 @@ const TutoringPreferences = () => {
   const preferredLocations: string[] = watch("preferredLocations") || [];
 
   const [noPreference, setNoPreference] = useState(false);
-
-  const levels = [
-    "Pre-School",
-    "Primary School",
-    "Lower Secondary",
-    "Upper Secondary",
-    "Junior College",
-    "IB/IGCSE",
-    "Diploma / Degree",
-    "Language",
-    "Computing",
-    "Special Skills",
-    "Music",
-  ];
-
-  const locationsByRegion = useMemo(
-    () => ({
-      North: [
-        "Admiralty",
-        "Ang Mo Kio",
-        "Bishan",
-        "Boon Lay",
-        "Bukit Batok",
-        "Bukit Panjang",
-        "Choa Chu Kang",
-        "Clementi",
-        "Jurong East",
-        "Jurong West",
-        "Kranji",
-        "Marsiling",
-        "Sembawang",
-        "Sengkang",
-        "Woodlands",
-        "Yew Tee",
-        "Yishun",
-      ],
-      East: [
-        "Bedok",
-        "Changi",
-        "East Coast",
-        "Geylang",
-        "Hougang",
-        "Katong",
-        "Marine Parade",
-        "Pasir Ris",
-        "Punggol",
-        "Serangoon",
-        "Tampines",
-        "Ubi",
-      ],
-      West: [
-        "Boon Lay",
-        "Bukit Batok",
-        "Bukit Merah",
-        "Bukit Timah",
-        "Choa Chu Kang",
-        "Clementi",
-        "Dover",
-        "Holland Village",
-        "Jurong East",
-        "Jurong West",
-        "Newton",
-        "Queenstown",
-        "Toa Payoh",
-        "West Coast",
-      ],
-      South: [
-        "Boat Quay",
-        "Bugis",
-        "Chinatown",
-        "City Hall",
-        "Clarke Quay",
-        "Dhoby Ghaut",
-        "Marina Bay",
-        "Orchard",
-        "Raffles Place",
-        "Robertson Quay",
-        "Tanjong Pagar",
-      ],
-      "North-West": ["Bukit Panjang", "Choa Chu Kang", "Hillview", "Keat Hong", "Teck Whye"],
-      Central: [
-        "Ang Mo Kiao",
-        "Balestier",
-        "Bishan",
-        "Bras Basah",
-        "Farrer Park",
-        "Kallang",
-        "Lavender",
-        "Little India",
-        "MacPherson",
-        "Novena",
-        "Potong Pasir",
-        "Rochor",
-        "Serangoon",
-        "Thomson",
-        "Toa Payoh",
-      ],
-    }),
-    []
-  );
 
   const toggleLevel = (level: string) => {
     const updated = tutoringLevels.includes(level)
@@ -183,7 +83,9 @@ const TutoringPreferences = () => {
 
             {Object.entries(locationsByRegion).map(([region, locations]) => (
               <div key={region} className="mb-6">
-                <h4 className="font-semibold text-darkpurple mb-3">{region}:</h4>
+                <h4 className="font-semibold text-darkpurple mb-3">
+                  {region}:
+                </h4>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                   {locations.map((location) => (
                     <label
@@ -215,10 +117,13 @@ const TutoringPreferences = () => {
                   onChange={handleNoPreference}
                   className="mr-3 text-primary-700 focus:ring-primary-700 rounded"
                 />
-                <span className="font-medium text-darkpurple">No Preference</span>
+                <span className="font-medium text-darkpurple">
+                  No Preference
+                </span>
               </label>
               <p className="text-sm text-gray-600 mt-1 ml-6">
-                Select this if you&apos;re willing to travel to any location in Singapore
+                Select this if you&apos;re willing to travel to any location in
+                Singapore
               </p>
             </div>
           </div>
