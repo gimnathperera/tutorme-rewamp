@@ -11,6 +11,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import LoadingIndicator from "./LoadingIndicator";
 
 export default function ViewBlogPage() {
   const params = useParams();
@@ -39,7 +40,7 @@ export default function ViewBlogPage() {
     return txt.value;
   }
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <LoadingIndicator />;
   if (error || !blog) return <p>Blog not found.</p>;
 
   const paragraph = blog.content.find((c) => c.type === "paragraph");
