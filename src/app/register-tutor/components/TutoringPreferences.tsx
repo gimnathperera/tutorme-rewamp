@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {  useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema"; // adjust the import if needed
-
+import { levels, locationsByRegion } from "../../../components/register-tutor";
 const TutoringPreferences = () => {
   const { control, watch, setValue, trigger, formState } =
     useFormContext<FindMyTutorForm>();
@@ -13,61 +13,6 @@ const TutoringPreferences = () => {
   const preferredLocations: string[] = watch("preferredLocations") || [];
 
   const [noPreference, setNoPreference] = useState(false);
-
-  const levels = [
-    "Pre-School / Montessori",
-    "Primary School (Grades 1-5)",
-    "Ordinary Level (O/L) (Grades 6-11)",
-    "Advanced Level (A/L) (Grades 12-13)",
-    "International Syllabus (Cambridge, Edexcel, IB)",
-    "Undergraduate",
-    "Diploma / Degree",
-    "Language (e.g., English, French, Japanese)",
-    "Computing (e.g., Programming, Graphic Design)",
-    "Music & Arts",
-    "Special Skills",
-  ];
-
-  const locationsByRegion = useMemo(
-    () => ({
-      "Western Province": [
-        "Kollupitiya (Colombo 3)",
-        "Bambalapitiya (Colombo 4)",
-        "Havelock Town (Colombo 5)",
-        "Wellawatte (Colombo 6)",
-        "Cinnamon Gardens (Colombo 7)",
-        "Borella (Colombo 8)",
-        "Dehiwala",
-        "Mount Lavinia",
-        "Nugegoda",
-        "Rajagiriya",
-        "Kotte",
-        "Battaramulla",
-        "Malabe",
-        "Moratuwa",
-        "Gampaha",
-        "Negombo",
-        "Kadawatha",
-        "Kiribathgoda",
-        "Kelaniya",
-        "Wattala",
-        "Ja-Ela",
-        "Kalutara",
-        "Panadura",
-        "Horana",
-        "Wadduwa",
-      ],
-      "Central Province": ["Kandy", "Matale", "Nuwara Eliya"],
-      "Southern Province": ["Galle", "Matara", "Hambantota"],
-      "North Western Province": ["Kurunegala", "Puttalam", "Chilaw"],
-      "Sabaragamuwa Province": ["Ratnapura", "Kegalle"],
-      "Uva Province": ["Badulla", "Bandarawela"],
-      "North Central Province": ["Anuradhapura", "Polonnaruwa"],
-      "Northern Province": ["Jaffna", "Vavuniya"],
-      "Eastern Province": ["Trincomalee", "Batticaloa"],
-    }),
-    []
-  );
 
   const toggleLevel = (level: string) => {
     const updated = tutoringLevels.includes(level)
