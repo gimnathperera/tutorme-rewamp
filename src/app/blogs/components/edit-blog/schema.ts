@@ -65,8 +65,6 @@ export const initialFormValues: UpdateArticleSchema = {
   image: "",
   relatedArticles: [],
   tags: [],
-  faqs: [
-    { question: "", answer: "" }, // initial empty FAQ
-  ],
+  faqs: [{ question: "", answer: "" }],
   status: "pending",
 };
