@@ -100,6 +100,8 @@ export type FetchTuitionRatesRequest = {
 export type UpdateBlogRequest = {
   id: string;
   blogId: string;
+  faqs: string[];
+  tags: string[];
   name: string;
   avatar: string;
   role: string;
@@ -115,10 +117,22 @@ export type UpdateBlogRequest = {
 
 export type FetchBlogsRequest = {
   blogId?: string;
+  faqs?: string[];
   image?: string;
+  name?: string;
+  id?: string;
+  tags?: string;
   status?: "pending" | "published" | "draft";
   authorName?: string;
   title?: string;
+  page?: number;
+  limit?: number;
+};
+
+export type FetchTagsRequest = {
+  tagId?: string;
+  name?: string;
+  description?: string;
   page?: number;
   limit?: number;
 };

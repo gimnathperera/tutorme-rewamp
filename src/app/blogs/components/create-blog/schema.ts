@@ -27,7 +27,16 @@ export const createArticleSchema = z.object({
       ])
     )
     .nonempty("Content cannot be empty"),
-  image: z.string().url("Cover image must be a valid URL"), // ✅ Changed to .url()
+  image: z.string().url("Cover image must be a valid URL"),
+  faqs: z
+    .array(
+      z.object({
+        question: z.string().min(1, "FAQ question is required"),
+        answer: z.string().min(1, "FAQ answer is required"),
+      })
+    )
+    .optional(),
+  tags: z.array(z.string().min(1, "Please add a tag")).optional(),
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
     .optional(),
@@ -51,9 +60,11 @@ export const initialFormValues: CreateArticleSchema = {
       type: "image",
       src: "",
       caption: "Cover Image",
-    }, // ✅ Valid URL
+    },
   ],
-  image: "https://via.placeholder.com/800x400", // ✅ Valid URL
+  image: "",
   relatedArticles: [],
+  tags: [],
+  faqs: [{ question: "", answer: "" }],
   status: "pending",
 };

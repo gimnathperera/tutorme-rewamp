@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-export const createArticleSchema = z.object({
+export const updateArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.object({
     name: z.string().min(1, "Author name is required"),
-    avatar: z.string().min(1, "Avatar is required"),
+    avatar: z.string().url("Avatar must be a valid URL"),
     role: z.string().min(1, "Author role is required"),
   }),
   content: z
@@ -21,22 +21,31 @@ export const createArticleSchema = z.object({
         }),
         z.object({
           type: z.literal("image"),
-          src: z.string().min(1, "Image source is required"),
+          src: z.string().url("Image source must be a valid URL"),
           caption: z.string().optional(),
         }),
       ])
     )
     .nonempty("Content cannot be empty"),
+  image: z.string().url("Cover image must be a valid URL"),
+  faqs: z
+    .array(
+      z.object({
+        question: z.string().min(1, "FAQ question is required"),
+        answer: z.string().min(1, "FAQ answer is required"),
+      })
+    )
+    .optional(),
+  tags: z.array(z.string().min(1, "Please add a tag")).optional(),
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
-    .nonempty("At least one related article is required"),
+    .optional(),
   status: z.enum(["pending", "published", "draft"]),
 });
 
-export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
+export type UpdateArticleSchema = z.infer<typeof updateArticleSchema>;
 
-// Default form values
-export const initialFormValues: CreateArticleSchema = {
+export const initialFormValues: UpdateArticleSchema = {
   title: "",
   author: {
     name: "",
@@ -47,8 +56,15 @@ export const initialFormValues: CreateArticleSchema = {
   content: [
     { type: "paragraph", text: "" },
     { type: "heading", text: "", level: 2 },
-    { type: "image", src: "", caption: "Cover Image" },
+    {
+      type: "image",
+      src: "",
+      caption: "Cover Image",
+    },
   ],
-  relatedArticles: [""],
+  image: "",
+  relatedArticles: [],
+  tags: [],
+  faqs: [{ question: "", answer: "" }],
   status: "pending",
 };
