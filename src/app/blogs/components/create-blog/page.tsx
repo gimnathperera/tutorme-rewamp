@@ -389,8 +389,6 @@ const AddBlog = () => {
                     ),
                   }}
                 />
-
-                {/* Preview FAQs */}
                 {watch("faqs")?.length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">FAQs</h3>
