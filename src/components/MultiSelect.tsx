@@ -53,7 +53,6 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     (value) => options.find((o) => o.value === value)?.text || ""
   );
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

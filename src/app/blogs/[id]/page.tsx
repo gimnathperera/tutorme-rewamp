@@ -42,12 +42,9 @@ export default function ViewBlogPage() {
   if (isLoading) return <p>Loading...</p>;
   if (error || !blog) return <p>Blog not found.</p>;
 
-  // Extract content parts
   const paragraph = blog.content.find((c) => c.type === "paragraph");
   const heading = blog.content.find((c) => c.type === "heading");
   const image = blog.content.find((c) => c.type === "image");
-
-  // Related articles
   const relatedArticles =
     allBlogs?.results.filter((b) =>
       blog.relatedArticles?.some((ra) => ra.id === b.id)
@@ -55,7 +52,6 @@ export default function ViewBlogPage() {
     blog.relatedArticles ||
     [];
 
-  // Tag colors
   const tagColors = [
     "bg-red-100 text-red-800",
     "bg-green-100 text-green-800",
@@ -106,11 +102,8 @@ export default function ViewBlogPage() {
         )}
       </div>
 
-      {/* Main Content + Sidebar */}
       <div className="flex flex-col m-10 lg:flex-row xl:flex-row md:flex-row gap-6 mt-6">
-        {/* Left Column */}
         <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6 transition-all">
-          {/* Author Info */}
           <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm transition-transform hover:scale-105">
             <Avatar>
               <AvatarImage src={blog.author?.avatar} />
@@ -125,8 +118,6 @@ export default function ViewBlogPage() {
               </p>
             </div>
           </div>
-
-          {/* Tags */}
           <div className="flex flex-wrap gap-2">
             {blog.tags?.map((t: any, idx: number) => (
               <span
@@ -147,10 +138,7 @@ export default function ViewBlogPage() {
               alt={"Blog Image"}
             />
           </div>
-          {/* Table of Contents */}
           <TableOfContents html={decodeHtml(paragraph?.text || "")} />
-
-          {/* Blog Body */}
           <div
             className="blog-content max-w-none text-justify mt-6 prose dark:prose-invert"
             dangerouslySetInnerHTML={{
@@ -161,7 +149,6 @@ export default function ViewBlogPage() {
           />
         </div>
 
-        {/* Right Column: Related Articles */}
         <aside className="w-full md:w-[30%] flex flex-col gap-6">
           <div>
             <h3 className="text-xl font-semibold border-b pb-2">
@@ -199,7 +186,6 @@ export default function ViewBlogPage() {
               )}
             </ul>
           </div>
-          {/* FAQ Accordion Section */}
           {blog.faqs?.length > 0 && (
             <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm">
               <h3 className="text-xl font-semibold mb-4">FAQs</h3>
