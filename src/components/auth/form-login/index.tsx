@@ -19,10 +19,9 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: initialFormValues,
-    mode: "onSubmit", // Only validate on submit
+    mode: "onSubmit",
   });
 
-  // Clear auth error when user types
   useEffect(() => {
     const subscription = loginForm.watch(() => {
       if (isAuthError) setIsAuthError(null);
@@ -30,7 +29,6 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     return () => subscription.unsubscribe();
   }, [isAuthError, loginForm, setIsAuthError]);
 
-  // Show toast for backend authentication errors
   useEffect(() => {
     if (isAuthError) {
       toast.error("Invalid credentials. Email or password wrong.");
@@ -56,7 +54,6 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             name="password"
             placeholder="*******"
           />
-          {/* Removed inline error display - backend errors now show in toast */}
         </div>
 
         <div className="pt-1">
