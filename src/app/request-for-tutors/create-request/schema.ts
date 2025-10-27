@@ -1,10 +1,13 @@
 import { z } from "zod";
 
 export const createRequestTutorSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Enter a valid email"),
-  phoneNumber: z.string().min(7, "Phone number is required"),
+  firstName: z.string().min(1, "First Name is required"),
+  lastName: z.string().min(1, "Last Name is required"),
+  email: z.string().email("Enter a valid Email Address"),
+  phoneNumber: z
+    .string()
+    .min(1, "Phone number is required")
+    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
   region: z.string().min(1, "Region is required"),
@@ -20,7 +23,7 @@ export const createRequestTutorSchema = z.object({
     })
   ),
   preferredTutorType: z.string().nonempty("Please select a tutor type"),
-  studentSchool: z.string().min(1),
+  studentSchool: z.string().min(1, "Student School is required"),
   genderPreference: z.string().nonempty("Please select a gender preference"),
   bilingual: z.string().nonempty("Please select an option"),
 });

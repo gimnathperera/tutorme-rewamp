@@ -391,7 +391,7 @@ export default function AddRequestForTutor() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Bilingual *</Label>
+                <Label>Is Bilingual Tutor Required? *</Label>
                 <select
                   {...register("bilingual")}
                   className="border text-sm py-3 border-gray-200 rounded p-2"
@@ -415,7 +415,7 @@ export default function AddRequestForTutor() {
           className="bg-blue-700 text-white hover:bg-blue-500 w-full sm:w-auto"
           isLoading={isLoading}
         >
-          Request Tutor
+          Request a Tutor
         </Button>
       </form>
     </div>
