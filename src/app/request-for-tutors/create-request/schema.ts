@@ -23,7 +23,7 @@ export const createRequestTutorSchema = z.object({
     })
   ),
   preferredTutorType: z.string().nonempty("Please select a tutor type"),
-  studentSchool: z.string().min(1).nonempty("Student School is required"),
+  studentSchool: z.string().min(1, "Student School is required"),
   genderPreference: z.string().nonempty("Please select a gender preference"),
   bilingual: z.string().nonempty("Please select an option"),
 });
