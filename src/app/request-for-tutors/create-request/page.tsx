@@ -415,7 +415,7 @@ export default function AddRequestForTutor() {
           className="bg-blue-700 text-white hover:bg-blue-500 w-full sm:w-auto"
           isLoading={isLoading}
         >
-          Request Tutor
+          Request a Tutor
         </Button>
       </form>
     </div>
