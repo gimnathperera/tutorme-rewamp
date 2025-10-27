@@ -19,7 +19,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: initialFormValues,
-    mode: "onSubmit",
+    mode: "onChange",
   });
 
   useEffect(() => {
