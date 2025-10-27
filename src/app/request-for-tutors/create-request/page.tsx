@@ -391,7 +391,7 @@ export default function AddRequestForTutor() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Bilingual *</Label>
+                <Label>Is Bilingual Tutor Required? *</Label>
                 <select
                   {...register("bilingual")}
                   className="border text-sm py-3 border-gray-200 rounded p-2"
