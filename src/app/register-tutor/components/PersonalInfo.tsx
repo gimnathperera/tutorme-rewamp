@@ -113,8 +113,8 @@ const PersonalInfo = () => {
                 label="Nationality *"
                 name="nationality"
                 options={[
-                  { label: "Singaporean", value: "Singaporean" },
-                  { label: "Singapore PR", value: "Singapore PR" },
+                  { label: "Sri Lankan", value: "Sri Lankan" },
+
                   { label: "Others", value: "Others" },
                 ]}
                 helperText={errors.nationality?.message as string}
@@ -128,9 +128,11 @@ const PersonalInfo = () => {
                 label="Race *"
                 name="race"
                 options={[
-                  { label: "Chinese", value: "Chinese" },
-                  { label: "Malay", value: "Malay" },
-                  { label: "Indian", value: "Indian" },
+                  { label: "Sinhalese", value: "Sinhalese" },
+                  { label: "Tamil", value: "Tamil" },
+                  { label: "Muslim", value: "Muslim" },
+                  { label: "Burgher", value: "Burgher" },
+
                   { label: "Others", value: "Others" },
                 ]}
                 helperText={errors.race?.message as string}

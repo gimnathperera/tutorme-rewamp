@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { initialFormValues, LoginSchema, loginSchema } from "./schema";
 import InputPassword from "@/components/shared/input-password";
 import { useAuthContext } from "@/contexts";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 type Props = {
   onRegisterClick: () => void;
@@ -20,10 +22,18 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     mode: "onChange",
   });
 
-  const { watch } = loginForm;
-  watch(() => {
-    if (isAuthError) setIsAuthError(null);
-  });
+  useEffect(() => {
+    const subscription = loginForm.watch(() => {
+      if (isAuthError) setIsAuthError(null);
+    });
+    return () => subscription.unsubscribe();
+  }, [isAuthError, loginForm, setIsAuthError]);
+
+  useEffect(() => {
+    if (isAuthError) {
+      toast.error("Invalid credentials. Email or password wrong.");
+    }
+  }, [isAuthError]);
 
   const onSubmit = (data: LoginSchema) => {
     login(data);
@@ -44,9 +54,6 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             name="password"
             placeholder="*******"
           />
-          {isAuthError && (
-            <span className="text-red-500 text-xs">{isAuthError}</span>
-          )}
         </div>
 
         <div className="pt-1">

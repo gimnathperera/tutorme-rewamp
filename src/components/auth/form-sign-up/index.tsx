@@ -44,30 +44,31 @@ const FormSignUp = ({ onLoginClick }: Props) => {
     <FormProvider {...signupForm}>
       <form onSubmit={signupForm.handleSubmit(onSubmit)}>
         <div className="space-y-4">
-          <InputText
-            label="Full Name"
-            name="name"
-            placeholder="Jhon Doe"
-            type="text"
-          />
-          <InputText
-            label="Email"
-            name="email"
-            placeholder="jhon@xyz.com"
-            type="email"
-          />
+          <div>
+            <label className="text-sm">
+              Full Name <span className="text-red-500">*</span>
+            </label>
+            <InputText name="name" placeholder="Jhon Doe" type="text" />
+          </div>
+          <div>
+            <label className="text-sm">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <InputText name="email" placeholder="jhon@xyz.com" type="email" />
+          </div>
 
-          <InputPassword
-            label="Password"
-            name="password"
-            placeholder="*******"
-          />
-
-          <InputPassword
-            label="Confirm Password"
-            placeholder="*******"
-            name="confirmPassword"
-          />
+          <div>
+            <label className="text-sm">
+              Password <span className="text-red-500">*</span>
+            </label>
+            <InputPassword name="password" placeholder="*******" />
+          </div>
+          <div>
+            <label className="text-sm">
+              Confirm Password <span className="text-red-500">*</span>
+            </label>
+            <InputPassword placeholder="*******" name="confirmPassword" />
+          </div>
         </div>
         <div className="space-y-2 mt-8">
           <SubmitButton title="Register" type="submit" loading={isLoading} />
