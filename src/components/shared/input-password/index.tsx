@@ -42,7 +42,7 @@ const InputPassword: React.FC<InputPasswordProps> = React.memo(
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className={`absolute inset-y-0 right-0 px-3 text-gray-500 hover:text-gray-700 focus:outline-none ${
+                className={`absolute inset-y-0 right-0 z-20 px-3 text-gray-500 hover:text-gray-700 focus:outline-none ${
                   error ? "mb-5" : ""
                 }`}
                 aria-label={showPassword ? "Hide password" : "Show password"}
