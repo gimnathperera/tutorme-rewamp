@@ -1,9 +1,14 @@
 import {
   UserLoginRequest,
   UserLogoutRequest,
+  ForgotPasswordRequest,
   UserRefreshTokenRequest,
 } from "@/types/request-types";
-import { TokenResponse, UserLoginResponse } from "@/types/response-types";
+import {
+  TokenResponse,
+  UserLoginResponse,
+  ForgotPasswordResponse,
+} from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -36,6 +41,18 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    forgotPassword: build.mutation<
+      ForgotPasswordResponse,
+      ForgotPasswordRequest
+    >({
+      query: (payload) => {
+        return {
+          url: Endpoints.ForgotPassword,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
   }),
 
   overrideExisting: false,
@@ -45,4 +62,5 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useFetchAccessTokenMutation,
+  useForgotPasswordMutation,
 } = usersApi;

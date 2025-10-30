@@ -18,4 +18,6 @@ export const Endpoints = {
   TuitionAssignments: "/v1/tuition-assignments",
   RequestTutors: "/v1/requestTutor",
   Tags: "/v1/tags",
+  ForgotPassword: "/v1/auth/forgot-password",
+  ResetPassword: "/v1/auth/reset-password",
 };
