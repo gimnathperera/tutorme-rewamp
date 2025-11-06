@@ -73,6 +73,8 @@ export const baseApi = createApi({
   reducerPath: "api",
   tagTypes: [
     "Faqs",
+    "ForgotPassword",
+    "ResetPassword",
     "RequestTutors",
     "Tags",
     "Testimonials",

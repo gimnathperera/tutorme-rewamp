@@ -1,7 +1,12 @@
 "use client";
 
+import { ForgotPasswordSchema } from "@/components/auth/form-forgot-password/schema";
 import { LoginSchema } from "@/components/auth/form-login/schema";
-import { useLoginMutation, useLogoutMutation } from "@/store/api/splits/auth";
+import {
+  useForgotPasswordMutation,
+  useLoginMutation,
+  useLogoutMutation,
+} from "@/store/api/splits/auth";
 import { AuthUserData, Tokens } from "@/types/auth-types";
 import { UserLoginResponse } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
@@ -20,6 +25,7 @@ export type AuthProviderType = {
   isUserLoaded: boolean;
   isUserLogoutLoading: boolean;
   login: (credentials: LoginSchema) => void;
+  forgotPassword: (credentials: ForgotPasswordSchema) => void;
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
 };
@@ -31,6 +37,7 @@ interface AuthContextType {
   isUserLogoutLoading: boolean;
   isUserLoaded: boolean;
   login: (credentials: LoginSchema) => void;
+  forgotPassword: (credentials: ForgotPasswordSchema) => void;
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
 }
@@ -43,6 +50,7 @@ const authProvider = {
   isUserLogoutLoading: false,
   login: () => {},
   logout: () => {},
+  forgotPassword: () => {},
   setIsAuthError: () => {},
 };
 
@@ -53,6 +61,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isUserLoaded, setIsUserLoaded] = useState(false);
   const [isAuthError, setIsAuthError] = useState<string | null>(null);
   const [handleUserLogin, { isLoading }] = useLoginMutation();
+  const [handleUserForgotPassword] = useForgotPasswordMutation();
   const [handleUserLogout, { isLoading: isUserLogoutLoading }] =
     useLogoutMutation();
 
@@ -76,6 +85,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (result.data) {
       handleLoginSuccess(result.data);
     }
+  };
+
+  const forgotPassword = async (forgotPassword: ForgotPasswordSchema) => {
+    const result = await handleUserForgotPassword(forgotPassword);
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      setIsAuthError(error);
+      throw new Error(error);
+    }
+    return {
+      success: true,
+      message: "Forgot password request sent successfully.",
+    };
   };
 
   const handleLoginSuccess = ({ user, tokens }: UserLoginResponse) => {
@@ -116,6 +139,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         user,
         isAuthError,
         isLoading,
+        forgotPassword,
         login,
         logout,
         setIsAuthError,

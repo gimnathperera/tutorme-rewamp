@@ -224,7 +224,10 @@ export type UserLoginResponse = {
     };
   };
 };
-
+export type ForgotPasswordResponse = {
+  success: boolean;
+  message: string;
+};
 export type TuitionAssignment = {
   title: string;
   assignmentNumber: string;
@@ -267,6 +270,10 @@ export type ProfileResponse = {
 
 export type UpdatePasswordResponse = {
   message: string;
+};
+export type ResetPasswordResponse = {
+  message: string;
+  success: boolean;
 };
 
 export type TokenResponse = {
