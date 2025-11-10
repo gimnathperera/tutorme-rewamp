@@ -24,12 +24,7 @@ type GradeGroup = {
   subjects: SubjectRate[];
 };
 
-type LevelGroup = {
-  level: { id: string; title: string } | null;
-  grades: Record<string, GradeGroup>;
-};
-
-export default function TuitionRatesByLevel() {
+export default function TuitionRatesByGrade() {
   const { data, isLoading, error } = useFetchTuitionRatesQuery({
     page: 1,
     limit: 100,
@@ -38,29 +33,19 @@ export default function TuitionRatesByLevel() {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Failed to load tuition rates</p>;
 
-  const groupedData: Record<string, LevelGroup> =
-    data?.results?.reduce((acc: Record<string, LevelGroup>, item) => {
-      const levelTitle = item.level?.title || "Unknown Level";
+  // Group by Grade
+  const groupedData: Record<string, GradeGroup> =
+    data?.results?.reduce((acc: Record<string, GradeGroup>, item) => {
       const gradeTitle = item.grade?.title || "Unknown Grade";
 
-      // Create level group if not exists
-      if (!acc[levelTitle]) {
-        acc[levelTitle] = {
-          level: item.level ?? null,
-          grades: {},
-        };
-      }
-
-      // Create grade group if not exists
-      if (!acc[levelTitle].grades[gradeTitle]) {
-        acc[levelTitle].grades[gradeTitle] = {
+      if (!acc[gradeTitle]) {
+        acc[gradeTitle] = {
           grade: item.grade ?? null,
           subjects: [],
         };
       }
 
-      // Add subject to the grade
-      acc[levelTitle].grades[gradeTitle].subjects.push({
+      acc[gradeTitle].subjects.push({
         title: item.subject?.title || "Unknown Subject",
         fullTime: item.fullTimeTuitionRate || [],
         partTime: item.partTimeTuitionRate || [],
@@ -68,76 +53,61 @@ export default function TuitionRatesByLevel() {
       });
 
       return acc;
-    }, {} as Record<string, LevelGroup>) || {};
+    }, {} as Record<string, GradeGroup>) || {};
 
   return (
     <div className="space-y-6">
-      {Object.values(groupedData).map((levelGroup, levelIdx) => (
-        <Card key={levelGroup.level?.id || `level-${levelIdx}`} className="p-4">
+      {Object.values(groupedData).map((gradeGroup, idx) => (
+        <Card key={gradeGroup.grade?.id || `grade-${idx}`} className="p-4">
           <CardContent>
-            {/* Level Title */}
+            {/* Grade Title */}
             <div className="flex flex-col justify-center items-center">
               <h2 className="text-3xl font-semibold">
-                {levelGroup.level?.title || "Unknown Level"}
+                {gradeGroup.grade?.title || "Unknown Grade"}
               </h2>
-              <p className="text-[#EF4350] font-bold">
-                {levelGroup.level?.title || "Unknown Level"} Tuition Rates
-              </p>
             </div>
 
-            {/* Loop through grades in this level */}
-            {Object.values(levelGroup.grades).map((gradeGroup, gradeIdx) => (
-              <div
-                key={gradeGroup.grade?.id || `grade-${gradeIdx}`}
-                className="mt-4"
-              >
-                {/* Grade Title */}
-                <h3 className="text-lg mt-10 font-semibold">
-                  {gradeGroup.grade?.title || "Unknown Grade"}
-                </h3>
+            {/* Subjects Table */}
+            <Table className="mt-4">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="bg-[#FCA627] w-1/4 text-white font-bold">
+                    Subjects
+                  </TableHead>
+                  <TableHead className="bg-[#FCA627] w-1/4 text-white font-bold">
+                    Full Time (Min - Max)
+                  </TableHead>
+                  <TableHead className="bg-[#FCA627] w-1/4 text-white font-bold">
+                    Part Time (Min - Max)
+                  </TableHead>
+                  <TableHead className="bg-[#FCA627] w-1/4 text-white font-bold">
+                    Government (Min - Max)
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
 
-                {/* Subjects Table */}
-                <Table className="mt-2">
-                  <TableHeader>
-                    <TableRow className="text-white font-bold ">
-                      <TableHead className="bg-[#FCA627] w-1/4">
-                        Subjects
-                      </TableHead>
-                      <TableHead className="bg-[#FCA627] w-1/4">
-                        Full Time (Min - Max)
-                      </TableHead>
-                      <TableHead className="bg-[#FCA627] w-1/4">
-                        Part Time (Min - Max)
-                      </TableHead>
-                      <TableHead className="bg-[#FCA627] w-1/4">
-                        Government (Min - Max)
-                      </TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody className="py-10">
-                    {gradeGroup.subjects.map((subject, subIdx) => (
-                      <TableRow key={subIdx}>
-                        <TableCell className="bg-[#28BBA3] text-white">
-                          {subject.title}
-                        </TableCell>
-                        <TableCell className="bg-gray-100">
-                          Rs. {subject.fullTime?.[0]?.minimumRate || "N/A"} -{" "}
-                          Rs. {subject.fullTime?.[0]?.maximumRate || "N/A"}
-                        </TableCell>
-                        <TableCell className="bg-gray-100">
-                          Rs. {subject.partTime?.[0]?.minimumRate || "N/A"} -{" "}
-                          Rs. {subject.partTime?.[0]?.maximumRate || "N/A"}
-                        </TableCell>
-                        <TableCell className="bg-gray-100">
-                          Rs. {subject.gov?.[0]?.minimumRate || "N/A"} - Rs.{" "}
-                          {subject.gov?.[0]?.maximumRate || "N/A"}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            ))}
+              <TableBody>
+                {gradeGroup.subjects.map((subject, subIdx) => (
+                  <TableRow key={subIdx}>
+                    <TableCell className="bg-[#28BBA3] text-white">
+                      {subject.title}
+                    </TableCell>
+                    <TableCell className="bg-gray-100">
+                      Rs. {subject.fullTime?.[0]?.minimumRate || "N/A"} - Rs.{" "}
+                      {subject.fullTime?.[0]?.maximumRate || "N/A"}
+                    </TableCell>
+                    <TableCell className="bg-gray-100">
+                      Rs. {subject.partTime?.[0]?.minimumRate || "N/A"} - Rs.{" "}
+                      {subject.partTime?.[0]?.maximumRate || "N/A"}
+                    </TableCell>
+                    <TableCell className="bg-gray-100">
+                      Rs. {subject.gov?.[0]?.minimumRate || "N/A"} - Rs.{" "}
+                      {subject.gov?.[0]?.maximumRate || "N/A"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </CardContent>
         </Card>
       ))}

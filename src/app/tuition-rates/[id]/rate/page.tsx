@@ -14,26 +14,13 @@ const RatePage = () => {
   if (isLoading) return <p>Loading tuition rates...</p>;
   if (!rate?.results || rate.results.length === 0) return <p>No tuition rates found.</p>;
 
-  // Filter items for the selected level safely
-  const levelItems: TuitionRateItem[] = rate.results.filter(
-    (item) => item.level?.id === levelId
-  );
-  if (levelItems.length === 0) return <p>No tuition rates found for this level.</p>;
-
-  // Get the level title from the filtered items
-  const levelTitle = levelItems[0]?.level?.title || "Level";
 
   // Group subjects by grade
   const gradesMap: Record<string, TuitionRateItem[]> = {};
-  levelItems.forEach((item) => {
-    const gradeTitle = item.grade?.title || "Unknown Grade";
-    if (!gradesMap[gradeTitle]) gradesMap[gradeTitle] = [];
-    gradesMap[gradeTitle].push(item);
-  });
 
   return (
     <div className="px-6 py-8 max-w-5xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-2">{levelTitle}</h2>
+      <h2 className="text-3xl font-bold text-center mb-2">{levelId}</h2>
       <h3 className="text-xl text-center mb-8 opacity-60">
         Explore the tuition rates for each subject by grade
       </h3>

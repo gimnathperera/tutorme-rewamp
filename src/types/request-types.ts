@@ -97,7 +97,6 @@ export type FetchGradesRequest = {
 export type FetchTuitionRatesRequest = {
   tuitionRateId?: string;
   title?: string;
-  levelId?: string;
   tutorType?: string;
   subject?: string;
   grade?: string;
