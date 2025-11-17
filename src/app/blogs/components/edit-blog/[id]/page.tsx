@@ -25,6 +25,7 @@ import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
+import FileUploadDropzone from "@/components/fileUploader";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -54,7 +55,9 @@ export default function EditBlogPage() {
     },
   });
 
-  const { register, handleSubmit, control, reset, watch, formState } = form;
+  const { register, handleSubmit, control, reset, watch, formState, setValue } =
+    form;
+
   const {
     fields: faqFields,
     append: appendFaq,
@@ -127,7 +130,7 @@ export default function EditBlogPage() {
       const payload = {
         id: blogId,
         title: data.title,
-        image: imageContent?.src || data.image || "",
+        image: data.image,
         author: {
           name: user.name,
           avatar: user.avatar || "https://example.com/default-avatar.png",
@@ -185,8 +188,9 @@ export default function EditBlogPage() {
                 {formState.errors.title.message}
               </p>
             )}
+
             {watch("content").map((c, idx) => {
-              if (c.type === "paragraph")
+              if (c.type === "paragraph" || c.type === "heading") {
                 return (
                   <Controller
                     key={idx}
@@ -203,37 +207,50 @@ export default function EditBlogPage() {
                     )}
                   />
                 );
-              if (c.type === "image")
-                return (
-                  <div key={idx} className="mb-4">
-                    <Label>Image URL</Label>
-                    <Input
-                      {...register(`content.${idx}.src` as const)}
-                      placeholder="Image URL"
-                    />
-                  </div>
-                );
+              }
               return null;
             })}
-            <div>
-              <Label>Cover Image URL</Label>
-              <Input {...register("image")} placeholder="Cover Image URL" />
-            </div>
-            <div>
-              <Label>Related Articles</Label>
-              <Controller
-                name="relatedArticles"
-                control={control}
-                render={({ field }) => (
-                  <MultiSelect
-                    label=""
-                    options={blogOptions}
-                    defaultSelected={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
+
+            {watch("content").map((c, idx) => {
+              if (c.type === "image") {
+                return (
+                  <div key={idx} className="mb-4">
+                    <Label>Content Image</Label>
+                    <FileUploadDropzone
+                      onUploaded={(url) => setValue(`content.${idx}.src`, url)}
+                    />
+                    {getContentError(idx, "src") && (
+                      <p className="text-sm text-red-500">
+                        {getContentError(idx, "src")}
+                      </p>
+                    )}
+                    {watch(`content.${idx}.src`) && (
+                      <img
+                        src={watch(`content.${idx}.src`)}
+                        alt="Content Preview"
+                        className="mt-2 max-h-48 rounded-lg object-cover"
+                      />
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            })}
+            <div className="mb-4">
+              <Label>Cover Image</Label>
+              <FileUploadDropzone
+                key="cover-dropzone"
+                onUploaded={(url) => setValue("image", url)}
               />
+              {watch("image") && (
+                <img
+                  src={watch("image")}
+                  alt="Cover Preview"
+                  className="mt-2 max-h-48 w-full rounded-lg object-cover"
+                />
+              )}
             </div>
+
             <div>
               <Label>Tags</Label>
               <Controller
