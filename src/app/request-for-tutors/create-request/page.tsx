@@ -254,7 +254,13 @@ export default function AddRequestForTutor() {
                       <option value="One Hour">One Hour</option>
                       <option value="Two Hours">Two Hours</option>
                     </select>
+                    {errors.tutors?.[index]?.duration && (
+                      <p className="text-sm text-red-500">
+                        {errors.tutors[index]?.duration?.message}
+                      </p>
+                    )}
                   </div>
+
                   <div className="grid gap-2">
                     <Label>Frequency *</Label>
                     <select
@@ -266,6 +272,11 @@ export default function AddRequestForTutor() {
                       <option value="Twice a Week">Twice a Week</option>
                       <option value="Daily">Daily</option>
                     </select>
+                    {errors.tutors?.[index]?.frequency && (
+                      <p className="text-sm text-red-500">
+                        {errors.tutors[index]?.frequency?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -282,6 +293,11 @@ export default function AddRequestForTutor() {
                       Ex / Current Government School Tutors
                     </option>
                   </select>
+                  {errors.tutors?.[index]?.preferredTutorType && (
+                    <p className="text-sm text-red-500">
+                      {errors.tutors[index]?.preferredTutorType?.message}
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
