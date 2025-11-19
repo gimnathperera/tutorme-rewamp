@@ -19,6 +19,11 @@ export const educationLevels = [
   "Others",
 ];
 
+export const tutorMediums = [
+  "Sinhala",
+  "English ",
+  "Tamil ",
+];
 export const yearsOptions = [
   "0",
   "1",
