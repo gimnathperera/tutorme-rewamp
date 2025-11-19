@@ -30,6 +30,7 @@ import "react-quill/dist/quill.snow.css";
 import { Label } from "@/components/ui/label";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import TableOfContents from "../table-of-content/TableOfContent";
+import FileUploadDropzone from "@/components/fileUploader";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -223,44 +224,59 @@ const AddBlog = () => {
                 )}
               </div>
 
-              <div className="">
-                <Label htmlFor="image">Content Image URL</Label>
+              <div className="mb-4">
+                <Label htmlFor="contentImage">Content Image</Label>
                 <Input
                   type="hidden"
                   value="image"
-                  className="border-none"
                   {...register("content.2.type")}
                 />
-                <Input
-                  id="content.2.src"
-                  placeholder="Add Blog Image Url"
-                  className="border-none rounded-md"
-                  {...register("content.2.src")}
-                />
-                {getContentError(2, "src") && (
-                  <p className="text-sm text-red-500">
-                    {getContentError(2, "src")}
-                  </p>
-                )}
                 <Input
                   type="hidden"
                   value="Cover Image"
                   {...register("content.2.caption")}
                 />
+
+                <FileUploadDropzone
+                  onUploaded={(url) =>
+                    createBlogForm.setValue("content.2.src", url)
+                  }
+                />
+
+                {getContentError(2, "src") && (
+                  <p className="text-sm text-red-500">
+                    {getContentError(2, "src")}
+                  </p>
+                )}
+
+                {watch("content.2.src") && (
+                  <img
+                    src={watch("content.2.src")}
+                    alt="Content Preview"
+                    className="mt-2 max-h-48 rounded-lg object-cover"
+                  />
+                )}
               </div>
             </div>
-            <div className="">
-              <Label htmlFor="image">Cover Image URL</Label>
-              <Input
-                id="image"
-                placeholder="Add Cover Image Url"
-                className="rounded-md"
-                {...register("image")}
+            <div className="mb-4">
+              <Label htmlFor="coverImage">Cover Image</Label>
+
+              <FileUploadDropzone
+                onUploaded={(url) => createBlogForm.setValue("image", url)}
               />
+
               {formState.errors.image && (
                 <p className="text-sm text-red-500">
                   {formState.errors.image.message}
                 </p>
+              )}
+
+              {watch("image") && (
+                <img
+                  src={watch("image")}
+                  alt="Cover Preview"
+                  className="mt-2 max-h-48 w-full rounded-lg object-cover"
+                />
               )}
             </div>
             <div className="border-none rounded-lg">
