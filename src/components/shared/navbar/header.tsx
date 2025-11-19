@@ -19,6 +19,8 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Find a Tutor", href: "/request-for-tutors", current: false },
+  { name: "Register a Tutor", href: "/register-tutor", current: false },
+
   {
     name: "Academics",
     href: "/",
@@ -38,11 +40,7 @@ const navigation: NavigationItem[] = [
       { name: "Tuition Assignments", href: "/tuition-assignments" },
     ],
   },
-  {
-    name: "Levels and Exams",
-    href: "/level-and-exams",
-    current: false,
-  },
+
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
   { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
