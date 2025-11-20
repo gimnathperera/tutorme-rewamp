@@ -77,7 +77,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         {label}
       </label>
 
-      <div className="relative z-20 inline-block w-full">
+      <div className="relative  inline-block w-full">
         <div className="relative flex flex-col items-center">
           <div
             onClick={toggleDropdown}
