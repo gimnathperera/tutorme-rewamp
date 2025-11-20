@@ -3,6 +3,8 @@ import { z } from "zod";
 export const createRequestTutorSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z.string().min(1, "Enter a valid email").email("Enter a valid email"),
+  city: z.string().min(1, "City is required"),
+  district: z.string().min(1, "District is required"),
   phoneNumber: z
     .string()
     .min(1, "Phone number is required")
@@ -32,6 +34,8 @@ export const initialFormValues: CreateRequestTutorSchema = {
   name: "",
   email: "",
   phoneNumber: "",
+  city: "",
+  district: "",
   medium: "",
   grade: [],
   tutors: [

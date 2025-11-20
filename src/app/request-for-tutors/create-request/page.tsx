@@ -13,14 +13,15 @@ import {
 import MultiSelect from "@/components/shared/MultiSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/Button/button";
-import { useFetchSubjectsQuery } from "@/store/api/splits/subjects";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import { useCreateTutorRequestsMutation } from "@/store/api/splits/request-tutor";
 import { getErrorInApiResult } from "@/utils/api";
 import { LIMITS_CONFIG } from "@/configs/limits";
 import LogoImage from "../../../../public/images/findTutor/lesson.png";
 import Image from "next/image";
+import { districts } from "@/configs/districts";
+import CitySelect from "@/components/citySelect";
+import DistrictSelect from "@/components/districtSelect";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -44,19 +45,23 @@ export default function AddRequestForTutor() {
 
   const tutors = watch("tutors");
 
-  const { data: subjectData } = useFetchSubjectsQuery({
-    page: 1,
-    limit: FETCH_LIMIT,
-  });
-  const subjectOptions =
-    subjectData?.results.map((s) => ({ value: s.id, text: s.title })) || [];
-
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
     limit: FETCH_LIMIT,
   });
   const gradeOptions =
     gradeData?.results.map((g) => ({ value: g.id, text: g.title })) || [];
+
+  const selectedGradeId = watch("grade.0");
+
+  // Get subjects for the selected grade from gradeData
+  const subjectOptions =
+    gradeData?.results
+      .find((g) => g.id === selectedGradeId)
+      ?.subjects.map((s: any) => ({
+        value: s.id,
+        text: s.title,
+      })) || [];
 
   const [createTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
 
@@ -111,18 +116,22 @@ export default function AddRequestForTutor() {
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className="max-w-7xl mx-auto m-5 bg-white rounded-lg shadow-md">
+    <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
         <h1>Request A Tutor</h1>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 bg-white">
         {step === 1 && (
           <div className="p-6 flex flex-col gap-2">
             <div className="grid gap-2">
               <Label htmlFor="name">Full Name *</Label>
-              <Input id="name" {...register("name")} />
+              <Input
+                id="name"
+                {...register("name")}
+                placeholder="e.g.John Doe"
+              />
               {errors.name && (
                 <p className="text-sm text-red-500">{errors.name.message}</p>
               )}
@@ -131,14 +140,22 @@ export default function AddRequestForTutor() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email *</Label>
-                <Input id="email" {...register("email")} />
+                <Input
+                  placeholder="e.g. johndoe@gmail.com"
+                  id="email"
+                  {...register("email")}
+                />
                 {errors.email && (
                   <p className="text-sm text-red-500">{errors.email.message}</p>
                 )}
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="phoneNumber">Phone Number *</Label>
-                <Input id="phoneNumber" {...register("phoneNumber")} />
+                <Input
+                  id="phoneNumber"
+                  placeholder="e.g. 0712345678"
+                  {...register("phoneNumber")}
+                />
                 {errors.phoneNumber && (
                   <p className="text-sm text-red-500">
                     {errors.phoneNumber.message}
@@ -146,7 +163,57 @@ export default function AddRequestForTutor() {
                 )}
               </div>
             </div>
+            <div className="grid gap-2">
+              <Label htmlFor="district">District *</Label>
+              <Controller
+                control={control}
+                name="district"
+                render={({ field }) => (
+                  <DistrictSelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                    districts={districts}
+                  />
+                )}
+              />
+              {errors.district && (
+                <p className="text-sm text-red-500">
+                  {errors.district.message}
+                </p>
+              )}
+            </div>
 
+            <div className="grid gap-2">
+              <Label htmlFor="city">City *</Label>
+              <Controller
+                control={control}
+                name="city"
+                render={({ field }) => (
+                  <CitySelect
+                    value={field.value || ""}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              {errors.city && (
+                <p className="text-sm text-red-500">{errors.city.message}</p>
+              )}
+            </div>
+
+            <div className="flex justify-end mt-4">
+              <button
+                type="button"
+                className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-gray-200 text-darkpurple hover:bg-gray-300"
+                onClick={nextStep}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="p-6 flex flex-col gap-2">
             <div className="grid gap-2">
               <Label htmlFor="medium">Medium *</Label>
               <select
@@ -182,21 +249,6 @@ export default function AddRequestForTutor() {
                 <p className="text-sm text-red-500">{errors.grade.message}</p>
               )}
             </div>
-
-            <div className="flex justify-end mt-4">
-              <button
-                type="button"
-                className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-gray-200 text-darkpurple hover:bg-gray-300"
-                onClick={nextStep}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
-
-        {step === 2 && (
-          <div className="p-6 flex flex-col gap-2">
             <div className="grid gap-2">
               <Label>Number of Tutors</Label>
               <select
@@ -235,6 +287,7 @@ export default function AddRequestForTutor() {
                       />
                     )}
                   />
+
                   {errors.tutors?.[index]?.subjects && (
                     <p className="text-sm text-red-500">
                       {errors.tutors[index]?.subjects?.message}
