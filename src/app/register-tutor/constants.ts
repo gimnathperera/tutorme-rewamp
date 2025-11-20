@@ -21,8 +21,8 @@ export const educationLevels = [
 
 export const tutorMediums = [
   "Sinhala",
-  "English ",
-  "Tamil ",
+  "English",
+  "Tamil",
 ];
 export const yearsOptions = [
   "0",
