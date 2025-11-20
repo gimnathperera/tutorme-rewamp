@@ -1,0 +1,4 @@
+export const LIMITS_CONFIG = {
+  FETCH_LIMIT: 100,
+  MAX_TUTOR_OPTIONS: 4,
+};
