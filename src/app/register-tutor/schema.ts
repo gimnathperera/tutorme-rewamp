@@ -17,18 +17,29 @@ export const findMyTutorSchema = z.object({
   nationality: z.string().nonempty("Nationality is required"),
   race: z.string().nonempty("Race is required"),
   last4NRIC: z.string().regex(/^\d{4}$/, "Enter exactly 4 digits"),
+
   tutoringLevels: z.array(z.string()).min(1, "Select at least one level"),
   preferredLocations: z.array(z.string()),
+
   tutorType: z.string().nonempty("Tutor type is required"),
   yearsExperience: z.number(),
   highestEducation: z.string().nonempty("Highest education is required"),
   academicDetails: z.string().nonempty("Academic details are required"),
+  tutorMediums: z
+    .array(z.string())
+    .min(1, "Please select at least one medium."),
+
+  grades: z.array(z.string()).min(1, "Select at least one grade"),
+  subjects: z.array(z.string()).min(1, "Select at least one subject"),
+
   teachingSummary: z.string().nonempty("Teaching summary is required"),
   studentResults: z.string().nonempty("Student results are required"),
   sellingPoints: z.string().nonempty("Selling points are required"),
+
   agreeTerms: z
     .boolean()
     .refine((v) => v, "You must agree to Terms & Conditions"),
+
   agreeAssignmentInfo: z
     .boolean()
     .refine((v) => v, "You must agree to receive assignment info"),
