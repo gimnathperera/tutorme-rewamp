@@ -39,7 +39,6 @@ export type TuitionRateItem = {
   title: string;
   grade: Grade;
   subject: Subject;
-  level: Level;
   govTuitionRate: Rate[];
   partTimeTuitionRate: Rate[];
   fullTimeTuitionRate: Rate[];
