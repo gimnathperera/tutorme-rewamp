@@ -26,7 +26,7 @@ export default function RegisterTutorPage() {
       dateOfBirth: "",
 
       gender: "Male",
-      age: 16,
+      age: 18,
       nationality: "Singaporean",
       race: "Chinese",
       last4NRIC: "",

@@ -4,6 +4,7 @@ import { useFormContext } from "react-hook-form";
 import { FindMyTutorForm } from "../schema";
 import InputText from "@/components/shared/input-text";
 import RadioGroup from "@/components/shared/input-radio";
+import { useEffect } from "react";
 
 const PersonalInfo = () => {
   const {
@@ -13,7 +14,25 @@ const PersonalInfo = () => {
     formState: { errors },
   } = useFormContext<FindMyTutorForm>();
 
-  const data = watch(); // for conditional validation / dependent re-validation
+  const data = watch();
+  useEffect(() => {
+    if (!data.dateOfBirth) return;
+
+    const birthDate = new Date(data.dateOfBirth);
+    const today = new Date();
+
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    const dayDiff = today.getDate() - birthDate.getDate();
+
+    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+      age--;
+    }
+
+    if (!isNaN(age) && age > 0 && age < 100) {
+      setValue("age", age);
+    }
+  }, [data.dateOfBirth, setValue]);
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -97,7 +116,7 @@ const PersonalInfo = () => {
                   errors.age ? "border-red-500" : "border-gray-300"
                 }`}
                 placeholder="25"
-                min={16}
+                min={18}
                 max={80}
               />
               {errors.age && (
