@@ -18,7 +18,7 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: "Find a Tutor", href: "/request-for-tutors", current: false },
+  { name: "Request a Tutor", href: "/request-for-tutors", current: false },
   { name: "Register a Tutor", href: "/register-tutor", current: false },
 
   {

@@ -51,7 +51,7 @@ const Beliefs = () => {
               className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90"
               onClick={handleOnLearnMoreClick}
             >
-              Find a Tutor
+              Request a Tutor
             </button>
           </div>
         </div>

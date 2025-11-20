@@ -29,7 +29,7 @@ const Banner = () => {
               className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary-700 text-white py-3 px-6 md:py-5 md:px-14 rounded-full hover:opacity-90"
               onClick={handleOnFindATutorClick}
             >
-              Find a tutor
+              Request a tutor
             </button>
           </div>
         </div>
