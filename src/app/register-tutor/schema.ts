@@ -12,7 +12,7 @@ export const findMyTutorSchema = z.object({
   gender: z.string().nonempty("Gender is required"),
   age: z
     .number()
-    .min(16, "Age must be at least 16")
+    .min(18, "Age must be at least 18")
     .max(80, "Age must be below 80"),
   nationality: z.string().nonempty("Nationality is required"),
   race: z.string().nonempty("Race is required"),
