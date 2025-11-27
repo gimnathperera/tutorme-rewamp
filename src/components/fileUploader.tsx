@@ -1,7 +1,7 @@
 "use client";
 
 import { Loader2, X } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, MouseEvent } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface FileUploadDropzoneProps {
@@ -67,10 +67,11 @@ export default function FileUploadDropzone({
 
       onUploaded(publicUrl);
     },
-    [onUploaded],
+    [onUploaded]
   );
 
-  const removeFile = () => {
+  const removeFile = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     setFileName("");
     setPreviewUrl(null);
     onUploaded("");
