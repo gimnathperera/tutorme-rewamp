@@ -47,6 +47,11 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
     logout();
   };
 
+  const avatarSrc =
+    user?.avatar && user.avatar.trim() !== ""
+      ? user.avatar
+      : "/images/testimonial/user1.svg";
+
   const handleLogoutConfirmationVisibility = () => {
     setIsLogoutConfirmationOpen((show) => !show);
   };
@@ -74,7 +79,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
           onClick={toggleDropdown}
         >
           <img
-            src="/images/testimonial/user1.svg"
+            src={avatarSrc}
             alt="Profile-image"
             className="w-10 h-10 rounded-full"
           />
