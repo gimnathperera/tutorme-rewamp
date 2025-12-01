@@ -165,7 +165,11 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="block lg:hidden">
+          <div className="flex items-center gap-3 lg:hidden">
+            {user?.email ? (
+              <ProfileDropdown isLoading={!isUserLoaded} user={user} />
+            ) : null}
+
             <Bars3Icon
               className="block h-6 w-6"
               aria-hidden="true"
