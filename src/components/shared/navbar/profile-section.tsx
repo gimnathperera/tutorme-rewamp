@@ -28,23 +28,16 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
     null
   ) as unknown as MutableRefObject<HTMLInputElement>;
 
-  // 🔹 local avatar state used by header
   const [avatarSrc, setAvatarSrc] = useState<string>(DEFAULT_AVATAR);
 
-  // 🔹 lazy profile fetch from API
   const [fetchProfile, { data: profileData }] = useLazyGetProfileQuery();
 
-  // 🔹 fetch profile when user is available (and on refresh)
   useEffect(() => {
     if (user?.id) {
       fetchProfile({ userId: String(user.id) });
     }
   }, [user?.id, fetchProfile]);
 
-  // 🔹 decide which avatar to show:
-  //    1) profile.avatar from API (latest)
-  //    2) user.avatar from auth context (fallback)
-  //    3) default icon
   useEffect(() => {
     const apiAvatar = (profileData as any)?.avatar;
     const contextAvatar = user?.avatar;
