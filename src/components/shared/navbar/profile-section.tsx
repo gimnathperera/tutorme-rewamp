@@ -7,11 +7,14 @@ import "react-loading-skeleton/dist/skeleton.css";
 import ConfirmationAlert from "../confirm-alert";
 import { useRouter } from "next/navigation";
 import { AuthUserData } from "@/types/auth-types";
+import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 
 type Props = {
   isLoading: boolean;
   user?: AuthUserData;
 };
+
+const DEFAULT_AVATAR = "/images/testimonial/user1.svg";
 
 const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const { logout, isUserLogoutLoading } = useAuthContext();
@@ -24,6 +27,36 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const dropdownRef = useRef(
     null
   ) as unknown as MutableRefObject<HTMLInputElement>;
+
+  // 🔹 local avatar state used by header
+  const [avatarSrc, setAvatarSrc] = useState<string>(DEFAULT_AVATAR);
+
+  // 🔹 lazy profile fetch from API
+  const [fetchProfile, { data: profileData }] = useLazyGetProfileQuery();
+
+  // 🔹 fetch profile when user is available (and on refresh)
+  useEffect(() => {
+    if (user?.id) {
+      fetchProfile({ userId: String(user.id) });
+    }
+  }, [user?.id, fetchProfile]);
+
+  // 🔹 decide which avatar to show:
+  //    1) profile.avatar from API (latest)
+  //    2) user.avatar from auth context (fallback)
+  //    3) default icon
+  useEffect(() => {
+    const apiAvatar = (profileData as any)?.avatar;
+    const contextAvatar = user?.avatar;
+
+    const finalAvatar =
+      (apiAvatar && apiAvatar.trim() !== "") ||
+      (contextAvatar && contextAvatar.trim() !== "")
+        ? (apiAvatar || contextAvatar)!
+        : DEFAULT_AVATAR;
+
+    setAvatarSrc(finalAvatar);
+  }, [profileData, user?.avatar]);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const closeDropdown = () => setIsOpen(false);
@@ -46,11 +79,6 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
     closeDropdown();
     logout();
   };
-
-  const avatarSrc =
-    user?.avatar && user.avatar.trim() !== ""
-      ? user.avatar
-      : "/images/testimonial/user1.svg";
 
   const handleLogoutConfirmationVisibility = () => {
     setIsLogoutConfirmationOpen((show) => !show);
@@ -81,7 +109,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
           <img
             src={avatarSrc}
             alt="Profile-image"
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full object-cover"
           />
         </button>
       )}
