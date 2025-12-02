@@ -26,19 +26,30 @@ const TestPapperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
         </div>
       ) : availablePapers?.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {availablePapers.map(({ title, year, subject }, index) => (
-            <div key={index} className="text-center">
-              <h2 className="text-lg font-bold text-black">{subject.title}</h2>
+          {availablePapers.map((paper) => (
+            <div key={paper.id} className="text-center">
+              <h2 className="text-lg font-bold text-black">
+                {paper.subject.title}
+              </h2>
+
               <a
-                href="#"
+                href={paper.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block text-blue-600 hover:underline font-semibold mt-2"
               >
-                Download All
+                Download Paper
               </a>
+
               <ul className="mt-4 space-y-1">
                 <li>
-                  <a href="#" className="text-gray-700 hover:underline">
-                    {`${title} ${year}`}
+                  <a
+                    href={paper.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 hover:underline"
+                  >
+                    {paper.title} ({paper.year})
                   </a>
                 </li>
               </ul>

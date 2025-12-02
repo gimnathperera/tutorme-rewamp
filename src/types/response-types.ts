@@ -15,6 +15,7 @@ export type PaginatedResponse<T> = {
   next: string | null;
   previous: string | null;
   results: T[];
+  tags: T[];
   totalResults: number;
 };
 
@@ -158,6 +159,7 @@ export type Tags = BaseEntity &
   WithTitleDescription & {
     _id: string;
     name: string;
+    tags: string[];
     description: string;
   };
 
