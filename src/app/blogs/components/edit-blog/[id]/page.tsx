@@ -254,14 +254,15 @@ export default function EditBlogPage() {
             <div>
               <Label>Tags</Label>
               <Controller
-                name="tags"
                 control={control}
+                name="tags"
                 render={({ field }) => (
                   <MultiSelect
-                    label=""
+                    key={JSON.stringify(field.value)}
                     options={tagsOptions}
                     defaultSelected={field.value}
                     onChange={field.onChange}
+                    label={""}
                   />
                 )}
               />
