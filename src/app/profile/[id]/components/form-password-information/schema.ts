@@ -2,19 +2,30 @@ import { z } from "zod";
 
 export const passwordInfoSchema = z
   .object({
-    currentPassword: z.string().min(1, { message: "Password is required" }),
+    currentPassword: z
+      .string()
+      .nonempty({ message: "Current password is required" }),
+
     newPassword: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters long" })
-      .regex(/[a-z]/, { message: "Must include at least one lowercase letter" })
-      .regex(/[A-Z]/, { message: "Must include at least one uppercase letter" })
-      .regex(/[0-9]/, { message: "Must include at least one number" })
-      .regex(/[#@$&]/, {
-        message: "Must include at least one special symbol (#, @, $, &)",
+      .nonempty({ message: "New password is required." })
+      .min(8, { message: "Password must be at least 8 characters long" })
+      .max(12, { message: "Password cannot exceed 12 characters" })
+      .superRefine((val, ctx) => {
+        const hasLetter = /[a-zA-Z]/.test(val);
+        const hasNumber = /\d/.test(val);
+
+        if (!hasLetter || !hasNumber) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "Password must contain at least 1 letter and 1 number",
+          });
+        }
       }),
+
     confirmPassword: z
       .string()
-      .min(6, { message: "Password must be at least 6 characters long" }),
+      .nonempty({ message: "Please confirm your new password." }),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Confirm Password must match New Password",
