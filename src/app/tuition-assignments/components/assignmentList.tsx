@@ -29,7 +29,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
     limit,
   };
 
-  // ❗ Do NOT send gradeId to backend for now – we filter on FE
+
   const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
 
   const allAssignments: TuitionAssignment[] = data?.results || [];
@@ -42,10 +42,8 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
 
       if (!gradeField) return false;
 
-      // Case 1: backend returns plain id
       if (typeof gradeField === "string") return gradeField === gradeId;
 
-      // Case 2: populated object with id
       if (typeof gradeField === "object") {
         if (gradeField.id && typeof gradeField.id === "string") {
           return gradeField.id === gradeId;
@@ -132,7 +130,6 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
                     {[
                       assignment.assignmentNumber,
                       assignment.title,
-                      // Try to display grade name if populated
                       assignment.gradeName ||
                         assignment.gradeTitle ||
                         assignment.gradeId?.title,
