@@ -159,13 +159,12 @@ export type FetchTestimonialsRequest = {
 };
 
 export type FetchTuitionAssignments = {
-  title: string;
-  assignmentNumber: string;
-  address: string;
-  duration: string;
-  gradeId: string;
-  tutorId: string;
-  assignmentPrice: string;
+  page?: number;
+  limit?: number;
+  title?: string;
+  assignmentNumber?: string;
+  gradeId?: string;
+  tutorId?: string;
 };
 
 type PersonalInfo = {
@@ -196,6 +195,12 @@ type TutorTypeInfo = {
   studentSchool: string;
   genderPreference: string;
   isBilingualTutor: boolean;
+};
+export type FetchTuitionAssignmentsRequest = {
+  page?: number;
+  limit?: number;
+  gradeId?: string;
+  subjectId?: string;
 };
 
 export type FindMyTutorRequest = {
