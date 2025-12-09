@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Table,
   TableBody,
@@ -10,47 +10,55 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { useFetchTuitionAssignmentsQuery } from '@/store/api/splits/tuition-assignments';
+import { useFetchTuitionAssignmentsQuery } from "@/store/api/splits/tuition-assignments";
+import { TuitionAssignment } from "@/types/response-types";
+import { FetchTuitionAssignments } from "@/types/request-types";
 
 interface AssignmentListProps {
-  tutorType: string;
   gradeId: string;
-  gender: string;
 }
 
-const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gender }) => {
+const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
   const router = useRouter();
 
   const [page, setPage] = useState(1);
   const limit = 10;
 
-  const queryParams: any = { page, limit };
-  if (gradeId && gradeId !== 'all') queryParams.gradeId = gradeId;
+  const queryParams: FetchTuitionAssignments = {
+    page,
+    limit,
+  };
+
 
   const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
-  const totalCount = data?.totalResults || 0;
-  const totalPages = Math.ceil(totalCount / limit);
+
+  const allAssignments: TuitionAssignment[] = data?.results || [];
 
   const assignments = useMemo(() => {
-    const allAssignments = data?.results || [];
-    let filtered = allAssignments;
+    if (!gradeId || gradeId === "all") return allAssignments;
 
-    if (tutorType && tutorType !== 'all') {
-      filtered = filtered.filter((assignment) => {
-        const assignmentTutorType = (assignment as any).tutorType;
-        return assignmentTutorType?.toLowerCase() === tutorType.toLowerCase();
-      });
-    }
+    return allAssignments.filter((assignment: any) => {
+      const gradeField = assignment.gradeId;
 
-    if (gender && gender !== 'all') {
-      filtered = filtered.filter((assignment) => {
-        const assignmentGender = (assignment as any).gender || (assignment as any).tutor?.gender;
-        return assignmentGender?.toLowerCase() === gender.toLowerCase();
-      });
-    }
+      if (!gradeField) return false;
 
-    return filtered;
-  }, [data?.results, tutorType, gender]);
+      if (typeof gradeField === "string") return gradeField === gradeId;
+
+      if (typeof gradeField === "object") {
+        if (gradeField.id && typeof gradeField.id === "string") {
+          return gradeField.id === gradeId;
+        }
+        if (gradeField._id && typeof gradeField._id === "string") {
+          return gradeField._id === gradeId;
+        }
+      }
+
+      return false;
+    });
+  }, [allAssignments, gradeId]);
+
+  const totalCount = assignments.length;
+  const totalPages = Math.max(1, Math.ceil(totalCount / limit));
 
   const [selected, setSelected] = useState<string[]>([]);
 
@@ -64,13 +72,13 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
     const selectedAssignments = assignments.filter((assignment) =>
       selected.includes(assignment.id)
     );
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       sessionStorage.setItem(
-        'selectedAssignments',
+        "selectedAssignments",
         JSON.stringify(selectedAssignments)
       );
     }
-    router.push('/tuition-assignments/selected');
+    router.push("/tuition-assignments/selected");
   };
 
   const handleNextPage = () => {
@@ -82,31 +90,39 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
   };
 
   return (
-    <div className='flex flex-col items-center w-full'>
+    <div className="flex flex-col items-center w-full">
       <div className="w-full overflow-x-auto max-w-5xl border border-gray-300 rounded-xl">
         <Table className="min-w-[600px] bg-white rounded-xl">
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-6 text-gray-500">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-6 text-gray-500"
+                >
                   Loading assignments...
                 </TableCell>
               </TableRow>
             ) : assignments.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-6 text-gray-500">
+                <TableCell
+                  colSpan={8}
+                  className="text-center py-6 text-gray-500"
+                >
                   No assignments found.
                 </TableCell>
               </TableRow>
             ) : (
-              assignments.map((assignment) => (
+              assignments.map((assignment: any) => (
                 <TableRow
                   key={assignment.id}
-                  className={selected.includes(assignment.id) ? 'bg-blue-50' : ''}
+                  className={
+                    selected.includes(assignment.id) ? "bg-blue-50" : ""
+                  }
                 >
-                  <TableCell className='p-4 font-semibold text-base'>
+                  <TableCell className="p-4 font-semibold text-base">
                     <input
-                      className='mr-3 border rounded border-gray-400'
+                      className="mr-3 border rounded border-gray-400"
                       type="checkbox"
                       checked={selected.includes(assignment.id)}
                       onChange={() => handleSelect(assignment.id)}
@@ -114,13 +130,14 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                     {[
                       assignment.assignmentNumber,
                       assignment.title,
-                      assignment.gradeName,
-                      assignment.tutorType,
+                      assignment.gradeName ||
+                        assignment.gradeTitle ||
+                        assignment.gradeId?.title,
                       assignment.address,
-                      assignment.assignmentPrice
+                      assignment.assignmentPrice,
                     ]
                       .filter(Boolean)
-                      .join(', ')}
+                      .join(", ")}
                   </TableCell>
                 </TableRow>
               ))
@@ -129,7 +146,10 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
 
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={8} className="text-center font-medium text-base py-3">
+              <TableCell
+                colSpan={8}
+                className="text-center font-medium text-base py-3"
+              >
                 <span>{selected.length} Assignments Selected</span>
                 <button
                   className="ml-4 px-4 py-2 bg-primary-700 text-white rounded-full font-semibold disabled:opacity-50"
@@ -141,7 +161,6 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
               </TableCell>
             </TableRow>
 
-            {/* Pagination Controls */}
             <TableRow>
               <TableCell colSpan={8} className="text-center py-4">
                 <div className="flex items-center justify-center gap-4">
@@ -153,7 +172,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ tutorType, gradeId, gen
                     Previous
                   </Button>
                   <span className="font-medium">
-                    Page {page} of {totalPages || 1}
+                    Page {page} of {totalPages}
                   </span>
                   <Button
                     variant="outline"

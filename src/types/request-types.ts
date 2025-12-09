@@ -159,13 +159,12 @@ export type FetchTestimonialsRequest = {
 };
 
 export type FetchTuitionAssignments = {
-  title: string;
-  assignmentNumber: string;
-  address: string;
-  duration: string;
-  gradeId: string;
-  tutorId: string;
-  assignmentPrice: string;
+  page?: number;
+  limit?: number;
+  title?: string;
+  assignmentNumber?: string;
+  gradeId?: string;
+  tutorId?: string;
 };
 
 type PersonalInfo = {
@@ -197,22 +196,27 @@ type TutorTypeInfo = {
   genderPreference: string;
   isBilingualTutor: boolean;
 };
+export type FetchTuitionAssignmentsRequest = {
+  page?: number;
+  limit?: number;
+  gradeId?: string;
+  subjectId?: string;
+};
 
 export type FindMyTutorRequest = {
   fullName: string;
   contactNumber: string;
 
   email: string;
-  dateOfBirth: string; // YYYY-MM-DD format
-
+  dateOfBirth: string; 
   gender: string;
   age: number;
   nationality: string;
   race: string;
   last4NRIC: string;
-  tutoringLevels: string[]; // e.g., ["Primary School", "Upper Secondary"]
-  preferredLocations: string[]; // e.g., ["Bukit Timah", "Toa Payoh"]
-  tutorType: string; // Full Time Tutor / Part Time Tutor
+  tutoringLevels: string[]; 
+  preferredLocations: string[]; 
+  tutorType: string; 
   yearsExperience: number;
   highestEducation: string;
   academicDetails: string;

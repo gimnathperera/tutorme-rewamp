@@ -3,36 +3,28 @@
 import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { SelectButton } from "@/components/shared/select";
-import tutorTypes from "@/lib/data/tuition-assignments/tutor-types";
-import genders from "@/lib/data/tuition-assignments/genders";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import AssignmentList from "./assignmentList";
 
-const tutorTypeOptions = tutorTypes;
-const genderOptions = genders;
 const Filter = () => {
-  const [tutorType, setTutorType] = useState("");
-  const [gradeId, setGradeId] = useState("");
-  const [gender, setGender] = useState("");
+  const [selectedGradeId, setSelectedGradeId] = useState<string>("");
+  const [appliedGradeId, setAppliedGradeId] = useState<string>("");
+
   const { data: gradesData, isLoading: isGradesLoading } = useFetchGradesQuery({
     page: 1,
     limit: 100,
   });
 
-  const [appliedFilters, setAppliedFilters] = useState({
-    tutorType: "",
-    gradeId: "",
-    gender: "",
-  });
-
-  const gradeOptions =
-    gradesData?.results.map((grade) => ({
-      label: grade.title,
-      value: grade.id,
-    })) || [];
+  const gradeOptions = [
+    { label: "All Grades", value: "all" },
+    ...(gradesData?.results.map((grade) => ({
+      label: grade.title, // show name
+      value: grade.id, // use id for filtering
+    })) || []),
+  ];
 
   const handleApply = () => {
-    setAppliedFilters({ tutorType, gradeId, gender });
+    setAppliedGradeId(selectedGradeId);
   };
 
   return (
@@ -42,33 +34,14 @@ const Filter = () => {
           <Skeleton height={50} width={200} borderRadius={10} />
         ) : (
           <SelectButton
-            placeholder="Tutor Type"
-            selectLabel="Tutor Type"
-            selectItems={tutorTypeOptions}
-            onChange={setTutorType}
-          />
-        )}
-        {isGradesLoading ? (
-          <Skeleton height={50} width={200} borderRadius={10} />
-        ) : (
-          <SelectButton
             placeholder="Grade"
             selectLabel="Grade"
             selectItems={gradeOptions}
-            onChange={setGradeId}
-          />
-        )}
-        {isGradesLoading ? (
-          <Skeleton height={50} width={200} borderRadius={10} />
-        ) : (
-          <SelectButton
-            placeholder="Gender"
-            selectLabel="Gender"
-            selectItems={genderOptions}
-            onChange={setGender}
+            onChange={setSelectedGradeId}
           />
         )}
       </div>
+
       <div className="flex justify-center w-full mb-6">
         <button
           className="text-sm md:text-xl font-semibold hover:shadow-xl bg-primary-700 text-white py-2 px-8 rounded-full hover:opacity-90 transition-all"
@@ -77,11 +50,8 @@ const Filter = () => {
           Apply
         </button>
       </div>
-      <AssignmentList
-        tutorType={appliedFilters.tutorType}
-        gradeId={appliedFilters.gradeId}
-        gender={appliedFilters.gender}
-      />
+
+      <AssignmentList gradeId={appliedGradeId} />
     </div>
   );
 };
