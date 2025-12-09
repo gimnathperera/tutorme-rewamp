@@ -27,7 +27,7 @@ type GradeGroup = {
 export default function TuitionRatesByGrade() {
   const { data, isLoading, error } = useFetchTuitionRatesQuery({
     page: 1,
-    limit: 100,
+    limit: 200,
   });
 
   if (isLoading) return <p>Loading...</p>;
