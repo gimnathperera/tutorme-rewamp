@@ -10,7 +10,6 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  TableFooter,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 
@@ -125,23 +124,21 @@ export default function TuitionRatesByGrade() {
           </CardContent>
         </Card>
       ))}
-      <TableFooter>
-        <div className="flex items-center justify-center gap-4">
-          <Button variant="outline" disabled={page === 1} onClick={handlePrev}>
-            Previous
-          </Button>
-          <span className="font-medium">
-            Page {page} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            disabled={page === totalPages || totalPages === 0}
-            onClick={handleNext}
-          >
-            Next
-          </Button>
-        </div>
-      </TableFooter>
+      <div className="flex items-center justify-center gap-4">
+        <Button variant="outline" disabled={page === 1} onClick={handlePrev}>
+          Previous
+        </Button>
+        <span className="font-medium">
+          Page {page} of {totalPages}
+        </span>
+        <Button
+          variant="outline"
+          disabled={page === totalPages || totalPages === 0}
+          onClick={handleNext}
+        >
+          Next
+        </Button>
+      </div>
     </div>
   );
 }
