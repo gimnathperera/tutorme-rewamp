@@ -77,7 +77,7 @@ export default function BlogsDashboard() {
         <div className="relative h-52 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl text-white p-10 flex flex-col md:flex-row items-center justify-between">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-2">
-              Welcome to the Tutor Me Blog
+              Welcome to the Tuition Lanka
             </h1>
             <p className="text-lg md:text-xl text-white/90">
               Discover the latest insights and updates.
