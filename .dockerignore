@@ -1,0 +1,14 @@
+node_modules
+.pnpm-store
+.vscode
+.git
+.gitignore
+.DS_Store
+dist
+build
+coverage
+*.log
+.env
+.env.local
+.env.*.local
+pnpm-debug.log
