@@ -30,7 +30,7 @@ const aboutDetails = [
   {
     name: "All Tuition Rates",
     subTitle: "Affordable Tuition Rates",
-    title: "Tutor Me Tuition Rates",
+    title: "Tuition Lanka Tuition Rates",
     description:
       "Our tuition rates are constantly updated based on tuition fees quoted by home tutors in Sri Lanka. These rates reflect local market averages for university students, graduate teachers, and government school teachers.",
   },

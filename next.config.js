@@ -29,6 +29,23 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.tuitionlanka.com",
+          },
+        ],
+        destination: "https://tuitionlanka.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
+  output: "standalone",
 };
 
 module.exports = nextConfig;
