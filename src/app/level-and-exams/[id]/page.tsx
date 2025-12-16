@@ -98,7 +98,7 @@ const LevelAndExams: FC = () => {
             Effective {level.title} Home Tuition
           </h1>
           <h1 className="text-3xl font-semibold text-center">
-            What Are The Topics and Subjects Covered By Tutor Me {level.title}{" "}
+            What Are The Topics and Subjects Covered By Tuition Lanka{level.title}{" "}
             Tutors?
           </h1>
         </div>

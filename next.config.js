@@ -29,7 +29,6 @@ const nextConfig = {
       },
     ],
   },
-
   async redirects() {
     return [
       {
@@ -45,6 +44,8 @@ const nextConfig = {
       },
     ];
   },
+
+  output: "standalone",
 };
 
 module.exports = nextConfig;

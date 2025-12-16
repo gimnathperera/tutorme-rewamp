@@ -55,7 +55,7 @@ const footer = () => {
           <div className="col-span-4">
             <h3 className="text-white text-4xl font-semibold leading-9 mb-4 lg:mb-20">
               {" "}
-              Tutor Me
+              Tuition Lanka
             </h3>
             <div className="flex gap-4">
               <div className="footer-icons">
@@ -123,7 +123,7 @@ const footer = () => {
                 @2024 - All Rights Reserved by{" "}
                 <Link href="https://tutor-me.com/" target="_blank">
                   {" "}
-                  tutor-me.com
+                  tuition-lanka.com
                 </Link>
               </h3>
             </div>

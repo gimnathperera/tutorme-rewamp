@@ -6,10 +6,10 @@ import { WithProviders } from "@/hocs/with-providers";
 
 
 export const metadata = {
-  title: "Tutor Me",
+  title: "Tuition Lanka",
   description: "Change how you learn with a tutor",
   icons: {
-     icon: "/favicon.ico",
+     icon: "/favicon.svg",
   },
 };
 
