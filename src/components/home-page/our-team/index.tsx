@@ -1,5 +1,5 @@
 import Image from "next/image";
-import TutorImage from "../../../../public/images/banner/banner2.jpg";
+import TutorImage from "../../../../public/images/banner/banner2.webp";
 
 const OurTeam = () => {
   return (

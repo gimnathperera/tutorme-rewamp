@@ -35,7 +35,7 @@ const Digital = () => {
           <div>
             <div className="lg:absolute girldoodle">
               <Image
-                src={"/images/digital/girldoodle.svg"}
+                src={"/images/digital/girldoodle.webp"}
                 alt="girldoodle"
                 width={815}
                 height={691}
