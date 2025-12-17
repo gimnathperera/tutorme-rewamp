@@ -35,10 +35,7 @@ const navigation: NavigationItem[] = [
     name: "Tuition",
     href: "/",
     current: false,
-    dropdown: [
-      { name: "Tuition Rates", href: "/tuition-rates" },
-      { name: "Tuition Assignments", href: "/tuition-assignments" },
-    ],
+    dropdown: [{ name: "Tuition Rates", href: "/tuition-rates" }],
   },
 
   { name: "FAQ", href: "/#faq-section", current: false },
