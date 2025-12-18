@@ -107,43 +107,44 @@ export default function FindMyTutorForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      {/* Step 1 */}
       <div
         className="mx-auto max-w-7xl my-10 px-6 lg:px-8"
         style={{ display: step === 1 ? "block" : "none" }}
       >
-        <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
+        <div className="text-2xl flex gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
           <h1>Register As A Tutor - Personal Information</h1>
         </div>
         <div className="p-6 flex flex-col gap-5">
-          <div className="flex flex-row gap-5 md:flex-row">
+          <div className="flex flex-col gap-5 md:flex-row">
             <div className="w-full">
               <Label>Full Name *</Label>
               <Input
-                className="border-gray-300 hover:border-blue"
                 {...register("fullName")}
+                className="border-gray-300 hover:border-blue"
               />
               {errors.fullName && (
                 <p className="text-red-500">{errors.fullName.message}</p>
               )}
             </div>
-
             <div className="w-full">
               <Label>Email *</Label>
               <Input
-                className="border-gray-300 hover:border-blue"
                 {...register("email")}
+                className="border-gray-300 hover:border-blue"
               />
               {errors.email && (
                 <p className="text-red-500">{errors.email.message}</p>
               )}
             </div>
           </div>
-          <div className="flex flex-row gap-5 md:flex-row">
+
+          <div className="flex flex-col gap-5 md:flex-row">
             <div className="w-full">
               <Label>Contact Number *</Label>
               <Input
-                className="border-gray-300 hover:border-blue"
                 {...register("contactNumber")}
+                className="border-gray-300 hover:border-blue"
               />
               {errors.contactNumber && (
                 <p className="text-red-500">{errors.contactNumber.message}</p>
@@ -152,22 +153,23 @@ export default function FindMyTutorForm() {
             <div className="w-full">
               <Label>Date of Birth *</Label>
               <Input
-                className="border-gray-300 hover:border-blue"
                 type="date"
                 {...register("dateOfBirth")}
+                className="border-gray-300 hover:border-blue"
               />
               {errors.dateOfBirth && (
                 <p className="text-red-500">{errors.dateOfBirth.message}</p>
               )}
             </div>
           </div>
-          <div className="flex flex-row gap-5 md:flex-row">
+
+          <div className="flex flex-col gap-5 md:flex-row">
             <div className="w-full">
               <Label>Age *</Label>
               <Input
-                className="border-gray-300 hover:border-blue"
                 type="number"
                 {...register("age", { valueAsNumber: true })}
+                className="border-gray-300 hover:border-blue"
               />
               {errors.age && (
                 <p className="text-red-500">{errors.age.message}</p>
@@ -192,7 +194,8 @@ export default function FindMyTutorForm() {
               )}
             </div>
           </div>
-          <div className="flex flex-row gap-5 md:flex-row">
+
+          <div className="flex flex-col gap-5 md:flex-row">
             <div className="w-full">
               <Label>Nationality *</Label>
               <Controller
@@ -211,7 +214,6 @@ export default function FindMyTutorForm() {
                 <p className="text-red-500">{errors.nationality.message}</p>
               )}
             </div>
-
             <div className="w-full">
               <Label>Race *</Label>
               <Controller
@@ -247,174 +249,168 @@ export default function FindMyTutorForm() {
         style={{ display: step === 2 ? "block" : "none" }}
         className="mx-auto max-w-7xl my-10 px-6 lg:px-8"
       >
-        <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
+        <div className="text-2xl flex gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
           <h1>Register As A Tutor - Teaching Preferences & Qualifications</h1>
         </div>
         <div className="grid gap-6 bg-white p-5">
-          <div>
-            <div className="flex flex-row gap-5 md:flex-row">
-              {/* Tutoring Levels */}
-              <div className="w-full">
-                <Label>Tutoring Levels *</Label>
-                <Controller
-                  control={control}
-                  name="tutoringLevels"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={TUTORING_LEVEL_OPTIONS}
-                      defaultSelected={field.value || []}
-                      onChange={field.onChange}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.tutoringLevels && (
-                  <p className="text-red-500">
-                    {errors.tutoringLevels.message}
-                  </p>
+          <div className="flex flex-col gap-5 md:flex-row">
+            <div className="w-full">
+              <Label>Tutoring Levels *</Label>
+              <Controller
+                control={control}
+                name="tutoringLevels"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={TUTORING_LEVEL_OPTIONS}
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    label=""
+                  />
                 )}
-              </div>
-
-              {/* Preferred Locations */}
-              <div className="w-full">
-                <Label>Preferred Locations *</Label>
-                <Controller
-                  control={control}
-                  name="preferredLocations"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={PREFFERED_LOCATION_OPTIONS}
-                      defaultSelected={field.value || []}
-                      onChange={field.onChange}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.preferredLocations && (
-                  <p className="text-red-500">
-                    {errors.preferredLocations.message}
-                  </p>
-                )}
-              </div>
+              />
+              {errors.tutoringLevels && (
+                <p className="text-red-500">{errors.tutoringLevels.message}</p>
+              )}
             </div>
-            <div className="flex flex-row gap-5 md:flex-row">
-              <div className="w-full">
-                <Label>Tutor Type *</Label>
-                <Controller
-                  control={control}
-                  name="tutorType"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={TUTOR_TYPE_OPTIONS}
-                      defaultSelected={field.value ? [field.value] : []}
-                      onChange={(val) => field.onChange(val[0] || "")}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.tutorType && (
-                  <p className="text-red-500">{errors.tutorType.message}</p>
+            <div className="w-full">
+              <Label>Preferred Locations *</Label>
+              <Controller
+                control={control}
+                name="preferredLocations"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={PREFFERED_LOCATION_OPTIONS}
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    label=""
+                  />
                 )}
-              </div>
-
-              <div className="w-full">
-                <Label>Register As A Tutor - Highest Education Level *</Label>
-                <Controller
-                  control={control}
-                  name="highestEducation"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={HIGHEST_EDUCATION_LEVELS}
-                      defaultSelected={field.value ? [field.value] : []}
-                      onChange={(val) => field.onChange(val[0] || "")}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.highestEducation && (
-                  <p className="text-red-500">
-                    {errors.highestEducation.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-row gap-5 ">
-              <div className="w-full">
-                <Label>Years of Experience *</Label>
-                <Input
-                  type="number"
-                  className="border-gray-300 hover:border-blue"
-                  {...register("yearsExperience", { valueAsNumber: true })}
-                />
-                {errors.yearsExperience && (
-                  <p className="text-red-500">
-                    {errors.yearsExperience.message}
-                  </p>
-                )}
-              </div>
-              <div className="w-full">
-                <Label>Tutor Mediums *</Label>
-                <Controller
-                  control={control}
-                  name="tutorMediums"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={MEDIUM_OPTIONS}
-                      defaultSelected={field.value || []}
-                      onChange={field.onChange}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.tutorMediums && (
-                  <p className="text-red-500">{errors.tutorMediums.message}</p>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-row gap-5">
-              <div className="w-full">
-                <Label>Grades *</Label>
-                <Controller
-                  control={control}
-                  name="grades"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={
-                        gradeData?.results.map((g: any) => ({
-                          value: g.id,
-                          text: g.title,
-                        })) || []
-                      }
-                      defaultSelected={field.value || []}
-                      onChange={field.onChange}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.grades && (
-                  <p className="text-red-500">{errors.grades.message}</p>
-                )}
-              </div>
-              <div className="w-full">
-                <Label>Subjects *</Label>
-                <Controller
-                  control={control}
-                  name="subjects"
-                  render={({ field }) => (
-                    <MultiSelect
-                      options={subjectOptions}
-                      defaultSelected={field.value || []}
-                      onChange={field.onChange}
-                      label=""
-                    />
-                  )}
-                />
-                {errors.subjects && (
-                  <p className="text-red-500">{errors.subjects.message}</p>
-                )}
-              </div>
+              />
+              {errors.preferredLocations && (
+                <p className="text-red-500">
+                  {errors.preferredLocations.message}
+                </p>
+              )}
             </div>
           </div>
+
+          <div className="flex flex-col gap-5 md:flex-row">
+            <div className="w-full">
+              <Label>Tutor Type *</Label>
+              <Controller
+                control={control}
+                name="tutorType"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={TUTOR_TYPE_OPTIONS}
+                    defaultSelected={field.value ? [field.value] : []}
+                    onChange={(val) => field.onChange(val[0] || "")}
+                    label=""
+                  />
+                )}
+              />
+              {errors.tutorType && (
+                <p className="text-red-500">{errors.tutorType.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <Label>Highest Education Level *</Label>
+              <Controller
+                control={control}
+                name="highestEducation"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={HIGHEST_EDUCATION_LEVELS}
+                    defaultSelected={field.value ? [field.value] : []}
+                    onChange={(val) => field.onChange(val[0] || "")}
+                    label=""
+                  />
+                )}
+              />
+              {errors.highestEducation && (
+                <p className="text-red-500">
+                  {errors.highestEducation.message}
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-5 md:flex-row">
+            <div className="w-full">
+              <Label>Years of Experience *</Label>
+              <Input
+                type="number"
+                {...register("yearsExperience", { valueAsNumber: true })}
+                className="border-gray-300 hover:border-blue"
+              />
+              {errors.yearsExperience && (
+                <p className="text-red-500">{errors.yearsExperience.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <Label>Tutor Mediums *</Label>
+              <Controller
+                control={control}
+                name="tutorMediums"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={MEDIUM_OPTIONS}
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    label=""
+                  />
+                )}
+              />
+              {errors.tutorMediums && (
+                <p className="text-red-500">{errors.tutorMediums.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-5 md:flex-row">
+            <div className="w-full">
+              <Label>Grades *</Label>
+              <Controller
+                control={control}
+                name="grades"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={
+                      gradeData?.results.map((g: any) => ({
+                        value: g.id,
+                        text: g.title,
+                      })) || []
+                    }
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    label=""
+                  />
+                )}
+              />
+              {errors.grades && (
+                <p className="text-red-500">{errors.grades.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <Label>Subjects *</Label>
+              <Controller
+                control={control}
+                name="subjects"
+                render={({ field }) => (
+                  <MultiSelect
+                    options={subjectOptions}
+                    defaultSelected={field.value || []}
+                    onChange={field.onChange}
+                    label=""
+                  />
+                )}
+              />
+              {errors.subjects && (
+                <p className="text-red-500">{errors.subjects.message}</p>
+              )}
+            </div>
+          </div>
+
           <div className="flex justify-between">
             <button
               type="button"
@@ -439,16 +435,16 @@ export default function FindMyTutorForm() {
         className="mx-auto max-w-7xl my-10 px-6 lg:px-8"
         style={{ display: step === 3 ? "block" : "none" }}
       >
-        <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
+        <div className="text-2xl flex gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
           <h1>Register As A Tutor - Teaching Profile</h1>
         </div>
         <div className="grid gap-1 bg-white p-5">
           <div>
             <Label>Short Introduction About Yourself *</Label>
             <textarea
-              className="border-gray-300 hover:border-blue w-full border rounded p-2"
-              placeholder="Personal Qualities (E.g Patient, Kind, Responsible...etc) Teaching Styles & Methodologies"
               {...register("teachingSummary")}
+              className="border-gray-300 hover:border-blue w-full border rounded p-2"
+              placeholder="Personal Qualities, Teaching Styles & Methodologies"
             />
             {errors.teachingSummary && (
               <p className="text-red-500">{errors.teachingSummary.message}</p>
@@ -459,9 +455,9 @@ export default function FindMyTutorForm() {
               Summary of Teaching Experience & Academic Achievements *
             </Label>
             <textarea
-              placeholder="Achievements & subjects taught, e.g., number of students, years, etc."
               {...register("academicDetails")}
               className="border-gray-300 hover:border-blue w-full border rounded p-2"
+              placeholder="Achievements & subjects taught, e.g., number of students, years, etc."
             />
             {errors.academicDetails && (
               <p className="text-red-500">{errors.academicDetails.message}</p>
@@ -470,9 +466,9 @@ export default function FindMyTutorForm() {
           <div>
             <Label>Results of Students / Track Record *</Label>
             <textarea
-              placeholder="Past grade improvement records of previous students."
               {...register("studentResults")}
               className="border-gray-300 hover:border-blue w-full border rounded p-2"
+              placeholder="Past grade improvement records of previous students."
             />
             {errors.studentResults && (
               <p className="text-red-500">{errors.studentResults.message}</p>
@@ -481,14 +477,15 @@ export default function FindMyTutorForm() {
           <div>
             <Label>Other Selling Points as a Tutor *</Label>
             <textarea
-              placeholder="Teaching methods, commitments, what makes you stand out."
               {...register("sellingPoints")}
               className="border-gray-300 hover:border-blue w-full border rounded p-2"
+              placeholder="Teaching methods, commitments, what makes you stand out."
             />
             {errors.sellingPoints && (
               <p className="text-red-500">{errors.sellingPoints.message}</p>
             )}
           </div>
+
           <div className="flex justify-between">
             <button
               type="button"
@@ -513,8 +510,7 @@ export default function FindMyTutorForm() {
         className="mx-auto max-w-7xl my-10 px-6 lg:px-8"
         style={{ display: step === 4 ? "block" : "none" }}
       >
-        <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
-          {/* <Image height={50} width={50} src={LogoImage} alt="Logo image" /> */}
+        <div className="text-2xl flex gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
           <h1>Verification & Agreement</h1>
         </div>
         <div className="grid gap-2 bg-white p-5">
@@ -535,40 +531,45 @@ export default function FindMyTutorForm() {
               </p>
             )}
           </div>
-          <div className="flex flex-row gap-2">
-            <input
-              type="checkbox"
-              {...register("agreeTerms")}
-              id="agreeTerms"
-            />
-            <Label htmlFor="agreeTerms" className="flex flex-col gap-2">
-              I agree to the Terms and Conditions
-              <span className="text-gray-500">
-                (I agree to receiving assignment information via SMS and
-                understand that rates are subject to negotiation. I understand
-                there may be admin fees involved for successful assignments.)
-              </span>
-            </Label>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                {...register("agreeTerms")}
+                id="agreeTerms"
+              />
+              <Label htmlFor="agreeTerms" className="flex flex-col gap-2">
+                I agree to the Terms and Conditions
+                <span className="text-gray-500">
+                  (I agree to receiving assignment information via SMS and
+                  understand that rates are subject to negotiation. I understand
+                  there may be admin fees involved for successful assignments.)
+                </span>
+              </Label>
+            </div>
+
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                {...register("agreeAssignmentInfo")}
+                id="agreeAssignmentInfo"
+              />
+              <Label
+                htmlFor="agreeAssignmentInfo"
+                className="flex flex-col gap-2"
+              >
+                I Agree to receiving assignment information regarding new
+                Tuition Assignments
+                <span className="text-gray-500">
+                  (By checking this box, you agree to receive SMS and email
+                  notifications about new tutoring assignments that match your
+                  preferences.)
+                </span>
+              </Label>
+            </div>
           </div>
-          <div className="flex flex-row gap-2">
-            <input
-              type="checkbox"
-              {...register("agreeAssignmentInfo")}
-              id="agreeAssignmentInfo"
-            />
-            <Label
-              className="flex flex-col gap-2"
-              htmlFor="agreeAssignmentInfo"
-            >
-              I Agree to receiving assignment information regarding new Tuition
-              Assignments
-              <span className="text-gray-500">
-                (By checking this box, you agree to receive SMS and email
-                notifications about new tutoring assignments that match your
-                preferences.)
-              </span>
-            </Label>
-          </div>
+
           <div className="flex justify-between gap-2">
             <button
               type="button"
@@ -579,8 +580,8 @@ export default function FindMyTutorForm() {
             </button>
             <button
               type="submit"
-              className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-black text-white hover:bg-gray-800"
               disabled={isLoading}
+              className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-black text-white hover:bg-gray-800"
             >
               Submit
             </button>
