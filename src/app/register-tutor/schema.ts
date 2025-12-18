@@ -1,48 +1,59 @@
 import { z } from "zod";
 
-export const findMyTutorSchema = z.object({
-  fullName: z.string().min(2, "Name must be at least 2 characters"),
-  contactNumber: z
-    .string()
-    .regex(/^\+?\d{8,12}$/, "Enter valid contact number"),
-
-  email: z.string().email("Enter valid email"),
-  dateOfBirth: z.string().nonempty("Date of birth is required"),
-
-  gender: z.string().nonempty("Gender is required"),
-  age: z
-    .number()
-    .min(18, "Age must be at least 18")
-    .max(80, "Age must be below 80"),
-  nationality: z.string().nonempty("Nationality is required"),
-  race: z.string().nonempty("Race is required"),
-  last4NRIC: z.string().regex(/^\d{4}$/, "Enter exactly 4 digits"),
-
-  tutoringLevels: z.array(z.string()).min(1, "Select at least one level"),
-  preferredLocations: z.array(z.string()),
-
-  tutorType: z.string().nonempty("Tutor type is required"),
-  yearsExperience: z.number(),
-  highestEducation: z.string().nonempty("Highest education is required"),
-  academicDetails: z.string().nonempty("Academic details are required"),
-  tutorMediums: z
-    .array(z.string())
-    .min(1, "Please select at least one medium."),
-
-  grades: z.array(z.string()).min(1, "Select at least one grade"),
-  subjects: z.array(z.string()).min(1, "Select at least one subject"),
-
-  teachingSummary: z.string().nonempty("Teaching summary is required"),
-  studentResults: z.string().nonempty("Student results are required"),
-  sellingPoints: z.string().nonempty("Selling points are required"),
-
-  agreeTerms: z
-    .boolean()
-    .refine((v) => v, "You must agree to Terms & Conditions"),
-
-  agreeAssignmentInfo: z
-    .boolean()
-    .refine((v) => v, "You must agree to receive assignment info"),
+export const step1Schema = z.object({
+  fullName: z.string().min(1, "Full Name is required"),
+  email: z.string().email("Invalid email"),
+  contactNumber: z.string().min(1, "Contact Number is required"),
+  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  gender: z.enum(["Male", "Female"]),
+  age: z.number().int().min(1).max(80),
+  nationality: z.enum(["Sri Lankan", "Others"]),
+  race: z.enum(["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"]),
 });
 
-export type FindMyTutorForm = z.infer<typeof findMyTutorSchema>;
+export const step2Schema = z.object({
+  tutoringLevels: z.array(z.string()).min(1, "Select at least one level"),
+  preferredLocations: z
+    .array(z.string())
+    .min(1, "Select at least one location"),
+  tutorType: z.string().min(1, "Select the tutor type"),
+  tutorMediums: z
+    .array(z.enum(["Sinhala", "English", "Tamil"]))
+    .min(1, "Select at least one medium"),
+  highestEducation: z.enum([
+    "PhD",
+    "Diploma",
+    "Masters",
+    "Undergraduate",
+    "Bachelor Degree",
+    "Diploma and Professional",
+    "JC/A Levels",
+    "Poly",
+    "Others",
+  ]),
+  grades: z.array(z.string()).min(1, "Select at least one grade"),
+  subjects: z.array(z.string()).min(1, "Select at least one subject"),
+  yearsExperience: z.number().min(0).max(50),
+});
+
+export const step3Schema = z.object({
+  teachingSummary: z.string().min(1, "Required"),
+  studentResults: z.string().min(1, "Required"),
+  sellingPoints: z.string().min(1, "Required"),
+  academicDetails: z.string().min(1, "Required"),
+});
+
+export const step4Schema = z.object({
+  certificatesAndQualifications: z
+    .array(z.string())
+    .min(1, "Upload at least one certificate"),
+  agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
+  agreeAssignmentInfo: z
+    .boolean()
+    .refine((v) => v, "You must confirm assignment info"),
+});
+
+export const fullSchema = step1Schema
+  .merge(step2Schema)
+  .merge(step3Schema)
+  .merge(step4Schema);
