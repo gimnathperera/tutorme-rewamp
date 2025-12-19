@@ -7,10 +7,7 @@ import {
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
-  const body = await req.json();
-  const fileName = body.fileName as string;
-  const fileType = body.fileType as string;
-
+  const { fileName } = await req.json();
   if (!fileName) {
     return NextResponse.json({ error: "Missing fileName" }, { status: 400 });
   }
@@ -21,18 +18,16 @@ export async function POST(req: Request) {
 
   const sharedKey = new StorageSharedKeyCredential(account, key);
 
-  const expiresOn = new Date(Date.now() + 15 * 60 * 1000);
+  const expiresOn = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
   const sas = generateBlobSASQueryParameters(
     {
       containerName: container,
       blobName: fileName,
-      permissions: BlobSASPermissions.parse("cw"),
-      startsOn: new Date(),
+      permissions: BlobSASPermissions.parse("cw"), // create + write
       expiresOn,
-      contentType: fileType,
     },
-    sharedKey,
+    sharedKey
   ).toString();
 
   const uploadUrl = `https://${account}.blob.core.windows.net/${container}/${fileName}?${sas}`;
