@@ -21,7 +21,7 @@ import {
   RACE_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   TUTORING_LEVEL_OPTIONS,
-} from "@/types/register-tutor-types";
+} from "@/configs/register-tutor";
 
 export default function FindMyTutorForm() {
   const [step, setStep] = useState(1);
