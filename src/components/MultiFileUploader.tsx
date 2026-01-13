@@ -139,6 +139,7 @@ export default function MultiFileUploadDropzone({
                       type="button"
                       onClick={(e) => removeFile(index, e)}
                       className="text-red-500 hover:text-red-700"
+                      title="Remove file"
                     >
                       <X size={16} />
                     </button>

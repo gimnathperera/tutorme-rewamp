@@ -33,112 +33,109 @@ const PersonalInfo = () => {
     }
   }, [dateOfBirth, setValue]);
 
+  const fieldWrapper = "flex flex-col gap-1";
+  const selectClass =
+    "h-11 w-full rounded-md border border-input bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
+      {/* Full Name */}
+      <div className={fieldWrapper}>
         <Label>Full Name *</Label>
         <Input
           {...register("fullName")}
           placeholder="Full Name"
-          className="border rounded border-gray-300 bg-white"
+          className="h-11"
         />
-        {errors.fullName && (
-          <p className="text-sm text-red-500">{`${errors.fullName.message}`}</p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.fullName?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Email */}
+      <div className={fieldWrapper}>
         <Label>Email *</Label>
         <Input
           {...register("email")}
           placeholder="Email"
-          className="border rounded border-gray-300 bg-white"
+          className="h-11"
         />
-        {errors.email && (
-          <p className="text-sm text-red-500">{`${errors.email.message}`}</p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.email?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Contact Number */}
+      <div className={fieldWrapper}>
         <Label>Contact Number *</Label>
         <Input
           {...register("contactNumber")}
           placeholder="Contact Number"
-          className="border rounded border-gray-300 bg-white"
+          className="h-11"
         />
-        {errors.contactNumber && (
-          <p className="text-sm text-red-500">
-            {`${errors.contactNumber.message}`}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.contactNumber?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Date of Birth */}
+      <div className={fieldWrapper}>
         <Label>Date of Birth *</Label>
         <Input
           type="date"
           {...register("dateOfBirth")}
-          className="border rounded border-gray-300 bg-white"
+          className="h-11"
         />
-        {errors.dateOfBirth && (
-          <p className="text-sm text-red-500">
-            {`${errors.dateOfBirth.message}`}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.dateOfBirth?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Age */}
+      <div className={fieldWrapper}>
         <Label>Age *</Label>
         <Input
           type="number"
           {...register("age", { valueAsNumber: true })}
           disabled
           placeholder="Age"
-          className="border rounded border-gray-300 bg-white"
+          className="h-11 bg-muted"
         />
-        {errors.age && (
-          <p className="text-sm text-red-500">{`${errors.age.message}`}</p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.age?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Gender */}
+      <div className={fieldWrapper}>
         <Label>Gender *</Label>
-        <select
-          {...register("gender")}
-          className="w-full border border-gray-300 rounded p-2 bg-white"
-        >
+        <select {...register("gender")} className={selectClass}>
           <option value="">Select</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
-        {errors.gender && (
-          <p className="text-sm text-red-500">{`${errors.gender.message}`}</p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.gender?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Nationality */}
+      <div className={fieldWrapper}>
         <Label>Nationality *</Label>
-        <select
-          {...register("nationality")}
-          className="w-full border rounded p-2 border-gray-300 bg-white"
-        >
+        <select {...register("nationality")} className={selectClass}>
           <option value="">Select</option>
           <option value="Sri Lankan">Sri Lankan</option>
           <option value="Others">Others</option>
         </select>
-        {errors.nationality && (
-          <p className="text-sm text-red-500">
-            {`${errors.nationality.message}`}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.nationality?.message as string}
+        </p>
       </div>
 
-      <div>
+      {/* Race */}
+      <div className={fieldWrapper}>
         <Label>Race *</Label>
-        <select
-          {...register("race")}
-          className="w-full border rounded p-2 border-gray-300 bg-white"
-        >
+        <select {...register("race")} className={selectClass}>
           <option value="">Select</option>
           <option value="Sinhalese">Sinhalese</option>
           <option value="Tamil">Tamil</option>
@@ -146,9 +143,9 @@ const PersonalInfo = () => {
           <option value="Burgher">Burgher</option>
           <option value="Others">Others</option>
         </select>
-        {errors.race && (
-          <p className="text-sm text-red-500">{`${errors.race.message}`}</p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.race?.message as string}
+        </p>
       </div>
     </div>
   );
