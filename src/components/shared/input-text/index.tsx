@@ -16,13 +16,14 @@ const InputText: React.FC<InputTextProps> = ({
   ...props
 }) => {
   const { control, formState } = useFormContext();
-
   const error = getNestedError(formState.errors, name);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
       {label && (
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="mb-1 text-sm font-medium text-gray-700">
+          {label}
+        </label>
       )}
 
       <Controller
@@ -32,20 +33,15 @@ const InputText: React.FC<InputTextProps> = ({
           <>
             <input
               {...field}
-              className={`relative block w-full appearance-none rounded-md border border-linegrey px-3 py-[0.625rem] text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm  ${
-                error ? "border-red-500" : "border-gray-300"
-              } ${className}`}
               {...props}
+              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 ${error ? "border-red-500" : "border-linegrey"
+                } ${className}`}
             />
-            {(error || helperText) && (
-              <span
-                className={`text-xs ${
-                  error ? "text-red-500" : "text-gray-500"
-                }`}
-              >
-                {error || helperText}
-              </span>
-            )}
+
+            {/* Reserved space → no layout jump */}
+            <span className="mt-1 min-h-[1.25rem] text-xs text-red-500">
+              {error || helperText || ""}
+            </span>
           </>
         )}
       />

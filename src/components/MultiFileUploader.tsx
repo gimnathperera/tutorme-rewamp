@@ -100,7 +100,7 @@ export default function MultiFileUploadDropzone({
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
+      className="border-2 bg-white border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
     >
       <input {...getInputProps()} />
       {uploading && (
