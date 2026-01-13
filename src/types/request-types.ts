@@ -205,25 +205,32 @@ export type FetchTuitionAssignmentsRequest = {
 
 export type FindMyTutorRequest = {
   fullName: string;
-  contactNumber: string;
-  certificatesAndQualifications: string[];
   email: string;
+  contactNumber: string;
   dateOfBirth: string;
-  gender: string;
   age: number;
+  gender: string;
   nationality: string;
   race: string;
+
   tutoringLevels: string[];
   preferredLocations: string[];
-  tutorType: string;
-  yearsExperience: number;
+
+  tutorType: string[];
+  tutorMediums: string[];
   highestEducation: string;
-  academicDetails: string[];
+  grades: string[];
+  subjects: string[];
+  yearsExperience: number;
+
   teachingSummary: string;
   studentResults: string;
   sellingPoints: string;
+  academicDetails: string;
 
+  certificatesAndQualifications: string[];
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
 };
+
 export type FetchTutorRequests = {};
