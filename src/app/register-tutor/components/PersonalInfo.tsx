@@ -1,10 +1,9 @@
-"use client";
+"use client"
 
-import { useFormContext } from "react-hook-form";
-import { FindMyTutorForm } from "../schema";
-import InputText from "@/components/shared/input-text";
-import RadioGroup from "@/components/shared/input-radio";
-import { useEffect } from "react";
+import { useEffect } from "react"
+import { useFormContext } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 const PersonalInfo = () => {
   const {
@@ -12,174 +11,128 @@ const PersonalInfo = () => {
     watch,
     setValue,
     formState: { errors },
-  } = useFormContext<FindMyTutorForm>();
+  } = useFormContext()
 
-  const data = watch();
+  const dateOfBirth = watch("dateOfBirth")
+
   useEffect(() => {
-    if (!data.dateOfBirth) return;
+    if (!dateOfBirth) return
 
-    const birthDate = new Date(data.dateOfBirth);
-    const today = new Date();
+    const dob = new Date(dateOfBirth)
+    const today = new Date()
 
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    const dayDiff = today.getDate() - birthDate.getDate();
+    let age = today.getFullYear() - dob.getFullYear()
+    const monthDiff = today.getMonth() - dob.getMonth()
 
-    if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
-      age--;
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < dob.getDate())
+    ) {
+      age--
     }
 
-    if (!isNaN(age) && age > 0 && age < 100) {
-      setValue("age", age);
+    if (age >= 0) {
+      setValue("age", age, { shouldValidate: true })
     }
-  }, [data.dateOfBirth, setValue]);
+  }, [dateOfBirth, setValue])
 
   return (
-    <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <div className="border-b border-gray-200 pb-8">
-          <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
-            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">
-              1
-            </span>
-            Personal Information
-          </h2>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <Label>Full Name *</Label>
+        <Input {...register("fullName")} placeholder="Full Name" className="border rounded border-gray-300 bg-white"/>
+        {errors.fullName && (
+          <p className="text-sm text-red-500">{`${errors.fullName.message}`}</p>
+        )}
+      </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Full Name */}
-            <div className="md:col-span-2">
-              <InputText
-                label="Full Name (As Per NRIC) *"
-                name="fullName"
-                placeholder="Enter your full name"
-                helperText={errors.fullName?.message as string}
-              />
-            </div>
+      <div>
+        <Label>Email *</Label>
+        <Input {...register("email")} placeholder="Email" className="border rounded border-gray-300 bg-white"/>
+        {errors.email && (
+          <p className="text-sm text-red-500">{`${errors.email.message}`}</p>
+        )}
+      </div>
 
-            {/* Contact Number */}
-            <div>
-              <InputText
-                label="Contact Number *"
-                name="contactNumber"
-                type="tel"
-                placeholder="91234567"
-                helperText={errors.contactNumber?.message as string}
-              />
-            </div>
+      <div>
+        <Label>Contact Number *</Label>
+        <Input {...register("contactNumber")} placeholder="Contact Number" className="border rounded border-gray-300 bg-white"/>
+        {errors.contactNumber && (
+          <p className="text-sm text-red-500">
+            {`${errors.contactNumber.message}`}
+          </p>
+        )}
+      </div>
 
-            <div>
-              <InputText
-                label="Email *"
-                name="email"
-                type="email"
-                placeholder="your.email@example.com"
-                helperText={errors.email?.message as string}
-              />
-            </div>
+      <div>
+        <Label>Date of Birth *</Label>
+        <Input type="date" {...register("dateOfBirth")} className="border rounded border-gray-300 bg-white"/>
+        {errors.dateOfBirth && (
+          <p className="text-sm text-red-500">
+            {`${errors.dateOfBirth.message}`}
+          </p>
+        )}
+      </div>
 
-            {/* Date of Birth */}
-            <div className="md:col-span-2">
-              <InputText
-                label="Date of Birth *"
-                name="dateOfBirth"
-                type="date"
-                helperText={errors.dateOfBirth?.message as string}
-              />
-            </div>
+      <div>
+        <Label>Age *</Label>
+        <Input
+          type="number"
+          {...register("age", { valueAsNumber: true })}
+          disabled
+          placeholder="Age"
+          className="border rounded border-gray-300 bg-white"
+        />
+        {errors.age && (
+          <p className="text-sm text-red-500">{`${errors.age.message}`}</p>
+        )}
+      </div>
 
-            {/* Gender */}
-            <div>
-              <RadioGroup
-                label="Gender *"
-                name="gender"
-                options={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
-                ]}
-                helperText={errors.gender?.message as string}
-                className="flex gap-6 mt-2"
-              />
-            </div>
+      <div>
+        <Label>Gender *</Label>
+        <select {...register("gender")} className="w-full border border-gray-300 rounded p-2 bg-white">
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        {errors.gender && (
+          <p className="text-sm text-red-500">{`${errors.gender.message}`}</p>
+        )}
+      </div>
 
-            {/* Age */}
-            <div>
-              <label className="block text-sm font-medium text-darkpurple mb-2">
-                Age *
-              </label>
-              <input
-                type="number"
-                {...register("age", {
-                  valueAsNumber: true,
-                  setValueAs: (v) => (v === "" ? undefined : Number(v)),
-                })}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-700 focus:border-primary-700 transition-colors ${
-                  errors.age ? "border-red-500" : "border-gray-300"
-                }`}
-                placeholder="25"
-                min={18}
-                max={80}
-              />
-              {errors.age && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.age.message}
-                </p>
-              )}
-            </div>
+      <div>
+        <Label>Nationality *</Label>
+        <select
+          {...register("nationality")}
+          className="w-full border rounded p-2 border-gray-300 bg-white"
+        >
+          <option value="">Select</option>
+          <option value="Sri Lankan">Sri Lankan</option>
+          <option value="Others">Others</option>
+        </select>
+        {errors.nationality && (
+          <p className="text-sm text-red-500">
+            {`${errors.nationality.message}`}
+          </p>
+        )}
+      </div>
 
-            {/* Nationality */}
-            <div>
-              <RadioGroup
-                label="Nationality *"
-                name="nationality"
-                options={[
-                  { label: "Sri Lankan", value: "Sri Lankan" },
-
-                  { label: "Others", value: "Others" },
-                ]}
-                helperText={errors.nationality?.message as string}
-                className="flex flex-wrap gap-4 mt-2"
-              />
-            </div>
-
-            {/* Race */}
-            <div>
-              <RadioGroup
-                label="Race *"
-                name="race"
-                options={[
-                  { label: "Sinhalese", value: "Sinhalese" },
-                  { label: "Tamil", value: "Tamil" },
-                  { label: "Muslim", value: "Muslim" },
-                  { label: "Burgher", value: "Burgher" },
-
-                  { label: "Others", value: "Others" },
-                ]}
-                helperText={errors.race?.message as string}
-                className="flex flex-wrap gap-4 mt-2"
-              />
-            </div>
-
-            {/* Last 4 Digits of NRIC */}
-            <div>
-              <InputText
-                label="Last 4 Digits of NRIC *"
-                name="last4NRIC"
-                type="text"
-                placeholder="1234"
-                maxLength={4}
-                inputMode="numeric"
-                helperText={errors.last4NRIC?.message as string}
-              />
-              <p className="text-xs text-gray-500 mt-1">
-                Your identity is protected! This information is securely stored
-                and not displayed on clients. *For Tax / Admin purpose only 🔒🔒
-              </p>
-            </div>
-          </div>
-        </div>
+      <div>
+        <Label>Race *</Label>
+        <select {...register("race")} className="w-full border rounded p-2 border-gray-300 bg-white">
+          <option value="">Select</option>
+          <option value="Sinhalese">Sinhalese</option>
+          <option value="Tamil">Tamil</option>
+          <option value="Muslim">Muslim</option>
+          <option value="Burgher">Burgher</option>
+          <option value="Others">Others</option>
+        </select>
+        {errors.race && (
+          <p className="text-sm text-red-500">{`${errors.race.message}`}</p>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PersonalInfo;
+export default PersonalInfo

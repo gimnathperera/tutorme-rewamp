@@ -1,239 +1,222 @@
-"use client";
+"use client"
 
-import { useFormContext } from "react-hook-form";
-import { FindMyTutorForm } from "../schema";
-import RadioGroup from "@/components/shared/input-radio";
-import InputMultiLineText from "@/components/shared/input-multi-line-text";
+import { useFormContext, Controller } from "react-hook-form"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+
+import MultiSelect from "@/components/shared/MultiSelect"
+
 import {
-  tutorTypes,
-  educationLevels,
-  yearsOptions,
-  tutorMediums,
-} from "../constants";
-import MultiSelect from "@/components/shared/MultiSelect";
-import {
-  useFetchGradesQuery,
-  useLazyFetchGradeByIdQuery,
-} from "@/store/api/splits/grades";
-import { useEffect, useState } from "react";
-import React from "react";
+  TUTORING_LEVEL_OPTIONS,
+  PREFFERED_LOCATION_OPTIONS,
+  TUTOR_TYPE_OPTIONS,
+  HIGHEST_EDUCATION_LEVELS,
+  MEDIUM_OPTIONS,
+} from "@/configs/register-tutor"
+
+import { useFetchGradesQuery } from "@/store/api/splits/grades"
 
 const AcademicExperience = () => {
-  const { watch, setValue, trigger, formState } =
-    useFormContext<FindMyTutorForm>();
-  const errors = formState.errors;
+  const {
+    register,
+    control,
+    watch, // ✅ FIX: destructure watch
+    formState: { errors },
+  } = useFormContext()
 
-  const yearsExperience = watch("yearsExperience") || 0;
+  const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 })
 
-  const handleYearsChange = (year: string) => {
-    const value = year === "10+" ? 10 : Number(year);
-    setValue("yearsExperience", value);
-    trigger("yearsExperience");
-  };
+  const selectedGradeId = watch("grades")?.[0]
 
-  const { data: gradesData } = useFetchGradesQuery({ page: 1, limit: 100 });
-  const [fetchGradeById] = useLazyFetchGradeByIdQuery();
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const selectedGrades = watch("grades") || [];
-  const selectedSubjects = watch("subjects") || [];
-  const selectedMediums: string[] = watch("tutorMediums") || [];
-
-  const gradeOptions =
-    gradesData?.results?.map((g) => ({
-      value: g.id,
-      text: g.title,
-    })) || [];
-
-  const [subjectOptions, setSubjectOptions] = useState<
-    { value: string; text: string }[]
-  >([]);
-
-  const toggleMedium = (medium: string) => {
-    const updated = selectedMediums.includes(medium)
-      ? selectedMediums.filter((m) => m !== medium)
-      : [...selectedMediums, medium];
-
-    setValue("tutorMediums", updated);
-    trigger("tutorMediums");
-  };
-  useEffect(() => {
-    if (selectedGrades.length === 0) {
-      setSubjectOptions([]);
-      setValue("subjects", []);
-      return;
-    }
-
-    const loadSubjects = async () => {
-      const allSubjects = [];
-
-      for (const gradeId of selectedGrades) {
-        const res = await fetchGradeById(gradeId);
-        if (res?.data?.subjects) {
-          allSubjects.push(...res.data.subjects);
-        }
-      }
-
-      const uniqueSubjects = Array.from(
-        new Map(allSubjects.map((s) => [s.id, s])).values()
-      );
-
-      setSubjectOptions(
-        uniqueSubjects.map((s) => ({ value: s.id, text: s.title }))
-      );
-    };
-
-    loadSubjects();
-  }, [fetchGradeById, selectedGrades, setValue]);
+  const subjectOptions =
+    gradeData?.results
+      ?.find((g: any) => g.id === selectedGradeId)
+      ?.subjects?.map((s: any) => ({
+        value: s.id,
+        text: s.title,
+      })) || []
 
   return (
-    <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-      <div className="bg-white rounded-2xl shadow-lg p-8">
-        <div className="border-b border-gray-200 pb-8">
-          <h2 className="text-2xl font-bold text-darkpurple mb-6 flex items-center">
-            <span className="bg-primary-700 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-3">
-              3
-            </span>
-            Academic Qualifications & Experience
-          </h2>
+    <div className="space-y-8">
+      {/* Tutoring Levels & Preferred Locations */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <Label>Tutoring Levels *</Label>
+          <Controller
+            name="tutoringLevels"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={TUTORING_LEVEL_OPTIONS}
+                defaultSelected={field.value || []}
+                onChange={field.onChange}
+                label=""
+              />
+            )}
+          />
+          {errors.tutoringLevels && (
+            <p className="text-sm text-red-500">
+              {`${errors.tutoringLevels.message}`}
+            </p>
+          )}
+        </div>
 
-          <div className="space-y-8">
-            {/* Tutor Medium Selection */}
-            <div>
-              <div className="text-sm mb-2">Select Tutor Medium *</div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {tutorMediums.map((medium) => (
-                  <label
-                    key={medium}
-                    className="flex items-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={selectedMediums.includes(medium)}
-                      onChange={() => toggleMedium(medium)}
-                      className="mr-3 text-primary-700 focus:ring-primary-700 rounded"
-                    />
-                    <span className="text-sm">{medium}</span>
-                  </label>
-                ))}
-              </div>
+        <div>
+          <Label>Preferred Locations *</Label>
+          <Controller
+            name="preferredLocations"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={PREFFERED_LOCATION_OPTIONS}
+                defaultSelected={field.value || []}
+                onChange={field.onChange}
+                label=""
+              />
+            )}
+          />
+          {errors.preferredLocations && (
+            <p className="text-sm text-red-500">
+              {`${errors.preferredLocations.message}`}
+            </p>
+          )}
+        </div>
+      </div>
 
-              {errors.tutorMediums && (
-                <p className="text-red-500 text-sm mt-2">
-                  {errors.tutorMediums.message as string}
-                </p>
-              )}
-            </div>
+      {/* Tutor Type & Highest Education */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <Label>Tutor Types *</Label>
+          <Controller
+            name="tutorType"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={TUTOR_TYPE_OPTIONS}
+                defaultSelected={field.value || []}
+                onChange={field.onChange}   // ✅ PASS ARRAY
+                label=""
+              />
+            )}
+          />
+          {errors.tutorType && (
+            <p className="text-sm text-red-500">
+              {`${errors.tutorType.message}`}
+            </p>
+          )}
+        </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                {/* Grades Multi Select */}
-                <MultiSelect
-                  label="Grades *"
-                  options={gradeOptions}
-                  defaultSelected={selectedGrades}
-                  onChange={(values) => {
-                    setValue("grades", values);
-                    trigger("grades");
-                  }}
-                />
-                {errors.grades && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.grades.message}
-                  </p>
-                )}
-              </div>
-              <div>
-                {/* Subjects Multi Select */}
-                <MultiSelect
-                  label="Subjects *"
-                  options={subjectOptions}
-                  defaultSelected={selectedSubjects}
-                  onChange={(values) => {
-                    setValue("subjects", values);
-                    trigger("subjects");
-                  }}
-                  disabled={selectedGrades.length === 0}
-                />
-                {errors.subjects && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.subjects.message}
-                  </p>
-                )}
-              </div>
-            </div>
+        <div>
+          <Label>Highest Education Level *</Label>
+          <select {...register("highestEducation")} className="w-full border rounded p-2 border-gray-300 bg-white">
+            <option value="">Select</option>
+            <option value="PhD">PhD</option>
+            <option value="Diploma">Diploma</option>
+            <option value="Masters">Masters</option>
+            <option value="Undergraduate">Undergraduate</option>
+            <option value="Bachelor Degree">Bachelor Degree</option>
+            <option value="Diploma and Professional">Diploma and Professional</option>
+            <option value="JC/A Levels">JC/A Levels</option>
+            <option value="Poly">Poly</option>
+            <option value="Others">Others</option>
+          </select>
+          {errors.highestEducation && (
+            <p className="text-sm text-red-500">
+              {`${errors.highestEducation.message}`}
+            </p>
+          )}
+        </div>
+      </div>
 
-            <RadioGroup
-              label="Type of Tutor *"
-              name="tutorType"
-              options={tutorTypes.map((type) => ({ label: type, value: type }))}
-              helperText={errors.tutorType?.message as string}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-            />
+      {/* Years of Experience & Tutor Mediums */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <Label>Years of Experience *</Label>
+          <Input
+            type="number"
+            {...register("yearsExperience", { valueAsNumber: true })}
+            className="border rounded border-gray-300 bg-white"
+          />
+          {errors.yearsExperience && (
+            <p className="text-sm text-red-500">
+              {`${errors.yearsExperience.message}`}
+            </p>
+          )}
+        </div>
 
-            {/* Years of Teaching Experience */}
-            <div>
-              <div className="text-sm mb-2">Years of Teaching Experience *</div>
-              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {yearsOptions.map((year) => (
-                  <label
-                    key={year}
-                    className="flex items-center justify-center p-3 border rounded-lg hover:bg-lightblue cursor-pointer transition-colors"
-                  >
-                    <input
-                      type="radio"
-                      value={year}
-                      checked={
-                        (year === "10+" && yearsExperience >= 10) ||
-                        String(yearsExperience) === year
-                      }
-                      onChange={() => handleYearsChange(year)}
-                      className="mr-2 text-primary-700 focus:ring-primary-700"
-                    />
-                    <span className="font-medium">{year}</span>
-                  </label>
-                ))}
-              </div>
-              {errors.yearsExperience && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.yearsExperience.message as string}
-                </p>
-              )}
-            </div>
+        <div>
+          <Label>Tutor Mediums *</Label>
+          <Controller
+            name="tutorMediums"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={MEDIUM_OPTIONS}
+                defaultSelected={field.value || []}
+                onChange={field.onChange}
+                label=""
+              />
+            )}
+          />
+          {errors.tutorMediums && (
+            <p className="text-sm text-red-500">
+              {`${errors.tutorMediums.message}`}
+            </p>
+          )}
+        </div>
+      </div>
 
-            {/* Highest Education Level */}
-            <RadioGroup
-              label="Highest Education Level *"
-              name="highestEducation"
-              options={educationLevels.map((level) => ({
-                label: level,
-                value: level,
-              }))}
-              helperText={errors.highestEducation?.message as string}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
-            />
+      {/* Grades & Subjects */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <Label>Grades *</Label>
+          <Controller
+            name="grades"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={
+                  gradeData?.results?.map((g: any) => ({
+                    value: g.id,
+                    text: g.title,
+                  })) || []
+                }
+                defaultSelected={field.value || []}
+                onChange={field.onChange}
+                label=""
+              />
+            )}
+          />
+          {errors.grades && (
+            <p className="text-sm text-red-500">
+              {`${errors.grades.message}`}
+            </p>
+          )}
+        </div>
 
-            {/* Academic Details */}
-            <InputMultiLineText
-              label="Academic Details *"
-              name="academicDetails"
-              placeholder="Field of study, university attended, academic achievements, etc."
-              rows={5}
-              helperText={errors.academicDetails?.message as string}
-            />
-
-            <div className="bg-blue p-4 rounded-lg">
-              <p className="text-sm text-white">
-                <strong>Note:</strong> If you are above School Leaver, please
-                kindly indicate your field of study, university attended,
-                academic achievements, etc.
-              </p>
-            </div>
-          </div>
+        <div>
+          <Label>Subjects *</Label>
+          <Controller
+            name="subjects"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={subjectOptions}
+                defaultSelected={field.value || []}
+                onChange={field.onChange}
+                label=""
+              />
+            )}
+          />
+          {errors.subjects && (
+            <p className="text-sm text-red-500">
+              {`${errors.subjects.message}`}
+            </p>
+          )}
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default AcademicExperience;
+export default AcademicExperience
