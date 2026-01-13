@@ -15,7 +15,7 @@ const AdvancedLevelRates = () => {
   const about = aboutDetails;
 
   const advancedLevelInfo = about.find(
-    (detail) => detail.name === "Advanced Level Tuition"
+    (detail) => detail.name === "Advanced Level Tuition",
   );
 
   if (!advancedLevelInfo) {

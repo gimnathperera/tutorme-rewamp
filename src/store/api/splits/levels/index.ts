@@ -5,7 +5,6 @@ import { Endpoints } from "../../endpoints";
 
 // ✅ For all levels (paginated list)
 export const LevelsApi = baseApi.injectEndpoints({
-
   endpoints: (build) => ({
     fetchLevels: build.query<PaginatedResponse<Level>, FetchLevelRequest>({
       query: (payload) => {
@@ -13,7 +12,7 @@ export const LevelsApi = baseApi.injectEndpoints({
         return {
           url: Endpoints.Levels,
           method: "GET",
-          params: rest
+          params: rest,
         };
       },
       providesTags: ["LevelAndExams"],

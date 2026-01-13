@@ -83,8 +83,8 @@ export default function AddRequestForTutor() {
         "tutors",
         tutors.slice(
           0,
-          selectedTutorCount
-        ) as CreateRequestTutorSchema["tutors"]
+          selectedTutorCount,
+        ) as CreateRequestTutorSchema["tutors"],
       );
     }
   }, [selectedTutorCount, tutors, setValue]);
@@ -261,7 +261,7 @@ export default function AddRequestForTutor() {
                     <option key={n} value={n}>
                       {n}
                     </option>
-                  )
+                  ),
                 )}
               </select>
             </div>

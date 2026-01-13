@@ -80,21 +80,21 @@ const Faqs = () => {
               <FaqSkeleton key={index} />
             ))
           : isError
-          ? [
-              <div
-                key="error"
-                className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700"
-              >
-                Failed to load FAQs. Please try again later.
-              </div>,
-            ]
-          : faqs.map((faq, index) => (
-              <FaqPill
-                key={index}
-                question={faq.question}
-                answer={faq.answer}
-              />
-            ))}
+            ? [
+                <div
+                  key="error"
+                  className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700"
+                >
+                  Failed to load FAQs. Please try again later.
+                </div>,
+              ]
+            : faqs.map((faq, index) => (
+                <FaqPill
+                  key={index}
+                  question={faq.question}
+                  answer={faq.answer}
+                />
+              ))}
       </div>
       {!isFetching && faqs.length < totalItems && (
         <div className="text-center mt-8">

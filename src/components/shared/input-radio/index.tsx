@@ -52,13 +52,11 @@ const RadioGroup: FC<RadioGroupProps> = ({
                   className={cn(
                     "h-4 w-4 accent-primary-600",
                     error && "ring-1 ring-red-500",
-                    className
+                    className,
                   )}
                   {...props}
                 />
-                <span className="text-sm text-gray-900">
-                  {option.label}
-                </span>
+                <span className="text-sm text-gray-900">{option.label}</span>
               </label>
             ))}
           </div>

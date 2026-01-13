@@ -21,7 +21,12 @@ interface SelectButtonProps {
   onChange?: (value: string) => void;
 }
 
-export function SelectButton({ placeholder, selectLabel, selectItems, onChange }: SelectButtonProps) {
+export function SelectButton({
+  placeholder,
+  selectLabel,
+  selectItems,
+  onChange,
+}: SelectButtonProps) {
   return (
     <Select onValueChange={onChange}>
       <SelectTrigger className="w-[200px] text-black p-7 text-lg font-semibold border rounded-xl shadow-sm bg-white hover:shadow-md transition">
@@ -31,7 +36,11 @@ export function SelectButton({ placeholder, selectLabel, selectItems, onChange }
         <SelectGroup>
           <SelectLabel>{selectLabel}</SelectLabel>
           {selectItems.map((item) => (
-            <SelectItem key={item.value} value={item.value} className="shadow-sm">
+            <SelectItem
+              key={item.value}
+              value={item.value}
+              className="shadow-sm"
+            >
               {item.label}
             </SelectItem>
           ))}

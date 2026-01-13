@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useFormContext } from "react-hook-form"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useFormContext } from "react-hook-form";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const TutorProfile = () => {
   const {
     register,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
   return (
     <div className="space-y-6">
@@ -68,9 +68,7 @@ const TutorProfile = () => {
 
       {/* Selling Points */}
       <div>
-        <Label className="mb-1 block">
-          Other Selling Points as a Tutor *
-        </Label>
+        <Label className="mb-1 block">Other Selling Points as a Tutor *</Label>
         <Textarea
           className="border rounded border-gray-300 bg-white"
           {...register("sellingPoints")}
@@ -84,7 +82,7 @@ const TutorProfile = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TutorProfile
+export default TutorProfile;

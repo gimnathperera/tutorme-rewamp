@@ -5,7 +5,10 @@ import { Endpoints } from "../../endpoints";
 
 export const TuitionAssignmentsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    fetchTuitionAssignments: build.query<PaginatedResponse<TuitionAssignment>, FetchTuitionAssignments>({
+    fetchTuitionAssignments: build.query<
+      PaginatedResponse<TuitionAssignment>,
+      FetchTuitionAssignments
+    >({
       query: (payload) => ({
         url: Endpoints.TuitionAssignments,
         method: "GET",

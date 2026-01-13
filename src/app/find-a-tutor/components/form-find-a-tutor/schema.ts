@@ -29,7 +29,7 @@ export const tutorSchema = z.object({
           .nonempty("Subjects array cannot be empty"),
         duration: z.string().min(1, "Duration is required"),
         frequency: z.string().min(1, "Frequency is required"),
-      })
+      }),
     )
     .nonempty("There must be at least one tutor"),
 });

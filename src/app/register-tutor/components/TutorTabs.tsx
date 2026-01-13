@@ -1,17 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm, FormProvider } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import toast from "react-hot-toast"
+import { useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs"
-import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,31 +14,37 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
-import PersonalInfo from "./PersonalInfo"
-import AcademicExperience from "./AcademicExperience"
-import TutorProfile from "./TutorProfile"
-import TermsAndSubmit from "./TermsAndSubmit"
-import { FindMyTutorForm, fullSchema, step1Schema, step2Schema, step3Schema } from "../schema"
-import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request"
-import { getErrorInApiResult } from "@/utils/api"
+import PersonalInfo from "./PersonalInfo";
+import AcademicExperience from "./AcademicExperience";
+import TutorProfile from "./TutorProfile";
+import TermsAndSubmit from "./TermsAndSubmit";
+import {
+  FindMyTutorForm,
+  fullSchema,
+  step1Schema,
+  step2Schema,
+  step3Schema,
+} from "../schema";
+import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+import { getErrorInApiResult } from "@/utils/api";
 
 type TabKey =
   | "personalInfo"
   | "qualifications"
   | "teachingProfile"
-  | "verification"
+  | "verification";
 
 const TAB_ORDER: TabKey[] = [
   "personalInfo",
   "qualifications",
   "teachingProfile",
   "verification",
-]
+];
 
 export function TutorTabs() {
-  const [tab, setTab] = useState<TabKey>("personalInfo")
+  const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const methods = useForm<FindMyTutorForm>({
     resolver: zodResolver(fullSchema),
@@ -76,42 +77,42 @@ export function TutorTabs() {
       agreeTerms: false,
       agreeAssignmentInfo: false,
     },
-  })
+  });
 
-  const { handleSubmit, trigger, reset } = methods
+  const { handleSubmit, trigger, reset } = methods;
 
-  const currentIndex = TAB_ORDER.indexOf(tab)
+  const currentIndex = TAB_ORDER.indexOf(tab);
 
   const nextStep = async () => {
-    let schema
-    if (tab === "personalInfo") schema = step1Schema
-    if (tab === "qualifications") schema = step2Schema
-    if (tab === "teachingProfile") schema = step3Schema
+    let schema;
+    if (tab === "personalInfo") schema = step1Schema;
+    if (tab === "qualifications") schema = step2Schema;
+    if (tab === "teachingProfile") schema = step3Schema;
 
     if (schema) {
-      const valid = await trigger(Object.keys(schema.shape) as any)
-      if (!valid) return
+      const valid = await trigger(Object.keys(schema.shape) as any);
+      if (!valid) return;
     }
 
-    setTab(TAB_ORDER[currentIndex + 1])
-  }
+    setTab(TAB_ORDER[currentIndex + 1]);
+  };
 
   const prevStep = () => {
-    setTab(TAB_ORDER[currentIndex - 1])
-  }
+    setTab(TAB_ORDER[currentIndex - 1]);
+  };
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
       const result = await addTutorRequest(data);
       const error = getErrorInApiResult(result);
       if (error) return toast.error(error);
-      toast.success("Tutor profile submitted successfully!")
-      reset()
-      setTab("personalInfo")
+      toast.success("Tutor profile submitted successfully!");
+      reset();
+      setTab("personalInfo");
     } catch {
-      toast.error("Something went wrong")
+      toast.error("Something went wrong");
     }
-  }
+  };
 
   return (
     <FormProvider {...methods}>
@@ -125,7 +126,9 @@ export function TutorTabs() {
             <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="personalInfo">Personal Info</TabsTrigger>
               <TabsTrigger value="qualifications">Qualifications</TabsTrigger>
-              <TabsTrigger value="teachingProfile">Teaching Profile</TabsTrigger>
+              <TabsTrigger value="teachingProfile">
+                Teaching Profile
+              </TabsTrigger>
               <TabsTrigger value="verification">
                 Verification & Agreement
               </TabsTrigger>
@@ -207,5 +210,5 @@ export function TutorTabs() {
         </div>
       </form>
     </FormProvider>
-  )
+  );
 }

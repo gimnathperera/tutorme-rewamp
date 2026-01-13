@@ -355,7 +355,7 @@ export default function EditBlogPage() {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                        "<p>Nothing to preview yet...</p>"
+                        "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />
@@ -385,7 +385,7 @@ export default function EditBlogPage() {
                     watch("relatedArticles").map(
                       (relatedId: string, idx: number) => {
                         const related = blogsData?.results.find(
-                          (b) => b.id === relatedId
+                          (b) => b.id === relatedId,
                         );
                         return (
                           <li key={idx} className="flex items-center gap-3">
@@ -404,7 +404,7 @@ export default function EditBlogPage() {
                             </div>
                           </li>
                         );
-                      }
+                      },
                     )
                   ) : (
                     <p className="text-sm text-gray-500">

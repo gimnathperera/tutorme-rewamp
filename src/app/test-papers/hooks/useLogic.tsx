@@ -79,11 +79,11 @@ const useLogic = (): LogicReturnType => {
           result.data.subjects.map((subject) => ({
             label: subject.title,
             value: subject.id.toString(),
-          }))
+          })),
         );
       }
     },
-    [fetchSubjectsByGrade]
+    [fetchSubjectsByGrade],
   );
 
   const fetchTestPapers = useCallback(
@@ -102,7 +102,7 @@ const useLogic = (): LogicReturnType => {
         setPapers(result.data.results);
       }
     },
-    [fetchPapers]
+    [fetchPapers],
   );
 
   useEffect(() => {

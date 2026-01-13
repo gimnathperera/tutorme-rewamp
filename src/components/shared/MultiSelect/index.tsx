@@ -25,7 +25,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     defaultSelected.length > 0
       ? defaultSelected
-      : options.filter((o) => o.selected).map((o) => o.value)
+      : options.filter((o) => o.selected).map((o) => o.value),
   );
 
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   };
 
   const selectedValuesText = selectedOptions.map(
-    (value) => options.find((option) => option.value === value)?.text || ""
+    (value) => options.find((option) => option.value === value)?.text || "",
   );
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

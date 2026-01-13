@@ -63,7 +63,7 @@ const InputPassword: React.FC<InputPasswordProps> = React.memo(
         />
       </div>
     );
-  }
+  },
 );
 
 InputPassword.displayName = "InputPassword";

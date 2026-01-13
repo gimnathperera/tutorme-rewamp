@@ -67,7 +67,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const existingUserData = getLocalStorageItem<AuthUserData>(
-      LocalStorageKey.USER_DATA
+      LocalStorageKey.USER_DATA,
     );
     if (existingUserData) {
       setUser(existingUserData);
@@ -117,7 +117,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = async () => {
     const tokens = getLocalStorageItem<LocalStorageKey.TOKENS>(
-      LocalStorageKey.TOKENS
+      LocalStorageKey.TOKENS,
     ) as unknown as Tokens;
     if (!tokens) return;
 

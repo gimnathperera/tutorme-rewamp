@@ -34,8 +34,9 @@ const InputText: React.FC<InputTextProps> = ({
             <input
               {...field}
               {...props}
-              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 ${error ? "border-red-500" : "border-linegrey"
-                } ${className}`}
+              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+                error ? "border-red-500" : "border-linegrey"
+              } ${className}`}
             />
 
             {/* Reserved space → no layout jump */}

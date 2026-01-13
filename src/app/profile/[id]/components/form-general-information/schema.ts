@@ -30,7 +30,7 @@ export const generalInfoSchema = z.object({
       },
       {
         message: "You must be at least 18 years old",
-      }
+      },
     ),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])

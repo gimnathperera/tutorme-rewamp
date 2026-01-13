@@ -43,25 +43,28 @@ export default function TuitionRatesByGrade() {
   const totalPages = Math.max(1, Math.ceil(totalResults / limit));
 
   const groupedData: Record<string, GradeGroup> =
-    results?.reduce((acc: Record<string, GradeGroup>, item) => {
-      const gradeTitle = item.grade?.title || "Unknown Grade";
+    results?.reduce(
+      (acc: Record<string, GradeGroup>, item) => {
+        const gradeTitle = item.grade?.title || "Unknown Grade";
 
-      if (!acc[gradeTitle]) {
-        acc[gradeTitle] = {
-          grade: item.grade ?? null,
-          subjects: [],
-        };
-      }
+        if (!acc[gradeTitle]) {
+          acc[gradeTitle] = {
+            grade: item.grade ?? null,
+            subjects: [],
+          };
+        }
 
-      acc[gradeTitle].subjects.push({
-        title: item.subject?.title || "Unknown Subject",
-        fullTime: item.fullTimeTuitionRate || [],
-        partTime: item.partTimeTuitionRate || [],
-        gov: item.govTuitionRate || [],
-      });
+        acc[gradeTitle].subjects.push({
+          title: item.subject?.title || "Unknown Subject",
+          fullTime: item.fullTimeTuitionRate || [],
+          partTime: item.partTimeTuitionRate || [],
+          gov: item.govTuitionRate || [],
+        });
 
-      return acc;
-    }, {} as Record<string, GradeGroup>) || {};
+        return acc;
+      },
+      {} as Record<string, GradeGroup>,
+    ) || {};
 
   const handleNext = () => {
     if (page < totalPages) setPage((p) => p + 1);

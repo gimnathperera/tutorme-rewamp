@@ -32,31 +32,34 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
     (item: any) =>
       item.level &&
       typeof item.level.title === "string" &&
-      item.level.title.trim().toLowerCase() === levelTitle.trim().toLowerCase()
+      item.level.title.trim().toLowerCase() === levelTitle.trim().toLowerCase(),
   );
 
   if (!levelResults.length)
     return <p>No tuition rates available for &quot;{levelTitle}&quot;</p>;
 
   // Group by grade
-  const groupedByGrade = levelResults.reduce((acc: any, item: any) => {
-    const gradeId = item.grade?.id || "unknown";
-    if (!acc[gradeId]) {
-      acc[gradeId] = {
-        gradeTitle: item.grade?.title || "Unknown Grade",
-        subjects: [],
-      };
-    }
+  const groupedByGrade = levelResults.reduce(
+    (acc: any, item: any) => {
+      const gradeId = item.grade?.id || "unknown";
+      if (!acc[gradeId]) {
+        acc[gradeId] = {
+          gradeTitle: item.grade?.title || "Unknown Grade",
+          subjects: [],
+        };
+      }
 
-    acc[gradeId].subjects.push({
-      title: item.subject?.title || "N/A",
-      fullTime: item.fullTimeTuitionRate || [],
-      partTime: item.partTimeTuitionRate || [],
-      gov: item.govTuitionRate || [],
-    });
+      acc[gradeId].subjects.push({
+        title: item.subject?.title || "N/A",
+        fullTime: item.fullTimeTuitionRate || [],
+        partTime: item.partTimeTuitionRate || [],
+        gov: item.govTuitionRate || [],
+      });
 
-    return acc;
-  }, {} as Record<string, any>);
+      return acc;
+    },
+    {} as Record<string, any>,
+  );
 
   return (
     <div className="space-y-8">

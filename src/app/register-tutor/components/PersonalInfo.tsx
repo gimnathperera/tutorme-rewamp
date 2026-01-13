@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useFormContext } from "react-hook-form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useEffect } from "react";
+import { useFormContext } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const PersonalInfo = () => {
   const {
@@ -11,36 +11,37 @@ const PersonalInfo = () => {
     watch,
     setValue,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
-  const dateOfBirth = watch("dateOfBirth")
+  const dateOfBirth = watch("dateOfBirth");
 
   useEffect(() => {
-    if (!dateOfBirth) return
+    if (!dateOfBirth) return;
 
-    const dob = new Date(dateOfBirth)
-    const today = new Date()
+    const dob = new Date(dateOfBirth);
+    const today = new Date();
 
-    let age = today.getFullYear() - dob.getFullYear()
-    const monthDiff = today.getMonth() - dob.getMonth()
+    let age = today.getFullYear() - dob.getFullYear();
+    const monthDiff = today.getMonth() - dob.getMonth();
 
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < dob.getDate())
-    ) {
-      age--
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
     }
 
     if (age >= 0) {
-      setValue("age", age, { shouldValidate: true })
+      setValue("age", age, { shouldValidate: true });
     }
-  }, [dateOfBirth, setValue])
+  }, [dateOfBirth, setValue]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <Label>Full Name *</Label>
-        <Input {...register("fullName")} placeholder="Full Name" className="border rounded border-gray-300 bg-white"/>
+        <Input
+          {...register("fullName")}
+          placeholder="Full Name"
+          className="border rounded border-gray-300 bg-white"
+        />
         {errors.fullName && (
           <p className="text-sm text-red-500">{`${errors.fullName.message}`}</p>
         )}
@@ -48,7 +49,11 @@ const PersonalInfo = () => {
 
       <div>
         <Label>Email *</Label>
-        <Input {...register("email")} placeholder="Email" className="border rounded border-gray-300 bg-white"/>
+        <Input
+          {...register("email")}
+          placeholder="Email"
+          className="border rounded border-gray-300 bg-white"
+        />
         {errors.email && (
           <p className="text-sm text-red-500">{`${errors.email.message}`}</p>
         )}
@@ -56,7 +61,11 @@ const PersonalInfo = () => {
 
       <div>
         <Label>Contact Number *</Label>
-        <Input {...register("contactNumber")} placeholder="Contact Number" className="border rounded border-gray-300 bg-white"/>
+        <Input
+          {...register("contactNumber")}
+          placeholder="Contact Number"
+          className="border rounded border-gray-300 bg-white"
+        />
         {errors.contactNumber && (
           <p className="text-sm text-red-500">
             {`${errors.contactNumber.message}`}
@@ -66,7 +75,11 @@ const PersonalInfo = () => {
 
       <div>
         <Label>Date of Birth *</Label>
-        <Input type="date" {...register("dateOfBirth")} className="border rounded border-gray-300 bg-white"/>
+        <Input
+          type="date"
+          {...register("dateOfBirth")}
+          className="border rounded border-gray-300 bg-white"
+        />
         {errors.dateOfBirth && (
           <p className="text-sm text-red-500">
             {`${errors.dateOfBirth.message}`}
@@ -90,7 +103,10 @@ const PersonalInfo = () => {
 
       <div>
         <Label>Gender *</Label>
-        <select {...register("gender")} className="w-full border border-gray-300 rounded p-2 bg-white">
+        <select
+          {...register("gender")}
+          className="w-full border border-gray-300 rounded p-2 bg-white"
+        >
           <option value="">Select</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -119,7 +135,10 @@ const PersonalInfo = () => {
 
       <div>
         <Label>Race *</Label>
-        <select {...register("race")} className="w-full border rounded p-2 border-gray-300 bg-white">
+        <select
+          {...register("race")}
+          className="w-full border rounded p-2 border-gray-300 bg-white"
+        >
           <option value="">Select</option>
           <option value="Sinhalese">Sinhalese</option>
           <option value="Tamil">Tamil</option>
@@ -132,7 +151,7 @@ const PersonalInfo = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default PersonalInfo
+export default PersonalInfo;

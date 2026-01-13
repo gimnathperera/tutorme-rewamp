@@ -4,7 +4,7 @@ export enum CustomAppEvent {
 
 export const triggerCustomAppEvent = <T>(
   type: CustomAppEvent,
-  event?: T
+  event?: T,
 ): void => {
   if (typeof window === "undefined") return;
   window.dispatchEvent(new CustomEvent(type, { detail: event }));

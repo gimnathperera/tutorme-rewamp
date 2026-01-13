@@ -54,7 +54,7 @@ const useLogic = (): LogicReturnType => {
     {
       limit: 100,
       page: 1,
-    }
+    },
   );
 
   const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
@@ -120,16 +120,16 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm.setValue("gender", gender);
       generalInfoForm.setValue(
         "subjects",
-        subjects.map((subject) => subject.id)
+        subjects.map((subject) => subject.id),
       );
       generalInfoForm.setValue("tutorType", tutorType);
       generalInfoForm.setValue(
         "grades",
-        grades.map((grade) => grade.id)
+        grades.map((grade) => grade.id),
       );
     },
 
-    [generalInfoForm, userRawData]
+    [generalInfoForm, userRawData],
   );
 
   const prePopulateLanguageAndTimeForm = useCallback(
@@ -140,7 +140,7 @@ const useLogic = (): LogicReturnType => {
       languageAndTimeForm.setValue("timeZone", timeZone);
       languageAndTimeForm.setValue("language", language);
     },
-    [languageAndTimeForm, userRawData]
+    [languageAndTimeForm, userRawData],
   );
 
   // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
@@ -152,9 +152,9 @@ const useLogic = (): LogicReturnType => {
         "subjects",
         subjects
           .filter(({ id }) =>
-            subjectsOptions.some((option) => option.value === id)
+            subjectsOptions.some((option) => option.value === id),
           )
-          .map((subject) => subject.id)
+          .map((subject) => subject.id),
       );
     }
   }, [userRawData, subjectsOptions, generalInfoForm]);
@@ -202,7 +202,7 @@ const useLogic = (): LogicReturnType => {
 
       if (result.data) {
         const newSubjects = result.data.subjects.filter(
-          ({ id }: Subject) => !subjectsSetRef.current.has(id)
+          ({ id }: Subject) => !subjectsSetRef.current.has(id),
         );
 
         newSubjects.forEach(({ id }) => subjectsSetRef.current.add(id));
@@ -252,7 +252,7 @@ const useLogic = (): LogicReturnType => {
   };
 
   const onLanguageAndTimeFormSubmission = async (
-    data: LanguageOptionsSchema
+    data: LanguageOptionsSchema,
   ) => {
     const result = await handleGeneralInfoFormSubmit({
       id: userId,

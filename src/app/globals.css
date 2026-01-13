@@ -160,10 +160,12 @@ html {
 }
 
 .bg-wework {
-  background-image: url("/images/wework/elipse.svg"),
-    url("/images/wework/vector.svg");
+  background-image:
+    url("/images/wework/elipse.svg"), url("/images/wework/vector.svg");
   background-repeat: no-repeat, no-repeat;
-  background-position: bottom, top right;
+  background-position:
+    bottom,
+    top right;
 }
 
 .bg-featured {
@@ -193,15 +195,22 @@ html {
 }
 
 .bg-testimonial {
-  background-image: url("/images/wework/elipse.svg"),
-    url("/images/testimonial/boy.svg"), url("/images/testimonial/girl.svg");
+  background-image:
+    url("/images/wework/elipse.svg"), url("/images/testimonial/boy.svg"),
+    url("/images/testimonial/girl.svg");
   background-repeat: no-repeat, no-repeat, no-repeat;
-  background-position: 55%, 84% 26%, 12% 18%;
+  background-position:
+    55%,
+    84% 26%,
+    12% 18%;
 }
 
 @media only screen and (max-width: 1400px) {
   .bg-testimonial {
-    background-position: 80%, top right, top left;
+    background-position:
+      80%,
+      top right,
+      top left;
   }
 }
 
@@ -235,10 +244,12 @@ html {
 }
 
 .bg-joinus {
-  background-image: url("/images/joinus/horn.svg"),
-    url("/images/joinus/paint.svg");
+  background-image:
+    url("/images/joinus/horn.svg"), url("/images/joinus/paint.svg");
   background-repeat: no-repeat, no-repeat;
-  background-position: 84% 109%, 12% 18%;
+  background-position:
+    84% 109%,
+    12% 18%;
 }
 
 .footer-icons {

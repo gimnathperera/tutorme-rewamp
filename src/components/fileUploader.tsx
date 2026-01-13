@@ -67,7 +67,7 @@ export default function FileUploadDropzone({
 
       onUploaded(publicUrl);
     },
-    [onUploaded]
+    [onUploaded],
   );
 
   const removeFile = () => {

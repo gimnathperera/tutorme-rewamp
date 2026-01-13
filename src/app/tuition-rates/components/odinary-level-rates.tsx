@@ -15,7 +15,7 @@ const OrdinaryLevelRates = () => {
   const about = aboutDetails;
 
   const ordinaryLevelInfo = about.find(
-    (detail) => detail.name === "Ordinary Level Tuition"
+    (detail) => detail.name === "Ordinary Level Tuition",
   );
 
   if (!ordinaryLevelInfo) {

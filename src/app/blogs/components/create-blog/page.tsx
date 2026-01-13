@@ -65,7 +65,7 @@ const AddBlog = () => {
 
   const getContentError = (
     index: number,
-    field: "text" | "src"
+    field: "text" | "src",
   ): string | undefined => {
     const contentError = formState.errors.content?.[index];
     if (
@@ -401,7 +401,7 @@ const AddBlog = () => {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                        "<p>Nothing to preview yet...</p>"
+                        "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />
@@ -431,7 +431,7 @@ const AddBlog = () => {
                     watch("relatedArticles").map(
                       (relatedId: string, idx: number) => {
                         const related = blogsData?.results.find(
-                          (b) => b.id === relatedId
+                          (b) => b.id === relatedId,
                         );
                         return (
                           <li key={idx} className="flex items-center gap-3">
@@ -450,7 +450,7 @@ const AddBlog = () => {
                             </div>
                           </li>
                         );
-                      }
+                      },
                     )
                   ) : (
                     <p className="text-sm text-gray-500">

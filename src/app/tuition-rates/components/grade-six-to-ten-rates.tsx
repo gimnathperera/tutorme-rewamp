@@ -15,7 +15,7 @@ const GradeSixToNineRates = () => {
   const about = aboutDetails;
 
   const SecondaryLevelInfo = about.find(
-    (detail) => detail.name === "Grade 6 to 9 Level Tuition"
+    (detail) => detail.name === "Grade 6 to 9 Level Tuition",
   );
 
   if (!SecondaryLevelInfo) {

@@ -22,7 +22,7 @@ const TableOfContents = ({ html }: { html: string }) => {
         id: h.textContent?.replace(/\s+/g, "-").toLowerCase() || "",
         text: h.textContent || "",
         level: parseInt(h.tagName.replace("H", ""), 10),
-      })
+      }),
     );
 
     setHeadings(foundHeadings);

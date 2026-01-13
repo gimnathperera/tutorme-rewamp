@@ -71,7 +71,7 @@ export default function MultiFileUploadDropzone({
           onUploaded(
             [...files.filter((f) => f.url), fileObj]
               .filter((f) => f.url)
-              .map((f) => f.url!)
+              .map((f) => f.url!),
           );
         } catch (err) {
           console.error(err);
@@ -81,7 +81,7 @@ export default function MultiFileUploadDropzone({
         }
       }
     },
-    [files, onUploaded]
+    [files, onUploaded],
   );
 
   const removeFile = (index: number, e: MouseEvent<HTMLButtonElement>) => {

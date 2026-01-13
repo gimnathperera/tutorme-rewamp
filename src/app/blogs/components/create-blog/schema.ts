@@ -24,7 +24,7 @@ export const createArticleSchema = z.object({
           src: z.string().url("Image source must be a valid URL"),
           caption: z.string().optional(),
         }),
-      ])
+      ]),
     )
     .nonempty("Content cannot be empty"),
   image: z.string().url("Cover image must be a valid URL"),
@@ -33,7 +33,7 @@ export const createArticleSchema = z.object({
       z.object({
         question: z.string().min(1, "FAQ question is required"),
         answer: z.string().min(1, "FAQ answer is required"),
-      })
+      }),
     )
     .optional(),
   tags: z.array(z.string().min(1, "Please add a tag")).optional(),

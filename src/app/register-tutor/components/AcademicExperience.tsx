@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useFormContext, Controller } from "react-hook-form"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useFormContext, Controller } from "react-hook-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import MultiSelect from "@/components/shared/MultiSelect"
+import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
   TUTORING_LEVEL_OPTIONS,
@@ -12,9 +12,9 @@ import {
   TUTOR_TYPE_OPTIONS,
   HIGHEST_EDUCATION_LEVELS,
   MEDIUM_OPTIONS,
-} from "@/configs/register-tutor"
+} from "@/configs/register-tutor";
 
-import { useFetchGradesQuery } from "@/store/api/splits/grades"
+import { useFetchGradesQuery } from "@/store/api/splits/grades";
 
 const AcademicExperience = () => {
   const {
@@ -22,11 +22,11 @@ const AcademicExperience = () => {
     control,
     watch, // ✅ FIX: destructure watch
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
-  const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 })
+  const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
 
-  const selectedGradeId = watch("grades")?.[0]
+  const selectedGradeId = watch("grades")?.[0];
 
   const subjectOptions =
     gradeData?.results
@@ -34,7 +34,7 @@ const AcademicExperience = () => {
       ?.subjects?.map((s: any) => ({
         value: s.id,
         text: s.title,
-      })) || []
+      })) || [];
 
   return (
     <div className="space-y-8">
@@ -94,7 +94,7 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={TUTOR_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}   // ✅ PASS ARRAY
+                onChange={field.onChange} // ✅ PASS ARRAY
                 label=""
               />
             )}
@@ -108,14 +108,19 @@ const AcademicExperience = () => {
 
         <div>
           <Label>Highest Education Level *</Label>
-          <select {...register("highestEducation")} className="w-full border rounded p-2 border-gray-300 bg-white">
+          <select
+            {...register("highestEducation")}
+            className="w-full border rounded p-2 border-gray-300 bg-white"
+          >
             <option value="">Select</option>
             <option value="PhD">PhD</option>
             <option value="Diploma">Diploma</option>
             <option value="Masters">Masters</option>
             <option value="Undergraduate">Undergraduate</option>
             <option value="Bachelor Degree">Bachelor Degree</option>
-            <option value="Diploma and Professional">Diploma and Professional</option>
+            <option value="Diploma and Professional">
+              Diploma and Professional
+            </option>
             <option value="JC/A Levels">JC/A Levels</option>
             <option value="Poly">Poly</option>
             <option value="Others">Others</option>
@@ -188,9 +193,7 @@ const AcademicExperience = () => {
             )}
           />
           {errors.grades && (
-            <p className="text-sm text-red-500">
-              {`${errors.grades.message}`}
-            </p>
+            <p className="text-sm text-red-500">{`${errors.grades.message}`}</p>
           )}
         </div>
 
@@ -216,7 +219,7 @@ const AcademicExperience = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AcademicExperience
+export default AcademicExperience;

@@ -38,7 +38,7 @@ export const handleRefreshTokenProcess = async (): Promise<boolean> => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ refreshToken }),
-      }
+      },
     );
 
     if (response.ok) {

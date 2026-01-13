@@ -28,21 +28,21 @@ export default function BlogsDashboard() {
   const allBlogs = useMemo(() => {
     return [...allBlogsRaw].sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
   }, [allBlogsRaw]);
 
   const filteredAllBlogs = useMemo(() => {
     if (!activeTag) return allBlogs;
     return allBlogs.filter((blog) =>
-      blog.tags?.some((t: any) => t.id === activeTag)
+      blog.tags?.some((t: any) => t.id === activeTag),
     );
   }, [activeTag, allBlogs]);
 
   const startIndex = (page - 1) * pageSize;
   const paginatedFilteredBlogs = filteredAllBlogs.slice(
     startIndex,
-    startIndex + pageSize
+    startIndex + pageSize,
   );
 
   const totalPages = Math.ceil(filteredAllBlogs.length / pageSize);

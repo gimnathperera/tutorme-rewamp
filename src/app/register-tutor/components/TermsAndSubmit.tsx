@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { Controller, useFormContext } from "react-hook-form"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+import { Controller, useFormContext } from "react-hook-form";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 
-import MultiFileUploadDropzone from "@/components/MultiFileUploader"
+import MultiFileUploadDropzone from "@/components/MultiFileUploader";
 
 const TermsAndSubmit = () => {
   const {
     control,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
   return (
     <div className="space-y-6">
@@ -95,7 +95,7 @@ const TermsAndSubmit = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default TermsAndSubmit
+export default TermsAndSubmit;

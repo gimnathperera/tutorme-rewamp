@@ -59,7 +59,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
               field.onChange(selected.map((option) => option.value))
             }
             value={options.filter((option) =>
-              field.value?.includes(option.value)
+              field.value?.includes(option.value),
             )}
             styles={{
               placeholder: (base) => ({

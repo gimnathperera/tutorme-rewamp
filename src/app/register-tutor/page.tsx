@@ -1,10 +1,8 @@
-import React from 'react'
-import { TutorTabs } from './components/TutorTabs'
+import React from "react";
+import { TutorTabs } from "./components/TutorTabs";
 
 const page = () => {
-  return (
-    <TutorTabs />
-  )
-}
+  return <TutorTabs />;
+};
 
-export default page
+export default page;

@@ -41,7 +41,7 @@ const FormResetPassword = () => {
   const onSubmit = async (data: ResetPasswordSchema) => {
     if (!token) {
       setErrorMsg(
-        "Reset link is not ready. Please wait a second and try again."
+        "Reset link is not ready. Please wait a second and try again.",
       );
       return;
     }
@@ -66,7 +66,7 @@ const FormResetPassword = () => {
       setTimeout(() => router.push("/"), 1000);
     } catch (error: any) {
       toast.error(
-        error?.data?.message || "Failed to reset password. Try again."
+        error?.data?.message || "Failed to reset password. Try again.",
       );
 
       const message =

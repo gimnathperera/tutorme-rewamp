@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const step1Schema = z.object({
   fullName: z
-  .string()
-  .min(1, "Full Name is required")
-  .regex(
-    /^[A-Za-z\s]+$/,
-    "Full Name can contain letters and spaces only"
-  ),
+    .string()
+    .min(1, "Full Name is required")
+    .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
   email: z.string().email("Invalid email"),
-  contactNumber: z.string().min(10, "Contact Number should be 10 digits").max(10, "Contact Number should be 10 digits"),
+  contactNumber: z
+    .string()
+    .min(10, "Contact Number should be 10 digits")
+    .max(10, "Contact Number should be 10 digits"),
   dateOfBirth: z.string().min(1, "Date of Birth is required"),
   gender: z.enum(["Male", "Female", "Others"]),
   age: z.number().int().min(1).max(80),
@@ -50,14 +50,12 @@ export const step3Schema = z.object({
 });
 
 export const step4Schema = z.object({
-  certificatesAndQualifications: z
-    .array(z.string()),
+  certificatesAndQualifications: z.array(z.string()),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()
     .refine((v) => v, "You must confirm assignment info"),
 });
-
 
 export const fullSchema = step1Schema
   .merge(step2Schema)

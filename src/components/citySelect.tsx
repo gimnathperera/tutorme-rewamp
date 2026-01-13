@@ -28,7 +28,7 @@ export default function CitySelect({ value, onChange }: CitySelectProps) {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ country: "Sri Lanka" }),
-        }
+        },
       );
 
       const data = await res.json();
@@ -50,7 +50,7 @@ export default function CitySelect({ value, onChange }: CitySelectProps) {
       return;
     }
     const filtered = cities.filter((c) =>
-      c.toLowerCase().includes(input.toLowerCase())
+      c.toLowerCase().includes(input.toLowerCase()),
     );
     setFilteredCities(filtered);
     setShowDropdown(filtered.length > 0);
