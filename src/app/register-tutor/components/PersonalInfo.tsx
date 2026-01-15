@@ -55,11 +55,7 @@ const PersonalInfo = () => {
       {/* Email */}
       <div className={fieldWrapper}>
         <Label>Email *</Label>
-        <Input
-          {...register("email")}
-          placeholder="Email"
-          className="h-11"
-        />
+        <Input {...register("email")} placeholder="Email" className="h-11" />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.email?.message as string}
         </p>
@@ -81,11 +77,7 @@ const PersonalInfo = () => {
       {/* Date of Birth */}
       <div className={fieldWrapper}>
         <Label>Date of Birth *</Label>
-        <Input
-          type="date"
-          {...register("dateOfBirth")}
-          className="h-11"
-        />
+        <Input type="date" {...register("dateOfBirth")} className="h-11" />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.dateOfBirth?.message as string}
         </p>

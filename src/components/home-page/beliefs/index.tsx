@@ -28,7 +28,7 @@ const Beliefs = () => {
             flexible, and effective.
           </h5>
           <div className="text-center sm:text-start">
-            <button 
+            <button
               className="text-xl py-5 px-14 mt-5 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90"
               onClick={handleRegisterTutor}
             >

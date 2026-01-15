@@ -22,6 +22,19 @@ import Image from "next/image";
 import { districts } from "@/configs/districts";
 import CitySelect from "@/components/citySelect";
 import DistrictSelect from "@/components/districtSelect";
+import { AlertDialogDemo } from "./sucessDialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -29,6 +42,8 @@ const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 export default function AddRequestForTutor() {
   const [step, setStep] = useState(1);
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertType, setAlertType] = useState<"success" | "error">("success");
 
   const {
     register,
@@ -72,9 +87,9 @@ export default function AddRequestForTutor() {
       while (newTutors.length < selectedTutorCount) {
         newTutors.push({
           subjects: [],
-          duration: "30 Minutes",
-          frequency: "Once a Week",
-          preferredTutorType: "Part Time Tutors",
+          duration: "",
+          frequency: "",
+          preferredTutorType: "",
         });
       }
       setValue("tutors", newTutors);
@@ -98,22 +113,32 @@ export default function AddRequestForTutor() {
 
       const result = await createTutorRequest(payload);
       const error = getErrorInApiResult(result);
-      if (error) return toast.error(error);
+
+      if (error) {
+        setAlertType("error");
+        setAlertOpen(true);
+        return;
+      }
 
       if ("data" in result) {
-        toast.success("Tutor request created successfully!");
         reset();
         setStep(1);
         setSelectedTutorCount(1);
+
+        setAlertType("success");
+        setAlertOpen(true);
       }
     } catch (err) {
       console.error(err);
-      toast.error("Unexpected error occurred while creating the request.");
+      setAlertType("error");
+      setAlertOpen(true);
     }
   };
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 2));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
+
+  const selectedDistrict = watch("district");
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -191,6 +216,7 @@ export default function AddRequestForTutor() {
                 render={({ field }) => (
                   <CitySelect
                     value={field.value || ""}
+                    district={selectedDistrict}
                     onChange={field.onChange}
                   />
                 )}
@@ -283,7 +309,6 @@ export default function AddRequestForTutor() {
                         options={subjectOptions}
                         defaultSelected={field.value || []}
                         onChange={(vals) => field.onChange(vals)}
-                        label=""
                       />
                     )}
                   />
@@ -373,6 +398,28 @@ export default function AddRequestForTutor() {
           </div>
         )}
       </form>
+      <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
+        <AlertDialogContent className="bg-white">
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {alertType === "success"
+                ? "Your request has been submitted successfully"
+                : "Something went wrong"}
+            </AlertDialogTitle>
+
+            <AlertDialogDescription>
+              {alertType === "success"
+                ? "We’ve sent the request details to your email. Our team is reviewing your request and will notify you once suitable tutors are available."
+                : "We couldn’t submit your request at the moment. Please check your details and try again shortly."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-blue-600 text-white">
+              Okey
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

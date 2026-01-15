@@ -1,7 +1,10 @@
 import { z } from "zod";
 
 export const createRequestTutorSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z
+    .string()
+    .min(1, "Name is required")
+    .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
   email: z.string().min(1, "Enter a valid email").email("Enter a valid email"),
   city: z.string().min(1, "City is required"),
   district: z.string().min(1, "District is required"),
