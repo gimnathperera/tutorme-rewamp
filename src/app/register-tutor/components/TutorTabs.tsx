@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -29,6 +28,7 @@ import {
 } from "../schema";
 import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
 import { getErrorInApiResult } from "@/utils/api";
+import { Spinner } from "@/components/ui/spinner";
 
 type TabKey =
   | "personalInfo"
@@ -201,7 +201,7 @@ export function TutorTabs() {
                     Previous
                   </Button>
                   <Button type="submit" className="ml-auto">
-                    Submit
+                    Submit {isLoading ? <Spinner /> : ""}
                   </Button>
                 </CardFooter>
               </Card>

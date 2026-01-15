@@ -24,6 +24,7 @@ const FormResetPassword = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [open, setOpen] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -45,6 +46,8 @@ const FormResetPassword = () => {
       );
       return;
     }
+
+    console.log(errorMsg, successMsg);
 
     setErrorMsg("");
     setSuccessMsg("");
@@ -74,12 +77,13 @@ const FormResetPassword = () => {
       setErrorMsg(message);
     }
   };
+
   useEffect(() => {
     if (!open) router.push("/");
   }, [open, router]);
 
   return (
-    <Dialog open={true}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogOverlay className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
 
       <DialogContent

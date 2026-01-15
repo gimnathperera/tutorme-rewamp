@@ -167,35 +167,6 @@ export type FetchTuitionAssignments = {
   tutorId?: string;
 };
 
-type PersonalInfo = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string;
-  city: string;
-  state: string;
-  zip: string;
-  region: string;
-  grade: string;
-};
-
-type LessonDetail = {
-  subjects: string[];
-  duration: string;
-  frequency: string;
-};
-
-type LessonInfo = {
-  tutorCount: string;
-  lessonDetails: LessonDetail[];
-};
-
-type TutorTypeInfo = {
-  tutorType: string;
-  studentSchool: string;
-  genderPreference: string;
-  isBilingualTutor: boolean;
-};
 export type FetchTuitionAssignmentsRequest = {
   page?: number;
   limit?: number;

@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import destr from "destr";
 
 export const prefix = "tutor-me";

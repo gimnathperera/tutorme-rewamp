@@ -70,8 +70,6 @@ export default function EditBlogPage() {
     return txt.value;
   };
 
-  const blogOptions: Option[] =
-    blogsData?.results.map((b) => ({ value: b.id, text: b.title })) || [];
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
@@ -126,7 +124,6 @@ export default function EditBlogPage() {
     if (!user) return toast.error("Please authenticate");
 
     try {
-      const imageContent = data.content.find((c) => c.type === "image");
       const payload = {
         id: blogId,
         title: data.title,

@@ -21,16 +21,15 @@ export default function BlogsDashboard() {
   } = useFetchBlogsQuery({ limit: 9999 });
 
   const { data: tagsData, isLoading: isTagsLoading } = useFetchTagsQuery({});
-
-  const allBlogsRaw = allBlogsData?.results || [];
   const tags = tagsData?.results || [];
 
   const allBlogs = useMemo(() => {
-    return [...allBlogsRaw].sort(
+    const blogs = allBlogsData?.results ?? [];
+    return [...blogs].sort(
       (a, b) =>
         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
-  }, [allBlogsRaw]);
+  }, [allBlogsData]);
 
   const filteredAllBlogs = useMemo(() => {
     if (!activeTag) return allBlogs;

@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import { Option } from "@/types/shared-types";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
 import { LanguageOptionsSchema } from "../components/form-language-time/schema";

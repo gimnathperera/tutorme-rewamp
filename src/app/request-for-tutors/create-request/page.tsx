@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
 
 import {
   createRequestTutorSchema,
@@ -22,19 +21,16 @@ import Image from "next/image";
 import { districts } from "@/configs/districts";
 import CitySelect from "@/components/citySelect";
 import DistrictSelect from "@/components/districtSelect";
-import { AlertDialogDemo } from "./sucessDialog";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -392,7 +388,7 @@ export default function AddRequestForTutor() {
                 type="submit"
                 className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-black text-white hover:bg-gray-800"
               >
-                Submit
+                Submit {isLoading ? <Spinner /> : ""}
               </button>
             </div>
           </div>

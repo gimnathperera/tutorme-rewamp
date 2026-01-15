@@ -31,9 +31,9 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
 
   const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
 
-  const allAssignments: TuitionAssignment[] = data?.results || [];
-
   const assignments = useMemo(() => {
+    const allAssignments: TuitionAssignment[] = data?.results ?? [];
+
     if (!gradeId || gradeId === "all") return allAssignments;
 
     return allAssignments.filter((assignment: any) => {
@@ -54,7 +54,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
 
       return false;
     });
-  }, [allAssignments, gradeId]);
+  }, [data, gradeId]);
 
   const totalCount = assignments.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));

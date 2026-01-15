@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import Link from "next/link";
 import { ReactNode } from "react";
 import Icon from "../icon";

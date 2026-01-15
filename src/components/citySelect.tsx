@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -30,7 +32,7 @@ export default function CitySelect({
     onChange("");
     setFilteredCities([]);
     setShowDropdown(false);
-  }, [district]);
+  }, [district, onChange]);
 
   /* ------------------ FILTER ------------------ */
   const handleInputChange = (input: string) => {

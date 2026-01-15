@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 "use client";
 
 import { ForgotPasswordSchema } from "@/components/auth/form-forgot-password/schema";

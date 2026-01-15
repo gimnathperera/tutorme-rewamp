@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import { Check, ChevronDown } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 

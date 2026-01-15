@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import React, { useState, useRef, useEffect } from "react";
 
 export interface Option {
