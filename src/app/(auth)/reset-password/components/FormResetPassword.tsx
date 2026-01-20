@@ -47,11 +47,6 @@ const FormResetPassword = () => {
       return;
     }
 
-    console.log(errorMsg, successMsg);
-
-    setErrorMsg("");
-    setSuccessMsg("");
-
     try {
       const response = await resetPassword({
         token,
@@ -63,13 +58,17 @@ const FormResetPassword = () => {
       } else if (response.message) {
         toast.success(response.message);
       } else {
-        toast.success("Password reset successful!");
+        setSuccessMsg("Password reset successful!");
+        toast.success(successMsg || "Password reset successful!");
       }
 
       setTimeout(() => router.push("/"), 1000);
     } catch (error: any) {
+      setErrorMsg("Failed to reset password. Try again.");
       toast.error(
-        error?.data?.message || "Failed to reset password. Try again.",
+        error?.data?.message ||
+          "Failed to reset password. Try again." ||
+          errorMsg,
       );
 
       const message =
