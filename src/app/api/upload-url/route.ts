@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       permissions: BlobSASPermissions.parse("cw"), // create + write
       expiresOn,
     },
-    sharedKey
+    sharedKey,
   ).toString();
 
   const uploadUrl = `https://${account}.blob.core.windows.net/${container}/${fileName}?${sas}`;

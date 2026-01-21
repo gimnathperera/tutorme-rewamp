@@ -8,7 +8,7 @@ import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-const GRADE_LIMIT = 10;
+const GRADE_LIMIT = 1000;
 
 const GradesPage: FC = () => {
   const router = useRouter();

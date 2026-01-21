@@ -1,10 +1,12 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import destr from "destr";
 
 export const prefix = "tutor-me";
 
 export const setLocalStorageItem = <T>(
   key: LocalStorageKey,
-  value: T
+  value: T,
 ): void => {
   if (typeof Storage == "undefined") {
     return;

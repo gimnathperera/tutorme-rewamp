@@ -30,7 +30,7 @@ export default function ViewBlogPage() {
 
   const toggleFaq = (index: number) => {
     setOpenFaqs((prev) =>
-      prev.map((isOpen, i) => (i === index ? !isOpen : isOpen))
+      prev.map((isOpen, i) => (i === index ? !isOpen : isOpen)),
     );
   };
 
@@ -48,7 +48,7 @@ export default function ViewBlogPage() {
   const image = blog.content.find((c) => c.type === "image");
   const relatedArticles =
     allBlogs?.results.filter((b) =>
-      blog.relatedArticles?.some((ra) => ra.id === b.id)
+      blog.relatedArticles?.some((ra) => ra.id === b.id),
     ) ||
     blog.relatedArticles ||
     [];
@@ -144,7 +144,7 @@ export default function ViewBlogPage() {
             className="blog-content max-w-none text-justify mt-6 prose dark:prose-invert"
             dangerouslySetInnerHTML={{
               __html: decodeHtml(
-                paragraph?.text || "<p>Nothing to preview yet...</p>"
+                paragraph?.text || "<p>Nothing to preview yet...</p>",
               ),
             }}
           />

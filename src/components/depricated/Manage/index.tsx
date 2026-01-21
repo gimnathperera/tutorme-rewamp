@@ -90,7 +90,7 @@ const Manage = () => {
   };
 
   const filteredData = names.filter(
-    (items) => items.category === selectedCategory
+    (items) => items.category === selectedCategory,
   );
 
   return (

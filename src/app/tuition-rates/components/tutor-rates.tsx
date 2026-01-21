@@ -19,7 +19,7 @@ const TutorRatesSection = () => {
   const about = aboutDetails;
 
   const allLevelInfo = about.find(
-    (detail) => detail.name === "All Tuition Rates"
+    (detail) => detail.name === "All Tuition Rates",
   );
 
   if (!allLevelInfo) {

@@ -36,7 +36,7 @@ type LogicReturnType = {
   };
 };
 
-const PAPER_LIMIT = 100;
+const PAPER_LIMIT = 10000;
 const useLogic = (): LogicReturnType => {
   const [subjectOptions, setSubjectOptions] = useState<Option[]>([]);
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -55,7 +55,7 @@ const useLogic = (): LogicReturnType => {
   // TODO: options will be fetched from a different API endpoint in the future
   const { data: gradesRowData, isLoading: isGradesLoading } =
     useFetchGradesQuery({
-      limit: 100,
+      limit: 1000,
       page: 1,
     });
 
@@ -79,11 +79,11 @@ const useLogic = (): LogicReturnType => {
           result.data.subjects.map((subject) => ({
             label: subject.title,
             value: subject.id.toString(),
-          }))
+          })),
         );
       }
     },
-    [fetchSubjectsByGrade]
+    [fetchSubjectsByGrade],
   );
 
   const fetchTestPapers = useCallback(
@@ -102,7 +102,7 @@ const useLogic = (): LogicReturnType => {
         setPapers(result.data.results);
       }
     },
-    [fetchPapers]
+    [fetchPapers],
   );
 
   useEffect(() => {

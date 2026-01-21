@@ -9,11 +9,11 @@ const RatePage = () => {
   const params = useParams();
   const { levelId } = params;
 
-  const { data:rate, isLoading } = useFetchTuitionRatesQuery({});
+  const { data: rate, isLoading } = useFetchTuitionRatesQuery({});
 
   if (isLoading) return <p>Loading tuition rates...</p>;
-  if (!rate?.results || rate.results.length === 0) return <p>No tuition rates found.</p>;
-
+  if (!rate?.results || rate.results.length === 0)
+    return <p>No tuition rates found.</p>;
 
   // Group subjects by grade
   const gradesMap: Record<string, TuitionRateItem[]> = {};
@@ -37,15 +37,21 @@ const RatePage = () => {
                   </h4>
                   <p className="mb-1">
                     <strong>Full-Time:</strong>{" "}
-                    {rate.fullTimeTuitionRate?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`).join(", ") || "N/A"}
+                    {rate.fullTimeTuitionRate
+                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                      .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
                     <strong>Part-Time:</strong>{" "}
-                    {rate.partTimeTuitionRate?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`).join(", ") || "N/A"}
+                    {rate.partTimeTuitionRate
+                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                      .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
                     <strong>Government:</strong>{" "}
-                    {rate.govTuitionRate?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`).join(", ") || "N/A"}
+                    {rate.govTuitionRate
+                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                      .join(", ") || "N/A"}
                   </p>
                 </CardContent>
                 <CardFooter>

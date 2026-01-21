@@ -4,12 +4,11 @@ import BackToTop from "@/components/shared/back-to-top";
 import "./globals.css";
 import { WithProviders } from "@/hocs/with-providers";
 
-
 export const metadata = {
   title: "Tuition Lanka",
   description: "Change how you learn with a tutor",
   icons: {
-     icon: "/favicon.svg",
+    icon: "/favicon.svg",
   },
 };
 

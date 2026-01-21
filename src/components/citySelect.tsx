@@ -1,59 +1,55 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
+import districtsAndCities from "@/configs/districtsAndCities.json";
 
 interface CitySelectProps {
   value: string;
+  district: string;
   onChange: (v: string) => void;
 }
 
-export default function CitySelect({ value, onChange }: CitySelectProps) {
-  const [cities, setCities] = useState<string[]>([]);
+export default function CitySelect({
+  value,
+  district,
+  onChange,
+}: CitySelectProps) {
   const [filteredCities, setFilteredCities] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  /* ------------------ GET CITIES FOR DISTRICT ------------------ */
+  const districtCities = useMemo(() => {
+    if (!district) return [];
+    const found = districtsAndCities.districts.find((d) => d.name === district);
+    return found?.cities || [];
+  }, [district]);
+
+  /* ------------------ CLEAR CITY WHEN DISTRICT CHANGES ------------------ */
   useEffect(() => {
-    const cached = localStorage.getItem("lk_cities");
+    onChange("");
+    setFilteredCities([]);
+    setShowDropdown(false);
+  }, [district, onChange]);
 
-    if (cached) {
-      setCities(JSON.parse(cached));
-      return;
-    }
-
-    const fetchCities = async () => {
-      const res = await fetch(
-        "https://countriesnow.space/api/v0.1/countries/cities",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ country: "Sri Lanka" }),
-        }
-      );
-
-      const data = await res.json();
-
-      if (!data.error) {
-        setCities(data.data);
-        localStorage.setItem("lk_cities", JSON.stringify(data.data));
-      }
-    };
-
-    fetchCities();
-  }, []);
-
+  /* ------------------ FILTER ------------------ */
   const handleInputChange = (input: string) => {
     onChange(input);
-    if (input.trim() === "") {
+
+    if (!input.trim()) {
       setFilteredCities([]);
       setShowDropdown(false);
       return;
     }
-    const filtered = cities.filter((c) =>
-      c.toLowerCase().includes(input.toLowerCase())
+
+    const matches = districtCities.filter((city) =>
+      city.toLowerCase().includes(input.toLowerCase()),
     );
-    setFilteredCities(filtered);
-    setShowDropdown(filtered.length > 0);
+
+    setFilteredCities(matches);
+    setShowDropdown(matches.length > 0);
   };
 
   const handleSelect = (city: string) => {
@@ -66,8 +62,10 @@ export default function CitySelect({ value, onChange }: CitySelectProps) {
       <Input
         value={value}
         onChange={(e) => handleInputChange(e.target.value)}
-        placeholder="Type the City"
+        placeholder={district ? "Type the City" : "Select district first"}
+        disabled={!district}
       />
+
       {showDropdown && (
         <ul className="absolute z-10 bg-white border w-full max-h-40 overflow-auto rounded mt-1 shadow-lg">
           {filteredCities.map((city) => (

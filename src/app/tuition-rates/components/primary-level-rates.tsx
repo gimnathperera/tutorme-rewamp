@@ -14,7 +14,7 @@ const PrimaryLevelTuitionRates = () => {
   const about = aboutDetails;
 
   const primaryLevelInfo = about.find(
-    (detail) => detail.name === "Primary Level Tuition"
+    (detail) => detail.name === "Primary Level Tuition",
   );
 
   if (!primaryLevelInfo) {

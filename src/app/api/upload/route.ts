@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   const sasToken = UPLOAD_CONFIG.SAS_TOKEN;
 
   const blobService = new BlobServiceClient(
-    `https://${account}.blob.core.windows.net/?${sasToken}`
+    `https://${account}.blob.core.windows.net/?${sasToken}`,
   );
 
   const containerClient = blobService.getContainerClient(container);

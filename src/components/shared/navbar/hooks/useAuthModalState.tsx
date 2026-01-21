@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import FormForgotPassword from "@/components/auth/form-forgot-password";
 import FormLogin from "@/components/auth/form-login";
 import FormSignUp from "@/components/auth/form-sign-up";

@@ -1,5 +1,5 @@
 const assignmentList = [
-    {
+  {
     id: "A001",
     subject: "Math",
     grade: "primary",
@@ -7,8 +7,8 @@ const assignmentList = [
     gender: "female",
     location: "Bukit Panjang",
     rate: "$40/hr",
-    },
-    {
+  },
+  {
     id: "A002",
     subject: "Science",
     grade: "secondary",
@@ -16,8 +16,8 @@ const assignmentList = [
     gender: "male",
     location: "Yishun",
     rate: "$35/hr",
-    },
-    {
+  },
+  {
     id: "A003",
     subject: "English",
     grade: "jc",
@@ -25,8 +25,8 @@ const assignmentList = [
     gender: "any",
     location: "Jurong West",
     rate: "$50/hr",
-    },
-    {
+  },
+  {
     id: "A004",
     subject: "Math",
     grade: "secondary",
@@ -34,8 +34,8 @@ const assignmentList = [
     gender: "any",
     location: "Bedok",
     rate: "$45/hr",
-    },
-    {
+  },
+  {
     id: "A005",
     subject: "Science",
     grade: "primary",
@@ -43,7 +43,7 @@ const assignmentList = [
     gender: "female",
     location: "Tampines",
     rate: "$38/hr",
-    },
+  },
 ];
 
 export default assignmentList;

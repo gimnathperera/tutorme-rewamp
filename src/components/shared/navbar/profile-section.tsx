@@ -25,7 +25,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
     useState(false);
 
   const dropdownRef = useRef(
-    null
+    null,
   ) as unknown as MutableRefObject<HTMLInputElement>;
 
   const [avatarSrc, setAvatarSrc] = useState<string>(DEFAULT_AVATAR);

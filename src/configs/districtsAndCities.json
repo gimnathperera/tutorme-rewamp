@@ -1,0 +1,398 @@
+{
+  "country": "Sri Lanka",
+  "districts": [
+    {
+      "name": "Ampara",
+      "province": "Eastern",
+      "cities": [
+        "Akkaraipattu",
+        "Ampara",
+        "Dehiattakandiya",
+        "Kalmunai",
+        "Maha Oya",
+        "Pottuvil",
+        "Sainthamaruthu",
+        "Sammanthurai",
+        "Thirukkovil",
+        "Uhana"
+      ]
+    },
+    {
+      "name": "Anuradhapura",
+      "province": "North Central",
+      "cities": [
+        "Anuradhapura",
+        "Eppawala",
+        "Galenbindunuwewa",
+        "Galnewa",
+        "Kekirawa",
+        "Medawachchiya",
+        "Mihintale",
+        "Nochchiyagama",
+        "Talawa",
+        "Thambutthegama"
+      ]
+    },
+    {
+      "name": "Badulla",
+      "province": "Uva",
+      "cities": [
+        "Badulla",
+        "Bandarawela",
+        "Diyatalawa",
+        "Ella",
+        "Hali-Ela",
+        "Haputale",
+        "Lunugala",
+        "Mahiyanganaya",
+        "Passara",
+        "Welimada"
+      ]
+    },
+    {
+      "name": "Batticaloa",
+      "province": "Eastern",
+      "cities": [
+        "Batticaloa",
+        "Chenkalady",
+        "Eravur",
+        "Kalawanchikudi",
+        "Kalkudah",
+        "Kattankudy",
+        "Oddamavadi",
+        "Valaichchenai"
+      ]
+    },
+    {
+      "name": "Colombo",
+      "province": "Western",
+      "cities": [
+        "Avissawella",
+        "Battaramulla",
+        "Colombo",
+        "Dehiwala-Mount Lavinia",
+        "Homagama",
+        "Kesbewa",
+        "Kolonnawa",
+        "Kotikawatta",
+        "Maharagama",
+        "Malabe",
+        "Moratuwa",
+        "Nawala",
+        "Nugegoda",
+        "Padukka",
+        "Piliyandala",
+        "Sri Jayawardenepura Kotte",
+        "Talawatugoda"
+      ]
+    },
+    {
+      "name": "Galle",
+      "province": "Southern",
+      "cities": [
+        "Ahangama",
+        "Ambalangoda",
+        "Baddegama",
+        "Batapola",
+        "Bentota",
+        "Elpitiya",
+        "Galle",
+        "Hikkaduwa",
+        "Imaduwa",
+        "Karapitiya",
+        "Koggala",
+        "Neluwa"
+      ]
+    },
+    {
+      "name": "Gampaha",
+      "province": "Western",
+      "cities": [
+        "Biyagama",
+        "Divulapitiya",
+        "Dompe",
+        "Gampaha",
+        "Ja-Ela",
+        "Kadawatha",
+        "Kandana",
+        "Katunayake",
+        "Kelaniya",
+        "Mahara",
+        "Minuwangoda",
+        "Mirigama",
+        "Negombo",
+        "Ragama",
+        "Seeduwa",
+        "Veyangoda",
+        "Wattala"
+      ]
+    },
+    {
+      "name": "Hambantota",
+      "province": "Southern",
+      "cities": [
+        "Ambalantota",
+        "Beliatta",
+        "Hambantota",
+        "Middeniya",
+        "Sooriyawewa",
+        "Tangalle",
+        "Tissamaharama",
+        "Walasmulla",
+        "Weeraketiya"
+      ]
+    },
+    {
+      "name": "Jaffna",
+      "province": "Northern",
+      "cities": [
+        "Chavakachcheri",
+        "Jaffna",
+        "Kankesanthurai",
+        "Karainagar",
+        "Kodikamam",
+        "Nallur",
+        "Nelliyady",
+        "Point Pedro",
+        "Velanai"
+      ]
+    },
+    {
+      "name": "Kalutara",
+      "province": "Western",
+      "cities": [
+        "Agalawatta",
+        "Aluthgama",
+        "Bandaragama",
+        "Beruwala",
+        "Bulathsinhala",
+        "Dodangoda",
+        "Horana",
+        "Ingiriya",
+        "Kalutara",
+        "Matugama",
+        "Panadura",
+        "Wadduwa"
+      ]
+    },
+    {
+      "name": "Kandy",
+      "province": "Central",
+      "cities": [
+        "Akurana",
+        "Digana",
+        "Galagedara",
+        "Gampola",
+        "Kadugannawa",
+        "Kandy",
+        "Katugastota",
+        "Kundasale",
+        "Nawalapitiya",
+        "Peradeniya",
+        "Pilimathalawa",
+        "Teldeniya",
+        "Wattegama"
+      ]
+    },
+    {
+      "name": "Kegalle",
+      "province": "Sabaragamuwa",
+      "cities": [
+        "Aranayaka",
+        "Dehiowita",
+        "Deraniyagala",
+        "Galigamuwa",
+        "Kegalle",
+        "Mawanella",
+        "Rambukkana",
+        "Ruwanwella",
+        "Warakapola",
+        "Yatiyantota"
+      ]
+    },
+    {
+      "name": "Kilinochchi",
+      "province": "Northern",
+      "cities": [
+        "Dharmapuram",
+        "Kilinochchi",
+        "Pallai",
+        "Paranthan",
+        "Pooneryn"
+      ]
+    },
+    {
+      "name": "Kurunegala",
+      "province": "North Western",
+      "cities": [
+        "Bingiriya",
+        "Galgamuwa",
+        "Giriulla",
+        "Hettipola",
+        "Kuliyapitiya",
+        "Kurunegala",
+        "Mawathagama",
+        "Narammala",
+        "Nikaweratiya",
+        "Pannala",
+        "Polgahawela",
+        "Wariyapola"
+      ]
+    },
+    {
+      "name": "Mannar",
+      "province": "Northern",
+      "cities": [
+        "Adampan",
+        "Madhu",
+        "Mannar",
+        "Murunkan",
+        "Nanattan",
+        "Pesalai"
+      ]
+    },
+    {
+      "name": "Matale",
+      "province": "Central",
+      "cities": [
+        "Dambulla",
+        "Galewela",
+        "Matale",
+        "Naula",
+        "Rattota",
+        "Sigiriya",
+        "Ukuwela",
+        "Yatawatta"
+      ]
+    },
+    {
+      "name": "Matara",
+      "province": "Southern",
+      "cities": [
+        "Akuressa",
+        "Deniyaya",
+        "Dickwella",
+        "Gandara",
+        "Hakmana",
+        "Kamburupitiya",
+        "Kekanadurra",
+        "Matara",
+        "Thihagoda",
+        "Weligama"
+      ]
+    },
+    {
+      "name": "Monaragala",
+      "province": "Uva",
+      "cities": [
+        "Badalkumbura",
+        "Bibile",
+        "Buttala",
+        "Kataragama",
+        "Monaragala",
+        "Siyambalanduwa",
+        "Thanamalwila",
+        "Wellawaya"
+      ]
+    },
+    {
+      "name": "Mullaitivu",
+      "province": "Northern",
+      "cities": [
+        "Mallavi",
+        "Mankulam",
+        "Mullaitivu",
+        "Mulliyawalai",
+        "Oddusuddan",
+        "Pudukuduirippu"
+      ]
+    },
+    {
+      "name": "Nuwara Eliya",
+      "province": "Central",
+      "cities": [
+        "Ginigathhena",
+        "Hatton",
+        "Kotagala",
+        "Maskeliya",
+        "Nanu Oya",
+        "Nuwara Eliya",
+        "Pundaluoya",
+        "Ragala",
+        "Talawakele",
+        "Walapane"
+      ]
+    },
+    {
+      "name": "Polonnaruwa",
+      "province": "North Central",
+      "cities": [
+        "Aralaganwila",
+        "Bakamuna",
+        "Giritale",
+        "Hingurakgoda",
+        "Kaduruwela",
+        "Medirigiriya",
+        "Polonnaruwa",
+        "Welikanda"
+      ]
+    },
+    {
+      "name": "Puttalam",
+      "province": "North Western",
+      "cities": [
+        "Anamaduwa",
+        "Chilaw",
+        "Dankotuwa",
+        "Kalpitiya",
+        "Madampe",
+        "Marawila",
+        "Mundel",
+        "Nattandiya",
+        "Puttalam",
+        "Wennappuwa"
+      ]
+    },
+    {
+      "name": "Ratnapura",
+      "province": "Sabaragamuwa",
+      "cities": [
+        "Balangoda",
+        "Eheliyagoda",
+        "Embilipitiya",
+        "Godakawela",
+        "Kahawatta",
+        "Kuruwita",
+        "Pelmadulla",
+        "Rakwana",
+        "Ratnapura",
+        "Weligepola"
+      ]
+    },
+    {
+      "name": "Trincomalee",
+      "province": "Eastern",
+      "cities": [
+        "Kantale",
+        "Kinniya",
+        "Kuchchaveli",
+        "Mutur",
+        "Nilaveli",
+        "Sampur",
+        "Thambalagamuwa",
+        "Trincomalee"
+      ]
+    },
+    {
+      "name": "Vavuniya",
+      "province": "Northern",
+      "cities": [
+        "Cheddikulam",
+        "Kanagarayankulam",
+        "Nedunkeni",
+        "Omanthai",
+        "Vavuniya"
+      ]
+    }
+  ]
+}

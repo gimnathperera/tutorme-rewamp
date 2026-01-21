@@ -2,8 +2,7 @@ import { getNestedError } from "@/utils/form";
 import React, { TextareaHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
-interface InputMultiLineTextProps
-  extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface InputMultiLineTextProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   helperText?: string;
   name: string;

@@ -1,10 +1,8 @@
-// If parent is server component
-import dynamic from "next/dynamic";
+import React from "react";
+import { TutorTabs } from "./components/TutorTabs";
 
-const FindMyTutorForm = dynamic(() => import("./FindMyTutorForm"), {
-  ssr: false,
-});
+const page = () => {
+  return <TutorTabs />;
+};
 
-export default function RegisterTutor() {
-  return <FindMyTutorForm />;
-}
+export default page;

@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 "use client";
 
 import { Loader2, X } from "lucide-react";
@@ -67,7 +69,7 @@ export default function FileUploadDropzone({
 
       onUploaded(publicUrl);
     },
-    [onUploaded]
+    [onUploaded],
   );
 
   const removeFile = () => {

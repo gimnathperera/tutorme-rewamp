@@ -24,6 +24,7 @@ const FormResetPassword = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const [open, setOpen] = useState(true);
 
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -41,13 +42,10 @@ const FormResetPassword = () => {
   const onSubmit = async (data: ResetPasswordSchema) => {
     if (!token) {
       setErrorMsg(
-        "Reset link is not ready. Please wait a second and try again."
+        "Reset link is not ready. Please wait a second and try again.",
       );
       return;
     }
-
-    setErrorMsg("");
-    setSuccessMsg("");
 
     try {
       const response = await resetPassword({
@@ -60,13 +58,17 @@ const FormResetPassword = () => {
       } else if (response.message) {
         toast.success(response.message);
       } else {
-        toast.success("Password reset successful!");
+        setSuccessMsg("Password reset successful!");
+        toast.success(successMsg || "Password reset successful!");
       }
 
       setTimeout(() => router.push("/"), 1000);
     } catch (error: any) {
+      setErrorMsg("Failed to reset password. Try again.");
       toast.error(
-        error?.data?.message || "Failed to reset password. Try again."
+        error?.data?.message ||
+          "Failed to reset password. Try again." ||
+          errorMsg,
       );
 
       const message =
@@ -74,12 +76,13 @@ const FormResetPassword = () => {
       setErrorMsg(message);
     }
   };
+
   useEffect(() => {
     if (!open) router.push("/");
   }, [open, router]);
 
   return (
-    <Dialog open={true}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogOverlay className="fixed inset-0 bg-black/10 backdrop-blur-sm" />
 
       <DialogContent

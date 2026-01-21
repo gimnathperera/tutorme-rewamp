@@ -51,7 +51,7 @@ const Testimonials: FC = () => {
   const { data, isLoading } = useFetchTestimonialsQuery({
     page: 1,
     limit: TESTIMONIAL_LIMIT,
-    ...( { sortBy: "createdAt:desc" } as any ),
+    ...({ sortBy: "createdAt:desc" } as any),
   });
 
   const postData = data?.results ?? [];

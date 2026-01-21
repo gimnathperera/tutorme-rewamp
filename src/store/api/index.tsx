@@ -31,7 +31,7 @@ const staggeredBaseQuery = retry(
     retryCondition: (
       error: FetchBaseQueryError | any,
       baseQueryArgs,
-      { attempt }
+      { attempt },
     ) => {
       if (ENDPOINTS_TO_AVOID_RETRY.includes(baseQueryArgs.url)) return false;
       if (attempt > 5) return false;
@@ -43,7 +43,7 @@ const staggeredBaseQuery = retry(
           (error.status === 429 || error.status > 500))
       );
     },
-  }
+  },
 );
 
 const baseQueryWithAuth: BaseQueryFn<

@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import InputText from "@/components/shared/input-text";
 import { FormProvider } from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";

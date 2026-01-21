@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 "use client";
 
 import { Loader2, X } from "lucide-react";
@@ -71,7 +73,7 @@ export default function MultiFileUploadDropzone({
           onUploaded(
             [...files.filter((f) => f.url), fileObj]
               .filter((f) => f.url)
-              .map((f) => f.url!)
+              .map((f) => f.url!),
           );
         } catch (err) {
           console.error(err);
@@ -81,7 +83,7 @@ export default function MultiFileUploadDropzone({
         }
       }
     },
-    [files, onUploaded]
+    [files, onUploaded],
   );
 
   const removeFile = (index: number, e: MouseEvent<HTMLButtonElement>) => {
@@ -100,7 +102,7 @@ export default function MultiFileUploadDropzone({
   return (
     <div
       {...getRootProps()}
-      className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
+      className="border-2 bg-white border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
     >
       <input {...getInputProps()} />
       {uploading && (
@@ -139,6 +141,7 @@ export default function MultiFileUploadDropzone({
                       type="button"
                       onClick={(e) => removeFile(index, e)}
                       className="text-red-500 hover:text-red-700"
+                      title="Remove file"
                     >
                       <X size={16} />
                     </button>

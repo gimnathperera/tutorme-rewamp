@@ -29,12 +29,11 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
     limit,
   };
 
-
   const { data, isLoading } = useFetchTuitionAssignmentsQuery(queryParams);
 
-  const allAssignments: TuitionAssignment[] = data?.results || [];
-
   const assignments = useMemo(() => {
+    const allAssignments: TuitionAssignment[] = data?.results ?? [];
+
     if (!gradeId || gradeId === "all") return allAssignments;
 
     return allAssignments.filter((assignment: any) => {
@@ -55,7 +54,7 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
 
       return false;
     });
-  }, [allAssignments, gradeId]);
+  }, [data, gradeId]);
 
   const totalCount = assignments.length;
   const totalPages = Math.max(1, Math.ceil(totalCount / limit));
@@ -64,18 +63,18 @@ const AssignmentList: React.FC<AssignmentListProps> = ({ gradeId }) => {
 
   const handleSelect = (id: string) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id],
     );
   };
 
   const handleApply = () => {
     const selectedAssignments = assignments.filter((assignment) =>
-      selected.includes(assignment.id)
+      selected.includes(assignment.id),
     );
     if (typeof window !== "undefined") {
       sessionStorage.setItem(
         "selectedAssignments",
-        JSON.stringify(selectedAssignments)
+        JSON.stringify(selectedAssignments),
       );
     }
     router.push("/tuition-assignments/selected");

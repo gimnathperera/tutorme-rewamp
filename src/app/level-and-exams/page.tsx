@@ -8,7 +8,6 @@ import { useFetchLevelsQuery } from "@/store/api/splits/levels";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-
 const LevelAndExamsPage: FC = () => {
   const router = useRouter();
 
@@ -78,4 +77,3 @@ const LevelAndExamsPage: FC = () => {
 };
 
 export default LevelAndExamsPage;
-

@@ -1,3 +1,5 @@
+/* eslint-disable unused-imports/no-unused-vars */
+
 import React, { useState, useRef, useEffect } from "react";
 
 export interface Option {
@@ -24,7 +26,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const [selectedOptions, setSelectedOptions] = useState<string[]>(
     defaultSelected.length > 0
       ? defaultSelected
-      : options.filter((o) => o.selected).map((o) => o.value)
+      : options.filter((o) => o.selected).map((o) => o.value),
   );
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -50,7 +52,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   };
 
   const selectedValuesText = selectedOptions.map(
-    (value) => options.find((o) => o.value === value)?.text || ""
+    (value) => options.find((o) => o.value === value)?.text || "",
   );
 
   useEffect(() => {

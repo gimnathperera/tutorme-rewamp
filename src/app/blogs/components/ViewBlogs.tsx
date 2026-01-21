@@ -21,28 +21,27 @@ export default function BlogsDashboard() {
   } = useFetchBlogsQuery({ limit: 9999 });
 
   const { data: tagsData, isLoading: isTagsLoading } = useFetchTagsQuery({});
-
-  const allBlogsRaw = allBlogsData?.results || [];
   const tags = tagsData?.results || [];
 
   const allBlogs = useMemo(() => {
-    return [...allBlogsRaw].sort(
+    const blogs = allBlogsData?.results ?? [];
+    return [...blogs].sort(
       (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
     );
-  }, [allBlogsRaw]);
+  }, [allBlogsData]);
 
   const filteredAllBlogs = useMemo(() => {
     if (!activeTag) return allBlogs;
     return allBlogs.filter((blog) =>
-      blog.tags?.some((t: any) => t.id === activeTag)
+      blog.tags?.some((t: any) => t.id === activeTag),
     );
   }, [activeTag, allBlogs]);
 
   const startIndex = (page - 1) * pageSize;
   const paginatedFilteredBlogs = filteredAllBlogs.slice(
     startIndex,
-    startIndex + pageSize
+    startIndex + pageSize,
   );
 
   const totalPages = Math.ceil(filteredAllBlogs.length / pageSize);

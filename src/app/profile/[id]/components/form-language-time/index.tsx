@@ -1,5 +1,6 @@
-import { FormProvider } from "react-hook-form";
+/* eslint-disable unused-imports/no-unused-vars */
 
+import { FormProvider } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";

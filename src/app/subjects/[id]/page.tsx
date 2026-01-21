@@ -10,7 +10,11 @@ const Subjects: FC = () => {
   const params = useParams();
   const subjectId = params?.id as string;
 
-  const { data: subject, error, isLoading } = useFetchSubjectByIdQuery(subjectId);
+  const {
+    data: subject,
+    error,
+    isLoading,
+  } = useFetchSubjectByIdQuery(subjectId);
 
   if (isLoading || subject === undefined) {
     return (
@@ -35,8 +39,6 @@ const Subjects: FC = () => {
       </div>
     );
   }
-
-
 
   return (
     <div className="py-10">
