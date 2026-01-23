@@ -28,7 +28,7 @@ type GradeGroup = {
 
 export default function TuitionRatesByGrade() {
   const [page, setPage] = useState<number>(1);
-  const limit = 50;
+  const limit = 20000;
 
   const { data, isLoading, error } = useFetchTuitionRatesQuery({
     page,

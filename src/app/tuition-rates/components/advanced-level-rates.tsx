@@ -10,7 +10,7 @@ import React from "react";
 import { advancedLevelRates } from "@/lib/data/tuition-rates/advanced-level";
 import { aboutDetails } from "@/lib/data/tuition-rates/about-details";
 
-const AdvancedLevelRates = () => {
+export default function AdvancedLevelRates() {
   const data = advancedLevelRates;
   const about = aboutDetails;
 
@@ -71,6 +71,4 @@ const AdvancedLevelRates = () => {
       </div>
     </div>
   );
-};
-
-export default AdvancedLevelRates;
+}
