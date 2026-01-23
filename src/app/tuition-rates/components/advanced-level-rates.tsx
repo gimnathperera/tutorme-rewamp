@@ -71,4 +71,4 @@ export default function AdvancedLevelRates() {
       </div>
     </div>
   );
-};
+}
