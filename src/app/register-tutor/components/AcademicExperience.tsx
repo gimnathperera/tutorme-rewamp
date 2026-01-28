@@ -111,16 +111,11 @@ const AcademicExperience = () => {
           >
             <option value="">Select</option>
             <option value="PhD">PhD</option>
-            <option value="Diploma">Diploma</option>
-            <option value="Masters">Masters</option>
+            <option value="Masters">Master's Degree</option>
+            <option value="Bachelor Degree">Bachelor's Degree</option>
             <option value="Undergraduate">Undergraduate</option>
-            <option value="Bachelor Degree">Bachelor Degree</option>
-            <option value="Diploma and Professional">
-              Diploma and Professional
-            </option>
-            <option value="JC/A Levels">JC/A Levels</option>
-            <option value="Poly">Poly</option>
-            <option value="Others">Others</option>
+            <option value="Diploma and Professional">Diploma and Professional</option>
+            <option value="AL">Advanced Level (A/L)</option>
           </select>
           {errors.highestEducation && (
             <p className="text-sm text-red-500">
