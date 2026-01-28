@@ -8,45 +8,38 @@ import {
   useUpdateProfileMutation,
 } from "@/store/api/splits/users";
 import toast from "react-hot-toast";
+import { Pencil } from "lucide-react";
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
 const ProfilePicSettings = () => {
-  const { user: authUser } = useAuthContext();
-  const userId = authUser?.id;
+  const { user } = useAuthContext();
+  const userId = user?.id;
 
-  // ✅ lazy profile fetch
   const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
-
-  // ✅ update profile mutation
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
-  const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR); // saved avatar
-  const [tempAvatar, setTempAvatar] = useState<string | null>(null); // preview before save
+  const [avatarUrl, setAvatarUrl] = useState(DEFAULT_AVATAR);
+  const [tempAvatar, setTempAvatar] = useState<string | null>(null);
+  const [open, setOpen] = useState(false);
 
-  // ✅ Fetch profile when we have userId
+  /* ---------------- Fetch avatar ---------------- */
   useEffect(() => {
-    if (userId) {
-      fetchProfile({ userId: String(userId) });
-    }
-  }, [userId, fetchProfile]);
+    if (userId) fetchProfile({ userId: String(userId) });
+  }, [userId]);
 
-  // ✅ Load saved avatar from backend
   useEffect(() => {
-    const avatar = (userData as any)?.avatar;
-    if (avatar) {
-      setAvatarUrl(avatar);
-    } else {
-      setAvatarUrl(DEFAULT_AVATAR);
+    if ((userData as any)?.avatar) {
+      setAvatarUrl((userData as any).avatar);
     }
   }, [userData]);
 
-  // ✅ Only set preview on upload – don't save yet
+  /* ---------------- Upload preview ---------------- */
   const handleUploaded = (url: string) => {
     setTempAvatar(url);
   };
 
-  // ✅ Save to backend ONLY when clicking Save
+  /* ---------------- Save ---------------- */
   const handleSave = async () => {
     if (!tempAvatar || !userId) return;
 
@@ -56,76 +49,99 @@ const ProfilePicSettings = () => {
         payload: { avatar: tempAvatar } as any,
       }).unwrap();
 
-      setAvatarUrl(tempAvatar);
+      setAvatarUrl(tempAvatar);   // 🔥 instant UI update
       setTempAvatar(null);
-      toast.success("Profile picture updated successfully");
-    } catch (err) {
-      console.error("Avatar save failed:", err);
-      toast.error("Failed to save profile picture");
+      setOpen(false);
+      toast.success("Profile picture updated");
+    } catch {
+      toast.error("Failed to update avatar");
     }
   };
 
-  // ✅ Delete avatar – reset to default
-  // ✅ Delete avatar – reset to default (and save default in DB)
+  /* ---------------- Delete ---------------- */
   const handleDelete = async () => {
     if (!userId) return;
 
     try {
       await updateProfile({
         id: String(userId),
-        payload: { avatar: DEFAULT_AVATAR } as any, // ⬅ save default image path
+        payload: { avatar: DEFAULT_AVATAR } as any,
       }).unwrap();
 
       setAvatarUrl(DEFAULT_AVATAR);
       setTempAvatar(null);
+      setOpen(false);
       toast.success("Profile picture removed");
-    } catch (err) {
-      console.error("Avatar delete failed:", err);
-      toast.error("Failed to delete profile picture");
+    } catch {
+      toast.error("Failed to delete avatar");
     }
   };
 
+  /* ================================================= */
+
   return (
-    <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2  sm:p-6">
-      <div className="items-center sm:flex xl:block 2xl:flex sm:space-x-4 xl:space-x-0 2xl:space-x-4">
+    <div className="flex justify-center p-10">
+      {/* -------- Avatar + Pen Icon -------- */}
+      <div className="relative w-36 h-36">
         <img
-          className="mb-4 rounded-lg w-28 h-28 sm:mb-0 xl:mb-4 2xl:mb-0 object-cover"
-          src={tempAvatar || avatarUrl}
-          alt="profile-image"
+          src={avatarUrl}
+          className="w-full h-full rounded-full object-cover border"
         />
-        <div>
-          <h3 className="mb-1 text-xl font-bold text-gray-900 ">
-            Profile picture
-          </h3>
-          <div className="mb-4 text-sm text-gray-500 ">
-            JPG, GIF or PNG. Max size of 800K
-          </div>
 
-          {/* 🔹 Upload / drag & drop area */}
-          <FileUploadDropzone onUploaded={handleUploaded} />
+        <button
+          onClick={() => setOpen(true)}
+          className="absolute bottom-1 right-1 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+        >
+          <Pencil size={18} />
+        </button>
+      </div>
 
-          <div className="flex items-center space-x-4 mt-4">
-            {/* SAVE BUTTON */}
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={!tempAvatar || isLoading}
-              className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 disabled:opacity-50"
-            >
-              Save
-            </button>
+      {/* -------- Modal -------- */}
+      {open && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
+          <div className="bg-white w-[400px] p-6 rounded-xl">
 
-            {/* DELETE BUTTON */}
-            <button
-              type="button"
-              onClick={handleDelete}
-              className="py-2 px-3 text-sm font-medium text-gray-900 focus:outline-none rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200"
-            >
-              Delete
-            </button>
+            <h3 className="text-lg font-semibold mb-2">
+              Change profile picture
+            </h3>
+
+            <p className="text-sm text-gray-500 mb-4">
+              JPG, PNG or GIF — Max 800KB
+            </p>
+
+            <FileUploadDropzone onUploaded={handleUploaded} />
+
+            <div className="flex justify-end gap-3 mt-6">
+
+              <button
+                onClick={() => {
+                  setTempAvatar(null);
+                  setOpen(false);
+                }}
+                className="px-4 py-2 border rounded-lg"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleDelete}
+                className="px-4 py-2 border rounded-lg text-red-600"
+              >
+                Delete
+              </button>
+
+              <button
+                disabled={!tempAvatar || isLoading}
+                onClick={handleSave}
+                className="px-4 py-2 rounded-lg bg-primary-700 text-white disabled:opacity-50"
+              >
+                Save
+              </button>
+
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
