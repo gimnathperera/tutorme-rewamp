@@ -62,13 +62,13 @@ const AcademicExperience = () => {
     };
 
     loadSubjects();
-  }, [selectedGradeIds]);
+  }, [selectedGradeIds, fetchSubjectsForGrades]);
 
   const { setValue } = useFormContext();
 
   useEffect(() => {
     setValue("subjects", []);
-  }, [selectedGradeIds]);
+  }, [selectedGradeIds, setValue]);
 
   return (
     <div className="space-y-8">
@@ -145,8 +145,8 @@ const AcademicExperience = () => {
           >
             <option value="">Select</option>
             <option value="PhD">PhD</option>
-            <option value="Masters">Master's Degree</option>
-            <option value="Bachelor Degree">Bachelor's Degree</option>
+            <option value="Masters">Master&apos;s Degree</option>
+            <option value="Bachelor Degree">Bachelor&apos;s Degree</option>
             <option value="Undergraduate">Undergraduate</option>
             <option value="Diploma and Professional">
               Diploma and Professional

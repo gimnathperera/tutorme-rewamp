@@ -27,7 +27,7 @@ const ProfilePicSettings = () => {
   /* ---------------- Fetch avatar ---------------- */
   useEffect(() => {
     if (userId) fetchProfile({ userId: String(userId) });
-  }, [userId]);
+  }, [userId, fetchProfile]);
 
   useEffect(() => {
     if ((userData as any)?.avatar) {
@@ -86,6 +86,7 @@ const ProfilePicSettings = () => {
       <div className="relative w-36 h-36">
         <img
           src={avatarUrl}
+          alt="User profile picture"
           className="w-full h-full rounded-full object-cover border"
         />
 
