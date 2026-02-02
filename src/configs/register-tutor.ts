@@ -116,16 +116,12 @@ export const PREFFERED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "No Preference", text: "No Preference" },
 ];
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  { value: "Full Time Student", text: "Full Time Student" },
-  { value: "Undergraduate", text: "Undergraduate" },
-  { value: "Part Time Tutor", text: "Part Time Tutor" },
-  { value: "Full Time Tutor", text: "Full Time Tutor" },
-  {
-    value: "Ex/Current MOE Teacher",
-    text: "Ex/Current MOE Teacher",
-  },
-  { value: "Ex-MOE Teacher", text: "Ex-MOE Teacher" },
-  { value: "Current MOE Teacher", text: "Current MOE Teacher" },
+  { value: "Full-Time", text: "Full-Time" },
+  { value: "Part-Time", text: "Part-Time" },
+  { value: "Online", text: "Online" },
+  { value: "School Teacher Tutors", text: "School Teacher Tutors" },
+  { value: "Group Tutors", text: "Group Tutors" },
+  { value: "Exam Coaches", text: "Exam Coaches" },
 ];
 export const HIGHEST_EDUCATION_LEVELS: SelectOption[] = [
   { value: "PhD", text: "PhD" },

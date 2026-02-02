@@ -12,9 +12,14 @@ import {
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
 
-import { useFetchGradesQuery } from "@/store/api/splits/grades";
+import {
+  useFetchGradesQuery,
+  useFetchSubjectsForGradesMutation,
+} from "@/store/api/splits/grades";
+import { useEffect, useState } from "react";
 
 const AcademicExperience = () => {
+  const fieldWrapper = "flex flex-col gap-1";
   const {
     register,
     control,
@@ -23,18 +28,47 @@ const AcademicExperience = () => {
   } = useFormContext();
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
+  const selectedGrades = watch("grades");
+  const selectedGradeIds: string[] = Array.isArray(selectedGrades)
+    ? selectedGrades
+    : [];
+  const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
+  const [subjectOptions, setSubjectOptions] = useState<
+    { value: string; text: string }[]
+  >([]);
 
-  const selectedGradeId = watch("grades")?.[0];
+  useEffect(() => {
+    if (selectedGradeIds.length === 0) {
+      setSubjectOptions([]);
+      return;
+    }
 
-  const subjectOptions =
-    gradeData?.results
-      ?.find((g: any) => g.id === selectedGradeId)
-      ?.subjects?.map((s: any) => ({
-        value: s.id,
-        text: s.title,
-      })) || [];
+    const loadSubjects = async () => {
+      try {
+        const res = await fetchSubjectsForGrades({
+          gradeIds: selectedGradeIds,
+        }).unwrap();
 
-  const fieldWrapper = "flex flex-col gap-1";
+        setSubjectOptions(
+          res.subjects.map((s: any) => ({
+            value: s.id,
+            text: s.title,
+          })),
+        );
+      } catch (error) {
+        console.error("Failed to load subjects", error);
+        setSubjectOptions([]);
+      }
+    };
+
+    loadSubjects();
+  }, [selectedGradeIds, fetchSubjectsForGrades]);
+
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue("subjects", []);
+  }, [selectedGradeIds, setValue]);
 
   return (
     <div className="space-y-8">
@@ -111,16 +145,13 @@ const AcademicExperience = () => {
           >
             <option value="">Select</option>
             <option value="PhD">PhD</option>
-            <option value="Diploma">Diploma</option>
-            <option value="Masters">Masters</option>
+            <option value="Masters">Master&apos;s Degree</option>
+            <option value="Bachelor Degree">Bachelor&apos;s Degree</option>
             <option value="Undergraduate">Undergraduate</option>
-            <option value="Bachelor Degree">Bachelor Degree</option>
             <option value="Diploma and Professional">
               Diploma and Professional
             </option>
-            <option value="JC/A Levels">JC/A Levels</option>
-            <option value="Poly">Poly</option>
-            <option value="Others">Others</option>
+            <option value="AL">Advanced Level (A/L)</option>
           </select>
           {errors.highestEducation && (
             <p className="text-sm text-red-500">
