@@ -38,9 +38,7 @@ const products: ProductType[] = [
   {
     id: 4,
     section: "Tuition",
-    link: [
-      { label: "Tuition Rates", url: "/tuition-rates" },
-    ],
+    link: [{ label: "Tuition Rates", url: "/tuition-rates" }],
   },
 ];
 

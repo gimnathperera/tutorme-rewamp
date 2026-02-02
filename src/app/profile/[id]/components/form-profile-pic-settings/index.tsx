@@ -50,7 +50,7 @@ const ProfilePicSettings = () => {
         payload: { avatar: tempAvatar } as any,
       }).unwrap();
 
-      setAvatarUrl(tempAvatar);   // 🔥 instant UI update
+      setAvatarUrl(tempAvatar); // 🔥 instant UI update
       setTempAvatar(null);
       setOpen(false);
       toast.success("Profile picture updated");
@@ -110,7 +110,6 @@ const ProfilePicSettings = () => {
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[400px] p-6 rounded-xl">
-
             <h3 className="text-lg font-semibold mb-2">
               Change profile picture
             </h3>
@@ -122,7 +121,6 @@ const ProfilePicSettings = () => {
             <FileUploadDropzone onUploaded={handleUploaded} />
 
             <div className="flex justify-end gap-3 mt-6">
-
               <button
                 onClick={() => {
                   setTempAvatar(null);
@@ -140,17 +138,14 @@ const ProfilePicSettings = () => {
               >
                 Save
               </button>
-
             </div>
           </div>
         </div>
       )}
 
-
       {confirmDeleteOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[360px] p-6 rounded-xl">
-
             <h3 className="text-lg font-semibold mb-2">
               Remove profile picture?
             </h3>
@@ -177,7 +172,6 @@ const ProfilePicSettings = () => {
                 Delete
               </button>
             </div>
-
           </div>
         </div>
       )}

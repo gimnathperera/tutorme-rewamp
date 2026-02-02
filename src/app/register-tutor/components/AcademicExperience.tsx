@@ -12,8 +12,10 @@ import {
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
 
-import { useFetchGradesQuery, useFetchSubjectsForGradesMutation } 
-from "@/store/api/splits/grades";
+import {
+  useFetchGradesQuery,
+  useFetchSubjectsForGradesMutation,
+} from "@/store/api/splits/grades";
 import { useEffect, useState } from "react";
 
 const AcademicExperience = () => {
@@ -27,7 +29,9 @@ const AcademicExperience = () => {
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
-  const selectedGradeIds: string[] = Array.isArray(selectedGrades) ? selectedGrades : [];
+  const selectedGradeIds: string[] = Array.isArray(selectedGrades)
+    ? selectedGrades
+    : [];
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; text: string }[]
@@ -49,7 +53,7 @@ const AcademicExperience = () => {
           res.subjects.map((s: any) => ({
             value: s.id,
             text: s.title,
-          }))
+          })),
         );
       } catch (error) {
         console.error("Failed to load subjects", error);
@@ -144,7 +148,9 @@ const AcademicExperience = () => {
             <option value="Masters">Master's Degree</option>
             <option value="Bachelor Degree">Bachelor's Degree</option>
             <option value="Undergraduate">Undergraduate</option>
-            <option value="Diploma and Professional">Diploma and Professional</option>
+            <option value="Diploma and Professional">
+              Diploma and Professional
+            </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
           {errors.highestEducation && (
