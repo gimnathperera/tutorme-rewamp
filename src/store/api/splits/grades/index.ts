@@ -19,6 +19,16 @@ export const GradesApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    fetchSubjectsForGrades: build.mutation<
+      { count: number; subjects: any[] },
+      { gradeIds: string[] }
+    >({
+      query: (body) => ({
+        url: Endpoints.SubjectsByGrades,
+        method: "POST",
+        body,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -27,4 +37,5 @@ export const {
   useFetchGradesQuery,
   useFetchGradeByIdQuery,
   useLazyFetchGradeByIdQuery,
+  useFetchSubjectsForGradesMutation,
 } = GradesApi;

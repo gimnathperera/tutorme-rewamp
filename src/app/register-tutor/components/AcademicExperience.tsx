@@ -12,9 +12,12 @@ import {
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
 
-import { useFetchGradesQuery } from "@/store/api/splits/grades";
+import { useFetchGradesQuery, useFetchSubjectsForGradesMutation } 
+from "@/store/api/splits/grades";
+import { useEffect, useState } from "react";
 
 const AcademicExperience = () => {
+  const fieldWrapper = "flex flex-col gap-1";
   const {
     register,
     control,
@@ -23,18 +26,45 @@ const AcademicExperience = () => {
   } = useFormContext();
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
+  const selectedGrades = watch("grades");
+  const selectedGradeIds: string[] = Array.isArray(selectedGrades) ? selectedGrades : [];
+  const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
+  const [subjectOptions, setSubjectOptions] = useState<
+    { value: string; text: string }[]
+  >([]);
 
-  const selectedGradeId = watch("grades")?.[0];
+  useEffect(() => {
+    if (selectedGradeIds.length === 0) {
+      setSubjectOptions([]);
+      return;
+    }
 
-  const subjectOptions =
-    gradeData?.results
-      ?.find((g: any) => g.id === selectedGradeId)
-      ?.subjects?.map((s: any) => ({
-        value: s.id,
-        text: s.title,
-      })) || [];
+    const loadSubjects = async () => {
+      try {
+        const res = await fetchSubjectsForGrades({
+          gradeIds: selectedGradeIds,
+        }).unwrap();
 
-  const fieldWrapper = "flex flex-col gap-1";
+        setSubjectOptions(
+          res.subjects.map((s: any) => ({
+            value: s.id,
+            text: s.title,
+          }))
+        );
+      } catch (error) {
+        console.error("Failed to load subjects", error);
+        setSubjectOptions([]);
+      }
+    };
+
+    loadSubjects();
+  }, [selectedGradeIds]);
+
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue("subjects", []);
+  }, [selectedGradeIds]);
 
   return (
     <div className="space-y-8">

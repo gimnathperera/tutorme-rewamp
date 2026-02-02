@@ -8,6 +8,7 @@ export const Endpoints = {
   Testimonials: "/v1/testimonials",
   Faqs: "/v1/faqs",
   Grades: "/v1/grades",
+  SubjectsByGrades: "/v1/grades/subjects-by-grades",
   Subjects: "/v1/subjects",
   Papers: "/v1/papers",
   Users: "/v1/users",
