@@ -9,7 +9,10 @@ const RatePage = () => {
   const params = useParams();
   const { levelId } = params;
 
-  const { data: rate, isLoading } = useFetchTuitionRatesQuery({});
+  const { data: rate, isLoading } = useFetchTuitionRatesQuery({
+    page: 1,
+    limit: 100000,
+  });
 
   if (isLoading) return <p>Loading tuition rates...</p>;
   if (!rate?.results || rate.results.length === 0)
