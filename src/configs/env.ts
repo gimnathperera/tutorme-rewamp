@@ -1,11 +1,28 @@
 import z from "zod";
 
+declare global {
+  interface Window {
+    __ENV: Record<string, string>;
+  }
+}
+
+const getEnvVar = (key: string, processEnvValue?: string) => {
+  if (typeof window !== "undefined" && window.__ENV && window.__ENV[key]) {
+    return window.__ENV[key];
+  }
+  return processEnvValue;
+};
+
 const ENV_VARIABLES = {
   NEXT_PUBLIC_API_URL:
-    process.env.NEXT_PUBLIC_API_URL || "https://api.placeholder.com",
+    getEnvVar("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL) ||
+    "https://api.placeholder.com",
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_WHATSAPP_NUMBER:
-    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890",
+    getEnvVar(
+      "NEXT_PUBLIC_WHATSAPP_NUMBER",
+      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
+    ) || "1234567890",
 };
 
 const envSchema = z
@@ -28,7 +45,7 @@ if (!result.success) {
   }
 }
 
-const parsedEnv = result.data;
+const parsedEnv = result.success ? result.data : (ENV_VARIABLES as any);
 
 export const env = {
   app: {
