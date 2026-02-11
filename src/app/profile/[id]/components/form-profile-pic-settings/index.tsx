@@ -13,7 +13,7 @@ import { Pencil, Trash2 } from "lucide-react";
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
 const ProfilePicSettings = () => {
-  const { user } = useAuthContext();
+  const { user, updateUser } = useAuthContext();
   const userId = user?.id;
 
   const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
@@ -51,6 +51,7 @@ const ProfilePicSettings = () => {
       }).unwrap();
 
       setAvatarUrl(tempAvatar); // 🔥 instant UI update
+      updateUser({ avatar: tempAvatar });
       setTempAvatar(null);
       setOpen(false);
       toast.success("Profile picture updated");
@@ -70,6 +71,7 @@ const ProfilePicSettings = () => {
       }).unwrap();
 
       setAvatarUrl(DEFAULT_AVATAR);
+      updateUser({ avatar: DEFAULT_AVATAR });
       setTempAvatar(null);
       setOpen(false);
       toast.success("Profile picture removed");
