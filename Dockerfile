@@ -26,7 +26,7 @@ ENV NEXT_PUBLIC_WHATSAPP_NUMBER=$NEXT_PUBLIC_WHATSAPP_NUMBER
 ENV BUILD_STANDALONE=true
 
 # Build Next.js (standalone)
-RUN pnpm build
+RUN pnpm run build
 
 # -----------------------
 # Runtime stage (LEAN)
@@ -41,7 +41,12 @@ ENV PORT=3000
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY entrypoint.sh ./
+
+# Fix line endings for Windows users and make executable
+RUN sed -i 's/\r$//' entrypoint.sh && chmod +x entrypoint.sh
 
 EXPOSE 3000
 
+ENTRYPOINT ["./entrypoint.sh"]
 CMD ["node", "server.js"]

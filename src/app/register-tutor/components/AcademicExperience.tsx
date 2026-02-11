@@ -16,7 +16,7 @@ import {
   useFetchGradesQuery,
   useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const AcademicExperience = () => {
   const fieldWrapper = "flex flex-col gap-1";
@@ -29,9 +29,10 @@ const AcademicExperience = () => {
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
-  const selectedGradeIds: string[] = Array.isArray(selectedGrades)
-    ? selectedGrades
-    : [];
+
+  const selectedGradeIds = useMemo<string[]>(() => {
+    return Array.isArray(selectedGrades) ? selectedGrades : [];
+  }, [selectedGrades]);
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; text: string }[]

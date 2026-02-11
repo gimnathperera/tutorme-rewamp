@@ -78,5 +78,10 @@
     "class-variance-authority": "^0.7.1",
     "eslint-plugin-unused-imports": "^4.1.4",
     "flowbite-typography": "^1.0.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
   }
 }

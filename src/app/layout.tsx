@@ -1,4 +1,5 @@
 import NavBar from "@/components/shared/navbar";
+import Script from "next/script";
 import Footer from "@/components/shared/footer";
 import BackToTop from "@/components/shared/back-to-top";
 import "./globals.css";
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <Script src="/env-config.js" strategy="beforeInteractive" />
         <WithProviders>
           <main className="bg-lightwhite">
             <NavBar />
