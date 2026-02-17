@@ -67,9 +67,6 @@ const AcademicExperience = () => {
 
   const { setValue } = useFormContext();
 
-  useEffect(() => {
-    setValue("subjects", []);
-  }, [selectedGradeIds, setValue]);
 
   return (
     <div className="space-y-8">
