@@ -20,15 +20,18 @@ const TermsAndSubmit = () => {
         <Controller
           name="certificatesAndQualifications"
           control={control}
+          defaultValue={[]}
           render={({ field }) => (
             <MultiFileUploadDropzone
-              onUploaded={(urls) => field.onChange(urls)}
+              onUploaded={(urls) => {
+                field.onChange(urls ?? []);
+              }}
             />
           )}
         />
-        {errors.certificatesAndQualifications && (
+        {errors.certificatesAndQualifications?.message && (
           <p className="mt-1 text-sm text-red-500">
-            {`${errors.certificatesAndQualifications.message}`}
+            {String(errors.certificatesAndQualifications.message)}
           </p>
         )}
       </div>

@@ -25,10 +25,23 @@ export default function MultiFileUploadDropzone({
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const newFiles: FileItem[] = acceptedFiles.map((file) => ({ file }));
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "application/pdf",
+      ];
       setFiles((prev) => [...prev, ...newFiles]);
 
       for (const fileObj of newFiles) {
         const file = fileObj.file;
+
+        if (!allowedTypes.includes(file.type)) {
+          alert(`${file.name} is not a supported file type`);
+          continue;
+        }
+
         setUploading(true);
 
         // Preview for images
@@ -97,6 +110,13 @@ export default function MultiFileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
+    accept: {
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/png": [".png"],
+      "image/gif": [".gif"],
+      "image/webp": [".webp"],
+      "application/pdf": [".pdf"],
+    },
   });
 
   return (

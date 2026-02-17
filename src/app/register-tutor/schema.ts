@@ -67,14 +67,11 @@ export const step2Schema = z.object({
       (v) =>
         [
           "PhD",
-          "Diploma",
           "Masters",
-          "Undergraduate",
           "Bachelor Degree",
+          "Undergraduate",
           "Diploma and Professional",
-          "JC/A Levels",
-          "Poly",
-          "Others",
+          "AL",
         ].includes(v),
       {
         message: "Please select highest education level",
@@ -103,7 +100,7 @@ export const step3Schema = z.object({
 });
 
 export const step4Schema = z.object({
-  certificatesAndQualifications: z.array(z.string()),
+  certificatesAndQualifications: z.array(z.string()).min(1, "Upload at least one certificate or qualification"),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()
