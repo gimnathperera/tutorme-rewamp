@@ -3,7 +3,7 @@
 "use client";
 
 import { Loader2, X, Eye } from "lucide-react";
-import { useCallback, useState, MouseEvent } from "react";
+import { useEffect, useCallback, useState, MouseEvent } from "react";
 import { useDropzone } from "react-dropzone";
 import {
   Dialog,
@@ -13,25 +13,49 @@ import {
 } from "@/components/ui/dialog";
 
 interface FileItem {
-  file: File;
+  file?: File;
   url?: string;
   previewUrl?: string;
+  name?: string;
+  type?: string;
 }
 
 interface MultiFileUploadDropzoneProps {
   onUploaded: (urls: string[]) => void;
+  initialUrls?: string[];
 }
 
 export default function MultiFileUploadDropzone({
   onUploaded,
+  initialUrls,
 }: MultiFileUploadDropzoneProps) {
   const [uploading, setUploading] = useState(false);
   const [files, setFiles] = useState<FileItem[]>([]);
   const [previewFile, setPreviewFile] = useState<FileItem | null>(null);
 
+  useEffect(() => {
+    if (initialUrls) {
+      if (files.length === 0 && initialUrls.length > 0) {
+        setFiles(
+          initialUrls.map((url) => ({
+            url,
+            name: url.split("/").pop() || "Uploaded File",
+            type: url.endsWith(".pdf") ? "application/pdf" : "image/jpeg",
+          }))
+        );
+      } else if (files.length > 0 && initialUrls.length === 0 && !uploading) {
+        setFiles([]);
+      }
+    }
+  }, [initialUrls, uploading]);
+
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      const newFiles: FileItem[] = acceptedFiles.map((file) => ({ file }));
+      const newFiles: FileItem[] = acceptedFiles.map((file) => ({
+        file,
+        name: file.name,
+        type: file.type
+      }));
       const allowedTypes = [
         "image/jpeg",
         "image/png",
@@ -42,6 +66,7 @@ export default function MultiFileUploadDropzone({
       setFiles((prev) => [...prev, ...newFiles]);
 
       for (const fileObj of newFiles) {
+        if (!fileObj.file) continue;
         const file = fileObj.file;
 
         if (!allowedTypes.includes(file.type)) {
@@ -161,7 +186,7 @@ export default function MultiFileUploadDropzone({
                     key={index}
                     className="flex items-center justify-between border p-2 rounded bg-gray-50 dark:bg-gray-700"
                   >
-                    <p className="truncate max-w-[70%]">{fileObj.file.name}</p>
+                    <p className="truncate max-w-[70%]">{fileObj.name}</p>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
@@ -195,22 +220,22 @@ export default function MultiFileUploadDropzone({
         <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col bg-white dark:bg-gray-800">
           <DialogHeader>
             <DialogTitle>
-              {previewFile?.file.name}
+              {previewFile?.name}
             </DialogTitle>
           </DialogHeader>
           <div className="flex-1 w-full h-full overflow-hidden bg-gray-100 dark:bg-gray-900 rounded-md flex items-center justify-center">
             {previewFile && (
               <>
-                {previewFile.file.type.startsWith("image/") ? (
+                {(previewFile.type?.startsWith("image/") || (previewFile.file && previewFile.file.type.startsWith("image/"))) ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
-                    src={previewFile.url || previewFile.previewUrl || URL.createObjectURL(previewFile.file)}
+                    src={previewFile.url || previewFile.previewUrl || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
                     alt="Preview"
                     className="max-w-full max-h-full object-contain"
                   />
-                ) : previewFile.file.type === "application/pdf" ? (
+                ) : (previewFile.type === "application/pdf" || (previewFile.file && previewFile.file.type === "application/pdf")) ? (
                   <iframe
-                    src={previewFile.url || URL.createObjectURL(previewFile.file)}
+                    src={previewFile.url || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
                     className="w-full h-full"
                     title="PDF Preview"
                   />
@@ -218,7 +243,7 @@ export default function MultiFileUploadDropzone({
                   <div className="text-center p-4">
                     <p>Preview not available for this file type.</p>
                     <a
-                      href={previewFile.url || URL.createObjectURL(previewFile.file)}
+                      href={previewFile.url || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 hover:underline mt-2 inline-block"

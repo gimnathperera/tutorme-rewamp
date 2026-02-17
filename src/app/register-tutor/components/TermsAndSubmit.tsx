@@ -20,9 +20,9 @@ const TermsAndSubmit = () => {
         <Controller
           name="certificatesAndQualifications"
           control={control}
-          defaultValue={[]}
           render={({ field }) => (
             <MultiFileUploadDropzone
+              initialUrls={field.value}
               onUploaded={(urls) => {
                 field.onChange(urls ?? []);
               }}
