@@ -126,7 +126,6 @@ export function TutorTabs() {
           </div>
 
           <Tabs value={tab} className="w-full">
-
             <TabsContent value="personalInfo">
               <Card>
                 <CardHeader>

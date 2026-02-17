@@ -52,11 +52,11 @@ const authProvider = {
   isLoading: false,
   isUserLoaded: false,
   isUserLogoutLoading: false,
-  login: () => { },
-  logout: () => { },
-  forgotPassword: () => { },
-  setIsAuthError: () => { },
-  updateUser: () => { },
+  login: () => {},
+  logout: () => {},
+  forgotPassword: () => {},
+  setIsAuthError: () => {},
+  updateUser: () => {},
 };
 
 const AuthContext = createContext<AuthContextType>(authProvider);

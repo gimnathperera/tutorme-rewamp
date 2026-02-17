@@ -33,8 +33,7 @@ const envSchema = z
  */
 const ENV_VARIABLES = {
   NEXT_PUBLIC_API_URL:
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://api.placeholder.com",
+    process.env.NEXT_PUBLIC_API_URL || "https://api.placeholder.com",
 
   NODE_ENV:
     (process.env.NODE_ENV as

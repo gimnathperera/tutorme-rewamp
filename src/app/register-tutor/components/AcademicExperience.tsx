@@ -67,7 +67,6 @@ const AcademicExperience = () => {
 
   const { setValue } = useFormContext();
 
-
   return (
     <div className="space-y-8">
       {/* ROW 1 */}
@@ -146,7 +145,9 @@ const AcademicExperience = () => {
             <option value="Masters">Master&apos;s Degree</option>
             <option value="Bachelor Degree">Bachelor&apos;s Degree</option>
             <option value="Undergraduate">Undergraduate</option>
-            <option value="Diploma and Professional">Diploma and Professional</option>
+            <option value="Diploma and Professional">
+              Diploma and Professional
+            </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
           {errors.highestEducation && (

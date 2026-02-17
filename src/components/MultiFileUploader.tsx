@@ -41,7 +41,7 @@ export default function MultiFileUploadDropzone({
             url,
             name: url.split("/").pop() || "Uploaded File",
             type: url.endsWith(".pdf") ? "application/pdf" : "image/jpeg",
-          }))
+          })),
         );
       } else if (files.length > 0 && initialUrls.length === 0 && !uploading) {
         setFiles([]);
@@ -54,7 +54,7 @@ export default function MultiFileUploadDropzone({
       const newFiles: FileItem[] = acceptedFiles.map((file) => ({
         file,
         name: file.name,
-        type: file.type
+        type: file.type,
       }));
       const allowedTypes = [
         "image/jpeg",
@@ -219,23 +219,36 @@ export default function MultiFileUploadDropzone({
       >
         <DialogContent className="max-w-4xl w-full h-[90vh] flex flex-col bg-white dark:bg-gray-800">
           <DialogHeader>
-            <DialogTitle>
-              {previewFile?.name}
-            </DialogTitle>
+            <DialogTitle>{previewFile?.name}</DialogTitle>
           </DialogHeader>
           <div className="flex-1 w-full h-full overflow-hidden bg-gray-100 dark:bg-gray-900 rounded-md flex items-center justify-center">
             {previewFile && (
               <>
-                {(previewFile.type?.startsWith("image/") || (previewFile.file && previewFile.file.type.startsWith("image/"))) ? (
+                {previewFile.type?.startsWith("image/") ||
+                (previewFile.file &&
+                  previewFile.file.type.startsWith("image/")) ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
-                    src={previewFile.url || previewFile.previewUrl || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
+                    src={
+                      previewFile.url ||
+                      previewFile.previewUrl ||
+                      (previewFile.file
+                        ? URL.createObjectURL(previewFile.file)
+                        : "")
+                    }
                     alt="Preview"
                     className="max-w-full max-h-full object-contain"
                   />
-                ) : (previewFile.type === "application/pdf" || (previewFile.file && previewFile.file.type === "application/pdf")) ? (
+                ) : previewFile.type === "application/pdf" ||
+                  (previewFile.file &&
+                    previewFile.file.type === "application/pdf") ? (
                   <iframe
-                    src={previewFile.url || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
+                    src={
+                      previewFile.url ||
+                      (previewFile.file
+                        ? URL.createObjectURL(previewFile.file)
+                        : "")
+                    }
                     className="w-full h-full"
                     title="PDF Preview"
                   />
@@ -243,7 +256,12 @@ export default function MultiFileUploadDropzone({
                   <div className="text-center p-4">
                     <p>Preview not available for this file type.</p>
                     <a
-                      href={previewFile.url || (previewFile.file ? URL.createObjectURL(previewFile.file) : "")}
+                      href={
+                        previewFile.url ||
+                        (previewFile.file
+                          ? URL.createObjectURL(previewFile.file)
+                          : "")
+                      }
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 hover:underline mt-2 inline-block"
