@@ -2,19 +2,41 @@ import { z } from "zod";
 import { addYears, isBefore } from "date-fns";
 
 export const generalInfoSchema = z.object({
-  name: z.string().min(1, "First Name is required"),
+  name: z
+    .string()
+    .trim()
+    .min(1, "First Name is required")
+    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
   email: z.string().email("Invalid email address"),
   phoneNumber: z
     .string()
-    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits")
+    .trim()
+    .regex(
+      /^(?=.*\d)[0-9 -]{10,15}$/,
+      "Phone number can contain only numbers, spaces, and '-'"
+    )
     .optional(),
   country: z.string().min(1, "Country is required").optional(),
-  city: z.string().min(1, "City is required").optional(),
-  state: z.string().min(1, "State is required").optional(),
-  region: z.string().min(1, "Region is required").optional(),
+  city: z
+    .string()
+    .min(1, "City is required")
+    .regex(/^[A-Za-z\s]+$/, "City cannot contain special characters or numbers")
+    .optional(),
+
+  state: z
+    .string()
+    .min(1, "State is required")
+    .regex(/^[A-Za-z\s]+$/, "State cannot contain special characters or numbers")
+    .optional(),
+
+  region: z
+    .string()
+    .min(1, "Region is required")
+    .regex(/^[A-Za-z\s]+$/, "Region cannot contain special characters or numbers")
+    .optional(),
   zip: z
     .string()
-    .regex(/^\d{5}$/, "ZIP must be 5 digits")
+    .regex(/^\d{5}(-\d{4})?$/, "ZIP must be 12345 or 12345-6789 format")
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
   birthday: z
