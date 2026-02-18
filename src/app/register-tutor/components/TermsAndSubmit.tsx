@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import MultiFileUploadDropzone from "@/components/MultiFileUploader";
+import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
 
 const TermsAndSubmit = () => {
   const {

@@ -19,8 +19,8 @@ import { LIMITS_CONFIG } from "@/configs/limits";
 import LogoImage from "../../../../public/images/findTutor/lesson.png";
 import Image from "next/image";
 import { districts } from "@/configs/districts";
-import CitySelect from "@/components/citySelect";
-import DistrictSelect from "@/components/districtSelect";
+import CitySelect from "@/components/form-controls/city-select";
+import DistrictSelect from "@/components/form-controls/district-select";
 import {
   AlertDialog,
   AlertDialogCancel,

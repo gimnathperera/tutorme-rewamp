@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import FileUploadDropzone from "@/components/fileUploader";
+import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 import { useAuthContext } from "@/contexts";
 import {
   useLazyGetProfileQuery,

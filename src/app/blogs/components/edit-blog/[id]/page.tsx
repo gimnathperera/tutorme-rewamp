@@ -20,12 +20,12 @@ import {
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
-import MultiSelect, { Option } from "@/components/MultiSelect";
+import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import FileUploadDropzone from "@/components/fileUploader";
+import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 
 export default function EditBlogPage() {
   const params = useParams();
