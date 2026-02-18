@@ -21,7 +21,7 @@ import {
   useCreateBlogMutation,
   useFetchBlogsQuery,
 } from "@/store/api/splits/blogs";
-import MultiSelect, { Option } from "@/components/MultiSelect";
+import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -30,7 +30,7 @@ import "react-quill/dist/quill.snow.css";
 import { Label } from "@/components/ui/label";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import TableOfContents from "../table-of-content/TableOfContent";
-import FileUploadDropzone from "@/components/fileUploader";
+import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
