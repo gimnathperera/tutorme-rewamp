@@ -15,19 +15,15 @@ export const step1Schema = z.object({
 
   dateOfBirth: z.string().min(1, "Date of Birth is required"),
 
-  gender: z
-    .string()
-    .refine((v) => ["Male", "Female", "Others"].includes(v), {
-      message: "Please select a valid gender",
-    }),
+  gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
+    message: "Please select a valid gender",
+  }),
 
   age: z.number().int().min(1).max(80, "Age must be below 80"),
 
-  nationality: z
-    .string()
-    .refine((v) => ["Sri Lankan", "Others"].includes(v), {
-      message: "Please select nationality",
-    }),
+  nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
+    message: "Please select nationality",
+  }),
 
   race: z
     .string()
@@ -48,16 +44,15 @@ export const step2Schema = z.object({
     .array(z.string())
     .min(1, "Select at least one location"),
 
-  tutorType: z
-    .array(z.string())
-    .min(1, "Select at least one tutor type"),
+  tutorType: z.array(z.string()).min(1, "Select at least one tutor type"),
 
   tutorMediums: z
     .array(
-      z.string().refine(
-        (v) => ["Sinhala", "English", "Tamil"].includes(v),
-        { message: "Invalid medium selected" },
-      ),
+      z
+        .string()
+        .refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
+          message: "Invalid medium selected",
+        }),
     )
     .min(1, "Select at least one medium"),
 
@@ -67,27 +62,20 @@ export const step2Schema = z.object({
       (v) =>
         [
           "PhD",
-          "Diploma",
           "Masters",
-          "Undergraduate",
           "Bachelor Degree",
+          "Undergraduate",
           "Diploma and Professional",
-          "JC/A Levels",
-          "Poly",
-          "Others",
+          "AL",
         ].includes(v),
       {
         message: "Please select highest education level",
       },
     ),
 
-  grades: z
-    .array(z.string())
-    .min(1, "Select at least one grade"),
+  grades: z.array(z.string()).min(1, "Select at least one grade"),
 
-  subjects: z
-    .array(z.string())
-    .min(1, "Select at least one subject"),
+  subjects: z.array(z.string()).min(1, "Select at least one subject"),
 
   yearsExperience: z
     .number()
@@ -103,7 +91,9 @@ export const step3Schema = z.object({
 });
 
 export const step4Schema = z.object({
-  certificatesAndQualifications: z.array(z.string()),
+  certificatesAndQualifications: z
+    .array(z.string())
+    .min(1, "Upload at least one certificate or qualification"),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()

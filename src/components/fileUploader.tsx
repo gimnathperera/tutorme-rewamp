@@ -5,6 +5,7 @@
 import { Loader2, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "react-hot-toast";
 
 interface FileUploadDropzoneProps {
   onUploaded: (url: string) => void;
@@ -21,6 +22,12 @@ export default function FileUploadDropzone({
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
+
+      // 🔒 safety validation
+      if (!file.type.startsWith("image/")) {
+        toast.error("Only image files are allowed");
+        return;
+      }
 
       setUploading(true);
       setFileName(file.name);
@@ -81,6 +88,12 @@ export default function FileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
+    accept: {
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/png": [".png"],
+      "image/gif": [".gif"],
+      "image/webp": [".webp"],
+    },
   });
 
   return (

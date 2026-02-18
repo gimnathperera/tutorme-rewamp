@@ -73,7 +73,7 @@ export function TutorTabs() {
       sellingPoints: "",
       academicDetails: "",
 
-      certificatesAndQualifications: ["abcd"],
+      certificatesAndQualifications: [],
       agreeTerms: false,
       agreeAssignmentInfo: false,
     },
@@ -114,6 +114,9 @@ export function TutorTabs() {
     }
   };
 
+  const certificates = methods.watch("certificatesAndQualifications");
+  const isSubmitDisabled = !certificates || certificates.length === 0;
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -123,17 +126,6 @@ export function TutorTabs() {
           </div>
 
           <Tabs value={tab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="personalInfo">Personal Info</TabsTrigger>
-              <TabsTrigger value="qualifications">Qualifications</TabsTrigger>
-              <TabsTrigger value="teachingProfile">
-                Teaching Profile
-              </TabsTrigger>
-              <TabsTrigger value="verification">
-                Verification & Agreement
-              </TabsTrigger>
-            </TabsList>
-
             <TabsContent value="personalInfo">
               <Card>
                 <CardHeader>
@@ -200,7 +192,11 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="submit" className="ml-auto">
+                  <Button
+                    type="submit"
+                    className="ml-auto"
+                    disabled={isLoading || isSubmitDisabled}
+                  >
                     Submit {isLoading ? <Spinner /> : ""}
                   </Button>
                 </CardFooter>
