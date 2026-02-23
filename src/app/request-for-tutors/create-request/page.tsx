@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
+import { Controller } from "react-hook-form";
 
 import {
   createRequestTutorSchema,
   CreateRequestTutorSchema,
   initialFormValues,
 } from "./schema";
-import MultiSelect from "@/components/shared/MultiSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
@@ -19,18 +20,8 @@ import { LIMITS_CONFIG } from "@/configs/limits";
 import LogoImage from "../../../../public/images/findTutor/lesson.png";
 import Image from "next/image";
 import { districts } from "@/configs/districts";
-import CitySelect from "@/components/form-controls/city-select";
-import DistrictSelect from "@/components/form-controls/district-select";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Spinner } from "@/components/ui/spinner";
+import CitySelect from "@/components/citySelect";
+import DistrictSelect from "@/components/districtSelect";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -38,8 +29,6 @@ const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 export default function AddRequestForTutor() {
   const [step, setStep] = useState(1);
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
-  const [alertOpen, setAlertOpen] = useState(false);
-  const [alertType, setAlertType] = useState<"success" | "error">("success");
 
   const {
     register,
@@ -63,7 +52,8 @@ export default function AddRequestForTutor() {
   const gradeOptions =
     gradeData?.results.map((g) => ({ value: g.id, text: g.title })) || [];
 
-  const selectedGradeId = watch("grade.0");
+  const selectedGradeId = watch("grade");
+  const selectedDistrict = watch("district");
 
   // Get subjects for the selected grade from gradeData
   const subjectOptions =
@@ -82,10 +72,11 @@ export default function AddRequestForTutor() {
       const newTutors: CreateRequestTutorSchema["tutors"] = [...tutors];
       while (newTutors.length < selectedTutorCount) {
         newTutors.push({
-          subjects: [],
-          duration: "",
-          frequency: "",
-          preferredTutorType: "",
+          subject: "",
+          assignedTutor: "",
+          duration: "30 Minutes",
+          frequency: "Once a Week",
+          preferredTutorType: "Part Time Tutors",
         });
       }
       setValue("tutors", newTutors);
@@ -94,8 +85,8 @@ export default function AddRequestForTutor() {
         "tutors",
         tutors.slice(
           0,
-          selectedTutorCount,
-        ) as CreateRequestTutorSchema["tutors"],
+          selectedTutorCount
+        ) as CreateRequestTutorSchema["tutors"]
       );
     }
   }, [selectedTutorCount, tutors, setValue]);
@@ -109,32 +100,22 @@ export default function AddRequestForTutor() {
 
       const result = await createTutorRequest(payload);
       const error = getErrorInApiResult(result);
-
-      if (error) {
-        setAlertType("error");
-        setAlertOpen(true);
-        return;
-      }
+      if (error) return toast.error(error);
 
       if ("data" in result) {
+        toast.success("Tutor request created successfully!");
         reset();
         setStep(1);
         setSelectedTutorCount(1);
-
-        setAlertType("success");
-        setAlertOpen(true);
       }
     } catch (err) {
       console.error(err);
-      setAlertType("error");
-      setAlertOpen(true);
+      toast.error("Unexpected error occurred while creating the request.");
     }
   };
 
   const nextStep = () => setStep((prev) => Math.min(prev + 1, 2));
   const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
-
-  const selectedDistrict = watch("district");
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
@@ -212,7 +193,7 @@ export default function AddRequestForTutor() {
                 render={({ field }) => (
                   <CitySelect
                     value={field.value || ""}
-                    district={selectedDistrict}
+                    district={selectedDistrict || ""}
                     onChange={field.onChange}
                   />
                 )}
@@ -257,7 +238,7 @@ export default function AddRequestForTutor() {
               <Label htmlFor="grade">Grade *</Label>
               <select
                 id="grade"
-                {...register("grade.0")}
+                {...register("grade")}
                 className="border border-gray-200 rounded p-2"
               >
                 <option value="">Select Grade</option>
@@ -283,7 +264,7 @@ export default function AddRequestForTutor() {
                     <option key={n} value={n}>
                       {n}
                     </option>
-                  ),
+                  )
                 )}
               </select>
             </div>
@@ -296,22 +277,21 @@ export default function AddRequestForTutor() {
                 <h3 className="font-semibold mb-2">Tutor {index + 1}</h3>
 
                 <div className="grid gap-2 mb-2">
-                  <Label>Subjects *</Label>
-                  <Controller
-                    name={`tutors.${index}.subjects`}
-                    control={control}
-                    render={({ field }) => (
-                      <MultiSelect
-                        options={subjectOptions}
-                        defaultSelected={field.value || []}
-                        onChange={(vals) => field.onChange(vals)}
-                      />
-                    )}
-                  />
-
-                  {errors.tutors?.[index]?.subjects && (
+                  <Label>Subject *</Label>
+                  <select
+                    {...register(`tutors.${index}.subject`)}
+                    className="border border-gray-200 rounded p-2"
+                  >
+                    <option value="">Select Subject</option>
+                    {subjectOptions.map((s) => (
+                      <option key={s.value} value={s.value}>
+                        {s.text}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.tutors?.[index]?.subject && (
                     <p className="text-sm text-red-500">
-                      {errors.tutors[index]?.subjects?.message}
+                      {errors.tutors[index]?.subject?.message}
                     </p>
                   )}
                 </div>
@@ -386,36 +366,15 @@ export default function AddRequestForTutor() {
               </button>
               <button
                 type="submit"
+                disabled={isLoading}
                 className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-black text-white hover:bg-gray-800"
               >
-                Submit {isLoading ? <Spinner /> : ""}
+                {isLoading ? "Submitting..." : "Submit"}
               </button>
             </div>
           </div>
         )}
       </form>
-      <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
-        <AlertDialogContent className="bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {alertType === "success"
-                ? "Your request has been submitted successfully"
-                : "Something went wrong"}
-            </AlertDialogTitle>
-
-            <AlertDialogDescription>
-              {alertType === "success"
-                ? "We’ve sent the request details to your email. Our team is reviewing your request and will notify you once suitable tutors are available."
-                : "We couldn’t submit your request at the moment. Please check your details and try again shortly."}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="bg-blue-600 text-white">
-              Okey
-            </AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

@@ -1,10 +1,7 @@
 import { z } from "zod";
 
 export const createRequestTutorSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
+  name: z.string().min(1, "Name is required"),
   email: z.string().min(1, "Enter a valid email").email("Enter a valid email"),
   city: z.string().min(1, "City is required"),
   district: z.string().min(1, "District is required"),
@@ -16,17 +13,16 @@ export const createRequestTutorSchema = z.object({
       message: "Phone number must be exactly 10 digits",
     }),
   medium: z.string().nonempty("Please select a medium"),
-  grade: z.array(z.string()).min(1, "Please select at least one grade"),
+  grade: z.string().nonempty("Please select a grade"),
   tutors: z
     .array(
       z.object({
-        subjects: z
-          .array(z.string())
-          .min(1, "Please select at least one subject"),
+        subject: z.string().nonempty("Please select a subject"),
+        assignedTutor: z.string().optional().default(""),
         duration: z.string().nonempty("Duration is required"),
         frequency: z.string().nonempty("Frequency is required"),
         preferredTutorType: z.string().nonempty("Please select a tutor type"),
-      }),
+      })
     )
     .min(1, "Tutor count is required"),
 });
@@ -40,10 +36,11 @@ export const initialFormValues: CreateRequestTutorSchema = {
   city: "",
   district: "",
   medium: "",
-  grade: [],
+  grade: "",
   tutors: [
     {
-      subjects: [],
+      subject: "",
+      assignedTutor: "",
       duration: "",
       frequency: "",
       preferredTutorType: "",
