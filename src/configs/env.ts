@@ -13,18 +13,9 @@ const getEnvVar = (key: string, processEnvValue?: string) => {
   return processEnvValue;
 };
 
-const ENV_VARIABLES = {
-  NEXT_PUBLIC_API_URL:
-    getEnvVar("NEXT_PUBLIC_API_URL", process.env.NEXT_PUBLIC_API_URL) ||
-    "https://api.placeholder.com",
-  NODE_ENV: process.env.NODE_ENV,
-  NEXT_PUBLIC_WHATSAPP_NUMBER:
-    getEnvVar(
-      "NEXT_PUBLIC_WHATSAPP_NUMBER",
-      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER
-    ) || "1234567890",
-};
-
+/**
+ * Schema validation
+ */
 const envSchema = z
   .object({
     NEXT_PUBLIC_API_URL: z.string().url(),
@@ -35,24 +26,47 @@ const envSchema = z
   })
   .strict();
 
+/**
+ * IMPORTANT:
+ * Next.js requires STATIC env access.
+ * NEVER use process.env[key]
+ */
+const ENV_VARIABLES = {
+  NEXT_PUBLIC_API_URL:
+    process.env.NEXT_PUBLIC_API_URL || "https://api.placeholder.com",
+
+  NODE_ENV:
+    (process.env.NODE_ENV as
+      | "development"
+      | "test"
+      | "production"
+      | undefined) || "development",
+
+  NEXT_PUBLIC_WHATSAPP_NUMBER:
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890",
+};
+
+/**
+ * Validate once
+ */
 const result = envSchema.safeParse(ENV_VARIABLES);
 
 if (!result.success) {
-  console.log(result.error.issues);
-  // Only exit in production, allow build to continue otherwise
-  if (process.env.NODE_ENV === "production" && typeof window !== "undefined") {
-    process.exit(-1);
-  }
+  console.warn("Invalid environment variables:", result.error.issues);
 }
 
-const parsedEnv = result.success ? result.data : (ENV_VARIABLES as any);
+const ENV = result.success ? result.data : ENV_VARIABLES;
 
+/**
+ * Exported env object
+ */
 export const env = {
   app: {
-    nodeEnv: parsedEnv.NODE_ENV,
-    whatsAppNumber: parsedEnv.NEXT_PUBLIC_WHATSAPP_NUMBER,
+    nodeEnv: ENV.NODE_ENV,
+    whatsAppNumber: ENV.NEXT_PUBLIC_WHATSAPP_NUMBER,
   },
+
   urls: {
-    apiUrl: parsedEnv.NEXT_PUBLIC_API_URL,
+    apiUrl: ENV.NEXT_PUBLIC_API_URL,
   },
 };

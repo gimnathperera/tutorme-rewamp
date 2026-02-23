@@ -22,13 +22,16 @@ const TermsAndSubmit = () => {
           control={control}
           render={({ field }) => (
             <MultiFileUploadDropzone
-              onUploaded={(urls) => field.onChange(urls)}
+              initialUrls={field.value}
+              onUploaded={(urls) => {
+                field.onChange(urls ?? []);
+              }}
             />
           )}
         />
-        {errors.certificatesAndQualifications && (
+        {errors.certificatesAndQualifications?.message && (
           <p className="mt-1 text-sm text-red-500">
-            {`${errors.certificatesAndQualifications.message}`}
+            {String(errors.certificatesAndQualifications.message)}
           </p>
         )}
       </div>

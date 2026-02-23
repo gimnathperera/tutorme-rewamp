@@ -30,6 +30,7 @@ export type AuthProviderType = {
   forgotPassword: (credentials: ForgotPasswordSchema) => void;
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
+  updateUser: (user: Partial<AuthUserData>) => void;
 };
 
 interface AuthContextType {
@@ -42,6 +43,7 @@ interface AuthContextType {
   forgotPassword: (credentials: ForgotPasswordSchema) => void;
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
+  updateUser: (user: Partial<AuthUserData>) => void;
 }
 
 const authProvider = {
@@ -54,6 +56,7 @@ const authProvider = {
   logout: () => {},
   forgotPassword: () => {},
   setIsAuthError: () => {},
+  updateUser: () => {},
 };
 
 const AuthContext = createContext<AuthContextType>(authProvider);
@@ -133,6 +136,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     removeLocalStorageItem(LocalStorageKey.TOKENS);
     localStorage.clear();
     window.location.reload();
+    window.location.reload();
+  };
+
+  const updateUser = (userData: Partial<AuthUserData>) => {
+    if (!user) return;
+
+    const updatedUser = { ...user, ...userData };
+    setUser(updatedUser);
+    setLocalStorageItem(LocalStorageKey.USER_DATA, updatedUser);
   };
 
   return (
@@ -147,6 +159,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         setIsAuthError,
         isUserLoaded,
         isUserLogoutLoading,
+        updateUser,
       }}
     >
       {children}
