@@ -1,10 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-import { Controller } from "react-hook-form";
 
 import {
   createRequestTutorSchema,
@@ -13,6 +12,15 @@ import {
 } from "./schema";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import { useCreateTutorRequestsMutation } from "@/store/api/splits/request-tutor";
 import { getErrorInApiResult } from "@/utils/api";
@@ -26,8 +34,11 @@ import DistrictSelect from "@/components/districtSelect";
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 
+type TabKey = "contact" | "tutorDetails";
+const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
+
 export default function AddRequestForTutor() {
-  const [step, setStep] = useState(1);
+  const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
 
   const {
@@ -36,6 +47,8 @@ export default function AddRequestForTutor() {
     control,
     watch,
     setValue,
+    trigger,
+    clearErrors,
     formState: { errors },
     reset,
   } = useForm<CreateRequestTutorSchema>({
@@ -44,18 +57,17 @@ export default function AddRequestForTutor() {
   });
 
   const tutors = watch("tutors");
+  const selectedGradeId = watch("grade");
+  const selectedDistrict = watch("district");
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
     limit: FETCH_LIMIT,
   });
+
   const gradeOptions =
     gradeData?.results.map((g) => ({ value: g.id, text: g.title })) || [];
 
-  const selectedGradeId = watch("grade");
-  const selectedDistrict = watch("district");
-
-  // Get subjects for the selected grade from gradeData
   const subjectOptions =
     gradeData?.results
       .find((g) => g.id === selectedGradeId)
@@ -65,6 +77,8 @@ export default function AddRequestForTutor() {
       })) || [];
 
   const [createTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
+
+  const currentIndex = TAB_ORDER.indexOf(tab);
 
   useEffect(() => {
     const currentCount = tutors.length;
@@ -83,13 +97,22 @@ export default function AddRequestForTutor() {
     } else if (selectedTutorCount < currentCount) {
       setValue(
         "tutors",
-        tutors.slice(
-          0,
-          selectedTutorCount
-        ) as CreateRequestTutorSchema["tutors"]
+        tutors.slice(0, selectedTutorCount) as CreateRequestTutorSchema["tutors"]
       );
     }
   }, [selectedTutorCount, tutors, setValue]);
+
+  const nextStep = async () => {
+    if (tab === "contact") {
+      const valid = await trigger(["name", "email", "phoneNumber", "district", "city"]);
+      if (!valid) return;
+    }
+    setTab(TAB_ORDER[currentIndex + 1]);
+  };
+
+  const prevStep = () => {
+    setTab(TAB_ORDER[currentIndex - 1]);
+  };
 
   const onSubmit = async (data: CreateRequestTutorSchema) => {
     try {
@@ -105,7 +128,8 @@ export default function AddRequestForTutor() {
       if ("data" in result) {
         toast.success("Tutor request created successfully!");
         reset();
-        setStep(1);
+        clearErrors();
+        setTab("contact");
         setSelectedTutorCount(1);
       }
     } catch (err) {
@@ -114,266 +138,270 @@ export default function AddRequestForTutor() {
     }
   };
 
-  const nextStep = () => setStep((prev) => Math.min(prev + 1, 2));
-  const prevStep = () => setStep((prev) => Math.max(prev - 1, 1));
-
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-      <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6  bg-gradient-to-r from-blue-500 to-indigo-600  text-white py-3 rounded">
+      <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
         <h1>Request A Tutor</h1>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 bg-white">
-        {step === 1 && (
-          <div className="p-6 flex flex-col gap-2">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Full Name *</Label>
-              <Input
-                id="name"
-                {...register("name")}
-                placeholder="e.g.John Doe"
-              />
-              {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
-              )}
-            </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Tabs value={tab} className="w-full">
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email *</Label>
-                <Input
-                  placeholder="e.g. johndoe@gmail.com"
-                  id="email"
-                  {...register("email")}
-                />
-                {errors.email && (
-                  <p className="text-sm text-red-500">{errors.email.message}</p>
-                )}
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="phoneNumber">Phone Number *</Label>
-                <Input
-                  id="phoneNumber"
-                  placeholder="e.g. 0712345678"
-                  {...register("phoneNumber")}
-                />
-                {errors.phoneNumber && (
-                  <p className="text-sm text-red-500">
-                    {errors.phoneNumber.message}
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="district">District *</Label>
-              <Controller
-                control={control}
-                name="district"
-                render={({ field }) => (
-                  <DistrictSelect
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    districts={districts}
+          {/* ── STEP 1: Contact Details ── */}
+          <TabsContent value="contact">
+            <Card>
+              <CardHeader>
+                <CardTitle>Contact Details</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {/* Full Name */}
+                <div className="grid gap-2">
+                  <Label htmlFor="name">Full Name *</Label>
+                  <Input
+                    id="name"
+                    {...register("name")}
+                    placeholder="e.g. John Doe"
                   />
-                )}
-              />
-              {errors.district && (
-                <p className="text-sm text-red-500">
-                  {errors.district.message}
-                </p>
-              )}
-            </div>
+                  {errors.name && (
+                    <p className="text-sm text-red-500">{errors.name.message}</p>
+                  )}
+                </div>
 
-            <div className="grid gap-2">
-              <Label htmlFor="city">City *</Label>
-              <Controller
-                control={control}
-                name="city"
-                render={({ field }) => (
-                  <CitySelect
-                    value={field.value || ""}
-                    district={selectedDistrict || ""}
-                    onChange={field.onChange}
+                {/* Email & Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      placeholder="e.g. johndoe@gmail.com"
+                      {...register("email")}
+                    />
+                    {errors.email && (
+                      <p className="text-sm text-red-500">{errors.email.message}</p>
+                    )}
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="phoneNumber">Phone Number *</Label>
+                    <Input
+                      id="phoneNumber"
+                      placeholder="e.g. 0712345678"
+                      {...register("phoneNumber")}
+                    />
+                    {errors.phoneNumber && (
+                      <p className="text-sm text-red-500">{errors.phoneNumber.message}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* District */}
+                <div className="grid gap-2">
+                  <Label htmlFor="district">District *</Label>
+                  <Controller
+                    control={control}
+                    name="district"
+                    render={({ field }) => (
+                      <DistrictSelect
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        districts={districts}
+                      />
+                    )}
                   />
-                )}
-              />
-              {errors.city && (
-                <p className="text-sm text-red-500">{errors.city.message}</p>
-              )}
-            </div>
+                  {errors.district && (
+                    <p className="text-sm text-red-500">{errors.district.message}</p>
+                  )}
+                </div>
 
-            <div className="flex justify-end mt-4">
-              <button
-                type="button"
-                className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-gray-200 text-darkpurple hover:bg-gray-300"
-                onClick={nextStep}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        )}
+                {/* City */}
+                <div className="grid gap-2">
+                  <Label htmlFor="city">City *</Label>
+                  <Controller
+                    control={control}
+                    name="city"
+                    render={({ field }) => (
+                      <CitySelect
+                        value={field.value || ""}
+                        district={selectedDistrict || ""}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                  {errors.city && (
+                    <p className="text-sm text-red-500">{errors.city.message}</p>
+                  )}
+                </div>
+              </CardContent>
 
-        {step === 2 && (
-          <div className="p-6 flex flex-col gap-2">
-            <div className="grid gap-2">
-              <Label htmlFor="medium">Medium *</Label>
-              <select
-                id="medium"
-                {...register("medium")}
-                className="border border-gray-200 rounded p-2"
-              >
-                <option value="">Select Medium</option>
-                <option value="Sinhala">Sinhala</option>
-                <option value="English">English</option>
-                <option value="Tamil">Tamil</option>
-              </select>
-              {errors.medium && (
-                <p className="text-sm text-red-500">{errors.medium.message}</p>
-              )}
-            </div>
+              <CardFooter className="flex justify-end">
+                <Button type="button" onClick={nextStep}>
+                  Next
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
 
-            <div className="grid gap-2">
-              <Label htmlFor="grade">Grade *</Label>
-              <select
-                id="grade"
-                {...register("grade")}
-                className="border border-gray-200 rounded p-2"
-              >
-                <option value="">Select Grade</option>
-                {gradeOptions.map((g) => (
-                  <option key={g.value} value={g.value}>
-                    {g.text}
-                  </option>
-                ))}
-              </select>
-              {errors.grade && (
-                <p className="text-sm text-red-500">{errors.grade.message}</p>
-              )}
-            </div>
-            <div className="grid gap-2">
-              <Label>Number of Tutors</Label>
-              <select
-                value={selectedTutorCount}
-                onChange={(e) => setSelectedTutorCount(Number(e.target.value))}
-                className="border border-gray-200 rounded p-2"
-              >
-                {Array.from({ length: MAX_TUTOR_OPTIONS }, (_, i) => i + 1).map(
-                  (n) => (
-                    <option key={n} value={n}>
-                      {n}
-                    </option>
-                  )
-                )}
-              </select>
-            </div>
-
-            {tutors.map((tutor, index) => (
-              <div
-                key={index}
-                className="p-4 border border-gray-200 rounded mb-4"
-              >
-                <h3 className="font-semibold mb-2">Tutor {index + 1}</h3>
-
-                <div className="grid gap-2 mb-2">
-                  <Label>Subject *</Label>
+          {/* ── STEP 2: Tutor Details ── */}
+          <TabsContent value="tutorDetails">
+            <Card>
+              <CardHeader>
+                <CardTitle>Tutor Details</CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-col gap-4">
+                {/* Medium */}
+                <div className="grid gap-2">
+                  <Label htmlFor="medium">Medium *</Label>
                   <select
-                    {...register(`tutors.${index}.subject`)}
+                    id="medium"
+                    {...register("medium")}
                     className="border border-gray-200 rounded p-2"
                   >
-                    <option value="">Select Subject</option>
-                    {subjectOptions.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.text}
+                    <option value="">Select Medium</option>
+                    <option value="Sinhala">Sinhala</option>
+                    <option value="English">English</option>
+                    <option value="Tamil">Tamil</option>
+                  </select>
+                  {errors.medium && (
+                    <p className="text-sm text-red-500">{errors.medium.message}</p>
+                  )}
+                </div>
+
+                {/* Grade */}
+                <div className="grid gap-2">
+                  <Label htmlFor="grade">Grade *</Label>
+                  <select
+                    id="grade"
+                    {...register("grade")}
+                    className="border border-gray-200 rounded p-2"
+                  >
+                    <option value="">Select Grade</option>
+                    {gradeOptions.map((g) => (
+                      <option key={g.value} value={g.value}>
+                        {g.text}
                       </option>
                     ))}
                   </select>
-                  {errors.tutors?.[index]?.subject && (
-                    <p className="text-sm text-red-500">
-                      {errors.tutors[index]?.subject?.message}
-                    </p>
+                  {errors.grade && (
+                    <p className="text-sm text-red-500">{errors.grade.message}</p>
                   )}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="grid gap-2">
-                    <Label>Duration *</Label>
-                    <select
-                      {...register(`tutors.${index}.duration`)}
-                      className="border border-gray-200 rounded p-2"
-                    >
-                      <option value="">Select Duration</option>
-                      <option value="30 Minutes">30 Minutes</option>
-                      <option value="One Hour">One Hour</option>
-                      <option value="Two Hours">Two Hours</option>
-                    </select>
-                    {errors.tutors?.[index]?.duration && (
-                      <p className="text-sm text-red-500">
-                        {errors.tutors[index]?.duration?.message}
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="grid gap-2">
-                    <Label>Frequency *</Label>
-                    <select
-                      {...register(`tutors.${index}.frequency`)}
-                      className="border border-gray-200 rounded p-2"
-                    >
-                      <option value="">Select Frequency</option>
-                      <option value="Once a Week">Once a Week</option>
-                      <option value="Twice a Week">Twice a Week</option>
-                      <option value="Daily">Daily</option>
-                    </select>
-                    {errors.tutors?.[index]?.frequency && (
-                      <p className="text-sm text-red-500">
-                        {errors.tutors[index]?.frequency?.message}
-                      </p>
-                    )}
-                  </div>
-                </div>
-
-                <div className="grid gap-2 mt-2">
-                  <Label>Preferred Tutor Type *</Label>
+                {/* Number of Tutors */}
+                <div className="grid gap-2">
+                  <Label>Number of Tutors</Label>
                   <select
-                    {...register(`tutors.${index}.preferredTutorType`)}
+                    value={selectedTutorCount}
+                    onChange={(e) => setSelectedTutorCount(Number(e.target.value))}
                     className="border border-gray-200 rounded p-2"
                   >
-                    <option value="">Select Tutor Type</option>
-                    <option value="Part Time Tutors">Part Time Tutors</option>
-                    <option value="Full Time Tutors">Full Time Tutors</option>
-                    <option value="Ex / Current Government School Tutors">
-                      Ex / Current Government School Tutors
-                    </option>
+                    {Array.from({ length: MAX_TUTOR_OPTIONS }, (_, i) => i + 1).map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
                   </select>
-                  {errors.tutors?.[index]?.preferredTutorType && (
-                    <p className="text-sm text-red-500">
-                      {errors.tutors[index]?.preferredTutorType?.message}
-                    </p>
-                  )}
                 </div>
-              </div>
-            ))}
 
-            <div className="flex justify-between gap-4 mt-4">
-              <button
-                type="button"
-                className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-gray-200 text-darkpurple hover:bg-gray-300"
-                onClick={prevStep}
-              >
-                Previous
-              </button>
-              <button
-                type="submit"
-                disabled={isLoading}
-                className="text-sm md:text-xl font-semibold hover:shadow-xl py-3 px-6 md:py-5 md:px-14 rounded-full transition-all bg-black text-white hover:bg-gray-800"
-              >
-                {isLoading ? "Submitting..." : "Submit"}
-              </button>
-            </div>
-          </div>
-        )}
+                {/* Per-tutor fields */}
+                {tutors.map((tutor, index) => (
+                  <div
+                    key={index}
+                    className="p-4 border border-gray-200 rounded"
+                  >
+                    <h3 className="font-semibold mb-2">Tutor {index + 1}</h3>
+
+                    <div className="grid gap-2 mb-2">
+                      <Label>Subject *</Label>
+                      <select
+                        {...register(`tutors.${index}.subject`)}
+                        className="border border-gray-200 rounded p-2"
+                      >
+                        <option value="">Select Subject</option>
+                        {subjectOptions.map((s) => (
+                          <option key={s.value} value={s.value}>
+                            {s.text}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.tutors?.[index]?.subject && (
+                        <p className="text-sm text-red-500">
+                          {errors.tutors[index]?.subject?.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="grid gap-2">
+                        <Label>Duration *</Label>
+                        <select
+                          {...register(`tutors.${index}.duration`)}
+                          className="border border-gray-200 rounded p-2"
+                        >
+                          <option value="">Select Duration</option>
+                          <option value="30 Minutes">30 Minutes</option>
+                          <option value="One Hour">One Hour</option>
+                          <option value="Two Hours">Two Hours</option>
+                        </select>
+                        {errors.tutors?.[index]?.duration && (
+                          <p className="text-sm text-red-500">
+                            {errors.tutors[index]?.duration?.message}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="grid gap-2">
+                        <Label>Frequency *</Label>
+                        <select
+                          {...register(`tutors.${index}.frequency`)}
+                          className="border border-gray-200 rounded p-2"
+                        >
+                          <option value="">Select Frequency</option>
+                          <option value="Once a Week">Once a Week</option>
+                          <option value="Twice a Week">Twice a Week</option>
+                          <option value="Daily">Daily</option>
+                        </select>
+                        {errors.tutors?.[index]?.frequency && (
+                          <p className="text-sm text-red-500">
+                            {errors.tutors[index]?.frequency?.message}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid gap-2 mt-2">
+                      <Label>Preferred Tutor Type *</Label>
+                      <select
+                        {...register(`tutors.${index}.preferredTutorType`)}
+                        className="border border-gray-200 rounded p-2"
+                      >
+                        <option value="">Select Tutor Type</option>
+                        <option value="Part Time Tutors">Part Time Tutors</option>
+                        <option value="Full Time Tutors">Full Time Tutors</option>
+                        <option value="Ex / Current Government School Tutors">
+                          Ex / Current Government School Tutors
+                        </option>
+                      </select>
+                      {errors.tutors?.[index]?.preferredTutorType && (
+                        <p className="text-sm text-red-500">
+                          {errors.tutors[index]?.preferredTutorType?.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+
+              <CardFooter className="flex justify-between">
+                <Button type="button" variant="outline" onClick={prevStep}>
+                  Previous
+                </Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? "Submitting..." : "Submit"}
+                </Button>
+              </CardFooter>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </form>
     </div>
   );
