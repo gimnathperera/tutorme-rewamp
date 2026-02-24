@@ -1,12 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 interface NavigationItem {
   name: string;
@@ -32,15 +28,9 @@ const navigation: NavigationItem[] = [
     name: "Tuition",
     href: "/",
     current: false,
-    dropdown: [
-      { name: "Tuition Rates", href: "/tuition-rates" },
-    ],
+    dropdown: [{ name: "Tuition Rates", href: "/tuition-rates" }],
   },
-  {
-    name: "FAQ",
-    href: "/#faq-section",
-    current: false,
-  },
+  { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
   { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
 ];
@@ -50,48 +40,72 @@ interface DrawerContentProps {
 }
 
 const DrawerContent = ({ onClose }: DrawerContentProps) => {
+  const [openDropdowns, setOpenDropdowns] = useState<Set<number>>(new Set());
+
+  const toggleDropdown = (index: number) => {
+    setOpenDropdowns((prev) => {
+      const next = new Set(prev);
+      if (next.has(index)) {
+        next.delete(index);
+      } else {
+        next.add(index);
+      }
+      return next;
+    });
+  };
+
   return (
     <div
-      className="rounded-md max-w-sm w-full mx-auto px-4"
-      onClick={(e) => e.stopPropagation()} // 👈 Prevent drawer close
+      className="w-full px-4 py-2"
+      onClick={(e) => e.stopPropagation()}
     >
-      <Accordion type="multiple" className="w-full">
+      <nav className="flex flex-col">
         {navigation.map((item, index) => {
           if (item.dropdown && item.dropdown.length > 0) {
+            const isOpen = openDropdowns.has(index);
             return (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-base text-black hover:text-purple-600">
-                  {item.name}
-                </AccordionTrigger>
-                <AccordionContent className="flex flex-col gap-1 pl-4">
-                  {item.dropdown.map((sub, i) => (
-                    <Link
-                      key={i}
-                      href={sub.href}
-                      className="text-sm text-muted-foreground hover:text-purple-600 transition-colors"
-                      onClick={onClose}
-                    >
-                      {sub.name}
-                    </Link>
-                  ))}
-                </AccordionContent>
-              </AccordionItem>
+              <div key={index} className="border-b border-gray-100 last:border-none">
+                <button
+                  onClick={() => toggleDropdown(index)}
+                  className="w-full flex items-center justify-between py-3.5 text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors"
+                >
+                  <span>{item.name}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                      }`}
+                  />
+                </button>
+                {isOpen && (
+                  <div className="pb-2 flex flex-col gap-0.5">
+                    {item.dropdown.map((sub, i) => (
+                      <Link
+                        key={i}
+                        href={sub.href}
+                        onClick={onClose}
+                        className="py-2.5 pl-4 text-sm text-gray-500 hover:text-blue-600 transition-colors"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             );
           }
 
           return (
-            <div key={index} className="py-1">
+            <div key={index} className="border-b border-gray-100 last:border-none">
               <Link
                 href={item.href}
-                className="block text-base text-black hover:text-purple-600 transition-colors"
                 onClick={onClose}
+                className="block py-3.5 text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors"
               >
                 {item.name}
               </Link>
             </div>
           );
         })}
-      </Accordion>
+      </nav>
     </div>
   );
 };
