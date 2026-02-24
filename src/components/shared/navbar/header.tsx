@@ -65,7 +65,7 @@ const Navbar = () => {
     handleOnChangeDrawerVisibility,
   } = useAuthModalState();
 
-  const { user, isUserLoaded } = useAuthContext();
+  const { user, isUserLoaded, logout } = useAuthContext();
 
   return (
     <Disclosure as="nav" className="navbar">
@@ -153,7 +153,7 @@ const Navbar = () => {
                 ) : (
                   <button
                     type="button"
-                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-navyblue hover:text-white"
+                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-blue-600 hover:text-white"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     Login
@@ -181,8 +181,10 @@ const Navbar = () => {
             handleOnChangeSignUpModalVisibility={
               handleOnChangeSignUpModalVisibility
             }
+            user={user}
+            logout={logout}
           >
-            <DrawerContent />
+            <DrawerContent onClose={() => handleOnChangeDrawerVisibility()} />
           </Drawer>
         </div>
       </div>

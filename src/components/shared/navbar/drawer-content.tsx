@@ -17,6 +17,7 @@ interface NavigationItem {
 
 const navigation: NavigationItem[] = [
   { name: "Request a Tutor", href: "/request-for-tutors", current: false },
+  { name: "Register a Tutor", href: "/register-tutor", current: false },
   {
     name: "Academics",
     href: "/",
@@ -33,20 +34,22 @@ const navigation: NavigationItem[] = [
     current: false,
     dropdown: [
       { name: "Tuition Rates", href: "/tuition-rates" },
-      { name: "Tuition Assignments", href: "/tuition-assignments" },
     ],
   },
   {
-    name: "Levels and Exams",
-    href: "/level-and-exams",
+    name: "FAQ",
+    href: "/#faq-section",
     current: false,
   },
-  { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
   { name: "Contact Us", href: "/#keep-in-touch-section", current: false },
 ];
 
-const DrawerContent = () => {
+interface DrawerContentProps {
+  onClose: () => void;
+}
+
+const DrawerContent = ({ onClose }: DrawerContentProps) => {
   return (
     <div
       className="rounded-md max-w-sm w-full mx-auto px-4"
@@ -66,6 +69,7 @@ const DrawerContent = () => {
                       key={i}
                       href={sub.href}
                       className="text-sm text-muted-foreground hover:text-purple-600 transition-colors"
+                      onClick={onClose}
                     >
                       {sub.name}
                     </Link>
@@ -80,6 +84,7 @@ const DrawerContent = () => {
               <Link
                 href={item.href}
                 className="block text-base text-black hover:text-purple-600 transition-colors"
+                onClick={onClose}
               >
                 {item.name}
               </Link>
