@@ -7,20 +7,28 @@ import { useCallback, useState, MouseEvent } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface FileItem {
-  file: File;
+  /** Null for entries that were pre-seeded from existing URLs (no File in memory). */
+  file: File | null;
   url?: string;
   previewUrl?: string;
 }
 
 interface MultiFileUploadDropzoneProps {
   onUploaded: (urls: string[]) => void;
+  /** Pre-existing URLs to hydrate the list with (e.g. after tab navigation). */
+  initialUrls?: string[];
 }
 
 export default function MultiFileUploadDropzone({
   onUploaded,
+  initialUrls,
 }: MultiFileUploadDropzoneProps) {
   const [uploading, setUploading] = useState(false);
-  const [files, setFiles] = useState<FileItem[]>([]);
+  // Lazy initializer: seed from pre-existing URLs so the list is populated
+  // immediately on mount without an extra render / useEffect flash.
+  const [files, setFiles] = useState<FileItem[]>(() =>
+    (initialUrls ?? []).map((url) => ({ file: null, url })),
+  );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -29,6 +37,7 @@ export default function MultiFileUploadDropzone({
 
       for (const fileObj of newFiles) {
         const file = fileObj.file;
+        if (!file) continue; // URL-only items are never re-uploaded
         setUploading(true);
 
         // Preview for images
@@ -128,7 +137,11 @@ export default function MultiFileUploadDropzone({
                   key={index}
                   className="flex items-center justify-between border p-2 rounded bg-gray-50 dark:bg-gray-700"
                 >
-                  <p className="truncate max-w-[80%]">{fileObj.file.name}</p>
+                  <p className="truncate max-w-[80%]">
+                    {fileObj.file
+                      ? fileObj.file.name
+                      : (fileObj.url?.split("/").pop() ?? "Certificate")}
+                  </p>
                   <div className="flex items-center gap-2">
                     {fileObj.previewUrl && (
                       <img
