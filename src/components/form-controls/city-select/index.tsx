@@ -42,6 +42,7 @@ export default function CitySelect({
     setSearchText("");
     setFilteredCities([]);
     setShowDropdown(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [district]);
 
   /* ------------------ SYNC display when value is cleared externally ---------- */
