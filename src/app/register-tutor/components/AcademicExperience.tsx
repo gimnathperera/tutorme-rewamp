@@ -65,8 +65,6 @@ const AcademicExperience = () => {
     loadSubjects();
   }, [selectedGradeIds, fetchSubjectsForGrades]);
 
-  const { setValue } = useFormContext();
-
   return (
     <div className="space-y-8">
       {/* ROW 1 */}
