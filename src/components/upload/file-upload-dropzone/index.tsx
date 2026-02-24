@@ -22,6 +22,11 @@ export default function FileUploadDropzone({
       const file = acceptedFiles[0];
       if (!file) return;
 
+      if (!file.type.startsWith("image/")) {
+        alert("Only image files are allowed.");
+        return;
+      }
+
       setUploading(true);
       setFileName(file.name);
 
@@ -81,6 +86,7 @@ export default function FileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
+    accept: { "image/*": [] },
   });
 
   return (
