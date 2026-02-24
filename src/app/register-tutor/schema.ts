@@ -48,11 +48,9 @@ export const step2Schema = z.object({
 
   tutorMediums: z
     .array(
-      z
-        .string()
-        .refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
-          message: "Invalid medium selected",
-        }),
+      z.string().refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
+        message: "Invalid medium selected",
+      }),
     )
     .min(1, "Select at least one medium"),
 

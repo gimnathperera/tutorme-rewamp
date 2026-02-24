@@ -55,24 +55,25 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
   };
 
   return (
-    <div
-      className="w-full px-4 py-2"
-      onClick={(e) => e.stopPropagation()}
-    >
+    <div className="w-full px-4 py-2" onClick={(e) => e.stopPropagation()}>
       <nav className="flex flex-col">
         {navigation.map((item, index) => {
           if (item.dropdown && item.dropdown.length > 0) {
             const isOpen = openDropdowns.has(index);
             return (
-              <div key={index} className="border-b border-gray-100 last:border-none">
+              <div
+                key={index}
+                className="border-b border-gray-100 last:border-none"
+              >
                 <button
                   onClick={() => toggleDropdown(index)}
                   className="w-full flex items-center justify-between py-3.5 text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors"
                 >
                   <span>{item.name}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-                      }`}
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 {isOpen && (
@@ -94,7 +95,10 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
           }
 
           return (
-            <div key={index} className="border-b border-gray-100 last:border-none">
+            <div
+              key={index}
+              className="border-b border-gray-100 last:border-none"
+            >
               <Link
                 href={item.href}
                 onClick={onClose}

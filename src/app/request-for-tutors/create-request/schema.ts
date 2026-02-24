@@ -22,7 +22,7 @@ export const createRequestTutorSchema = z.object({
         duration: z.string().nonempty("Duration is required"),
         frequency: z.string().nonempty("Frequency is required"),
         preferredTutorType: z.string().nonempty("Tutor type is required"),
-      })
+      }),
     )
     .min(1, "Tutor count is required"),
 });

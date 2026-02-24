@@ -42,4 +42,3 @@ src/
 
 - Core form and upload components are now grouped by domain under `src/components/form-controls` and `src/components/upload`.
 - Backward-compatible re-export files remain in original paths to avoid breaking existing imports.
-

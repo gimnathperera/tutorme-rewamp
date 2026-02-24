@@ -97,14 +97,23 @@ export default function AddRequestForTutor() {
     } else if (selectedTutorCount < currentCount) {
       setValue(
         "tutors",
-        tutors.slice(0, selectedTutorCount) as CreateRequestTutorSchema["tutors"]
+        tutors.slice(
+          0,
+          selectedTutorCount,
+        ) as CreateRequestTutorSchema["tutors"],
       );
     }
   }, [selectedTutorCount, tutors, setValue]);
 
   const nextStep = async () => {
     if (tab === "contact") {
-      const valid = await trigger(["name", "email", "phoneNumber", "district", "city"]);
+      const valid = await trigger([
+        "name",
+        "email",
+        "phoneNumber",
+        "district",
+        "city",
+      ]);
       if (!valid) return;
     }
     setTab(TAB_ORDER[currentIndex + 1]);
@@ -147,7 +156,6 @@ export default function AddRequestForTutor() {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Tabs value={tab} className="w-full">
-
           {/* ── STEP 1: Contact Details ── */}
           <TabsContent value="contact">
             <Card>
@@ -164,7 +172,9 @@ export default function AddRequestForTutor() {
                     placeholder="e.g. John Doe"
                   />
                   {errors.name && (
-                    <p className="text-sm text-red-500">{errors.name.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.name.message}
+                    </p>
                   )}
                 </div>
 
@@ -178,7 +188,9 @@ export default function AddRequestForTutor() {
                       {...register("email")}
                     />
                     {errors.email && (
-                      <p className="text-sm text-red-500">{errors.email.message}</p>
+                      <p className="text-sm text-red-500">
+                        {errors.email.message}
+                      </p>
                     )}
                   </div>
                   <div className="grid gap-2">
@@ -189,7 +201,9 @@ export default function AddRequestForTutor() {
                       {...register("phoneNumber")}
                     />
                     {errors.phoneNumber && (
-                      <p className="text-sm text-red-500">{errors.phoneNumber.message}</p>
+                      <p className="text-sm text-red-500">
+                        {errors.phoneNumber.message}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -209,7 +223,9 @@ export default function AddRequestForTutor() {
                     )}
                   />
                   {errors.district && (
-                    <p className="text-sm text-red-500">{errors.district.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.district.message}
+                    </p>
                   )}
                 </div>
 
@@ -228,7 +244,9 @@ export default function AddRequestForTutor() {
                     )}
                   />
                   {errors.city && (
-                    <p className="text-sm text-red-500">{errors.city.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.city.message}
+                    </p>
                   )}
                 </div>
               </CardContent>
@@ -262,7 +280,9 @@ export default function AddRequestForTutor() {
                     <option value="Tamil">Tamil</option>
                   </select>
                   {errors.medium && (
-                    <p className="text-sm text-red-500">{errors.medium.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.medium.message}
+                    </p>
                   )}
                 </div>
 
@@ -282,7 +302,9 @@ export default function AddRequestForTutor() {
                     ))}
                   </select>
                   {errors.grade && (
-                    <p className="text-sm text-red-500">{errors.grade.message}</p>
+                    <p className="text-sm text-red-500">
+                      {errors.grade.message}
+                    </p>
                   )}
                 </div>
 
@@ -291,10 +313,15 @@ export default function AddRequestForTutor() {
                   <Label>Number of Tutors</Label>
                   <select
                     value={selectedTutorCount}
-                    onChange={(e) => setSelectedTutorCount(Number(e.target.value))}
+                    onChange={(e) =>
+                      setSelectedTutorCount(Number(e.target.value))
+                    }
                     className="border border-gray-200 rounded p-2"
                   >
-                    {Array.from({ length: MAX_TUTOR_OPTIONS }, (_, i) => i + 1).map((n) => (
+                    {Array.from(
+                      { length: MAX_TUTOR_OPTIONS },
+                      (_, i) => i + 1,
+                    ).map((n) => (
                       <option key={n} value={n}>
                         {n}
                       </option>
@@ -375,8 +402,12 @@ export default function AddRequestForTutor() {
                         className="border border-gray-200 rounded p-2"
                       >
                         <option value="">Select Tutor Type</option>
-                        <option value="Part Time Tutors">Part Time Tutors</option>
-                        <option value="Full Time Tutors">Full Time Tutors</option>
+                        <option value="Part Time Tutors">
+                          Part Time Tutors
+                        </option>
+                        <option value="Full Time Tutors">
+                          Full Time Tutors
+                        </option>
                         <option value="Ex / Current Government School Tutors">
                           Ex / Current Government School Tutors
                         </option>

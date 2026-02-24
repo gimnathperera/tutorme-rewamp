@@ -72,8 +72,8 @@ export default function CitySelect({
 
   /* ------------------ SELECT from dropdown (commits to form) -------------- */
   const handleSelect = (city: string) => {
-    onChange(city);        // commit real value
-    setSearchText(city);   // mirror in display
+    onChange(city); // commit real value
+    setSearchText(city); // mirror in display
     setShowDropdown(false);
     setFilteredCities([]);
   };

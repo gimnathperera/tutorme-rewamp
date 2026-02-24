@@ -225,8 +225,8 @@ export default function MultiFileUploadDropzone({
             {previewFile && (
               <>
                 {previewFile.type?.startsWith("image/") ||
-                  (previewFile.file &&
-                    previewFile.file.type.startsWith("image/")) ? (
+                (previewFile.file &&
+                  previewFile.file.type.startsWith("image/")) ? (
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={
