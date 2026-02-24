@@ -4,7 +4,8 @@ import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
-
+import LogoImage from "../../../../public/images/findTutor/register.png";
+import Image from "next/image";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
@@ -121,8 +122,9 @@ export function TutorTabs() {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-          <div className="mb-6 rounded bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 text-2xl font-bold text-white">
-            Register As A Tutor
+          <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded">
+            <Image height={50} width={50} src={LogoImage} alt="Logo image" />
+            <h1>Register As A Tutor</h1>
           </div>
 
           <Tabs value={tab} className="w-full">

@@ -25,7 +25,7 @@ import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import { useCreateTutorRequestsMutation } from "@/store/api/splits/request-tutor";
 import { getErrorInApiResult } from "@/utils/api";
 import { LIMITS_CONFIG } from "@/configs/limits";
-import LogoImage from "../../../../public/images/findTutor/lesson.png";
+import LogoImage from "../../../../public/images/findTutor/tutor.png";
 import Image from "next/image";
 import { districts } from "@/configs/districts";
 import CitySelect from "@/components/citySelect";
