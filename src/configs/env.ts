@@ -1,7 +1,7 @@
 import z from "zod";
 
-// eslint-disable-next-line unused-imports/no-unused-vars
 declare global {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   interface Window {
     __ENV: Record<string, string>;
   }
