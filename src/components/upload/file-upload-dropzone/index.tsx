@@ -22,21 +22,16 @@ export default function FileUploadDropzone({
       const file = acceptedFiles[0];
       if (!file) return;
 
-      if (!file.type.startsWith("image/")) {
-        alert("Only image files are allowed.");
-        return;
-      }
+      // Defence-in-depth: reject anything that isn't an image even if the
+      // accept constraint is somehow bypassed (e.g. programmatic drops).
+      if (!file.type.startsWith("image/")) return;
 
       setUploading(true);
       setFileName(file.name);
 
-      if (file.type.startsWith("image/")) {
-        const reader = new FileReader();
-        reader.onload = () => setPreviewUrl(reader.result as string);
-        reader.readAsDataURL(file);
-      } else {
-        setPreviewUrl(null);
-      }
+      const reader = new FileReader();
+      reader.onload = () => setPreviewUrl(reader.result as string);
+      reader.readAsDataURL(file);
 
       const signed = await fetch("/api/upload-url", {
         method: "POST",
