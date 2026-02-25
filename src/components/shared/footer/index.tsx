@@ -88,7 +88,7 @@ const footer = () => {
             </div>
           </div>
 
-          {/* CLOUMN-2/3 */}
+          {/* COLUMN-2/3 */}
 
           {products.map((product) => (
             <div key={product.id} className="group relative col-span-2">

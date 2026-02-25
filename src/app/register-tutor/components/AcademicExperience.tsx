@@ -7,7 +7,7 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
   TUTORING_LEVEL_OPTIONS,
-  PREFFERED_LOCATION_OPTIONS,
+  PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
@@ -96,7 +96,7 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={PREFFERED_LOCATION_OPTIONS}
+                options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
               />
