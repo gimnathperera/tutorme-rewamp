@@ -23,6 +23,13 @@ const PersonalInfo = () => {
 
   const dateOfBirth = watch("dateOfBirth");
 
+  /** Latest selectable date = today minus 18 years (tutor must be ≥ 18) */
+  const maxDate = (() => {
+    const d = new Date();
+    d.setFullYear(d.getFullYear() - 18);
+    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
+  })();
+
   useEffect(() => {
     if (!dateOfBirth) return;
 
@@ -82,12 +89,29 @@ const PersonalInfo = () => {
         </p>
       </div>
 
+      {/* Gender */}
+      <div className={fieldWrapper}>
+        <Label>Gender *</Label>
+        <select
+          {...register("gender")}
+          className={`${selectClass} ${selectBorder(!!errors.gender)}`}
+        >
+          <option value="">Select</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
+        <p className="text-sm text-red-500 min-h-[1.25rem]">
+          {errors.gender?.message as string}
+        </p>
+      </div>
+
       {/* Date of Birth */}
       <div className={fieldWrapper}>
         <Label>Date of Birth *</Label>
         <Input
           type="date"
           {...register("dateOfBirth")}
+          max={maxDate}
           className={`${inputClass} ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
         />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
@@ -107,22 +131,6 @@ const PersonalInfo = () => {
         />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.age?.message as string}
-        </p>
-      </div>
-
-      {/* Gender */}
-      <div className={fieldWrapper}>
-        <Label>Gender *</Label>
-        <select
-          {...register("gender")}
-          className={`${selectClass} ${selectBorder(!!errors.gender)}`}
-        >
-          <option value="">Select</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-        </select>
-        <p className="text-sm text-red-500 min-h-[1.25rem]">
-          {errors.gender?.message as string}
         </p>
       </div>
 

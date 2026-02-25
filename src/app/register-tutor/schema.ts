@@ -20,7 +20,7 @@ export const step1Schema = z.object({
     message: "Gender is required",
   }),
 
-  age: z.number().int().min(1, "Age is required").max(80, "Age must be below 80"),
+  age: z.number().int().min(18, "You must be at least 18 years old").max(80, "Age must be below 80"),
 
   nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
     message: "Nationality is required",
