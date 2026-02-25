@@ -7,10 +7,12 @@ import KeepInTouch from "@/components/home-page/keep-in-touch";
 import OurTeam from "@/components/home-page/our-team";
 import Testimonials from "@/components/home-page/testimonials";
 import WhatsAppButton from "@/components/shared/whatapp-button";
+import ScrollAnimationProvider from "@/components/shared/scroll-animation-provider";
 
 export default function Home() {
   return (
     <>
+      <ScrollAnimationProvider />
       <Banner />
       <AboutUs />
       <Digital />

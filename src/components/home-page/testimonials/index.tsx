@@ -57,47 +57,48 @@ const Testimonials: FC = () => {
   const postData = data?.results ?? [];
 
   return (
-    <div className="bg-testimonial pt-40 pb-16 lg:py-32">
-      <div className="mx-auto max-w-7xl sm:py-4 lg:px-8 ">
-        <div className="text-center">
-          <h3 className="text-4xl sm:text-6xl font-bold text-black my-3">
+    <div className="bg-testimonial pt-32 pb-12 lg:py-28">
+      <div className="mx-auto max-w-7xl sm:py-4 lg:px-8">
+        {/* Stacked marquee headings */}
+        <div className="text-center overflow-hidden animate-fade-in">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black my-2">
             See what others are saying.
-          </h3>
-          <h3 className="text-4xl sm:text-6xl font-bold text-black text-opacity-50 lg:mr-48 my-4">
+          </h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-40 lg:mr-48 my-2 hidden sm:block">
             See what others are saying.
-          </h3>
-          <h3 className="text-4xl sm:text-6xl font-bold text-black text-opacity-25 lg:-mr-32 my-4">
+          </h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-20 lg:-mr-32 my-2 hidden sm:block">
             See what others are saying.
-          </h3>
+          </h2>
         </div>
+
         {!isLoading && (
           <Slider {...settings}>
             {postData.map(({ owner, content, rating }, i) => (
               <div key={i} className="relative">
-                <div className="bg-white test-sha m-3 p-10 my-20 rounded-3xl">
+                <div className="bg-white test-sha m-3 p-8 my-20 rounded-3xl">
                   <img
                     src={owner?.avatar ?? ""}
                     alt="testimonial-avatar-image"
-                    className="inline-block m-auto absolute test-pos object-cover rounded-full border-4 border-white w-[80px] h-[80px]"
+                    className="inline-block m-auto absolute test-pos object-cover rounded-full border-4 border-white w-[70px] h-[70px]"
                   />
-
-                  <h4 className="text-base font-medium text-testColor my-4">
+                  <p className="text-sm font-medium text-testColor my-4 leading-relaxed">
                     {content ?? "-"}
-                  </h4>
+                  </p>
                   <hr style={{ color: "lightgrey" }} />
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center mt-3">
                     <div>
-                      <h3 className="text-base font-medium pt-4 pb-2">
+                      <h4 className="text-sm font-semibold pt-3 pb-1">
                         {owner?.name}
-                      </h3>
-                      <h3 className="text-xs font-medium pb-2 opacity-50">
+                      </h4>
+                      <h5 className="text-xs font-medium pb-2 opacity-50">
                         {owner?.role}
-                      </h3>
+                      </h5>
                     </div>
-                    <div className="flex">
+                    <div className="flex gap-0.5">
                       {rating &&
                         [...Array(rating)].map((_, i) => (
-                          <StarIcon key={i} width={20} className="star" />
+                          <StarIcon key={i} width={16} className="star" />
                         ))}
                     </div>
                   </div>
