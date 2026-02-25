@@ -10,85 +10,128 @@ interface CitySelectProps {
   value: string;
   district: string;
   onChange: (v: string) => void;
+  hasError?: boolean;
+}
+
+/* ── Helpers ── */
+
+/** Levenshtein distance between two strings (case-insensitive). */
+function levenshtein(a: string, b: string): number {
+  const al = a.toLowerCase();
+  const bl = b.toLowerCase();
+  const m = al.length;
+  const n = bl.length;
+  const dp: number[][] = Array.from({ length: m + 1 }, (_, i) =>
+    Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0)),
+  );
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] =
+        al[i - 1] === bl[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+    }
+  }
+  return dp[m][n];
+}
+
+/**
+ * Returns up to `limit` cities whose edit distance from `query` is ≤ `maxDist`.
+ * Sorted by distance (best match first).
+ */
+function fuzzyMatch(
+  query: string,
+  cities: string[],
+  maxDist = 3,
+  limit = 5,
+): string[] {
+  return cities
+    .map((city) => ({ city, dist: levenshtein(query, city) }))
+    .filter(({ dist }) => dist <= maxDist)
+    .sort((a, b) => a.dist - b.dist)
+    .slice(0, limit)
+    .map(({ city }) => city);
 }
 
 export default function CitySelect({
   value,
   district,
   onChange,
+  hasError = false,
 }: CitySelectProps) {
-  // searchText drives the input display; value is the committed (form) value.
   const [searchText, setSearchText] = useState("");
-  const [filteredCities, setFilteredCities] = useState<string[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  /* ------------------ GET CITIES FOR DISTRICT ------------------ */
+  /* ── Cities for the chosen district ── */
   const districtCities = useMemo(() => {
     if (!district) return [];
     const found = districtsAndCities.districts.find((d) => d.name === district);
     return found?.cities || [];
   }, [district]);
 
-  /* ------------------ CLEAR CITY WHEN DISTRICT CHANGES ------------------ */
+  /* ── Derived: exact substring matches ── */
+  const exactMatches = useMemo(() => {
+    if (!searchText.trim()) return [];
+    return districtCities.filter((city) =>
+      city.toLowerCase().includes(searchText.toLowerCase()),
+    );
+  }, [searchText, districtCities]);
+
+  /* ── Derived: fuzzy suggestions (only when no exact matches) ── */
+  const suggestions = useMemo(() => {
+    if (!searchText.trim() || exactMatches.length > 0) return [];
+    return fuzzyMatch(searchText, districtCities);
+  }, [searchText, districtCities, exactMatches]);
+
+  /* ── Clear city when district changes ── */
   useEffect(() => {
-    // Only clear when switching to a real district (not when district is emptied on reset)
     if (!district) {
       setSearchText("");
-      setFilteredCities([]);
       setShowDropdown(false);
       return;
     }
     onChange("");
     setSearchText("");
-    setFilteredCities([]);
     setShowDropdown(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [district]);
 
-  /* ------------------ SYNC display when value is cleared externally ---------- */
+  /* ── Sync display when value is cleared externally ── */
   useEffect(() => {
     if (!value) setSearchText("");
   }, [value]);
 
-  /* ------------------ FILTER on search input ------------------ */
+  /* ── Handle typing ── */
   const handleInputChange = (input: string) => {
-    // Update display only — do NOT commit to form yet
     setSearchText(input);
-    // If user clears the box, also clear the committed form value
     if (!input.trim()) {
       onChange("");
-      setFilteredCities([]);
       setShowDropdown(false);
       return;
     }
-
-    const matches = districtCities.filter((city) =>
-      city.toLowerCase().includes(input.toLowerCase()),
-    );
-
-    setFilteredCities(matches);
-    setShowDropdown(matches.length > 0);
+    setShowDropdown(true);
   };
 
-  /* ------------------ SELECT from dropdown (commits to form) -------------- */
+  /* ── Commit a selection ── */
   const handleSelect = (city: string) => {
-    onChange(city); // commit real value
-    setSearchText(city); // mirror in display
+    onChange(city);
+    setSearchText(city);
     setShowDropdown(false);
-    setFilteredCities([]);
   };
 
-  /* ------------------ BLUR: reject free text, revert to committed value --- */
+  /* ── Blur: revert if user typed something that was never committed ── */
   const handleBlur = () => {
-    // Short delay so click on dropdown item fires first
     setTimeout(() => {
       setShowDropdown(false);
-      // If what the user typed doesn't match the committed value, revert
       if (searchText !== value) {
         setSearchText(value);
       }
     }, 150);
   };
+
+  const hasExact = exactMatches.length > 0;
+  const hasSuggestions = suggestions.length > 0;
+  const noResults = !hasExact && !hasSuggestions && searchText.trim().length > 0;
 
   return (
     <div className="relative w-full">
@@ -96,26 +139,54 @@ export default function CitySelect({
         value={searchText}
         onChange={(e) => handleInputChange(e.target.value)}
         onBlur={handleBlur}
+        onFocus={() => {
+          if (searchText.trim()) setShowDropdown(true);
+        }}
         placeholder={district ? "Search city..." : "Select district first"}
         disabled={!district}
         autoComplete="off"
+        className={`h-11 ${hasError ? "border-red-500" : "border-gray-300"}`}
       />
 
       {showDropdown && (
-        <ul className="absolute z-10 bg-white border w-full max-h-40 overflow-auto rounded mt-1 shadow-lg">
-          {filteredCities.length > 0 ? (
-            filteredCities.map((city) => (
+        <ul className="absolute z-10 bg-white border border-gray-200 w-full max-h-52 overflow-auto rounded-md mt-1 shadow-lg">
+          {/* ── Exact / substring matches ── */}
+          {hasExact &&
+            exactMatches.map((city) => (
               <li
                 key={city}
-                className="p-2 hover:bg-gray-200 cursor-pointer"
-                onMouseDown={(e) => e.preventDefault()} // prevent blur before click
+                onMouseDown={(e) => e.preventDefault()}
                 onClick={() => handleSelect(city)}
+                className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer"
               >
                 {city}
               </li>
-            ))
-          ) : (
-            <li className="p-2 text-gray-400 text-sm">No cities found</li>
+            ))}
+
+          {/* ── Fuzzy suggestions ── */}
+          {!hasExact && hasSuggestions && (
+            <>
+              <li className="px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide select-none border-b border-gray-100">
+                Did you mean?
+              </li>
+              {suggestions.map((city) => (
+                <li
+                  key={city}
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => handleSelect(city)}
+                  className="px-3 py-2 text-sm hover:bg-gray-100 cursor-pointer text-amber-700"
+                >
+                  {city}
+                </li>
+              ))}
+            </>
+          )}
+
+          {/* ── No match at all ── */}
+          {noResults && (
+            <li className="px-3 py-2 text-sm text-gray-400 select-none">
+              No city found for &ldquo;{searchText}&rdquo;
+            </li>
           )}
         </ul>
       )}

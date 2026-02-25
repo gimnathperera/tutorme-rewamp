@@ -31,6 +31,15 @@ import { districts } from "@/configs/districts";
 import CitySelect from "@/components/citySelect";
 import DistrictSelect from "@/components/districtSelect";
 
+/** ── Shared style tokens (mirrors register-tutor standard) ── */
+const fieldWrapper = "flex flex-col gap-1";
+const inputClass = "h-11";
+const selectClass =
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+const selectBorder = (hasError: boolean) =>
+  hasError ? "border-red-500" : "border-gray-300";
+const errorMsg = "text-sm text-red-500 min-h-[1.25rem]";
+
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 
@@ -164,52 +173,43 @@ export default function AddRequestForTutor() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label htmlFor="name">Full Name *</Label>
                   <Input
                     id="name"
                     {...register("name")}
                     placeholder="e.g. John Doe"
+                    className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
                   />
-                  {errors.name && (
-                    <p className="text-sm text-red-500">
-                      {errors.name.message}
-                    </p>
-                  )}
+                  <p className={errorMsg}>{errors.name?.message}</p>
                 </div>
 
                 {/* Email & Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="grid gap-2">
+                  <div className={fieldWrapper}>
                     <Label htmlFor="email">Email *</Label>
                     <Input
                       id="email"
                       placeholder="e.g. johndoe@gmail.com"
                       {...register("email")}
+                      className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
                     />
-                    {errors.email && (
-                      <p className="text-sm text-red-500">
-                        {errors.email.message}
-                      </p>
-                    )}
+                    <p className={errorMsg}>{errors.email?.message}</p>
                   </div>
-                  <div className="grid gap-2">
+                  <div className={fieldWrapper}>
                     <Label htmlFor="phoneNumber">Phone Number *</Label>
                     <Input
                       id="phoneNumber"
                       placeholder="e.g. 0712345678"
                       {...register("phoneNumber")}
+                      className={`${inputClass} ${errors.phoneNumber ? "border-red-500" : "border-gray-300"}`}
                     />
-                    {errors.phoneNumber && (
-                      <p className="text-sm text-red-500">
-                        {errors.phoneNumber.message}
-                      </p>
-                    )}
+                    <p className={errorMsg}>{errors.phoneNumber?.message}</p>
                   </div>
                 </div>
 
                 {/* District */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label htmlFor="district">District *</Label>
                   <Controller
                     control={control}
@@ -219,18 +219,15 @@ export default function AddRequestForTutor() {
                         value={field.value || ""}
                         onChange={field.onChange}
                         districts={districts}
+                        hasError={!!errors.district}
                       />
                     )}
                   />
-                  {errors.district && (
-                    <p className="text-sm text-red-500">
-                      {errors.district.message}
-                    </p>
-                  )}
+                  <p className={errorMsg}>{errors.district?.message}</p>
                 </div>
 
                 {/* City */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label htmlFor="city">City *</Label>
                   <Controller
                     control={control}
@@ -240,14 +237,11 @@ export default function AddRequestForTutor() {
                         value={field.value || ""}
                         district={selectedDistrict || ""}
                         onChange={field.onChange}
+                        hasError={!!errors.city}
                       />
                     )}
                   />
-                  {errors.city && (
-                    <p className="text-sm text-red-500">
-                      {errors.city.message}
-                    </p>
-                  )}
+                  <p className={errorMsg}>{errors.city?.message}</p>
                 </div>
               </CardContent>
 
@@ -267,32 +261,28 @@ export default function AddRequestForTutor() {
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label htmlFor="medium">Medium *</Label>
                   <select
                     id="medium"
                     {...register("medium")}
-                    className="border border-gray-200 rounded p-2"
+                    className={`${selectClass} ${selectBorder(!!errors.medium)}`}
                   >
                     <option value="">Select Medium</option>
                     <option value="Sinhala">Sinhala</option>
                     <option value="English">English</option>
                     <option value="Tamil">Tamil</option>
                   </select>
-                  {errors.medium && (
-                    <p className="text-sm text-red-500">
-                      {errors.medium.message}
-                    </p>
-                  )}
+                  <p className={errorMsg}>{errors.medium?.message}</p>
                 </div>
 
                 {/* Grade */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label htmlFor="grade">Grade *</Label>
                   <select
                     id="grade"
                     {...register("grade")}
-                    className="border border-gray-200 rounded p-2"
+                    className={`${selectClass} ${selectBorder(!!errors.grade)}`}
                   >
                     <option value="">Select Grade</option>
                     {gradeOptions.map((g) => (
@@ -301,22 +291,18 @@ export default function AddRequestForTutor() {
                       </option>
                     ))}
                   </select>
-                  {errors.grade && (
-                    <p className="text-sm text-red-500">
-                      {errors.grade.message}
-                    </p>
-                  )}
+                  <p className={errorMsg}>{errors.grade?.message}</p>
                 </div>
 
                 {/* Number of Tutors */}
-                <div className="grid gap-2">
+                <div className={fieldWrapper}>
                   <Label>Number of Tutors</Label>
                   <select
                     value={selectedTutorCount}
                     onChange={(e) =>
                       setSelectedTutorCount(Number(e.target.value))
                     }
-                    className="border border-gray-200 rounded p-2"
+                    className={`${selectClass} border-gray-300`}
                   >
                     {Array.from(
                       { length: MAX_TUTOR_OPTIONS },
@@ -333,15 +319,16 @@ export default function AddRequestForTutor() {
                 {tutors.map((tutor, index) => (
                   <div
                     key={index}
-                    className="p-4 border border-gray-200 rounded"
+                    className="p-4 border border-gray-200 rounded-md"
                   >
-                    <h3 className="font-semibold mb-2">Tutor {index + 1}</h3>
+                    <h3 className="font-semibold mb-3">Tutor {index + 1}</h3>
 
-                    <div className="grid gap-2 mb-2">
+                    {/* Subject */}
+                    <div className={`${fieldWrapper} mb-4`}>
                       <Label>Subject *</Label>
                       <select
                         {...register(`tutors.${index}.subject`)}
-                        className="border border-gray-200 rounded p-2"
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)}`}
                       >
                         <option value="">Select Subject</option>
                         {subjectOptions.map((s) => (
@@ -350,56 +337,53 @@ export default function AddRequestForTutor() {
                           </option>
                         ))}
                       </select>
-                      {errors.tutors?.[index]?.subject && (
-                        <p className="text-sm text-red-500">
-                          {errors.tutors[index]?.subject?.message}
-                        </p>
-                      )}
+                      <p className={errorMsg}>
+                        {errors.tutors?.[index]?.subject?.message}
+                      </p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="grid gap-2">
+                      {/* Duration */}
+                      <div className={fieldWrapper}>
                         <Label>Duration *</Label>
                         <select
                           {...register(`tutors.${index}.duration`)}
-                          className="border border-gray-200 rounded p-2"
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)}`}
                         >
                           <option value="">Select Duration</option>
                           <option value="30 Minutes">30 Minutes</option>
                           <option value="One Hour">One Hour</option>
                           <option value="Two Hours">Two Hours</option>
                         </select>
-                        {errors.tutors?.[index]?.duration && (
-                          <p className="text-sm text-red-500">
-                            {errors.tutors[index]?.duration?.message}
-                          </p>
-                        )}
+                        <p className={errorMsg}>
+                          {errors.tutors?.[index]?.duration?.message}
+                        </p>
                       </div>
 
-                      <div className="grid gap-2">
+                      {/* Frequency */}
+                      <div className={fieldWrapper}>
                         <Label>Frequency *</Label>
                         <select
                           {...register(`tutors.${index}.frequency`)}
-                          className="border border-gray-200 rounded p-2"
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)}`}
                         >
                           <option value="">Select Frequency</option>
                           <option value="Once a Week">Once a Week</option>
                           <option value="Twice a Week">Twice a Week</option>
                           <option value="Daily">Daily</option>
                         </select>
-                        {errors.tutors?.[index]?.frequency && (
-                          <p className="text-sm text-red-500">
-                            {errors.tutors[index]?.frequency?.message}
-                          </p>
-                        )}
+                        <p className={errorMsg}>
+                          {errors.tutors?.[index]?.frequency?.message}
+                        </p>
                       </div>
                     </div>
 
-                    <div className="grid gap-2 mt-2">
+                    {/* Preferred Tutor Type */}
+                    <div className={`${fieldWrapper} mt-4`}>
                       <Label>Preferred Tutor Type *</Label>
                       <select
                         {...register(`tutors.${index}.preferredTutorType`)}
-                        className="border border-gray-200 rounded p-2"
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
                       >
                         <option value="">Select Tutor Type</option>
                         <option value="Part Time Tutors">
@@ -412,11 +396,9 @@ export default function AddRequestForTutor() {
                           Ex / Current Government School Tutors
                         </option>
                       </select>
-                      {errors.tutors?.[index]?.preferredTutorType && (
-                        <p className="text-sm text-red-500">
-                          {errors.tutors[index]?.preferredTutorType?.message}
-                        </p>
-                      )}
+                      <p className={errorMsg}>
+                        {errors.tutors?.[index]?.preferredTutorType?.message}
+                      </p>
                     </div>
                   </div>
                 ))}
