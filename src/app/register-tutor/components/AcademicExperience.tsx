@@ -18,8 +18,15 @@ import {
 } from "@/store/api/splits/grades";
 import { useEffect, useMemo, useState } from "react";
 
+/** Shared style tokens – keep in sync with other register-tutor components */
+const fieldWrapper = "flex flex-col gap-1";
+const inputClass = "h-11";
+const selectClass =
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+const selectBorder = (hasError: boolean) =>
+  hasError ? "border-red-500" : "border-gray-300";
+
 const AcademicExperience = () => {
-  const fieldWrapper = "flex flex-col gap-1";
   const {
     register,
     control,
@@ -79,14 +86,13 @@ const AcademicExperience = () => {
                 options={TUTORING_LEVEL_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutoringLevels}
               />
             )}
           />
-          {errors.tutoringLevels && (
-            <p className="text-sm text-red-500">
-              {errors.tutoringLevels.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutoringLevels?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
@@ -99,14 +105,13 @@ const AcademicExperience = () => {
                 options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.preferredLocations}
               />
             )}
           />
-          {errors.preferredLocations && (
-            <p className="text-sm text-red-500">
-              {errors.preferredLocations.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.preferredLocations?.message as string}
+          </p>
         </div>
       </div>
 
@@ -122,21 +127,20 @@ const AcademicExperience = () => {
                 options={TUTOR_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutorType}
               />
             )}
           />
-          {errors.tutorType && (
-            <p className="text-sm text-red-500">
-              {errors.tutorType.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutorType?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
           <Label>Highest Education Level *</Label>
           <select
             {...register("highestEducation")}
-            className="h-11 w-full rounded-md border border-input bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+            className={`${selectClass} ${selectBorder(!!errors.highestEducation)}`}
           >
             <option value="">Select</option>
             <option value="PhD">PhD</option>
@@ -148,11 +152,9 @@ const AcademicExperience = () => {
             </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
-          {errors.highestEducation && (
-            <p className="text-sm text-red-500">
-              {errors.highestEducation.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.highestEducation?.message as string}
+          </p>
         </div>
       </div>
 
@@ -162,14 +164,14 @@ const AcademicExperience = () => {
           <Label>Years of Experience *</Label>
           <Input
             type="number"
-            className="h-11"
+            min={0}
+            max={100}
+            className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", { valueAsNumber: true })}
           />
-          {errors.yearsExperience && (
-            <p className="text-sm text-red-500">
-              {errors.yearsExperience.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.yearsExperience?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
@@ -182,14 +184,13 @@ const AcademicExperience = () => {
                 options={MEDIUM_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutorMediums}
               />
             )}
           />
-          {errors.tutorMediums && (
-            <p className="text-sm text-red-500">
-              {errors.tutorMediums.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutorMediums?.message as string}
+          </p>
         </div>
       </div>
 
@@ -210,14 +211,13 @@ const AcademicExperience = () => {
                 }
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.grades}
               />
             )}
           />
-          {errors.grades && (
-            <p className="text-sm text-red-500">
-              {errors.grades.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.grades?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
@@ -230,14 +230,13 @@ const AcademicExperience = () => {
                 options={subjectOptions}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.subjects}
               />
             )}
           />
-          {errors.subjects && (
-            <p className="text-sm text-red-500">
-              {errors.subjects.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.subjects?.message as string}
+          </p>
         </div>
       </div>
     </div>

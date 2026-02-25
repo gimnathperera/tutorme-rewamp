@@ -5,6 +5,14 @@ import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+/** Shared style tokens for the register-tutor form */
+const fieldWrapper = "flex flex-col gap-1";
+const inputClass = "h-11";
+const selectClass =
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+const selectBorder = (hasError: boolean) =>
+  hasError ? "border-red-500" : "border-gray-300";
+
 const PersonalInfo = () => {
   const {
     register,
@@ -33,10 +41,6 @@ const PersonalInfo = () => {
     }
   }, [dateOfBirth, setValue]);
 
-  const fieldWrapper = "flex flex-col gap-1";
-  const selectClass =
-    "h-11 w-full rounded-md border border-input bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Full Name */}
@@ -45,7 +49,7 @@ const PersonalInfo = () => {
         <Input
           {...register("fullName")}
           placeholder="Full Name"
-          className="h-11"
+          className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
         />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.fullName?.message as string}
@@ -55,7 +59,11 @@ const PersonalInfo = () => {
       {/* Email */}
       <div className={fieldWrapper}>
         <Label>Email *</Label>
-        <Input {...register("email")} placeholder="Email" className="h-11" />
+        <Input
+          {...register("email")}
+          placeholder="Email"
+          className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
+        />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.email?.message as string}
         </p>
@@ -67,7 +75,7 @@ const PersonalInfo = () => {
         <Input
           {...register("contactNumber")}
           placeholder="Contact Number"
-          className="h-11"
+          className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}
         />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.contactNumber?.message as string}
@@ -77,7 +85,11 @@ const PersonalInfo = () => {
       {/* Date of Birth */}
       <div className={fieldWrapper}>
         <Label>Date of Birth *</Label>
-        <Input type="date" {...register("dateOfBirth")} className="h-11" />
+        <Input
+          type="date"
+          {...register("dateOfBirth")}
+          className={`${inputClass} ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
+        />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.dateOfBirth?.message as string}
         </p>
@@ -91,7 +103,7 @@ const PersonalInfo = () => {
           {...register("age", { valueAsNumber: true })}
           disabled
           placeholder="Age"
-          className="h-11 bg-muted"
+          className={`${inputClass} bg-muted border-gray-300`}
         />
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.age?.message as string}
@@ -101,7 +113,10 @@ const PersonalInfo = () => {
       {/* Gender */}
       <div className={fieldWrapper}>
         <Label>Gender *</Label>
-        <select {...register("gender")} className={selectClass}>
+        <select
+          {...register("gender")}
+          className={`${selectClass} ${selectBorder(!!errors.gender)}`}
+        >
           <option value="">Select</option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
@@ -114,7 +129,10 @@ const PersonalInfo = () => {
       {/* Nationality */}
       <div className={fieldWrapper}>
         <Label>Nationality *</Label>
-        <select {...register("nationality")} className={selectClass}>
+        <select
+          {...register("nationality")}
+          className={`${selectClass} ${selectBorder(!!errors.nationality)}`}
+        >
           <option value="">Select</option>
           <option value="Sri Lankan">Sri Lankan</option>
           <option value="Others">Others</option>
@@ -127,7 +145,10 @@ const PersonalInfo = () => {
       {/* Race */}
       <div className={fieldWrapper}>
         <Label>Race *</Label>
-        <select {...register("race")} className={selectClass}>
+        <select
+          {...register("race")}
+          className={`${selectClass} ${selectBorder(!!errors.race)}`}
+        >
           <option value="">Select</option>
           <option value="Sinhalese">Sinhalese</option>
           <option value="Tamil">Tamil</option>
