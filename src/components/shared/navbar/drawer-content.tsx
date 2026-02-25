@@ -25,10 +25,9 @@ const navigation: NavigationItem[] = [
     ],
   },
   {
-    name: "Tuition",
-    href: "/",
+    name: "Tuition Rates",
+    href: "/tuition-rates",
     current: false,
-    dropdown: [{ name: "Tuition Rates", href: "/tuition-rates" }],
   },
   { name: "FAQ", href: "/#faq-section", current: false },
   { name: "Blog", href: "/blogs", current: false },
@@ -71,9 +70,8 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
                 >
                   <span>{item.name}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
                 {isOpen && (
