@@ -71,16 +71,9 @@ const AboutUs = () => {
                 height={80}
                 className="mb-5"
               />
-              <p className="text-base font-normal text-black group-hover:text-offwhite mb-5 leading-relaxed transition-colors duration-300">
+              <p className="text-base font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-300">
                 {item.paragraph}
               </p>
-              <Link
-                href="#"
-                className="text-base font-semibold group-hover:text-white text-blue hover-underline inline-flex items-center gap-1"
-              >
-                {item.link}
-                <ChevronRightIcon width={18} height={18} />
-              </Link>
             </div>
           ))}
         </div>
