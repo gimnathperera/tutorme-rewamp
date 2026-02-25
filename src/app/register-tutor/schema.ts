@@ -6,7 +6,7 @@ export const step1Schema = z.object({
     .min(1, "Full Name is required")
     .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
 
-  email: z.string().email("Invalid email"),
+  email: z.string().min(1, "Email is required").email("Invalid email"),
 
   contactNumber: z
     .string()
