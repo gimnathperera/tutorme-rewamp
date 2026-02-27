@@ -87,7 +87,7 @@ const AddBlog = () => {
         ...initialFormValues,
         author: {
           name: user.name,
-          avatar: user.avatar || "https://example.com/default-avatar.png",
+          avatar: user.avatar || "/images/profile/pp.png",
           role: user.role,
         },
       });
@@ -140,22 +140,26 @@ const AddBlog = () => {
     <div className="flex flex-col bg-white m-5 md:flex-row gap-8">
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
         <div className="flex gap-2 mt-6 px-6">
-          <Button
+          <button
             type="button"
-            className="border bg-gray-200"
-            variant={isPreview ? "outline" : "default"}
             onClick={() => setIsPreview(false)}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${!isPreview
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
           >
             Edit
-          </Button>
-          <Button
+          </button>
+          <button
             type="button"
-            className="bg-black text-white"
-            variant={isPreview ? "default" : "outline"}
             onClick={() => setIsPreview(true)}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${isPreview
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
           >
             Preview
-          </Button>
+          </button>
         </div>
 
         {!isPreview ? (
@@ -335,24 +339,22 @@ const AddBlog = () => {
                       </p>
                     )}
                   </div>
-                  <Button
+                  <button
                     type="button"
-                    variant="outline"
-                    className="h-fit bg-red-500 text-white"
                     onClick={() => removeFaq(index)}
+                    className="h-8 px-3 text-xs font-medium rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors"
                   >
                     Remove
-                  </Button>
+                  </button>
                 </div>
               ))}
-              <Button
+              <button
                 type="button"
                 onClick={() => appendFaq({ question: "", answer: "" })}
-                variant="default"
-                className="bg-black text-white hover:transition-opacity"
+                className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
               >
-                Add FAQ
-              </Button>
+                + Add FAQ
+              </button>
             </div>
 
             <input type="hidden" value="pending" {...register("status")} />
@@ -401,15 +403,15 @@ const AddBlog = () => {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                        "<p>Nothing to preview yet...</p>",
+                      "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />
-                {watch("faqs")?.length > 0 && (
+                {(watch("faqs") ?? []).length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">FAQs</h3>
                     <ul className="space-y-2">
-                      {watch("faqs").map((faq, idx) => (
+                      {(watch("faqs") ?? []).map((faq, idx) => (
                         <li key={idx} className="border-b pb-2">
                           <p className="font-medium text-blue-700">
                             {faq.question}
@@ -427,8 +429,8 @@ const AddBlog = () => {
                   Related Articles
                 </h3>
                 <ul className="space-y-4">
-                  {(watch("relatedArticles") || []).length > 0 ? (
-                    watch("relatedArticles").map(
+                  {(watch("relatedArticles") ?? []).length > 0 ? (
+                    (watch("relatedArticles") ?? []).map(
                       (relatedId: string, idx: number) => {
                         const related = blogsData?.results.find(
                           (b) => b.id === relatedId,
@@ -464,21 +466,21 @@ const AddBlog = () => {
         )}
 
         <div className="flex justify-between items-center mt-6 px-6 mb-4">
-          <Button
+          <button
+            type="button"
             onClick={onClear}
-            variant="outline"
-            className="text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue"
+            className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
           >
             Clear
-          </Button>
-          <Button
+          </button>
+          <button
             type="submit"
-            className="text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-black hover:bg-white hover:text-black hover:border"
-            isLoading={isLoading}
+            disabled={isLoading}
+            className="h-9 px-5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             onClick={handleSubmit(onSubmit)}
           >
-            Publish
-          </Button>
+            {isLoading ? "Publishing..." : "Publish"}
+          </button>
         </div>
       </form>
     </div>
