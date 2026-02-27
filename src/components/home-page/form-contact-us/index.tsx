@@ -44,7 +44,7 @@ const FormContactUs = () => {
   return (
     <FormProvider {...contactUsForm}>
       <form onSubmit={contactUsForm.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+        <div>
           <InputText label="Name" name="name" placeholder="John Doe" />
 
           <InputText label="Email" name="email" placeholder="xyz@email.com" />
