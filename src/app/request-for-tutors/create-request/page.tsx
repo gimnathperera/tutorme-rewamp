@@ -62,6 +62,8 @@ export default function AddRequestForTutor() {
     reset,
   } = useForm<CreateRequestTutorSchema>({
     resolver: zodResolver(createRequestTutorSchema),
+    mode: "onTouched",
+    reValidateMode: "onChange",
     defaultValues: initialFormValues,
   });
 
@@ -178,10 +180,15 @@ export default function AddRequestForTutor() {
                   <Input
                     id="name"
                     {...register("name")}
-                    placeholder="e.g. John Doe"
+                    placeholder="e.g. Nimal Perera"
+                    autoComplete="name"
                     className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
                   />
-                  <p className={errorMsg}>{errors.name?.message}</p>
+                  {errors.name ? (
+                    <p className={errorMsg}>{errors.name?.message}</p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground min-h-[1.25rem]">Letters and spaces only</p>
+                  )}
                 </div>
 
                 {/* Email & Phone */}
@@ -190,21 +197,35 @@ export default function AddRequestForTutor() {
                     <Label htmlFor="email">Email *</Label>
                     <Input
                       id="email"
+                      type="email"
                       placeholder="e.g. johndoe@gmail.com"
+                      autoComplete="email"
                       {...register("email")}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
                     />
-                    <p className={errorMsg}>{errors.email?.message}</p>
+                    {errors.email ? (
+                      <p className={errorMsg}>{errors.email?.message}</p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">Enter a valid email address</p>
+                    )}
                   </div>
                   <div className={fieldWrapper}>
                     <Label htmlFor="phoneNumber">Phone Number *</Label>
                     <Input
                       id="phoneNumber"
+                      type="tel"
+                      inputMode="numeric"
+                      maxLength={10}
                       placeholder="e.g. 0712345678"
+                      autoComplete="tel"
                       {...register("phoneNumber")}
                       className={`${inputClass} ${errors.phoneNumber ? "border-red-500" : "border-gray-300"}`}
                     />
-                    <p className={errorMsg}>{errors.phoneNumber?.message}</p>
+                    {errors.phoneNumber ? (
+                      <p className={errorMsg}>{errors.phoneNumber?.message}</p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">10-digit mobile number (digits only)</p>
+                    )}
                   </div>
                 </div>
 
