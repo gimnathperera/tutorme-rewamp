@@ -3,7 +3,14 @@
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 import {
   createRequestTutorSchema,
@@ -49,6 +56,8 @@ const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
 export default function AddRequestForTutor() {
   const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
+  /** null = closed, "success" = success dialog, string = error message dialog */
+  const [submissionResult, setSubmissionResult] = useState<"success" | string | null>(null);
 
   const {
     register,
@@ -136,26 +145,28 @@ export default function AddRequestForTutor() {
 
   const onSubmit = async (data: CreateRequestTutorSchema) => {
     try {
-      const payload = {
-        ...data,
-        status: "Pending",
-      };
-
+      const payload = { ...data, status: "Pending" };
       const result = await createTutorRequest(payload);
       const error = getErrorInApiResult(result);
-      if (error) return toast.error(error);
-
+      if (error) {
+        setSubmissionResult(error);
+        return;
+      }
       if ("data" in result) {
-        toast.success("Tutor request created successfully!");
-        reset();
-        clearErrors();
-        setTab("contact");
-        setSelectedTutorCount(1);
+        setSubmissionResult("success");
       }
     } catch (err) {
       console.error(err);
-      toast.error("Unexpected error occurred while creating the request.");
+      setSubmissionResult("Unexpected error occurred while creating the request. Please try again.");
     }
+  };
+
+  const handleSuccessClose = () => {
+    setSubmissionResult(null);
+    reset();
+    clearErrors();
+    setTab("contact");
+    setSelectedTutorCount(1);
   };
 
   return (
@@ -438,6 +449,57 @@ export default function AddRequestForTutor() {
           </TabsContent>
         </Tabs>
       </form>
+
+      {/* ── Success Dialog ── */}
+      <Dialog open={submissionResult === "success"} onOpenChange={(o) => { if (!o) handleSuccessClose(); }}>
+        <DialogContent className="max-w-md text-center">
+          <div className="flex justify-center mb-2">
+            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+              <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">Request Submitted!</DialogTitle>
+            <DialogDescription className="text-center">
+              Your tutor request has been submitted successfully. We&apos;ll match you with a suitable tutor and get back to you shortly.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex-col sm:flex-row gap-2 mt-2">
+            <Button variant="outline" className="w-full sm:w-auto" onClick={handleSuccessClose}>
+              Submit Another Request
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Error Dialog ── */}
+      <Dialog
+        open={typeof submissionResult === "string" && submissionResult !== "success"}
+        onOpenChange={(o) => { if (!o) setSubmissionResult(null); }}
+      >
+        <DialogContent className="max-w-md text-center">
+          <div className="flex justify-center mb-2">
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+              <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">Submission Failed</DialogTitle>
+            <DialogDescription className="text-center">
+              Something went wrong.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="justify-center mt-2">
+            <Button onClick={() => setSubmissionResult(null)}>
+              Try Again
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
