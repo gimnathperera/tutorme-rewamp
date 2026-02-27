@@ -37,7 +37,7 @@ const TermsAndSubmit = () => {
       </div>
 
       {/* Agreements */}
-      <div className="space-y-4">
+      <div>
         {/* Agree Terms */}
         <div className="flex items-start gap-3">
           <Controller
