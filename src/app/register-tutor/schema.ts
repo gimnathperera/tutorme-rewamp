@@ -3,10 +3,15 @@ import { z } from "zod";
 export const step1Schema = z.object({
   fullName: z
     .string()
+    .trim()
     .min(1, "Full Name is required")
     .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
 
-  email: z.string().min(1, "Email is required").email("Invalid email"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
 
   contactNumber: z
     .string()
@@ -14,7 +19,7 @@ export const step1Schema = z.object({
     .min(1, "Contact Number is required")
     .regex(/^\d{10}$/, "Contact Number should be exactly 10 digits"),
 
-  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  dateOfBirth: z.string().trim().min(1, "Date of Birth is required"),
 
   gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
     message: "Gender is required",
@@ -83,10 +88,26 @@ export const step2Schema = z.object({
 });
 
 export const step3Schema = z.object({
-  teachingSummary: z.string().min(1, "Teaching Summary is required"),
-  studentResults: z.string().min(1, "Student Results is required"),
-  sellingPoints: z.string().min(1, "Selling Points is required"),
-  academicDetails: z.string().min(1, "Academic Details is required"),
+  teachingSummary: z
+    .string()
+    .trim()
+    .min(1, "Teaching Summary is required")
+    .max(500, "Teaching Summary cannot exceed 500 characters"),
+  studentResults: z
+    .string()
+    .trim()
+    .min(1, "Student Results is required")
+    .max(500, "Student Results cannot exceed 500 characters"),
+  sellingPoints: z
+    .string()
+    .trim()
+    .min(1, "Selling Points is required")
+    .max(500, "Selling Points cannot exceed 500 characters"),
+  academicDetails: z
+    .string()
+    .trim()
+    .min(1, "Academic Details is required")
+    .max(500, "Academic Details cannot exceed 500 characters"),
 });
 
 export const step4Schema = z.object({

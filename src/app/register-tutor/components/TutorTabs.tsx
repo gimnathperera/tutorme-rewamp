@@ -49,7 +49,8 @@ export function TutorTabs() {
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const methods = useForm<FindMyTutorForm>({
     resolver: zodResolver(fullSchema),
-    mode: "onSubmit",
+    mode: "onTouched",
+    reValidateMode: "onChange",
     defaultValues: {
       fullName: "",
       email: "",
