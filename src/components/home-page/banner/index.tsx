@@ -44,17 +44,17 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl my-10 sm:py-10 px-6 lg:px-8 overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-2 my-10 lg:my-16 items-center">
+    <div className="mx-auto max-w-7xl py-6 sm:py-10 px-6 lg:px-8 overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 mb-6 lg:mb-10 items-center gap-4">
         {/* Left: Text Content */}
         <div className="mx-auto sm:mx-0 w-full">
           {/* Badge */}
           <div
             ref={badgeRef}
-            className="py-3 text-center lg:text-start"
+            className="py-2 text-center lg:text-start"
             style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
           >
-            <button className="text-blue bg-lightblue hover:shadow-xl text-sm md:text-base font-bold px-6 py-2 rounded-3xl tracking-wider hover:text-white hover:bg-black transition-all duration-300">
+            <button className="text-blue bg-lightblue hover:shadow-xl text-sm font-bold px-5 py-1.5 rounded-3xl tracking-wider hover:text-white hover:bg-black transition-all duration-300">
               E-Learning Platform
             </button>
           </div>
@@ -62,10 +62,10 @@ const Banner = () => {
           {/* Headline */}
           <div
             ref={headlineRef}
-            className="py-3 text-center lg:text-start"
+            className="py-2 text-center lg:text-start"
             style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
           >
-            <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-darkpurple leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-darkpurple leading-tight">
               Personalized Home <br />
               Tuition
             </h1>
@@ -74,11 +74,11 @@ const Banner = () => {
           {/* CTA Button */}
           <div
             ref={ctaRef}
-            className="my-8 text-center lg:text-start"
+            className="mt-6 mb-4 text-center lg:text-start"
             style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
           >
             <button
-              className="text-sm md:text-base font-semibold hover:shadow-xl bg-primary-700 text-white py-4 px-10 md:py-5 md:px-14 rounded-full hover:opacity-90 transition-all duration-300"
+              className="text-sm md:text-base font-semibold hover:shadow-xl bg-primary-700 text-white py-3.5 px-9 rounded-full hover:opacity-90 transition-all duration-300"
               onClick={handleOnFindATutorClick}
             >
               Request a Tutor

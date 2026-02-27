@@ -67,7 +67,7 @@ const Faqs = () => {
   return (
     <div
       id="faq-section"
-      className="mx-auto max-w-7xl py-20 px-4 lg:px-12 bg-faqblue rounded-2xl my-16 faq-bg"
+      className="mx-auto max-w-7xl py-12 lg:py-16 px-4 lg:px-12 bg-faqblue rounded-2xl faq-bg"
     >
       {/* Section heading */}
       <h3 className="text-sm md:text-base font-semibold text-white text-center mb-4 tracking-widest uppercase animate-on-scroll">

@@ -13,14 +13,17 @@ export default function Home() {
   return (
     <>
       <ScrollAnimationProvider />
-      <Banner />
-      <AboutUs />
-      <Digital />
-      <Beliefs />
-      <OurTeam />
-      <Faqs />
-      <Testimonials />
-      <KeepInTouch />
+      {/* space-y controls consistent inter-section gaps on all screen sizes */}
+      <div className="space-y-12 sm:space-y-16">
+        <Banner />
+        <AboutUs />
+        <Digital />
+        <Beliefs />
+        <OurTeam />
+        <Faqs />
+        <Testimonials />
+        <KeepInTouch />
+      </div>
       <WhatsAppButton />
     </>
   );
