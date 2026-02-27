@@ -35,7 +35,7 @@ import DistrictSelect from "@/components/districtSelect";
 const fieldWrapper = "flex flex-col gap-1";
 const inputClass = "h-11";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 const errorMsg = "text-sm text-red-500 min-h-[1.25rem]";
@@ -289,7 +289,7 @@ export default function AddRequestForTutor() {
                     {...register("medium")}
                     className={`${selectClass} ${selectBorder(!!errors.medium)}`}
                   >
-                    <option value="">Select Medium</option>
+                    <option value="" disabled hidden>Select medium of instruction</option>
                     <option value="Sinhala">Sinhala</option>
                     <option value="English">English</option>
                     <option value="Tamil">Tamil</option>
@@ -305,7 +305,7 @@ export default function AddRequestForTutor() {
                     {...register("grade")}
                     className={`${selectClass} ${selectBorder(!!errors.grade)}`}
                   >
-                    <option value="">Select Grade</option>
+                    <option value="" disabled hidden>Select student's grade</option>
                     {gradeOptions.map((g) => (
                       <option key={g.value} value={g.value}>
                         {g.text}
@@ -317,20 +317,21 @@ export default function AddRequestForTutor() {
 
                 {/* Number of Tutors */}
                 <div className={fieldWrapper}>
-                  <Label>Number of Tutors</Label>
+                  <Label htmlFor="tutorCount">Number of Tutors</Label>
                   <select
+                    id="tutorCount"
                     value={selectedTutorCount}
                     onChange={(e) =>
                       setSelectedTutorCount(Number(e.target.value))
                     }
-                    className={`${selectClass} border-gray-300`}
+                    className={`${selectClass} border-gray-300 text-gray-900`}
                   >
                     {Array.from(
                       { length: MAX_TUTOR_OPTIONS },
                       (_, i) => i + 1,
                     ).map((n) => (
                       <option key={n} value={n}>
-                        {n}
+                        {n} {n === 1 ? "tutor" : "tutors"}
                       </option>
                     ))}
                   </select>
@@ -346,12 +347,15 @@ export default function AddRequestForTutor() {
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
-                      <Label>Subject *</Label>
+                      <Label htmlFor={`subject-${index}`}>Subject *</Label>
                       <select
+                        id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
                         className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)}`}
                       >
-                        <option value="">Select Subject</option>
+                        <option value="" disabled hidden>
+                          {selectedGradeId ? "Select subject" : "Select a grade first"}
+                        </option>
                         {subjectOptions.map((s) => (
                           <option key={s.value} value={s.value}>
                             {s.text}
@@ -366,15 +370,16 @@ export default function AddRequestForTutor() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Duration */}
                       <div className={fieldWrapper}>
-                        <Label>Duration *</Label>
+                        <Label htmlFor={`duration-${index}`}>Duration *</Label>
                         <select
+                          id={`duration-${index}`}
                           {...register(`tutors.${index}.duration`)}
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)}`}
                         >
-                          <option value="">Select Duration</option>
+                          <option value="" disabled hidden>Select session duration</option>
                           <option value="30 Minutes">30 Minutes</option>
-                          <option value="One Hour">One Hour</option>
-                          <option value="Two Hours">Two Hours</option>
+                          <option value="One Hour">1 Hour</option>
+                          <option value="Two Hours">2 Hours</option>
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.duration?.message}
@@ -383,12 +388,13 @@ export default function AddRequestForTutor() {
 
                       {/* Frequency */}
                       <div className={fieldWrapper}>
-                        <Label>Frequency *</Label>
+                        <Label htmlFor={`frequency-${index}`}>Frequency *</Label>
                         <select
+                          id={`frequency-${index}`}
                           {...register(`tutors.${index}.frequency`)}
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)}`}
                         >
-                          <option value="">Select Frequency</option>
+                          <option value="" disabled hidden>Select sessions per week</option>
                           <option value="Once a Week">Once a Week</option>
                           <option value="Twice a Week">Twice a Week</option>
                           <option value="Daily">Daily</option>
@@ -401,21 +407,16 @@ export default function AddRequestForTutor() {
 
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
-                      <Label>Preferred Tutor Type *</Label>
+                      <Label htmlFor={`tutorType-${index}`}>Preferred Tutor Type *</Label>
                       <select
+                        id={`tutorType-${index}`}
                         {...register(`tutors.${index}.preferredTutorType`)}
                         className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
                       >
-                        <option value="">Select Tutor Type</option>
-                        <option value="Part Time Tutors">
-                          Part Time Tutors
-                        </option>
-                        <option value="Full Time Tutors">
-                          Full Time Tutors
-                        </option>
-                        <option value="Ex / Current Government School Tutors">
-                          Ex / Current Government School Tutors
-                        </option>
+                        <option value="" disabled hidden>Select preferred tutor type</option>
+                        <option value="Part Time Tutors">Part Time Tutors</option>
+                        <option value="Full Time Tutors">Full Time Tutors</option>
+                        <option value="Ex / Current Government School Tutors">Ex / Current Government School Tutors</option>
                       </select>
                       <p className={errorMsg}>
                         {errors.tutors?.[index]?.preferredTutorType?.message}
