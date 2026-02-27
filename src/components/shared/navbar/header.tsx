@@ -40,6 +40,8 @@ const Navbar = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  /** The id of the anchor section currently in view on the home page, e.g. "faq-section" */
+  const [activeSection, setActiveSection] = useState<string | null>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -60,6 +62,42 @@ const Navbar = () => {
     document.addEventListener("keydown", handler);
     return () => document.removeEventListener("keydown", handler);
   }, []);
+
+  /**
+   * IntersectionObserver: watch anchor sections on the home page.
+   * Fires only when pathname === "/" so we don't attach it on other pages.
+   */
+  useEffect(() => {
+    if (pathname !== "/") {
+      setActiveSection(null);
+      return;
+    }
+
+    const sectionIds = ["faq-section", "keep-in-touch-section"];
+    const observers: IntersectionObserver[] = [];
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          } else {
+            // Clear only if this section was the active one
+            setActiveSection((prev) => (prev === id ? null : prev));
+          }
+        },
+        { threshold: 0.3 } // section must be ≥ 30% visible
+      );
+
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach((obs) => obs.disconnect());
+  }, [pathname]);
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -84,8 +122,12 @@ const Navbar = () => {
       return item.dropdown.some((sub) => pathname.startsWith(sub.href));
     }
     if (item.href === "/") return pathname === "/";
-    // anchor links (#…) live on home — treat as active only on "/"
-    if (item.href.startsWith("/#")) return pathname === "/";
+    // Anchor links: active only when the corresponding section is in the viewport
+    if (item.href.startsWith("/#")) {
+      if (pathname !== "/") return false;
+      const sectionId = item.href.slice(2); // "/#faq-section" → "faq-section"
+      return activeSection === sectionId;
+    }
     return pathname.startsWith(item.href);
   };
 
