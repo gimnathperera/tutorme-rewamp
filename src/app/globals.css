@@ -63,7 +63,9 @@ body {
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .animate-fade-in {
@@ -74,13 +76,17 @@ body {
 .animate-slide-left {
   opacity: 0;
   transform: translateX(-50px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 .animate-slide-right {
   opacity: 0;
   transform: translateX(50px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
 }
 
 /* When IntersectionObserver adds .is-visible */
@@ -93,10 +99,18 @@ body {
 }
 
 /* Stagger delays for child elements */
-.stagger-1 { transition-delay: 0.1s; }
-.stagger-2 { transition-delay: 0.2s; }
-.stagger-3 { transition-delay: 0.35s; }
-.stagger-4 { transition-delay: 0.5s; }
+.stagger-1 {
+  transition-delay: 0.1s;
+}
+.stagger-2 {
+  transition-delay: 0.2s;
+}
+.stagger-3 {
+  transition-delay: 0.35s;
+}
+.stagger-4 {
+  transition-delay: 0.5s;
+}
 
 /* Banner hero image parallax */
 .parallax-hero {

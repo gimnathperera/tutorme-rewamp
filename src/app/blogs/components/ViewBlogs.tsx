@@ -5,8 +5,6 @@ import { useFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import DefaultAvatar from "../../../../public/images/profile/pp.png";
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
@@ -82,7 +80,6 @@ export default function BlogsDashboard() {
     <div className="p-4 lg:p-6 flex flex-col lg:flex-row gap-8">
       {/* ── Main content ── */}
       <div className="flex-1 flex flex-col gap-6 min-w-0">
-
         {/* Hero banner */}
         <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
           <div className="relative z-10">
@@ -105,10 +102,11 @@ export default function BlogsDashboard() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTag(null)}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+              !activeTag
                 ? "bg-blue-600 text-white shadow-sm"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-              }`}
+            }`}
           >
             All
           </button>
@@ -116,10 +114,11 @@ export default function BlogsDashboard() {
             <button
               key={tag.id}
               onClick={() => setActiveTag(tag.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                activeTag === tag.id
                   ? "bg-blue-600 text-white shadow-sm"
                   : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                }`}
+              }`}
             >
               {tag.name}
             </button>

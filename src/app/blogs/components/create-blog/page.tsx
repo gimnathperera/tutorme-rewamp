@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/Button/button";
 import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -143,20 +142,22 @@ const AddBlog = () => {
           <button
             type="button"
             onClick={() => setIsPreview(false)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${!isPreview
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
+              !isPreview
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           >
             Edit
           </button>
           <button
             type="button"
             onClick={() => setIsPreview(true)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${isPreview
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
+              isPreview
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           >
             Preview
           </button>
@@ -403,7 +404,7 @@ const AddBlog = () => {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                      "<p>Nothing to preview yet...</p>",
+                        "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />

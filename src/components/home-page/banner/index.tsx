@@ -52,7 +52,11 @@ const Banner = () => {
           <div
             ref={badgeRef}
             className="py-2 text-center lg:text-start"
-            style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
+            style={{
+              opacity: 0,
+              transform: "translateY(30px)",
+              transition: "opacity 0.6s ease, transform 0.6s ease",
+            }}
           >
             <button className="text-blue bg-lightblue hover:shadow-xl text-sm font-bold px-5 py-1.5 rounded-3xl tracking-wider hover:text-white hover:bg-black transition-all duration-300">
               E-Learning Platform
@@ -63,7 +67,11 @@ const Banner = () => {
           <div
             ref={headlineRef}
             className="py-2 text-center lg:text-start"
-            style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
+            style={{
+              opacity: 0,
+              transform: "translateY(30px)",
+              transition: "opacity 0.6s ease, transform 0.6s ease",
+            }}
           >
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-darkpurple leading-tight">
               Personalized Home <br />
@@ -75,7 +83,11 @@ const Banner = () => {
           <div
             ref={ctaRef}
             className="mt-6 mb-4 text-center lg:text-start"
-            style={{ opacity: 0, transform: "translateY(30px)", transition: "opacity 0.6s ease, transform 0.6s ease" }}
+            style={{
+              opacity: 0,
+              transform: "translateY(30px)",
+              transition: "opacity 0.6s ease, transform 0.6s ease",
+            }}
           >
             <button
               className="text-sm md:text-base font-semibold hover:shadow-xl bg-primary-700 text-white py-3.5 px-9 rounded-full hover:opacity-90 transition-all duration-300"

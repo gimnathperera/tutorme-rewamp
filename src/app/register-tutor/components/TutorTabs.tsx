@@ -57,7 +57,9 @@ export function TutorTabs() {
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   /** null = closed | "success" = success dialog | string = error message */
-  const [submissionResult, setSubmissionResult] = useState<"success" | string | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<
+    "success" | string | null
+  >(null);
   const methods = useForm<FindMyTutorForm>({
     resolver: zodResolver(fullSchema),
     mode: "onTouched",
@@ -230,19 +232,37 @@ export function TutorTabs() {
       </form>
 
       {/* ── Success Dialog ── */}
-      <Dialog open={submissionResult === "success"} onOpenChange={(o) => { if (!o) handleDone(); }}>
+      <Dialog
+        open={submissionResult === "success"}
+        onOpenChange={(o) => {
+          if (!o) handleDone();
+        }}
+      >
         <DialogContent className="max-w-md">
           <div className="flex justify-center mb-3">
             <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-              <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <svg
+                className="w-8 h-8 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Registration Submitted!</DialogTitle>
+            <DialogTitle className="text-center text-xl">
+              Registration Submitted!
+            </DialogTitle>
             <DialogDescription className="text-center">
-              Your tutor profile has been submitted successfully. Our team will review it and get back to you shortly.
+              Your tutor profile has been submitted successfully. Our team will
+              review it and get back to you shortly.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
@@ -255,27 +275,41 @@ export function TutorTabs() {
 
       {/* ── Error Dialog ── */}
       <Dialog
-        open={typeof submissionResult === "string" && submissionResult !== "success"}
-        onOpenChange={(o) => { if (!o) setSubmissionResult(null); }}
+        open={
+          typeof submissionResult === "string" && submissionResult !== "success"
+        }
+        onOpenChange={(o) => {
+          if (!o) setSubmissionResult(null);
+        }}
       >
         <DialogContent className="max-w-md">
           <div className="flex justify-center mb-3">
             <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-              <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Submission Failed</DialogTitle>
+            <DialogTitle className="text-center text-xl">
+              Submission Failed
+            </DialogTitle>
             <DialogDescription className="text-center">
               Something went wrong.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>
-              Try Again
-            </Button>
+            <Button onClick={() => setSubmissionResult(null)}>Try Again</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

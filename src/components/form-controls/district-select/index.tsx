@@ -27,7 +27,9 @@ export default function DistrictSelect({
           borderClass,
         ].join(" ")}
       >
-        <option value="" disabled hidden>Select your district</option>
+        <option value="" disabled hidden>
+          Select your district
+        </option>
         {districts.map((district) => (
           <option key={district} value={district} className="text-gray-900">
             {district}

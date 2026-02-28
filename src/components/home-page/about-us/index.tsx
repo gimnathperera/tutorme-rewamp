@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 
 interface datatype {

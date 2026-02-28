@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1";
-const textareaBase = "w-full rounded-md border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring resize-y";
+const textareaBase =
+  "w-full rounded-md border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-ring resize-y";
 const textareaBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -17,7 +18,9 @@ const CharCounter = ({ value }: { value: string }) => {
   const count = (value ?? "").length;
   const near = count > CHAR_LIMIT * 0.85;
   return (
-    <span className={`text-xs tabular-nums ${near ? "text-orange-500 font-medium" : "text-muted-foreground"}`}>
+    <span
+      className={`text-xs tabular-nums ${near ? "text-orange-500 font-medium" : "text-muted-foreground"}`}
+    >
       {count} / {CHAR_LIMIT}
     </span>
   );

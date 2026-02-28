@@ -55,7 +55,9 @@ export default function TuitionRatesByGrade() {
   if (error) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-red-500 font-medium">Failed to load tuition rates.</p>
+        <p className="text-red-500 font-medium">
+          Failed to load tuition rates.
+        </p>
       </div>
     );
   }
@@ -82,8 +84,12 @@ export default function TuitionRatesByGrade() {
       {} as Record<string, GradeGroup>,
     ) || {};
 
-  const handleNext = () => { if (page < totalPages) setPage((p) => p + 1); };
-  const handlePrev = () => { if (page > 1) setPage((p) => p - 1); };
+  const handleNext = () => {
+    if (page < totalPages) setPage((p) => p + 1);
+  };
+  const handlePrev = () => {
+    if (page > 1) setPage((p) => p - 1);
+  };
 
   return (
     <div className="space-y-8 px-2 sm:px-0">
@@ -101,7 +107,8 @@ export default function TuitionRatesByGrade() {
               {gradeGroup.grade?.title || "Unknown Grade"}
             </h2>
             <span className="ml-auto bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              {gradeGroup.subjects.length} Subject{gradeGroup.subjects.length !== 1 ? "s" : ""}
+              {gradeGroup.subjects.length} Subject
+              {gradeGroup.subjects.length !== 1 ? "s" : ""}
             </span>
           </div>
 
@@ -137,8 +144,9 @@ export default function TuitionRatesByGrade() {
                 {gradeGroup.subjects.map((subject, subIdx) => (
                   <tr
                     key={subIdx}
-                    className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
-                      }`}
+                    className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
+                      subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
+                    }`}
                   >
                     <td className="px-5 py-3.5">
                       <span className="inline-flex items-center gap-2">

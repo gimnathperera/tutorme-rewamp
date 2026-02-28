@@ -23,7 +23,7 @@ const PersonalInfo = () => {
     register,
     watch,
     setValue,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useFormContext();
 
   const dateOfBirth = watch("dateOfBirth");
@@ -125,7 +125,9 @@ const PersonalInfo = () => {
           autoComplete="sex"
           className={`${selectClass} ${selectBorder(!!errors.gender)}`}
         >
-          <option value="" disabled hidden>Select your gender</option>
+          <option value="" disabled hidden>
+            Select your gender
+          </option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
           <option value="Others">Others</option>
@@ -184,7 +186,9 @@ const PersonalInfo = () => {
           autoComplete="country-name"
           className={`${selectClass} ${selectBorder(!!errors.nationality)}`}
         >
-          <option value="" disabled hidden>Select your nationality</option>
+          <option value="" disabled hidden>
+            Select your nationality
+          </option>
           <option value="Sri Lankan">Sri Lankan</option>
           <option value="Others">Others</option>
         </select>
@@ -201,7 +205,9 @@ const PersonalInfo = () => {
           {...register("race")}
           className={`${selectClass} ${selectBorder(!!errors.race)}`}
         >
-          <option value="" disabled hidden>Select your ethnicity</option>
+          <option value="" disabled hidden>
+            Select your ethnicity
+          </option>
           <option value="Sinhalese">Sinhalese</option>
           <option value="Tamil">Tamil</option>
           <option value="Muslim">Muslim</option>

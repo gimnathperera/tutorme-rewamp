@@ -24,8 +24,7 @@ const KeepInTouch = () => {
           </h2>
           <p className="text-lightblack text-sm sm:text-base font-normal max-w-2xl mx-auto leading-relaxed">
             Stay connected with us for updates, tips, and the latest tutoring
-            opportunities.{" "}
-            <br className="hidden md:block" />
+            opportunities. <br className="hidden md:block" />
             Whether you&apos;re a tutor sharing knowledge or a student chasing
             goals, our community is here to support your growth every step of
             the way.

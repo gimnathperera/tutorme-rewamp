@@ -57,7 +57,9 @@ export default function AddRequestForTutor() {
   const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
   /** null = closed, "success" = success dialog, string = error message dialog */
-  const [submissionResult, setSubmissionResult] = useState<"success" | string | null>(null);
+  const [submissionResult, setSubmissionResult] = useState<
+    "success" | string | null
+  >(null);
 
   const {
     register,
@@ -157,7 +159,9 @@ export default function AddRequestForTutor() {
       }
     } catch (err) {
       console.error(err);
-      setSubmissionResult("Unexpected error occurred while creating the request. Please try again.");
+      setSubmissionResult(
+        "Unexpected error occurred while creating the request. Please try again.",
+      );
     }
   };
 
@@ -198,7 +202,9 @@ export default function AddRequestForTutor() {
                   {errors.name ? (
                     <p className={errorMsg}>{errors.name?.message}</p>
                   ) : (
-                    <p className="text-xs text-muted-foreground min-h-[1.25rem]">Letters and spaces only</p>
+                    <p className="text-xs text-muted-foreground min-h-[1.25rem]">
+                      Letters and spaces only
+                    </p>
                   )}
                 </div>
 
@@ -217,7 +223,9 @@ export default function AddRequestForTutor() {
                     {errors.email ? (
                       <p className={errorMsg}>{errors.email?.message}</p>
                     ) : (
-                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">Enter a valid email address</p>
+                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">
+                        Enter a valid email address
+                      </p>
                     )}
                   </div>
                   <div className={fieldWrapper}>
@@ -235,7 +243,9 @@ export default function AddRequestForTutor() {
                     {errors.phoneNumber ? (
                       <p className={errorMsg}>{errors.phoneNumber?.message}</p>
                     ) : (
-                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">10-digit mobile number (digits only)</p>
+                      <p className="text-xs text-muted-foreground min-h-[1.25rem]">
+                        10-digit mobile number (digits only)
+                      </p>
                     )}
                   </div>
                 </div>
@@ -300,7 +310,9 @@ export default function AddRequestForTutor() {
                     {...register("medium")}
                     className={`${selectClass} ${selectBorder(!!errors.medium)}`}
                   >
-                    <option value="" disabled hidden>Select medium of instruction</option>
+                    <option value="" disabled hidden>
+                      Select medium of instruction
+                    </option>
                     <option value="Sinhala">Sinhala</option>
                     <option value="English">English</option>
                     <option value="Tamil">Tamil</option>
@@ -316,7 +328,9 @@ export default function AddRequestForTutor() {
                     {...register("grade")}
                     className={`${selectClass} ${selectBorder(!!errors.grade)}`}
                   >
-                    <option value="" disabled hidden>Select student's grade</option>
+                    <option value="" disabled hidden>
+                      Select student&apos;s grade
+                    </option>
                     {gradeOptions.map((g) => (
                       <option key={g.value} value={g.value}>
                         {g.text}
@@ -365,7 +379,9 @@ export default function AddRequestForTutor() {
                         className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)}`}
                       >
                         <option value="" disabled hidden>
-                          {selectedGradeId ? "Select subject" : "Select a grade first"}
+                          {selectedGradeId
+                            ? "Select subject"
+                            : "Select a grade first"}
                         </option>
                         {subjectOptions.map((s) => (
                           <option key={s.value} value={s.value}>
@@ -387,7 +403,9 @@ export default function AddRequestForTutor() {
                           {...register(`tutors.${index}.duration`)}
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)}`}
                         >
-                          <option value="" disabled hidden>Select session duration</option>
+                          <option value="" disabled hidden>
+                            Select session duration
+                          </option>
                           <option value="30 Minutes">30 Minutes</option>
                           <option value="One Hour">1 Hour</option>
                           <option value="Two Hours">2 Hours</option>
@@ -399,13 +417,17 @@ export default function AddRequestForTutor() {
 
                       {/* Frequency */}
                       <div className={fieldWrapper}>
-                        <Label htmlFor={`frequency-${index}`}>Frequency *</Label>
+                        <Label htmlFor={`frequency-${index}`}>
+                          Frequency *
+                        </Label>
                         <select
                           id={`frequency-${index}`}
                           {...register(`tutors.${index}.frequency`)}
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)}`}
                         >
-                          <option value="" disabled hidden>Select sessions per week</option>
+                          <option value="" disabled hidden>
+                            Select sessions per week
+                          </option>
                           <option value="Once a Week">Once a Week</option>
                           <option value="Twice a Week">Twice a Week</option>
                           <option value="Daily">Daily</option>
@@ -418,16 +440,26 @@ export default function AddRequestForTutor() {
 
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
-                      <Label htmlFor={`tutorType-${index}`}>Preferred Tutor Type *</Label>
+                      <Label htmlFor={`tutorType-${index}`}>
+                        Preferred Tutor Type *
+                      </Label>
                       <select
                         id={`tutorType-${index}`}
                         {...register(`tutors.${index}.preferredTutorType`)}
                         className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
                       >
-                        <option value="" disabled hidden>Select preferred tutor type</option>
-                        <option value="Part Time Tutors">Part Time Tutors</option>
-                        <option value="Full Time Tutors">Full Time Tutors</option>
-                        <option value="Ex / Current Government School Tutors">Ex / Current Government School Tutors</option>
+                        <option value="" disabled hidden>
+                          Select preferred tutor type
+                        </option>
+                        <option value="Part Time Tutors">
+                          Part Time Tutors
+                        </option>
+                        <option value="Full Time Tutors">
+                          Full Time Tutors
+                        </option>
+                        <option value="Ex / Current Government School Tutors">
+                          Ex / Current Government School Tutors
+                        </option>
                       </select>
                       <p className={errorMsg}>
                         {errors.tutors?.[index]?.preferredTutorType?.message}
@@ -451,23 +483,45 @@ export default function AddRequestForTutor() {
       </form>
 
       {/* ── Success Dialog ── */}
-      <Dialog open={submissionResult === "success"} onOpenChange={(o) => { if (!o) handleSuccessClose(); }}>
+      <Dialog
+        open={submissionResult === "success"}
+        onOpenChange={(o) => {
+          if (!o) handleSuccessClose();
+        }}
+      >
         <DialogContent className="max-w-md text-center">
           <div className="flex justify-center mb-2">
             <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
-              <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              <svg
+                className="w-8 h-8 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Request Submitted!</DialogTitle>
+            <DialogTitle className="text-center text-xl">
+              Request Submitted!
+            </DialogTitle>
             <DialogDescription className="text-center">
-              Your tutor request has been submitted successfully. We&apos;ll match you with a suitable tutor and get back to you shortly.
+              Your tutor request has been submitted successfully. We&apos;ll
+              match you with a suitable tutor and get back to you shortly.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2 mt-2">
-            <Button variant="outline" className="w-full sm:w-auto" onClick={handleSuccessClose}>
+            <Button
+              variant="outline"
+              className="w-full sm:w-auto"
+              onClick={handleSuccessClose}
+            >
               Submit Another Request
             </Button>
           </DialogFooter>
@@ -476,27 +530,41 @@ export default function AddRequestForTutor() {
 
       {/* ── Error Dialog ── */}
       <Dialog
-        open={typeof submissionResult === "string" && submissionResult !== "success"}
-        onOpenChange={(o) => { if (!o) setSubmissionResult(null); }}
+        open={
+          typeof submissionResult === "string" && submissionResult !== "success"
+        }
+        onOpenChange={(o) => {
+          if (!o) setSubmissionResult(null);
+        }}
       >
         <DialogContent className="max-w-md text-center">
           <div className="flex justify-center mb-2">
             <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
-              <svg className="w-8 h-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">Submission Failed</DialogTitle>
+            <DialogTitle className="text-center text-xl">
+              Submission Failed
+            </DialogTitle>
             <DialogDescription className="text-center">
               Something went wrong.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>
-              Try Again
-            </Button>
+            <Button onClick={() => setSubmissionResult(null)}>Try Again</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

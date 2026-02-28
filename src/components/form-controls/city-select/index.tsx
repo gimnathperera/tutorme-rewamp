@@ -131,7 +131,8 @@ export default function CitySelect({
 
   const hasExact = exactMatches.length > 0;
   const hasSuggestions = suggestions.length > 0;
-  const noResults = !hasExact && !hasSuggestions && searchText.trim().length > 0;
+  const noResults =
+    !hasExact && !hasSuggestions && searchText.trim().length > 0;
 
   return (
     <div className="relative w-full">

@@ -46,7 +46,10 @@ const Navbar = () => {
   // Close dropdown when clicking outside
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setOpenDropdown(null);
       }
     };
@@ -89,7 +92,7 @@ const Navbar = () => {
             setActiveSection((prev) => (prev === id ? null : prev));
           }
         },
-        { threshold: 0.3 } // section must be ≥ 30% visible
+        { threshold: 0.3 }, // section must be ≥ 30% visible
       );
 
       obs.observe(el);
@@ -146,7 +149,10 @@ const Navbar = () => {
 
             {/* ── Desktop nav links ── */}
             <div className="hidden lg:flex items-center">
-              <div ref={dropdownRef} className="flex justify-end space-x-1 relative">
+              <div
+                ref={dropdownRef}
+                className="flex justify-end space-x-1 relative"
+              >
                 {navigation.map((item) => {
                   const active = isActive(item);
 
@@ -272,7 +278,9 @@ const Navbar = () => {
           <Drawer
             isOpen={isOpen}
             setIsOpen={handleOnChangeDrawerVisibility}
-            handleOnChangeSignUpModalVisibility={handleOnChangeSignUpModalVisibility}
+            handleOnChangeSignUpModalVisibility={
+              handleOnChangeSignUpModalVisibility
+            }
             user={user}
             logout={logout}
           >

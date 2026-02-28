@@ -70,8 +70,9 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
                 >
                   <span>{item.name}</span>
                   <ChevronDown
-                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-                      }`}
+                    className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                      isOpen ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 {isOpen && (

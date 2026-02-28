@@ -143,7 +143,9 @@ const AcademicExperience = () => {
             {...register("highestEducation")}
             className={`${selectClass} ${selectBorder(!!errors.highestEducation)}`}
           >
-            <option value="" disabled hidden>Select highest education level</option>
+            <option value="" disabled hidden>
+              Select highest education level
+            </option>
             <option value="PhD">PhD</option>
             <option value="Masters">Master&apos;s Degree</option>
             <option value="Bachelor Degree">Bachelor&apos;s Degree</option>

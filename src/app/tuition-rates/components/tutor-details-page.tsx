@@ -97,8 +97,9 @@ const TutorDetailsSection = () => {
               {details.map((data, idx) => (
                 <div
                   key={data.id}
-                  className={`px-5 py-3.5 text-sm text-gray-700 leading-relaxed transition-colors duration-150 hover:bg-gray-50 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
-                    }`}
+                  className={`px-5 py-3.5 text-sm text-gray-700 leading-relaxed transition-colors duration-150 hover:bg-gray-50 ${
+                    idx % 2 === 0 ? "bg-white" : "bg-gray-50/50"
+                  }`}
                 >
                   <span className="flex items-start gap-2">
                     <span

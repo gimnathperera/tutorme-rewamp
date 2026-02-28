@@ -83,8 +83,19 @@ const FaqPill = ({
 
 const FaqSkeleton = () => (
   <div className="w-full rounded-2xl bg-white/30 py-4 px-6">
-    <Skeleton height={24} width="70%" baseColor="#ffffff40" highlightColor="#ffffff60" />
-    <Skeleton height={16} width="90%" className="mt-3" baseColor="#ffffff40" highlightColor="#ffffff60" />
+    <Skeleton
+      height={24}
+      width="70%"
+      baseColor="#ffffff40"
+      highlightColor="#ffffff60"
+    />
+    <Skeleton
+      height={16}
+      width="90%"
+      className="mt-3"
+      baseColor="#ffffff40"
+      highlightColor="#ffffff60"
+    />
   </div>
 );
 
@@ -131,23 +142,23 @@ const Faqs = () => {
 
       {/* FAQ list — single column so expansions shift items fluidly */}
       <div className="flex flex-col gap-3 max-w-3xl mx-auto">
-        {isFetching && page === 1
-          ? Array.from({ length: FAQ_LIMIT }, (_, i) => <FaqSkeleton key={i} />)
-          : isError
-            ? (
-              <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
-                Failed to load FAQs. Please try again later.
-              </div>
-            )
-            : faqs.map((faq, index) => (
-              <FaqPill
-                key={index}
-                question={faq.question}
-                answer={faq.answer}
-                isOpen={openIndex === index}
-                onToggle={() => handleToggle(index)}
-              />
-            ))}
+        {isFetching && page === 1 ? (
+          Array.from({ length: FAQ_LIMIT }, (_, i) => <FaqSkeleton key={i} />)
+        ) : isError ? (
+          <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
+            Failed to load FAQs. Please try again later.
+          </div>
+        ) : (
+          faqs.map((faq, index) => (
+            <FaqPill
+              key={index}
+              question={faq.question}
+              answer={faq.answer}
+              isOpen={openIndex === index}
+              onToggle={() => handleToggle(index)}
+            />
+          ))
+        )}
       </div>
 
       {/* Load more */}
