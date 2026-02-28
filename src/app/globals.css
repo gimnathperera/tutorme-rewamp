@@ -13,6 +13,111 @@ body {
   font-family: "Urbanist", sans-serif;
 }
 
+/* ============================================================
+   SCROLL ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Base state — elements start hidden */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.animate-slide-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+.animate-slide-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s ease;
+}
+
+/* When IntersectionObserver adds .is-visible */
+.animate-on-scroll.is-visible,
+.animate-fade-in.is-visible,
+.animate-slide-left.is-visible,
+.animate-slide-right.is-visible {
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+/* Stagger delays for child elements */
+.stagger-1 {
+  transition-delay: 0.1s;
+}
+.stagger-2 {
+  transition-delay: 0.2s;
+}
+.stagger-3 {
+  transition-delay: 0.35s;
+}
+.stagger-4 {
+  transition-delay: 0.5s;
+}
+
+/* Banner hero image parallax */
+.parallax-hero {
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
 html:not([data-scroll="0"]) .navbar {
   position: fixed;
   top: 0;

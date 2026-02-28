@@ -1,7 +1,7 @@
 "use client";
 
-import FormTestPapperSearch from "./components/form-test-papper-search";
-import TestPapperList from "./components/test-papper-list";
+import FormTestPaperSearch from "./components/form-test-papper-search";
+import TestPaperList from "./components/test-papper-list";
 import useLogic from "./hooks/useLogic";
 
 const TestPapers = () => {
@@ -37,7 +37,7 @@ const TestPapers = () => {
           Download Test Papers
         </h2>
 
-        <FormTestPapperSearch
+        <FormTestPaperSearch
           gradesOptions={gradesOptions}
           subjectOptions={subjectOptions}
           testPaperSearchForm={testPaperSearchForm}
@@ -47,7 +47,7 @@ const TestPapers = () => {
       </div>
 
       {isFormValid && (
-        <TestPapperList
+        <TestPaperList
           availablePapers={availablePapers}
           isPapersLoading={isPapersLoading}
         />

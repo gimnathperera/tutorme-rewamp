@@ -56,7 +56,7 @@ const footer = () => {
             </h3>
             <div className="flex gap-4">
               <div className="footer-icons">
-                <Link href="https://facebook.com">
+                <Link href="#">
                   <Image
                     src={"/images/footer/vec.svg"}
                     alt="facebook"
@@ -66,9 +66,9 @@ const footer = () => {
                 </Link>
               </div>
               <div className="footer-icons">
-                <Link href="https://twitter.com">
+                <Link href="#">
                   <Image
-                    src={"/images/footer/instagram.svg"}
+                    src={"/images/footer/twitter.svg"}
                     alt="twitter"
                     width={20}
                     height={20}
@@ -76,7 +76,7 @@ const footer = () => {
                 </Link>
               </div>
               <div className="footer-icons">
-                <Link href="https://instagram.com">
+                <Link href="#">
                   <Image
                     src={"/images/footer/instagram.svg"}
                     alt="instagram"
@@ -88,7 +88,7 @@ const footer = () => {
             </div>
           </div>
 
-          {/* CLOUMN-2/3 */}
+          {/* COLUMN-2/3 */}
 
           {products.map((product) => (
             <div key={product.id} className="group relative col-span-2">
@@ -117,11 +117,7 @@ const footer = () => {
           <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <h3 className="text-center md:text-start text-offwhite text-lg">
-                @2024 - All Rights Reserved by{" "}
-                <Link href="https://tutor-me.com/" target="_blank">
-                  {" "}
-                  tuition-lanka.com
-                </Link>
+                @2024 - All Rights Reserved by tuitionlanka.com
               </h3>
             </div>
             <div className="flex justify-center md:justify-end">

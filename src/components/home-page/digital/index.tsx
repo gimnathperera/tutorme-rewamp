@@ -10,35 +10,35 @@ const Digital = () => {
   };
 
   return (
-    <div className="mx-2">
-      <div className="mx-auto max-w-7xl px-4 my-40 pb-20 lg:pb-40 lg:px-8 bg-digital rounded-3xl bg-primary-700 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-2 my-16">
+    <div className="px-4 lg:px-8">
+      <div className="mx-auto max-w-7xl py-10 lg:py-0 lg:pb-20 lg:px-8 bg-digital rounded-3xl bg-primary-700 relative overflow-hidden min-h-[340px] lg:min-h-[420px]">
+        <div className="grid grid-cols-1 lg:grid-cols-2 py-10 lg:py-12">
           {/* COLUMN-1 */}
-
-          <div className="pt-24 lg:pl-24 ">
-            <h3 className="text-lg font-normal text-white mb-5 tracking-widest text-center lg:text-start">
+          <div className="lg:pl-16 xl:pl-24 animate-slide-left">
+            <h3 className="text-sm font-semibold text-white mb-3 tracking-widest text-center lg:text-start uppercase">
               WHO WE ARE
             </h3>
-            <h4 className="text-4xl sm:text-6xl font-bold text-white mb-8 leading-snug text-center lg:text-start">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 leading-snug text-center lg:text-start">
               Home tuition provides the convenience of studying at home.
-            </h4>
+            </h2>
             <div className="text-center lg:text-start">
               <button
-                className="text-xl font-semibold text-white bg-btnblue py-4 px-12 hover:opacity-90 rounded-full"
+                className="text-base font-semibold text-white bg-btnblue py-3.5 px-9 hover:opacity-90 rounded-full transition-all duration-300 hover:shadow-lg"
                 onClick={handleOnLearnMoreClick}
               >
-                Get started
+                Get Started
               </button>
             </div>
           </div>
 
-          <div>
+          {/* COLUMN-2: Image */}
+          <div className="hidden lg:block">
             <div className="lg:absolute girldoodle">
               <Image
                 src={"/images/digital/girldoodle.webp"}
                 alt="girldoodle"
-                width={815}
-                height={691}
+                width={700}
+                height={595}
               />
             </div>
           </div>

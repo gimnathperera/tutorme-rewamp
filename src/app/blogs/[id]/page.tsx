@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+
 import LoadingIndicator from "./LoadingIndicator";
 
 export default function ViewBlogPage() {
@@ -68,15 +68,13 @@ export default function ViewBlogPage() {
     <>
       <div className="m-10">
         {blog.author?.name === user?.name && (
-          <div className="flex flex-row justify-end items-end my-2">
-            <Button className="justify-end text-xl font-semibold text-white  py-6 px-6 lg:px-12  rounded-full  bg-primary-700 hover:bg-btnblue">
-              <Link
-                href={`/blogs/components/edit-blog/${blog.id}`}
-                className=""
-              >
-                Edit Blog
-              </Link>
-            </Button>
+          <div className="flex justify-end mb-4">
+            <Link
+              href={`/blogs/components/edit-blog/${blog.id}`}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+            >
+              ✏️ Edit Blog
+            </Link>
           </div>
         )}
         {image?.src && (
@@ -105,10 +103,14 @@ export default function ViewBlogPage() {
 
       <div className="flex flex-col m-10 lg:flex-row xl:flex-row md:flex-row gap-6 mt-6">
         <div className="flex-1 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 space-y-6 transition-all">
-          <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm transition-transform hover:scale-105">
+          <div className="flex items-center gap-4 mb-6 p-4 bg-gray-50 rounded-xl shadow-sm">
             <Avatar>
-              <AvatarImage src={blog.author?.avatar} />
-              <AvatarFallback>{blog.author?.name?.[0]}</AvatarFallback>
+              <AvatarImage
+                src={blog.author?.avatar || "/images/profile/pp.png"}
+              />
+              <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
+                {blog.author?.name?.[0]?.toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             <div>
               <p className="font-semibold text-lg">{blog.author?.name}</p>
@@ -133,11 +135,16 @@ export default function ViewBlogPage() {
           </div>
           <div></div>
           <div>
-            <img
-              className="rounded-lg mb-2 max-h-[400px] w-full object-cover"
-              src={blog.image}
-              alt={"Blog Image"}
-            />
+            {blog.image && (
+              <img
+                className="rounded-xl mb-4 max-h-[400px] w-full object-cover"
+                src={blog.image}
+                alt="Blog Image"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            )}
           </div>
           <TableOfContents html={decodeHtml(paragraph?.text || "")} />
           <div
@@ -166,9 +173,13 @@ export default function ViewBlogPage() {
                     }
                   >
                     <img
-                      src={related.image || "/placeholder.png"}
+                      src={related.image || "/images/profile/pp.png"}
                       alt="thumbnail"
-                      className="w-16 h-16 rounded-md object-cover"
+                      className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src =
+                          "/images/profile/pp.png";
+                      }}
                     />
                     <div>
                       <p className="text-sm font-medium text-gray-800 dark:text-gray-200 hover:underline">

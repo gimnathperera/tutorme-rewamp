@@ -1,7 +1,5 @@
-import Link from "next/link";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-//check data type
+
 interface datatype {
   heading: string;
   imgSrc: string;
@@ -14,7 +12,7 @@ const Aboutdata: datatype[] = [
     heading: "Personalized Learning",
     imgSrc: "/images/aboutus/imgOne.svg",
     paragraph:
-      "Tutors adapt teaching methods to suit the students learning style.",
+      "Tutors adapt teaching methods to suit the student's learning style.",
     link: "Learn more",
   },
   {
@@ -32,10 +30,12 @@ const Aboutdata: datatype[] = [
   },
 ];
 
+const staggerClasses = ["stagger-1", "stagger-2", "stagger-3"];
+
 const AboutUs = () => {
   return (
-    <div id="aboutus-section">
-      <div className="mx-auto max-w-7xl px-4 py-24 my-32 lg:px-10 bg-lightgrey rounded-3xl relative">
+    <div id="aboutus-section" className="px-4 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16 lg:px-10 bg-lightgrey rounded-3xl relative overflow-hidden">
         <Image
           src={"/images/aboutus/dots.svg"}
           width={100}
@@ -43,38 +43,35 @@ const AboutUs = () => {
           alt="dots-image"
           className="absolute bottom-1 -left-20"
         />
-        <h3 className="text-center text-blue text-lg tracking-widest">
+
+        {/* Section labels */}
+        <h3 className="text-center text-blue text-sm tracking-widest font-semibold uppercase animate-on-scroll">
           ABOUT US
         </h3>
-        <h4 className="text-center text-4xl lg:text-65xl font-bold">
+        <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold mt-2 mb-2 animate-on-scroll stagger-1">
           Why Choose Home Tuition?
-        </h4>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 my-16 gap-x-16 lg:gap-x-32">
+        </h2>
+
+        {/* Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8 gap-6">
           {Aboutdata.map((item, i) => (
             <div
               key={i}
-              className="hover:bg-navyblue bg-white rounded-3xl mt-16 pt-10 pl-8 pb-10 pr-6 shadow-xl group"
+              className={`hover:bg-navyblue bg-white rounded-3xl pt-8 pl-8 pb-8 pr-6 shadow-md group animate-on-scroll transition-all duration-300 hover:shadow-xl ${staggerClasses[i]}`}
             >
-              <h4 className="text-4xl font-semibold  text-black mb-5 group-hover:text-white">
+              <h4 className="text-xl font-semibold text-black mb-3 group-hover:text-white transition-colors duration-300">
                 {item.heading}
               </h4>
               <Image
                 src={item.imgSrc}
                 alt={item.imgSrc}
-                width={100}
-                height={100}
-                className="mb-5"
+                width={72}
+                height={72}
+                className="mb-4"
               />
-              <h4 className="text-lg font-normal text-black group-hover:text-offwhite mb-5">
+              <p className="text-sm font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-300">
                 {item.paragraph}
-              </h4>
-              <Link
-                href="#"
-                className="text-lg font-semibold group-hover:text-white text-blue hover-underline"
-              >
-                {item.link}
-                <ChevronRightIcon width={20} height={20} />
-              </Link>
+              </p>
             </div>
           ))}
         </div>

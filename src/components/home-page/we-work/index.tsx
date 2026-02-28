@@ -5,7 +5,6 @@ import Image from "next/image";
 import LinkedInSvg from "../../../../public/images/wework/linkedin.svg";
 
 // CAROUSEL DATA
-
 interface DataType {
   profession: string;
   name: string;
@@ -45,15 +44,12 @@ const postData: DataType[] = [
   },
 ];
 
-// CAROUSEL SETTINGS
-
 export default class WeWork extends Component {
   render() {
     const settings = {
       dots: false,
       infinite: true,
       slidesToShow: 5,
-      // centerMode: true,
       slidesToScroll: 1,
       arrows: false,
       autoplay: true,
@@ -92,45 +88,48 @@ export default class WeWork extends Component {
     };
 
     return (
-      <div className="bg-wework py-32">
-        <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8 ">
-          <div className="text-center">
-            <h3 className="text-4xl sm:text-6xl font-bold text-black my-2">
+      <div className="bg-wework py-28">
+        <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8">
+          {/* Stacked marquee headings */}
+          <div className="text-center overflow-hidden animate-fade-in">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black my-2">
               We work in several verticals.
-            </h3>
-            <h3 className="text-4xl sm:text-6xl font-bold text-black opacity-50 lg:mr-48 my-2">
+            </h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-40 lg:mr-48 my-2 hidden sm:block">
               We work in several verticals.
-            </h3>
-            <h3 className="text-4xl sm:text-6xl font-bold text-black opacity-25 lg:-mr-32 my-2">
+            </h2>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-20 lg:-mr-32 my-2 hidden sm:block">
               We work in several verticals.
-            </h3>
+            </h2>
           </div>
         </div>
 
         <Slider {...settings}>
           {postData.map((items, i) => (
             <div key={i}>
-              <div className="bg-white m-3 py-14 my-10 text-center shadow-xl rounded-3xl">
+              <div className="bg-white m-3 py-12 my-10 text-center shadow-xl rounded-3xl hover:shadow-2xl transition-shadow duration-300">
                 <div className="relative">
                   <Image
                     src={items.imgSrc}
-                    alt="gaby"
-                    width={182}
-                    height={182}
+                    alt="team-member"
+                    width={140}
+                    height={140}
                     className="inline-block m-auto"
                   />
                   <Image
                     src={LinkedInSvg}
-                    alt="greenbg"
-                    width={120}
-                    height={120}
-                    className=" absolute inline-block position-linkedin"
+                    alt="linkedin"
+                    width={100}
+                    height={100}
+                    className="absolute inline-block position-linkedin"
                   />
                 </div>
-                <h4 className="text-4xl font-bold pt-14">{items.name}</h4>
-                <h3 className="text-2xl font-normal pt-4 pb-2 opacity-50">
+                <h4 className="text-xl md:text-2xl font-bold pt-12">
+                  {items.name}
+                </h4>
+                <h5 className="text-sm md:text-base font-normal pt-2 pb-2 opacity-50">
                   {items.profession}
-                </h3>
+                </h5>
               </div>
             </div>
           ))}

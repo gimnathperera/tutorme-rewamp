@@ -13,7 +13,7 @@ export const generalInfoSchema = z.object({
     .trim()
     .regex(
       /^(?=.*\d)[0-9 -]{10,15}$/,
-      "Phone number can contain only numbers, spaces, and '-'"
+      "Phone number can contain only numbers, spaces, and '-'",
     )
     .optional(),
   country: z.string().min(1, "Country is required").optional(),
@@ -26,13 +26,19 @@ export const generalInfoSchema = z.object({
   state: z
     .string()
     .min(1, "State is required")
-    .regex(/^[A-Za-z\s]+$/, "State cannot contain special characters or numbers")
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "State cannot contain special characters or numbers",
+    )
     .optional(),
 
   region: z
     .string()
     .min(1, "Region is required")
-    .regex(/^[A-Za-z\s]+$/, "Region cannot contain special characters or numbers")
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "Region cannot contain special characters or numbers",
+    )
     .optional(),
   zip: z
     .string()

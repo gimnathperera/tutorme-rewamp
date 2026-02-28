@@ -1,17 +1,11 @@
 import z from "zod";
 
 declare global {
+  // eslint-disable-next-line unused-imports/no-unused-vars
   interface Window {
     __ENV: Record<string, string>;
   }
 }
-
-const getEnvVar = (key: string, processEnvValue?: string) => {
-  if (typeof window !== "undefined" && window.__ENV && window.__ENV[key]) {
-    return window.__ENV[key];
-  }
-  return processEnvValue;
-};
 
 /**
  * Schema validation

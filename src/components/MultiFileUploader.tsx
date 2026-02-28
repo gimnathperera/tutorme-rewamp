@@ -47,7 +47,7 @@ export default function MultiFileUploadDropzone({
         setFiles([]);
       }
     }
-  }, [initialUrls, uploading]);
+  }, [initialUrls, uploading, files.length]);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {

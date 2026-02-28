@@ -3,12 +3,15 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import Icon from "../icon";
+import { AuthUserData } from "@/types/auth-types";
 
 interface DrawerProps {
   children: ReactNode;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   handleOnChangeSignUpModalVisibility: () => void;
+  user?: AuthUserData | null;
+  logout?: () => void;
 }
 
 const Drawer = ({
@@ -16,6 +19,8 @@ const Drawer = ({
   isOpen,
   setIsOpen,
   handleOnChangeSignUpModalVisibility,
+  user,
+  logout,
 }: DrawerProps) => {
   return (
     <main
@@ -60,10 +65,17 @@ const Drawer = ({
 
           <footer className="p-4">
             <button
-              className="w-full block bg-purple-600 text-white hover:bg-purple-700 py-2 rounded-md text-center text-base font-medium"
-              onClick={handleOnChangeSignUpModalVisibility}
+              className="w-full block bg-blue-600 text-white hover:bg-blue-700 py-2 rounded-full text-center text-base font-medium"
+              onClick={() => {
+                if (user?.email) {
+                  logout?.();
+                  setIsOpen(false);
+                } else {
+                  handleOnChangeSignUpModalVisibility();
+                }
+              }}
             >
-              Login
+              {user?.email ? "Logout" : "Login"}
             </button>
           </footer>
         </article>
