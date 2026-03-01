@@ -68,11 +68,11 @@ const MainForm: FC = () => {
       },
     };
 
-    onHandleAddTutorRequest(payload);
+    onHandleAddTutorRequest(payload as unknown as FindMyTutorRequest);
   };
 
-  const onHandleAddTutorRequest = async (payload: FindMyTutorRequest) => {
-    const response = await addTutorRequest(payload);
+  const onHandleAddTutorRequest = async (payload: any) => {
+    const response = await addTutorRequest(payload as any);
     const error = getErrorInApiResult(response);
 
     if (error) {
