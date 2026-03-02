@@ -92,13 +92,13 @@ export default class WeWork extends Component {
         <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8">
           {/* Stacked marquee headings */}
           <div className="text-center overflow-hidden animate-fade-in">
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black my-2">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] my-2">
               We work in several verticals.
             </h2>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-40 lg:mr-48 my-2 hidden sm:block">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] opacity-40 lg:mr-48 my-2 hidden sm:block">
               We work in several verticals.
             </h2>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black opacity-20 lg:-mr-32 my-2 hidden sm:block">
+            <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] opacity-20 lg:-mr-32 my-2 hidden sm:block">
               We work in several verticals.
             </h2>
           </div>
@@ -124,10 +124,10 @@ export default class WeWork extends Component {
                     className="absolute inline-block position-linkedin"
                   />
                 </div>
-                <h4 className="text-xl md:text-2xl font-bold pt-12">
+                <h4 className="text-xl font-semibold text-black pt-12">
                   {items.name}
                 </h4>
-                <h5 className="text-sm md:text-base font-normal pt-2 pb-2 opacity-50">
+                <h5 className="text-sm font-normal text-[#6B7280] pt-2 pb-2">
                   {items.profession}
                 </h5>
               </div>

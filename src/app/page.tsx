@@ -13,9 +13,10 @@ export default function Home() {
   return (
     <>
       <ScrollAnimationProvider />
+      {/* Hero banner - full screen, outside the section gap container */}
+      <Banner />
       {/* space-y controls consistent inter-section gaps on all screen sizes */}
       <div className="space-y-12 sm:space-y-16">
-        <Banner />
         <AboutUs />
         <Digital />
         <Beliefs />

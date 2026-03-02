@@ -36,19 +36,11 @@ const AboutUs = () => {
   return (
     <div id="aboutus-section" className="px-4 lg:px-8">
       <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16 lg:px-10 bg-lightgrey rounded-3xl relative overflow-hidden">
-        <Image
-          src={"/images/aboutus/dots.svg"}
-          width={100}
-          height={100}
-          alt="dots-image"
-          className="absolute bottom-1 -left-20"
-        />
-
         {/* Section labels */}
         <h3 className="text-center text-blue text-sm tracking-widest font-semibold uppercase animate-on-scroll">
           ABOUT US
         </h3>
-        <h2 className="text-center text-3xl md:text-4xl lg:text-5xl font-bold mt-2 mb-2 animate-on-scroll stagger-1">
+        <h2 className="text-center text-3xl md:text-4xl font-semibold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
           Why Choose Home Tuition?
         </h2>
 
@@ -59,7 +51,7 @@ const AboutUs = () => {
               key={i}
               className={`hover:bg-navyblue bg-white rounded-3xl pt-8 pl-8 pb-8 pr-6 shadow-md group animate-on-scroll transition-all duration-300 hover:shadow-xl ${staggerClasses[i]}`}
             >
-              <h4 className="text-xl font-semibold text-black mb-3 group-hover:text-white transition-colors duration-300">
+              <h4 className="text-xl font-semibold leading-[1.3] text-black mb-3 group-hover:text-white transition-colors duration-300">
                 {item.heading}
               </h4>
               <Image
@@ -69,7 +61,7 @@ const AboutUs = () => {
                 height={72}
                 className="mb-4"
               />
-              <p className="text-sm font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-300">
+              <p className="text-base font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-300">
                 {item.paragraph}
               </p>
             </div>

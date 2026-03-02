@@ -49,5 +49,7 @@
 // };
 
 module.exports = {
-  output: 'standalone',
+  // standalone output requires symlink support (Linux/Docker only).
+  // On Windows, set BUILD_STANDALONE=true only when building for Docker.
+  output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
 };

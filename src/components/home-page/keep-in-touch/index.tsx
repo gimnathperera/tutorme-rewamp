@@ -18,11 +18,11 @@ const KeepInTouch = () => {
           <h3 className="text-blue text-sm font-semibold tracking-widest uppercase mb-3">
             KEEP IN TOUCH
           </h3>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold my-4 leading-tight">
+          <h2 className="text-3xl sm:text-4xl font-semibold leading-[1.2] text-[#111827] my-4">
             Take your learning or teaching journey
             <br className="hidden sm:block" /> to the next level.
           </h2>
-          <p className="text-lightblack text-sm sm:text-base font-normal max-w-2xl mx-auto leading-relaxed">
+          <p className="text-[#4B5563] text-base font-normal max-w-2xl mx-auto leading-relaxed">
             Stay connected with us for updates, tips, and the latest tutoring
             opportunities. <br className="hidden md:block" />
             Whether you&apos;re a tutor sharing knowledge or a student chasing

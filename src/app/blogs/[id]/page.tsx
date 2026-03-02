@@ -131,8 +131,9 @@ export default function ViewBlogPage() {
             {blog.tags?.map((t: any, idx: number) => (
               <span
                 key={t.id}
-                className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition transform hover:-translate-y-1 hover:scale-105 ${tagColors[idx % tagColors.length]
-                  }`}
+                className={`px-3 py-1 rounded-full text-sm font-medium cursor-pointer transition transform hover:-translate-y-1 hover:scale-105 ${
+                  tagColors[idx % tagColors.length]
+                }`}
               >
                 {t.name}
               </span>
@@ -220,8 +221,9 @@ export default function ViewBlogPage() {
                       </span>
                     </button>
                     <div
-                      className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
-                        }`}
+                      className={`overflow-hidden transition-all duration-300 ${
+                        openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                      }`}
                     >
                       <p className="text-gray-700 dark:text-gray-400 mt-1">
                         {faq.answer}

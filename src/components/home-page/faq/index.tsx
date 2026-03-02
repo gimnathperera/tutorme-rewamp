@@ -40,7 +40,7 @@ const FaqPill = ({
         className="flex w-full items-center justify-between px-6 py-4 text-left gap-4 group"
         aria-expanded={isOpen}
       >
-        <span className="text-sm sm:text-base font-semibold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors duration-200">
+        <span className="text-base font-semibold text-gray-900 leading-snug group-hover:text-blue-600 transition-colors duration-200">
           {question}
         </span>
         <span
@@ -64,7 +64,7 @@ const FaqPill = ({
           transition: "max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        <p className="px-6 pb-5 text-sm text-gray-600 leading-relaxed">
+        <p className="px-6 pb-5 text-base text-[#4B5563] leading-relaxed">
           {answer}
         </p>
       </div>
@@ -136,7 +136,7 @@ const Faqs = () => {
       <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">
         FAQ
       </h3>
-      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-white mb-10">
+      <h2 className="text-3xl md:text-4xl font-semibold text-center text-white leading-[1.2] mb-10">
         Frequently asked <br /> questions.
       </h2>
 
