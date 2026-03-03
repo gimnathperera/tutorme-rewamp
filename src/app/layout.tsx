@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Script src="/env-config.js" strategy="beforeInteractive" />
+        <Script src="/env-config.js" strategy="afterInteractive" />
         <WithProviders>
           <main className="bg-lightwhite">
             <NavBar />

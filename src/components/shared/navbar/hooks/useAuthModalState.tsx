@@ -32,6 +32,7 @@ const useAuthModalState = (): LogicReturnType => {
   useEffect(() => {
     if (user) {
       setIsSignUpModalOpen(false);
+      setIsOpen(false);
     }
   }, [user]);
 

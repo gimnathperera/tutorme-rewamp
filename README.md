@@ -1,34 +1,44 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TutorMe Revamp
+
+Next.js 14 + TypeScript web app for TutorMe.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs on [http://localhost:4000](http://localhost:4000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `pnpm dev` – start local development server.
+- `pnpm build` – production build.
+- `pnpm start` – run production build.
+- `pnpm lint` – run Next.js ESLint checks.
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/
+├── app/                    # Next.js app router pages and API routes
+├── components/
+│   ├── form-controls/      # Reusable form-centric components (city, district, multi-select)
+│   ├── upload/             # File upload dropzones (single and multi)
+│   ├── home-page/          # Homepage sections
+│   ├── shared/             # Shared UI blocks
+│   └── ui/                 # Primitive UI components
+├── configs/                # Static config/constants/json
+├── contexts/               # React contexts
+├── hooks/                  # Reusable hooks
+├── lib/                    # Helpers and static data
+├── store/                  # Redux toolkit store and API slices
+├── types/                  # TS contracts
+└── utils/                  # Utility helpers
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notes on Restructure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Core form and upload components are now grouped by domain under `src/components/form-controls` and `src/components/upload`.
+- Backward-compatible re-export files remain in original paths to avoid breaking existing imports.

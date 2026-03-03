@@ -20,12 +20,12 @@ import {
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
-import MultiSelect, { Option } from "@/components/MultiSelect";
+import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 import "react-quill/dist/quill.snow.css";
-import FileUploadDropzone from "@/components/fileUploader";
+import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -126,18 +126,20 @@ export default function EditBlogPage() {
     try {
       const payload = {
         id: blogId,
+        blogId: blogId,
         title: data.title,
         image: data.image,
-        author: {
-          name: user.name,
-          avatar: user.avatar || "https://example.com/default-avatar.png",
-          role: user.role,
-        },
-        relatedArticles: data.relatedArticles,
-        tags: data.tags,
-        content: data.content,
-        faqs: data.faqs,
-        status: data.status,
+        name: user.name,
+        avatar: user.avatar || "https://example.com/default-avatar.png",
+        role: user.role,
+        relatedArticles: data.relatedArticles ?? [],
+        tags: data.tags ?? [],
+        faqs: (data.faqs ?? []) as unknown as string[],
+        status: (data.status || "pending") as
+          | "pending"
+          | "approved"
+          | "rejected"
+          | undefined,
       };
 
       await updateBlog(payload).unwrap();
@@ -352,15 +354,15 @@ export default function EditBlogPage() {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                        "<p>Nothing to preview yet...</p>",
+                      "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />
-                {watch("faqs")?.length > 0 && (
+                {(watch("faqs") ?? []).length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
                     <h3 className="text-lg font-semibold mb-2">FAQs</h3>
                     <ul className="space-y-2">
-                      {watch("faqs").map((faq, idx) => (
+                      {(watch("faqs") ?? []).map((faq, idx) => (
                         <li key={idx} className="border-b pb-2">
                           <p className="font-medium text-blue-700">
                             {faq.question}
@@ -378,8 +380,8 @@ export default function EditBlogPage() {
                   Related Articles
                 </h3>
                 <ul className="space-y-4">
-                  {(watch("relatedArticles") || []).length > 0 ? (
-                    watch("relatedArticles").map(
+                  {(watch("relatedArticles") ?? []).length > 0 ? (
+                    (watch("relatedArticles") ?? []).map(
                       (relatedId: string, idx: number) => {
                         const related = blogsData?.results.find(
                           (b) => b.id === relatedId,

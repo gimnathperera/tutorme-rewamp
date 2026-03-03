@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import toast from "react-hot-toast";
-
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import LogoImage from "../../../../public/images/findTutor/register.png";
+import Image from "next/image";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
@@ -44,26 +53,32 @@ const TAB_ORDER: TabKey[] = [
 ];
 
 export function TutorTabs() {
+  const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
+  /** null = closed | "success" = success dialog | string = error message */
+  const [submissionResult, setSubmissionResult] = useState<
+    "success" | string | null
+  >(null);
   const methods = useForm<FindMyTutorForm>({
     resolver: zodResolver(fullSchema),
-    mode: "onSubmit",
+    mode: "onTouched",
+    reValidateMode: "onChange",
     defaultValues: {
       fullName: "",
       email: "",
       contactNumber: "",
       dateOfBirth: "",
       age: 0,
-      gender: undefined,
-      nationality: undefined,
-      race: undefined,
+      gender: "",
+      nationality: "",
+      race: "",
 
       tutoringLevels: [],
       preferredLocations: [],
       tutorType: [],
       tutorMediums: [],
-      highestEducation: undefined,
+      highestEducation: "",
       grades: [],
       subjects: [],
       yearsExperience: 0,
@@ -105,13 +120,22 @@ export function TutorTabs() {
     try {
       const result = await addTutorRequest(data);
       const error = getErrorInApiResult(result);
-      if (error) return toast.error(error);
-      toast.success("Tutor profile submitted successfully!");
-      reset();
-      setTab("personalInfo");
+      if (error) {
+        setSubmissionResult(error);
+        return;
+      }
+      setSubmissionResult("success");
     } catch {
-      toast.error("Something went wrong");
+      setSubmissionResult("Something went wrong. Please try again.");
     }
+  };
+
+  /** Reset form and navigate to home on success dismiss */
+  const handleDone = () => {
+    setSubmissionResult(null);
+    reset();
+    setTab("personalInfo");
+    router.push("/");
   };
 
   const certificates = methods.watch("certificatesAndQualifications");
@@ -121,8 +145,9 @@ export function TutorTabs() {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-          <div className="mb-6 rounded bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-3 text-2xl font-bold text-white">
-            Register As A Tutor
+          <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
+            <Image height={50} width={50} src={LogoImage} alt="Logo image" />
+            <h1>Register As A Tutor</h1>
           </div>
 
           <Tabs value={tab} className="w-full">
@@ -205,6 +230,89 @@ export function TutorTabs() {
           </Tabs>
         </div>
       </form>
+
+      {/* ── Success Dialog ── */}
+      <Dialog
+        open={submissionResult === "success"}
+        onOpenChange={(o) => {
+          if (!o) handleDone();
+        }}
+      >
+        <DialogContent className="max-w-md">
+          <div className="flex justify-center mb-3">
+            <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-green-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 13l4 4L19 7"
+                />
+              </svg>
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">
+              Registration Submitted!
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Your tutor profile has been submitted successfully. Our team will
+              review it and get back to you shortly.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="justify-center mt-2">
+            <Button className="w-full sm:w-auto" onClick={handleDone}>
+              Done
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* ── Error Dialog ── */}
+      <Dialog
+        open={
+          typeof submissionResult === "string" && submissionResult !== "success"
+        }
+        onOpenChange={(o) => {
+          if (!o) setSubmissionResult(null);
+        }}
+      >
+        <DialogContent className="max-w-md">
+          <div className="flex justify-center mb-3">
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </div>
+          </div>
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl">
+              Submission Failed
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Something went wrong.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="justify-center mt-2">
+            <Button onClick={() => setSubmissionResult(null)}>Try Again</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </FormProvider>
   );
 }

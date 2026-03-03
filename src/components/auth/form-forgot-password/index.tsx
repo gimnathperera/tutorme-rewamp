@@ -24,11 +24,8 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
     setIsAuthError("");
 
     try {
-      const response = await forgotPassword(data);
-
-      if (response.success) {
-        toast.success(response.message);
-      }
+      await forgotPassword(data);
+      toast.success("Password reset link sent to your email.");
     } catch (error: any) {
       const errorMessage =
         error?.message || "Something went wrong. Please try again.";

@@ -3,26 +3,36 @@ import { z } from "zod";
 export const step1Schema = z.object({
   fullName: z
     .string()
+    .trim()
     .min(1, "Full Name is required")
     .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
 
-  email: z.string().email("Invalid email"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
 
   contactNumber: z
     .string()
-    .min(10, "Contact Number should be 10 digits")
-    .max(10, "Contact Number should be 10 digits"),
+    .trim()
+    .min(1, "Contact Number is required")
+    .regex(/^\d{10}$/, "Contact Number should be exactly 10 digits"),
 
-  dateOfBirth: z.string().min(1, "Date of Birth is required"),
+  dateOfBirth: z.string().trim().min(1, "Date of Birth is required"),
 
   gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
-    message: "Please select a valid gender",
+    message: "Gender is required",
   }),
 
-  age: z.number().int().min(1).max(80, "Age must be below 80"),
+  age: z
+    .number()
+    .int()
+    .min(18, "You must be at least 18 years old")
+    .max(80, "Age must be below 80"),
 
   nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
-    message: "Please select nationality",
+    message: "Nationality is required",
   }),
 
   race: z
@@ -30,31 +40,27 @@ export const step1Schema = z.object({
     .refine(
       (v) => ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
       {
-        message: "Please select race",
+        message: "Race is required",
       },
     ),
 });
 
 export const step2Schema = z.object({
-  tutoringLevels: z
-    .array(z.string())
-    .min(1, "Select at least one tutoring level"),
+  tutoringLevels: z.array(z.string()).min(1, "Tutoring Levels are required"),
 
   preferredLocations: z
     .array(z.string())
-    .min(1, "Select at least one location"),
+    .min(1, "Preferred Locations are required"),
 
-  tutorType: z.array(z.string()).min(1, "Select at least one tutor type"),
+  tutorType: z.array(z.string()).min(1, "Tutor Types are required"),
 
   tutorMediums: z
     .array(
-      z
-        .string()
-        .refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
-          message: "Invalid medium selected",
-        }),
+      z.string().refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
+        message: "Invalid medium selected",
+      }),
     )
-    .min(1, "Select at least one medium"),
+    .min(1, "Tutor Mediums are required"),
 
   highestEducation: z
     .string()
@@ -69,31 +75,47 @@ export const step2Schema = z.object({
           "AL",
         ].includes(v),
       {
-        message: "Please select highest education level",
+        message: "Highest Education is required",
       },
     ),
 
-  grades: z.array(z.string()).min(1, "Select at least one grade"),
+  grades: z.array(z.string()).min(1, "Grades are required"),
 
-  subjects: z.array(z.string()).min(1, "Select at least one subject"),
+  subjects: z.array(z.string()).min(1, "Subjects are required"),
 
   yearsExperience: z
     .number()
-    .min(0, "Experience cannot be negative")
+    .min(1, "Years of Experience is required")
     .max(50, "Experience cannot exceed 50 years"),
 });
 
 export const step3Schema = z.object({
-  teachingSummary: z.string().min(1, "Required"),
-  studentResults: z.string().min(1, "Required"),
-  sellingPoints: z.string().min(1, "Required"),
-  academicDetails: z.string().min(1, "Required"),
+  teachingSummary: z
+    .string()
+    .trim()
+    .min(1, "Teaching Summary is required")
+    .max(500, "Teaching Summary cannot exceed 500 characters"),
+  studentResults: z
+    .string()
+    .trim()
+    .min(1, "Student Results is required")
+    .max(500, "Student Results cannot exceed 500 characters"),
+  sellingPoints: z
+    .string()
+    .trim()
+    .min(1, "Selling Points is required")
+    .max(500, "Selling Points cannot exceed 500 characters"),
+  academicDetails: z
+    .string()
+    .trim()
+    .min(1, "Academic Details is required")
+    .max(500, "Academic Details cannot exceed 500 characters"),
 });
 
 export const step4Schema = z.object({
   certificatesAndQualifications: z
     .array(z.string())
-    .min(1, "Upload at least one certificate or qualification"),
+    .min(1, "Certificates and Qualifications are required"),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()

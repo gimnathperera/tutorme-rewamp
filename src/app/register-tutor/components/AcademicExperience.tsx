@@ -7,7 +7,7 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
   TUTORING_LEVEL_OPTIONS,
-  PREFFERED_LOCATION_OPTIONS,
+  PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
@@ -18,8 +18,15 @@ import {
 } from "@/store/api/splits/grades";
 import { useEffect, useMemo, useState } from "react";
 
+/** Shared style tokens – keep in sync with other register-tutor components */
+const fieldWrapper = "flex flex-col gap-1";
+const inputClass = "h-11";
+const selectClass =
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+const selectBorder = (hasError: boolean) =>
+  hasError ? "border-red-500" : "border-gray-300";
+
 const AcademicExperience = () => {
-  const fieldWrapper = "flex flex-col gap-1";
   const {
     register,
     control,
@@ -65,14 +72,12 @@ const AcademicExperience = () => {
     loadSubjects();
   }, [selectedGradeIds, fetchSubjectsForGrades]);
 
-  const { setValue } = useFormContext();
-
   return (
     <div className="space-y-8">
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label>Tutoring Levels *</Label>
+          <Label htmlFor="tutoringLevels">Tutoring Levels *</Label>
           <Controller
             name="tutoringLevels"
             control={control}
@@ -81,41 +86,39 @@ const AcademicExperience = () => {
                 options={TUTORING_LEVEL_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutoringLevels}
               />
             )}
           />
-          {errors.tutoringLevels && (
-            <p className="text-sm text-red-500">
-              {errors.tutoringLevels.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutoringLevels?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
-          <Label>Preferred Locations *</Label>
+          <Label htmlFor="preferredLocations">Preferred Locations *</Label>
           <Controller
             name="preferredLocations"
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={PREFFERED_LOCATION_OPTIONS}
+                options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.preferredLocations}
               />
             )}
           />
-          {errors.preferredLocations && (
-            <p className="text-sm text-red-500">
-              {errors.preferredLocations.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.preferredLocations?.message as string}
+          </p>
         </div>
       </div>
 
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label>Tutor Types *</Label>
+          <Label htmlFor="tutorType">Tutor Types *</Label>
           <Controller
             name="tutorType"
             control={control}
@@ -124,23 +127,25 @@ const AcademicExperience = () => {
                 options={TUTOR_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutorType}
               />
             )}
           />
-          {errors.tutorType && (
-            <p className="text-sm text-red-500">
-              {errors.tutorType.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutorType?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
-          <Label>Highest Education Level *</Label>
+          <Label htmlFor="highestEducation">Highest Education Level *</Label>
           <select
+            id="highestEducation"
             {...register("highestEducation")}
-            className="h-11 w-full rounded-md border border-input bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
+            className={`${selectClass} ${selectBorder(!!errors.highestEducation)}`}
           >
-            <option value="">Select</option>
+            <option value="" disabled hidden>
+              Select highest education level
+            </option>
             <option value="PhD">PhD</option>
             <option value="Masters">Master&apos;s Degree</option>
             <option value="Bachelor Degree">Bachelor&apos;s Degree</option>
@@ -150,32 +155,32 @@ const AcademicExperience = () => {
             </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
-          {errors.highestEducation && (
-            <p className="text-sm text-red-500">
-              {errors.highestEducation.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.highestEducation?.message as string}
+          </p>
         </div>
       </div>
 
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label>Years of Experience *</Label>
+          <Label htmlFor="yearsExperience">Years of Experience *</Label>
           <Input
+            id="yearsExperience"
             type="number"
-            className="h-11"
+            min={0}
+            max={50}
+            step={1}
+            className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", { valueAsNumber: true })}
           />
-          {errors.yearsExperience && (
-            <p className="text-sm text-red-500">
-              {errors.yearsExperience.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.yearsExperience?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
-          <Label>Tutor Mediums *</Label>
+          <Label htmlFor="tutorMediums">Tutor Mediums *</Label>
           <Controller
             name="tutorMediums"
             control={control}
@@ -184,21 +189,20 @@ const AcademicExperience = () => {
                 options={MEDIUM_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.tutorMediums}
               />
             )}
           />
-          {errors.tutorMediums && (
-            <p className="text-sm text-red-500">
-              {errors.tutorMediums.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.tutorMediums?.message as string}
+          </p>
         </div>
       </div>
 
       {/* ROW 4 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label>Grades *</Label>
+          <Label htmlFor="grades">Grades *</Label>
           <Controller
             name="grades"
             control={control}
@@ -212,18 +216,17 @@ const AcademicExperience = () => {
                 }
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.grades}
               />
             )}
           />
-          {errors.grades && (
-            <p className="text-sm text-red-500">
-              {errors.grades.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.grades?.message as string}
+          </p>
         </div>
 
         <div className={fieldWrapper}>
-          <Label>Subjects *</Label>
+          <Label htmlFor="subjects">Subjects *</Label>
           <Controller
             name="subjects"
             control={control}
@@ -232,14 +235,13 @@ const AcademicExperience = () => {
                 options={subjectOptions}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
+                hasError={!!errors.subjects}
               />
             )}
           />
-          {errors.subjects && (
-            <p className="text-sm text-red-500">
-              {errors.subjects.message as string}
-            </p>
-          )}
+          <p className="text-sm text-red-500 min-h-[1.25rem]">
+            {errors.subjects?.message as string}
+          </p>
         </div>
       </div>
     </div>

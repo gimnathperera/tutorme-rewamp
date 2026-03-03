@@ -53,7 +53,7 @@ export const TUTORING_LEVEL_OPTIONS: SelectOption[] = [
   { value: "Music & Arts", text: "Music & Arts" },
   { value: "Special Skills", text: "Special Skills" },
 ];
-export const PREFFERED_LOCATION_OPTIONS: SelectOption[] = [
+export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   {
     value: "Kollupitiya (Colombo 3)",
     text: "Kollupitiya (Colombo 3)",

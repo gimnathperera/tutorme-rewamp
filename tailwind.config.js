@@ -36,7 +36,7 @@ module.exports = {
       current: "currentColor",
       lightwhite: "#F9F9F9",
       white: "#ffffff",
-      black: "#000000",
+      black: "#111827",
       blue: "#0066FF",
       lightblue: "#d9e8ff",
       darkpurple: "#241A24",
@@ -72,13 +72,13 @@ module.exports = {
     },
     fontSize: {
       xs: [
-        "0.75rem",
+        "12px",
         {
           lineHeight: "1rem",
         },
       ],
       sm: [
-        "0.875rem",
+        "14px",
         {
           lineHeight: "1.25rem",
         },
@@ -96,7 +96,7 @@ module.exports = {
         },
       ],
       xl: [
-        "1.25rem",
+        "24px",
         {
           lineHeight: "1.75rem",
         },
@@ -108,19 +108,19 @@ module.exports = {
         },
       ],
       "3xl": [
-        "1.875rem",
+        "26px",
         {
           lineHeight: "2.25rem",
         },
       ],
       "4xl": [
-        "2.25rem",
+        "40px",
         {
           lineHeight: "2.5rem",
         },
       ],
       "5xl": [
-        "3rem",
+        "52px",
         {
           lineHeight: "1",
         },

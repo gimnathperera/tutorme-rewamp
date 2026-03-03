@@ -9,7 +9,7 @@ type Props = {
   isPapersLoading: boolean;
 };
 
-const TestPapperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
+const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-3xl mt-8">
       {isPapersLoading ? (
@@ -75,4 +75,4 @@ const TestPapperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
   );
 };
 
-export default TestPapperList;
+export default TestPaperList;

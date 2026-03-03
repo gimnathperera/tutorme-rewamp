@@ -44,7 +44,7 @@ const TutorTypeComponent = () => {
           options={[
             { label: "Male", value: "Male" },
             { label: "Female", value: "Female" },
-            { label: "No Gender Preference", value: "None" },
+            { label: "Others", value: "None" },
           ]}
         />
 

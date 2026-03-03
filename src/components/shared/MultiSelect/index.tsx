@@ -13,6 +13,7 @@ interface MultiSelectProps {
   defaultSelected?: string[];
   onChange?: (selected: string[]) => void;
   disabled?: boolean;
+  hasError?: boolean;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -20,6 +21,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   defaultSelected = [],
   onChange,
   disabled = false,
+  hasError = false,
 }) => {
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(defaultSelected);
@@ -59,12 +61,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const borderClass = hasError ? "border-red-500" : "border-gray-300";
+
   return (
     <div className="w-full relative" ref={dropdownRef}>
       {/* CONTROL */}
       <div
         onClick={toggleDropdown}
-        className="flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border border-input bg-background px-3 text-sm cursor-pointer"
+        className={`flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border ${borderClass} bg-background px-3 text-sm cursor-pointer`}
       >
         {selectedOptions.length > 0 ? (
           selectedOptions.map((value) => {
@@ -97,7 +101,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
       {/* DROPDOWN */}
       {isOpen && (
-        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border bg-white shadow">
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow">
           {options.map((option) => (
             <div
               key={option.value}

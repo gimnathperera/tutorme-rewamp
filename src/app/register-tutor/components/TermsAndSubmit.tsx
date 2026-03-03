@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
-import MultiFileUploadDropzone from "@/components/MultiFileUploader";
+import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
 
 const TermsAndSubmit = () => {
   const {
@@ -29,15 +29,15 @@ const TermsAndSubmit = () => {
             />
           )}
         />
-        {errors.certificatesAndQualifications?.message && (
-          <p className="mt-1 text-sm text-red-500">
-            {String(errors.certificatesAndQualifications.message)}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem] mt-1">
+          {errors.certificatesAndQualifications?.message
+            ? String(errors.certificatesAndQualifications.message)
+            : ""}
+        </p>
       </div>
 
       {/* Agreements */}
-      <div className="space-y-4">
+      <div>
         {/* Agree Terms */}
         <div className="flex items-start gap-3">
           <Controller
@@ -60,11 +60,9 @@ const TermsAndSubmit = () => {
             </span>
           </Label>
         </div>
-        {errors.agreeTerms && (
-          <p className="text-sm text-red-500 ml-7">
-            {`${errors.agreeTerms.message}`}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem] ml-7">
+          {errors.agreeTerms?.message as string}
+        </p>
 
         {/* Agree Assignment Info */}
         <div className="flex items-start gap-3">
@@ -91,11 +89,9 @@ const TermsAndSubmit = () => {
             </span>
           </Label>
         </div>
-        {errors.agreeAssignmentInfo && (
-          <p className="text-sm text-red-500 ml-7">
-            {`${errors.agreeAssignmentInfo.message}`}
-          </p>
-        )}
+        <p className="text-sm text-red-500 min-h-[1.25rem] ml-7">
+          {errors.agreeAssignmentInfo?.message as string}
+        </p>
       </div>
     </div>
   );

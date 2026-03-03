@@ -19,7 +19,7 @@ type Props = {
   isSubjectsLoading: boolean;
 };
 
-const FormTestPapperSearch: FC<Props> = ({
+const FormTestPaperSearch: FC<Props> = ({
   gradesOptions,
   subjectOptions,
   testPaperSearchForm,
@@ -58,4 +58,4 @@ const FormTestPapperSearch: FC<Props> = ({
   );
 };
 
-export default FormTestPapperSearch;
+export default FormTestPaperSearch;

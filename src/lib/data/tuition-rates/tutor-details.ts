@@ -9,7 +9,7 @@ const tutorDetails = [
     id: 2,
     partTimeTutorDetail: "Made Up of Mostly Undergraduates",
     fullTimeTutorDetail: "Made Up of Mostly Graduates",
-    moeTutorDetail: "MOE & NIE TrainedSchool Teachers",
+    moeTutorDetail: "MOE & NIE Trained School Teachers",
   },
   {
     id: 3,
