@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -126,6 +126,16 @@ export default function AddRequestForTutor() {
       );
     }
   }, [selectedTutorCount, tutors, setValue]);
+
+  // Reset subject for every tutor when grade changes (skip initial mount)
+  const isFirstGradeMount = useRef(true);
+  useEffect(() => {
+    if (isFirstGradeMount.current) {
+      isFirstGradeMount.current = false;
+      return;
+    }
+    tutors.forEach((_, i) => setValue(`tutors.${i}.subject`, ""));
+  }, [selectedGradeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const nextStep = async () => {
     if (tab === "contact") {
@@ -376,7 +386,8 @@ export default function AddRequestForTutor() {
                       <select
                         id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)}`}
+                        disabled={!selectedGradeId}
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:opacity-50 disabled:cursor-not-allowed`}
                       >
                         <option value="" disabled hidden>
                           {selectedGradeId

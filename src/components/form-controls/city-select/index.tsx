@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import districtsAndCities from "@/configs/districtsAndCities.json";
 
@@ -59,8 +59,10 @@ export default function CitySelect({
   onChange,
   hasError = false,
 }: CitySelectProps) {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(value ?? "");
   const [showDropdown, setShowDropdown] = useState(false);
+  /** Skip the district-change effect on the very first render (re-mount restore). */
+  const isFirstMount = useRef(true);
 
   /* ── Cities for the chosen district ── */
   const districtCities = useMemo(() => {
@@ -83,8 +85,12 @@ export default function CitySelect({
     return fuzzyMatch(searchText, districtCities);
   }, [searchText, districtCities, exactMatches]);
 
-  /* ── Clear city when district changes ── */
+  /* ── Clear city when district changes (skip on initial mount) ── */
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return; // don't clear on re-mount — value/searchText already restored
+    }
     if (!district) {
       setSearchText("");
       setShowDropdown(false);
