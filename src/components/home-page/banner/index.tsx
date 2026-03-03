@@ -1,11 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 
 const Banner = () => {
   const route = useRouter();
-  const heroImageRef = useRef<HTMLDivElement>(null);
   const badgeRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -14,24 +12,32 @@ const Banner = () => {
     route.push("/request-for-tutors");
   };
 
-  // Parallax scroll effect on hero image
-  useEffect(() => {
-    const handleScroll = () => {
-      if (heroImageRef.current) {
-        const scrollY = window.scrollY;
-        heroImageRef.current.style.transform = `translateY(${scrollY * 0.18}px)`;
+  const handleScrollDown = () => {
+    const bannerEl = document.getElementById("hero-section");
+    if (bannerEl) {
+      const nextSection = bannerEl.nextElementSibling as HTMLElement;
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: window.innerHeight, behavior: "smooth" });
       }
+    }
+  };
+
+  // Signal to <html> that the hero is active — used by CSS to style the navbar
+  useEffect(() => {
+    document.documentElement.setAttribute('data-hero', 'true');
+    return () => {
+      document.documentElement.removeAttribute('data-hero');
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Fade-up animation on mount for text content
   useEffect(() => {
     const elements = [
-      { el: badgeRef.current, delay: 0 },
-      { el: headlineRef.current, delay: 150 },
-      { el: ctaRef.current, delay: 300 },
+      { el: badgeRef.current, delay: 200 },
+      { el: headlineRef.current, delay: 400 },
+      { el: ctaRef.current, delay: 600 },
     ];
     elements.forEach(({ el, delay }) => {
       if (el) {
@@ -44,75 +50,92 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="mx-auto max-w-7xl py-6 sm:py-10 px-6 lg:px-8 overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-2 mt-4 lg:mt-8 mb-6 lg:mb-10 items-center gap-4">
-        {/* Left: Text Content */}
-        <div className="mx-auto sm:mx-0 w-full">
-          {/* Badge */}
-          <div
-            ref={badgeRef}
-            className="py-2 text-center lg:text-start"
-            style={{
-              opacity: 0,
-              transform: "translateY(30px)",
-              transition: "opacity 0.6s ease, transform 0.6s ease",
-            }}
-          >
-            <button className="text-blue bg-lightblue hover:shadow-xl text-sm font-bold px-5 py-1.5 rounded-3xl tracking-wider hover:text-white hover:bg-black transition-all duration-300">
-              E-Learning Platform
-            </button>
-          </div>
+    <section
+      id="hero-section"
+      className="hero-section"
+    >
+      {/* Background Video */}
+      <video
+        className="hero-video"
+        src="/videos/home/home.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+      />
 
-          {/* Headline */}
-          <div
-            ref={headlineRef}
-            className="py-2 text-center lg:text-start"
-            style={{
-              opacity: 0,
-              transform: "translateY(30px)",
-              transition: "opacity 0.6s ease, transform 0.6s ease",
-            }}
-          >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl font-bold text-darkpurple leading-tight">
-              Personalized Home <br />
-              Tuition
-            </h1>
-          </div>
+      {/* Dark overlay */}
+      <div className="hero-overlay" />
 
-          {/* CTA Button */}
-          <div
-            ref={ctaRef}
-            className="mt-6 mb-4 text-center lg:text-start"
-            style={{
-              opacity: 0,
-              transform: "translateY(30px)",
-              transition: "opacity 0.6s ease, transform 0.6s ease",
-            }}
-          >
-            <button
-              className="text-sm md:text-base font-semibold hover:shadow-xl bg-primary-700 text-white py-3.5 px-9 rounded-full hover:opacity-90 transition-all duration-300"
-              onClick={handleOnFindATutorClick}
-            >
-              Request a Tutor
-            </button>
-          </div>
+      {/* Main content — centered */}
+      <div className="hero-content">
+        {/* Badge */}
+        <div
+          ref={badgeRef}
+          style={{
+            opacity: 0,
+            transform: "translateY(30px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}
+        >
+          <button className="hero-badge">
+            E-Learning Platform
+          </button>
         </div>
 
-        {/* Right: Hero Image with Parallax */}
-        <div className="lg:-m-24 lg:pt-20 hidden lg:block">
-          <div ref={heroImageRef} className="parallax-hero">
-            <Image
-              src={"/images/banner/banner.png"}
-              alt="hero-image"
-              width={800}
-              height={642}
-              className="mix-blend-multiply"
-              priority
-            />
-          </div>
+        {/* Headline */}
+        <div
+          ref={headlineRef}
+          style={{
+            opacity: 0,
+            transform: "translateY(30px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}
+        >
+          <h1 className="hero-title">
+            Personalized Home <br />
+            Tuition
+          </h1>
+        </div>
+
+        {/* CTA Button */}
+        <div
+          ref={ctaRef}
+          style={{
+            opacity: 0,
+            transform: "translateY(30px)",
+            transition: "opacity 0.6s ease, transform 0.6s ease",
+          }}
+        >
+          <button
+            className="hero-cta"
+            onClick={handleOnFindATutorClick}
+          >
+            Request a Tutor
+          </button>
         </div>
       </div>
-    </div>
+
+      {/* Scroll-down arrow */}
+      <button
+        className="hero-scroll-arrow"
+        onClick={handleScrollDown}
+        aria-label="Scroll down"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="hero-scroll-icon"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+    </section>
   );
 };
 

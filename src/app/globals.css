@@ -125,16 +125,22 @@ body {
     transition: transform 0.1s linear;
 }
 
-html:not([data-scroll="0"]) .navbar {
+/* Navbar at the top of the page (over hero video) — transparent */
+.navbar {
     position: fixed;
     top: 0;
     width: 100%;
+    z-index: 50;
+    background-color: transparent;
+    border-bottom: none;
+    transition: background-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Navbar after scroll — solid background */
+html:not([data-scroll="0"]) .navbar {
     background-color: #f9f9f9 !important;
-    opacity: 1.9;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
-    transition: 0.4s linear;
-    padding: 0px !important;
-    z-index: 3;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10);
+    border-bottom: 0.5px solid rgba(196, 196, 196, 0.75);
 }
 
 html:not([data-scroll="0"]) .navbar>div>div {
@@ -150,9 +156,160 @@ html {
     scroll-behavior: smooth !important;
 }
 
-.navbar {
-    border-bottom: 0.5px solid rgba(196, 196, 196, 0.75);
+/* ============================================================
+   HERO SECTION — fullscreen video banner
+   ============================================================ */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -3rem;
+    /* counteract pt-12 on <main> (mobile) */
 }
+
+@media (min-width: 640px) {
+    .hero-section {
+        margin-top: -5rem;
+        /* counteract sm:pt-20 on <main> */
+    }
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom,
+            rgba(0, 0, 0, 0.55) 0%,
+            rgba(0, 0, 0, 0.40) 60%,
+            rgba(0, 0, 0, 0.60) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 900px;
+    width: 100%;
+}
+
+.hero-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+    font-size: 0.875rem;
+    font-weight: 700;
+    padding: 0.4rem 1.4rem;
+    border-radius: 9999px;
+    letter-spacing: 0.08em;
+    cursor: default;
+    transition: background 0.3s ease;
+}
+
+.hero-badge:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.hero-title {
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+    margin: 0;
+}
+
+.hero-cta {
+    display: inline-block;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.9rem 2.5rem;
+    border-radius: 9999px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);
+}
+
+.hero-cta:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(37, 99, 235, 0.6);
+}
+
+/* Scroll-down arrow */
+.hero-scroll-arrow {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(255, 255, 255, 0.40);
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ffffff;
+    transition: background 0.3s ease, transform 0.3s ease;
+    animation: hero-bounce 2s ease-in-out infinite;
+}
+
+.hero-scroll-arrow:hover {
+    background: rgba(255, 255, 255, 0.30);
+    transform: translateX(-50%) translateY(-4px);
+    cursor: pointer;
+}
+
+.hero-scroll-icon {
+    width: 1.4rem;
+    height: 1.4rem;
+    stroke-width: 2.5;
+}
+
+@keyframes hero-bounce {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(8px);
+    }
+}
+
 
 .hover-underline {
     display: inline-flex;
