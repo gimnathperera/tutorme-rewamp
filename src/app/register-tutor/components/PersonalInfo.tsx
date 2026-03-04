@@ -130,7 +130,6 @@ const PersonalInfo = () => {
           </option>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
-          <option value="Others">Others</option>
         </select>
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.gender?.message as string}
