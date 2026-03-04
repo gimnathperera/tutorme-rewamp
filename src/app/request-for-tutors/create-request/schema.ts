@@ -21,7 +21,8 @@ export const createRequestTutorSchema = z.object({
     .string()
     .trim()
     .min(1, "Phone number is required")
-    .regex(/^\d{10}$/, "Phone number should be exactly 10 digits"),
+    .regex(/^\d+$/, "Phone Number must contain numeric values only")
+    .length(10, "Phone number should be exactly 10 digits"),
 
   medium: z.string().nonempty("Medium is required"),
 
