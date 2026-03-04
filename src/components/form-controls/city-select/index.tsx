@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import districtsAndCities from "@/configs/districtsAndCities.json";
 
@@ -59,8 +59,15 @@ export default function CitySelect({
   onChange,
   hasError = false,
 }: CitySelectProps) {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(value ?? "");
   const [showDropdown, setShowDropdown] = useState(false);
+  /**
+   * Tracks the district value from the previous render.
+   * Initialised with the current district so that the very first effect run
+   * (and any subsequent run where the value hasn't actually changed, e.g.
+   * navigating back between form steps) sees prev === district and skips clearing.
+   */
+  const prevDistrict = useRef(district);
 
   /* ── Cities for the chosen district ── */
   const districtCities = useMemo(() => {
@@ -83,13 +90,15 @@ export default function CitySelect({
     return fuzzyMatch(searchText, districtCities);
   }, [searchText, districtCities, exactMatches]);
 
-  /* ── Clear city when district changes ── */
+  /* ── Clear city ONLY when the user deliberately picks a different district ── */
   useEffect(() => {
-    if (!district) {
-      setSearchText("");
-      setShowDropdown(false);
-      return;
-    }
+    const prev = prevDistrict.current;
+    prevDistrict.current = district; // always keep the ref up-to-date
+
+    // Skip when the district value hasn't actually changed (covers: initial
+    // mount, navigation back to this tab with the same district still selected).
+    if (district === prev) return;
+
     onChange("");
     setSearchText("");
     setShowDropdown(false);

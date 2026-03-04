@@ -36,7 +36,12 @@ const navigation: NavigationItem[] = [
   { name: "Contact Us", href: "/#keep-in-touch-section" },
 ];
 
-const Navbar = () => {
+interface NavbarProps {
+  /** True when the hero video section is visible at the top of the page */
+  isHeroTop?: boolean;
+}
+
+const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -134,6 +139,16 @@ const Navbar = () => {
     return pathname.startsWith(item.href);
   };
 
+  // ── Hero-mode colour tokens (desktop nav only) ──────────────────────────
+  const heroLinkColor = isHeroTop ? "rgba(255,255,255,0.92)" : "";
+  const heroLogoBlack = isHeroTop ? "#ffffff" : "";
+  const heroLogoBlue = isHeroTop ? "rgba(147,197,253,1)" : "";
+  const heroBtnBorder = isHeroTop
+    ? "1px solid rgba(255,255,255,0.5)"
+    : undefined;
+  const heroBtnColor = isHeroTop ? "rgba(255,255,255,0.92)" : undefined;
+  const heroHamburger = isHeroTop ? "#ffffff" : "";
+
   return (
     <Disclosure as="nav" className="navbar">
       <div className="mx-auto max-w-7xl p-3 md:p-4">
@@ -142,8 +157,19 @@ const Navbar = () => {
             {/* ── Logo ── */}
             <div className="flex flex-shrink-0 items-start">
               <Link href="/" className="text-xl sm:text-4xl flex font-semibold">
-                <div className="text-black font-bold">Tuition</div>
-                <div className="text-blue-600 font-bold"> Lanka</div>
+                <div
+                  className="font-bold transition-colors duration-300"
+                  style={{ color: heroLogoBlack || undefined }}
+                >
+                  Tuition
+                </div>
+                <div
+                  className="font-bold transition-colors duration-300"
+                  style={{ color: heroLogoBlue || "rgb(37,99,235)" }}
+                >
+                  {" "}
+                  Lanka
+                </div>
               </Link>
             </div>
 
@@ -162,6 +188,11 @@ const Navbar = () => {
                         onClick={() => toggleDropdown(item.name)}
                         aria-expanded={openDropdown === item.name}
                         aria-haspopup="true"
+                        style={
+                          !active && isHeroTop
+                            ? { color: heroLinkColor }
+                            : undefined
+                        }
                         className={[
                           "group px-3 py-2 rounded-md text-base font-medium flex items-center gap-1 transition-colors duration-150",
                           active
@@ -222,6 +253,11 @@ const Navbar = () => {
                     <Link
                       key={item.name}
                       href={item.href}
+                      style={
+                        !active && isHeroTop
+                          ? { color: heroLinkColor }
+                          : undefined
+                      }
                       className={[
                         "relative px-3 py-2 rounded-md text-base font-medium transition-colors duration-150",
                         active
@@ -253,6 +289,11 @@ const Navbar = () => {
                 ) : (
                   <button
                     type="button"
+                    style={
+                      isHeroTop
+                        ? { border: heroBtnBorder, color: heroBtnColor }
+                        : undefined
+                    }
                     className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
@@ -269,7 +310,8 @@ const Navbar = () => {
               <ProfileDropdown isLoading={!isUserLoaded} user={user} />
             ) : null}
             <Bars3Icon
-              className="block h-6 w-6"
+              className="block h-6 w-6 transition-colors duration-300"
+              style={{ color: heroHamburger || undefined }}
               aria-hidden="true"
               onClick={handleOnChangeDrawerVisibility}
             />
