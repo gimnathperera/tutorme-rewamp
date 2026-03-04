@@ -236,6 +236,7 @@ const AcademicExperience = () => {
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
                 hasError={!!errors.subjects}
+                disabled={selectedGradeIds.length === 0}
               />
             )}
           />
