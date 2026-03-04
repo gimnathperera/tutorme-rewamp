@@ -110,9 +110,9 @@ export default function AddRequestForTutor() {
         newTutors.push({
           subject: "",
           assignedTutor: "",
-          duration: "30 Minutes",
-          frequency: "Once a Week",
-          preferredTutorType: "Part Time Tutors",
+          duration: "",
+          frequency: "",
+          preferredTutorType: "",
         });
       }
       setValue("tutors", newTutors);
