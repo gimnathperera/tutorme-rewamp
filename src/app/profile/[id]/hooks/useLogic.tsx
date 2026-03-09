@@ -32,7 +32,7 @@ import {
   timeZoneOptions,
 } from "./util";
 import { Option } from "@/types/shared-types";
-import { isUndefined, size } from "lodash-es";
+import { size } from "lodash-es";
 import {
   initialLanguageAndTimeFormValues,
   LanguageOptionsSchema,
@@ -82,6 +82,10 @@ const useLogic = (): LogicReturnType => {
   });
 
   const [grades] = generalInfoForm.watch(["grades"]);
+  /** Tracks which subject IDs belong to each grade: gradeId → Set<subjectId> */
+  const gradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
+  /** Snapshot of grades from the previous render, used to detect removals */
+  const prevGradesRef = useRef<string[]>([]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -182,15 +186,40 @@ const useLogic = (): LogicReturnType => {
     await getUserRawData();
   }, [getUserRawData]);
 
-  const fetchedGradesRef = useRef(new Set());
-  const subjectsSetRef = useRef(new Set());
-
   const handleOnGradeChangeSubjectFetch = useCallback(async () => {
-    if (size(grades) === 0 || isUndefined(grades)) return;
+    const currentGrades: string[] = grades ?? [];
+    const prevGrades = prevGradesRef.current;
 
-    for (const gradeId of grades) {
-      if (fetchedGradesRef.current.has(gradeId)) continue;
-      fetchedGradesRef.current.add(gradeId);
+    // ── Handle removed grades ──────────────────────────────────────────────
+    const removedGrades = prevGrades.filter((id) => !currentGrades.includes(id));
+    if (removedGrades.length > 0) {
+      // Collect all subject IDs that belong to removed grades
+      const removedSubjectIds = new Set<string>();
+      removedGrades.forEach((gradeId) => {
+        (gradeSubjectsMapRef.current.get(gradeId) ?? []).forEach((sid) =>
+          removedSubjectIds.add(sid),
+        );
+        gradeSubjectsMapRef.current.delete(gradeId);
+      });
+
+      // Remove those subjects from the options list
+      setSubjectsOptions((prev) =>
+        prev.filter((opt) => !removedSubjectIds.has(opt.value)),
+      );
+
+      // Remove those subjects from the form's selected subjects
+      const currentSubjects: string[] =
+        generalInfoForm.getValues("subjects") ?? [];
+      generalInfoForm.setValue(
+        "subjects",
+        currentSubjects.filter((sid) => !removedSubjectIds.has(sid)),
+        { shouldDirty: true },
+      );
+    }
+
+    // ── Handle added grades ────────────────────────────────────────────────
+    for (const gradeId of currentGrades) {
+      if (gradeSubjectsMapRef.current.has(gradeId)) continue; // already fetched
 
       const result = await fetchSubjectsByGrade(gradeId);
       const error = getErrorInApiResult(result);
@@ -201,11 +230,17 @@ const useLogic = (): LogicReturnType => {
       }
 
       if (result.data) {
-        const newSubjects = result.data.subjects.filter(
-          ({ id }: Subject) => !subjectsSetRef.current.has(id),
+        const existingIds = new Set(
+          Array.from(gradeSubjectsMapRef.current.values()).flat(),
+        );
+        const newSubjects: Subject[] = result.data.subjects.filter(
+          ({ id }: Subject) => !existingIds.has(id),
         );
 
-        newSubjects.forEach(({ id }) => subjectsSetRef.current.add(id));
+        gradeSubjectsMapRef.current.set(
+          gradeId,
+          result.data.subjects.map(({ id }: Subject) => id),
+        );
 
         setSubjectsOptions((prev) => [
           ...prev,
@@ -216,7 +251,9 @@ const useLogic = (): LogicReturnType => {
         ]);
       }
     }
-  }, [fetchSubjectsByGrade, grades]);
+
+    prevGradesRef.current = currentGrades;
+  }, [fetchSubjectsByGrade, grades, generalInfoForm]);
 
   useEffect(() => {
     forceRedirectUser();
