@@ -250,8 +250,15 @@ export default function AddRequestForTutor() {
                       placeholder="e.g. johndoe@gmail.com"
                       autoComplete="email"
                       {...register("email", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("email", noSpaces, { shouldValidate: true });
+                          }
+                        },
                         onBlur: (e) => {
-                          setValue("email", e.target.value.trim(), {
+                          setValue("email", e.target.value.replace(/ /g, ""), {
                             shouldValidate: true,
                           });
                         },
@@ -276,8 +283,15 @@ export default function AddRequestForTutor() {
                       placeholder="e.g. 0712345678"
                       autoComplete="tel"
                       {...register("phoneNumber", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("phoneNumber", noSpaces, { shouldValidate: true });
+                          }
+                        },
                         onBlur: (e) => {
-                          setValue("phoneNumber", e.target.value.trim(), {
+                          setValue("phoneNumber", e.target.value.replace(/ /g, ""), {
                             shouldValidate: true,
                           });
                         },
