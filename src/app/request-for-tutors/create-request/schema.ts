@@ -5,7 +5,8 @@ export const createRequestTutorSchema = z.object({
     .string()
     .trim()
     .min(1, "Full Name is required")
-    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
+    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only")
+    .refine((v) => !/ {2,}/.test(v), "Multiple consecutive spaces are not allowed"),
 
   email: z
     .string()
