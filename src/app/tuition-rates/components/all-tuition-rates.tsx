@@ -59,7 +59,9 @@ export default function TuitionRatesByGrade() {
   if (error) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-red-500 font-medium">Failed to load tuition rates.</p>
+        <p className="text-red-500 font-medium">
+          Failed to load tuition rates.
+        </p>
       </div>
     );
   }
@@ -158,8 +160,9 @@ export default function TuitionRatesByGrade() {
                       {gradeGroup.subjects.map((subject, subIdx) => (
                         <tr
                           key={subIdx}
-                          className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
-                            }`}
+                          className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
+                            subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
+                          }`}
                         >
                           <td className="px-5 py-3.5">
                             <span className="inline-flex items-center gap-2">

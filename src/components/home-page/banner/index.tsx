@@ -26,9 +26,9 @@ const Banner = () => {
 
   // Signal to <html> that the hero is active — used by CSS to style the navbar
   useEffect(() => {
-    document.documentElement.setAttribute('data-hero', 'true');
+    document.documentElement.setAttribute("data-hero", "true");
     return () => {
-      document.documentElement.removeAttribute('data-hero');
+      document.documentElement.removeAttribute("data-hero");
     };
   }, []);
 
@@ -50,10 +50,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <section
-      id="hero-section"
-      className="hero-section"
-    >
+    <section id="hero-section" className="hero-section">
       {/* Background Video */}
       <video
         className="hero-video"
@@ -78,9 +75,7 @@ const Banner = () => {
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}
         >
-          <button className="hero-badge">
-            E-Learning Platform
-          </button>
+          <button className="hero-badge">E-Learning Platform</button>
         </div>
 
         {/* Headline */}
@@ -107,10 +102,7 @@ const Banner = () => {
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}
         >
-          <button
-            className="hero-cta"
-            onClick={handleOnFindATutorClick}
-          >
+          <button className="hero-cta" onClick={handleOnFindATutorClick}>
             Request a Tutor
           </button>
         </div>

@@ -354,7 +354,7 @@ export default function EditBlogPage() {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                      "<p>Nothing to preview yet...</p>",
+                        "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />

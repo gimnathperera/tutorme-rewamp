@@ -44,7 +44,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
 
     const finalAvatar =
       (apiAvatar && apiAvatar.trim() !== "") ||
-        (contextAvatar && contextAvatar.trim() !== "")
+      (contextAvatar && contextAvatar.trim() !== "")
         ? (apiAvatar || contextAvatar)!
         : DEFAULT_AVATAR;
 

@@ -191,7 +191,9 @@ const useLogic = (): LogicReturnType => {
     const prevGrades = prevGradesRef.current;
 
     // ── Handle removed grades ──────────────────────────────────────────────
-    const removedGrades = prevGrades.filter((id) => !currentGrades.includes(id));
+    const removedGrades = prevGrades.filter(
+      (id) => !currentGrades.includes(id),
+    );
     if (removedGrades.length > 0) {
       // Collect all subject IDs that belong to removed grades
       const removedSubjectIds = new Set<string>();

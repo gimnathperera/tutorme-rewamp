@@ -41,8 +41,9 @@ const InputSelect: FC<InputSelectProps> = ({
           <div className="relative">
             <select
               {...field}
-              className={`block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm ${error ? "border-red-500" : "border-linegrey"
-                } sm:leading-6 ${className}`}
+              className={`block w-full appearance-none rounded-md border px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm ${
+                error ? "border-red-500" : "border-linegrey"
+              } sm:leading-6 ${className}`}
               disabled={loading}
               {...props}
             >

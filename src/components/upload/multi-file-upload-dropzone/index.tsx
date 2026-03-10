@@ -86,7 +86,9 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
             {/* Zoom controls */}
             <button
               type="button"
-              onClick={() => setScale((s) => Math.max(0.25, +(s - 0.25).toFixed(2)))}
+              onClick={() =>
+                setScale((s) => Math.max(0.25, +(s - 0.25).toFixed(2)))
+              }
               className="flex items-center justify-center h-7 w-7 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               title="Zoom out"
             >
@@ -97,7 +99,9 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
             </span>
             <button
               type="button"
-              onClick={() => setScale((s) => Math.min(4, +(s + 0.25).toFixed(2)))}
+              onClick={() =>
+                setScale((s) => Math.min(4, +(s + 0.25).toFixed(2)))
+              }
               className="flex items-center justify-center h-7 w-7 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               title="Zoom in"
             >
@@ -119,7 +123,10 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
         <div className="flex-1 overflow-auto flex items-start justify-center p-4 bg-gray-50 dark:bg-gray-800">
           {isImage && imageSrc && (
             <div
-              style={{ transform: `scale(${scale})`, transformOrigin: "top center" }}
+              style={{
+                transform: `scale(${scale})`,
+                transformOrigin: "top center",
+              }}
               className="transition-transform duration-150"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -151,7 +158,9 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
 
           {!isImage && !isPdf && (
             <div className="flex flex-col items-center justify-center gap-3 py-12 text-gray-500">
-              <p className="text-sm">Preview not available for this file type.</p>
+              <p className="text-sm">
+                Preview not available for this file type.
+              </p>
             </div>
           )}
         </div>

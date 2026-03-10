@@ -254,7 +254,9 @@ export default function AddRequestForTutor() {
                           // strip every space character as the user types
                           const noSpaces = e.target.value.replace(/ /g, "");
                           if (noSpaces !== e.target.value) {
-                            setValue("email", noSpaces, { shouldValidate: true });
+                            setValue("email", noSpaces, {
+                              shouldValidate: true,
+                            });
                           }
                         },
                         onBlur: (e) => {
@@ -287,13 +289,19 @@ export default function AddRequestForTutor() {
                           // strip every space character as the user types
                           const noSpaces = e.target.value.replace(/ /g, "");
                           if (noSpaces !== e.target.value) {
-                            setValue("phoneNumber", noSpaces, { shouldValidate: true });
+                            setValue("phoneNumber", noSpaces, {
+                              shouldValidate: true,
+                            });
                           }
                         },
                         onBlur: (e) => {
-                          setValue("phoneNumber", e.target.value.replace(/ /g, ""), {
-                            shouldValidate: true,
-                          });
+                          setValue(
+                            "phoneNumber",
+                            e.target.value.replace(/ /g, ""),
+                            {
+                              shouldValidate: true,
+                            },
+                          );
                         },
                       })}
                       className={`${inputClass} ${errors.phoneNumber ? "border-red-500" : "border-gray-300"}`}
