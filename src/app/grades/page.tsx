@@ -56,9 +56,13 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
             </div>
             <Dialog.Title className="flex-1 text-white font-bold text-lg leading-snug">
               {isLoading ? (
-                <Skeleton width={200} baseColor="#ffffff40" highlightColor="#ffffff60" />
+                <Skeleton
+                  width={200}
+                  baseColor="#ffffff40"
+                  highlightColor="#ffffff60"
+                />
               ) : (
-                data?.title ?? "Grade Details"
+                (data?.title ?? "Grade Details")
               )}
             </Dialog.Title>
             <Dialog.Close asChild>
@@ -223,33 +227,33 @@ const GradesPage: FC = () => {
       <div className="mx-auto max-w-7xl px-4 py-8 sm:py-16 lg:px-10 rounded-3xl bg-lightgrey grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {isLoading
           ? Array.from({ length: 8 }).map((_, index) => (
-            <Card key={index} className="flex flex-col m-2 bg-white">
-              <CardContent className="flex-grow p-6">
-                <div className="h-16 flex items-center justify-center">
-                  <Skeleton circle height={32} width={32} />
-                </div>
-                <h2 className="text-xl font-semibold text-center mb-2">
-                  <Skeleton width="60%" />
-                </h2>
-                <p className="text-center text-muted-foreground">
-                  <Skeleton count={3} width="80%" />
-                </p>
-              </CardContent>
-              <CardFooter className="p-6 pt-0">
-                <Skeleton height={40} />
-              </CardFooter>
-            </Card>
-          ))
+              <Card key={index} className="flex flex-col m-2 bg-white">
+                <CardContent className="flex-grow p-6">
+                  <div className="h-16 flex items-center justify-center">
+                    <Skeleton circle height={32} width={32} />
+                  </div>
+                  <h2 className="text-xl font-semibold text-center mb-2">
+                    <Skeleton width="60%" />
+                  </h2>
+                  <p className="text-center text-muted-foreground">
+                    <Skeleton count={3} width="80%" />
+                  </p>
+                </CardContent>
+                <CardFooter className="p-6 pt-0">
+                  <Skeleton height={40} />
+                </CardFooter>
+              </Card>
+            ))
           : grades.map(({ id, title, description }) => (
-            <GradeCard
-              key={id}
-              id={id}
-              title={title}
-              description={description}
-              onStartLearning={onHandleGradeClick}
-              onShowDetails={setSelectedGradeId}
-            />
-          ))}
+              <GradeCard
+                key={id}
+                id={id}
+                title={title}
+                description={description}
+                onStartLearning={onHandleGradeClick}
+                onShowDetails={setSelectedGradeId}
+              />
+            ))}
       </div>
 
       {/* Detail popup */}

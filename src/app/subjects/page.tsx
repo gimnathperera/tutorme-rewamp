@@ -51,7 +51,7 @@ const SubjectDetailDialog: FC<SubjectDetailDialogProps> = ({
                     highlightColor="#ffffff60"
                   />
                 ) : (
-                  data?.title ?? "Subject Details"
+                  (data?.title ?? "Subject Details")
                 )}
               </Dialog.Title>
               {gradeTitle && (
