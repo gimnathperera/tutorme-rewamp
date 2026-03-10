@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
 import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { BookOpen, ChevronDown } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+} from "@/components/ui/accordion";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 
 type Rate = { minimumRate: string; maximumRate: string };
 type SubjectRate = {
@@ -38,10 +42,10 @@ function RateCell({ rates }: { rates: Rate[] }) {
 }
 
 export default function TuitionRatesByGrade() {
-  const [page, setPage] = useState<number>(1);
-  const limit = 20000;
-
-  const { data, isLoading, error } = useFetchTuitionRatesQuery({ page, limit });
+  const { data, isLoading, error } = useFetchTuitionRatesQuery({
+    page: 1,
+    limit: 20000,
+  });
 
   if (isLoading) {
     return (
@@ -55,16 +59,12 @@ export default function TuitionRatesByGrade() {
   if (error) {
     return (
       <div className="flex items-center justify-center py-20">
-        <p className="text-red-500 font-medium">
-          Failed to load tuition rates.
-        </p>
+        <p className="text-red-500 font-medium">Failed to load tuition rates.</p>
       </div>
     );
   }
 
   const results = data?.results || [];
-  const totalResults = data?.totalResults ?? results.length;
-  const totalPages = Math.max(1, Math.ceil(totalResults / limit));
 
   const groupedData: Record<string, GradeGroup> =
     results?.reduce(
@@ -84,123 +84,110 @@ export default function TuitionRatesByGrade() {
       {} as Record<string, GradeGroup>,
     ) || {};
 
-  const handleNext = () => {
-    if (page < totalPages) setPage((p) => p + 1);
-  };
-  const handlePrev = () => {
-    if (page > 1) setPage((p) => p - 1);
-  };
+  const gradeEntries = Object.values(groupedData);
+
+  // First grade is open by default
+  const defaultValue =
+    gradeEntries.length > 0
+      ? gradeEntries[0].grade?.id || "grade-0"
+      : undefined;
 
   return (
-    <div className="space-y-8 px-2 sm:px-0">
-      {Object.values(groupedData).map((gradeGroup, idx) => (
-        <div
-          key={gradeGroup.grade?.id || `grade-${idx}`}
-          className="rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-white"
-        >
-          {/* Grade Header */}
-          <div className="flex items-center gap-3 px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600">
-            <div className="bg-white/20 rounded-full p-1.5">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-white font-bold text-lg tracking-wide">
-              {gradeGroup.grade?.title || "Unknown Grade"}
-            </h2>
-            <span className="ml-auto bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full">
-              {gradeGroup.subjects.length} Subject
-              {gradeGroup.subjects.length !== 1 ? "s" : ""}
-            </span>
-          </div>
+    <div className="px-2 sm:px-0">
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue={defaultValue}
+        className="space-y-3"
+      >
+        {gradeEntries.map((gradeGroup, idx) => {
+          const itemValue = gradeGroup.grade?.id || `grade-${idx}`;
+          return (
+            <AccordionItem
+              key={itemValue}
+              value={itemValue}
+              className="rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-white"
+            >
+              {/* Custom styled trigger that keeps the gradient header */}
+              <AccordionPrimitive.Header className="flex">
+                <AccordionPrimitive.Trigger className="flex w-full min-w-0 items-center gap-2 sm:gap-3 px-3 sm:px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-left [&[data-state=open]_.chevron]:rotate-180">
+                  <div className="bg-white/20 rounded-full p-1.5 shrink-0">
+                    <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                  </div>
+                  <h2 className="text-white font-bold text-base sm:text-lg tracking-wide flex-1 min-w-0 truncate">
+                    {gradeGroup.grade?.title || "Unknown Grade"}
+                  </h2>
+                  <span className="hidden sm:inline-flex bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full shrink-0">
+                    {gradeGroup.subjects.length} Subject
+                    {gradeGroup.subjects.length !== 1 ? "s" : ""}
+                  </span>
+                  <ChevronDown className="chevron w-5 h-5 text-white shrink-0 ml-1 transition-transform duration-300" />
+                </AccordionPrimitive.Trigger>
+              </AccordionPrimitive.Header>
 
-          {/* Scrollable Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[560px] text-sm">
-              <thead>
-                <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
-                    Subject
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                      Full-Time
-                    </span>
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                      Part-Time
-                    </span>
-                  </th>
-                  <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
-                    <span className="inline-flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                      Government
-                    </span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {gradeGroup.subjects.map((subject, subIdx) => (
-                  <tr
-                    key={subIdx}
-                    className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
-                      subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
-                    }`}
-                  >
-                    <td className="px-5 py-3.5">
-                      <span className="inline-flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
-                        <span className="font-semibold text-gray-800">
-                          {subject.title}
-                        </span>
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <RateCell rates={subject.fullTime} />
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <RateCell rates={subject.partTime} />
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <RateCell rates={subject.gov} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      ))}
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 pt-2 pb-6">
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page === 1}
-            onClick={handlePrev}
-            className="flex items-center gap-1 border-gray-300 hover:border-[#FCA627] hover:text-[#FCA627] transition-colors"
-          >
-            <ChevronLeft className="w-4 h-4" />
-            Previous
-          </Button>
-          <span className="text-sm font-semibold text-gray-600 bg-gray-100 px-4 py-1.5 rounded-full">
-            {page} / {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={page === totalPages || totalPages === 0}
-            onClick={handleNext}
-            className="flex items-center gap-1 border-gray-300 hover:border-[#FCA627] hover:text-[#FCA627] transition-colors"
-          >
-            Next
-            <ChevronRight className="w-4 h-4" />
-          </Button>
-        </div>
-      )}
+              {/* Table revealed with smooth slide animation */}
+              <AccordionContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[560px] text-sm">
+                    <thead>
+                      <tr className="bg-gray-50 border-b border-gray-200">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                          Subject
+                        </th>
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
+                            Full-Time
+                          </span>
+                        </th>
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
+                            Part-Time
+                          </span>
+                        </th>
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
+                            Government
+                          </span>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {gradeGroup.subjects.map((subject, subIdx) => (
+                        <tr
+                          key={subIdx}
+                          className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
+                            }`}
+                        >
+                          <td className="px-5 py-3.5">
+                            <span className="inline-flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
+                              <span className="font-semibold text-gray-800">
+                                {subject.title}
+                              </span>
+                            </span>
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <RateCell rates={subject.fullTime} />
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <RateCell rates={subject.partTime} />
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <RateCell rates={subject.gov} />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          );
+        })}
+      </Accordion>
     </div>
   );
 }
