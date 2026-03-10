@@ -31,6 +31,8 @@ const AcademicExperience = () => {
     register,
     control,
     watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useFormContext();
 
@@ -48,6 +50,7 @@ const AcademicExperience = () => {
   useEffect(() => {
     if (selectedGradeIds.length === 0) {
       setSubjectOptions([]);
+      setValue("subjects", []);
       return;
     }
 
@@ -57,12 +60,18 @@ const AcademicExperience = () => {
           gradeIds: selectedGradeIds,
         }).unwrap();
 
-        setSubjectOptions(
-          res.subjects.map((s: any) => ({
-            value: s.id,
-            text: s.title,
-          })),
-        );
+        const newOptions = res.subjects.map((s: any) => ({
+          value: s.id,
+          text: s.title,
+        }));
+        setSubjectOptions(newOptions);
+
+        // Remove any previously selected subjects that no longer belong
+        // to the current set of grades.
+        const validIds = new Set(newOptions.map((o) => o.value));
+        const currentSubjects: string[] = getValues("subjects") ?? [];
+        const filtered = currentSubjects.filter((id) => validIds.has(id));
+        setValue("subjects", filtered);
       } catch (error) {
         console.error("Failed to load subjects", error);
         setSubjectOptions([]);
@@ -70,7 +79,7 @@ const AcademicExperience = () => {
     };
 
     loadSubjects();
-  }, [selectedGradeIds, fetchSubjectsForGrades]);
+  }, [selectedGradeIds, fetchSubjectsForGrades, setValue, getValues]);
 
   return (
     <div className="space-y-8">
