@@ -47,7 +47,7 @@ const InputSelect: FC<InputSelectProps> = ({
               disabled={loading}
               {...props}
             >
-              <option value="" className="text-gray-500">
+              <option value="" disabled hidden className="text-gray-500">
                 Select an option
               </option>
               {options.map((option, index) => (

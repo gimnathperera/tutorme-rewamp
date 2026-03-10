@@ -717,9 +717,7 @@
     {
       "name": "Jaffna",
       "province": "Northern",
-      "cities": [
-        "Jaffna"
-      ]
+      "cities": ["Jaffna"]
     },
     {
       "name": "Kalutara",
@@ -1382,10 +1380,7 @@
     {
       "name": "Mannar",
       "province": "Northern",
-      "cities": [
-        "Mannar",
-        "Puthukudiyiruppu"
-      ]
+      "cities": ["Mannar", "Puthukudiyiruppu"]
     },
     {
       "name": "Matale",
@@ -1611,9 +1606,7 @@
     {
       "name": "Mullaitivu",
       "province": "Northern",
-      "cities": [
-        "Mullativu"
-      ]
+      "cities": ["Mullativu"]
     },
     {
       "name": "Nuwara Eliya",
@@ -1993,9 +1986,7 @@
     {
       "name": "Vavuniya",
       "province": "Northern",
-      "cities": [
-        "Vavuniya"
-      ]
+      "cities": ["Vavuniya"]
     }
   ]
 }

@@ -232,8 +232,8 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                                 href={subItem.href}
                                 onClick={() => setOpenDropdown(null)}
                                 className={[
-                                  "flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-100",
-                                  idx !== 0 ? "border-t border-gray-50" : "",
+                                  "flex items-center gap-2 px-4 py-2.5 mx-1.5 rounded-lg text-sm transition-colors duration-100",
+                                  idx !== 0 ? "" : "",
                                   subActive
                                     ? "text-blue-600 font-semibold bg-blue-50"
                                     : "text-gray-700 hover:bg-gray-50 hover:text-blue-600",
@@ -294,7 +294,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         ? { border: heroBtnBorder, color: heroBtnColor }
                         : undefined
                     }
-                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-200"
+                    className="text-sm font-semibold bg-transparent py-2 px-5 navbutton rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     Login

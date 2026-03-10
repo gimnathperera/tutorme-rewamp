@@ -23,5 +23,5 @@ export const districts = [
   "Puttalam",
   "Ratnapura",
   "Trincomalee",
-  "Vavuniya"
+  "Vavuniya",
 ];

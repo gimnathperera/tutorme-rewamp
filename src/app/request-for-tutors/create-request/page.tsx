@@ -50,6 +50,14 @@ const errorMsg = "text-sm text-red-500 min-h-[1.25rem]";
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 
+/**
+ * Strip leading spaces immediately; on blur collapse multiple internal spaces
+ * so the stored value is always clean.
+ */
+const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
+const collapseSpaces = (value: string) =>
+  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
+
 type TabKey = "contact" | "tutorDetails";
 const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
 
@@ -204,7 +212,21 @@ export default function AddRequestForTutor() {
                   <Label htmlFor="name">Full Name *</Label>
                   <Input
                     id="name"
-                    {...register("name")}
+                    {...register("name", {
+                      onChange: (e) => {
+                        // strip leading spaces as the user types
+                        const cleaned = stripLeadingSpaces(e.target.value);
+                        if (cleaned !== e.target.value) {
+                          setValue("name", cleaned, { shouldValidate: true });
+                        }
+                      },
+                      onBlur: (e) => {
+                        // fully normalize on blur (collapse multiple spaces too)
+                        setValue("name", collapseSpaces(e.target.value), {
+                          shouldValidate: true,
+                        });
+                      },
+                    })}
                     placeholder="e.g. Nimal Perera"
                     autoComplete="name"
                     className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
@@ -227,7 +249,22 @@ export default function AddRequestForTutor() {
                       type="email"
                       placeholder="e.g. johndoe@gmail.com"
                       autoComplete="email"
-                      {...register("email")}
+                      {...register("email", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("email", noSpaces, {
+                              shouldValidate: true,
+                            });
+                          }
+                        },
+                        onBlur: (e) => {
+                          setValue("email", e.target.value.replace(/ /g, ""), {
+                            shouldValidate: true,
+                          });
+                        },
+                      })}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
                     />
                     {errors.email ? (
@@ -247,7 +284,26 @@ export default function AddRequestForTutor() {
                       maxLength={10}
                       placeholder="e.g. 0712345678"
                       autoComplete="tel"
-                      {...register("phoneNumber")}
+                      {...register("phoneNumber", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("phoneNumber", noSpaces, {
+                              shouldValidate: true,
+                            });
+                          }
+                        },
+                        onBlur: (e) => {
+                          setValue(
+                            "phoneNumber",
+                            e.target.value.replace(/ /g, ""),
+                            {
+                              shouldValidate: true,
+                            },
+                          );
+                        },
+                      })}
                       className={`${inputClass} ${errors.phoneNumber ? "border-red-500" : "border-gray-300"}`}
                     />
                     {errors.phoneNumber ? (
