@@ -11,10 +11,10 @@ export const generalInfoSchema = z.object({
   phoneNumber: z
     .string()
     .trim()
-    .regex(
-      /^(?=.*\d)[0-9 -]{10,15}$/,
-      "Phone number can contain only numbers, spaces, and '-'",
-    )
+    .min(1, "Phone number is required")
+    .regex(/^[0-9 -]+$/, "Phone number can contain only numbers, spaces, and '-'")
+    .min(10, "Phone number must be at least 10 characters")
+    .max(15, "Phone number must be at most 15 characters")
     .optional(),
   country: z.string().min(1, "Country is required").optional(),
   city: z
@@ -42,16 +42,20 @@ export const generalInfoSchema = z.object({
     .optional(),
   zip: z
     .string()
+    .trim()
+    .min(1, "ZIP / Postal code is required")
     .regex(/^\d{5}(-\d{4})?$/, "ZIP must be 12345 or 12345-6789 format")
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
   birthday: z
     .union([z.string(), z.date()])
-    .optional()
+    .refine((val) => val !== "" && val !== null && val !== undefined, {
+      message: "Birthday is required",
+    })
     .transform((value) => (value === "" ? undefined : value))
     .refine(
       (date) => {
-        if (!date) return true; // Allow undefined values
+        if (!date) return true; // Handled by first refine
         const today = new Date();
         const minDate = addYears(today, -18);
         return isBefore(new Date(date), minDate);
@@ -59,7 +63,8 @@ export const generalInfoSchema = z.object({
       {
         message: "You must be at least 18 years old",
       },
-    ),
+    )
+    .optional(),
   gender: z
     .union([z.enum(["Male", "Female", "None"]), z.literal("")])
     .refine((val) => val !== "", { message: "Gender is required" })
