@@ -66,7 +66,7 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.fullName ? (
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.fullName?.message as string}
           </p>
         ) : (
@@ -86,7 +86,7 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.email ? (
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.email?.message as string}
           </p>
         ) : (
@@ -108,7 +108,7 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.contactNumber ? (
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.contactNumber?.message as string}
           </p>
         ) : (
@@ -148,7 +148,7 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.dateOfBirth ? (
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.dateOfBirth?.message as string}
           </p>
         ) : (
@@ -168,7 +168,7 @@ const PersonalInfo = () => {
           className={`${inputClass} bg-muted border-gray-300`}
         />
         {errors.age ? (
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.age?.message as string}
           </p>
         ) : (

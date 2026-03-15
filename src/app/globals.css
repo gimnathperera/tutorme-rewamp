@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap");
 /* TAILWIND CSS LINKS */
 @tailwind base;
 @tailwind components;
@@ -8,10 +9,210 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
+html {
+  --scroll-behavior: smooth !important;
+  scroll-behavior: smooth !important;
+}
+
+/* 
+  Page 7: typography should support reading and understanding
+  Page 11: spacing influences reading flow and comprehension
+  Page 14: poor spacing / too-small text reduces comfort and trust
+*/
 body {
   margin: 0;
   font-family: "Urbanist", sans-serif;
+  font-size: 1rem; /* 16px base */
+  line-height: 1.6;
+  font-weight: 400;
+  color: #111827;
+  background-color: #f9f9f9;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+/* 
+  Page 11: size and weight create hierarchy
+  Page 13: clear headline hierarchy improves scanning
+*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Urbanist", sans-serif;
+  margin: 0;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+/* Hero Title — 48px, weight 800, line-height 1.1 */
+h1 {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+/* Section Title — 36px, weight 700, line-height 1.2 */
+h2 {
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+/* Sub-Section Title — 30px, weight 700, line-height 1.25 */
+h3 {
+  font-size: 1.875rem;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+/* Card Title — 20px, weight 600, line-height 1.4 */
+h4 {
+  font-size: 1.25rem;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+  font-size: 1rem; /* body text, Pages 12, 14 */
+  line-height: 1.625;
+  color: rgba(17, 24, 39, 0.82);
+}
+
+/* 
+  Page 12-13: balanced line lengths and generous spacing improve readability
+*/
+.reading-width {
+  max-width: 65ch;
+}
+
+/* 
+  Page 51-52: alignment should guide the eye and reduce cognitive load
+*/
+.text-balance {
+  text-wrap: balance;
+}
+
+/* 
+  Page 47 + 49: open, readable text on digital interfaces matters,
+  and small sizes need good clarity
+*/
+/* Helper Text — 12px, weight 400 */
+small,
+.helper-text {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: #747474;
+}
+
+/* Form Labels — 14px, weight 500 */
+.ui-label {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+/* Buttons — 16px, weight 600 */
+.ui-button-text {
+  font-size: 1rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* Hero Title — clamp(3rem → 3.75rem), weight 800 (text-5xl → text-6xl range) */
+.hero-title {
+  font-size: clamp(3rem, 7vw, 3.75rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+/* Hero badge can be calmer and more legible */
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  font-size: 0.875rem; /* small UI label size */
+  line-height: 1.25rem;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: 9999px;
+  letter-spacing: 0;
+  cursor: default;
+  transition: background 0.3s ease;
+}
+
+/* Blog content — spec: 16px body, 1.7 line-height, 36px titles */
+.blog-content h1 {
+  font-size: 2.25rem; /* text-4xl = 36px — blog title */
+  line-height: 1.2;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.blog-content h2 {
+  font-size: 1.875rem; /* text-3xl = 30px */
+  line-height: 1.25;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: #1f2937;
+}
+
+.blog-content h3 {
+  font-size: 1.25rem; /* text-xl = 20px */
+  line-height: 1.4;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+.blog-content p,
+.blog-content li {
+  font-size: 1rem; /* text-base = 16px */
+  line-height: 1.7;
+  color: #374151;
+}
+
+.blog-content ul,
+.blog-content ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.blog-content strong {
+  font-weight: 700;
+  color: #111827;
+}
+
+.blog-content a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.blog-content a:hover {
+  text-decoration: underline;
+}
+
+.blog-content img {
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+}
+
 
 /* ============================================================
    SCROLL ANIMATIONS
@@ -164,11 +365,6 @@ html:not([data-scroll="0"]) .border-right {
   height: 4rem;
 }
 
-html {
-  --scroll-behavior: smooth !important;
-  scroll-behavior: smooth !important;
-}
-
 /* ============================================================
    HERO SECTION — fullscreen video banner
    ============================================================ */
@@ -229,33 +425,8 @@ html {
   width: 100%;
 }
 
-.hero-badge {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  color: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 700;
-  padding: 0.4rem 1.4rem;
-  border-radius: 9999px;
-  letter-spacing: 0.08em;
-  cursor: default;
-  transition: background 0.3s ease;
-}
-
 .hero-badge:hover {
   background: rgba(255, 255, 255, 0.25);
-}
-
-.hero-title {
-  font-size: clamp(2.5rem, 8vw, 5.5rem);
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.1;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
-  margin: 0;
 }
 
 .hero-cta {
@@ -757,35 +928,6 @@ html {
   color: #747474;
 }
 
-.blog-content h1 {
-  @apply text-4xl font-bold mt-8 mb-4 text-gray-900;
-}
-
-.blog-content h2 {
-  @apply text-3xl font-semibold mt-6 mb-3 text-gray-800;
-}
-
-.blog-content h3 {
-  @apply text-2xl font-semibold mt-4 mb-2 text-gray-700;
-}
-
 .blog-content p {
   @apply text-gray-700 leading-relaxed mb-4;
-}
-
-.blog-content ul,
-.blog-content ol {
-  @apply list-disc list-inside mb-4 pl-6 text-gray-700;
-}
-
-.blog-content strong {
-  @apply font-semibold text-gray-900;
-}
-
-.blog-content a {
-  @apply text-blue-600 hover:underline;
-}
-
-.blog-content img {
-  @apply rounded-lg my-6;
 }

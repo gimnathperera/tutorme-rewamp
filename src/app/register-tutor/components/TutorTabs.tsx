@@ -145,9 +145,9 @@ export function TutorTabs() {
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-          <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
+          <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-            <h1>Register As A Tutor</h1>
+            <h1 className="text-3xl font-bold">Register As A Tutor</h1>
           </div>
 
           <Tabs value={tab} className="w-full">
@@ -257,10 +257,10 @@ export function TutorTabs() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Registration Submitted!
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Your tutor profile has been submitted successfully. Our team will
               review it and get back to you shortly.
             </DialogDescription>
@@ -301,10 +301,10 @@ export function TutorTabs() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Submission Failed
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Something went wrong.
             </DialogDescription>
           </DialogHeader>

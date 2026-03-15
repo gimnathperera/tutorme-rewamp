@@ -179,7 +179,7 @@ export default function EditBlogPage() {
             <input
               id="title"
               placeholder="Blog Title"
-              className="text-[30pt] h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
+              className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
               {...register("title")}
             />
             {formState.errors.title && (

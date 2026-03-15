@@ -43,7 +43,7 @@ const SubjectDetailDialog: FC<SubjectDetailDialogProps> = ({
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <Dialog.Title className="text-white font-bold text-lg leading-snug">
+              <Dialog.Title className="text-white font-semibold text-xl leading-snug">
                 {isLoading ? (
                   <Skeleton
                     width={180}
@@ -85,7 +85,7 @@ const SubjectDetailDialog: FC<SubjectDetailDialogProps> = ({
           {/* Footer */}
           <div className="px-6 py-4 border-t border-gray-100 shrink-0">
             <button
-              className="w-full py-3 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-teal-600 hover:to-cyan-700 transition-all shadow hover:shadow-md"
+              className="w-full py-3 text-base font-semibold text-white rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-teal-600 hover:to-cyan-700 transition-all shadow hover:shadow-md"
               onClick={() => {
                 if (subjectId) onStartLearning(subjectId);
                 onClose();
@@ -137,7 +137,7 @@ const SubjectCard: FC<SubjectCardProps> = ({
 
     <CardFooter className="p-6 pt-0 mt-auto">
       <button
-        className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:opacity-90"
+        className="py-3 px-5 text-base font-semibold disabled:opacity-50 w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:opacity-90"
         onClick={() => onStartLearning(id)}
       >
         Start Learning
@@ -162,10 +162,10 @@ const SubjectsPage: FC = () => {
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl py-4 m-3">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+        <h2 className="text-4xl font-bold text-center">
           Pick Your Subject and Let&apos;s Get Learning!
         </h2>
-        <h3 className="text-xl sm:text-2xl font-medium text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="text-xl font-normal text-center pt-4 sm:pt-10 opacity-50">
           Explore courses and resources just for you! Pick your subject to begin
           <br className="hidden sm:block" />
           an exciting and personalized learning adventure!
@@ -202,7 +202,7 @@ const SubjectsPage: FC = () => {
             >
               {/* Grade heading */}
               <div className="mb-6">
-                <h3 className="text-2xl sm:text-3xl font-semibold text-center sm:text-left">
+                <h3 className="text-3xl font-bold text-center sm:text-left">
                   {grade.title}
                 </h3>
               </div>

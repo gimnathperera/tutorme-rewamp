@@ -40,7 +40,7 @@ const Drawer = ({
         <article className="relative w-340px max-w-lg h-full flex flex-col">
           <header className="px-4 py-4 flex items-center">
             <div className="flex flex-shrink-0 items-center border-right">
-              <Link href="/" className="text-2xl font-semibold text-black">
+              <Link href="/" className="text-2xl font-bold text-black">
                 Tuition Lanka
               </Link>
             </div>
@@ -65,7 +65,7 @@ const Drawer = ({
 
           <footer className="p-4">
             <button
-              className="w-full block bg-blue-600 text-white hover:bg-blue-700 py-2 rounded-full text-center text-base font-medium"
+              className="w-full block bg-blue-600 text-white hover:bg-blue-700 py-2 rounded-full text-center text-base font-semibold"
               onClick={() => {
                 if (user?.email) {
                   logout?.();

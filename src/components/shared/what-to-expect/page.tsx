@@ -53,10 +53,10 @@ const WhatToExceptFromTutorMe = (props: { name: string }) => {
   return (
     <>
       <div className="space-y-4">
-        <h1 className="text-center text-[#FCA627] font-bold text-xl">
+        <h1 className="text-center text-[#FCA627] font-bold text-3xl">
           {props.name} Tuition Singapore
         </h1>
-        <h1 className="text-3xl font-semibold text-center">
+        <h1 className="text-4xl font-bold text-center">
           What To Expect From MindFlex’s {props.name} Tutors
         </h1>
       </div>
@@ -67,7 +67,7 @@ const WhatToExceptFromTutorMe = (props: { name: string }) => {
             className="flex flex-col items-center text-center p-4 border rounded-xl shadow-sm bg-white hover:shadow-md transition"
           >
             <Image src={card.icon} alt="" width={50} height={50} />
-            <p className="mt-4 text-sm font-medium text-gray-700">
+            <p className="mt-4 text-base font-medium text-gray-700">
               {card.text}
             </p>
           </div>

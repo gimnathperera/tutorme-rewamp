@@ -20,7 +20,7 @@ const Beliefs = () => {
             <h2 className="text-sm font-semibold text-white tracking-widest mb-3 text-center sm:text-start uppercase">
               JOIN
             </h2>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white leading-[1.25] mb-4 text-center sm:text-start">
+            <h3 className="text-3xl lg:text-4xl font-bold text-white leading-[1.25] mb-4 text-center sm:text-start">
               Share{" "}
               <span className="text-grey">
                 knowledge and inspire students worldwide.
@@ -32,7 +32,7 @@ const Beliefs = () => {
             </p>
             <div className="mt-auto text-center sm:text-start">
               <button
-                className="text-sm sm:text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90 transition-all duration-300 hover:shadow-lg"
+                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90 transition-all duration-300 hover:shadow-lg"
                 onClick={handleRegisterTutor}
               >
                 Become a Tutor
@@ -45,7 +45,7 @@ const Beliefs = () => {
             <h2 className="text-sm font-semibold text-blue tracking-widest mb-3 text-center sm:text-start uppercase">
               FIND
             </h2>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-black leading-[1.25] mb-4 text-center sm:text-start">
+            <h3 className="text-3xl lg:text-4xl font-bold text-black leading-[1.25] mb-4 text-center sm:text-start">
               <span className="text-blue">Find</span> the perfect tutor for any
               subject, anytime.
             </h3>
@@ -55,7 +55,7 @@ const Beliefs = () => {
             </p>
             <div className="mt-auto text-center sm:text-start">
               <button
-                className="text-sm sm:text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90 transition-all duration-300 hover:shadow-lg"
+                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90 transition-all duration-300 hover:shadow-lg"
                 onClick={handleOnLearnMoreClick}
               >
                 Request a Tutor

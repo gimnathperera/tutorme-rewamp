@@ -54,7 +54,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
             <div className="bg-white/20 rounded-full p-2">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
-            <Dialog.Title className="flex-1 text-white font-bold text-lg leading-snug">
+            <Dialog.Title className="flex-1 text-white font-semibold text-xl leading-snug">
               {isLoading ? (
                 <Skeleton
                   width={200}
@@ -131,7 +131,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
           {/* Footer */}
           <div className="px-6 py-4 border-t border-gray-100 shrink-0">
             <button
-              className="w-full py-3 text-sm font-semibold text-white rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all shadow hover:shadow-md"
+              className="w-full py-3 text-base font-semibold text-white rounded-xl bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all shadow hover:shadow-md"
               onClick={() => {
                 if (gradeId) onStartLearning(gradeId);
                 onClose();
@@ -188,7 +188,7 @@ const GradeCard: FC<GradeCardProps> = ({
 
     <CardFooter className="p-6 pt-0 mt-auto">
       <button
-        className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:opacity-90"
+        className="py-3 px-5 text-base disabled:opacity-50 font-semibold w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:opacity-90"
         onClick={() => onStartLearning(id)}
       >
         Start Learning
@@ -214,10 +214,10 @@ const GradesPage: FC = () => {
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl py-4 m-3">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+        <h2 className="text-4xl font-bold text-center">
           Pick Your Grade and Let&apos;s Get Learning!
         </h2>
-        <h3 className="text-xl sm:text-2xl font-medium text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="text-xl font-normal text-center pt-4 sm:pt-10 opacity-50">
           Explore courses and resources just for you! Pick your grade to begin
           <br className="hidden sm:block" />
           an exciting and personalized learning adventure!

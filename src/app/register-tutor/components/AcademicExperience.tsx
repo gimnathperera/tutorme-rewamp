@@ -99,7 +99,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutoringLevels?.message as string}
           </p>
         </div>
@@ -118,7 +118,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.preferredLocations?.message as string}
           </p>
         </div>
@@ -140,7 +140,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutorType?.message as string}
           </p>
         </div>
@@ -164,7 +164,7 @@ const AcademicExperience = () => {
             </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.highestEducation?.message as string}
           </p>
         </div>
@@ -183,7 +183,7 @@ const AcademicExperience = () => {
             className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", { valueAsNumber: true })}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.yearsExperience?.message as string}
           </p>
         </div>
@@ -202,7 +202,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutorMediums?.message as string}
           </p>
         </div>
@@ -229,7 +229,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.grades?.message as string}
           </p>
         </div>
@@ -249,7 +249,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.subjects?.message as string}
           </p>
         </div>

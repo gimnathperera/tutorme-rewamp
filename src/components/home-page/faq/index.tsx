@@ -136,7 +136,7 @@ const Faqs = () => {
       <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">
         FAQ
       </h3>
-      <h2 className="text-3xl md:text-4xl font-semibold text-center text-white leading-[1.2] mb-10">
+      <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
         Frequently asked <br /> questions.
       </h2>
 
@@ -166,7 +166,7 @@ const Faqs = () => {
         <div className="text-center mt-8">
           <button
             onClick={loadMore}
-            className="px-8 py-3 border-2 border-white text-white text-sm font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+            className="px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
           >
             See More
           </button>

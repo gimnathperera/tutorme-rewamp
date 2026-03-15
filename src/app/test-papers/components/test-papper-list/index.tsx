@@ -28,7 +28,7 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {availablePapers.map((paper) => (
             <div key={paper.id} className="text-center">
-              <h2 className="text-lg font-bold text-black">
+              <h2 className="text-xl font-semibold text-black">
                 {paper.subject.title}
               </h2>
 
@@ -36,7 +36,7 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
                 href={paper.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-blue-600 hover:underline font-semibold mt-2"
+                className="block text-sm font-semibold text-blue-600 hover:underline mt-2"
               >
                 Download Paper
               </a>
@@ -47,7 +47,7 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
                     href={paper.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-700 hover:underline"
+                    className="text-sm text-gray-700 hover:underline"
                   >
                     {paper.title} ({paper.year})
                   </a>
@@ -65,10 +65,10 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
             height={64}
             className="inline-block m-auto mb-4"
           />
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-base font-semibold text-gray-700">
             No Test Papers Available
           </h2>
-          <p className="text-gray-500 mt-2">Please search again!</p>
+          <p className="text-sm text-gray-500 mt-2">Please search again!</p>
         </div>
       )}
     </div>

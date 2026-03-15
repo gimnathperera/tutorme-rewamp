@@ -98,10 +98,10 @@ const FormResetPassword = () => {
               height={200}
             />
           </div>
-          <DialogTitle className="text-2xl text-center font-semibold">
+          <DialogTitle className="text-3xl text-center font-bold">
             Reset Password
           </DialogTitle>
-          <DialogDescription className="text-center text-gray-500">
+          <DialogDescription className="text-center text-base text-gray-500">
             Enter your new password below to reset your password
           </DialogDescription>
         </DialogHeader>

@@ -18,7 +18,7 @@ const KeepInTouch = () => {
           <h3 className="text-blue text-sm font-semibold tracking-widest uppercase mb-3">
             KEEP IN TOUCH
           </h3>
-          <h2 className="text-3xl sm:text-4xl font-semibold leading-[1.2] text-[#111827] my-4">
+          <h2 className="text-4xl font-bold leading-[1.2] text-[#111827] my-4">
             Take your learning or teaching journey
             <br className="hidden sm:block" /> to the next level.
           </h2>
@@ -34,7 +34,7 @@ const KeepInTouch = () => {
         <div className="pt-8 flex justify-center animate-on-scroll stagger-2">
           <button
             type="button"
-            className="text-sm sm:text-base font-semibold text-white py-3.5 px-9 rounded-full bg-primary-700 hover:bg-btnblue transition-all duration-300 hover:shadow-lg"
+            className="text-base font-semibold text-white py-3.5 px-9 rounded-full bg-primary-700 hover:bg-btnblue transition-all duration-300 hover:shadow-lg"
             onClick={handleModalVisibility}
           >
             Send us a message

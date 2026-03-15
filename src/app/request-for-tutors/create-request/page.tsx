@@ -45,7 +45,7 @@ const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
-const errorMsg = "text-sm text-red-500 min-h-[1.25rem]";
+const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -193,9 +193,9 @@ export default function AddRequestForTutor() {
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-      <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
+      <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-        <h1>Request A Tutor</h1>
+        <h1 className="text-3xl font-bold">Request A Tutor</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -434,7 +434,7 @@ export default function AddRequestForTutor() {
                     key={index}
                     className="p-4 border border-gray-200 rounded-md"
                   >
-                    <h3 className="font-semibold mb-3">Tutor {index + 1}</h3>
+                    <h3 className="text-base font-semibold mb-3">Tutor {index + 1}</h3>
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
@@ -575,10 +575,10 @@ export default function AddRequestForTutor() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Request Submitted!
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Your tutor request has been submitted successfully. We&apos;ll
               match you with a suitable tutor and get back to you shortly.
             </DialogDescription>
@@ -623,10 +623,10 @@ export default function AddRequestForTutor() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Submission Failed
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Something went wrong.
             </DialogDescription>
           </DialogHeader>

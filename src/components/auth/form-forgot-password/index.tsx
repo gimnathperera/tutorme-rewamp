@@ -45,7 +45,7 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
           />
         </div>
         {isAuthError && (
-          <p className="text-red-500 text-sm mt-3 text-center">{isAuthError}</p>
+          <p className="text-red-500 text-xs mt-3 text-center">{isAuthError}</p>
         )}
 
         <div className="space-y-2 mt-8">

@@ -40,7 +40,7 @@ const AboutUs = () => {
         <h3 className="text-center text-blue text-sm tracking-widest font-semibold uppercase animate-on-scroll">
           ABOUT US
         </h3>
-        <h2 className="text-center text-3xl md:text-4xl font-semibold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
+        <h2 className="text-center text-4xl font-bold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
           Why Choose Home Tuition?
         </h2>
 
