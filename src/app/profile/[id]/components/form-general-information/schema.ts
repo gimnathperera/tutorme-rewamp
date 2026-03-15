@@ -11,10 +11,9 @@ export const generalInfoSchema = z.object({
   phoneNumber: z
     .string()
     .trim()
-    .min(1, "Phone number is required")
-    .regex(/^[0-9 -]+$/, "Phone number can contain only numbers, spaces, and '-'")
-    .min(10, "Phone number must be at least 10 characters")
-    .max(15, "Phone number must be at most 15 characters")
+    .min(1, "Contact Number is required")
+    .regex(/^\d+$/, "Phone Number must contain numeric values only")
+    .length(10, "Contact Number should be exactly 10 digits")
     .optional(),
   country: z.string().min(1, "Country is required").optional(),
   city: z
