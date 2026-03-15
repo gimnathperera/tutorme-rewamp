@@ -57,7 +57,6 @@ export const tutorTypesOptions = [
 export const genderOptions = [
   { label: "Male", value: "Male" },
   { label: "Female", value: "Female" },
-  { label: "Others", value: "None" },
 ];
 
 export const countryOptions: Option[] = [
