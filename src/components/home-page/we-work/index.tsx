@@ -88,7 +88,7 @@ export default class WeWork extends Component {
     };
 
     return (
-      <div className="bg-wework py-28">
+      <div className="bg-wework py-12 lg:py-16">
         <div className="mx-auto max-w-2xl lg:max-w-7xl sm:py-4 lg:px-8">
           {/* Stacked marquee headings */}
           <div className="text-center overflow-hidden animate-fade-in">

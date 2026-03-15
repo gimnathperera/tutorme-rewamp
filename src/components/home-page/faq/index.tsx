@@ -130,7 +130,7 @@ const Faqs = () => {
   return (
     <div
       id="faq-section"
-      className="mx-auto max-w-7xl py-12 lg:py-16 px-4 lg:px-12 bg-faqblue rounded-2xl faq-bg"
+      className="mx-auto max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue rounded-2xl faq-bg"
     >
       {/* Section heading */}
       <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">

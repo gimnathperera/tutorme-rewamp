@@ -16,7 +16,7 @@ export default function Home() {
       {/* Hero banner - full screen, outside the section gap container */}
       <Banner />
       {/* space-y controls consistent inter-section gaps on all screen sizes */}
-      <div className="space-y-6 sm:space-y-8">
+      <div className="space-y-3 sm:space-y-5">
         <AboutUs />
         <Digital />
         <Beliefs />

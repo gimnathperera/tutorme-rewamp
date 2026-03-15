@@ -227,7 +227,7 @@ const Testimonials: FC = () => {
 
   return (
     <section
-      className="bg-testimonial py-12 lg:py-16"
+      className="bg-testimonial py-8 lg:py-12"
       aria-label="Testimonials"
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-8">

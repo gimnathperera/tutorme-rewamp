@@ -147,7 +147,7 @@ export function TutorTabs() {
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-            <h1 className="text-3xl font-bold">Register As A Tutor</h1>
+            <h1 className="text-3xl text-white font-bold">Register As A Tutor</h1>
           </div>
 
           <Tabs value={tab} className="w-full">

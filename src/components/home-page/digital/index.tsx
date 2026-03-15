@@ -11,7 +11,7 @@ const Digital = () => {
 
   return (
     <div className="px-4 lg:px-8">
-      <div className="mx-auto max-w-7xl py-10 lg:py-0 lg:pb-20 lg:px-8 bg-digital rounded-3xl bg-primary-700 relative overflow-hidden min-h-[340px] lg:min-h-[420px]">
+      <div className="mx-auto max-w-7xl py-8 lg:py-0 lg:pb-12 lg:px-8 bg-digital rounded-3xl bg-primary-700 relative overflow-hidden min-h-[340px] lg:min-h-[420px]">
         <div className="grid grid-cols-1 lg:grid-cols-2 py-10 lg:py-12">
           {/* COLUMN-1 */}
           <div className="lg:pl-16 xl:pl-24 animate-slide-left">

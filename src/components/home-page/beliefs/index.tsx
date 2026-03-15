@@ -16,7 +16,7 @@ const Beliefs = () => {
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* JOIN card */}
-          <div className="bg-darkblue pt-10 px-8 sm:px-12 pb-10 sm:pb-12 rounded-3xl animate-slide-left flex flex-col">
+          <div className="bg-darkblue pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-left flex flex-col">
             <h2 className="text-sm font-semibold text-white tracking-widest mb-3 text-center sm:text-start uppercase">
               JOIN
             </h2>
@@ -41,7 +41,7 @@ const Beliefs = () => {
           </div>
 
           {/* FIND card */}
-          <div className="bg-build pt-10 px-8 sm:px-12 pb-10 sm:pb-12 rounded-3xl animate-slide-right flex flex-col">
+          <div className="bg-build pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-right flex flex-col">
             <h2 className="text-sm font-semibold text-blue tracking-widest mb-3 text-center sm:text-start uppercase">
               FIND
             </h2>
