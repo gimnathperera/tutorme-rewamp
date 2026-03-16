@@ -128,7 +128,7 @@ const Faqs = () => {
   };
 
   return (
-    <div className="px-4 lg:px-0">
+    <div className="px-4 lg:px-8">
       <div
         id="faq-section"
         className="mx-auto rounded-3xl max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue faq-bg"

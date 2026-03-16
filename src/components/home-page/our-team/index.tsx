@@ -3,7 +3,7 @@ import TutorImage from "../../../../public/images/banner/banner2.webp";
 
 const OurTeam = () => {
   return (
-    <div className="px-4 lg:px-0">
+    <div className="px-4 lg:px-8">
       <div className="mx-auto max-w-7xl py-8 lg:py-12">
         <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] text-center animate-on-scroll">
           Our team believes you deserve <br className="hidden md:block" /> only

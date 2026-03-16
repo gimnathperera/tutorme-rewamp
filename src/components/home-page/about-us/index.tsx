@@ -34,7 +34,7 @@ const staggerClasses = ["stagger-1", "stagger-2", "stagger-3"];
 
 const AboutUs = () => {
   return (
-    <div id="aboutus-section">
+    <div id="aboutus-section" className="px-4 lg:px-8">
       <div className="mx-auto max-w-7xl py-8 lg:py-10">
         {/* Section labels */}
         <h3 className="text-center text-blue text-sm tracking-widest font-semibold uppercase animate-on-scroll">
@@ -45,7 +45,7 @@ const AboutUs = () => {
         </h2>
 
         {/* Cards */}
-        <div className="grid px-4 lg:px-0 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8 gap-6">
           {Aboutdata.map((item, i) => (
             <div
               key={i}

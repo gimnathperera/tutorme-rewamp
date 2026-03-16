@@ -245,11 +245,12 @@ const Testimonials: FC = () => {
         </div>
 
         {/* ── Card grid ── */}
-        <div
-          ref={trackRef}
-          key={animKey}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 testimonial-grid-animate"
-        >
+        <div className="px-4 lg:px-8">
+          <div
+            ref={trackRef}
+            key={animKey}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 testimonial-grid-animate"
+          >
           {visibleItems.map((item, i) => (
             <TestimonialCard key={`${slide}-${i}`} item={item} />
           ))}
@@ -257,6 +258,7 @@ const Testimonials: FC = () => {
             Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
               (_, i) => <SkeletonCard key={`sk-${i}`} />,
             )}
+          </div>
         </div>
 
         {/* ── Controls ── */}
