@@ -22,7 +22,8 @@ html {
 body {
   margin: 0;
   font-family: "Urbanist", sans-serif;
-  font-size: 1rem; /* 16px base */
+  font-size: 1rem;
+  /* 16px base */
   line-height: 1.6;
   font-weight: 400;
   color: #111827;
@@ -78,7 +79,8 @@ h4 {
 
 p {
   margin: 0;
-  font-size: 1rem; /* body text, Pages 12, 14 */
+  font-size: 1rem;
+  /* body text, Pages 12, 14 */
   line-height: 1.625;
   color: rgba(17, 24, 39, 0.82);
 }
@@ -143,7 +145,8 @@ small,
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: #ffffff;
-  font-size: 0.875rem; /* small UI label size */
+  font-size: 0.875rem;
+  /* small UI label size */
   line-height: 1.25rem;
   font-weight: 600;
   padding: 0.5rem 1.25rem;
@@ -155,7 +158,8 @@ small,
 
 /* Blog content — spec: 16px body, 1.7 line-height, 36px titles */
 .blog-content h1 {
-  font-size: 2.25rem; /* text-4xl = 36px — blog title */
+  font-size: 2.25rem;
+  /* text-4xl = 36px — blog title */
   line-height: 1.2;
   font-weight: 700;
   margin-top: 2rem;
@@ -164,7 +168,8 @@ small,
 }
 
 .blog-content h2 {
-  font-size: 1.875rem; /* text-3xl = 30px */
+  font-size: 1.875rem;
+  /* text-3xl = 30px */
   line-height: 1.25;
   font-weight: 700;
   margin-top: 1.75rem;
@@ -173,7 +178,8 @@ small,
 }
 
 .blog-content h3 {
-  font-size: 1.25rem; /* text-xl = 20px */
+  font-size: 1.25rem;
+  /* text-xl = 20px */
   line-height: 1.4;
   font-weight: 600;
   margin-top: 1.5rem;
@@ -183,7 +189,8 @@ small,
 
 .blog-content p,
 .blog-content li {
-  font-size: 1rem; /* text-base = 16px */
+  font-size: 1rem;
+  /* text-base = 16px */
   line-height: 1.7;
   color: #374151;
 }
@@ -353,11 +360,11 @@ html[data-hero="0"] .navbar {
   border-bottom: 0.5px solid rgba(196, 196, 196, 0.75);
 }
 
-html:not([data-scroll="0"]) .navbar > div > div {
+html:not([data-scroll="0"]) .navbar>div>div {
   height: 3rem;
 }
 
-html[data-hero="0"] .navbar > div > div {
+html[data-hero="0"] .navbar>div>div {
   height: 3rem;
 }
 
@@ -403,12 +410,10 @@ html:not([data-scroll="0"]) .border-right {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.4) 60%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.4) 60%,
+      rgba(0, 0, 0, 0.6) 100%);
   z-index: 1;
 }
 
@@ -490,6 +495,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 @keyframes hero-bounce {
+
   0%,
   100% {
     transform: translateX(-50%) translateY(0);
@@ -672,6 +678,12 @@ html:not([data-scroll="0"]) .border-right {
   }
 }
 
+@media only screen and (max-width: 768px) {
+  .bg-testimonial {
+    background-image: none;
+  }
+}
+
 .manageTabs {
   border: 1px solid #dbdbdb;
   box-shadow: 0px 4px 5px 1px rgba(193, 193, 193, 0.35);
@@ -688,8 +700,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 .star {
-  filter: invert(79%) sepia(53%) saturate(1095%) hue-rotate(330deg)
-    brightness(101%) contrast(96%);
+  filter: invert(79%) sepia(53%) saturate(1095%) hue-rotate(330deg) brightness(101%) contrast(96%);
 }
 
 .article-img {
@@ -708,6 +719,12 @@ html:not([data-scroll="0"]) .border-right {
   background-position:
     84% 109%,
     12% 18%;
+}
+
+@media only screen and (max-width: 1160px) {
+  .bg-joinus {
+    background-image: none;
+  }
 }
 
 .footer-icons {
@@ -827,20 +844,20 @@ html:not([data-scroll="0"]) .border-right {
   opacity: 1;
 }
 
-.imageContainer:hover > a > button {
+.imageContainer:hover>a>button {
   display: block;
 }
 
-.manage > div:nth-child(2) {
+.manage>div:nth-child(2) {
   background-color: #00224a !important;
   color: #ffffff;
 }
 
-.manage > div:nth-child(2) button {
+.manage>div:nth-child(2) button {
   color: #ffffff;
 }
 
-.manage > div:nth-child(2) h3 {
+.manage>div:nth-child(2) h3 {
   color: #747474;
 }
 

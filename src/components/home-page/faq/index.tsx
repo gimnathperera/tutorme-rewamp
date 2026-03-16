@@ -31,7 +31,7 @@ const FaqPill = ({
 
   return (
     <div
-      className="w-full rounded-2xl bg-white overflow-hidden"
+      className="w-full rounded-3xl bg-white overflow-hidden"
       style={{ animation: "fadeIn 0.35s ease both" }}
     >
       {/* Header button */}
@@ -128,50 +128,52 @@ const Faqs = () => {
   };
 
   return (
-    <div
-      id="faq-section"
-      className="mx-auto max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue rounded-2xl faq-bg"
-    >
-      {/* Section heading */}
-      <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">
-        FAQ
-      </h3>
-      <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
-        Frequently asked <br /> questions.
-      </h2>
+    <div className="px-4 lg:px-0">
+      <div
+        id="faq-section"
+        className="mx-auto rounded-3xl max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue faq-bg"
+      >
+        {/* Section heading */}
+        <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">
+          FAQ
+        </h3>
+        <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
+          Frequently asked <br /> questions.
+        </h2>
 
-      {/* FAQ list — single column so expansions shift items fluidly */}
-      <div className="flex flex-col gap-3 max-w-3xl mx-auto">
-        {isFetching && page === 1 ? (
-          Array.from({ length: FAQ_LIMIT }, (_, i) => <FaqSkeleton key={i} />)
-        ) : isError ? (
-          <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
-            Failed to load FAQs. Please try again later.
+        {/* FAQ list — single column so expansions shift items fluidly */}
+        <div className="flex flex-col gap-3 max-w-3xl mx-auto">
+          {isFetching && page === 1 ? (
+            Array.from({ length: FAQ_LIMIT }, (_, i) => <FaqSkeleton key={i} />)
+          ) : isError ? (
+            <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
+              Failed to load FAQs. Please try again later.
+            </div>
+          ) : (
+            faqs.map((faq, index) => (
+              <FaqPill
+                key={index}
+                question={faq.question}
+                answer={faq.answer}
+                isOpen={openIndex === index}
+                onToggle={() => handleToggle(index)}
+              />
+            ))
+          )}
+        </div>
+
+        {/* Load more */}
+        {!isFetching && faqs.length < totalItems && (
+          <div className="text-center mt-8">
+            <button
+              onClick={loadMore}
+              className="px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
+            >
+              See More
+            </button>
           </div>
-        ) : (
-          faqs.map((faq, index) => (
-            <FaqPill
-              key={index}
-              question={faq.question}
-              answer={faq.answer}
-              isOpen={openIndex === index}
-              onToggle={() => handleToggle(index)}
-            />
-          ))
         )}
       </div>
-
-      {/* Load more */}
-      {!isFetching && faqs.length < totalItems && (
-        <div className="text-center mt-8">
-          <button
-            onClick={loadMore}
-            className="px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
-          >
-            See More
-          </button>
-        </div>
-      )}
     </div>
   );
 };
