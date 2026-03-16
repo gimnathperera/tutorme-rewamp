@@ -71,9 +71,7 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
 
         {Object.values(groupedByGrade).map((gradeGroup: any, idx: number) => (
           <div key={idx} className="mt-4">
-            <h3 className="text-3xl font-bold mb-4">
-              {gradeGroup.gradeTitle}
-            </h3>
+            <h3 className="text-3xl font-bold mb-4">{gradeGroup.gradeTitle}</h3>
             <Table className="mt-2">
               <TableHeader>
                 <TableRow className="text-white font-bold">

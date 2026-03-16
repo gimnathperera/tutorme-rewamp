@@ -68,7 +68,9 @@ const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
                     {title}
                   </Dialog.Title>
                   {description && (
-                    <p className="mt-2 text-base text-gray-500">{description}</p>
+                    <p className="mt-2 text-base text-gray-500">
+                      {description}
+                    </p>
                   )}
                 </div>
                 <div className="mt-6 flex justify-center gap-4">

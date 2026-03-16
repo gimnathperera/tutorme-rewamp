@@ -66,7 +66,9 @@ const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
         transition:
           "max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         overflow: "hidden",
-        transform: expanded ? "translateY(-3px) scale(1.012)" : "translateY(0) scale(1)",
+        transform: expanded
+          ? "translateY(-3px) scale(1.012)"
+          : "translateY(0) scale(1)",
         boxShadow: expanded
           ? "0 12px 40px rgba(59,130,246,0.18)"
           : "0 2px 12px rgba(0,0,0,0.06)",
@@ -226,10 +228,7 @@ const Testimonials: FC = () => {
   const showSkeletons = isFetching && visibleItems.length < CARDS_PER_SLIDE;
 
   return (
-    <section
-      className="bg-testimonial py-8 lg:py-12"
-      aria-label="Testimonials"
-    >
+    <section className="bg-testimonial py-8 lg:py-12" aria-label="Testimonials">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* ── Stacked heading ── */}
         <div className="text-center overflow-hidden animate-fade-in mb-10">
@@ -251,13 +250,13 @@ const Testimonials: FC = () => {
             key={animKey}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 testimonial-grid-animate"
           >
-          {visibleItems.map((item, i) => (
-            <TestimonialCard key={`${slide}-${i}`} item={item} />
-          ))}
-          {showSkeletons &&
-            Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
-              (_, i) => <SkeletonCard key={`sk-${i}`} />,
-            )}
+            {visibleItems.map((item, i) => (
+              <TestimonialCard key={`${slide}-${i}`} item={item} />
+            ))}
+            {showSkeletons &&
+              Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
+                (_, i) => <SkeletonCard key={`sk-${i}`} />,
+              )}
           </div>
         </div>
 

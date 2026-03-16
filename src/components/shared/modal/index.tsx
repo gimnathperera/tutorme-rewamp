@@ -58,9 +58,7 @@ const Modal: FC<Props> = ({
                   <div
                     className={`flex flex-shrink-0 items-center justify-center`}
                   >
-                    <p className="text-xl font-semibold text-black">
-                      {title}
-                    </p>
+                    <p className="text-xl font-semibold text-black">{title}</p>
                   </div>
                   {description && (
                     <p className="mb-4 lg:mb-8 mt-8 text-base text-center text-gray-500 dark:text-gray-400">

@@ -21,9 +21,7 @@ const ProfilePage: FC = () => {
     <div className="container pb-8">
       <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4">
         <div className="mb-4 col-span-full xl:mb-2">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Profile settings
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">Profile settings</h1>
         </div>
         <div className="col-span-full xl:col-auto">
           <ProfilePicSettings />

@@ -434,7 +434,9 @@ export default function AddRequestForTutor() {
                     key={index}
                     className="p-4 border border-gray-200 rounded-md"
                   >
-                    <h3 className="text-base font-semibold mb-3">Tutor {index + 1}</h3>
+                    <h3 className="text-base font-semibold mb-3">
+                      Tutor {index + 1}
+                    </h3>
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
