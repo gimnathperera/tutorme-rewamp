@@ -143,6 +143,7 @@ const PersonalInfo = () => {
           id="dateOfBirth"
           type="date"
           {...register("dateOfBirth")}
+          onKeyDown={(e) => e.preventDefault()}
           max={maxDate}
           autoComplete="bday"
           className={`${inputClass} ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
