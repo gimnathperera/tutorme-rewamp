@@ -112,7 +112,11 @@ const FormGeneralInfo: FC<Props> = ({
                 name="address"
                 type="text"
               />
-              <InputDatePicker label="Birthday" name="birthday" />
+              <InputDatePicker
+                label="Birthday"
+                name="birthday"
+                onKeyDown={(e) => e.preventDefault()}
+              />
               <InputMultiSelect
                 label="Grade/Level"
                 name="grades"

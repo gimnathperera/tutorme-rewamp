@@ -10,6 +10,7 @@ interface DatePickerProps {
   className?: string;
   dateFormat?: string;
   placeholderText?: string;
+  onKeyDown?: React.KeyboardEventHandler<HTMLElement>;
 }
 
 const InputDatePicker: React.FC<DatePickerProps> = ({
