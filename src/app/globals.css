@@ -359,11 +359,11 @@ html[data-hero="0"] .navbar {
   border-bottom: 0.5px solid rgba(196, 196, 196, 0.75);
 }
 
-html:not([data-scroll="0"]) .navbar > div > div {
+html:not([data-scroll="0"]) .navbar>div>div {
   height: 3rem;
 }
 
-html[data-hero="0"] .navbar > div > div {
+html[data-hero="0"] .navbar>div>div {
   height: 3rem;
 }
 
@@ -409,12 +409,10 @@ html:not([data-scroll="0"]) .border-right {
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.55) 0%,
-    rgba(0, 0, 0, 0.4) 60%,
-    rgba(0, 0, 0, 0.6) 100%
-  );
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.4) 60%,
+      rgba(0, 0, 0, 0.6) 100%);
   z-index: 1;
 }
 
@@ -435,27 +433,62 @@ html:not([data-scroll="0"]) .border-right {
   background: rgba(255, 255, 255, 0.25);
 }
 
-.hero-cta {
-  display: inline-block;
-  background: #2563eb;
-  color: #ffffff;
+.hero-cta,
+.hero-cta-secondary,
+.hero-cta-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   font-size: 1rem;
   font-weight: 600;
-  padding: 0.9rem 2.5rem;
+  padding: 0.875rem 2.25rem;
   border-radius: 9999px;
-  border: none;
   cursor: pointer;
-  transition:
-    background 0.3s ease,
-    transform 0.2s ease,
-    box-shadow 0.3s ease;
-  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);
+  transition: all 0.3s ease;
+}
+
+.hero-cta {
+  background: #2563eb;
+  color: #ffffff;
+  border: 1.5px solid #2563eb;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
 }
 
 .hero-cta:hover {
   background: #1d4ed8;
+  border-color: #1d4ed8;
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.6);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5);
+}
+
+.hero-cta-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+}
+
+.hero-cta-secondary:hover {
+  background: rgba(255, 255, 255, 1);
+  color: #2563eb;
+  border-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+}
+
+.hero-cta-whatsapp {
+  background: #ffffff;
+  color: #25D366;
+  border: 1.5px solid #ffffff;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+}
+
+.hero-cta-whatsapp:hover {
+  background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
 }
 
 /* Scroll-down arrow */
@@ -496,6 +529,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 @keyframes hero-bounce {
+
   0%,
   100% {
     transform: translateX(-50%) translateY(0);
@@ -700,8 +734,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 .star {
-  filter: invert(79%) sepia(53%) saturate(1095%) hue-rotate(330deg)
-    brightness(101%) contrast(96%);
+  filter: invert(79%) sepia(53%) saturate(1095%) hue-rotate(330deg) brightness(101%) contrast(96%);
 }
 
 .article-img {
@@ -845,20 +878,20 @@ html:not([data-scroll="0"]) .border-right {
   opacity: 1;
 }
 
-.imageContainer:hover > a > button {
+.imageContainer:hover>a>button {
   display: block;
 }
 
-.manage > div:nth-child(2) {
+.manage>div:nth-child(2) {
   background-color: #00224a !important;
   color: #ffffff;
 }
 
-.manage > div:nth-child(2) button {
+.manage>div:nth-child(2) button {
   color: #ffffff;
 }
 
-.manage > div:nth-child(2) h3 {
+.manage>div:nth-child(2) h3 {
   color: #747474;
 }
 

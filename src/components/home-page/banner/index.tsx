@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { FaWhatsapp } from "react-icons/fa";
 
 const Banner = () => {
   const route = useRouter();
@@ -93,7 +94,7 @@ const Banner = () => {
           </h1>
         </div>
 
-        {/* CTA Button */}
+        {/* CTA Buttons */}
         <div
           ref={ctaRef}
           style={{
@@ -101,9 +102,29 @@ const Banner = () => {
             transform: "translateY(30px)",
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}
+          className="flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center mt-6 w-full px-4"
         >
           <button className="hero-cta" onClick={handleOnFindATutorClick}>
-            Request a Tutor
+            Request for Tutor
+          </button>
+
+          <button 
+            className="hero-cta-secondary"
+            onClick={() => route.push("/register-tutor")}
+          >
+            Register as a Tutor
+          </button>
+
+          <button 
+            className="hero-cta-whatsapp"
+            onClick={() => {
+              const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
+              const formattedNum = num.startsWith("0") ? `94${num.slice(1)}` : num;
+              window.open(`https://wa.me/${formattedNum}`, "_blank");
+            }}
+          >
+            <FaWhatsapp size={20} />
+            Enquire on Whatsapp
           </button>
         </div>
       </div>
