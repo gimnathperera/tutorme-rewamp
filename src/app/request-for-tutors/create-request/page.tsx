@@ -276,7 +276,7 @@ export default function AddRequestForTutor() {
                     )}
                   </div>
                   <div className={fieldWrapper}>
-                    <Label htmlFor="phoneNumber">Phone Number *</Label>
+                    <Label htmlFor="phoneNumber">Contact Number *</Label>
                     <Input
                       id="phoneNumber"
                       type="tel"

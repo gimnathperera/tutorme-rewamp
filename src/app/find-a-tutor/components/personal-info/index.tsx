@@ -52,8 +52,8 @@ export const PersonalInfoComponent: FC<Props> = ({
           loading={isGradesLoading}
         />
         <InputText
-          label="Phone Number"
-          placeholder="Phone Number"
+          label="Contact Number"
+          placeholder="Contact Number"
           name="phoneNumber"
           type="tel"
         />

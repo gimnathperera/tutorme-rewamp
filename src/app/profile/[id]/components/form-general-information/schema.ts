@@ -12,7 +12,7 @@ export const generalInfoSchema = z.object({
     .string()
     .trim()
     .min(1, "Contact Number is required")
-    .regex(/^\d+$/, "Phone Number must contain numeric values only")
+    .regex(/^\d+$/, "Contact Number must contain numeric values only")
     .length(10, "Contact Number should be exactly 10 digits")
     .optional(),
   country: z.string().min(1, "Country is required").optional(),

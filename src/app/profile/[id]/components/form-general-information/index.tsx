@@ -71,8 +71,8 @@ const FormGeneralInfo: FC<Props> = ({
                 disabled
               />
               <InputText
-                label="Phone Number"
-                placeholder="Phone Number"
+                label="Contact Number"
+                placeholder="Contact Number"
                 name="phoneNumber"
                 type="tel"
               />
