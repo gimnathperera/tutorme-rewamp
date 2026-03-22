@@ -17,9 +17,6 @@ const Beliefs = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* JOIN card */}
           <div className="bg-darkblue pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-left flex flex-col">
-            <h2 className="text-sm font-semibold text-white tracking-widest mb-3 text-center sm:text-start uppercase">
-              JOIN
-            </h2>
             <h3 className="text-3xl lg:text-4xl font-bold text-white leading-[1.25] mb-4 text-center sm:text-start">
               Share{" "}
               <span className="text-grey">
@@ -42,9 +39,6 @@ const Beliefs = () => {
 
           {/* FIND card */}
           <div className="bg-build pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-right flex flex-col">
-            <h2 className="text-sm font-semibold text-blue tracking-widest mb-3 text-center sm:text-start uppercase">
-              FIND
-            </h2>
             <h3 className="text-3xl lg:text-4xl font-bold text-black leading-[1.25] mb-4 text-center sm:text-start">
               <span className="text-blue">Find</span> the perfect tutor for any
               subject, anytime.

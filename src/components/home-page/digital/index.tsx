@@ -15,9 +15,6 @@ const Digital = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 py-10 lg:py-12">
           {/* COLUMN-1 */}
           <div className="lg:pl-16 xl:pl-24 animate-slide-left">
-            <h3 className="text-sm font-semibold text-white mb-3 tracking-widest text-center lg:text-start uppercase">
-              WHO WE ARE
-            </h3>
             <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white mb-6 leading-[1.2] text-center lg:text-start">
               Home tuition provides the convenience of studying at home.
             </h2>

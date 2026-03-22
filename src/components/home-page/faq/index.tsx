@@ -134,9 +134,6 @@ const Faqs = () => {
         className="mx-auto rounded-3xl max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue faq-bg"
       >
         {/* Section heading */}
-        <h3 className="text-sm font-semibold text-white text-center mb-3 tracking-widest uppercase">
-          FAQ
-        </h3>
         <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
           Frequently asked <br /> questions.
         </h2>
