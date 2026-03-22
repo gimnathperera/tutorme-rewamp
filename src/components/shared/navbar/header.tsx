@@ -253,6 +253,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                     <Link
                       key={item.name}
                       href={item.href}
+                      onClick={() => setOpenDropdown(null)}
                       style={
                         !active && isHeroTop
                           ? { color: heroLinkColor }
