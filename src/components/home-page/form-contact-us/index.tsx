@@ -44,17 +44,16 @@ const FormContactUs = () => {
   return (
     <FormProvider {...contactUsForm}>
       <form onSubmit={contactUsForm.handleSubmit(onSubmit)}>
-        <div>
+        <div className="space-y-1">
           <InputText label="Name" name="name" placeholder="John Doe" />
-
-          <InputText label="Email" name="email" placeholder="xyz@email.com" />
+          <InputText label="Email" name="email" placeholder="john@email.com" />
           <InputMultiLineText
             label="Message"
             name="message"
             placeholder="Leave a comment"
           />
         </div>
-        <div className="mt-8">
+        <div className="mt-4">
           <SubmitButton
             title="Send message"
             type="submit"

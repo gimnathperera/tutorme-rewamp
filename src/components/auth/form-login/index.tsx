@@ -42,7 +42,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   return (
     <FormProvider {...loginForm}>
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+        <div className="-space-y-1">
           <InputText
             label="Email"
             name="email"
@@ -64,7 +64,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             Forgot password?
           </p>
         </div>
-        <div className="space-y-2 mt-8">
+        <div className="space-y-2 mt-4">
           <SubmitButton title="Login" type="submit" loading={isLoading} />
 
           <div className="text-center">

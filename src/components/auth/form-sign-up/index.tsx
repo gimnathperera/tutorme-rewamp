@@ -43,7 +43,7 @@ const FormSignUp = ({ onLoginClick }: Props) => {
   return (
     <FormProvider {...signupForm}>
       <form onSubmit={signupForm.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+        <div className="-space-y-1">
           <div>
             <label className="mb-1 text-sm font-medium text-gray-700">
               Full Name <span className="text-red-500">*</span>
@@ -70,7 +70,7 @@ const FormSignUp = ({ onLoginClick }: Props) => {
             <InputPassword placeholder="*******" name="confirmPassword" />
           </div>
         </div>
-        <div className="space-y-2 mt-8">
+        <div className="space-y-2 mt-4">
           <SubmitButton title="Register" type="submit" loading={isLoading} />
 
           <div className="text-center">
