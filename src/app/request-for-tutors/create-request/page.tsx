@@ -325,7 +325,10 @@ export default function AddRequestForTutor() {
                     render={({ field }) => (
                       <DistrictSelect
                         value={field.value || ""}
-                        onChange={field.onChange}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          if (val) clearErrors("district");
+                        }}
                         districts={districts}
                         hasError={!!errors.district}
                       />
@@ -344,7 +347,10 @@ export default function AddRequestForTutor() {
                       <CitySelect
                         value={field.value || ""}
                         district={selectedDistrict || ""}
-                        onChange={field.onChange}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          if (val) clearErrors("city");
+                        }}
                         hasError={!!errors.city}
                       />
                     )}
