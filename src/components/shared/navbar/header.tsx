@@ -142,7 +142,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   // ── Hero-mode colour tokens (desktop nav only) ──────────────────────────
   const heroLinkColor = isHeroTop ? "rgba(255,255,255,0.92)" : "";
   const heroLogoBlack = isHeroTop ? "#ffffff" : "";
-  const heroLogoBlue = isHeroTop ? "rgba(147,197,253,1)" : "";
+  const heroLogoBlue = isHeroTop ? "rgba(37, 99, 235)" : "";
   const heroBtnBorder = isHeroTop
     ? "1px solid rgba(255,255,255,0.5)"
     : undefined;
