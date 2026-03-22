@@ -15,9 +15,6 @@ const KeepInTouch = () => {
     <div className="bg-joinus py-8 lg:py-12" id="keep-in-touch-section">
       <div className="mx-auto max-w-7xl">
         <div className="text-center animate-on-scroll">
-          <h3 className="text-blue text-sm font-semibold tracking-widest uppercase mb-3">
-            KEEP IN TOUCH
-          </h3>
           <h2 className="text-4xl font-bold leading-[1.2] text-[#111827] my-4">
             Take your learning or teaching journey
             <br className="hidden sm:block" /> to the next level.
