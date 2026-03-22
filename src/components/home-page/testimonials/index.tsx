@@ -7,12 +7,15 @@ import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
 /* ─── Grid slide-in keyframe injected once ───────────────── */
 const GRID_ANIM_STYLE = `
 @keyframes testimonial-grid-in {
-  from { opacity: 0; transform: translateY(18px); }
+  from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0);    }
 }
-.testimonial-grid-animate {
-  animation: testimonial-grid-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+.testimonial-card-animate {
+  animation: testimonial-grid-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+.testimonial-card-animate:nth-child(1) { animation-delay: 0ms;   }
+.testimonial-card-animate:nth-child(2) { animation-delay: 80ms;  }
+.testimonial-card-animate:nth-child(3) { animation-delay: 160ms; }
 `;
 
 /* ─── types ─────────────────────────────────────────────── */
@@ -248,14 +251,20 @@ const Testimonials: FC = () => {
           <div
             ref={trackRef}
             key={animKey}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 testimonial-grid-animate"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {visibleItems.map((item, i) => (
-              <TestimonialCard key={`${slide}-${i}`} item={item} />
+              <div key={`${slide}-${i}`} className="testimonial-card-animate">
+                <TestimonialCard item={item} />
+              </div>
             ))}
             {showSkeletons &&
               Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
-                (_, i) => <SkeletonCard key={`sk-${i}`} />,
+                (_, i) => (
+                  <div key={`sk-${i}`} className="testimonial-card-animate">
+                    <SkeletonCard />
+                  </div>
+                ),
               )}
           </div>
         </div>
