@@ -67,7 +67,6 @@ const Banner = () => {
 
       {/* Main content — centered */}
       <div className="hero-content">
-
         {/* Headline */}
         <div
           ref={headlineRef}
@@ -108,7 +107,9 @@ const Banner = () => {
             className="hero-cta-whatsapp"
             onClick={() => {
               const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-              const formattedNum = num.startsWith("0") ? `94${num.slice(1)}` : num;
+              const formattedNum = num.startsWith("0")
+                ? `94${num.slice(1)}`
+                : num;
               window.open(`https://wa.me/${formattedNum}`, "_blank");
             }}
           >

@@ -253,7 +253,7 @@ export const countryOptions: Option[] = [
   { label: "Vietnam", value: "VN" },
   { label: "Yemen", value: "YE" },
   { label: "Zambia", value: "ZM" },
-  { label: "Zimbabwe", value: "ZW" }
+  { label: "Zimbabwe", value: "ZW" },
 ];
 
 export const languageOptions = [
