@@ -67,17 +67,6 @@ const Banner = () => {
 
       {/* Main content — centered */}
       <div className="hero-content">
-        {/* Badge */}
-        <div
-          ref={badgeRef}
-          style={{
-            opacity: 0,
-            transform: "translateY(30px)",
-            transition: "opacity 0.6s ease, transform 0.6s ease",
-          }}
-        >
-          <button className="hero-badge">E-Learning Platform</button>
-        </div>
 
         {/* Headline */}
         <div
@@ -108,14 +97,14 @@ const Banner = () => {
             Request for Tutor
           </button>
 
-          <button 
+          <button
             className="hero-cta-secondary"
             onClick={() => route.push("/register-tutor")}
           >
             Register as a Tutor
           </button>
 
-          <button 
+          <button
             className="hero-cta-whatsapp"
             onClick={() => {
               const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
