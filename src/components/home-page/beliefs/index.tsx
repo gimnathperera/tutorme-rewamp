@@ -29,7 +29,7 @@ const Beliefs = () => {
             </p>
             <div className="mt-auto text-center sm:text-start">
               <button
-                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 hover:opacity-90 transition-all duration-300 hover:shadow-lg"
+                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 hover:bg-primary-800 transition-colors duration-200 hover:shadow-lg"
                 onClick={handleRegisterTutor}
               >
                 Become a Tutor
@@ -49,7 +49,7 @@ const Beliefs = () => {
             </p>
             <div className="mt-auto text-center sm:text-start">
               <button
-                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:opacity-90 transition-all duration-300 hover:shadow-lg"
+                className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-primary-800 transition-colors duration-200 hover:shadow-lg"
                 onClick={handleOnLearnMoreClick}
               >
                 Request a Tutor
