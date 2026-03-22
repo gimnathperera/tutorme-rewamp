@@ -44,7 +44,7 @@ const SubmitButton: React.FC<ButtonTextProps> = ({
       ) : (
         <>
           {startIcon && <Icon name={startIcon} />}
-          <p className="text-white">{title}</p>
+          {title}
           {endIcon && <Icon name={endIcon} />}
         </>
       )}
