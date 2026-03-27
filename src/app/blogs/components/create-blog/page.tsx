@@ -20,6 +20,7 @@ import {
   useCreateBlogMutation,
   useFetchBlogsQuery,
 } from "@/store/api/splits/blogs";
+import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
@@ -36,6 +37,10 @@ const AddBlog = () => {
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagData } = useFetchTagsQuery({});
   const { user } = useAuthContext();
+  const userId = user?.id;
+
+  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
+
   const [isPreview, setIsPreview] = useState(false);
 
   const createBlogForm = useForm<CreateArticleSchema>({
@@ -88,20 +93,28 @@ const AddBlog = () => {
 
   const redirect = useRouter();
 
+  /* ---------------- Fetch avatar ---------------- */
+  useEffect(() => {
+    if (userId) fetchProfile({ userId: String(userId) });
+  }, [userId, fetchProfile]);
+
   useEffect(() => {
     if (user) {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = dbAvatar || user.avatar;
+
       reset({
         ...initialFormValues,
         author: {
           name: user.name,
-          avatar: !user.avatar || user.avatar.startsWith("/") 
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
             ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-            : user.avatar,
+            : avatarToUse,
           role: user.role,
         },
       });
     }
-  }, [user, reset]);
+  }, [user, userData, reset]);
 
   const blogOptions: Option[] =
     blogsData?.results.map((blog) => ({
@@ -122,13 +135,16 @@ const AddBlog = () => {
     }
 
     try {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = data.author.avatar || dbAvatar || user.avatar;
+
       const sanitizedData = {
         ...data,
         author: {
           ...data.author,
-          avatar: !data.author.avatar || data.author.avatar.startsWith("/") 
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
             ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-            : data.author.avatar,
+            : avatarToUse,
         }
       };
       

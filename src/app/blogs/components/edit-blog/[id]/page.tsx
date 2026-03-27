@@ -17,6 +17,7 @@ import {
   useFetchBlogsQuery,
   useUpdateBlogMutation,
 } from "@/store/api/splits/blogs";
+import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
@@ -36,6 +37,8 @@ export default function EditBlogPage() {
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagsData } = useFetchTagsQuery({});
   const { data: blog, isLoading, refetch } = useFetchBlogByIdQuery(blogId);
+
+  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
 
   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
@@ -82,7 +85,14 @@ export default function EditBlogPage() {
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
   useEffect(() => {
+    if (user?.id) fetchProfile({ userId: String(user.id) });
+  }, [user?.id, fetchProfile]);
+
+  useEffect(() => {
     if (blog && user && blogsData && tagsData) {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = dbAvatar || user.avatar;
+
       const relatedIds = (blog.relatedArticles || [])
         .map((r) => blogsData.results.find((b) => b.id === r.id)?.id)
         .filter(Boolean) as string[];
@@ -97,7 +107,9 @@ export default function EditBlogPage() {
         status: blog.status || "pending",
         author: {
           name: user.name,
-          avatar: user.avatar || "https://example.com/default-avatar.png",
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : avatarToUse,
           role: user.role,
         },
         relatedArticles: relatedIds,
@@ -132,15 +144,18 @@ export default function EditBlogPage() {
     if (!user) return toast.error("Please authenticate");
 
     try {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = data.author?.avatar || dbAvatar || user.avatar;
+
       const payload = {
         id: blogId,
         blogId: blogId,
         title: data.title,
         image: data.image,
         name: user.name,
-        avatar: !user.avatar || user.avatar.startsWith("/") 
+        avatar: !avatarToUse || avatarToUse.startsWith("/") 
           ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-          : user.avatar,
+          : avatarToUse,
         role: user.role,
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
