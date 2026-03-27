@@ -64,6 +64,14 @@ export default function EditBlogPage() {
     remove: removeFaq,
   } = useFieldArray({ control, name: "faqs" });
 
+  const encodeImageUrl = (url: string) => {
+    try {
+      return encodeURI(decodeURI(url));
+    } catch {
+      return url;
+    }
+  };
+
   const decodeHtml = (html: string) => {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;
@@ -130,7 +138,9 @@ export default function EditBlogPage() {
         title: data.title,
         image: data.image,
         name: user.name,
-        avatar: user.avatar || "https://example.com/default-avatar.png",
+        avatar: !user.avatar || user.avatar.startsWith("/") 
+          ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+          : user.avatar,
         role: user.role,
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
@@ -216,7 +226,7 @@ export default function EditBlogPage() {
                   <div key={idx} className="mb-4">
                     <Label>Content Image</Label>
                     <FileUploadDropzone
-                      onUploaded={(url) => setValue(`content.${idx}.src`, url)}
+                      onUploaded={(url) => setValue(`content.${idx}.src`, encodeImageUrl(url))}
                     />
                     {getContentError(idx, "src") && (
                       <p className="text-sm text-red-500">
@@ -239,7 +249,7 @@ export default function EditBlogPage() {
               <Label>Cover Image</Label>
               <FileUploadDropzone
                 key="cover-dropzone"
-                onUploaded={(url) => setValue("image", url)}
+                onUploaded={(url) => setValue("image", encodeImageUrl(url))}
               />
               {watch("image") && (
                 <img

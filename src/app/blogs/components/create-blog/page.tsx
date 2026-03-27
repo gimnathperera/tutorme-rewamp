@@ -56,6 +56,14 @@ const AddBlog = () => {
     name: "faqs",
   });
 
+  const encodeImageUrl = (url: string) => {
+    try {
+      return encodeURI(decodeURI(url));
+    } catch {
+      return url;
+    }
+  };
+
   const decodeHtml = (html: string) => {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;
@@ -86,7 +94,9 @@ const AddBlog = () => {
         ...initialFormValues,
         author: {
           name: user.name,
-          avatar: user.avatar || "/images/profile/pp.png",
+          avatar: !user.avatar || user.avatar.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : user.avatar,
           role: user.role,
         },
       });
@@ -112,7 +122,17 @@ const AddBlog = () => {
     }
 
     try {
-      const result = await createBlog(data);
+      const sanitizedData = {
+        ...data,
+        author: {
+          ...data.author,
+          avatar: !data.author.avatar || data.author.avatar.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : data.author.avatar,
+        }
+      };
+      
+      const result = await createBlog(sanitizedData);
       const error = getErrorInApiResult(result);
       if (error) return toast.error(error);
 
@@ -244,7 +264,7 @@ const AddBlog = () => {
 
                 <FileUploadDropzone
                   onUploaded={(url) =>
-                    createBlogForm.setValue("content.2.src", url)
+                    createBlogForm.setValue("content.2.src", encodeImageUrl(url))
                   }
                 />
 
@@ -267,7 +287,7 @@ const AddBlog = () => {
               <Label htmlFor="coverImage">Cover Image</Label>
 
               <FileUploadDropzone
-                onUploaded={(url) => createBlogForm.setValue("image", url)}
+                onUploaded={(url) => createBlogForm.setValue("image", encodeImageUrl(url))}
               />
 
               {formState.errors.image && (
@@ -478,7 +498,6 @@ const AddBlog = () => {
             type="submit"
             disabled={isLoading}
             className="h-9 px-5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-            onClick={handleSubmit(onSubmit)}
           >
             {isLoading ? "Publishing..." : "Publish"}
           </button>
