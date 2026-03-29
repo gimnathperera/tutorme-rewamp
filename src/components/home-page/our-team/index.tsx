@@ -13,7 +13,7 @@ const OurTeam = () => {
           We&apos;re dedicated to helping students and tutors connect through a
           trusted, easy-to-use platform.
           <br className="hidden md:block" />
-          Every learner deserves quality education — and every tutor deserves
+          Every learner deserves quality education - and every tutor deserves
           recognition for their effort.
         </p>
         <div className="mt-8 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2">
