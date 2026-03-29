@@ -231,7 +231,7 @@ const Testimonials: FC = () => {
   const showSkeletons = isFetching && visibleItems.length < CARDS_PER_SLIDE;
 
   return (
-    <section className="bg-testimonial py-8 lg:py-12" aria-label="Testimonials">
+    <section className="bg-testimonial py-8 lg:py-12" aria-label="Testimonials" id="testimonials-section">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* ── Stacked heading ── */}
         <div className="text-center overflow-hidden animate-fade-in mb-10">

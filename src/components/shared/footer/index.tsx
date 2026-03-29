@@ -23,7 +23,9 @@ const products: ProductType[] = [
     section: "Resources",
     link: [
       { label: "Blog", url: "/blogs" },
+      { label: "Testimonials", url: "/#testimonials-section" },
       { label: "FAQs", url: "/#faq-section" },
+      { label: "About Us", url: "/#aboutus-section" },
     ],
   },
   {
