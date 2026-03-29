@@ -36,7 +36,7 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
   return (
     <FormProvider {...forgotPasswordForm}>
       <form onSubmit={forgotPasswordForm.handleSubmit(onSubmit)}>
-        <div className="-space-y-1">
+        <div className="space-y-3">
           <InputText
             label="Email"
             name="email"

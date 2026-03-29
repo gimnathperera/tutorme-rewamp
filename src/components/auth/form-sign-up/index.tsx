@@ -43,7 +43,7 @@ const FormSignUp = ({ onLoginClick }: Props) => {
   return (
     <FormProvider {...signupForm}>
       <form onSubmit={signupForm.handleSubmit(onSubmit)}>
-        <div className="-space-y-1">
+        <div className="space-y-3">
           <div>
             <label className="mb-1 text-sm font-medium text-gray-700">
               Full Name <span className="text-red-500">*</span>

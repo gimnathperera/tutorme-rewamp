@@ -47,14 +47,16 @@ const Modal: FC<Props> = ({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all relative">
-                <button
-                  onClick={closeModal}
-                  className="absolute top-0 right-0 m-4 p-2 bg-transparent text-gray-400 hover:text-gray-600 focus:outline-none"
-                >
-                  <Icon name="CircleX" />
-                </button>
-                <div className="py-8 lg:py-8 px-4 mx-auto max-w-screen-md">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-4 sm:p-6 text-left align-middle shadow-xl transition-all relative">
+                <div className="flex justify-end w-full">
+                  <button
+                    onClick={closeModal}
+                    className="bg-transparent text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    <Icon name="CircleX" />
+                  </button>
+                </div>
+                <div className="pb-4 px-4 mx-auto max-w-screen-md">
                   <div
                     className={`flex flex-shrink-0 items-center justify-center`}
                   >
@@ -65,8 +67,8 @@ const Modal: FC<Props> = ({
                       {description}
                     </p>
                   )}
-                  {imagePath && (
-                    <div className="flex justify-center mb-4">
+                  {/* {imagePath && (
+                    <div className="hidden sm:flex justify-center mb-4">
                       <img
                         src={imagePath}
                         alt="hero-image"
@@ -74,7 +76,7 @@ const Modal: FC<Props> = ({
                         height={200}
                       />
                     </div>
-                  )}
+                  )} */}
                   {children}
                 </div>
               </Dialog.Panel>

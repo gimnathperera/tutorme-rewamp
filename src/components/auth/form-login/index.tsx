@@ -42,7 +42,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   return (
     <FormProvider {...loginForm}>
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
-        <div className="-space-y-1">
+        <div className="space-y-3">
           <InputText
             label="Email"
             name="email"
