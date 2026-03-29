@@ -10,7 +10,6 @@ import { FC } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
-import InputDatePicker from "@/components/shared/input-date-picker";
 
 type Props = {
   dropdownOptionData: {
@@ -112,9 +111,10 @@ const FormGeneralInfo: FC<Props> = ({
                 name="address"
                 type="text"
               />
-              <InputDatePicker
+              <InputText
                 label="Birthday"
                 name="birthday"
+                type="date"
                 onKeyDown={(e) => e.preventDefault()}
               />
               <InputMultiSelect
