@@ -54,7 +54,7 @@ const TutorDetailsSection = () => {
         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
           Types of Home Tutors
         </h2>
-        <p className="text-gray-500 max-w-2xl text-[15px] leading-relaxed">
+        <p className="text-gray-500 max-w-2xl text-sm leading-relaxed">
           In this section, we help you understand the 3 main categories of Home
           Tutors in Sri Lanka. This information will assist you greatly in
           making the right tutor choice for your needs.

@@ -28,8 +28,8 @@ const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
   confirmText = "Yes, I'm sure",
   cancelText = "No, cancel",
   icon,
-  confirmButtonStyle = "text-white bg-red-600 hover:bg-red-700 focus:ring-red-300",
-  cancelButtonStyle = "text-gray-500 bg-white hover:bg-gray-100 focus:ring-primary-300",
+  confirmButtonStyle = "text-base font-semibold text-white bg-red-600 hover:bg-red-700 focus:ring-red-300",
+  cancelButtonStyle = "text-base font-semibold text-gray-500 bg-white hover:bg-gray-100 focus:ring-primary-300",
   loading = false,
 }) => {
   return (
@@ -63,26 +63,28 @@ const ConfirmationAlert: FC<ConfirmationAlertProps> = ({
                   {icon && <div className="mb-4">{icon}</div>}
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium text-gray-900"
+                    className="text-xl font-semibold text-gray-900"
                   >
                     {title}
                   </Dialog.Title>
                   {description && (
-                    <p className="mt-2 text-sm text-gray-500">{description}</p>
+                    <p className="mt-2 text-base text-gray-500">
+                      {description}
+                    </p>
                   )}
                 </div>
                 <div className="mt-6 flex justify-center gap-4">
                   <button
                     type="button"
                     onClick={closeModal}
-                    className={`py-2 px-4 rounded-lg font-medium ${cancelButtonStyle}`}
+                    className={`py-2 px-4 rounded-lg ${cancelButtonStyle}`}
                   >
                     {cancelText}
                   </button>
                   <SubmitButton
                     type="button"
                     onClick={onConfirm}
-                    className={`py-2 px-4 rounded-lg font-medium ${confirmButtonStyle}`}
+                    className={`py-2 px-4 rounded-lg ${confirmButtonStyle}`}
                     loading={loading}
                     title={confirmText}
                   />

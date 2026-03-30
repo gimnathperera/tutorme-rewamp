@@ -142,7 +142,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   // ── Hero-mode colour tokens (desktop nav only) ──────────────────────────
   const heroLinkColor = isHeroTop ? "rgba(255,255,255,0.92)" : "";
   const heroLogoBlack = isHeroTop ? "#ffffff" : "";
-  const heroLogoBlue = isHeroTop ? "rgba(147,197,253,1)" : "";
+  const heroLogoBlue = isHeroTop ? "rgba(37, 99, 235)" : "";
   const heroBtnBorder = isHeroTop
     ? "1px solid rgba(255,255,255,0.5)"
     : undefined;
@@ -156,7 +156,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           <div className="flex flex-1 items-center sm:justify-between">
             {/* ── Logo ── */}
             <div className="flex flex-shrink-0 items-start">
-              <Link href="/" className="text-xl sm:text-4xl flex font-semibold">
+              <Link href="/" className="text-3xl sm:text-4xl flex font-bold">
                 <div
                   className="font-bold transition-colors duration-300"
                   style={{ color: heroLogoBlack || undefined }}
@@ -232,8 +232,8 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                                 href={subItem.href}
                                 onClick={() => setOpenDropdown(null)}
                                 className={[
-                                  "flex items-center gap-2 px-4 py-2.5 text-sm transition-colors duration-100",
-                                  idx !== 0 ? "border-t border-gray-50" : "",
+                                  "flex items-center gap-2 px-4 py-2.5 mx-1.5 rounded-lg text-base transition-colors duration-100",
+                                  idx !== 0 ? "" : "",
                                   subActive
                                     ? "text-blue-600 font-semibold bg-blue-50"
                                     : "text-gray-700 hover:bg-gray-50 hover:text-blue-600",
@@ -253,6 +253,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                     <Link
                       key={item.name}
                       href={item.href}
+                      onClick={() => setOpenDropdown(null)}
                       style={
                         !active && isHeroTop
                           ? { color: heroLinkColor }
@@ -294,7 +295,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         ? { border: heroBtnBorder, color: heroBtnColor }
                         : undefined
                     }
-                    className="justify-end text-xl font-semibold bg-transparent py-4 px-6 lg:px-12 navbutton rounded-full hover:bg-blue-600 hover:text-white transition-colors duration-200"
+                    className="text-base font-medium text-white py-2 px-5 bg-primary-700 rounded-full hover:bg-primary-800 transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     Login

@@ -86,7 +86,7 @@ export default function BlogsDashboard() {
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
               TuitionLanka Insights
             </p>
-            <h1 className="text-2xl md:text-3xl font-bold leading-tight">
+            <h1 className="text-2xl text-white md:text-3xl font-bold leading-tight">
               Welcome to the Tuition Lanka Blog
             </h1>
             <p className="text-sm md:text-base text-white/80 mt-1">
@@ -152,7 +152,7 @@ export default function BlogsDashboard() {
                       alt={blog.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm text-gray-700 text-[10px] font-semibold px-2 py-1 rounded-md shadow-sm">
+                    <div className="absolute top-2.5 left-2.5 bg-white/90 backdrop-blur-sm text-gray-700 text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
                       {blogDate.toLocaleDateString("en-US", {
                         day: "numeric",
                         month: "short",
@@ -180,12 +180,12 @@ export default function BlogsDashboard() {
                       <span className="text-xs font-semibold text-gray-800">
                         {blog.author.name}
                       </span>
-                      <span className="text-[10px] text-gray-400 capitalize">
+                      <span className="text-xs text-gray-400 capitalize">
                         {blog.author.role}
                       </span>
                     </div>
                     {!imageSrc && (
-                      <span className="ml-auto text-[10px] text-gray-400">
+                      <span className="ml-auto text-xs text-gray-400">
                         {blogDate.toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
@@ -206,7 +206,7 @@ export default function BlogsDashboard() {
                       {blog.tags.slice(0, 3).map((t: any) => (
                         <span
                           key={t.id}
-                          className="inline-block bg-blue-50 text-blue-700 text-[10px] font-medium px-2 py-0.5 rounded-full"
+                          className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full"
                         >
                           {t.name}
                         </span>
@@ -279,7 +279,7 @@ export default function BlogsDashboard() {
                   <p className="text-xs font-semibold text-gray-800 group-hover:text-blue-600 line-clamp-2 transition-colors">
                     {blog.title}
                   </p>
-                  <p className="text-[10px] text-gray-400 mt-0.5">
+                  <p className="text-xs text-gray-400 mt-0.5">
                     {blog.author.name}
                   </p>
                 </div>

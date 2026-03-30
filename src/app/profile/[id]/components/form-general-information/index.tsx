@@ -10,7 +10,6 @@ import { FC } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
-import InputDatePicker from "@/components/shared/input-date-picker";
 
 type Props = {
   dropdownOptionData: {
@@ -71,8 +70,8 @@ const FormGeneralInfo: FC<Props> = ({
                 disabled
               />
               <InputText
-                label="Phone Number"
-                placeholder="Phone Number"
+                label="Contact Number"
+                placeholder="Contact Number"
                 name="phoneNumber"
                 type="tel"
               />
@@ -112,7 +111,12 @@ const FormGeneralInfo: FC<Props> = ({
                 name="address"
                 type="text"
               />
-              <InputDatePicker label="Birthday" name="birthday" />
+              <InputText
+                label="Birthday"
+                name="birthday"
+                type="date"
+                onKeyDown={(e) => e.preventDefault()}
+              />
               <InputMultiSelect
                 label="Grade/Level"
                 name="grades"
@@ -147,7 +151,7 @@ const FormGeneralInfo: FC<Props> = ({
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton
-                className="peer font-medium rounded-lg text-sm px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="peer font-semibold rounded-lg text-base px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
                 type="submit"
                 loading={isSubmitting}
                 title="Update General Information"

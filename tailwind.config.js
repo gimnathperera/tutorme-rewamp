@@ -5,25 +5,10 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-
-    // Or if using `src` directory:
-    "./src/**/*.{js,ts,jsx,tsx}",
     "./src/**/*.{js,ts,jsx,tsx}",
     "node_modules/flowbite/**/*.js",
   ],
   theme: {
-    extend: {
-      typography: {
-        DEFAULT: {
-          css: {
-            color: "#1e293b",
-            h1: { color: "#111827", fontWeight: "700" },
-            h2: { color: "#1f2937", fontWeight: "600" },
-            a: { color: "#2563eb", "&:hover": { color: "#1d4ed8" } },
-          },
-        },
-      },
-    },
     screens: {
       sm: "640px",
       md: "768px",
@@ -31,6 +16,133 @@ module.exports = {
       xl: "1280px",
       "2xl": "1536px",
     },
+
+    extend: {
+      // Page 36: use structured variation within one family for consistency
+      // Page 40: typography should function as a scalable system
+      fontFamily: {
+        sans: ['"Urbanist"', "sans-serif"],
+        display: ['"Urbanist"', "sans-serif"],
+      },
+
+      // Page 11: size and weight establish hierarchy
+      // Page 12-13: clean typography, balanced line lengths, generous spacing
+      // Page 14: text that is too small or tightly spaced reduces comfort
+      // Note: the PDF gives principles, not exact numeric sizes.
+      // These sizes are my recommended implementation based on those principles.
+      fontSize: {
+        xs: [
+          "0.75rem", // 12px - better minimum readable UI text (Page 14)
+          {
+            lineHeight: "1rem",
+            letterSpacing: "0.01em",
+          },
+        ],
+        sm: [
+          "0.875rem", // 14px - helper text / small labels (Page 13)
+          {
+            lineHeight: "1.25rem",
+            letterSpacing: "0.01em",
+          },
+        ],
+        base: [
+          "1rem", // 16px - primary body text for readability
+          {
+            lineHeight: "1.6",
+            letterSpacing: "0",
+          },
+        ],
+        lg: [
+          "1.125rem", // 18px - emphasized body / intro text
+          {
+            lineHeight: "1.6",
+            letterSpacing: "0",
+          },
+        ],
+        xl: [
+          "1.25rem", // 20px - card titles / small section headings
+          {
+            lineHeight: "1.4",
+            letterSpacing: "-0.01em",
+          },
+        ],
+        "2xl": [
+          "1.5rem", // 24px - section headings
+          {
+            lineHeight: "1.4",
+            letterSpacing: "-0.015em",
+          },
+        ],
+        "3xl": [
+          "1.875rem", // 30px - sub-section title
+          {
+            lineHeight: "1.25",
+            letterSpacing: "-0.02em",
+          },
+        ],
+        "4xl": [
+          "2.25rem", // 36px - section title
+          {
+            lineHeight: "1.2",
+            letterSpacing: "-0.025em",
+          },
+        ],
+        "5xl": [
+          "3rem", // 48px - desktop hero headline start (Pages 11, 13)
+          {
+            lineHeight: "1.1",
+            letterSpacing: "-0.03em",
+          },
+        ],
+        "6xl": [
+          "3.75rem", // 60px - large hero headline (Pages 11, 13)
+          {
+            lineHeight: "1.05",
+            letterSpacing: "-0.035em",
+          },
+        ],
+        "7xl": [
+          "4.5rem", // 72px - very large campaign/hero use only (Page 33 says display sizes should be used sparingly)
+          {
+            lineHeight: "1",
+            letterSpacing: "-0.04em",
+          },
+        ],
+        "8xl": [
+          "6rem", // 96px - special marketing-only display use (Page 33)
+          {
+            lineHeight: "1",
+            letterSpacing: "-0.05em",
+          },
+        ],
+      },
+
+      // Page 36-38: family-based variation and structured hierarchy through weights
+      fontWeight: {
+        regular: "400",
+        medium: "500",
+        semibold: "600",
+        bold: "700",
+        extrabold: "800",
+      },
+
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+
     colors: {
       transparent: "transparent",
       current: "currentColor",
@@ -68,122 +180,6 @@ module.exports = {
         700: "#1d4ed8",
         800: "#1e40af",
         900: "#1e3a8a",
-      },
-    },
-    fontSize: {
-      xs: [
-        "12px",
-        {
-          lineHeight: "1rem",
-        },
-      ],
-      sm: [
-        "14px",
-        {
-          lineHeight: "1.25rem",
-        },
-      ],
-      base: [
-        "1rem",
-        {
-          lineHeight: "1.5rem",
-        },
-      ],
-      lg: [
-        "1.125rem",
-        {
-          lineHeight: "1.75rem",
-        },
-      ],
-      xl: [
-        "24px",
-        {
-          lineHeight: "1.75rem",
-        },
-      ],
-      "2xl": [
-        "1.5rem",
-        {
-          lineHeight: "2rem",
-        },
-      ],
-      "3xl": [
-        "26px",
-        {
-          lineHeight: "2.25rem",
-        },
-      ],
-      "4xl": [
-        "40px",
-        {
-          lineHeight: "2.5rem",
-        },
-      ],
-      "5xl": [
-        "52px",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "6xl": [
-        "3.75rem",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "7xl": [
-        "4.5rem",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "8xl": [
-        "6rem",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "9xl": [
-        "8rem",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "65xl": [
-        "65px",
-        {
-          lineHeight: "1",
-        },
-      ],
-      "80xl": [
-        "80px",
-        {
-          lineHeight: "6rem",
-        },
-      ],
-    },
-    extend: {
-      keyframes: {
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },

@@ -17,6 +17,7 @@ import {
   useFetchBlogsQuery,
   useUpdateBlogMutation,
 } from "@/store/api/splits/blogs";
+import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
@@ -36,6 +37,8 @@ export default function EditBlogPage() {
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagsData } = useFetchTagsQuery({});
   const { data: blog, isLoading, refetch } = useFetchBlogByIdQuery(blogId);
+
+  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
 
   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
@@ -64,6 +67,14 @@ export default function EditBlogPage() {
     remove: removeFaq,
   } = useFieldArray({ control, name: "faqs" });
 
+  const encodeImageUrl = (url: string) => {
+    try {
+      return encodeURI(decodeURI(url));
+    } catch {
+      return url;
+    }
+  };
+
   const decodeHtml = (html: string) => {
     const txt = document.createElement("textarea");
     txt.innerHTML = html;
@@ -74,7 +85,14 @@ export default function EditBlogPage() {
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
   useEffect(() => {
+    if (user?.id) fetchProfile({ userId: String(user.id) });
+  }, [user?.id, fetchProfile]);
+
+  useEffect(() => {
     if (blog && user && blogsData && tagsData) {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = dbAvatar || user.avatar;
+
       const relatedIds = (blog.relatedArticles || [])
         .map((r) => blogsData.results.find((b) => b.id === r.id)?.id)
         .filter(Boolean) as string[];
@@ -89,7 +107,9 @@ export default function EditBlogPage() {
         status: blog.status || "pending",
         author: {
           name: user.name,
-          avatar: user.avatar || "https://example.com/default-avatar.png",
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : avatarToUse,
           role: user.role,
         },
         relatedArticles: relatedIds,
@@ -124,13 +144,18 @@ export default function EditBlogPage() {
     if (!user) return toast.error("Please authenticate");
 
     try {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = data.author?.avatar || dbAvatar || user.avatar;
+
       const payload = {
         id: blogId,
         blogId: blogId,
         title: data.title,
         image: data.image,
         name: user.name,
-        avatar: user.avatar || "https://example.com/default-avatar.png",
+        avatar: !avatarToUse || avatarToUse.startsWith("/") 
+          ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+          : avatarToUse,
         role: user.role,
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
@@ -179,7 +204,7 @@ export default function EditBlogPage() {
             <input
               id="title"
               placeholder="Blog Title"
-              className="text-[30pt] h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
+              className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
               {...register("title")}
             />
             {formState.errors.title && (
@@ -216,7 +241,7 @@ export default function EditBlogPage() {
                   <div key={idx} className="mb-4">
                     <Label>Content Image</Label>
                     <FileUploadDropzone
-                      onUploaded={(url) => setValue(`content.${idx}.src`, url)}
+                      onUploaded={(url) => setValue(`content.${idx}.src`, encodeImageUrl(url))}
                     />
                     {getContentError(idx, "src") && (
                       <p className="text-sm text-red-500">
@@ -239,7 +264,7 @@ export default function EditBlogPage() {
               <Label>Cover Image</Label>
               <FileUploadDropzone
                 key="cover-dropzone"
-                onUploaded={(url) => setValue("image", url)}
+                onUploaded={(url) => setValue("image", encodeImageUrl(url))}
               />
               {watch("image") && (
                 <img
@@ -354,7 +379,7 @@ export default function EditBlogPage() {
                   dangerouslySetInnerHTML={{
                     __html: decodeHtml(
                       watch("content.0.text") ||
-                      "<p>Nothing to preview yet...</p>",
+                        "<p>Nothing to preview yet...</p>",
                     ),
                   }}
                 />

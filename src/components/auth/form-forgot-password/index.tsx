@@ -36,7 +36,7 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
   return (
     <FormProvider {...forgotPasswordForm}>
       <form onSubmit={forgotPasswordForm.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+        <div className="space-y-3">
           <InputText
             label="Email"
             name="email"
@@ -45,10 +45,10 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
           />
         </div>
         {isAuthError && (
-          <p className="text-red-500 text-sm mt-3 text-center">{isAuthError}</p>
+          <p className="text-red-500 text-xs mt-3 text-center">{isAuthError}</p>
         )}
 
-        <div className="space-y-2 mt-8">
+        <div className="space-y-2 mt-4">
           <SubmitButton
             title={isLoading ? "Sending..." : "Send Verification Link"}
             type="submit"

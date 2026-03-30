@@ -4,6 +4,20 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
 
+/* ─── Grid slide-in keyframe injected once ───────────────── */
+const GRID_ANIM_STYLE = `
+@keyframes testimonial-grid-in {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+.testimonial-card-animate {
+  animation: testimonial-grid-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.testimonial-card-animate:nth-child(1) { animation-delay: 0ms;   }
+.testimonial-card-animate:nth-child(2) { animation-delay: 80ms;  }
+.testimonial-card-animate:nth-child(3) { animation-delay: 160ms; }
+`;
+
 /* ─── types ─────────────────────────────────────────────── */
 type TestimonialItem = {
   owner: { name: string; role: string; avatar: string };
@@ -53,10 +67,13 @@ const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
         /* Fixed collapsed height; expands on hover via max-height transition */
         maxHeight: expanded ? "600px" : "220px",
         transition:
-          "max-height 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.25s ease",
+          "max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         overflow: "hidden",
+        transform: expanded
+          ? "translateY(-3px) scale(1.012)"
+          : "translateY(0) scale(1)",
         boxShadow: expanded
-          ? "0 8px 32px rgba(59,130,246,0.15)"
+          ? "0 12px 40px rgba(59,130,246,0.18)"
           : "0 2px 12px rgba(0,0,0,0.06)",
       }}
       onMouseEnter={() => setExpanded(true)}
@@ -138,7 +155,17 @@ const Testimonials: FC = () => {
   const [page, setPage] = useState(1);
   const [allItems, setAllItems] = useState<TestimonialItem[]>([]);
   const [slide, setSlide] = useState(0);
+  const [animKey, setAnimKey] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  /* Inject grid animation CSS once */
+  useEffect(() => {
+    if (document.getElementById("testimonial-grid-style")) return;
+    const tag = document.createElement("style");
+    tag.id = "testimonial-grid-style";
+    tag.textContent = GRID_ANIM_STYLE;
+    document.head.appendChild(tag);
+  }, []);
 
   const { data, isFetching } = useFetchTestimonialsQuery({
     page,
@@ -162,6 +189,7 @@ const Testimonials: FC = () => {
     (idx: number) => {
       const clamped = Math.max(0, Math.min(idx, totalSlides - 1));
       setSlide(clamped);
+      setAnimKey((k) => k + 1); // re-trigger grid entrance animation
 
       // If we are at the last known slide and there are more pages to load, fetch
       const totalFetched = data?.totalResults ?? 0;
@@ -203,36 +231,42 @@ const Testimonials: FC = () => {
   const showSkeletons = isFetching && visibleItems.length < CARDS_PER_SLIDE;
 
   return (
-    <section
-      className="bg-testimonial py-12 lg:py-16"
-      aria-label="Testimonials"
-    >
+    <section className="bg-testimonial py-8 lg:py-12" aria-label="Testimonials" id="testimonials-section">
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* ── Stacked heading ── */}
         <div className="text-center overflow-hidden animate-fade-in mb-10">
-          <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] my-1">
+          <h2 className="text-4xl font-bold text-black leading-[1.2] my-1">
             See what others are saying.
           </h2>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden sm:block">
+          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden sm:block">
             See what others are saying.
           </h2>
-          <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden sm:block">
+          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden sm:block">
             See what others are saying.
           </h2>
         </div>
 
         {/* ── Card grid ── */}
-        <div
-          ref={trackRef}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
-        >
-          {visibleItems.map((item, i) => (
-            <TestimonialCard key={`${slide}-${i}`} item={item} />
-          ))}
-          {showSkeletons &&
-            Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
-              (_, i) => <SkeletonCard key={`sk-${i}`} />,
-            )}
+        <div className="px-4 lg:px-8">
+          <div
+            ref={trackRef}
+            key={animKey}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
+          >
+            {visibleItems.map((item, i) => (
+              <div key={`${slide}-${i}`} className="testimonial-card-animate">
+                <TestimonialCard item={item} />
+              </div>
+            ))}
+            {showSkeletons &&
+              Array.from({ length: CARDS_PER_SLIDE - visibleItems.length }).map(
+                (_, i) => (
+                  <div key={`sk-${i}`} className="testimonial-card-animate">
+                    <SkeletonCard />
+                  </div>
+                ),
+              )}
+          </div>
         </div>
 
         {/* ── Controls ── */}
@@ -257,9 +291,9 @@ const Testimonials: FC = () => {
                   key={i}
                   onClick={() => goTo(i)}
                   aria-label={`Slide ${i + 1}`}
-                  className="transition-all duration-200"
+                  className="transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{
-                    width: slide === i ? "24px" : "8px",
+                    width: slide === i ? "28px" : "8px",
                     height: "8px",
                     borderRadius: "9999px",
                     background: slide === i ? "#2563eb" : "#d1d5db",

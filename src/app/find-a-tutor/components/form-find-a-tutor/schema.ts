@@ -7,7 +7,7 @@ export const tutorSchema = z.object({
   grade: z.string().min(1, "Grade is required"),
   phoneNumber: z
     .string()
-    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
+    .regex(/^\d{10}$/, "Contact Number must be exactly 10 digits"),
   city: z.string().min(1, "City is required"),
   state: z.string().min(1, "State is required"),
   region: z.string().min(1, "Region is required"),

@@ -3,7 +3,7 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordSchema, ResetPasswordSchema } from "./schema";
-import InputText from "@/components/shared/input-text";
+import InputPassword from "@/components/shared/input-password";
 import SubmitButton from "@/components/shared/submit-button";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -98,10 +98,10 @@ const FormResetPassword = () => {
               height={200}
             />
           </div>
-          <DialogTitle className="text-2xl text-center font-semibold">
+          <DialogTitle className="text-3xl text-center font-bold">
             Reset Password
           </DialogTitle>
-          <DialogDescription className="text-center text-gray-500">
+          <DialogDescription className="text-center text-base text-gray-500">
             Enter your new password below to reset your password
           </DialogDescription>
         </DialogHeader>
@@ -111,16 +111,14 @@ const FormResetPassword = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-4 mt-4"
           >
-            <InputText
+            <InputPassword
               label="New Password"
               name="password"
-              type="password"
               placeholder="Enter new password"
             />
-            <InputText
+            <InputPassword
               label="Confirm Password"
               name="confirmPassword"
-              type="password"
               placeholder="Confirm new password"
             />
 

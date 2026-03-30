@@ -35,12 +35,9 @@ const staggerClasses = ["stagger-1", "stagger-2", "stagger-3"];
 const AboutUs = () => {
   return (
     <div id="aboutus-section" className="px-4 lg:px-8">
-      <div className="mx-auto max-w-7xl px-4 py-12 lg:py-16 lg:px-10 bg-lightgrey rounded-3xl relative overflow-hidden">
+      <div className="mx-auto max-w-7xl py-8 lg:py-10">
         {/* Section labels */}
-        <h3 className="text-center text-blue text-sm tracking-widest font-semibold uppercase animate-on-scroll">
-          ABOUT US
-        </h3>
-        <h2 className="text-center text-3xl md:text-4xl font-semibold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
+        <h2 className="text-center text-4xl font-bold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
           Why Choose Home Tuition?
         </h2>
 

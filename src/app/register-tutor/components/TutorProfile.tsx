@@ -54,7 +54,7 @@ const TutorProfile = () => {
           maxLength={CHAR_LIMIT}
         />
         <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-sm text-red-500">
+          <p className="text-xs text-red-500">
             {errors.teachingSummary?.message as string}
           </p>
           <CharCounter value={teachingSummary} />
@@ -75,7 +75,7 @@ const TutorProfile = () => {
           maxLength={CHAR_LIMIT}
         />
         <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-sm text-red-500">
+          <p className="text-xs text-red-500">
             {errors.academicDetails?.message as string}
           </p>
           <CharCounter value={academicDetails} />
@@ -96,7 +96,7 @@ const TutorProfile = () => {
           maxLength={CHAR_LIMIT}
         />
         <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-sm text-red-500">
+          <p className="text-xs text-red-500">
             {errors.studentResults?.message as string}
           </p>
           <CharCounter value={studentResults} />
@@ -117,7 +117,7 @@ const TutorProfile = () => {
           maxLength={CHAR_LIMIT}
         />
         <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-sm text-red-500">
+          <p className="text-xs text-red-500">
             {errors.sellingPoints?.message as string}
           </p>
           <CharCounter value={sellingPoints} />

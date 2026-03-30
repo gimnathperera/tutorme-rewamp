@@ -39,10 +39,11 @@ const InputText: React.FC<InputTextProps> = ({
               } ${className}`}
             />
 
-            {/* Reserved space → no layout jump */}
-            <span className="mt-1 min-h-[1.25rem] text-xs text-red-500">
-              {error || helperText || ""}
-            </span>
+            {(error || helperText) && (
+              <span className="text-xs text-red-500 mt-1">
+                {error || helperText}
+              </span>
+            )}
           </>
         )}
       />

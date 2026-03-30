@@ -18,7 +18,7 @@ const SubmitButton: React.FC<ButtonTextProps> = ({
 }) => {
   return (
     <button
-      className={`py-3 px-5 text-sm font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:opacity-90 flex justify-center items-center gap-2 ${
+      className={`py-3 px-5 text-base font-semibold w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:bg-primary-800 transition-colors duration-200 flex justify-center items-center gap-2 ${
         loading ? "disabled:opacity-50" : ""
       }`}
       disabled={loading || rest.disabled}
@@ -45,7 +45,7 @@ const SubmitButton: React.FC<ButtonTextProps> = ({
       ) : (
         <>
           {startIcon && <Icon name={startIcon} />}
-          <p>{title}</p>
+          {title}
           {endIcon && <Icon name={endIcon} />}
         </>
       )}

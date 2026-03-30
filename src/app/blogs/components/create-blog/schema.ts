@@ -4,7 +4,7 @@ export const createArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
   author: z.object({
     name: z.string().min(1, "Author name is required"),
-    avatar: z.string().url("Avatar must be a valid URL"),
+    avatar: z.string().min(1, "Avatar is required"),
     role: z.string().min(1, "Author role is required"),
   }),
   content: z
@@ -12,22 +12,23 @@ export const createArticleSchema = z.object({
       z.union([
         z.object({
           type: z.literal("paragraph"),
-          text: z.string().min(1, "Paragraph text is required"),
+          text: z.string().optional().default(""),
         }),
         z.object({
           type: z.literal("heading"),
-          text: z.string().min(1, "Heading text is required"),
+          text: z.string().optional().default(""),
           level: z.number().int().min(1).max(6),
         }),
         z.object({
           type: z.literal("image"),
-          src: z.string().url("Image source must be a valid URL"),
+          src: z.string().optional().default(""),
           caption: z.string().optional(),
         }),
       ]),
     )
-    .nonempty("Content cannot be empty"),
-  image: z.string().url("Cover image must be a valid URL"),
+    .optional()
+    .default([]),
+  image: z.string().optional().default(""),
   faqs: z
     .array(
       z.object({
@@ -65,6 +66,6 @@ export const initialFormValues: CreateArticleSchema = {
   image: "",
   relatedArticles: [],
   tags: [],
-  faqs: [{ question: "", answer: "" }],
+  faqs: [],
   status: "pending",
 };

@@ -57,10 +57,10 @@ const Subjects: FC = () => {
   return (
     <div className="py-10">
       <div className="mx-auto max-w-7xl py-10">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+        <h2 className="text-4xl font-bold text-center">
           {title || "Pick a Subject and Dive In!"}
         </h2>
-        <h3 className="text-xl sm:text-2xl font-medium text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="text-xl font-normal text-center pt-4 sm:pt-10 opacity-50">
           Discover fun and engaging lessons tailored to your interests.
           <br className="hidden sm:block" />
           Choose a subject to start your exciting learning journey!
@@ -78,7 +78,7 @@ const Subjects: FC = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <h2 className="text-xl font-semibold">{title}</h2>
-                    <p className="text-gray-600">{description}</p>
+                    <p className="text-sm text-gray-600">{description}</p>
                   </div>
                   <ChevronRight className="text-gray-400" />
                 </div>

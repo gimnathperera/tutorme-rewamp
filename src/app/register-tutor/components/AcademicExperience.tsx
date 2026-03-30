@@ -31,6 +31,8 @@ const AcademicExperience = () => {
     register,
     control,
     watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useFormContext();
 
@@ -48,6 +50,7 @@ const AcademicExperience = () => {
   useEffect(() => {
     if (selectedGradeIds.length === 0) {
       setSubjectOptions([]);
+      setValue("subjects", []);
       return;
     }
 
@@ -57,12 +60,18 @@ const AcademicExperience = () => {
           gradeIds: selectedGradeIds,
         }).unwrap();
 
-        setSubjectOptions(
-          res.subjects.map((s: any) => ({
-            value: s.id,
-            text: s.title,
-          })),
-        );
+        const newOptions = res.subjects.map((s: any) => ({
+          value: s.id,
+          text: s.title,
+        }));
+        setSubjectOptions(newOptions);
+
+        // Remove any previously selected subjects that no longer belong
+        // to the current set of grades.
+        const validIds = new Set(newOptions.map((o) => o.value));
+        const currentSubjects: string[] = getValues("subjects") ?? [];
+        const filtered = currentSubjects.filter((id) => validIds.has(id));
+        setValue("subjects", filtered);
       } catch (error) {
         console.error("Failed to load subjects", error);
         setSubjectOptions([]);
@@ -70,7 +79,7 @@ const AcademicExperience = () => {
     };
 
     loadSubjects();
-  }, [selectedGradeIds, fetchSubjectsForGrades]);
+  }, [selectedGradeIds, fetchSubjectsForGrades, setValue, getValues]);
 
   return (
     <div className="space-y-8">
@@ -90,7 +99,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutoringLevels?.message as string}
           </p>
         </div>
@@ -109,7 +118,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.preferredLocations?.message as string}
           </p>
         </div>
@@ -131,7 +140,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutorType?.message as string}
           </p>
         </div>
@@ -155,7 +164,7 @@ const AcademicExperience = () => {
             </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.highestEducation?.message as string}
           </p>
         </div>
@@ -174,7 +183,7 @@ const AcademicExperience = () => {
             className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", { valueAsNumber: true })}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.yearsExperience?.message as string}
           </p>
         </div>
@@ -193,7 +202,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.tutorMediums?.message as string}
           </p>
         </div>
@@ -220,7 +229,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.grades?.message as string}
           </p>
         </div>
@@ -240,7 +249,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-sm text-red-500 min-h-[1.25rem]">
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.subjects?.message as string}
           </p>
         </div>

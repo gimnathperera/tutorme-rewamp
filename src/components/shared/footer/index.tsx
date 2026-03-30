@@ -23,7 +23,9 @@ const products: ProductType[] = [
     section: "Resources",
     link: [
       { label: "Blog", url: "/blogs" },
+      { label: "Testimonials", url: "/#testimonials-section" },
       { label: "FAQs", url: "/#faq-section" },
+      { label: "About Us", url: "/#aboutus-section" },
     ],
   },
   {
@@ -45,12 +47,12 @@ const products: ProductType[] = [
 const footer = () => {
   return (
     <div className="bg-black" id="first-section">
-      <div className="mx-auto max-w-2xl pt-4 pb-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="mt-24 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
+      <div className="mx-auto max-w-2xl pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+        <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
 
           <div className="col-span-4">
-            <h3 className="text-white text-4xl font-semibold leading-9 mb-4 lg:mb-20">
+            <h3 className="text-white text-2xl font-bold leading-snug mb-4 lg:mb-10">
               {" "}
               Tuition Lanka
             </h3>
@@ -92,15 +94,15 @@ const footer = () => {
 
           {products.map((product) => (
             <div key={product.id} className="group relative col-span-2">
-              <p className="text-white text-xl font-extrabold mb-9">
+              <p className="text-white text-sm font-semibold uppercase tracking-widest mb-4">
                 {product.section}
               </p>
               <ul>
                 {product.link.map((linkObj, index) => (
-                  <li key={index} className="mb-5">
+                  <li key={index} className="mb-3">
                     <Link
                       href={linkObj.url}
-                      className="text-white text-lg font-normal mb-6 hover:text-gray-300 transition"
+                      className="text-white text-sm font-normal mb-4 hover:text-gray-300 transition"
                     >
                       {linkObj.label}
                     </Link>
@@ -113,21 +115,21 @@ const footer = () => {
       </div>
 
       <div className="mx-auto max-w-2xl lg:max-w-7xl">
-        <div className="pt-5 pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
+        <div className="pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
           <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
-              <h3 className="text-center md:text-start text-offwhite text-lg">
-                @2024 - All Rights Reserved by tuitionlanka.com
-              </h3>
+              <p className="text-center md:text-start text-offwhite text-sm">
+                @2026 - All Rights Reserved by tuitionlanka.com
+              </p>
             </div>
             <div className="flex justify-center md:justify-end">
               <Link href="/">
-                <h3 className="text-offwhite pr-6">Privacy policy</h3>
+                <p className="text-offwhite text-sm pr-6">Privacy policy</p>
               </Link>
               <Link href="/">
-                <h3 className="text-offwhite pl-6 border-solid border-l border-footer">
-                  Terms & conditions
-                </h3>
+                <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer">
+                  Terms &amp; conditions
+                </p>
               </Link>
             </div>
           </div>

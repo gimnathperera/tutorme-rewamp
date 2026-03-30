@@ -5,7 +5,11 @@ export const createRequestTutorSchema = z.object({
     .string()
     .trim()
     .min(1, "Full Name is required")
-    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
+    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only")
+    .refine(
+      (v) => !/ {2,}/.test(v),
+      "Multiple consecutive spaces are not allowed",
+    ),
 
   email: z
     .string()
@@ -20,9 +24,9 @@ export const createRequestTutorSchema = z.object({
   phoneNumber: z
     .string()
     .trim()
-    .min(1, "Phone number is required")
-    .regex(/^\d+$/, "Phone Number must contain numeric values only")
-    .length(10, "Phone number should be exactly 10 digits"),
+    .min(1, "Contact Number is required")
+    .regex(/^\d+$/, "Contact Number must contain numeric values only")
+    .length(10, "Contact Number should be exactly 10 digits"),
 
   medium: z.string().nonempty("Medium is required"),
 

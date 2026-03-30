@@ -48,6 +48,12 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     onChange?.(updated);
   };
 
+  // Sync internal selection state when the parent updates defaultSelected
+  // (e.g. when the form filters out subjects after a grade is removed).
+  useEffect(() => {
+    setSelectedOptions(defaultSelected);
+  }, [defaultSelected]);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (

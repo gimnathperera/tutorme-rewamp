@@ -43,34 +43,34 @@ const FormSignUp = ({ onLoginClick }: Props) => {
   return (
     <FormProvider {...signupForm}>
       <form onSubmit={signupForm.handleSubmit(onSubmit)}>
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
-            <label className="text-sm">
+            <label className="mb-1 text-sm font-medium text-gray-700">
               Full Name <span className="text-red-500">*</span>
             </label>
             <InputText name="name" placeholder="Jhon Doe" type="text" />
           </div>
           <div>
-            <label className="text-sm">
+            <label className="mb-1 text-sm font-medium text-gray-700">
               Email <span className="text-red-500">*</span>
             </label>
             <InputText name="email" placeholder="jhon@xyz.com" type="email" />
           </div>
 
           <div>
-            <label className="text-sm">
+            <label className="mb-1 text-sm font-medium text-gray-700">
               Password <span className="text-red-500">*</span>
             </label>
             <InputPassword name="password" placeholder="*******" />
           </div>
           <div>
-            <label className="text-sm">
+            <label className="mb-1 text-sm font-medium text-gray-700">
               Confirm Password <span className="text-red-500">*</span>
             </label>
             <InputPassword placeholder="*******" name="confirmPassword" />
           </div>
         </div>
-        <div className="space-y-2 mt-8">
+        <div className="space-y-2 mt-4">
           <SubmitButton title="Register" type="submit" loading={isLoading} />
 
           <div className="text-center">

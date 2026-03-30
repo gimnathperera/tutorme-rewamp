@@ -45,10 +45,18 @@ const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
-const errorMsg = "text-sm text-red-500 min-h-[1.25rem]";
+const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
+
+/**
+ * Strip leading spaces immediately; on blur collapse multiple internal spaces
+ * so the stored value is always clean.
+ */
+const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
+const collapseSpaces = (value: string) =>
+  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
 
 type TabKey = "contact" | "tutorDetails";
 const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
@@ -185,9 +193,9 @@ export default function AddRequestForTutor() {
 
   return (
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
-      <div className="text-2xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
+      <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-        <h1>Request A Tutor</h1>
+        <h1 className="text-3xl text-white font-bold">Request A Tutor</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -204,7 +212,21 @@ export default function AddRequestForTutor() {
                   <Label htmlFor="name">Full Name *</Label>
                   <Input
                     id="name"
-                    {...register("name")}
+                    {...register("name", {
+                      onChange: (e) => {
+                        // strip leading spaces as the user types
+                        const cleaned = stripLeadingSpaces(e.target.value);
+                        if (cleaned !== e.target.value) {
+                          setValue("name", cleaned, { shouldValidate: true });
+                        }
+                      },
+                      onBlur: (e) => {
+                        // fully normalize on blur (collapse multiple spaces too)
+                        setValue("name", collapseSpaces(e.target.value), {
+                          shouldValidate: true,
+                        });
+                      },
+                    })}
                     placeholder="e.g. Nimal Perera"
                     autoComplete="name"
                     className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
@@ -227,7 +249,22 @@ export default function AddRequestForTutor() {
                       type="email"
                       placeholder="e.g. johndoe@gmail.com"
                       autoComplete="email"
-                      {...register("email")}
+                      {...register("email", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("email", noSpaces, {
+                              shouldValidate: true,
+                            });
+                          }
+                        },
+                        onBlur: (e) => {
+                          setValue("email", e.target.value.replace(/ /g, ""), {
+                            shouldValidate: true,
+                          });
+                        },
+                      })}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
                     />
                     {errors.email ? (
@@ -239,7 +276,7 @@ export default function AddRequestForTutor() {
                     )}
                   </div>
                   <div className={fieldWrapper}>
-                    <Label htmlFor="phoneNumber">Phone Number *</Label>
+                    <Label htmlFor="phoneNumber">Contact Number *</Label>
                     <Input
                       id="phoneNumber"
                       type="tel"
@@ -247,7 +284,26 @@ export default function AddRequestForTutor() {
                       maxLength={10}
                       placeholder="e.g. 0712345678"
                       autoComplete="tel"
-                      {...register("phoneNumber")}
+                      {...register("phoneNumber", {
+                        onChange: (e) => {
+                          // strip every space character as the user types
+                          const noSpaces = e.target.value.replace(/ /g, "");
+                          if (noSpaces !== e.target.value) {
+                            setValue("phoneNumber", noSpaces, {
+                              shouldValidate: true,
+                            });
+                          }
+                        },
+                        onBlur: (e) => {
+                          setValue(
+                            "phoneNumber",
+                            e.target.value.replace(/ /g, ""),
+                            {
+                              shouldValidate: true,
+                            },
+                          );
+                        },
+                      })}
                       className={`${inputClass} ${errors.phoneNumber ? "border-red-500" : "border-gray-300"}`}
                     />
                     {errors.phoneNumber ? (
@@ -269,7 +325,10 @@ export default function AddRequestForTutor() {
                     render={({ field }) => (
                       <DistrictSelect
                         value={field.value || ""}
-                        onChange={field.onChange}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          if (val) clearErrors("district");
+                        }}
                         districts={districts}
                         hasError={!!errors.district}
                       />
@@ -288,7 +347,10 @@ export default function AddRequestForTutor() {
                       <CitySelect
                         value={field.value || ""}
                         district={selectedDistrict || ""}
-                        onChange={field.onChange}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          if (val) clearErrors("city");
+                        }}
                         hasError={!!errors.city}
                       />
                     )}
@@ -378,7 +440,9 @@ export default function AddRequestForTutor() {
                     key={index}
                     className="p-4 border border-gray-200 rounded-md"
                   >
-                    <h3 className="font-semibold mb-3">Tutor {index + 1}</h3>
+                    <h3 className="text-base font-semibold mb-3">
+                      Tutor {index + 1}
+                    </h3>
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
@@ -519,10 +583,10 @@ export default function AddRequestForTutor() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Request Submitted!
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Your tutor request has been submitted successfully. We&apos;ll
               match you with a suitable tutor and get back to you shortly.
             </DialogDescription>
@@ -567,10 +631,10 @@ export default function AddRequestForTutor() {
             </div>
           </div>
           <DialogHeader>
-            <DialogTitle className="text-center text-xl">
+            <DialogTitle className="text-center text-xl font-semibold">
               Submission Failed
             </DialogTitle>
-            <DialogDescription className="text-center">
+            <DialogDescription className="text-center text-base">
               Something went wrong.
             </DialogDescription>
           </DialogHeader>

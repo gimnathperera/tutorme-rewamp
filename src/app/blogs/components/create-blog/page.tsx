@@ -20,6 +20,7 @@ import {
   useCreateBlogMutation,
   useFetchBlogsQuery,
 } from "@/store/api/splits/blogs";
+import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
@@ -36,6 +37,10 @@ const AddBlog = () => {
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagData } = useFetchTagsQuery({});
   const { user } = useAuthContext();
+  const userId = user?.id;
+
+  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
+
   const [isPreview, setIsPreview] = useState(false);
 
   const createBlogForm = useForm<CreateArticleSchema>({
@@ -55,6 +60,14 @@ const AddBlog = () => {
     control,
     name: "faqs",
   });
+
+  const encodeImageUrl = (url: string) => {
+    try {
+      return encodeURI(decodeURI(url));
+    } catch {
+      return url;
+    }
+  };
 
   const decodeHtml = (html: string) => {
     const txt = document.createElement("textarea");
@@ -80,18 +93,28 @@ const AddBlog = () => {
 
   const redirect = useRouter();
 
+  /* ---------------- Fetch avatar ---------------- */
+  useEffect(() => {
+    if (userId) fetchProfile({ userId: String(userId) });
+  }, [userId, fetchProfile]);
+
   useEffect(() => {
     if (user) {
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = dbAvatar || user.avatar;
+
       reset({
         ...initialFormValues,
         author: {
           name: user.name,
-          avatar: user.avatar || "/images/profile/pp.png",
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : avatarToUse,
           role: user.role,
         },
       });
     }
-  }, [user, reset]);
+  }, [user, userData, reset]);
 
   const blogOptions: Option[] =
     blogsData?.results.map((blog) => ({
@@ -112,7 +135,20 @@ const AddBlog = () => {
     }
 
     try {
-      const result = await createBlog(data);
+      const dbAvatar = (userData as any)?.avatar;
+      const avatarToUse = data.author.avatar || dbAvatar || user.avatar;
+
+      const sanitizedData = {
+        ...data,
+        author: {
+          ...data.author,
+          avatar: !avatarToUse || avatarToUse.startsWith("/") 
+            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+            : avatarToUse,
+        }
+      };
+      
+      const result = await createBlog(sanitizedData);
       const error = getErrorInApiResult(result);
       if (error) return toast.error(error);
 
@@ -168,7 +204,7 @@ const AddBlog = () => {
             <input
               id="title"
               placeholder="Blog Title"
-              className="text-[30pt] h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
+              className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
               {...register("title")}
             />
             {formState.errors.title && (
@@ -244,7 +280,7 @@ const AddBlog = () => {
 
                 <FileUploadDropzone
                   onUploaded={(url) =>
-                    createBlogForm.setValue("content.2.src", url)
+                    createBlogForm.setValue("content.2.src", encodeImageUrl(url))
                   }
                 />
 
@@ -267,7 +303,7 @@ const AddBlog = () => {
               <Label htmlFor="coverImage">Cover Image</Label>
 
               <FileUploadDropzone
-                onUploaded={(url) => createBlogForm.setValue("image", url)}
+                onUploaded={(url) => createBlogForm.setValue("image", encodeImageUrl(url))}
               />
 
               {formState.errors.image && (
@@ -478,7 +514,6 @@ const AddBlog = () => {
             type="submit"
             disabled={isLoading}
             className="h-9 px-5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
-            onClick={handleSubmit(onSubmit)}
           >
             {isLoading ? "Publishing..." : "Publish"}
           </button>

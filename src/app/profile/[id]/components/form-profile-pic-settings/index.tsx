@@ -113,7 +113,7 @@ const ProfilePicSettings = () => {
       {open && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[400px] p-6 rounded-xl">
-            <h3 className="text-lg font-semibold mb-2">
+            <h3 className="text-xl font-semibold mb-2">
               Change profile picture
             </h3>
 
@@ -129,7 +129,7 @@ const ProfilePicSettings = () => {
                   setTempAvatar(null);
                   setOpen(false);
                 }}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 text-base font-semibold border rounded-lg"
               >
                 Cancel
               </button>
@@ -137,7 +137,7 @@ const ProfilePicSettings = () => {
               <button
                 disabled={!tempAvatar || isLoading}
                 onClick={handleSave}
-                className="px-4 py-2 rounded-lg bg-primary-700 text-white disabled:opacity-50"
+                className="px-4 py-2 text-base font-semibold rounded-lg bg-primary-700 text-white disabled:opacity-50"
               >
                 Save
               </button>
@@ -149,7 +149,7 @@ const ProfilePicSettings = () => {
       {confirmDeleteOpen && (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
           <div className="bg-white w-[360px] p-6 rounded-xl">
-            <h3 className="text-lg font-semibold mb-2">
+            <h3 className="text-xl font-semibold mb-2">
               Remove profile picture?
             </h3>
 
@@ -160,7 +160,7 @@ const ProfilePicSettings = () => {
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => setConfirmDeleteOpen(false)}
-                className="px-4 py-2 border rounded-lg"
+                className="px-4 py-2 text-base font-semibold border rounded-lg"
               >
                 Cancel
               </button>
@@ -170,7 +170,7 @@ const ProfilePicSettings = () => {
                   await handleDelete();
                   setConfirmDeleteOpen(false);
                 }}
-                className="px-4 py-2 rounded-lg bg-red-600 text-white"
+                className="px-4 py-2 text-base font-semibold rounded-lg bg-red-600 text-white"
               >
                 Delete
               </button>
