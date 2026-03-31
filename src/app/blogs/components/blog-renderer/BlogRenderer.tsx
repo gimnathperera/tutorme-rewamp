@@ -48,7 +48,10 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             );
 
           case "heading": {
-            const level = block.level && block.level >= 1 && block.level <= 6 ? block.level : 2;
+            const level =
+              block.level && block.level >= 1 && block.level <= 6
+                ? block.level
+                : 2;
             const HTag = `h${level}` as keyof JSX.IntrinsicElements;
             return (
               <HTag
@@ -57,10 +60,10 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                   level === 1
                     ? "text-3xl"
                     : level === 2
-                    ? "text-2xl mt-8 mb-4 border-b pb-2"
-                    : level === 3
-                    ? "text-xl mt-6 mb-3"
-                    : "text-lg mt-4 mb-2"
+                      ? "text-2xl mt-8 mb-4 border-b pb-2"
+                      : level === 3
+                        ? "text-xl mt-6 mb-3"
+                        : "text-lg mt-4 mb-2"
                 }`}
               >
                 {block.text}
@@ -71,7 +74,10 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
           case "image":
             if (!block.src) return null;
             return (
-              <figure key={index} className="my-10 block-image flex flex-col items-center">
+              <figure
+                key={index}
+                className="my-10 block-image flex flex-col items-center"
+              >
                 <img
                   src={block.src}
                   alt={block.caption || "Blog image"}

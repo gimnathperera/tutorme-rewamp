@@ -51,7 +51,10 @@ const TermsAndSubmit = () => {
               />
             )}
           />
-          <Label htmlFor="agreeTerms" className="flex flex-col gap-1 text-[15px]">
+          <Label
+            htmlFor="agreeTerms"
+            className="flex flex-col gap-1 text-[15px]"
+          >
             <span>I agree to the Terms and Conditions *</span>
             <span className="text-xs text-muted-foreground">
               I agree to receiving assignment information via SMS and understand
@@ -77,7 +80,10 @@ const TermsAndSubmit = () => {
               />
             )}
           />
-          <Label htmlFor="agreeAssignmentInfo" className="flex flex-col gap-1 text-[15px]">
+          <Label
+            htmlFor="agreeAssignmentInfo"
+            className="flex flex-col gap-1 text-[15px]"
+          >
             <span>
               I agree to receiving assignment information regarding new Tuition
               Assignments *

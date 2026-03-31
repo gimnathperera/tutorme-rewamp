@@ -107,13 +107,15 @@ export default function ViewBlogPage() {
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="font-bold text-xl text-gray-900 dark:text-gray-100">{blog.author?.name}</p>
+                <p className="font-bold text-xl text-gray-900 dark:text-gray-100">
+                  {blog.author?.name}
+                </p>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {blog.author?.role} •{" "}
                   {new Date(blog.createdAt).toLocaleDateString("en-US", {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </p>
               </div>
@@ -133,12 +135,21 @@ export default function ViewBlogPage() {
             </div>
 
             <div className="border-y py-8 dark:border-gray-700">
-              <TableOfContents html={
-                blog.content
-                  ?.filter((b: any) => b.type === "heading" || b.type === "paragraph")
-                  ?.map((b: any) => (b.type === "heading" ? `<h${b.level}>${b.text}</h${b.level}>` : b.text))
-                  .join("\n") || ""
-              } />
+              <TableOfContents
+                html={
+                  blog.content
+                    ?.filter(
+                      (b: any) =>
+                        b.type === "heading" || b.type === "paragraph",
+                    )
+                    ?.map((b: any) =>
+                      b.type === "heading"
+                        ? `<h${b.level}>${b.text}</h${b.level}>`
+                        : b.text,
+                    )
+                    .join("\n") || ""
+                }
+              />
             </div>
 
             <div className="mt-10 blog-renderer-wrapper">

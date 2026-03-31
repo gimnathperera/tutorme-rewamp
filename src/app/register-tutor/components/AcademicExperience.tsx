@@ -86,7 +86,9 @@ const AcademicExperience = () => {
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutoringLevels">Tutoring Levels *</Label>
+          <Label className="text-[15px]" htmlFor="tutoringLevels">
+            Tutoring Levels *
+          </Label>
           <Controller
             name="tutoringLevels"
             control={control}
@@ -105,7 +107,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="preferredLocations">Preferred Locations *</Label>
+          <Label className="text-[15px]" htmlFor="preferredLocations">
+            Preferred Locations *
+          </Label>
           <Controller
             name="preferredLocations"
             control={control}
@@ -127,7 +131,9 @@ const AcademicExperience = () => {
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorType">Tutor Types *</Label>
+          <Label className="text-[15px]" htmlFor="tutorType">
+            Tutor Types *
+          </Label>
           <Controller
             name="tutorType"
             control={control}
@@ -146,7 +152,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="highestEducation">Highest Education Level *</Label>
+          <Label className="text-[15px]" htmlFor="highestEducation">
+            Highest Education Level *
+          </Label>
           <select
             id="highestEducation"
             {...register("highestEducation")}
@@ -173,7 +181,9 @@ const AcademicExperience = () => {
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="yearsExperience">Years of Experience *</Label>
+          <Label className="text-[15px]" htmlFor="yearsExperience">
+            Years of Experience *
+          </Label>
           <Input
             id="yearsExperience"
             type="number"
@@ -189,7 +199,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorMediums">Tutor Mediums *</Label>
+          <Label className="text-[15px]" htmlFor="tutorMediums">
+            Tutor Mediums *
+          </Label>
           <Controller
             name="tutorMediums"
             control={control}
@@ -211,7 +223,9 @@ const AcademicExperience = () => {
       {/* ROW 4 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="grades">Grades *</Label>
+          <Label className="text-[15px]" htmlFor="grades">
+            Grades *
+          </Label>
           <Controller
             name="grades"
             control={control}
@@ -235,7 +249,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="subjects">Subjects *</Label>
+          <Label className="text-[15px]" htmlFor="subjects">
+            Subjects *
+          </Label>
           <Controller
             name="subjects"
             control={control}

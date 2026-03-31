@@ -59,8 +59,16 @@ export default function EditBlogPage() {
     },
   });
 
-  const { register, handleSubmit, control, reset, watch, formState, setValue, setError } =
-    form;
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    watch,
+    formState,
+    setValue,
+    setError,
+  } = form;
 
   const {
     fields: faqFields,
@@ -118,9 +126,10 @@ export default function EditBlogPage() {
         status: blog.status || "pending",
         author: {
           name: user.name,
-          avatar: !avatarToUse || avatarToUse.startsWith("/") 
-            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-            : avatarToUse,
+          avatar:
+            !avatarToUse || avatarToUse.startsWith("/")
+              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+              : avatarToUse,
           role: user.role,
         },
         relatedArticles: relatedIds,
@@ -165,19 +174,17 @@ export default function EditBlogPage() {
         image: data.image,
         author: {
           name: user.name,
-          avatar: !avatarToUse || avatarToUse.startsWith("/") 
-            ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-            : avatarToUse,
+          avatar:
+            !avatarToUse || avatarToUse.startsWith("/")
+              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
+              : avatarToUse,
           role: user.role,
         },
         content: data.content,
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
         faqs: data.faqs ?? [],
-        status: (data.status || "pending") as
-          | "pending"
-          | "published"
-          | "draft",
+        status: (data.status || "pending") as "pending" | "published" | "draft",
       };
 
       const result = await updateBlog(payload);
@@ -241,11 +248,16 @@ export default function EditBlogPage() {
             )}
 
             <div className="space-y-6">
-              <Label className="text-xl font-semibold border-b pb-2 flex">Content Blocks</Label>
+              <Label className="text-xl font-semibold border-b pb-2 flex">
+                Content Blocks
+              </Label>
               {contentFields.map((field, index) => {
                 const blockType = watch(`content.${index}.type`);
                 return (
-                  <div key={field.id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50 relative group">
+                  <div
+                    key={field.id}
+                    className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50 relative group"
+                  >
                     <div className="flex justify-between items-center mb-4">
                       <span className="font-semibold text-gray-700 capitalize">
                         {blockType} Block
@@ -297,10 +309,16 @@ export default function EditBlogPage() {
 
                     {blockType === "heading" && (
                       <div className="space-y-2 flex gap-2 w-full">
-                        <Input className="flex-1 bg-white" placeholder="Heading text" {...register(`content.${index}.text` as const)} />
+                        <Input
+                          className="flex-1 bg-white"
+                          placeholder="Heading text"
+                          {...register(`content.${index}.text` as const)}
+                        />
                         <select
                           className="block w-24 rounded-md border-gray-300 py-2 pl-3 pr-8 text-base focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm bg-white"
-                          {...register(`content.${index}.level` as const, { valueAsNumber: true })}
+                          {...register(`content.${index}.level` as const, {
+                            valueAsNumber: true,
+                          })}
                         >
                           <option value={1}>H1</option>
                           <option value={2}>H2</option>
@@ -315,7 +333,12 @@ export default function EditBlogPage() {
                     {blockType === "image" && (
                       <div className="space-y-4">
                         <FileUploadDropzone
-                          onUploaded={(url) => setValue(`content.${index}.src` as const, encodeImageUrl(url))}
+                          onUploaded={(url) =>
+                            setValue(
+                              `content.${index}.src` as const,
+                              encodeImageUrl(url),
+                            )
+                          }
                         />
                         {watch(`content.${index}.src` as const) && (
                           <img
@@ -324,14 +347,20 @@ export default function EditBlogPage() {
                             className="mt-2 max-h-48 rounded-lg object-cover"
                           />
                         )}
-                        <Input className="bg-white" placeholder="Image caption (optional)" {...register(`content.${index}.caption` as const)} />
+                        <Input
+                          className="bg-white"
+                          placeholder="Image caption (optional)"
+                          {...register(`content.${index}.caption` as const)}
+                        />
                       </div>
                     )}
 
                     {blockType === "table" && (
                       <div className="space-y-4 p-4 bg-white rounded-lg border shadow-inner">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm font-medium text-gray-600">Table Configuration</span>
+                          <span className="text-sm font-medium text-gray-600">
+                            Table Configuration
+                          </span>
                           <div className="flex gap-2">
                             <Button
                               type="button"
@@ -339,11 +368,24 @@ export default function EditBlogPage() {
                               size="sm"
                               id={`edit-add-column-${index}`}
                               onClick={() => {
-                                const current = watch(`content.${index}`) as any;
-                                const newHeaders = [...(current.headers || []), `Col ${(current.headers?.length || 0) + 1}`];
-                                const newRows = (current.rows || []).map((row: string[]) => [...row, ""]);
-                                setValue(`content.${index}.headers` as const, newHeaders);
-                                setValue(`content.${index}.rows` as const, newRows);
+                                const current = watch(
+                                  `content.${index}`,
+                                ) as any;
+                                const newHeaders = [
+                                  ...(current.headers || []),
+                                  `Col ${(current.headers?.length || 0) + 1}`,
+                                ];
+                                const newRows = (current.rows || []).map(
+                                  (row: string[]) => [...row, ""],
+                                );
+                                setValue(
+                                  `content.${index}.headers` as const,
+                                  newHeaders,
+                                );
+                                setValue(
+                                  `content.${index}.rows` as const,
+                                  newRows,
+                                );
                               }}
                             >
                               + Column
@@ -354,95 +396,161 @@ export default function EditBlogPage() {
                               size="sm"
                               id={`edit-add-row-${index}`}
                               onClick={() => {
-                                const current = watch(`content.${index}`) as any;
-                                const colCount = (current.headers?.length || 1);
-                                const newRows = [...(current.rows || []), Array(colCount).fill("")];
-                                setValue(`content.${index}.rows` as const, newRows);
+                                const current = watch(
+                                  `content.${index}`,
+                                ) as any;
+                                const colCount = current.headers?.length || 1;
+                                const newRows = [
+                                  ...(current.rows || []),
+                                  Array(colCount).fill(""),
+                                ];
+                                setValue(
+                                  `content.${index}.rows` as const,
+                                  newRows,
+                                );
                               }}
                             >
                               + Row
                             </Button>
                           </div>
                         </div>
-                        
+
                         <div className="overflow-x-auto border rounded">
                           <table className="w-full border-collapse">
                             <thead>
                               <tr>
-                                {(watch(`content.${index}.headers`) || []).map((header: string, hIdx: number) => (
-                                  <th key={hIdx} className="border p-2 bg-gray-50">
-                                    <div className="flex flex-col gap-1">
-                                      <Input
-                                        className="h-8 text-xs font-bold"
-                                        value={header}
-                                        onChange={(e) => {
-                                          const newHeaders = [...(watch(`content.${index}.headers`) || [])];
-                                          newHeaders[hIdx] = e.target.value;
-                                          setValue(`content.${index}.headers` as const, newHeaders);
-                                        }}
-                                      />
-                                      <button
-                                        type="button"
-                                        className="text-[10px] text-red-500 hover:underline"
-                                        onClick={() => {
-                                          const newHeaders = (watch(`content.${index}.headers`) || []).filter((_: any, i: number) => i !== hIdx);
-                                          const newRows = (watch(`content.${index}.rows`) || []).map((row: string[]) => row.filter((_: any, i: number) => i !== hIdx));
-                                          setValue(`content.${index}.headers` as const, newHeaders);
-                                          setValue(`content.${index}.rows` as const, newRows);
-                                        }}
-                                      >
-                                        Remove
-                                      </button>
-                                    </div>
-                                  </th>
-                                ))}
+                                {(watch(`content.${index}.headers`) || []).map(
+                                  (header: string, hIdx: number) => (
+                                    <th
+                                      key={hIdx}
+                                      className="border p-2 bg-gray-50"
+                                    >
+                                      <div className="flex flex-col gap-1">
+                                        <Input
+                                          className="h-8 text-xs font-bold"
+                                          value={header}
+                                          onChange={(e) => {
+                                            const newHeaders = [
+                                              ...(watch(
+                                                `content.${index}.headers`,
+                                              ) || []),
+                                            ];
+                                            newHeaders[hIdx] = e.target.value;
+                                            setValue(
+                                              `content.${index}.headers` as const,
+                                              newHeaders,
+                                            );
+                                          }}
+                                        />
+                                        <button
+                                          type="button"
+                                          className="text-[10px] text-red-500 hover:underline"
+                                          onClick={() => {
+                                            const newHeaders = (
+                                              watch(
+                                                `content.${index}.headers`,
+                                              ) || []
+                                            ).filter(
+                                              (_: any, i: number) => i !== hIdx,
+                                            );
+                                            const newRows = (
+                                              watch(`content.${index}.rows`) ||
+                                              []
+                                            ).map((row: string[]) =>
+                                              row.filter(
+                                                (_: any, i: number) =>
+                                                  i !== hIdx,
+                                              ),
+                                            );
+                                            setValue(
+                                              `content.${index}.headers` as const,
+                                              newHeaders,
+                                            );
+                                            setValue(
+                                              `content.${index}.rows` as const,
+                                              newRows,
+                                            );
+                                          }}
+                                        >
+                                          Remove
+                                        </button>
+                                      </div>
+                                    </th>
+                                  ),
+                                )}
                               </tr>
                             </thead>
                             <tbody>
-                              {(watch(`content.${index}.rows`) || []).map((row: string[], rIdx: number) => (
-                                <tr key={rIdx}>
-                                  {row.map((cell, cIdx) => (
-                                    <td key={cIdx} className="border p-2">
-                                      <Input
-                                        className="h-8 text-xs border-none focus:ring-0"
-                                        value={cell}
-                                        onChange={(e) => {
-                                          const newRows = [...(watch(`content.${index}.rows`) || [])];
-                                          const newRow = [...newRows[rIdx]];
-                                          newRow[cIdx] = e.target.value;
-                                          newRows[rIdx] = newRow;
-                                          setValue(`content.${index}.rows` as const, newRows);
+                              {(watch(`content.${index}.rows`) || []).map(
+                                (row: string[], rIdx: number) => (
+                                  <tr key={rIdx}>
+                                    {row.map((cell, cIdx) => (
+                                      <td key={cIdx} className="border p-2">
+                                        <Input
+                                          className="h-8 text-xs border-none focus:ring-0"
+                                          value={cell}
+                                          onChange={(e) => {
+                                            const newRows = [
+                                              ...(watch(
+                                                `content.${index}.rows`,
+                                              ) || []),
+                                            ];
+                                            const newRow = [...newRows[rIdx]];
+                                            newRow[cIdx] = e.target.value;
+                                            newRows[rIdx] = newRow;
+                                            setValue(
+                                              `content.${index}.rows` as const,
+                                              newRows,
+                                            );
+                                          }}
+                                        />
+                                      </td>
+                                    ))}
+                                    <td className="border p-1 w-8">
+                                      <button
+                                        type="button"
+                                        className="text-red-500 hover:text-red-700"
+                                        onClick={() => {
+                                          const newRows = (
+                                            watch(`content.${index}.rows`) || []
+                                          ).filter(
+                                            (_: any, i: number) => i !== rIdx,
+                                          );
+                                          setValue(
+                                            `content.${index}.rows` as const,
+                                            newRows,
+                                          );
                                         }}
-                                      />
+                                      >
+                                        ×
+                                      </button>
                                     </td>
-                                  ))}
-                                  <td className="border p-1 w-8">
-                                    <button
-                                      type="button"
-                                      className="text-red-500 hover:text-red-700"
-                                      onClick={() => {
-                                        const newRows = (watch(`content.${index}.rows`) || []).filter((_: any, i: number) => i !== rIdx);
-                                        setValue(`content.${index}.rows` as const, newRows);
-                                      }}
-                                    >
-                                      ×
-                                    </button>
-                                  </td>
-                                </tr>
-                              ))}
+                                  </tr>
+                                ),
+                              )}
                             </tbody>
                           </table>
                         </div>
                       </div>
                     )}
-                    
+
                     {blockType === "quote" && (
                       <div className="space-y-2">
-                        <Input id={`edit-quote-text-${index}`} className="bg-white" placeholder="Quote text" {...register(`content.${index}.text` as const)} />
-                        <Input id={`edit-quote-citation-${index}`} className="bg-white" placeholder="Citation (optional)" {...register(`content.${index}.citation` as const)} />
+                        <Input
+                          id={`edit-quote-text-${index}`}
+                          className="bg-white"
+                          placeholder="Quote text"
+                          {...register(`content.${index}.text` as const)}
+                        />
+                        <Input
+                          id={`edit-quote-citation-${index}`}
+                          className="bg-white"
+                          placeholder="Citation (optional)"
+                          {...register(`content.${index}.citation` as const)}
+                        />
                       </div>
                     )}
-                    
+
                     {blockType === "list" && (
                       <div className="space-y-4 p-4 bg-white rounded-lg border">
                         <div className="flex gap-4 items-center">
@@ -456,35 +564,53 @@ export default function EditBlogPage() {
                             <option value="ordered">Numbered</option>
                           </select>
                         </div>
-                        
+
                         <div className="space-y-2">
-                          {(watch(`content.${index}.items`) || []).map((item: string, iIdx: number) => (
-                            <div key={iIdx} className="flex gap-2 items-center">
-                              <span className="text-gray-400 text-xs w-4">
-                                {watch(`content.${index}.style`) === "ordered" ? `${iIdx + 1}.` : "•"}
-                              </span>
-                              <Input
-                                id={`edit-list-item-${index}-${iIdx}`}
-                                className="flex-1 h-8 text-sm"
-                                value={item}
-                                onChange={(e) => {
-                                  const newItems = [...(watch(`content.${index}.items`) || [])];
-                                  newItems[iIdx] = e.target.value;
-                                  setValue(`content.${index}.items` as const, newItems);
-                                }}
-                              />
-                              <button
-                                type="button"
-                                className="text-red-500 hover:bg-red-50 rounded p-1"
-                                onClick={() => {
-                                  const newItems = (watch(`content.${index}.items`) || []).filter((_: any, i: number) => i !== iIdx);
-                                  setValue(`content.${index}.items` as const, newItems);
-                                }}
+                          {(watch(`content.${index}.items`) || []).map(
+                            (item: string, iIdx: number) => (
+                              <div
+                                key={iIdx}
+                                className="flex gap-2 items-center"
                               >
-                                ×
-                              </button>
-                            </div>
-                          ))}
+                                <span className="text-gray-400 text-xs w-4">
+                                  {watch(`content.${index}.style`) === "ordered"
+                                    ? `${iIdx + 1}.`
+                                    : "•"}
+                                </span>
+                                <Input
+                                  id={`edit-list-item-${index}-${iIdx}`}
+                                  className="flex-1 h-8 text-sm"
+                                  value={item}
+                                  onChange={(e) => {
+                                    const newItems = [
+                                      ...(watch(`content.${index}.items`) ||
+                                        []),
+                                    ];
+                                    newItems[iIdx] = e.target.value;
+                                    setValue(
+                                      `content.${index}.items` as const,
+                                      newItems,
+                                    );
+                                  }}
+                                />
+                                <button
+                                  type="button"
+                                  className="text-red-500 hover:bg-red-50 rounded p-1"
+                                  onClick={() => {
+                                    const newItems = (
+                                      watch(`content.${index}.items`) || []
+                                    ).filter((_: any, i: number) => i !== iIdx);
+                                    setValue(
+                                      `content.${index}.items` as const,
+                                      newItems,
+                                    );
+                                  }}
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ),
+                          )}
                           <Button
                             type="button"
                             variant="ghost"
@@ -492,8 +618,14 @@ export default function EditBlogPage() {
                             id={`edit-add-list-item-${index}`}
                             className="w-full border-dashed border text-gray-500 hover:text-blue-600"
                             onClick={() => {
-                              const newItems = [...(watch(`content.${index}.items`) || []), ""];
-                              setValue(`content.${index}.items` as const, newItems);
+                              const newItems = [
+                                ...(watch(`content.${index}.items`) || []),
+                                "",
+                              ];
+                              setValue(
+                                `content.${index}.items` as const,
+                                newItems,
+                              );
                             }}
                           >
                             + Add Item
@@ -501,25 +633,93 @@ export default function EditBlogPage() {
                         </div>
                       </div>
                     )}
-                    
+
                     {blockType === "embed" && (
                       <div className="space-y-2">
-                        <Input id={`edit-embed-src-${index}`} className="bg-white" placeholder="Embed Src URL (e.g. YouTube)" {...register(`content.${index}.src` as const)} />
-                        <Input id={`edit-embed-html-${index}`} className="bg-white" placeholder="Or raw HTML" {...register(`content.${index}.html` as const)} />
+                        <Input
+                          id={`edit-embed-src-${index}`}
+                          className="bg-white"
+                          placeholder="Embed Src URL (e.g. YouTube)"
+                          {...register(`content.${index}.src` as const)}
+                        />
+                        <Input
+                          id={`edit-embed-html-${index}`}
+                          className="bg-white"
+                          placeholder="Or raw HTML"
+                          {...register(`content.${index}.html` as const)}
+                        />
                       </div>
                     )}
                   </div>
                 );
               })}
-              
+
               <div className="flex flex-wrap gap-2 mt-4 p-4 border-2 border-dashed border-gray-200 rounded-xl justify-center">
-                <button type="button" onClick={() => appendContent({ type: "paragraph", text: "" })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Text</button>
-                <button type="button" onClick={() => appendContent({ type: "heading", text: "", level: 2 })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Heading</button>
-                <button type="button" onClick={() => appendContent({ type: "image", src: "", caption: "" })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Image</button>
-                <button type="button" onClick={() => appendContent({ type: "quote", text: "", citation: "" })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Quote</button>
-                <button type="button" onClick={() => appendContent({ type: "table", headers: [], rows: [] })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Table</button>
-                <button type="button" onClick={() => appendContent({ type: "list", items: [""], style: "unordered" })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ List</button>
-                <button type="button" onClick={() => appendContent({ type: "embed", src: "", html: "" })} className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium">+ Embed</button>
+                <button
+                  type="button"
+                  onClick={() => appendContent({ type: "paragraph", text: "" })}
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Text
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({ type: "heading", text: "", level: 2 })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Heading
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({ type: "image", src: "", caption: "" })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Image
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({ type: "quote", text: "", citation: "" })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Quote
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({ type: "table", headers: [], rows: [] })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Table
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({
+                      type: "list",
+                      items: [""],
+                      style: "unordered",
+                    })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + List
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    appendContent({ type: "embed", src: "", html: "" })
+                  }
+                  className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
+                >
+                  + Embed
+                </button>
               </div>
             </div>
             <div className="mb-4">
@@ -619,12 +819,21 @@ export default function EditBlogPage() {
 
             <div className="flex flex-col m-10 md:flex-row gap-6 mt-6">
               <div className="flex-1 bg-white shadow-sm p-6 rounded-lg">
-                <TableOfContents html={
-                  watch("content")
-                    ?.filter((b: any) => b.type === "heading" || b.type === "paragraph")
-                    ?.map((b: any) => (b.type === "heading" ? `<h${b.level}>${b.text}</h${b.level}>` : b.text))
-                    .join("\n") || ""
-                } />
+                <TableOfContents
+                  html={
+                    watch("content")
+                      ?.filter(
+                        (b: any) =>
+                          b.type === "heading" || b.type === "paragraph",
+                      )
+                      ?.map((b: any) =>
+                        b.type === "heading"
+                          ? `<h${b.level}>${b.text}</h${b.level}>`
+                          : b.text,
+                      )
+                      .join("\n") || ""
+                  }
+                />
 
                 <div className="mt-8">
                   <BlogRenderer content={(watch("content") as any) || []} />

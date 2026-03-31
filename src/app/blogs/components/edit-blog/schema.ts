@@ -37,7 +37,10 @@ export const updateArticleSchema = z.object({
         z.object({
           type: z.literal("list"),
           items: z.array(z.string()).min(1, "List must have at least one item"),
-          style: z.enum(["ordered", "unordered"]).optional().default("unordered"),
+          style: z
+            .enum(["ordered", "unordered"])
+            .optional()
+            .default("unordered"),
         }),
         z.object({
           type: z.literal("embed"),
@@ -74,9 +77,7 @@ export const initialFormValues: UpdateArticleSchema = {
       "https://img.freepik.com/free-photo/woman-beach-with-her-baby-enjoying-sunset_52683-144131.jpg?size=626&ext=jpg",
     role: "Author",
   },
-  content: [
-    { type: "paragraph", text: "" },
-  ],
+  content: [{ type: "paragraph", text: "" }],
   image: "",
   relatedArticles: [],
   tags: [],

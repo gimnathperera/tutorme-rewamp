@@ -209,7 +209,9 @@ export default function AddRequestForTutor() {
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="name">Full Name *</Label>
+                  <Label className="text-[15px]" htmlFor="name">
+                    Full Name *
+                  </Label>
                   <Input
                     id="name"
                     {...register("name", {
@@ -243,7 +245,9 @@ export default function AddRequestForTutor() {
                 {/* Email & Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="email">Email *</Label>
+                    <Label className="text-[15px]" htmlFor="email">
+                      Email *
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -276,7 +280,9 @@ export default function AddRequestForTutor() {
                     )}
                   </div>
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="phoneNumber">Contact Number *</Label>
+                    <Label className="text-[15px]" htmlFor="phoneNumber">
+                      Contact Number *
+                    </Label>
                     <Input
                       id="phoneNumber"
                       type="tel"
@@ -318,7 +324,9 @@ export default function AddRequestForTutor() {
 
                 {/* District */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="district">District *</Label>
+                  <Label className="text-[15px]" htmlFor="district">
+                    District *
+                  </Label>
                   <Controller
                     control={control}
                     name="district"
@@ -339,7 +347,9 @@ export default function AddRequestForTutor() {
 
                 {/* City */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="city">City *</Label>
+                  <Label className="text-[15px]" htmlFor="city">
+                    City *
+                  </Label>
                   <Controller
                     control={control}
                     name="city"
@@ -376,7 +386,9 @@ export default function AddRequestForTutor() {
               <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="medium">Medium *</Label>
+                  <Label className="text-[15px]" htmlFor="medium">
+                    Medium *
+                  </Label>
                   <select
                     id="medium"
                     {...register("medium")}
@@ -394,7 +406,9 @@ export default function AddRequestForTutor() {
 
                 {/* Grade */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="grade">Grade *</Label>
+                  <Label className="text-[15px]" htmlFor="grade">
+                    Grade *
+                  </Label>
                   <select
                     id="grade"
                     {...register("grade")}
@@ -414,7 +428,9 @@ export default function AddRequestForTutor() {
 
                 {/* Number of Tutors */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="tutorCount">Number of Tutors</Label>
+                  <Label className="text-[15px]" htmlFor="tutorCount">
+                    Number of Tutors
+                  </Label>
                   <select
                     id="tutorCount"
                     value={selectedTutorCount}
@@ -446,7 +462,12 @@ export default function AddRequestForTutor() {
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
-                      <Label className="text-[15px]" htmlFor={`subject-${index}`}>Subject *</Label>
+                      <Label
+                        className="text-[15px]"
+                        htmlFor={`subject-${index}`}
+                      >
+                        Subject *
+                      </Label>
                       <select
                         id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
@@ -472,7 +493,12 @@ export default function AddRequestForTutor() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Duration */}
                       <div className={fieldWrapper}>
-                        <Label className="text-[15px]" htmlFor={`duration-${index}`}>Duration *</Label>
+                        <Label
+                          className="text-[15px]"
+                          htmlFor={`duration-${index}`}
+                        >
+                          Duration *
+                        </Label>
                         <select
                           id={`duration-${index}`}
                           {...register(`tutors.${index}.duration`)}
@@ -492,7 +518,10 @@ export default function AddRequestForTutor() {
 
                       {/* Frequency */}
                       <div className={fieldWrapper}>
-                        <Label className="text-[15px]" htmlFor={`frequency-${index}`}>
+                        <Label
+                          className="text-[15px]"
+                          htmlFor={`frequency-${index}`}
+                        >
                           Frequency *
                         </Label>
                         <select
@@ -515,7 +544,10 @@ export default function AddRequestForTutor() {
 
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
-                      <Label className="text-[15px]" htmlFor={`tutorType-${index}`}>
+                      <Label
+                        className="text-[15px]"
+                        htmlFor={`tutorType-${index}`}
+                      >
                         Preferred Tutor Type *
                       </Label>
                       <select
