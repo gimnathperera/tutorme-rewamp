@@ -56,15 +56,14 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             return (
               <HTag
                 key={index}
-                className={`font-semibold text-gray-900 dark:text-gray-100 block-heading ${
-                  level === 1
+                className={`font-semibold text-gray-900 dark:text-gray-100 block-heading ${level === 1
                     ? "text-3xl"
                     : level === 2
                       ? "text-2xl mt-8 mb-4 border-b pb-2"
                       : level === 3
                         ? "text-xl mt-6 mb-3"
                         : "text-lg mt-4 mb-2"
-                }`}
+                  }`}
               >
                 {block.text}
               </HTag>
@@ -136,7 +135,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                 className="p-4 my-6 border-s-4 border-blue-500 bg-gray-50 dark:bg-gray-800 dark:border-blue-400 block-quote"
               >
                 <p className="text-xl italic font-medium leading-relaxed text-gray-900 dark:text-white">
-                  "{block.text}"
+                  &quot;{block.text}&quot;
                 </p>
                 {block.citation && (
                   <cite className="mt-2 block text-sm font-semibold text-gray-600 dark:text-gray-400">

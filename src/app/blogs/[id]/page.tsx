@@ -10,7 +10,11 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
-import BlogRenderer from "../components/blog-renderer/BlogRenderer";
+import dynamic from "next/dynamic";
+const BlogRenderer = dynamic(
+  () => import("../components/blog-renderer/BlogRenderer"),
+  { ssr: false },
+);
 
 import LoadingIndicator from "./LoadingIndicator";
 
@@ -34,12 +38,6 @@ export default function ViewBlogPage() {
       prev.map((isOpen, i) => (i === index ? !isOpen : isOpen)),
     );
   };
-
-  function decodeHtml(html: string) {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-  }
 
   if (isLoading) return <LoadingIndicator />;
   if (error || !blog) return <p>Blog not found.</p>;
@@ -125,9 +123,8 @@ export default function ViewBlogPage() {
               {blog.tags?.map((t: any, idx: number) => (
                 <span
                   key={t.id}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${
-                    tagColors[idx % tagColors.length]
-                  }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${tagColors[idx % tagColors.length]
+                    }`}
                 >
                   {t.name}
                 </span>
@@ -216,9 +213,8 @@ export default function ViewBlogPage() {
                       </span>
                     </button>
                     <div
-                      className={`overflow-hidden transition-all duration-300 ${
-                        openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
-                      }`}
+                      className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                        }`}
                     >
                       <p className="text-gray-700 dark:text-gray-400 mt-1">
                         {faq.answer}

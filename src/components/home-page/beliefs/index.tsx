@@ -52,7 +52,7 @@ const Beliefs = () => {
                 className="text-base py-3.5 px-9 font-semibold text-white rounded-full bg-primary-700 border border-blue hover:bg-primary-800 transition-colors duration-200 hover:shadow-lg"
                 onClick={handleOnLearnMoreClick}
               >
-                Request a Tutor
+                Request for Tutor
               </button>
             </div>
           </div>

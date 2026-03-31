@@ -23,9 +23,12 @@ import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
 import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import TableOfContents from "../../table-of-content/TableOfContent";
-import BlogRenderer from "../../blog-renderer/BlogRenderer";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const BlogRenderer = dynamic(
+  () => import("../../blog-renderer/BlogRenderer"),
+  { ssr: false },
+);
 import "react-quill/dist/quill.snow.css";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 
@@ -37,7 +40,7 @@ export default function EditBlogPage() {
 
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagsData } = useFetchTagsQuery({});
-  const { data: blog, isLoading, refetch } = useFetchBlogByIdQuery(blogId);
+  const { data: blog, isLoading } = useFetchBlogByIdQuery(blogId);
 
   const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
 
@@ -147,18 +150,7 @@ export default function EditBlogPage() {
         })),
       });
     }
-  }, [blog, user, blogsData, tagsData, reset]);
-
-  const getContentError = (index: number, field: "text" | "src") => {
-    const contentError = formState.errors.content?.[index];
-    if (
-      contentError &&
-      typeof contentError === "object" &&
-      field in contentError
-    )
-      return (contentError as any)[field]?.message;
-    return undefined;
-  };
+  }, [blog, user, blogsData, tagsData, reset, userData]);
 
   const onSubmit = async (data: UpdateArticleSchema) => {
     if (!user) return toast.error("Please authenticate");

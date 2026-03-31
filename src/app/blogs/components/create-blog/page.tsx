@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import {
   Controller,
   useForm,
-  FieldError,
   useFieldArray,
 } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -26,13 +25,15 @@ import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+const BlogRenderer = dynamic(() => import("../blog-renderer/BlogRenderer"), {
+  ssr: false,
+});
 import "react-quill/dist/quill.snow.css";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/Button/button";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import TableOfContents from "../table-of-content/TableOfContent";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
-import BlogRenderer from "../blog-renderer/BlogRenderer";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -57,7 +58,6 @@ const AddBlog = () => {
     reset,
     register,
     handleSubmit,
-    setValue,
     setError,
     formState,
   } = createBlogForm;
@@ -87,28 +87,6 @@ const AddBlog = () => {
     } catch {
       return url;
     }
-  };
-
-  const decodeHtml = (html: string) => {
-    const txt = document.createElement("textarea");
-    txt.innerHTML = html;
-    return txt.value;
-  };
-
-  const getContentError = (
-    index: number,
-    field: "text" | "src",
-  ): string | undefined => {
-    const contentError = formState.errors.content?.[index];
-    if (
-      contentError &&
-      typeof contentError === "object" &&
-      field in contentError
-    ) {
-      const fieldError = (contentError as Record<string, FieldError>)[field];
-      return fieldError?.message;
-    }
-    return undefined;
   };
 
   const redirect = useRouter();
@@ -211,22 +189,20 @@ const AddBlog = () => {
           <button
             type="button"
             onClick={() => setIsPreview(false)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
-              !isPreview
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${!isPreview
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
           >
             Edit
           </button>
           <button
             type="button"
             onClick={() => setIsPreview(true)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
-              isPreview
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-            }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${isPreview
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
           >
             Preview
           </button>
