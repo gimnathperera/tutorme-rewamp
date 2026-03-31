@@ -24,6 +24,26 @@ export const createArticleSchema = z.object({
           src: z.string().optional().default(""),
           caption: z.string().optional(),
         }),
+        z.object({
+          type: z.literal("table"),
+          headers: z.array(z.string()).optional().default([]),
+          rows: z.array(z.array(z.string())).optional().default([]),
+        }),
+        z.object({
+          type: z.literal("quote"),
+          text: z.string().min(1, "Quote text is required"),
+          citation: z.string().optional(),
+        }),
+        z.object({
+          type: z.literal("list"),
+          items: z.array(z.string()).min(1, "List must have at least one item"),
+          style: z.enum(["ordered", "unordered"]).optional().default("unordered"),
+        }),
+        z.object({
+          type: z.literal("embed"),
+          src: z.string().optional(),
+          html: z.string().optional(),
+        }),
       ]),
     )
     .optional()
@@ -56,12 +76,6 @@ export const initialFormValues: CreateArticleSchema = {
   },
   content: [
     { type: "paragraph", text: "" },
-    { type: "heading", text: "", level: 2 },
-    {
-      type: "image",
-      src: "",
-      caption: "Cover Image",
-    },
   ],
   image: "",
   relatedArticles: [],

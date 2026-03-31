@@ -145,6 +145,10 @@ export type Blogs = BaseEntity &
       | { type: "paragraph"; text: string }
       | { type: "heading"; text: string; level: number }
       | { type: "image"; src: string; caption?: string }
+      | { type: "table"; headers: string[]; rows: string[][] }
+      | { type: "quote"; text: string; citation?: string }
+      | { type: "list"; items: string[]; style: "ordered" | "unordered" }
+      | { type: "embed"; src?: string; html?: string }
     >;
     faqs: Array<{
       _id: string;
