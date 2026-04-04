@@ -111,11 +111,6 @@ export type UpdateBlogRequest = {
   blogId: string;
   title?: string;
   image?: string;
-  author?: {
-    name?: string;
-    avatar?: string;
-    role?: string;
-  };
   content?: Blogs["content"];
   faqs?: Array<{ _id?: string; question: string; answer: string }>;
   tags?: string[];

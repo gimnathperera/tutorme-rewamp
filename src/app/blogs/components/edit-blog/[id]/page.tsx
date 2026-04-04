@@ -17,7 +17,6 @@ import {
   useFetchBlogsQuery,
   useUpdateBlogMutation,
 } from "@/store/api/splits/blogs";
-import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
@@ -42,8 +41,6 @@ export default function EditBlogPage() {
   const { data: tagsData } = useFetchTagsQuery({});
   const { data: blog, isLoading } = useFetchBlogByIdQuery(blogId);
 
-  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
-
   const [updateBlog, { isLoading: isUpdating }] = useUpdateBlogMutation();
 
   const [isPreview, setIsPreview] = useState(false);
@@ -52,7 +49,6 @@ export default function EditBlogPage() {
     resolver: zodResolver(updateArticleSchema),
     defaultValues: {
       title: "",
-      author: { name: "", avatar: "", role: "" },
       content: [],
       relatedArticles: [],
       tags: [],
@@ -106,15 +102,9 @@ export default function EditBlogPage() {
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
-  useEffect(() => {
-    if (user?.id) fetchProfile({ userId: String(user.id) });
-  }, [user?.id, fetchProfile]);
 
   useEffect(() => {
     if (blog && user && blogsData && tagsData) {
-      const dbAvatar = (userData as any)?.avatar;
-      const avatarToUse = dbAvatar || user.avatar;
-
       const relatedIds = (blog.relatedArticles || [])
         .map((r) => blogsData.results.find((b) => b.id === r.id)?.id)
         .filter(Boolean) as string[];
@@ -127,14 +117,6 @@ export default function EditBlogPage() {
         title: blog.title,
         image: blog.image,
         status: blog.status || "pending",
-        author: {
-          name: user.name,
-          avatar:
-            !avatarToUse || avatarToUse.startsWith("/")
-              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-              : avatarToUse,
-          role: user.role,
-        },
         relatedArticles: relatedIds,
         tags: tagIds,
         content: blog.content.map((c) => ({
@@ -150,28 +132,17 @@ export default function EditBlogPage() {
         })),
       });
     }
-  }, [blog, user, blogsData, tagsData, reset, userData]);
+  }, [blog, user, blogsData, tagsData, reset]);
 
   const onSubmit = async (data: UpdateArticleSchema) => {
     if (!user) return toast.error("Please authenticate");
 
     try {
-      const dbAvatar = (userData as any)?.avatar;
-      const avatarToUse = data.author?.avatar || dbAvatar || user.avatar;
-
       const payload = {
         id: blogId,
         blogId: blogId,
         title: data.title,
         image: data.image,
-        author: {
-          name: user.name,
-          avatar:
-            !avatarToUse || avatarToUse.startsWith("/")
-              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-              : avatarToUse,
-          role: user.role,
-        },
         content: data.content,
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
@@ -870,7 +841,7 @@ export default function EditBlogPage() {
                                 {related?.title || "Untitled Post"}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {related?.author?.name || "Unknown Author"}
+                                Tuition Lanka
                               </p>
                             </div>
                           </li>

@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Controller,
   useForm,
@@ -19,7 +19,6 @@ import {
   useCreateBlogMutation,
   useFetchBlogsQuery,
 } from "@/store/api/splits/blogs";
-import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import { useAuthContext } from "@/contexts";
 import { useRouter } from "next/navigation";
@@ -40,9 +39,6 @@ const AddBlog = () => {
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagData } = useFetchTagsQuery({});
   const { user } = useAuthContext();
-  const userId = user?.id;
-
-  const [fetchProfile, { data: userData }] = useLazyGetProfileQuery();
 
   const [isPreview, setIsPreview] = useState(false);
 
@@ -91,30 +87,6 @@ const AddBlog = () => {
 
   const redirect = useRouter();
 
-  /* ---------------- Fetch avatar ---------------- */
-  useEffect(() => {
-    if (userId) fetchProfile({ userId: String(userId) });
-  }, [userId, fetchProfile]);
-
-  useEffect(() => {
-    if (user) {
-      const dbAvatar = (userData as any)?.avatar;
-      const avatarToUse = dbAvatar || user.avatar;
-
-      reset({
-        ...initialFormValues,
-        author: {
-          name: user.name,
-          avatar:
-            !avatarToUse || avatarToUse.startsWith("/")
-              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-              : avatarToUse,
-          role: user.role,
-        },
-      });
-    }
-  }, [user, userData, reset]);
-
   const blogOptions: Option[] =
     blogsData?.results.map((blog) => ({
       value: blog.id,
@@ -134,21 +106,7 @@ const AddBlog = () => {
     }
 
     try {
-      const dbAvatar = (userData as any)?.avatar;
-      const avatarToUse = data.author.avatar || dbAvatar || user.avatar;
-
-      const sanitizedData = {
-        ...data,
-        author: {
-          ...data.author,
-          avatar:
-            !avatarToUse || avatarToUse.startsWith("/")
-              ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=random`
-              : avatarToUse,
-        },
-      };
-
-      const result = await createBlog(sanitizedData);
+      const result = await createBlog(data);
       if ("error" in result) {
         const errData = (result.error as any)?.data;
         if (errData?.error && typeof errData.error === "object") {
@@ -877,7 +835,7 @@ const AddBlog = () => {
                                 {related?.title || "Untitled Post"}
                               </p>
                               <p className="text-xs text-gray-500">
-                                {related?.author?.name || "Unknown Author"}
+                                Tuition Lanka
                               </p>
                             </div>
                           </li>

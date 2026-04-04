@@ -88,7 +88,7 @@ export default function ViewBlogPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="mb-10">
-        {blog.author?.name === user?.name && (
+        {(blog.author?.id === user?.id || user?.role === "admin") && (
           <div className="flex justify-end mb-4">
             <Link
               href={`/blogs/components/edit-blog/${blog.id}`}
@@ -122,16 +122,14 @@ export default function ViewBlogPage() {
           <div className="max-w-4xl mx-auto space-y-8 text-lg leading-relaxed">
             <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
               <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
-                <AvatarImage
-                  src={blog.author?.avatar || "/images/profile/pp.png"}
-                />
+                <AvatarImage src="/images/profile/pp.png" />
                 <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl uppercase">
-                  {blog.author?.name?.[0]}
+                  TL
                 </AvatarFallback>
               </Avatar>
               <div>
                 <p className="font-bold text-xl text-gray-900 dark:text-gray-100">
-                  {blog.author?.name}
+                  Tuition Lanka
                 </p>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {blog.author?.role} •{" "}
@@ -210,7 +208,7 @@ export default function ViewBlogPage() {
                         {related.title || "Untitled Post"}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {related.author?.name || "Unknown Author"}
+                        Tuition Lanka
                       </p>
                     </div>
                   </li>

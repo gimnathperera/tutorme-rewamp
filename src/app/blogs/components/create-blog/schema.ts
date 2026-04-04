@@ -2,11 +2,6 @@ import { z } from "zod";
 
 export const createArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  author: z.object({
-    name: z.string().min(1, "Author name is required"),
-    avatar: z.string().min(1, "Avatar is required"),
-    role: z.string().min(1, "Author role is required"),
-  }),
   content: z
     .array(
       z.union([
@@ -71,12 +66,6 @@ export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
 
 export const initialFormValues: CreateArticleSchema = {
   title: "",
-  author: {
-    name: "",
-    avatar:
-      "https://img.freepik.com/free-photo/woman-beach-with-her-baby-enjoying-sunset_52683-144131.jpg?size=626&ext=jpg",
-    role: "Author",
-  },
   content: [{ type: "paragraph", text: "" }],
   image: "",
   relatedArticles: [],

@@ -125,19 +125,18 @@ export type Blogs = BaseEntity &
     type: string;
     status: "pending" | "published" | "draft";
     author: {
-      name: string;
-      avatar: string;
-      role: string;
+      /** MongoDB ObjectId of the user who created the blog */
+      id: string;
+      role: "admin" | "tutor";
     };
     relatedArticles: Array<{
       id: string;
       slug?: string;
       title: string;
       image: string;
-      author: {
-        name: string;
-        avatar: string;
-        role: string;
+      author?: {
+        id: string;
+        role: "admin" | "tutor";
       };
     }>;
     tags: Array<{

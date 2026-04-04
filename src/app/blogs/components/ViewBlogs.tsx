@@ -137,7 +137,7 @@ export default function BlogsDashboard() {
                 | undefined
               )?.src;
             const blogDate = new Date(blog.createdAt);
-            const avatarSrc = blog.author.avatar || DEFAULT_AVATAR;
+            const avatarSrc = DEFAULT_AVATAR;
 
             return (
               <article
@@ -171,7 +171,7 @@ export default function BlogsDashboard() {
                   <div className="flex items-center gap-2.5">
                     <img
                       src={avatarSrc}
-                      alt={blog.author.name}
+                      alt="Blog post thumbnail"
                       className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src = DEFAULT_AVATAR;
