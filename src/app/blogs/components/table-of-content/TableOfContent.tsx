@@ -9,10 +9,7 @@ interface Heading {
 }
 
 const slugify = (text: string) =>
-  text
-    .trim()
-    .replace(/\s+/g, "-")
-    .toLowerCase();
+  text.trim().replace(/\s+/g, "-").toLowerCase();
 
 const TableOfContents = ({ html }: { html: string }) => {
   const [headings, setHeadings] = useState<Heading[]>([]);
@@ -96,4 +93,3 @@ const TableOfContents = ({ html }: { html: string }) => {
 };
 
 export default TableOfContents;
-

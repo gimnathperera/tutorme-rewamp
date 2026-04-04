@@ -24,10 +24,9 @@ import MultiSelect, { Option } from "@/components/form-controls/multi-select";
 import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-const BlogRenderer = dynamic(
-  () => import("../../blog-renderer/BlogRenderer"),
-  { ssr: false },
-);
+const BlogRenderer = dynamic(() => import("../../blog-renderer/BlogRenderer"), {
+  ssr: false,
+});
 import "react-quill/dist/quill.snow.css";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 
@@ -102,7 +101,6 @@ export default function EditBlogPage() {
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
-
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   // Guard 1: unauthenticated users → show a login prompt dialog
@@ -139,19 +137,48 @@ export default function EditBlogPage() {
         content: blog.content.map((c) => {
           switch (c.type) {
             case "paragraph":
-              return { type: "paragraph", text: "text" in c ? decodeHtml(c.text) : "" };
+              return {
+                type: "paragraph",
+                text: "text" in c ? decodeHtml(c.text) : "",
+              };
             case "heading":
-              return { type: "heading", text: "text" in c ? decodeHtml(c.text) : "", level: "level" in c ? (c.level as number) : 2 };
+              return {
+                type: "heading",
+                text: "text" in c ? decodeHtml(c.text) : "",
+                level: "level" in c ? (c.level as number) : 2,
+              };
             case "image":
-              return { type: "image", src: "src" in c ? (c.src as string) : "", caption: "caption" in c ? (c.caption as string) : "" };
+              return {
+                type: "image",
+                src: "src" in c ? (c.src as string) : "",
+                caption: "caption" in c ? (c.caption as string) : "",
+              };
             case "table":
-              return { type: "table", headers: "headers" in c ? (c.headers as string[]) : [], rows: "rows" in c ? (c.rows as string[][]) : [] };
+              return {
+                type: "table",
+                headers: "headers" in c ? (c.headers as string[]) : [],
+                rows: "rows" in c ? (c.rows as string[][]) : [],
+              };
             case "quote":
-              return { type: "quote", text: "text" in c ? decodeHtml(c.text) : "", citation: "citation" in c ? (c.citation as string) : "" };
+              return {
+                type: "quote",
+                text: "text" in c ? decodeHtml(c.text) : "",
+                citation: "citation" in c ? (c.citation as string) : "",
+              };
             case "list":
-              return { type: "list", items: "items" in c ? (c.items as string[]) : [""], style: ("style" in c ? c.style : "unordered") as "ordered" | "unordered" };
+              return {
+                type: "list",
+                items: "items" in c ? (c.items as string[]) : [""],
+                style: ("style" in c ? c.style : "unordered") as
+                  | "ordered"
+                  | "unordered",
+              };
             case "embed":
-              return { type: "embed", src: "src" in c ? (c.src as string) : "", html: "html" in c ? (c.html as string) : "" };
+              return {
+                type: "embed",
+                src: "src" in c ? (c.src as string) : "",
+                html: "html" in c ? (c.html as string) : "",
+              };
             default:
               return { type: "paragraph", text: "" };
           }
@@ -215,9 +242,12 @@ export default function EditBlogPage() {
             🔒
           </div>
           <div className="text-center">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Login Required</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
+              Login Required
+            </h2>
             <p className="text-sm text-gray-500 leading-relaxed">
-              You need to be logged in to edit this blog. Please sign in to continue.
+              You need to be logged in to edit this blog. Please sign in to
+              continue.
             </p>
           </div>
           <div className="flex gap-3 w-full">

@@ -125,9 +125,12 @@ export default function ViewBlogPage() {
         {confirmDelete && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4">
-              <h2 className="text-lg font-bold text-gray-900 mb-2">Delete Blog?</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-2">
+                Delete Blog?
+              </h2>
               <p className="text-sm text-gray-600 mb-6">
-                This action cannot be undone. The blog will be permanently removed.
+                This action cannot be undone. The blog will be permanently
+                removed.
               </p>
               <div className="flex gap-3 justify-end">
                 <button
@@ -195,8 +198,9 @@ export default function ViewBlogPage() {
               {blog.tags?.map((t: any, idx: number) => (
                 <span
                   key={t.id}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${tagColors[idx % tagColors.length]
-                    }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${
+                    tagColors[idx % tagColors.length]
+                  }`}
                 >
                   {t.name}
                 </span>
@@ -207,8 +211,7 @@ export default function ViewBlogPage() {
               html={
                 blog.content
                   ?.filter(
-                    (b: any) =>
-                      b.type === "heading" || b.type === "paragraph",
+                    (b: any) => b.type === "heading" || b.type === "paragraph",
                   )
                   ?.map((b: any) =>
                     b.type === "heading"
@@ -240,8 +243,9 @@ export default function ViewBlogPage() {
                         </span>
                       </button>
                       <div
-                        className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
-                          }`}
+                        className={`overflow-hidden transition-all duration-300 ${
+                          openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                        }`}
                       >
                         <p className="text-gray-700 dark:text-gray-400 mt-1">
                           {faq.answer}
@@ -297,7 +301,6 @@ export default function ViewBlogPage() {
               )}
             </ul>
           </div>
-
         </aside>
       </div>
     </div>

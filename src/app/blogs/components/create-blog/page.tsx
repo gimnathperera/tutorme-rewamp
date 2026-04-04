@@ -4,11 +4,7 @@ import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
-import {
-  Controller,
-  useForm,
-  useFieldArray,
-} from "react-hook-form";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
   CreateArticleSchema,
@@ -48,15 +44,8 @@ const AddBlog = () => {
     mode: "onChange",
   });
 
-  const {
-    watch,
-    control,
-    reset,
-    register,
-    handleSubmit,
-    setError,
-    formState,
-  } = createBlogForm;
+  const { watch, control, reset, register, handleSubmit, setError, formState } =
+    createBlogForm;
 
   const {
     fields: faqFields,
@@ -146,20 +135,22 @@ const AddBlog = () => {
           <button
             type="button"
             onClick={() => setIsPreview(false)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${!isPreview
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
+              !isPreview
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           >
             Edit
           </button>
           <button
             type="button"
             onClick={() => setIsPreview(true)}
-            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${isPreview
-              ? "bg-blue-600 text-white"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+            className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
+              isPreview
+                ? "bg-blue-600 text-white"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           >
             Preview
           </button>

@@ -37,8 +37,16 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
       {content.map((block, index) => {
         switch (block.type) {
           case "paragraph": {
-            const sanitized = DOMPurify.sanitize(decodeHtml(block.text || "")).trim();
-            if (!sanitized || sanitized === "<p></p>" || sanitized === "<p><br></p>" || sanitized === "<br>") return null;
+            const sanitized = DOMPurify.sanitize(
+              decodeHtml(block.text || ""),
+            ).trim();
+            if (
+              !sanitized ||
+              sanitized === "<p></p>" ||
+              sanitized === "<p><br></p>" ||
+              sanitized === "<br>"
+            )
+              return null;
             return (
               <div
                 key={index}

@@ -106,10 +106,11 @@ export default function BlogsDashboard() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTag(null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                !activeTag
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
             >
               All
             </button>
@@ -117,10 +118,11 @@ export default function BlogsDashboard() {
               <button
                 key={tag.id}
                 onClick={() => setActiveTag(tag.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
+                  activeTag === tag.id
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                }`}
               >
                 {tag.name}
               </button>
@@ -134,8 +136,8 @@ export default function BlogsDashboard() {
                 blog.image ||
                 (
                   blog.content.find((c) => c.type === "image") as
-                  | { type: "image"; src: string; caption?: string }
-                  | undefined
+                    | { type: "image"; src: string; caption?: string }
+                    | undefined
                 )?.src;
               const blogDate = new Date(blog.createdAt);
               const avatarSrc = DEFAULT_AVATAR;
@@ -227,7 +229,9 @@ export default function BlogsDashboard() {
               </span>
               <button
                 disabled={page === totalPages}
-                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
               >
                 Next →
