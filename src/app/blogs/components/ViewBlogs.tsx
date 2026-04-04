@@ -83,7 +83,7 @@ export default function BlogsDashboard() {
     <>
       <div className="flex flex-col lg:flex-row gap-8">
         {/* ── Main content ── */}
-        <div className="flex-1 flex flex-col gap-6 min-w-0">
+        <div className="flex-1 flex flex-col gap-6 lg:gap-10 min-w-0">
           {/* Hero banner */}
           <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
             <div className="relative z-10">
@@ -119,7 +119,7 @@ export default function BlogsDashboard() {
                 onClick={() => setActiveTag(tag.id)}
                 className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
                   ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   }`}
               >
                 {tag.name}
