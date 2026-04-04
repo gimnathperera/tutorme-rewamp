@@ -710,7 +710,16 @@ const AddBlog = () => {
             </div>
 
             <div className="p-4 border rounded-lg space-y-4">
-              <Label>FAQs</Label>
+              <div className="flex items-center justify-between">
+                <Label>FAQs</Label>
+                <button
+                  type="button"
+                  onClick={() => appendFaq({ question: "", answer: "" })}
+                  className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              </div>
               {faqFields.map((faq, index) => (
                 <div key={faq.id} className="flex gap-2 items-start">
                   <div className="flex-1 space-y-1">
@@ -742,13 +751,6 @@ const AddBlog = () => {
                   </button>
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={() => appendFaq({ question: "", answer: "" })}
-                className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
-              >
-                + Add FAQ
-              </button>
             </div>
 
             <input type="hidden" value="pending" {...register("status")} />
