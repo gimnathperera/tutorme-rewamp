@@ -194,24 +194,12 @@ export default function BlogsDashboard() {
                       )}
                     </div>
 
+                    <hr className="border-gray-100 w-full" />
+
                     {/* Title */}
                     <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {blog.title}
                     </h2>
-
-                    {/* Tags */}
-                    {blog.tags?.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-auto">
-                        {blog.tags.slice(0, 3).map((t: any) => (
-                          <span
-                            key={t.id}
-                            className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full"
-                          >
-                            {t.name}
-                          </span>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </article>
               );
