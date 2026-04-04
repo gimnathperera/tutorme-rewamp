@@ -132,7 +132,6 @@ const AddBlog = () => {
 
   const onRegisterSuccess = () => {
     reset(initialFormValues);
-    toast.success("Blog created successfully");
     redirect.push("/blogs");
   };
 
