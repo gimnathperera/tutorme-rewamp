@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 
-const DEFAULT_AVATAR = "/images/profile/pp.png";
+const DEFAULT_AVATAR = "/images/logo/tuitionlanka.png";
 
 export default function BlogsDashboard() {
   const [page, setPage] = useState(1);
@@ -81,224 +81,224 @@ export default function BlogsDashboard() {
 
   return (
     <>
-    <div className="flex flex-col lg:flex-row gap-8">
-      {/* ── Main content ── */}
-      <div className="flex-1 flex flex-col gap-6 min-w-0">
-        {/* Hero banner */}
-        <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
-          <div className="relative z-10">
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
-              TuitionLanka Insights
-            </p>
-            <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
-              Welcome to the Tuition Lanka Blog
-            </h1>
-            <p className="text-sm md:text-base text-white/80 mt-1">
-              Discover the latest insights, tips, and updates.
-            </p>
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* ── Main content ── */}
+        <div className="flex-1 flex flex-col gap-6 min-w-0">
+          {/* Hero banner */}
+          <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
+            <div className="relative z-10">
+              <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
+                TuitionLanka Insights
+              </p>
+              <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
+                Welcome to the Tuition Lanka Blog
+              </h1>
+              <p className="text-sm md:text-base text-white/80 mt-1">
+                Discover the latest insights, tips, and updates.
+              </p>
+            </div>
+            {/* Decorative circles */}
+            <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
+            <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
           </div>
-          {/* Decorative circles */}
-          <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
-          <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
-        </div>
 
-        {/* Tag filter pills */}
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setActiveTag(null)}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
-              ? "bg-blue-600 text-white shadow-sm"
-              : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-              }`}
-          >
-            All
-          </button>
-          {tags.map((tag) => (
+          {/* Tag filter pills */}
+          <div className="flex flex-wrap gap-2">
             <button
-              key={tag.id}
-              onClick={() => setActiveTag(tag.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+              onClick={() => setActiveTag(null)}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
                 ? "bg-blue-600 text-white shadow-sm"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 }`}
             >
-              {tag.name}
+              All
             </button>
-          ))}
-        </div>
-
-        {/* Blog grid */}
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {paginatedFilteredBlogs.map((blog) => {
-            const imageSrc =
-              blog.image ||
-              (
-                blog.content.find((c) => c.type === "image") as
-                | { type: "image"; src: string; caption?: string }
-                | undefined
-              )?.src;
-            const blogDate = new Date(blog.createdAt);
-            const avatarSrc = DEFAULT_AVATAR;
-
-            return (
-              <article
-                key={blog.id}
-                onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
-                className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
+            {tags.map((tag) => (
+              <button
+                key={tag.id}
+                onClick={() => setActiveTag(tag.id)}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  }`}
               >
-                {/* Cover image */}
-                {imageSrc ? (
-                  <div className="relative h-44 bg-gray-100 overflow-hidden">
-                    <img
-                      src={imageSrc}
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute bottom-2.5 right-2.5 bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
-                      {blogDate.toLocaleDateString("en-US", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500" />
-                )}
+                {tag.name}
+              </button>
+            ))}
+          </div>
 
-                {/* Card body */}
-                <div className="p-4 flex flex-col flex-1 gap-2">
-                  {/* Author row */}
-                  <div className="flex items-center gap-2.5">
-                    <img
-                      src={avatarSrc}
-                      alt="Blog post thumbnail"
-                      className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = DEFAULT_AVATAR;
-                      }}
-                    />
-                    <div className="flex flex-col leading-tight">
-                      <span className="text-xs font-semibold text-gray-800">
-                        Tuition Lanka
-                      </span>
-                    </div>
-                    {!imageSrc && (
-                      <span className="ml-auto text-xs text-gray-400">
+          {/* Blog grid */}
+          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {paginatedFilteredBlogs.map((blog) => {
+              const imageSrc =
+                blog.image ||
+                (
+                  blog.content.find((c) => c.type === "image") as
+                  | { type: "image"; src: string; caption?: string }
+                  | undefined
+                )?.src;
+              const blogDate = new Date(blog.createdAt);
+              const avatarSrc = DEFAULT_AVATAR;
+
+              return (
+                <article
+                  key={blog.id}
+                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
+                  className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
+                >
+                  {/* Cover image */}
+                  {imageSrc ? (
+                    <div className="relative h-44 bg-gray-100 overflow-hidden">
+                      <img
+                        src={imageSrc}
+                        alt={blog.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute bottom-2.5 right-2.5 bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
                         {blogDate.toLocaleDateString("en-US", {
                           day: "numeric",
                           month: "short",
                           year: "numeric",
                         })}
-                      </span>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500" />
+                  )}
+
+                  {/* Card body */}
+                  <div className="p-4 flex flex-col flex-1 gap-2">
+                    {/* Author row */}
+                    <div className="flex items-center gap-2.5">
+                      <img
+                        src={avatarSrc}
+                        alt="Blog post thumbnail"
+                        className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = DEFAULT_AVATAR;
+                        }}
+                      />
+                      <div className="flex flex-col leading-tight">
+                        <span className="text-xs font-semibold text-gray-800">
+                          Tuition Lanka
+                        </span>
+                      </div>
+                      {!imageSrc && (
+                        <span className="ml-auto text-xs text-gray-400">
+                          {blogDate.toLocaleDateString("en-US", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      {blog.title}
+                    </h2>
+
+                    {/* Tags */}
+                    {blog.tags?.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mt-auto">
+                        {blog.tags.slice(0, 3).map((t: any) => (
+                          <span
+                            key={t.id}
+                            className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full"
+                          >
+                            {t.name}
+                          </span>
+                        ))}
+                      </div>
                     )}
                   </div>
+                </article>
+              );
+            })}
 
-                  {/* Title */}
-                  <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                    {blog.title}
-                  </h2>
+            {paginatedFilteredBlogs.length === 0 && (
+              <p className="col-span-full py-10 text-center text-sm text-gray-400">
+                No blogs found for this tag.
+              </p>
+            )}
+          </div>
 
-                  {/* Tags */}
-                  {blog.tags?.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-auto">
-                      {blog.tags.slice(0, 3).map((t: any) => (
-                        <span
-                          key={t.id}
-                          className="inline-block bg-blue-50 text-blue-700 text-xs font-medium px-2 py-0.5 rounded-full"
-                        >
-                          {t.name}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </article>
-            );
-          })}
-
-          {paginatedFilteredBlogs.length === 0 && (
-            <p className="col-span-full py-10 text-center text-sm text-gray-400">
-              No blogs found for this tag.
-            </p>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2 mt-4">
+              <button
+                disabled={page === 1}
+                onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                ← Previous
+              </button>
+              <span className="text-sm text-gray-500 px-2">
+                {page} / {totalPages}
+              </span>
+              <button
+                disabled={page === totalPages}
+                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                Next →
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2 mt-4">
-            <button
-              disabled={page === 1}
-              onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-              className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
-            >
-              ← Previous
-            </button>
-            <span className="text-sm text-gray-500 px-2">
-              {page} / {totalPages}
-            </span>
-            <button
-              disabled={page === totalPages}
-              onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-              className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
-            >
-              Next →
-            </button>
-          </div>
-        )}
-      </div>
-
-      {/* ── Sidebar ── */}
-      <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
-        {/* + Add Blog button — desktop only (sidebar position) */}
-        {(user?.role === "admin" || user?.role === "tutor") && (
-          <div className="hidden lg:flex justify-end">
-            <Link
-              href="/blogs/components/create-blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-            >
-              + Add Blog
-            </Link>
-          </div>
-        )}
-        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-          <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3 mb-4">
-            Recent Articles
-          </h3>
-          <div className="flex flex-col gap-3">
-            {recentArticles.map((blog) => (
-              <div
-                key={blog.id}
-                onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
-                className="flex items-center gap-3 cursor-pointer group"
+        {/* ── Sidebar ── */}
+        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
+          {/* + Add Blog button — desktop only (sidebar position) */}
+          {(user?.role === "admin" || user?.role === "tutor") && (
+            <div className="hidden lg:flex justify-end">
+              <Link
+                href="/blogs/components/create-blog"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
               >
-                <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
-                  {blog.image ? (
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-400 text-xs font-bold">
-                      {blog.title[0]}
-                    </div>
-                  )}
+                + Add Blog
+              </Link>
+            </div>
+          )}
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3 mb-4">
+              Recent Articles
+            </h3>
+            <div className="flex flex-col gap-3">
+              {recentArticles.map((blog) => (
+                <div
+                  key={blog.id}
+                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
+                  className="flex items-center gap-3 cursor-pointer group"
+                >
+                  <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
+                    {blog.image ? (
+                      <img
+                        src={blog.image}
+                        alt={blog.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-400 text-xs font-bold">
+                        {blog.title[0]}
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col min-w-0">
+                    <p className="text-xs font-semibold text-gray-800 group-hover:text-blue-600 line-clamp-2 transition-colors">
+                      {blog.title}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Tuition Lanka
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-col min-w-0">
-                  <p className="text-xs font-semibold text-gray-800 group-hover:text-blue-600 line-clamp-2 transition-colors">
-                    {blog.title}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-0.5">
-                    Tuition Lanka
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </aside>
-    </div>
+        </aside>
+      </div>
 
       {/* ── Floating Action Button — mobile/tablet only ── */}
       {(user?.role === "admin" || user?.role === "tutor") && (
