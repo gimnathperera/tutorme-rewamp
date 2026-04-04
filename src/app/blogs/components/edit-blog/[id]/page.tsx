@@ -136,13 +136,26 @@ export default function EditBlogPage() {
         status: blog.status || "pending",
         relatedArticles: relatedIds,
         tags: tagIds,
-        content: blog.content.map((c) => ({
-          type: c.type,
-          text: "text" in c ? decodeHtml(c.text) : "",
-          src: "src" in c ? c.src : "",
-          caption: "caption" in c ? c.caption : "Cover Image",
-          level: "level" in c ? c.level : 1,
-        })),
+        content: blog.content.map((c) => {
+          switch (c.type) {
+            case "paragraph":
+              return { type: "paragraph", text: "text" in c ? decodeHtml(c.text) : "" };
+            case "heading":
+              return { type: "heading", text: "text" in c ? decodeHtml(c.text) : "", level: "level" in c ? (c.level as number) : 2 };
+            case "image":
+              return { type: "image", src: "src" in c ? (c.src as string) : "", caption: "caption" in c ? (c.caption as string) : "" };
+            case "table":
+              return { type: "table", headers: "headers" in c ? (c.headers as string[]) : [], rows: "rows" in c ? (c.rows as string[][]) : [] };
+            case "quote":
+              return { type: "quote", text: "text" in c ? decodeHtml(c.text) : "", citation: "citation" in c ? (c.citation as string) : "" };
+            case "list":
+              return { type: "list", items: "items" in c ? (c.items as string[]) : [""], style: ("style" in c ? c.style : "unordered") as "ordered" | "unordered" };
+            case "embed":
+              return { type: "embed", src: "src" in c ? (c.src as string) : "", html: "html" in c ? (c.html as string) : "" };
+            default:
+              return { type: "paragraph", text: "" };
+          }
+        }),
         faqs: (blog.faqs || []).map((faq) => ({
           question: faq?.question || "",
           answer: faq?.answer || "",
