@@ -119,6 +119,8 @@ export type Blogs = BaseEntity &
     _id: string;
     id: string;
     title: string;
+    /** SEO-friendly slug, e.g. "the-business-value-of-software-qa" */
+    slug?: string;
     image: string;
     type: string;
     status: "pending" | "published" | "draft";
@@ -129,6 +131,7 @@ export type Blogs = BaseEntity &
     };
     relatedArticles: Array<{
       id: string;
+      slug?: string;
       title: string;
       image: string;
       author: {
