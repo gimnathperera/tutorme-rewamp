@@ -66,7 +66,7 @@ export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
 
 export const initialFormValues: CreateArticleSchema = {
   title: "",
-  content: [{ type: "paragraph", text: "" }],
+  content: [],
   image: "",
   relatedArticles: [],
   tags: [],

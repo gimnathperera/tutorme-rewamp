@@ -203,23 +203,21 @@ export default function ViewBlogPage() {
               ))}
             </div>
 
-            <div className="border-y py-8 dark:border-gray-700">
-              <TableOfContents
-                html={
-                  blog.content
-                    ?.filter(
-                      (b: any) =>
-                        b.type === "heading" || b.type === "paragraph",
-                    )
-                    ?.map((b: any) =>
-                      b.type === "heading"
-                        ? `<h${b.level}>${b.text}</h${b.level}>`
-                        : b.text,
-                    )
-                    .join("\n") || ""
-                }
-              />
-            </div>
+            <TableOfContents
+              html={
+                blog.content
+                  ?.filter(
+                    (b: any) =>
+                      b.type === "heading" || b.type === "paragraph",
+                  )
+                  ?.map((b: any) =>
+                    b.type === "heading"
+                      ? `<h${b.level}>${b.text}</h${b.level}>`
+                      : b.text,
+                  )
+                  .join("\n") || ""
+              }
+            />
 
             <div className="mt-10 blog-renderer-wrapper">
               <BlogRenderer content={blog.content} />

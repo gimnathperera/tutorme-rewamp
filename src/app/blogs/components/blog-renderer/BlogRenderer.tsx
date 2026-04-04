@@ -36,16 +36,19 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
     <div className="blog-content-renderer">
       {content.map((block, index) => {
         switch (block.type) {
-          case "paragraph":
+          case "paragraph": {
+            const sanitized = DOMPurify.sanitize(decodeHtml(block.text || "")).trim();
+            if (!sanitized || sanitized === "<p></p>" || sanitized === "<p><br></p>" || sanitized === "<br>") return null;
             return (
               <div
                 key={index}
                 className="prose prose-gray dark:prose-invert max-w-none text-base leading-8 text-gray-700 dark:text-gray-300 mb-5 text-justify block-paragraph"
                 dangerouslySetInnerHTML={{
-                  __html: DOMPurify.sanitize(decodeHtml(block.text || "")),
+                  __html: sanitized,
                 }}
               />
             );
+          }
 
           case "heading": {
             const level =
