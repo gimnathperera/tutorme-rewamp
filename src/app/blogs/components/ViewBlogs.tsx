@@ -5,6 +5,8 @@ import { useFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts";
+import Link from "next/link";
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
@@ -13,6 +15,7 @@ export default function BlogsDashboard() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const pageSize = 9;
   const router = useRouter();
+  const { user } = useAuthContext();
 
   const {
     data: allBlogsData,
@@ -77,7 +80,7 @@ export default function BlogsDashboard() {
     );
 
   return (
-    <div className="p-4 lg:p-6 flex flex-col lg:flex-row gap-8">
+    <div className="flex flex-col lg:flex-row gap-8">
       {/* ── Main content ── */}
       <div className="flex-1 flex flex-col gap-6 min-w-0">
         {/* Hero banner */}
@@ -86,7 +89,7 @@ export default function BlogsDashboard() {
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
               TuitionLanka Insights
             </p>
-            <h1 className="text-2xl text-white md:text-3xl font-bold leading-tight">
+            <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
               Welcome to the Tuition Lanka Blog
             </h1>
             <p className="text-sm md:text-base text-white/80 mt-1">
@@ -102,11 +105,10 @@ export default function BlogsDashboard() {
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTag(null)}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-              !activeTag
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-            }`}
+            className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
+              ? "bg-blue-600 text-white shadow-sm"
+              : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
           >
             All
           </button>
@@ -114,11 +116,10 @@ export default function BlogsDashboard() {
             <button
               key={tag.id}
               onClick={() => setActiveTag(tag.id)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                activeTag === tag.id
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-              }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                }`}
             >
               {tag.name}
             </button>
@@ -132,8 +133,8 @@ export default function BlogsDashboard() {
               blog.image ||
               (
                 blog.content.find((c) => c.type === "image") as
-                  | { type: "image"; src: string; caption?: string }
-                  | undefined
+                | { type: "image"; src: string; caption?: string }
+                | undefined
               )?.src;
             const blogDate = new Date(blog.createdAt);
             const avatarSrc = blog.author.avatar || DEFAULT_AVATAR;
@@ -141,7 +142,7 @@ export default function BlogsDashboard() {
             return (
               <article
                 key={blog.id}
-                onClick={() => router.push(`/blogs/${blog.id}`)}
+                onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
                 className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
               >
                 {/* Cover image */}
@@ -178,10 +179,7 @@ export default function BlogsDashboard() {
                     />
                     <div className="flex flex-col leading-tight">
                       <span className="text-xs font-semibold text-gray-800">
-                        {blog.author.name}
-                      </span>
-                      <span className="text-xs text-gray-400 capitalize">
-                        {blog.author.role}
+                        Tuition Lanka
                       </span>
                     </div>
                     {!imageSrc && (
@@ -251,6 +249,17 @@ export default function BlogsDashboard() {
 
       {/* ── Sidebar ── */}
       <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
+        {/* + Add Blog button — visible only to admins, aligned with hero banner */}
+        {user?.role === "admin" && (
+          <div className="flex justify-end">
+            <Link
+              href="/blogs/components/create-blog"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+            >
+              + Add Blog
+            </Link>
+          </div>
+        )}
         <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
           <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3 mb-4">
             Recent Articles
@@ -259,7 +268,7 @@ export default function BlogsDashboard() {
             {recentArticles.map((blog) => (
               <div
                 key={blog.id}
-                onClick={() => router.push(`/blogs/${blog.id}`)}
+                onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
                 className="flex items-center gap-3 cursor-pointer group"
               >
                 <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
@@ -280,7 +289,7 @@ export default function BlogsDashboard() {
                     {blog.title}
                   </p>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    {blog.author.name}
+                    Tuition Lanka
                   </p>
                 </div>
               </div>
