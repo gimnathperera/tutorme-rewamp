@@ -50,7 +50,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             return (
               <div
                 key={index}
-                className="prose prose-gray dark:prose-invert max-w-none text-base leading-8 text-gray-700 dark:text-gray-300 mb-5 text-justify block-paragraph"
+                className="prose prose-gray dark:prose-invert max-w-none text-base font-medium leading-8 text-gray-500 dark:text-gray-300 mb-5 text-justify block-paragraph"
                 dangerouslySetInnerHTML={{
                   __html: sanitized,
                 }}
@@ -72,8 +72,8 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
               2: "scroll-mt-20 text-3xl font-bold text-gray-900 dark:text-white mt-10 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug",
               3: "scroll-mt-20 text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-3 leading-snug",
               4: "scroll-mt-20 text-xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-2",
-              5: "scroll-mt-20 text-lg font-semibold text-gray-700 dark:text-gray-200 mt-6 mb-2",
-              6: "scroll-mt-20 text-base font-semibold text-gray-600 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide",
+              5: "scroll-mt-20 text-lg font-semibold text-gray-500 dark:text-gray-200 mt-6 mb-2",
+              6: "scroll-mt-20 text-base font-semibold text-gray-400 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide",
             }[level];
 
             return (
@@ -172,7 +172,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             return (
               <ListTag
                 key={index}
-                className={`space-y-2 text-base text-justify text-gray-700 dark:text-gray-300 my-5 leading-7 block-list ${listClass}`}
+                className={`space-y-2 text-base text-justify text-gray-500 dark:text-gray-300 my-5 leading-7 block-list ${listClass}`}
               >
                 {block.items?.map((item, i) => (
                   <li key={i}>{item}</li>
