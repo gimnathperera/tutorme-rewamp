@@ -8,6 +8,12 @@ interface Heading {
   level: number;
 }
 
+const slugify = (text: string) =>
+  text
+    .trim()
+    .replace(/\s+/g, "-")
+    .toLowerCase();
+
 const TableOfContents = ({ html }: { html: string }) => {
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [isOpen, setIsOpen] = useState(true);
@@ -19,7 +25,7 @@ const TableOfContents = ({ html }: { html: string }) => {
 
     const foundHeadings = Array.from(doc.querySelectorAll("h1, h2, h3")).map(
       (h) => ({
-        id: h.textContent?.replace(/\s+/g, "-").toLowerCase() || "",
+        id: slugify(h.textContent || ""),
         text: h.textContent || "",
         level: parseInt(h.tagName.replace("H", ""), 10),
       }),
@@ -40,6 +46,13 @@ const TableOfContents = ({ html }: { html: string }) => {
   };
 
   const numberedHeadings = generateNumbering(headings);
+
+  const scrollToHeading = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   if (headings.length === 0) return null;
 
@@ -66,10 +79,14 @@ const TableOfContents = ({ html }: { html: string }) => {
               style={{ marginLeft: `${(h.level - 1) * 16}px` }}
               className="hover:text-blue-600 transition-all"
             >
-              <a href={`#${h.id}`} className="no-underline flex gap-1">
+              <button
+                type="button"
+                onClick={() => scrollToHeading(h.id)}
+                className="no-underline flex gap-1 text-left w-full hover:text-blue-600 transition-colors"
+              >
                 <span className="font-medium text-gray-800">{h.number}.</span>
                 <span>{h.text}</span>
-              </a>
+              </button>
             </li>
           ))}
         </ul>
@@ -79,3 +96,4 @@ const TableOfContents = ({ html }: { html: string }) => {
 };
 
 export default TableOfContents;
+

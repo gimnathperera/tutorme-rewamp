@@ -53,17 +53,23 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                 ? block.level
                 : 2;
             const HTag = `h${level}` as keyof JSX.IntrinsicElements;
+            const headingId = block.text
+              ?.trim()
+              .replace(/\s+/g, "-")
+              .toLowerCase() || "";
             return (
               <HTag
                 key={index}
-                className={`font-semibold text-gray-900 dark:text-gray-100 block-heading ${level === 1
+                id={headingId}
+                className={`font-semibold text-gray-900 dark:text-gray-100 block-heading ${
+                  level === 1
                     ? "text-3xl"
                     : level === 2
                       ? "text-2xl mt-8 mb-4 border-b pb-2"
                       : level === 3
                         ? "text-xl mt-6 mb-3"
                         : "text-lg mt-4 mb-2"
-                  }`}
+                }`}
               >
                 {block.text}
               </HTag>
