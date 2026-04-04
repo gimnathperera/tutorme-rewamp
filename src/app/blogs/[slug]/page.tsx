@@ -259,7 +259,7 @@ export default function ViewBlogPage() {
           </div>
         </div>
 
-        <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-20 lg:self-start">
+        <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
             <h3 className="text-xl font-semibold border-b pb-2">
               Related Articles

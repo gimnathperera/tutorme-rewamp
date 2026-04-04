@@ -68,12 +68,12 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
               block.text?.trim().replace(/\s+/g, "-").toLowerCase() || "";
 
             const headingClass = {
-              1: "text-4xl font-bold text-gray-900 dark:text-white mt-12 mb-5 leading-tight",
-              2: "text-3xl font-bold text-gray-900 dark:text-white mt-10 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug",
-              3: "text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-3 leading-snug",
-              4: "text-xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-2",
-              5: "text-lg font-semibold text-gray-700 dark:text-gray-200 mt-6 mb-2",
-              6: "text-base font-semibold text-gray-600 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide",
+              1: "scroll-mt-20 text-4xl font-bold text-gray-900 dark:text-white mt-12 mb-5 leading-tight",
+              2: "scroll-mt-20 text-3xl font-bold text-gray-900 dark:text-white mt-10 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug",
+              3: "scroll-mt-20 text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-3 leading-snug",
+              4: "scroll-mt-20 text-xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-2",
+              5: "scroll-mt-20 text-lg font-semibold text-gray-700 dark:text-gray-200 mt-6 mb-2",
+              6: "scroll-mt-20 text-base font-semibold text-gray-600 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide",
             }[level];
 
             return (

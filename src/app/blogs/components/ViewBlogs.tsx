@@ -81,9 +81,9 @@ export default function BlogsDashboard() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row gap-8">
+      <div className="flex flex-col lg:flex-row gap-7">
         {/* ── Main content ── */}
-        <div className="flex-1 flex flex-col gap-6 lg:gap-10 min-w-0">
+        <div className="flex-1 flex flex-col gap-6 lg:gap-7 min-w-0">
           {/* Hero banner */}
           <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
             <div className="relative z-10">
@@ -106,11 +106,10 @@ export default function BlogsDashboard() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveTag(null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                !activeTag
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-              }`}
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
+                ? "bg-blue-600 text-white shadow-sm"
+                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                }`}
             >
               All
             </button>
@@ -118,11 +117,10 @@ export default function BlogsDashboard() {
               <button
                 key={tag.id}
                 onClick={() => setActiveTag(tag.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${
-                  activeTag === tag.id
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                  }`}
               >
                 {tag.name}
               </button>
@@ -130,17 +128,32 @@ export default function BlogsDashboard() {
           </div>
 
           {/* Blog grid */}
-          <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
             {paginatedFilteredBlogs.map((blog) => {
               const imageSrc =
                 blog.image ||
                 (
                   blog.content.find((c) => c.type === "image") as
-                    | { type: "image"; src: string; caption?: string }
-                    | undefined
+                  | { type: "image"; src: string; caption?: string }
+                  | undefined
                 )?.src;
               const blogDate = new Date(blog.createdAt);
               const avatarSrc = DEFAULT_AVATAR;
+
+              // Extract plain-text excerpt from first non-empty paragraph block
+              const excerpt = (() => {
+                const para = blog.content?.find(
+                  (c: any) => c.type === "paragraph" && c.text?.trim(),
+                );
+                if (!para || !("text" in para)) return "";
+                return (para.text as string)
+                  .replace(/&amp;/g, "&")
+                  .replace(/&lt;/g, "<")
+                  .replace(/&gt;/g, ">")
+                  .replace(/&nbsp;/g, " ")
+                  .replace(/<[^>]*>/g, "")
+                  .trim();
+              })();
 
               return (
                 <article
@@ -202,6 +215,15 @@ export default function BlogsDashboard() {
                     <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
                       {blog.title}
                     </h2>
+
+                    {excerpt && (
+                      <>
+                        <hr className="border-gray-100 w-full" />
+                        <p className="text-xs text-gray-500 line-clamp-2 leading-relaxed">
+                          {excerpt}
+                        </p>
+                      </>
+                    )}
                   </div>
                 </article>
               );
