@@ -33,14 +33,14 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
   };
 
   return (
-    <div className="blog-content-renderer space-y-6">
+    <div className="blog-content-renderer">
       {content.map((block, index) => {
         switch (block.type) {
           case "paragraph":
             return (
               <div
                 key={index}
-                className="prose dark:prose-invert max-w-none text-justify block-paragraph"
+                className="prose prose-gray dark:prose-invert max-w-none text-base leading-8 text-gray-700 dark:text-gray-300 mb-5 text-justify block-paragraph"
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(decodeHtml(block.text || "")),
                 }}
@@ -53,23 +53,23 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                 ? block.level
                 : 2;
             const HTag = `h${level}` as keyof JSX.IntrinsicElements;
-            const headingId = block.text
-              ?.trim()
-              .replace(/\s+/g, "-")
-              .toLowerCase() || "";
+            const headingId =
+              block.text?.trim().replace(/\s+/g, "-").toLowerCase() || "";
+
+            const headingClass = {
+              1: "text-4xl font-bold text-gray-900 dark:text-white mt-12 mb-5 leading-tight",
+              2: "text-3xl font-bold text-gray-900 dark:text-white mt-10 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug",
+              3: "text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-3 leading-snug",
+              4: "text-xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-2",
+              5: "text-lg font-semibold text-gray-700 dark:text-gray-200 mt-6 mb-2",
+              6: "text-base font-semibold text-gray-600 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide",
+            }[level];
+
             return (
               <HTag
                 key={index}
                 id={headingId}
-                className={`font-semibold text-gray-900 dark:text-gray-100 block-heading ${
-                  level === 1
-                    ? "text-3xl"
-                    : level === 2
-                      ? "text-2xl mt-8 mb-4 border-b pb-2"
-                      : level === 3
-                        ? "text-xl mt-6 mb-3"
-                        : "text-lg mt-4 mb-2"
-                }`}
+                className={`block-heading ${headingClass}`}
               >
                 {block.text}
               </HTag>
@@ -79,20 +79,17 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
           case "image":
             if (!block.src) return null;
             return (
-              <figure
-                key={index}
-                className="my-10 block-image flex flex-col items-center"
-              >
+              <figure key={index} className="my-10 block-image flex flex-col">
                 <img
                   src={block.src}
                   alt={block.caption || "Blog image"}
-                  className="rounded-2xl object-cover max-h-[450px] w-auto max-w-full md:max-w-[90%] shadow-lg border dark:border-gray-700 hover:scale-[1.01] transition-transform duration-300"
+                  className="rounded-2xl object-cover max-h-[360px] w-full shadow-lg border dark:border-gray-700 hover:scale-[1.01] transition-transform duration-300"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = "none";
                   }}
                 />
                 {block.caption && (
-                  <figcaption className="text-center text-sm text-gray-500 mt-2 italic">
+                  <figcaption className="text-sm text-gray-500 mt-2 italic">
                     {block.caption}
                   </figcaption>
                 )}
@@ -101,15 +98,19 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
 
           case "table":
             return (
-              <div key={index} className="overflow-x-auto my-6 block-table">
-                <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border dark:border-gray-700 rounded-lg overflow-hidden">
+              /* Desktop: fits the content column. Mobile/tablet: scrolls horizontally */
+              <div
+                key={index}
+                className="my-6 block-table overflow-x-auto lg:overflow-x-visible"
+              >
+                <table className="w-full divide-y divide-gray-200 dark:divide-gray-700 border dark:border-gray-700 rounded-lg overflow-hidden">
                   <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
                       {block.headers?.map((header, i) => (
                         <th
                           key={i}
                           scope="col"
-                          className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"
+                          className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider break-words"
                         >
                           {header}
                         </th>
@@ -122,7 +123,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                         {row?.map((cell, cellIndex) => (
                           <td
                             key={cellIndex}
-                            className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300"
+                            className="px-4 py-3 text-sm text-gray-900 dark:text-gray-300 break-words text-justify"
                           >
                             {cell}
                           </td>
@@ -138,13 +139,13 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             return (
               <blockquote
                 key={index}
-                className="p-4 my-6 border-s-4 border-blue-500 bg-gray-50 dark:bg-gray-800 dark:border-blue-400 block-quote"
+                className="pl-5 py-3 my-7 border-l-4 border-blue-500 bg-blue-50 dark:bg-gray-800 dark:border-blue-400 rounded-r-lg block-quote"
               >
-                <p className="text-xl italic font-medium leading-relaxed text-gray-900 dark:text-white">
+                <p className="text-lg italic font-medium leading-relaxed text-gray-800 dark:text-white">
                   &quot;{block.text}&quot;
                 </p>
                 {block.citation && (
-                  <cite className="mt-2 block text-sm font-semibold text-gray-600 dark:text-gray-400">
+                  <cite className="mt-2 block text-sm font-semibold text-gray-500 dark:text-gray-400">
                     — {block.citation}
                   </cite>
                 )}
@@ -155,12 +156,12 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             const ListTag = block.style === "ordered" ? "ol" : "ul";
             const listClass =
               block.style === "ordered"
-                ? "list-decimal list-inside"
-                : "list-disc list-inside";
+                ? "list-decimal list-outside ml-5"
+                : "list-disc list-outside ml-5";
             return (
               <ListTag
                 key={index}
-                className={`space-y-1 text-gray-700 dark:text-gray-300 my-4 block-list ${listClass}`}
+                className={`space-y-2 text-base text-justify text-gray-700 dark:text-gray-300 my-5 leading-7 block-list ${listClass}`}
               >
                 {block.items?.map((item, i) => (
                   <li key={i}>{item}</li>
@@ -170,12 +171,11 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
           }
 
           case "embed":
-            // To safely support embeds, we strictly sanitize if it's HTML
             if (block.html) {
               return (
                 <div
                   key={index}
-                  className="my-6 w-full flex justify-center block-embed"
+                  className="my-6 w-full aspect-video block-embed"
                   dangerouslySetInnerHTML={{
                     __html: DOMPurify.sanitize(block.html, {
                       ADD_TAGS: ["iframe"],
@@ -184,6 +184,11 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                         "allowfullscreen",
                         "frameborder",
                         "scrolling",
+                        "width",
+                        "height",
+                        "src",
+                        "title",
+                        "referrerpolicy",
                       ],
                     }),
                   }}
@@ -194,7 +199,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
               return (
                 <div
                   key={index}
-                  className="my-6 w-full flex justify-center aspect-video block-embed"
+                  className="my-6 w-full aspect-video block-embed"
                 >
                   <iframe
                     src={block.src}
