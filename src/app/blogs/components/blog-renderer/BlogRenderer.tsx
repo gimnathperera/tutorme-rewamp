@@ -90,7 +90,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
           case "image":
             if (!block.src) return null;
             return (
-              <figure key={index} className="my-10 block-image flex flex-col">
+              <figure key={index} className="block-image flex flex-col">
                 <img
                   src={block.src}
                   alt={block.caption || "Blog image"}
