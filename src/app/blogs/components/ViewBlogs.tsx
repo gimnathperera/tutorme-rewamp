@@ -80,6 +80,7 @@ export default function BlogsDashboard() {
     );
 
   return (
+    <>
     <div className="flex flex-col lg:flex-row gap-8">
       {/* ── Main content ── */}
       <div className="flex-1 flex flex-col gap-6 min-w-0">
@@ -249,9 +250,9 @@ export default function BlogsDashboard() {
 
       {/* ── Sidebar ── */}
       <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
-        {/* + Add Blog button — visible only to admins, aligned with hero banner */}
+        {/* + Add Blog button — desktop only (sidebar position) */}
         {(user?.role === "admin" || user?.role === "tutor") && (
-          <div className="flex justify-end">
+          <div className="hidden lg:flex justify-end">
             <Link
               href="/blogs/components/create-blog"
               className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
@@ -298,5 +299,29 @@ export default function BlogsDashboard() {
         </div>
       </aside>
     </div>
+
+      {/* ── Floating Action Button — mobile/tablet only ── */}
+      {(user?.role === "admin" || user?.role === "tutor") && (
+        <Link
+          href="/blogs/components/create-blog"
+          aria-label="Add new blog"
+          className="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-lg shadow-blue-500/40 transition-all duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="w-6 h-6"
+          >
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+        </Link>
+      )}
+    </>
   );
 }
