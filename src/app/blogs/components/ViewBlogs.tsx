@@ -237,7 +237,7 @@ export default function BlogsDashboard() {
         </div>
 
         {/* ── Sidebar ── */}
-        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
+        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6 lg:sticky lg:top-10 lg:self-start">
           {/* + Add Blog button — desktop only (sidebar position) */}
           {(user?.role === "admin" || user?.role === "tutor") && (
             <div className="hidden lg:flex justify-end">

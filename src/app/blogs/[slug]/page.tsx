@@ -222,11 +222,41 @@ export default function ViewBlogPage() {
             <div className="mt-10 blog-renderer-wrapper">
               <BlogRenderer content={blog.content} />
             </div>
+
+            {blog.faqs?.length > 0 && (
+              <div className="mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
+                <h3 className="text-xl font-semibold mb-4">FAQs</h3>
+                <div className="space-y-2">
+                  {blog.faqs.map((faq: any, idx: number) => (
+                    <div key={idx} className="border-b last:border-b-0 pb-2">
+                      <button
+                        type="button"
+                        onClick={() => toggleFaq(idx)}
+                        className="w-full text-left flex justify-between items-center py-2 font-medium text-gray-800 dark:text-gray-200 hover:text-blue-600 transition"
+                      >
+                        <span>{faq.question}</span>
+                        <span className="ml-2 transform transition-transform duration-300">
+                          {openFaqs[idx] ? "▲" : "▼"}
+                        </span>
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                          }`}
+                      >
+                        <p className="text-gray-700 dark:text-gray-400 mt-1">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <aside className="w-full md:w-[30%] flex flex-col gap-6">
-          <div>
+        <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-20 lg:self-start">
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
             <h3 className="text-xl font-semibold border-b pb-2">
               Related Articles
             </h3>
@@ -267,35 +297,7 @@ export default function ViewBlogPage() {
               )}
             </ul>
           </div>
-          {blog.faqs?.length > 0 && (
-            <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-900 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold mb-4">FAQs</h3>
-              <div className="space-y-2">
-                {blog.faqs.map((faq: any, idx: number) => (
-                  <div key={idx} className="border-b last:border-b-0 pb-2">
-                    <button
-                      type="button"
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full text-left flex justify-between items-center py-2 font-medium text-gray-800 dark:text-gray-200 hover:text-blue-600 transition"
-                    >
-                      <span>{faq.question}</span>
-                      <span className="ml-2 transform transition-transform duration-300">
-                        {openFaqs[idx] ? "▲" : "▼"}
-                      </span>
-                    </button>
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
-                        }`}
-                    >
-                      <p className="text-gray-700 dark:text-gray-400 mt-1">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+
         </aside>
       </div>
     </div>
