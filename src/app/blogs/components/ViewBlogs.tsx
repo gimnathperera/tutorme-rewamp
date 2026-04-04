@@ -250,7 +250,7 @@ export default function BlogsDashboard() {
       {/* ── Sidebar ── */}
       <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6">
         {/* + Add Blog button — visible only to admins, aligned with hero banner */}
-        {user?.role === "admin" && (
+        {(user?.role === "admin" || user?.role === "tutor") && (
           <div className="flex justify-end">
             <Link
               href="/blogs/components/create-blog"

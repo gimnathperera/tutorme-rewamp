@@ -1,10 +1,11 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   useFetchBlogBySlugQuery,
   useFetchBlogByIdQuery,
   useFetchBlogsQuery,
+  useDeleteBlogMutation,
 } from "@/store/api/splits/blogs";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
@@ -12,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import toast from "react-hot-toast";
 
 const BlogRenderer = dynamic(
   () => import("../components/blog-renderer/BlogRenderer"),
@@ -26,6 +28,7 @@ const isObjectId = (s: string) => /^[a-f\d]{24}$/i.test(s);
 export default function ViewBlogPage() {
   const params = useParams();
   const slugParam = params?.slug as string;
+  const router = useRouter();
 
   const isLegacyId = isObjectId(slugParam);
 
@@ -49,6 +52,19 @@ export default function ViewBlogPage() {
 
   const { data: allBlogs } = useFetchBlogsQuery({});
   const { user } = useAuthContext();
+  const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const handleDelete = async () => {
+    if (!blog) return;
+    try {
+      await deleteBlog(blog.id).unwrap();
+      toast.success("Blog deleted successfully");
+      router.push("/blogs");
+    } catch {
+      toast.error("Failed to delete blog");
+    }
+  };
 
   const [openFaqs, setOpenFaqs] = useState<boolean[]>([]);
 
@@ -88,14 +104,47 @@ export default function ViewBlogPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <div className="mb-10">
-        {(blog.author?.id === user?.id || user?.role === "admin") && (
-          <div className="flex justify-end mb-4">
+        {user && (blog.author?.id === user.id || user.role === "admin") && (
+          <div className="flex justify-end gap-2 mb-4">
             <Link
               href={`/blogs/components/edit-blog/${blog.id}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
             >
               ✏️ Edit Blog
             </Link>
+            <button
+              onClick={() => setConfirmDelete(true)}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200 shadow-sm"
+            >
+              🗑️ Delete
+            </button>
+          </div>
+        )}
+
+        {/* Confirm delete dialog */}
+        {confirmDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">Delete Blog?</h2>
+              <p className="text-sm text-gray-600 mb-6">
+                This action cannot be undone. The blog will be permanently removed.
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition disabled:opacity-50"
+                >
+                  {isDeleting ? "Deleting…" : "Yes, Delete"}
+                </button>
+              </div>
+            </div>
           </div>
         )}
         {blog.image && (

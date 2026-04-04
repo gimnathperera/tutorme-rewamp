@@ -35,7 +35,7 @@ export default function EditBlogPage() {
   const params = useParams();
   const blogId = params?.id as string;
   const router = useRouter();
-  const { user } = useAuthContext();
+  const { user, isUserLoaded } = useAuthContext();
 
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagsData } = useFetchTagsQuery({});
@@ -102,6 +102,23 @@ export default function EditBlogPage() {
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
+
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
+
+  // Guard 1: unauthenticated users → show a login prompt dialog
+  useEffect(() => {
+    if (isUserLoaded && !user) {
+      setShowAuthDialog(true);
+    }
+  }, [isUserLoaded, user, router]);
+
+  // Guard 2: tutors can only edit their own blogs
+  useEffect(() => {
+    if (blog && user && user.role === "tutor" && blog.author?.id !== user.id) {
+      toast.error("You can only edit your own blogs");
+      router.replace(`/blogs/${blog.slug || blog.id}`);
+    }
+  }, [blog, user, router]);
 
   useEffect(() => {
     if (blog && user && blogsData && tagsData) {
@@ -173,6 +190,41 @@ export default function EditBlogPage() {
       toast.error("Failed to update blog");
     }
   };
+
+  if (!isUserLoaded) return null; // wait for auth to hydrate
+
+  // Show auth dialog for unauthenticated users
+  if (showAuthDialog) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 flex flex-col items-center gap-5">
+          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center text-3xl">
+            🔒
+          </div>
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Login Required</h2>
+            <p className="text-sm text-gray-500 leading-relaxed">
+              You need to be logged in to edit this blog. Please sign in to continue.
+            </p>
+          </div>
+          <div className="flex gap-3 w-full">
+            <button
+              onClick={() => router.replace("/blogs")}
+              className="flex-1 px-4 py-2.5 rounded-lg border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => router.replace("/sign-in")}
+              className="flex-1 px-4 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition shadow-sm"
+            >
+              Sign In
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) return <p>Loading...</p>;
 
