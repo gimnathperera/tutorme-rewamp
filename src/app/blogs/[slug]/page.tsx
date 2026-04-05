@@ -184,7 +184,6 @@ export default function ViewBlogPage() {
                   Tuition Lanka
                 </p>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {blog.author?.role} •{" "}
                   {new Date(blog.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
@@ -198,9 +197,8 @@ export default function ViewBlogPage() {
               {blog.tags?.map((t: any, idx: number) => (
                 <span
                   key={t.id}
-                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${
-                    tagColors[idx % tagColors.length]
-                  }`}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${tagColors[idx % tagColors.length]
+                    }`}
                 >
                   {t.name}
                 </span>
@@ -243,9 +241,8 @@ export default function ViewBlogPage() {
                         </span>
                       </button>
                       <div
-                        className={`overflow-hidden transition-all duration-300 ${
-                          openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
-                        }`}
+                        className={`overflow-hidden transition-all duration-300 ${openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                          }`}
                       >
                         <p className="text-gray-700 dark:text-gray-400 mt-1">
                           {faq.answer}
