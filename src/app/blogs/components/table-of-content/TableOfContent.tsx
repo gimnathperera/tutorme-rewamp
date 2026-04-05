@@ -54,7 +54,7 @@ const TableOfContents = ({ html }: { html: string }) => {
   if (headings.length === 0) return null;
 
   return (
-    <div className="border rounded-md bg-gray-50 p-4 mb-6 shadow-sm">
+    <div className="border rounded-2xl bg-gray-50 p-4 mb-6 shadow-sm">
       <div
         className="flex items-center justify-between cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
