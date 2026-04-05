@@ -100,6 +100,16 @@ export default function BlogsDashboard() {
             {/* Decorative circles */}
             <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
             <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
+            {(user?.role === "admin" || user?.role === "tutor") && (
+              <div className="hidden lg:flex absolute right-6 top-1/2 -translate-y-1/2 z-10">
+                <Link
+                  href="/blogs/components/create-blog"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 px-5 py-2.5 rounded-lg bg-white hover:bg-blue-50 transition-colors duration-200 shadow-sm"
+                >
+                  + Add Blog
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Tag filter pills */}
@@ -261,57 +271,6 @@ export default function BlogsDashboard() {
             </div>
           )}
         </div>
-
-        {/* ── Sidebar ── */}
-        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6 lg:sticky lg:top-20 lg:sticky-mt-10 lg:self-start">
-          {/* + Add Blog button — desktop only (sidebar position) */}
-          {(user?.role === "admin" || user?.role === "tutor") && (
-            <div className="hidden lg:flex justify-end">
-              <Link
-                href="/blogs/components/create-blog"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-              >
-                + Add Blog
-              </Link>
-            </div>
-          )}
-          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-            <h3 className="text-sm font-semibold text-gray-900 border-b border-gray-100 pb-3 mb-4">
-              Recent Articles
-            </h3>
-            <div className="flex flex-col gap-3">
-              {recentArticles.map((blog) => (
-                <div
-                  key={blog.id}
-                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
-                  className="flex items-center gap-3 cursor-pointer group"
-                >
-                  <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden bg-gray-100">
-                    {blog.image ? (
-                      <img
-                        src={blog.image}
-                        alt={blog.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center text-blue-400 text-xs font-bold">
-                        {blog.title[0]}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-xs font-semibold text-gray-800 group-hover:text-blue-600 line-clamp-2 transition-colors">
-                      {blog.title}
-                    </p>
-                    <p className="text-xs text-gray-400 mt-0.5">
-                      Tuition Lanka
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </aside>
       </div>
 
       {/* ── Floating Action Button — mobile/tablet only ── */}
