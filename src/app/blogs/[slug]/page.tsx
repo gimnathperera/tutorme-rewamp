@@ -102,10 +102,10 @@ export default function ViewBlogPage() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <div className="mb-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-10">
+      <div className="mb-2 lg:mb-4">
         {user && (blog.author?.id === user.id || user.role === "admin") && (
-          <div className="flex justify-end gap-2 mb-4">
+          <div className="flex justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
             <Link
               href={`/blogs/components/edit-blog/${blog.id}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
@@ -151,7 +151,7 @@ export default function ViewBlogPage() {
           </div>
         )}
         {blog.image && (
-          <div className="relative w-full mb-8 rounded-lg overflow-hidden shadow-lg">
+          <div className="relative w-full rounded-lg overflow-hidden shadow-lg">
             <img
               src={blog.image}
               alt={blog.title || "Cover Image"}
@@ -169,9 +169,9 @@ export default function ViewBlogPage() {
         )}
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8 mt-12">
-        <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-8 transition-all overflow-hidden">
-          <div className="max-w-4xl mx-auto space-y-8 text-lg leading-relaxed">
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 mt-4 lg:mt-6">
+        <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-4 lg:p-8 transition-all overflow-hidden">
+          <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-lg leading-relaxed">
             <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
               <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
                 <AvatarImage src="/images/logo/tuitionlanka.png" />
