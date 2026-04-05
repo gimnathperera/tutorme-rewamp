@@ -225,8 +225,8 @@ export default function ViewBlogPage() {
             </div>
 
             {blog.faqs?.length > 0 && (
-              <div className="mt-10 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
-                <h3 className="text-xl font-semibold mb-4">FAQs</h3>
+              <div className="mt-10 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
+                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">FAQs</h2>
                 <div className="space-y-2">
                   {blog.faqs.map((faq: any, idx: number) => (
                     <div key={idx} className="border-b last:border-b-0 pb-2">
