@@ -103,10 +103,10 @@ export default function BlogsDashboard() {
           </div>
 
           {/* Tag filter pills */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={() => setActiveTag(null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${!activeTag
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${!activeTag
                 ? "bg-blue-600 text-white shadow-sm"
                 : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                 }`}
@@ -117,7 +117,7 @@ export default function BlogsDashboard() {
               <button
                 key={tag.id}
                 onClick={() => setActiveTag(tag.id)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-200 ${activeTag === tag.id
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${activeTag === tag.id
                   ? "bg-blue-600 text-white shadow-sm"
                   : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
                   }`}
@@ -263,7 +263,7 @@ export default function BlogsDashboard() {
         </div>
 
         {/* ── Sidebar ── */}
-        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6 lg:sticky lg:top-10 lg:self-start">
+        <aside className="w-full lg:w-64 flex-shrink-0 flex flex-col gap-6 lg:sticky lg:top-20 lg:sticky-mt-10 lg:self-start">
           {/* + Add Blog button — desktop only (sidebar position) */}
           {(user?.role === "admin" || user?.role === "tutor") && (
             <div className="hidden lg:flex justify-end">
