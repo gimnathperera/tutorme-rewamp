@@ -56,33 +56,33 @@ const FormGeneralInfo: FC<Props> = ({
           <div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
               <InputText
-                label="Full Name"
+                label="Full Name *"
                 placeholder="First Name"
                 name="name"
                 type="text"
               />
 
               <InputText
-                label="Email"
+                label="Email *"
                 placeholder="Email"
                 name="email"
                 type="text"
                 disabled
               />
               <InputText
-                label="Contact Number"
+                label="Contact Number *"
                 placeholder="Contact Number"
                 name="phoneNumber"
                 type="tel"
               />
               <InputSelect
-                label="Country"
+                label="Country *"
                 placeholder="Country"
                 name="country"
                 options={countryOptions}
               />
               <InputText
-                label="City"
+                label="City *"
                 placeholder="City"
                 name="city"
                 type="text"
