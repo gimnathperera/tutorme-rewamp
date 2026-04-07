@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { FaTiktok } from "react-icons/fa";
 
 interface ProductType {
   id: number;
@@ -50,42 +51,50 @@ const footer = () => {
       <div className="mx-auto max-w-2xl pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
-
           <div className="col-span-4">
             <h3 className="text-white text-2xl font-bold leading-snug mb-4 lg:mb-10">
-              {" "}
               Tuition Lanka
             </h3>
+
             <div className="flex gap-4">
               <div className="footer-icons">
-                <Link href="#">
+                <a
+                  href={process.env.NEXT_PUBLIC_FACEBOOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src={"/images/footer/vec.svg"}
                     alt="facebook"
                     width={15}
                     height={20}
                   />
-                </Link>
+                </a>
               </div>
+
               <div className="footer-icons">
-                <Link href="#">
-                  <Image
-                    src={"/images/footer/twitter.svg"}
-                    alt="twitter"
-                    width={20}
-                    height={20}
-                  />
-                </Link>
+                <a
+                  href={process.env.NEXT_PUBLIC_TIKTOK_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaTiktok size={20} />
+                </a>
               </div>
+
               <div className="footer-icons">
-                <Link href="#">
+                <a
+                  href={process.env.NEXT_PUBLIC_INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src={"/images/footer/instagram.svg"}
                     alt="instagram"
                     width={20}
                     height={20}
                   />
-                </Link>
+                </a>
               </div>
             </div>
           </div>
