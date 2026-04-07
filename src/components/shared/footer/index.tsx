@@ -78,7 +78,7 @@ const footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <FaTiktok size={20} />
+                  <FaTiktok className="text-white" size={20} />
                 </a>
               </div>
 
