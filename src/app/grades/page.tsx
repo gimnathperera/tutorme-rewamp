@@ -212,7 +212,8 @@ const GradesPage: FC = () => {
       if (/grade\s*\d+/i.test(title)) return 1;
       if (/o\/?l/i.test(title)) return 2;
       if (/a\/?l/i.test(title)) return 3;
-      if (/other activities/i.test(title)) return 4;
+      if (/extracurricular activities/i.test(title)) return 4;
+      if (/other activities/i.test(title)) return 5;
       return 99;
     };
 
