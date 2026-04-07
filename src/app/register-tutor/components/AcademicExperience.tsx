@@ -20,9 +20,9 @@ import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-2";
-const inputClass = "h-11 text-[16px] placeholder:text-gray-500 text-gray-900";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-[16px] focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -86,7 +86,7 @@ const AcademicExperience = () => {
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutoringLevels">
+          <Label className="text-sm" htmlFor="tutoringLevels">
             Tutoring Levels *
           </Label>
           <Controller
@@ -107,7 +107,7 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="preferredLocations">
+          <Label className="text-sm" htmlFor="preferredLocations">
             Preferred Locations *
           </Label>
           <Controller
@@ -131,7 +131,7 @@ const AcademicExperience = () => {
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorType">
+          <Label className="text-sm" htmlFor="tutorType">
             Tutor Types *
           </Label>
           <Controller
@@ -152,7 +152,7 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="highestEducation">
+          <Label className="text-sm" htmlFor="highestEducation">
             Highest Education Level *
           </Label>
           <select
@@ -181,7 +181,7 @@ const AcademicExperience = () => {
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="yearsExperience">
+          <Label className="text-sm" htmlFor="yearsExperience">
             Years of Experience *
           </Label>
           <Input
@@ -199,7 +199,7 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorMediums">
+          <Label className="text-sm" htmlFor="tutorMediums">
             Tutor Mediums *
           </Label>
           <Controller
@@ -223,7 +223,7 @@ const AcademicExperience = () => {
       {/* ROW 4 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="grades">
+          <Label className="text-sm" htmlFor="grades">
             Grades *
           </Label>
           <Controller
@@ -249,7 +249,7 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="subjects">
+          <Label className="text-sm" htmlFor="subjects">
             Subjects *
           </Label>
           <Controller

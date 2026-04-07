@@ -16,7 +16,7 @@ const TermsAndSubmit = () => {
     <div className="space-y-6">
       {/* Certificates Upload */}
       <div>
-        <Label className="text-[15px] mb-2 block">Certificates *</Label>
+        <Label className="text-sm mb-2 block">Certificates *</Label>
         <Controller
           name="certificatesAndQualifications"
           control={control}
@@ -53,7 +53,7 @@ const TermsAndSubmit = () => {
           />
           <Label
             htmlFor="agreeTerms"
-            className="flex flex-col gap-1 text-[15px]"
+            className="flex flex-col gap-1 text-sm"
           >
             <span>I agree to the Terms and Conditions *</span>
             <span className="text-xs text-muted-foreground">
@@ -82,7 +82,7 @@ const TermsAndSubmit = () => {
           />
           <Label
             htmlFor="agreeAssignmentInfo"
-            className="flex flex-col gap-1 text-[15px]"
+            className="flex flex-col gap-1 text-sm"
           >
             <span>
               I agree to receiving assignment information regarding new Tuition
