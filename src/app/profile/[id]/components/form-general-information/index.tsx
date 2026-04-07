@@ -88,31 +88,31 @@ const FormGeneralInfo: FC<Props> = ({
                 type="text"
               />
               <InputText
-                label="State / Province"
+                label="State / Province *"
                 placeholder="State / Province"
                 name="state"
                 type="text"
               />
               <InputText
-                label="Region"
+                label="Region *"
                 placeholder="Region"
                 name="region"
                 type="text"
               />
               <InputText
-                label="ZIP / Postal code"
+                label="ZIP / Postal code *"
                 placeholder="ZIP / Postal code"
                 name="zip"
                 type="text"
               />
               <InputText
-                label="Address"
+                label="Address *"
                 placeholder="Address"
                 name="address"
                 type="text"
               />
               <InputText
-                label="Birthday"
+                label="Birthday *"
                 name="birthday"
                 type="date"
                 onKeyDown={(e) => e.preventDefault()}
