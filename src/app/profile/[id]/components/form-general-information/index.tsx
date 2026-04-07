@@ -115,6 +115,7 @@ const FormGeneralInfo: FC<Props> = ({
                 label="Birthday"
                 name="birthday"
                 type="date"
+                max={new Date().toISOString().split("T")[0]}
                 onKeyDown={(e) => e.preventDefault()}
               />
               <InputMultiSelect
