@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 "use client";
 
 import { Dialog, Transition } from "@headlessui/react";
@@ -48,16 +49,38 @@ const Modal: FC<Props> = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-4 sm:p-6 text-left align-middle shadow-xl transition-all relative">
-                
                 {/* Decorative Background Elements */}
-                <div className="pointer-events-none absolute -top-20 -left-10 w-56 h-56 rounded-full bg-blue-600/5" aria-hidden="true" />
-                <div className="pointer-events-none absolute -bottom-24 -right-20 w-80 h-80 rounded-full bg-blue-600/5" aria-hidden="true" />
-                <div className="pointer-events-none absolute top-[25%] -right-10 w-28 h-28 rounded-full border-[6px] border-blue-600/5" aria-hidden="true" />
-                <div className="pointer-events-none absolute bottom-[15%] left-2 w-10 h-10 rounded-full bg-blue-600/5" aria-hidden="true" />
-                
+                <div
+                  className="pointer-events-none absolute -top-20 -left-10 w-56 h-56 rounded-full bg-blue-600/5"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute -bottom-24 -right-20 w-80 h-80 rounded-full bg-blue-600/5"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute top-[25%] -right-10 w-28 h-28 rounded-full border-[6px] border-blue-600/5"
+                  aria-hidden="true"
+                />
+                <div
+                  className="pointer-events-none absolute bottom-[15%] left-2 w-10 h-10 rounded-full bg-blue-600/5"
+                  aria-hidden="true"
+                />
+
                 {/* Dot Grid */}
-                <svg className="pointer-events-none absolute top-16 left-8 w-16 h-16 text-blue-600/5 transform -rotate-12" fill="currentColor" viewBox="0 0 40 40">
-                  <pattern id="dot-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                <svg
+                  className="pointer-events-none absolute top-16 left-8 w-16 h-16 text-blue-600/5 transform -rotate-12"
+                  fill="currentColor"
+                  viewBox="0 0 40 40"
+                >
+                  <pattern
+                    id="dot-pattern"
+                    x="0"
+                    y="0"
+                    width="10"
+                    height="10"
+                    patternUnits="userSpaceOnUse"
+                  >
                     <circle cx="2" cy="2" r="2" />
                   </pattern>
                   <rect width="40" height="40" fill="url(#dot-pattern)" />

@@ -23,9 +23,9 @@ export default function RootLayout({
       <body>
         <Script src="/env-config.js" strategy="afterInteractive" />
         <WithProviders>
-          <main className="bg-lightwhite pt-12 sm:pt-20">
+          <main className="bg-lightwhite pt-12 sm:pt-20 flex flex-col min-h-screen">
             <NavBar />
-            {children}
+            <div className="flex-1">{children}</div>
             <Footer />
           </main>
         </WithProviders>

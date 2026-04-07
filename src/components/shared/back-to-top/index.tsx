@@ -29,7 +29,7 @@ const BackToTop: FC = () => {
   }, []);
 
   return (
-    <div className="fixed bottom-4 right-4">
+    <div className="hidden lg:block fixed bottom-4 right-4">
       {isVisible && (
         <button
           onClick={scrollToTop}

@@ -13,8 +13,8 @@ const products: ProductType[] = [
     section: "Menu",
     link: [
       { label: "Home", url: "/" },
-      { label: "Request a Tutor", url: "/request-for-tutors" },
-      { label: "Register a Tutor", url: "/register-tutor" },
+      { label: "Request for Tutor", url: "/request-for-tutors" },
+      { label: "Register as a Tutor", url: "/register-tutor" },
       { label: "Contact Us", url: "/#keep-in-touch-section" },
     ],
   },

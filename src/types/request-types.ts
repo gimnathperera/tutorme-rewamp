@@ -1,3 +1,4 @@
+import { Blogs } from "./response-types";
 export type ContactUsRequest = {
   message: string;
   sender: {
@@ -108,28 +109,18 @@ export type FetchTuitionRatesRequest = {
 export type UpdateBlogRequest = {
   id: string;
   blogId: string;
-  faqs: string[];
-  tags: string[];
-  name: string;
-  avatar: string;
-  role: string;
-  image?: string;
-  relatedArticles: string[];
-  status?: "pending" | "approved" | "rejected";
-  authorName?: string;
   title?: string;
-  sortBy?: string;
-  page?: number;
-  limit?: number;
+  image?: string;
+  content?: Blogs["content"];
+  faqs?: Array<{ _id?: string; question: string; answer: string }>;
+  tags?: string[];
+  relatedArticles?: string[];
+  status?: "pending" | "published" | "draft";
 };
 
 export type FetchBlogsRequest = {
   blogId?: string;
-  faqs?: string[];
-  image?: string;
-  name?: string;
   id?: string;
-  tags?: string;
   status?: "pending" | "published" | "draft";
   authorName?: string;
   title?: string;
