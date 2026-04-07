@@ -8,6 +8,7 @@ import {
   PASSWORD_LETTER_NUMBER_MSG,
 } from "../../../configs/password";
 
+// Normalize text: trim + remove extra spaces
 const normalizeText = (value: string) => value.trim().replace(/\s+/g, " ");
 
 export const signUpSchema = z
@@ -15,8 +16,11 @@ export const signUpSchema = z
     name: z
       .string()
       .transform(normalizeText)
-      .refine((value) => value.length > 0, {
+      .refine((val) => val.length > 0, {
         message: "Full Name is required",
+      })
+      .refine((val) => /^[A-Za-z\s]+$/.test(val), {
+        message: "Name can contain letters and spaces only",
       }),
 
     email: z
