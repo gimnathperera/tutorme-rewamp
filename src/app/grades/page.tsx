@@ -207,7 +207,32 @@ const GradesPage: FC = () => {
     limit: GRADE_LIMIT,
   });
 
-  const grades = data?.results || [];
+  const grades = (data?.results || []).slice().sort((a, b) => {
+    const getPriority = (title: string) => {
+      if (/grade\s*\d+/i.test(title)) return 1;
+      if (/o\/?l/i.test(title)) return 2;
+      if (/a\/?l/i.test(title)) return 3;
+      if (/other activities/i.test(title)) return 4;
+      return 99;
+    };
+
+    const priorityA = getPriority(a.title);
+    const priorityB = getPriority(b.title);
+
+    // Step 1: category sorting
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    // Step 2: numeric sorting inside "Grade"
+    if (priorityA === 1) {
+      const numA = Number(a.title.match(/\d+/)?.[0] ?? 0);
+      const numB = Number(b.title.match(/\d+/)?.[0] ?? 0);
+      return numA - numB;
+    }
+
+    return 0;
+  });
 
   const onHandleGradeClick = (id: string) => router.push(`/grades/${id}`);
 
