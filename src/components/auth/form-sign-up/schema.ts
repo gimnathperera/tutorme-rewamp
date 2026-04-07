@@ -8,17 +8,26 @@ import {
   PASSWORD_LETTER_NUMBER_MSG,
 } from "../../../configs/password";
 
+const normalizeText = (value: string) => value.trim().replace(/\s+/g, " ");
+
 export const signUpSchema = z
   .object({
-    name: z.string().nonempty("Full Name is required"),
+    name: z
+      .string()
+      .transform(normalizeText)
+      .refine((value) => value.length > 0, {
+        message: "Full Name is required",
+      }),
 
     email: z
       .string()
+      .trim()
       .nonempty("Email is required.")
       .email({ message: "Invalid email address" }),
 
     password: z
       .string()
+      .trim()
       .nonempty("Password is required.")
       .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
       .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
@@ -26,7 +35,10 @@ export const signUpSchema = z
         message: PASSWORD_LETTER_NUMBER_MSG,
       }),
 
-    confirmPassword: z.string().nonempty("Please confirm your password."),
+    confirmPassword: z
+      .string()
+      .trim()
+      .nonempty("Please confirm your password."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
