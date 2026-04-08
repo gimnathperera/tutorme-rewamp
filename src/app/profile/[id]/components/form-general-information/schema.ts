@@ -55,6 +55,15 @@ export const generalInfoSchema = z.object({
     .refine(
       (date) => {
         if (!date) return true; // Handled by first refine
+        return isBefore(new Date(date), new Date());
+      },
+      {
+        message: "Birthday cannot be a future date",
+      },
+    )
+    .refine(
+      (date) => {
+        if (!date) return true; // Handled by first refine
         const today = new Date();
         const minDate = addYears(today, -18);
         return isBefore(new Date(date), minDate);
