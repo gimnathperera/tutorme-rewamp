@@ -257,10 +257,9 @@ export const countryOptions: Option[] = [
 ];
 
 export const languageOptions = [
-  { value: "en", label: "English" },
-  { value: "sp", label: "Spanish" },
-  { value: "fr", label: "French" },
-  { value: "sn", label: "Sinhala" },
+  { value: "sinhala", label: "Sinhala" },
+  { value: "english", label: "English" },
+  { value: "tamil", label: "Tamil" },
 ];
 
 export const timeZoneOptions = [
