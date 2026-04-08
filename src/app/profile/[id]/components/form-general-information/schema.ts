@@ -43,7 +43,7 @@ export const generalInfoSchema = z.object({
     .string()
     .trim()
     .min(1, "ZIP / Postal code is required")
-    .regex(/^\d{5}(-\d{4})?$/, "ZIP must be 12345 or 12345-6789 format")
+    .regex(/^\d{5}$/, "Zip/Postal code should be exactly 5 digits")
     .optional(),
   address: z.string().min(1, "Address is required").optional(),
   birthday: z
