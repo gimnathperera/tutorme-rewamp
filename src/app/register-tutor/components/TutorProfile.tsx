@@ -43,7 +43,7 @@ const TutorProfile = () => {
       {/* Teaching Summary */}
       <div className={fieldWrapper}>
         <Label htmlFor="teachingSummary" className="text-sm mb-1 block">
-          Short Introduction About Yourself *
+          Short Introduction About Yourself <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="teachingSummary"
@@ -64,7 +64,7 @@ const TutorProfile = () => {
       {/* Academic Details */}
       <div className={fieldWrapper}>
         <Label htmlFor="academicDetails" className="text-sm mb-1 block">
-          Summary of Teaching Experience &amp; Academic Achievements *
+          Summary of Teaching Experience &amp; Academic Achievements <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="academicDetails"
@@ -85,7 +85,7 @@ const TutorProfile = () => {
       {/* Student Results */}
       <div className={fieldWrapper}>
         <Label htmlFor="studentResults" className="text-sm mb-1 block">
-          Results of Students / Track Record *
+          Results of Students / Track Record <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="studentResults"
@@ -106,7 +106,7 @@ const TutorProfile = () => {
       {/* Selling Points */}
       <div className={fieldWrapper}>
         <Label htmlFor="sellingPoints" className="text-sm mb-1 block">
-          Other Selling Points as a Tutor *
+          Other Selling Points as a Tutor <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="sellingPoints"
