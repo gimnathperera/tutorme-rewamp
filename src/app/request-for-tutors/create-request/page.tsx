@@ -40,9 +40,9 @@ import DistrictSelect from "@/components/districtSelect";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
-const inputClass = "h-11 text-[16px] placeholder:text-gray-500 text-gray-900";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-[16px] focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150 text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150 text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
@@ -204,12 +204,12 @@ export default function AddRequestForTutor() {
           <TabsContent value="contact">
             <Card>
               <CardHeader>
-                <CardTitle>Contact Details</CardTitle>
+                <CardTitle className="text-base font-medium">Contact Details</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="name">
+                  <Label className="text-sm" htmlFor="name">
                     Full Name *
                   </Label>
                   <Input
@@ -245,7 +245,7 @@ export default function AddRequestForTutor() {
                 {/* Email & Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="email">
+                    <Label className="text-sm" htmlFor="email">
                       Email *
                     </Label>
                     <Input
@@ -280,7 +280,7 @@ export default function AddRequestForTutor() {
                     )}
                   </div>
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="phoneNumber">
+                    <Label className="text-sm" htmlFor="phoneNumber">
                       Contact Number *
                     </Label>
                     <Input
@@ -324,7 +324,7 @@ export default function AddRequestForTutor() {
 
                 {/* District */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="district">
+                  <Label className="text-sm" htmlFor="district">
                     District *
                   </Label>
                   <Controller
@@ -347,7 +347,7 @@ export default function AddRequestForTutor() {
 
                 {/* City */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="city">
+                  <Label className="text-sm" htmlFor="city">
                     City *
                   </Label>
                   <Controller
@@ -381,12 +381,12 @@ export default function AddRequestForTutor() {
           <TabsContent value="tutorDetails">
             <Card>
               <CardHeader>
-                <CardTitle>Tutor Details</CardTitle>
+                <CardTitle className="text-base font-medium">Tutor Details</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="medium">
+                  <Label className="text-sm" htmlFor="medium">
                     Medium *
                   </Label>
                   <select
@@ -406,7 +406,7 @@ export default function AddRequestForTutor() {
 
                 {/* Grade */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="grade">
+                  <Label className="text-sm" htmlFor="grade">
                     Grade *
                   </Label>
                   <select
@@ -428,7 +428,7 @@ export default function AddRequestForTutor() {
 
                 {/* Number of Tutors */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="tutorCount">
+                  <Label className="text-sm" htmlFor="tutorCount">
                     Number of Tutors
                   </Label>
                   <select
@@ -463,7 +463,7 @@ export default function AddRequestForTutor() {
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
                       <Label
-                        className="text-[15px]"
+                        className="text-sm"
                         htmlFor={`subject-${index}`}
                       >
                         Subject *
@@ -494,7 +494,7 @@ export default function AddRequestForTutor() {
                       {/* Duration */}
                       <div className={fieldWrapper}>
                         <Label
-                          className="text-[15px]"
+                          className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
                           Duration *
@@ -519,7 +519,7 @@ export default function AddRequestForTutor() {
                       {/* Frequency */}
                       <div className={fieldWrapper}>
                         <Label
-                          className="text-[15px]"
+                          className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
                           Frequency *
@@ -545,7 +545,7 @@ export default function AddRequestForTutor() {
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
                       <Label
-                        className="text-[15px]"
+                        className="text-sm"
                         htmlFor={`tutorType-${index}`}
                       >
                         Preferred Tutor Type *
