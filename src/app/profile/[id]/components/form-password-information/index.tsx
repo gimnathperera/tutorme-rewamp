@@ -5,7 +5,6 @@ import SubmitButton from "@/components/shared/submit-button";
 import { useUpdateUserPasswordMutation } from "@/store/api/splits/users";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { isEmpty } from "lodash-es";
 import { useParams } from "next/navigation";
 import { FC } from "react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -22,14 +21,25 @@ const FormPasswordInfo: FC = () => {
 
   const [updateProfileUpdate, { isLoading }] = useUpdateUserPasswordMutation();
 
-  const passwordInfoForm = useForm({
+  const passwordInfoForm = useForm<PasswordInfoSchema>({
     resolver: zodResolver(passwordInfoSchema),
     defaultValues: initialFormValues,
     mode: "onChange",
   });
 
-  const { isDirty, errors } = passwordInfoForm.formState;
-  const isButtonDisabled = !isDirty || isLoading || !isEmpty(errors);
+  const { isDirty, isValid } = passwordInfoForm.formState;
+
+  const currentPassword = passwordInfoForm.watch("currentPassword");
+  const newPassword = passwordInfoForm.watch("newPassword");
+  const confirmPassword = passwordInfoForm.watch("confirmPassword");
+
+  const areAllFieldsFilled =
+    !!currentPassword?.trim() &&
+    !!newPassword?.trim() &&
+    !!confirmPassword?.trim();
+
+  const isButtonDisabled =
+    !isDirty || !areAllFieldsFilled || !isValid || isLoading;
 
   const handleOnPasswordChangeSubmit = async (data: PasswordInfoSchema) => {
     const submitData = {
@@ -39,13 +49,16 @@ const FormPasswordInfo: FC = () => {
         newPassword: data.newPassword,
       },
     };
+
     const result = await updateProfileUpdate(submitData);
     const error = getErrorInApiResult(result);
+
     if (error) {
       return toast.error(error);
     }
 
     toast.success("Password updated successfully");
+    passwordInfoForm.reset();
   };
 
   const onSubmit = (data: PasswordInfoSchema) => {
@@ -53,8 +66,9 @@ const FormPasswordInfo: FC = () => {
   };
 
   return (
-    <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
-      <h3 className="mb-4 text-xl font-semibold ">Password information</h3>
+    <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2 sm:p-6">
+      <h3 className="mb-4 text-xl font-semibold">Password information</h3>
+
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
@@ -74,6 +88,7 @@ const FormPasswordInfo: FC = () => {
               placeholder="*******"
             />
           </div>
+
           <div className="col-span-6 sm:col-full">
             <SubmitButton
               className="peer font-semibold rounded-lg text-base px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
