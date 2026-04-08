@@ -11,11 +11,11 @@ const GRID_ANIM_STYLE = `
   to   { opacity: 1; transform: translateY(0);    }
 }
 .testimonial-card-animate {
-  animation: testimonial-grid-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: testimonial-grid-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .testimonial-card-animate:nth-child(1) { animation-delay: 0ms;   }
-.testimonial-card-animate:nth-child(2) { animation-delay: 80ms;  }
-.testimonial-card-animate:nth-child(3) { animation-delay: 160ms; }
+.testimonial-card-animate:nth-child(2) { animation-delay: 130ms; }
+.testimonial-card-animate:nth-child(3) { animation-delay: 260ms; }
 `;
 
 /* ─── types ─────────────────────────────────────────────── */
@@ -150,15 +150,17 @@ const SkeletonCard: FC = () => (
   </div>
 );
 
+const AUTOPLAY_DELAY = 4000; // ms between auto-advances
+
 /* ─── Main component ─────────────────────────────────────── */
 const Testimonials: FC = () => {
   const [page, setPage] = useState(1);
   const [allItems, setAllItems] = useState<TestimonialItem[]>([]);
   const [slide, setSlide] = useState(0);
   const [animKey, setAnimKey] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
 
-  /* Inject grid animation CSS once */
   useEffect(() => {
     if (document.getElementById("testimonial-grid-style")) return;
     const tag = document.createElement("style");
@@ -213,6 +215,18 @@ const Testimonials: FC = () => {
   const prev = () => goTo(slide - 1);
   const next = () => goTo(slide + 1);
 
+  useEffect(() => {
+    if (isPaused || maxKnownSlide <= 0) return;
+    const id = setInterval(() => {
+      setSlide((current) => {
+        const next = current >= maxKnownSlide ? 0 : current + 1;
+        setAnimKey((k) => k + 1);
+        return next;
+      });
+    }, AUTOPLAY_DELAY);
+    return () => clearInterval(id);
+  }, [isPaused, maxKnownSlide]);
+
   /* Keyboard support */
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -235,6 +249,8 @@ const Testimonials: FC = () => {
       className="bg-testimonial py-8 lg:py-12"
       aria-label="Testimonials"
       id="testimonials-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* ── Stacked heading ── */}
