@@ -139,7 +139,14 @@ export function TutorTabs() {
   };
 
   const certificates = methods.watch("certificatesAndQualifications");
-  const isSubmitDisabled = !certificates || certificates.length === 0;
+  const agreeTerms = methods.watch("agreeTerms");
+  const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
+  const isSubmitDisabled =
+    isLoading ||
+    !certificates ||
+    certificates.length === 0 ||
+    !agreeTerms ||
+    !agreeAssignmentInfo;
 
   return (
     <FormProvider {...methods}>
@@ -222,7 +229,7 @@ export function TutorTabs() {
                   <Button
                     type="submit"
                     className="ml-auto"
-                    disabled={isLoading || isSubmitDisabled}
+                    disabled={isSubmitDisabled}
                   >
                     Submit {isLoading ? <Spinner /> : ""}
                   </Button>
