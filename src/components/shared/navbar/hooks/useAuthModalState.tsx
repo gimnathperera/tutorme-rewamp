@@ -45,6 +45,11 @@ const useAuthModalState = (): LogicReturnType => {
     setIsOpen((show) => !show);
   };
 
+  const handleCloseAuthModal = () => {
+    setIsOpen(false);
+    setIsSignUpModalOpen(false);
+  };
+
   const handleOnChangeForm = (formType: FormType) => {
     setCurrentForm(formType);
   };
@@ -60,14 +65,27 @@ const useAuthModalState = (): LogicReturnType => {
             }
           />
         );
+
       case FormType.SignUp:
         return (
           <FormSignUp onLoginClick={() => handleOnChangeForm(FormType.Login)} />
         );
-      default:
+
+      case FormType.ForgotPassword:
         return (
           <FormForgotPassword
             onLoginClick={() => handleOnChangeForm(FormType.Login)}
+            onSuccess={handleCloseAuthModal}
+          />
+        );
+
+      default:
+        return (
+          <FormLogin
+            onRegisterClick={() => handleOnChangeForm(FormType.SignUp)}
+            onForgotPasswordClick={() =>
+              handleOnChangeForm(FormType.ForgotPassword)
+            }
           />
         );
     }
@@ -79,8 +97,10 @@ const useAuthModalState = (): LogicReturnType => {
         return "Login";
       case FormType.SignUp:
         return "Sign Up";
-      default:
+      case FormType.ForgotPassword:
         return "Forgot Password";
+      default:
+        return "Login";
     }
   };
 
@@ -90,8 +110,10 @@ const useAuthModalState = (): LogicReturnType => {
         return "Login to access to your account";
       case FormType.SignUp:
         return "Sign up to create an account";
-      default:
+      case FormType.ForgotPassword:
         return "Please enter your email to reset your password";
+      default:
+        return "Login to access to your account";
     }
   };
 
@@ -101,8 +123,10 @@ const useAuthModalState = (): LogicReturnType => {
         return "/images/auth/login.svg";
       case FormType.SignUp:
         return "/images/auth/signup.svg";
-      default:
+      case FormType.ForgotPassword:
         return "/images/auth/forgotpassword.svg";
+      default:
+        return "/images/auth/login.svg";
     }
   };
 

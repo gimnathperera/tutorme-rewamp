@@ -26,6 +26,16 @@ export const BlogsApi = baseApi.injectEndpoints({
       providesTags: (result, error, id) => [{ type: "Blogs" as const, id }],
     }),
 
+    /** SEO-friendly lookup: GET /blogs/slug/:slug */
+    fetchBlogBySlug: build.query<Blogs, string>({
+      query: (slug) => ({
+        url: `${Endpoints.Blogs}/slug/${slug}`,
+        method: "GET",
+      }),
+      providesTags: (result) =>
+        result ? [{ type: "Blogs" as const, id: result.id }] : ["Blogs"],
+    }),
+
     createBlog: build.mutation<Blogs, CreateArticleSchema>({
       query: (payload) => ({
         url: Endpoints.Blogs,
@@ -58,6 +68,7 @@ export const BlogsApi = baseApi.injectEndpoints({
 export const {
   useFetchBlogsQuery,
   useFetchBlogByIdQuery,
+  useFetchBlogBySlugQuery,
   useUpdateBlogMutation,
   useLazyFetchBlogByIdQuery,
   useCreateBlogMutation,

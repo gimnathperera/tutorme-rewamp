@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { useAuthContext } from "@/contexts";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Modal from "../modal";
 import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
@@ -19,8 +19,8 @@ interface NavigationItem {
 }
 
 const navigation: NavigationItem[] = [
-  { name: "Request a Tutor", href: "/request-for-tutors" },
-  { name: "Register a Tutor", href: "/register-tutor" },
+  { name: "Request for Tutor", href: "/request-for-tutors" },
+  { name: "Register as a Tutor", href: "/register-tutor" },
   {
     name: "Academics",
     href: "/",
@@ -37,18 +37,52 @@ const navigation: NavigationItem[] = [
 ];
 
 interface NavbarProps {
-  /** True when the hero video section is visible at the top of the page */
   isHeroTop?: boolean;
 }
 
+const NAVBAR_OFFSET = 110;
+
 const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   const pathname = usePathname();
+  const router = useRouter();
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  /** The id of the anchor section currently in view on the home page, e.g. "faq-section" */
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
-  // Close dropdown when clicking outside
+  const scrollToSection = useCallback((sectionId: string) => {
+    const el = document.getElementById(sectionId);
+    if (!el) return;
+
+    const top = el.getBoundingClientRect().top + window.scrollY - NAVBAR_OFFSET;
+
+    window.scrollTo({
+      top,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const handleAnchorNavigation = useCallback(
+    (href: string) => {
+      const sectionId = href.replace("/#", "");
+
+      setOpenDropdown(null);
+
+      if (pathname === "/") {
+        requestAnimationFrame(() => {
+          setTimeout(() => scrollToSection(sectionId), 50);
+        });
+        return;
+      }
+
+      router.push(`/#${sectionId}`);
+
+      setTimeout(() => {
+        scrollToSection(sectionId);
+      }, 250);
+    },
+    [pathname, router, scrollToSection],
+  );
+
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (
@@ -62,7 +96,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Close dropdown on Escape key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setOpenDropdown(null);
@@ -71,10 +104,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
-  /**
-   * IntersectionObserver: watch anchor sections on the home page.
-   * Fires only when pathname === "/" so we don't attach it on other pages.
-   */
   useEffect(() => {
     if (pathname !== "/") {
       setActiveSection(null);
@@ -93,11 +122,13 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           if (entry.isIntersecting) {
             setActiveSection(id);
           } else {
-            // Clear only if this section was the active one
             setActiveSection((prev) => (prev === id ? null : prev));
           }
         },
-        { threshold: 0.3 }, // section must be ≥ 30% visible
+        {
+          threshold: 0.3,
+          rootMargin: `-${NAVBAR_OFFSET}px 0px 0px 0px`,
+        },
       );
 
       obs.observe(el);
@@ -106,6 +137,22 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
 
     return () => observers.forEach((obs) => obs.disconnect());
   }, [pathname]);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    if (typeof window === "undefined") return;
+
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const sectionId = hash.replace("#", "");
+
+    const timer = setTimeout(() => {
+      scrollToSection(sectionId);
+    }, 250);
+
+    return () => clearTimeout(timer);
+  }, [pathname, scrollToSection]);
 
   const toggleDropdown = (name: string) => {
     setOpenDropdown(openDropdown === name ? null : name);
@@ -124,22 +171,22 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
 
   const { user, isUserLoaded, logout } = useAuthContext();
 
-  /** True when the given nav item should be considered "active" */
   const isActive = (item: NavigationItem): boolean => {
     if (item.dropdown) {
       return item.dropdown.some((sub) => pathname.startsWith(sub.href));
     }
+
     if (item.href === "/") return pathname === "/";
-    // Anchor links: active only when the corresponding section is in the viewport
+
     if (item.href.startsWith("/#")) {
       if (pathname !== "/") return false;
-      const sectionId = item.href.slice(2); // "/#faq-section" → "faq-section"
+      const sectionId = item.href.slice(2);
       return activeSection === sectionId;
     }
+
     return pathname.startsWith(item.href);
   };
 
-  // ── Hero-mode colour tokens (desktop nav only) ──────────────────────────
   const heroLinkColor = isHeroTop ? "rgba(255,255,255,0.92)" : "";
   const heroLogoBlack = isHeroTop ? "#ffffff" : "";
   const heroLogoBlue = isHeroTop ? "rgba(37, 99, 235)" : "";
@@ -154,7 +201,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
       <div className="mx-auto max-w-7xl p-3 md:p-4">
         <div className="relative flex h-12 sm:h-20 items-center">
           <div className="flex flex-1 items-center sm:justify-between">
-            {/* ── Logo ── */}
             <div className="flex flex-shrink-0 items-start">
               <Link href="/" className="text-3xl sm:text-4xl flex font-bold">
                 <div
@@ -173,7 +219,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
               </Link>
             </div>
 
-            {/* ── Desktop nav links ── */}
             <div className="hidden lg:flex items-center">
               <div
                 ref={dropdownRef}
@@ -207,13 +252,11 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                             openDropdown === item.name ? "rotate-180" : "",
                           ].join(" ")}
                         />
-                        {/* active underline indicator */}
                         {active && (
                           <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-blue-600 rounded-full" />
                         )}
                       </button>
 
-                      {/* ── Dropdown panel ── */}
                       <div
                         className={[
                           "absolute top-full left-0 mt-2 w-52 origin-top-left rounded-xl bg-white shadow-xl ring-1 ring-black/5 z-50",
@@ -249,6 +292,34 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         </div>
                       </div>
                     </div>
+                  ) : item.href.startsWith("/#") ? (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAnchorNavigation(item.href);
+                      }}
+                      style={
+                        !active && isHeroTop
+                          ? { color: heroLinkColor }
+                          : undefined
+                      }
+                      className={[
+                        "relative px-3 py-2 rounded-md text-base font-medium transition-colors duration-150 cursor-pointer",
+                        active
+                          ? "text-blue-600 font-semibold"
+                          : "navlinks hover:text-blue-600",
+                      ].join(" ")}
+                    >
+                      {item.name}
+                      <span
+                        className={[
+                          "absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
+                          active ? "scale-x-100" : "scale-x-0",
+                        ].join(" ")}
+                      />
+                    </a>
                   ) : (
                     <Link
                       key={item.name}
@@ -267,7 +338,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       ].join(" ")}
                     >
                       {item.name}
-                      {/* animated underline for active link */}
                       <span
                         className={[
                           "absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
@@ -280,7 +350,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
               </div>
             </div>
 
-            {/* ── Login / Profile ── */}
             <div className="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:pr-0">
               <div className="hidden lg:block">
                 {user?.email ? (
@@ -305,7 +374,6 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             </div>
           </div>
 
-          {/* ── Mobile hamburger ── */}
           <div className="flex items-center gap-3 lg:hidden">
             {user?.email ? (
               <ProfileDropdown isLoading={!isUserLoaded} user={user} />

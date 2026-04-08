@@ -31,11 +31,14 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
 
   useEffect(() => {
     if (isAuthError) {
-      toast.error("Invalid credentials. Email or password wrong.");
+      toast.error("Invalid credentials. Email or password wrong.", {
+        id: "login-error",
+      });
     }
   }, [isAuthError]);
 
   const onSubmit = (data: LoginSchema) => {
+    if (isAuthError) setIsAuthError(null);
     login(data);
   };
 
