@@ -25,7 +25,7 @@ const navigation: NavigationItem[] = [
     name: "Academics",
     href: "/",
     dropdown: [
-      { name: "Grades and Subjects", href: "/grades-and-subjects" },
+      { name: "Grades & Subjects", href: "/grades-and-subjects" },
       { name: "Test Papers", href: "/test-papers" },
     ],
   },
