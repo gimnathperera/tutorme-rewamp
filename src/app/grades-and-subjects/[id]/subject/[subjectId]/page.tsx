@@ -1,18 +1,7 @@
-import React from "react";
-import TutionRates from "./components/get-started";
-import Digital from "@/components/home-page/digital";
-import KeepInTouch from "@/components/home-page/keep-in-touch";
+import { notFound } from "next/navigation";
 
 const Page = () => {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="space-y-8">
-        <TutionRates />
-        <Digital />
-        <KeepInTouch />
-      </div>
-    </div>
-  );
+  notFound();
 };
 
 export default Page;
