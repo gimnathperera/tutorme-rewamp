@@ -19,10 +19,10 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
-const fieldWrapper = "flex flex-col gap-1";
-const inputClass = "h-11";
+const fieldWrapper = "flex flex-col gap-2";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -86,7 +86,9 @@ const AcademicExperience = () => {
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label htmlFor="tutoringLevels">Tutoring Levels *</Label>
+          <Label className="text-sm" htmlFor="tutoringLevels">
+            Tutoring Levels *
+          </Label>
           <Controller
             name="tutoringLevels"
             control={control}
@@ -105,7 +107,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label htmlFor="preferredLocations">Preferred Locations *</Label>
+          <Label className="text-sm" htmlFor="preferredLocations">
+            Preferred Locations *
+          </Label>
           <Controller
             name="preferredLocations"
             control={control}
@@ -127,7 +131,9 @@ const AcademicExperience = () => {
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label htmlFor="tutorType">Tutor Types *</Label>
+          <Label className="text-sm" htmlFor="tutorType">
+            Tutor Types *
+          </Label>
           <Controller
             name="tutorType"
             control={control}
@@ -146,7 +152,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label htmlFor="highestEducation">Highest Education Level *</Label>
+          <Label className="text-sm" htmlFor="highestEducation">
+            Highest Education Level *
+          </Label>
           <select
             id="highestEducation"
             {...register("highestEducation")}
@@ -173,7 +181,9 @@ const AcademicExperience = () => {
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label htmlFor="yearsExperience">Years of Experience *</Label>
+          <Label className="text-sm" htmlFor="yearsExperience">
+            Years of Experience *
+          </Label>
           <Input
             id="yearsExperience"
             type="number"
@@ -189,7 +199,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label htmlFor="tutorMediums">Tutor Mediums *</Label>
+          <Label className="text-sm" htmlFor="tutorMediums">
+            Tutor Mediums *
+          </Label>
           <Controller
             name="tutorMediums"
             control={control}
@@ -211,7 +223,9 @@ const AcademicExperience = () => {
       {/* ROW 4 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label htmlFor="grades">Grades *</Label>
+          <Label className="text-sm" htmlFor="grades">
+            Grades *
+          </Label>
           <Controller
             name="grades"
             control={control}
@@ -235,7 +249,9 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label htmlFor="subjects">Subjects *</Label>
+          <Label className="text-sm" htmlFor="subjects">
+            Subjects *
+          </Label>
           <Controller
             name="subjects"
             control={control}

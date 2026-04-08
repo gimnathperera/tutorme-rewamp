@@ -167,6 +167,22 @@ small,
   color: #111827;
 }
 
+.blog-content li.ql-align-justify,
+.blog-content-renderer li.ql-align-justify {
+  font-size: 1rem;
+  line-height: 1.625;
+  color: rgba(17, 24, 39, 0.82);
+  list-style: disc;
+  margin-left: 16px;
+}
+
+.blog-content p.ql-align-justify a,
+.blog-content p a,
+.blog-content-renderer p.ql-align-justify a,
+.blog-content-renderer p a {
+  color: #2563eb;
+}
+
 .blog-content h2 {
   font-size: 1.875rem;
   /* text-3xl = 30px */
@@ -196,26 +212,48 @@ small,
 }
 
 .blog-content ul,
-.blog-content ol {
+.blog-content ol,
+.blog-content-renderer ul,
+.blog-content-renderer ol {
   padding-left: 1.5rem;
   margin-bottom: 1rem;
+  list-style-position: outside;
 }
 
-.blog-content strong {
+.blog-content ul,
+.blog-content-renderer ul {
+  list-style-type: disc;
+}
+
+.blog-content ol,
+.blog-content-renderer ol {
+  list-style-type: decimal;
+}
+
+.blog-content li,
+.blog-content-renderer li {
+  margin-bottom: 0.25rem;
+}
+
+.blog-content strong,
+.blog-content-renderer strong {
   font-weight: 700;
   color: #111827;
 }
 
-.blog-content a {
+.blog-content a,
+.blog-content-renderer a {
   color: #2563eb;
   text-decoration: none;
 }
 
-.blog-content a:hover {
+.blog-content a:hover,
+.blog-content-renderer a:hover {
   text-decoration: underline;
 }
 
-.blog-content img {
+.blog-content img,
+.blog-content-renderer img {
   border-radius: 0.75rem;
   margin: 1.5rem 0;
 }

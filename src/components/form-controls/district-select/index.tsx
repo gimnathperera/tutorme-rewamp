@@ -22,7 +22,7 @@ export default function DistrictSelect({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={[
-          "h-11 w-full rounded-md border px-3 text-sm bg-transparent",
+          "h-11 w-full rounded-md border px-3 text-[16px] bg-transparent",
           "focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150",
           borderClass,
         ].join(" ")}

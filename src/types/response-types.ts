@@ -119,22 +119,24 @@ export type Blogs = BaseEntity &
     _id: string;
     id: string;
     title: string;
+    /** SEO-friendly slug, e.g. "the-business-value-of-software-qa" */
+    slug?: string;
     image: string;
     type: string;
     status: "pending" | "published" | "draft";
     author: {
-      name: string;
-      avatar: string;
-      role: string;
+      /** MongoDB ObjectId of the user who created the blog */
+      id: string;
+      role: "admin" | "tutor";
     };
     relatedArticles: Array<{
       id: string;
+      slug?: string;
       title: string;
       image: string;
-      author: {
-        name: string;
-        avatar: string;
-        role: string;
+      author?: {
+        id: string;
+        role: "admin" | "tutor";
       };
     }>;
     tags: Array<{
@@ -145,6 +147,10 @@ export type Blogs = BaseEntity &
       | { type: "paragraph"; text: string }
       | { type: "heading"; text: string; level: number }
       | { type: "image"; src: string; caption?: string }
+      | { type: "table"; headers: string[]; rows: string[][] }
+      | { type: "quote"; text: string; citation?: string }
+      | { type: "list"; items: string[]; style: "ordered" | "unordered" }
+      | { type: "embed"; src?: string; html?: string }
     >;
     faqs: Array<{
       _id: string;

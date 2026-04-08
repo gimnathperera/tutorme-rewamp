@@ -2,11 +2,6 @@ import { z } from "zod";
 
 export const createArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  author: z.object({
-    name: z.string().min(1, "Author name is required"),
-    avatar: z.string().min(1, "Avatar is required"),
-    role: z.string().min(1, "Author role is required"),
-  }),
   content: z
     .array(
       z.union([
@@ -23,6 +18,29 @@ export const createArticleSchema = z.object({
           type: z.literal("image"),
           src: z.string().optional().default(""),
           caption: z.string().optional(),
+        }),
+        z.object({
+          type: z.literal("table"),
+          headers: z.array(z.string()).optional().default([]),
+          rows: z.array(z.array(z.string())).optional().default([]),
+        }),
+        z.object({
+          type: z.literal("quote"),
+          text: z.string().min(1, "Quote text is required"),
+          citation: z.string().optional(),
+        }),
+        z.object({
+          type: z.literal("list"),
+          items: z.array(z.string()).min(1, "List must have at least one item"),
+          style: z
+            .enum(["ordered", "unordered"])
+            .optional()
+            .default("unordered"),
+        }),
+        z.object({
+          type: z.literal("embed"),
+          src: z.string().optional(),
+          html: z.string().optional(),
         }),
       ]),
     )
@@ -48,21 +66,7 @@ export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
 
 export const initialFormValues: CreateArticleSchema = {
   title: "",
-  author: {
-    name: "",
-    avatar:
-      "https://img.freepik.com/free-photo/woman-beach-with-her-baby-enjoying-sunset_52683-144131.jpg?size=626&ext=jpg",
-    role: "Author",
-  },
-  content: [
-    { type: "paragraph", text: "" },
-    { type: "heading", text: "", level: 2 },
-    {
-      type: "image",
-      src: "",
-      caption: "Cover Image",
-    },
-  ],
+  content: [],
   image: "",
   relatedArticles: [],
   tags: [],

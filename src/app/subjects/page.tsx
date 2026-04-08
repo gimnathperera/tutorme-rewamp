@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 "use client";
 
 import { FC, useState } from "react";
