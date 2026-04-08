@@ -849,13 +849,24 @@ const AddBlog = () => {
         )}
 
         <div className="flex justify-between items-center mt-6 px-6 mb-4">
-          <button
-            type="button"
-            onClick={onClear}
-            className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Clear
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => redirect.back()}
+              className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              onClick={onClear}
+              className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}
