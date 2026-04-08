@@ -58,7 +58,7 @@ const PersonalInfo = () => {
       {/* Full Name */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="fullName">
-          Full Name *
+          Full Name <span className="text-red-500">*</span>
         </Label>
         <Input
           id="fullName"
@@ -79,7 +79,7 @@ const PersonalInfo = () => {
       {/* Email */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="email">
-          Email *
+          Email <span className="text-red-500">*</span>
         </Label>
         <Input
           id="email"
@@ -101,7 +101,7 @@ const PersonalInfo = () => {
       {/* Contact Number */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="contactNumber">
-          Contact Number *
+          Contact Number <span className="text-red-500">*</span>
         </Label>
         <Input
           id="contactNumber"
@@ -125,7 +125,7 @@ const PersonalInfo = () => {
       {/* Gender */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="gender">
-          Gender *
+          Gender <span className="text-red-500">*</span>
         </Label>
         <select
           id="gender"
@@ -147,7 +147,7 @@ const PersonalInfo = () => {
       {/* Date of Birth */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="dateOfBirth">
-          Date of Birth *
+          Date of Birth <span className="text-red-500">*</span>
         </Label>
         <Input
           id="dateOfBirth"
@@ -170,7 +170,7 @@ const PersonalInfo = () => {
       {/* Age — auto-calculated */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="age">
-          Age *
+          Age <span className="text-red-500">*</span>
         </Label>
         <Input
           id="age"
@@ -192,7 +192,7 @@ const PersonalInfo = () => {
       {/* Nationality */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="nationality">
-          Nationality *
+          Nationality <span className="text-red-500">*</span>
         </Label>
         <select
           id="nationality"
@@ -214,7 +214,7 @@ const PersonalInfo = () => {
       {/* Race */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="race">
-          Race *
+          Race <span className="text-red-500">*</span>
         </Label>
         <select
           id="race"

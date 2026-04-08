@@ -87,7 +87,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutoringLevels">
-            Tutoring Levels *
+            Tutoring Levels <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutoringLevels"
@@ -108,7 +108,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="preferredLocations">
-            Preferred Locations *
+            Preferred Locations <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="preferredLocations"
@@ -132,7 +132,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorType">
-            Tutor Types *
+            Tutor Types <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorType"
@@ -153,7 +153,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="highestEducation">
-            Highest Education Level *
+            Highest Education Level <span className="text-red-500">*</span>
           </Label>
           <select
             id="highestEducation"
@@ -182,7 +182,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="yearsExperience">
-            Years of Experience *
+            Years of Experience <span className="text-red-500">*</span>
           </Label>
           <Input
             id="yearsExperience"
@@ -200,7 +200,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorMediums">
-            Tutor Mediums *
+            Tutor Mediums <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorMediums"
@@ -224,7 +224,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="grades">
-            Grades *
+            Grades <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="grades"
@@ -250,7 +250,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="subjects">
-            Subjects *
+            Subjects <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="subjects"

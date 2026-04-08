@@ -33,8 +33,7 @@ const products: ProductType[] = [
     id: 3,
     section: "Academics",
     link: [
-      { label: "Grades", url: "/grades" },
-      { label: "Subjects", url: "/subjects" },
+      { label: "Grades & Subjects", url: "/grades-and-subjects" },
       { label: "Test Papers", url: "/test-papers" },
     ],
   },

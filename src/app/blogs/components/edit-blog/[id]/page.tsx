@@ -956,7 +956,15 @@ export default function EditBlogPage() {
           </>
         )}
 
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-between items-center mt-6">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push(`/blogs/${blogId}`)}
+          >
+            Cancel
+          </Button>
+
           <Button
             type="submit"
             className="bg-blue-700 text-white hover:bg-blue-500"

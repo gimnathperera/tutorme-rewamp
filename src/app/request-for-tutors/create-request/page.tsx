@@ -210,7 +210,7 @@ export default function AddRequestForTutor() {
                 {/* Full Name */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="name">
-                    Full Name *
+                    Full Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -246,7 +246,7 @@ export default function AddRequestForTutor() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="email">
-                      Email *
+                      Email <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="email"
@@ -281,7 +281,7 @@ export default function AddRequestForTutor() {
                   </div>
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="phoneNumber">
-                      Contact Number *
+                      Contact Number <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phoneNumber"
@@ -322,50 +322,53 @@ export default function AddRequestForTutor() {
                   </div>
                 </div>
 
-                {/* District */}
-                <div className={fieldWrapper}>
-                  <Label className="text-sm" htmlFor="district">
-                    District *
-                  </Label>
-                  <Controller
-                    control={control}
-                    name="district"
-                    render={({ field }) => (
-                      <DistrictSelect
-                        value={field.value || ""}
-                        onChange={(val) => {
-                          field.onChange(val);
-                          if (val) clearErrors("district");
-                        }}
-                        districts={districts}
-                        hasError={!!errors.district}
-                      />
-                    )}
-                  />
-                  <p className={errorMsg}>{errors.district?.message}</p>
-                </div>
+                {/* District + City – grouped to reduce spacing between them */}
+                <div className="flex flex-col gap-2">
+                  {/* District */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="district">
+                      District <span className="text-red-500">*</span>
+                    </Label>
+                    <Controller
+                      control={control}
+                      name="district"
+                      render={({ field }) => (
+                        <DistrictSelect
+                          value={field.value || ""}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            if (val) clearErrors("district");
+                          }}
+                          districts={districts}
+                          hasError={!!errors.district}
+                        />
+                      )}
+                    />
+                    <p className={errorMsg}>{errors.district?.message}</p>
+                  </div>
 
-                {/* City */}
-                <div className={fieldWrapper}>
-                  <Label className="text-sm" htmlFor="city">
-                    City *
-                  </Label>
-                  <Controller
-                    control={control}
-                    name="city"
-                    render={({ field }) => (
-                      <CitySelect
-                        value={field.value || ""}
-                        district={selectedDistrict || ""}
-                        onChange={(val) => {
-                          field.onChange(val);
-                          if (val) clearErrors("city");
-                        }}
-                        hasError={!!errors.city}
-                      />
-                    )}
-                  />
-                  <p className={errorMsg}>{errors.city?.message}</p>
+                  {/* City */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="city">
+                      City <span className="text-red-500">*</span>
+                    </Label>
+                    <Controller
+                      control={control}
+                      name="city"
+                      render={({ field }) => (
+                        <CitySelect
+                          value={field.value || ""}
+                          district={selectedDistrict || ""}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            if (val) clearErrors("city");
+                          }}
+                          hasError={!!errors.city}
+                        />
+                      )}
+                    />
+                    <p className={errorMsg}>{errors.city?.message}</p>
+                  </div>
                 </div>
               </CardContent>
 
@@ -387,7 +390,7 @@ export default function AddRequestForTutor() {
                 {/* Medium */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="medium">
-                    Medium *
+                    Medium <span className="text-red-500">*</span>
                   </Label>
                   <select
                     id="medium"
@@ -407,7 +410,7 @@ export default function AddRequestForTutor() {
                 {/* Grade */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="grade">
-                    Grade *
+                    Grade <span className="text-red-500">*</span>
                   </Label>
                   <select
                     id="grade"
@@ -466,13 +469,13 @@ export default function AddRequestForTutor() {
                         className="text-sm"
                         htmlFor={`subject-${index}`}
                       >
-                        Subject *
+                        Subject <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
                         disabled={!selectedGradeId}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:bg-gray-100 disabled:cursor-not-allowed`}
                       >
                         <option value="" disabled hidden>
                           {selectedGradeId
@@ -497,7 +500,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
-                          Duration *
+                          Duration <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`duration-${index}`}
@@ -522,7 +525,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
-                          Frequency *
+                          Frequency <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`frequency-${index}`}
@@ -548,7 +551,7 @@ export default function AddRequestForTutor() {
                         className="text-sm"
                         htmlFor={`tutorType-${index}`}
                       >
-                        Preferred Tutor Type *
+                        Preferred Tutor Type <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`tutorType-${index}`}
