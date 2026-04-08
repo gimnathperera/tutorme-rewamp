@@ -7,7 +7,6 @@ import Image from "next/image";
 import ClassRoomImage from "../../../../public/images/level-and-exams/image.png";
 import { Card, CardHeader } from "@/components/ui/card";
 import TutorImage from "../../../../public/images/level-and-exams/tutor.png";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useFetchLevelsByIdQuery } from "@/store/api/splits/levels";
 import TuitionRatesByLevelComponent from "@/components/shared/tuition-rates";
@@ -106,14 +105,6 @@ const LevelAndExams: FC = () => {
           {level.subjects.map((sub, index) => (
             <Card className="flex justify-between flex-row" key={index}>
               <CardHeader>{sub?.title}</CardHeader>
-              <Link
-                className="flex justify-center items-center"
-                href={`/subjects/${sub?.id}`}
-              >
-                <button className="m-5 p-2 rounded-xl text-white font-semibold bg-[#28BBA3]">
-                  View Subject
-                </button>
-              </Link>
             </Card>
           ))}
         </div>
