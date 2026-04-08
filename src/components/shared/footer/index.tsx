@@ -47,7 +47,7 @@ const products: ProductType[] = [
 const footer = () => {
   return (
     <div className="bg-black" id="first-section">
-      <div className="mx-auto max-w-2xl pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div className="mx-auto max-w-7xl pt-2 px-4 mb-3">
         <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
 
@@ -58,7 +58,7 @@ const footer = () => {
             </h3>
             <div className="flex gap-4">
               <div className="footer-icons">
-                <Link href="#">
+                <Link href="https://www.facebook.com/share/1DSPtmuvbp/?mibextid=wwXIfr">
                   <Image
                     src={"/images/footer/vec.svg"}
                     alt="facebook"
@@ -68,20 +68,20 @@ const footer = () => {
                 </Link>
               </div>
               <div className="footer-icons">
-                <Link href="#">
+                <Link href="https://www.instagram.com/tuition_lanka?igsh=MXg5NHZmMGRmbzB2aQ%3D%3D&utm_source=qr">
                   <Image
-                    src={"/images/footer/twitter.svg"}
-                    alt="twitter"
+                    src={"/images/footer/instagram.svg"}
+                    alt="instagram"
                     width={20}
                     height={20}
                   />
                 </Link>
               </div>
               <div className="footer-icons">
-                <Link href="#">
+                <Link href="https://www.tiktok.com/@tuition.lanka?_r=1&_t=ZS-95KfEN0F8Ls">
                   <Image
-                    src={"/images/footer/instagram.svg"}
-                    alt="instagram"
+                    src={"/images/footer/tiktok.svg"}
+                    alt="tiktok"
                     width={20}
                     height={20}
                   />
@@ -94,12 +94,12 @@ const footer = () => {
 
           {products.map((product) => (
             <div key={product.id} className="group relative col-span-2">
-              <p className="text-white text-sm font-semibold uppercase tracking-widest mb-4">
+              <p className="text-white text-sm font-semibold uppercase tracking-widest mb-2">
                 {product.section}
               </p>
               <ul>
                 {product.link.map((linkObj, index) => (
-                  <li key={index} className="mb-3">
+                  <li key={index}>
                     <Link
                       href={linkObj.url}
                       className="text-white text-sm font-normal mb-4 hover:text-gray-300 transition"
@@ -114,8 +114,8 @@ const footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-2xl lg:max-w-7xl">
-        <div className="pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="pb-5 border-solid border-t border-footer">
           <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <p className="text-center md:text-start text-offwhite text-sm">
