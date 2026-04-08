@@ -8,9 +8,10 @@ import toast from "react-hot-toast";
 
 type Props = {
   onLoginClick: () => void;
+  onSuccess: () => void;
 };
 
-const FormForgotPassword = ({ onLoginClick }: Props) => {
+const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
   const { forgotPassword, isAuthError, setIsAuthError, isLoading } =
     useAuthContext();
 
@@ -26,6 +27,8 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
     try {
       await forgotPassword(data);
       toast.success("Password reset link sent to your email.");
+      forgotPasswordForm.reset();
+      onSuccess();
     } catch (error: any) {
       const errorMessage =
         error?.message || "Something went wrong. Please try again.";
@@ -44,6 +47,7 @@ const FormForgotPassword = ({ onLoginClick }: Props) => {
             type="email"
           />
         </div>
+
         {isAuthError && (
           <p className="text-red-500 text-xs mt-3 text-center">{isAuthError}</p>
         )}
