@@ -22,8 +22,6 @@ export default function FileUploadDropzone({
       const file = acceptedFiles[0];
       if (!file) return;
 
-      // Defence-in-depth: reject anything that isn't an image even if the
-      // accept constraint is somehow bypassed (e.g. programmatic drops).
       if (!file.type.startsWith("image/")) return;
 
       setUploading(true);
@@ -66,13 +64,15 @@ export default function FileUploadDropzone({
       }
 
       const publicUrl = uploadUrl.split("?")[0];
-
       onUploaded(publicUrl);
     },
     [onUploaded],
   );
 
-  const removeFile = () => {
+  const removeFile = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     setFileName("");
     setPreviewUrl(null);
     onUploaded("");
@@ -109,13 +109,13 @@ export default function FileUploadDropzone({
             <div className="mt-2 flex items-center justify-center gap-2 w-full px-2">
               <p
                 className="
-      text-sm text-gray-500 dark:text-gray-400
-      w-auto
-      max-w-full
-      min-w-[120px]
-      truncate
-      break-all
-    "
+                  text-sm text-gray-500 dark:text-gray-400
+                  w-auto
+                  max-w-full
+                  min-w-[120px]
+                  truncate
+                  break-all
+                "
               >
                 {fileName}
               </p>
