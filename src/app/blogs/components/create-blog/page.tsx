@@ -701,12 +701,15 @@ const AddBlog = () => {
             </div>
 
             <div className="p-4 border rounded-lg space-y-4">
-              <div className="flex items-center justify-between">
-                <Label>FAQs</Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label className="text-base font-semibold leading-9">
+                  FAQs
+                </Label>
+
                 <button
                   type="button"
                   onClick={() => appendFaq({ question: "", answer: "" })}
-                  className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
+                  className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors flex items-center"
                 >
                   + Add FAQ
                 </button>
