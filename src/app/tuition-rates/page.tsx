@@ -15,9 +15,9 @@ const TuitionRatesPage = () => {
           <br className="hidden sm:block" />
           an exciting and personalized learning adventure!
         </h3>
+        <TutorDetailsSection />
+        <TuitionRatesByLevel />
       </div>
-      <TutorDetailsSection />
-      <TuitionRatesByLevel />
     </div>
   );
 };
