@@ -3,7 +3,6 @@ import { FC } from "react";
 import useLogic from "./hooks/useLogic";
 import ProfilePicSettings from "./components/form-profile-pic-settings";
 import FormLanguageTime from "./components/form-language-time";
-import SocialAccounts from "./components/form-social-accounts";
 import FormGeneralInfo from "./components/form-general-information";
 import FormPasswordInfo from "./components/form-password-information";
 
@@ -33,8 +32,6 @@ const ProfilePage: FC = () => {
             onFormSubmit={onLanguageAndTimeFormSubmission}
             isSubmitting={isGeneralFormSubmitting}
           />
-
-          <SocialAccounts />
         </div>
         <div className="col-span-2">
           <FormGeneralInfo
