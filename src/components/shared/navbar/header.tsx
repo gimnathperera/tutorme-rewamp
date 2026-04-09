@@ -30,7 +30,7 @@ const navigation: NavigationItem[] = [
     ],
   },
   { name: "Tuition Rates", href: "/tuition-rates" },
-  { name: "FAQ", href: "/#faq-section" },
+  { name: "FAQ", href: "/faq" },
   { name: "Blog", href: "/blogs" },
   { name: "Contact Us", href: "/#keep-in-touch-section" },
 ];
