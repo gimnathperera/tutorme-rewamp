@@ -1,5 +1,4 @@
 import React from "react";
-import TutorDetailsSection from "./components/tutor-details-page";
 import TuitionRatesByLevel from "./components/all-tuition-rates";
 
 const TuitionRatesPage = () => {
@@ -9,13 +8,12 @@ const TuitionRatesPage = () => {
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
           Check the Tuition Rates and Let&apos;s Get Learning!
         </h2>
-        <h3 className="text-xl sm:text-2xl font-medium text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="text-xl sm:text-2xl font-medium text-center pt-4 sm:pt-10 opacity-50 mb-12">
           Explore courses and resources just for you! See the relative tuition
           rates to begin
           <br className="hidden sm:block" />
           an exciting and personalized learning adventure!
         </h3>
-        <TutorDetailsSection />
         <TuitionRatesByLevel />
       </div>
     </div>
