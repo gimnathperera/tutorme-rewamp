@@ -9,6 +9,7 @@ const TestPapers = () => {
     derivedData: {
       gradesOptions,
       subjectOptions,
+      mediumOptions,
       isGradesLoading,
       isSubjectsLoading,
       papers: availablePapers,
@@ -40,6 +41,7 @@ const TestPapers = () => {
         <FormTestPaperSearch
           gradesOptions={gradesOptions}
           subjectOptions={subjectOptions}
+          mediumOptions={mediumOptions}
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading}
           isSubjectsLoading={isSubjectsLoading}

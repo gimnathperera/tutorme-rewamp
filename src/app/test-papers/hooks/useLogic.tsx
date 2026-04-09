@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
+import { MEDIUM_OPTIONS } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
 import {
   useFetchGradesQuery,
@@ -12,23 +13,51 @@ import { Paper } from "@/types/response-types";
 import { useLazyFetchPapersQuery } from "@/store/api/splits/papers";
 import {
   initialFormValues,
+  PaperSearchSchema,
   paperSearchSchema,
 } from "../components/form-test-papper-search/schema";
 
+const normalizeFilterValue = (value: string) => value.trim().toLowerCase();
+
+const extractStringValues = (value: unknown): string[] => {
+  if (typeof value === "string") {
+    return [normalizeFilterValue(value)];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap(extractStringValues);
+  }
+
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+
+    return ["title", "name", "value"].flatMap((key) =>
+      extractStringValues(record[key]),
+    );
+  }
+
+  return [];
+};
+
+const getPaperMediumValues = (paper: Paper): string[] => {
+  const rawPaper = paper as Paper & Record<string, unknown>;
+
+  return [
+    rawPaper.medium,
+    rawPaper.language,
+    rawPaper.languages,
+    rawPaper.mediums,
+  ].flatMap(extractStringValues);
+};
+
 type LogicReturnType = {
   forms: {
-    testPaperSearchForm: UseFormReturn<
-      {
-        grade: string;
-        subject: string;
-      },
-      any,
-      undefined
-    >;
+    testPaperSearchForm: UseFormReturn<PaperSearchSchema>;
   };
   derivedData: {
     gradesOptions: Option[];
     subjectOptions: Option[];
+    mediumOptions: Option[];
     isGradesLoading: boolean;
     isSubjectsLoading: boolean;
     isPapersLoading: boolean;
@@ -47,10 +76,8 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const [selectedGrade, selectedSubject] = testPaperSearchForm.watch([
-    "grade",
-    "subject",
-  ]);
+  const [selectedGrade, selectedSubject, selectedMedium, searchTerm] =
+    testPaperSearchForm.watch(["grade", "subject", "medium", "search"]);
 
   // TODO: options will be fetched from a different API endpoint in the future
   const { data: gradesRowData, isLoading: isGradesLoading } =
@@ -126,6 +153,41 @@ const useLogic = (): LogicReturnType => {
       value: grade.id.toString(),
     })) || [];
 
+  const mediumOptions = MEDIUM_OPTIONS.map((option) => ({
+    label: option.text,
+    value: option.value,
+  }));
+
+  const normalizedSearchTerm = normalizeFilterValue(searchTerm);
+  const normalizedSelectedMedium = normalizeFilterValue(selectedMedium);
+
+  const filteredPapers = papers.filter((paper) => {
+    const searchableContent = [
+      paper.title,
+      paper.subject?.title,
+      paper.grade?.title,
+      paper.year,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch =
+      !normalizedSearchTerm ||
+      searchableContent.includes(normalizedSearchTerm);
+
+    const paperMediumValues = getPaperMediumValues(paper);
+    const matchesMedium =
+      !normalizedSelectedMedium ||
+      paperMediumValues.length === 0 ||
+      paperMediumValues.some(
+        (value) =>
+          value.includes(normalizedSelectedMedium) ||
+          normalizedSelectedMedium.includes(value),
+      );
+
+    return matchesSearch && matchesMedium;
+  });
+
   return {
     forms: {
       testPaperSearchForm,
@@ -133,10 +195,11 @@ const useLogic = (): LogicReturnType => {
     derivedData: {
       gradesOptions,
       subjectOptions,
+      mediumOptions,
       isGradesLoading,
       isSubjectsLoading,
       isPapersLoading,
-      papers,
+      papers: filteredPapers,
     },
   };
 };
