@@ -12,9 +12,10 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 type Rate = { minimumRate: string; maximumRate: string };
 type SubjectRate = {
   title: string;
-  fullTime: Rate[];
-  partTime: Rate[];
-  gov: Rate[];
+  onlineIndividual: Rate[];
+  onlineGroup: Rate[];
+  physicalIndividual: Rate[];
+  physicalGroup: Rate[];
 };
 
 type GradeGroup = {
@@ -77,9 +78,10 @@ export default function TuitionRatesByGrade() {
         }
         acc[gradeTitle].subjects.push({
           title: item.subject?.title || "Unknown Subject",
-          fullTime: item.fullTimeTuitionRate || [],
-          partTime: item.partTimeTuitionRate || [],
-          gov: item.govTuitionRate || [],
+          onlineIndividual: item.onlineIndividualTuitionRate || [],
+          onlineGroup: item.onlineGroupTuitionRate || [],
+          physicalIndividual: item.physicalIndividualTuitionRate || [],
+          physicalGroup: item.physicalGroupTuitionRate || [],
         });
         return acc;
       },
@@ -179,16 +181,16 @@ export default function TuitionRatesByGrade() {
                             </span>
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.fullTime} />
+                            <RateCell rates={subject.onlineIndividual} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.partTime} />
+                            <RateCell rates={subject.onlineGroup} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.gov} />
+                            <RateCell rates={subject.physicalIndividual} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.gov} />
+                            <RateCell rates={subject.physicalGroup} />
                           </td>
                         </tr>
                       ))}
