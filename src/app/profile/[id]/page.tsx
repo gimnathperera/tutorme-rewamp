@@ -6,6 +6,7 @@ import FormLanguageTime from "./components/form-language-time";
 import SocialAccounts from "./components/form-social-accounts";
 import FormGeneralInfo from "./components/form-general-information";
 import FormPasswordInfo from "./components/form-password-information";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const ProfilePage: FC = () => {
   const {
@@ -46,6 +47,7 @@ const ProfilePage: FC = () => {
           <FormPasswordInfo />
         </div>
       </div>
+      <WhatsAppButton />
     </div>
   );
 };

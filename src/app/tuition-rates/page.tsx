@@ -1,6 +1,7 @@
 import React from "react";
 import TutorDetailsSection from "./components/tutor-details-page";
 import TuitionRatesByLevel from "./components/all-tuition-rates";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const TuitionRatesPage = () => {
   return (
@@ -18,6 +19,7 @@ const TuitionRatesPage = () => {
       </div>
       <TutorDetailsSection />
       <TuitionRatesByLevel />
+      <WhatsAppButton />
     </div>
   );
 };
