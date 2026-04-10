@@ -45,7 +45,7 @@ function RateCell({ rates }: { rates: Rate[] }) {
 export default function TuitionRatesByGrade() {
   const { data, isLoading, error } = useFetchTuitionRatesQuery({
     page: 1,
-    limit: 20000,
+    limit: 1000,
   });
 
   if (isLoading) {

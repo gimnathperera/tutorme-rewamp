@@ -11,7 +11,7 @@ const RatePage = () => {
 
   const { data: rate, isLoading } = useFetchTuitionRatesQuery({
     page: 1,
-    limit: 100000,
+    limit: 1000,
   });
 
   if (isLoading) return <p>Loading tuition rates...</p>;
