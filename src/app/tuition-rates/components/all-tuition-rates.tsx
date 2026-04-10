@@ -156,7 +156,7 @@ export default function TuitionRatesByGrade() {
                         </th>
                         <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
                             Physical - Group
                           </span>
                         </th>
