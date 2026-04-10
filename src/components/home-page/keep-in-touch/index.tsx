@@ -1,16 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Modal from "../../shared/modal";
-import FormContactUs from "../form-contact-us";
+import Link from "next/link";
 
 const KeepInTouch = () => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
-
-  const handleModalVisibility = () => {
-    setIsOpenModal((prev) => !prev);
-  };
-
   return (
     <div className="bg-joinus py-8 lg:py-12" id="keep-in-touch-section">
       <div className="mx-auto max-w-7xl">
@@ -29,25 +21,14 @@ const KeepInTouch = () => {
         </div>
 
         <div className="pt-8 flex justify-center animate-on-scroll stagger-2">
-          <button
-            type="button"
+          <Link
+            href="/contact-us"
             className="text-base font-semibold text-white py-3.5 px-9 rounded-full bg-primary-700 hover:bg-primary-800 transition-colors duration-200 hover:shadow-lg"
-            onClick={handleModalVisibility}
           >
             Send us a message
-          </button>
+          </Link>
         </div>
       </div>
-
-      <Modal
-        isOpen={isOpenModal}
-        closeModal={handleModalVisibility}
-        title="Contact Us"
-        description="Contact us now? Want to send us a feedback?"
-        imagePath="/images/contactus/contactus.svg"
-      >
-        <FormContactUs />
-      </Modal>
     </div>
   );
 };
