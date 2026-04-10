@@ -133,25 +133,31 @@ export default function TuitionRatesByGrade() {
                   <table className="w-full min-w-[560px] text-sm">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           Subject
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                            Full-Time
+                            Online - Individual
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                            Part-Time
+                            Online - Group
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                            Government
+                            Physical - Individual
+                          </span>
+                        </th>
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
+                            Physical - Group
                           </span>
                         </th>
                       </tr>
@@ -177,6 +183,9 @@ export default function TuitionRatesByGrade() {
                           </td>
                           <td className="px-5 py-3.5">
                             <RateCell rates={subject.partTime} />
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <RateCell rates={subject.gov} />
                           </td>
                           <td className="px-5 py-3.5">
                             <RateCell rates={subject.gov} />
