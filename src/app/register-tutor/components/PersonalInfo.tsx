@@ -7,9 +7,9 @@ import { Label } from "@/components/ui/label";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-2";
-const inputClass = "h-11 text-[16px] placeholder:text-gray-500 text-gray-900";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-[16px] focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -57,8 +57,8 @@ const PersonalInfo = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {/* Full Name */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="fullName">
-          Full Name *
+        <Label className="text-sm" htmlFor="fullName">
+          Full Name <span className="text-red-500">*</span>
         </Label>
         <Input
           id="fullName"
@@ -78,8 +78,8 @@ const PersonalInfo = () => {
 
       {/* Email */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="email">
-          Email *
+        <Label className="text-sm" htmlFor="email">
+          Email <span className="text-red-500">*</span>
         </Label>
         <Input
           id="email"
@@ -100,8 +100,8 @@ const PersonalInfo = () => {
 
       {/* Contact Number */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="contactNumber">
-          Contact Number *
+        <Label className="text-sm" htmlFor="contactNumber">
+          Contact Number <span className="text-red-500">*</span>
         </Label>
         <Input
           id="contactNumber"
@@ -124,8 +124,8 @@ const PersonalInfo = () => {
 
       {/* Gender */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="gender">
-          Gender *
+        <Label className="text-sm" htmlFor="gender">
+          Gender <span className="text-red-500">*</span>
         </Label>
         <select
           id="gender"
@@ -146,8 +146,8 @@ const PersonalInfo = () => {
 
       {/* Date of Birth */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="dateOfBirth">
-          Date of Birth *
+        <Label className="text-sm" htmlFor="dateOfBirth">
+          Date of Birth <span className="text-red-500">*</span>
         </Label>
         <Input
           id="dateOfBirth"
@@ -169,8 +169,8 @@ const PersonalInfo = () => {
 
       {/* Age — auto-calculated */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="age">
-          Age *
+        <Label className="text-sm" htmlFor="age">
+          Age <span className="text-red-500">*</span>
         </Label>
         <Input
           id="age"
@@ -191,8 +191,8 @@ const PersonalInfo = () => {
 
       {/* Nationality */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="nationality">
-          Nationality *
+        <Label className="text-sm" htmlFor="nationality">
+          Nationality <span className="text-red-500">*</span>
         </Label>
         <select
           id="nationality"
@@ -213,8 +213,8 @@ const PersonalInfo = () => {
 
       {/* Race */}
       <div className={fieldWrapper}>
-        <Label className="text-[15px]" htmlFor="race">
-          Race *
+        <Label className="text-sm" htmlFor="race">
+          Race <span className="text-red-500">*</span>
         </Label>
         <select
           id="race"

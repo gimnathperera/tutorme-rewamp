@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-2";
 const textareaBase =
-  "w-full rounded-md border bg-white px-3 py-2 text-[16px] placeholder:text-gray-500 text-gray-900 focus:outline-none focus:ring-1 focus:ring-ring resize-y";
+  "w-full rounded-md border bg-white px-3 py-2 text-sm placeholder:text-gray-500 text-gray-900 focus:outline-none focus:ring-1 focus:ring-ring resize-y";
 const textareaBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -42,8 +42,8 @@ const TutorProfile = () => {
     <div className="space-y-6">
       {/* Teaching Summary */}
       <div className={fieldWrapper}>
-        <Label htmlFor="teachingSummary" className="text-[15px] mb-1 block">
-          Short Introduction About Yourself *
+        <Label htmlFor="teachingSummary" className="text-sm mb-1 block">
+          Short Introduction About Yourself <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="teachingSummary"
@@ -63,8 +63,8 @@ const TutorProfile = () => {
 
       {/* Academic Details */}
       <div className={fieldWrapper}>
-        <Label htmlFor="academicDetails" className="text-[15px] mb-1 block">
-          Summary of Teaching Experience &amp; Academic Achievements *
+        <Label htmlFor="academicDetails" className="text-sm mb-1 block">
+          Summary of Teaching Experience &amp; Academic Achievements <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="academicDetails"
@@ -84,8 +84,8 @@ const TutorProfile = () => {
 
       {/* Student Results */}
       <div className={fieldWrapper}>
-        <Label htmlFor="studentResults" className="text-[15px] mb-1 block">
-          Results of Students / Track Record *
+        <Label htmlFor="studentResults" className="text-sm mb-1 block">
+          Results of Students / Track Record <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="studentResults"
@@ -105,8 +105,8 @@ const TutorProfile = () => {
 
       {/* Selling Points */}
       <div className={fieldWrapper}>
-        <Label htmlFor="sellingPoints" className="text-[15px] mb-1 block">
-          Other Selling Points as a Tutor *
+        <Label htmlFor="sellingPoints" className="text-sm mb-1 block">
+          Other Selling Points as a Tutor <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="sellingPoints"

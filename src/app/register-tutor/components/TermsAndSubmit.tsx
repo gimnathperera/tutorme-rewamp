@@ -16,7 +16,7 @@ const TermsAndSubmit = () => {
     <div className="space-y-6">
       {/* Certificates Upload */}
       <div>
-        <Label className="text-[15px] mb-2 block">Certificates *</Label>
+        <Label className="text-sm mb-2 block">Certificates <span className="text-red-500">*</span></Label>
         <Controller
           name="certificatesAndQualifications"
           control={control}
@@ -53,9 +53,9 @@ const TermsAndSubmit = () => {
           />
           <Label
             htmlFor="agreeTerms"
-            className="flex flex-col gap-1 text-[15px]"
+            className="flex flex-col gap-1 text-sm"
           >
-            <span>I agree to the Terms and Conditions *</span>
+            <span>I agree to the Terms and Conditions <span className="text-red-500">*</span></span>
             <span className="text-xs text-muted-foreground">
               I agree to receiving assignment information via SMS and understand
               that rates are subject to negotiation. Admin fees may apply for
@@ -82,11 +82,11 @@ const TermsAndSubmit = () => {
           />
           <Label
             htmlFor="agreeAssignmentInfo"
-            className="flex flex-col gap-1 text-[15px]"
+            className="flex flex-col gap-1 text-sm"
           >
             <span>
               I agree to receiving assignment information regarding new Tuition
-              Assignments *
+              Assignments <span className="text-red-500">*</span>
             </span>
             <span className="text-xs text-muted-foreground">
               By checking this box, you agree to receive SMS and email

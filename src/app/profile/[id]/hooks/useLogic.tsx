@@ -148,8 +148,15 @@ const useLogic = (): LogicReturnType => {
   );
 
   // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
+  // IMPORTANT: Only runs once when initial data is loaded, NOT on subsequent subjectsOptions changes
+  const hasInitialSubjectsBeenSet = useRef(false);
+
   useEffect(() => {
-    if (userRawData && size(subjectsOptions) > 0) {
+    if (
+      userRawData &&
+      size(subjectsOptions) > 0 &&
+      !hasInitialSubjectsBeenSet.current
+    ) {
       const { subjects } = userRawData;
 
       generalInfoForm.setValue(
@@ -160,6 +167,8 @@ const useLogic = (): LogicReturnType => {
           )
           .map((subject) => subject.id),
       );
+
+      hasInitialSubjectsBeenSet.current = true;
     }
   }, [userRawData, subjectsOptions, generalInfoForm]);
 

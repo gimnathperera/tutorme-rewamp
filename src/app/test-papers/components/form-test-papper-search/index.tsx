@@ -1,6 +1,8 @@
+"use client";
+
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
-import { FC } from "react";
+import { FC, useEffect, useRef } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { PaperSearchSchema } from "./schema";
 
@@ -31,6 +33,21 @@ const FormTestPaperSearch: FC<Props> = ({
   };
 
   const selectedGrade = testPaperSearchForm.watch("grade");
+  const prevGradeRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (
+      prevGradeRef.current !== null &&
+      prevGradeRef.current !== selectedGrade
+    ) {
+      testPaperSearchForm.setValue("subject", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+
+    prevGradeRef.current = selectedGrade;
+  }, [selectedGrade, testPaperSearchForm]);
 
   return (
     <FormProvider {...testPaperSearchForm}>

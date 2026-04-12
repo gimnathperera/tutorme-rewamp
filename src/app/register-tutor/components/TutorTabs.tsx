@@ -139,7 +139,14 @@ export function TutorTabs() {
   };
 
   const certificates = methods.watch("certificatesAndQualifications");
-  const isSubmitDisabled = !certificates || certificates.length === 0;
+  const agreeTerms = methods.watch("agreeTerms");
+  const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
+  const isSubmitDisabled =
+    isLoading ||
+    !certificates ||
+    certificates.length === 0 ||
+    !agreeTerms ||
+    !agreeAssignmentInfo;
 
   return (
     <FormProvider {...methods}>
@@ -156,7 +163,7 @@ export function TutorTabs() {
             <TabsContent value="personalInfo">
               <Card>
                 <CardHeader>
-                  <CardTitle>Personal Information</CardTitle>
+                  <CardTitle className="text-base font-medium">Personal Information</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <PersonalInfo />
@@ -172,7 +179,7 @@ export function TutorTabs() {
             <TabsContent value="qualifications">
               <Card>
                 <CardHeader>
-                  <CardTitle>Qualifications</CardTitle>
+                  <CardTitle className="text-base font-medium">Qualifications</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <AcademicExperience />
@@ -191,7 +198,7 @@ export function TutorTabs() {
             <TabsContent value="teachingProfile">
               <Card>
                 <CardHeader>
-                  <CardTitle>Teaching Profile</CardTitle>
+                  <CardTitle className="text-base font-medium">Teaching Profile</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TutorProfile />
@@ -210,7 +217,7 @@ export function TutorTabs() {
             <TabsContent value="verification">
               <Card>
                 <CardHeader>
-                  <CardTitle>Verification & Agreement</CardTitle>
+                  <CardTitle className="text-base font-medium">Verification & Agreement</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TermsAndSubmit />
@@ -222,7 +229,7 @@ export function TutorTabs() {
                   <Button
                     type="submit"
                     className="ml-auto"
-                    disabled={isLoading || isSubmitDisabled}
+                    disabled={isSubmitDisabled}
                   >
                     Submit {isLoading ? <Spinner /> : ""}
                   </Button>

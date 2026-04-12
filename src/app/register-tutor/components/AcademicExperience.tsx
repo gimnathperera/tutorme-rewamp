@@ -20,9 +20,9 @@ import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-2";
-const inputClass = "h-11 text-[16px] placeholder:text-gray-500 text-gray-900";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-[16px] focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -86,8 +86,8 @@ const AcademicExperience = () => {
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutoringLevels">
-            Tutoring Levels *
+          <Label className="text-sm" htmlFor="tutoringLevels">
+            Tutoring Levels <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutoringLevels"
@@ -107,8 +107,8 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="preferredLocations">
-            Preferred Locations *
+          <Label className="text-sm" htmlFor="preferredLocations">
+            Preferred Locations <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="preferredLocations"
@@ -131,8 +131,8 @@ const AcademicExperience = () => {
       {/* ROW 2 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorType">
-            Tutor Types *
+          <Label className="text-sm" htmlFor="tutorType">
+            Tutor Types <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorType"
@@ -152,8 +152,8 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="highestEducation">
-            Highest Education Level *
+          <Label className="text-sm" htmlFor="highestEducation">
+            Highest Education Level <span className="text-red-500">*</span>
           </Label>
           <select
             id="highestEducation"
@@ -181,8 +181,8 @@ const AcademicExperience = () => {
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="yearsExperience">
-            Years of Experience *
+          <Label className="text-sm" htmlFor="yearsExperience">
+            Years of Experience <span className="text-red-500">*</span>
           </Label>
           <Input
             id="yearsExperience"
@@ -199,8 +199,8 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="tutorMediums">
-            Tutor Mediums *
+          <Label className="text-sm" htmlFor="tutorMediums">
+            Tutor Mediums <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorMediums"
@@ -223,8 +223,8 @@ const AcademicExperience = () => {
       {/* ROW 4 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="grades">
-            Grades *
+          <Label className="text-sm" htmlFor="grades">
+            Grades <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="grades"
@@ -249,8 +249,8 @@ const AcademicExperience = () => {
         </div>
 
         <div className={fieldWrapper}>
-          <Label className="text-[15px]" htmlFor="subjects">
-            Subjects *
+          <Label className="text-sm" htmlFor="subjects">
+            Subjects <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="subjects"

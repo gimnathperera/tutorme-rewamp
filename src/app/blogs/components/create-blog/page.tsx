@@ -701,12 +701,15 @@ const AddBlog = () => {
             </div>
 
             <div className="p-4 border rounded-lg space-y-4">
-              <div className="flex items-center justify-between">
-                <Label>FAQs</Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label className="text-base font-semibold leading-9">
+                  FAQs
+                </Label>
+
                 <button
                   type="button"
                   onClick={() => appendFaq({ question: "", answer: "" })}
-                  className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
+                  className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors flex items-center"
                 >
                   + Add FAQ
                 </button>
@@ -846,13 +849,24 @@ const AddBlog = () => {
         )}
 
         <div className="flex justify-between items-center mt-6 px-6 mb-4">
-          <button
-            type="button"
-            onClick={onClear}
-            className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            Clear
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => redirect.back()}
+              className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+
+            <button
+              type="button"
+              onClick={onClear}
+              className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Clear
+            </button>
+          </div>
+
           <button
             type="submit"
             disabled={isLoading}

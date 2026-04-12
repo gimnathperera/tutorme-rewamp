@@ -40,9 +40,9 @@ import DistrictSelect from "@/components/districtSelect";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
-const inputClass = "h-11 text-[16px] placeholder:text-gray-500 text-gray-900";
+const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-[16px] focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150 text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150 text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
@@ -204,13 +204,15 @@ export default function AddRequestForTutor() {
           <TabsContent value="contact">
             <Card>
               <CardHeader>
-                <CardTitle>Contact Details</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Contact Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="name">
-                    Full Name *
+                  <Label className="text-sm" htmlFor="name">
+                    Full Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -245,8 +247,8 @@ export default function AddRequestForTutor() {
                 {/* Email & Phone */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="email">
-                      Email *
+                    <Label className="text-sm" htmlFor="email">
+                      Email <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="email"
@@ -280,8 +282,8 @@ export default function AddRequestForTutor() {
                     )}
                   </div>
                   <div className={fieldWrapper}>
-                    <Label className="text-[15px]" htmlFor="phoneNumber">
-                      Contact Number *
+                    <Label className="text-sm" htmlFor="phoneNumber">
+                      Contact Number <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phoneNumber"
@@ -322,50 +324,55 @@ export default function AddRequestForTutor() {
                   </div>
                 </div>
 
-                {/* District */}
-                <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="district">
-                    District *
-                  </Label>
-                  <Controller
-                    control={control}
-                    name="district"
-                    render={({ field }) => (
-                      <DistrictSelect
-                        value={field.value || ""}
-                        onChange={(val) => {
-                          field.onChange(val);
-                          if (val) clearErrors("district");
-                        }}
-                        districts={districts}
-                        hasError={!!errors.district}
-                      />
-                    )}
-                  />
-                  <p className={errorMsg}>{errors.district?.message}</p>
-                </div>
+                {/* District + City – grouped to reduce spacing between them */}
+                <div className="flex flex-col gap-4">
+                  {/* District */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="district">
+                      District <span className="text-red-500">*</span>
+                    </Label>
+                    <Controller
+                      control={control}
+                      name="district"
+                      render={({ field }) => (
+                        <DistrictSelect
+                          value={field.value || ""}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            if (val) clearErrors("district");
+                          }}
+                          districts={districts}
+                          hasError={!!errors.district}
+                        />
+                      )}
+                    />
+                    {errors.district?.message && <p className={errorMsg}>{errors.district.message}</p>}
+                  </div>
 
-                {/* City */}
-                <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="city">
-                    City *
-                  </Label>
-                  <Controller
-                    control={control}
-                    name="city"
-                    render={({ field }) => (
-                      <CitySelect
-                        value={field.value || ""}
-                        district={selectedDistrict || ""}
-                        onChange={(val) => {
-                          field.onChange(val);
-                          if (val) clearErrors("city");
-                        }}
-                        hasError={!!errors.city}
-                      />
+                  {/* City */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="city">
+                      City <span className="text-red-500">*</span>
+                    </Label>
+                    <Controller
+                      control={control}
+                      name="city"
+                      render={({ field }) => (
+                        <CitySelect
+                          value={field.value || ""}
+                          district={selectedDistrict || ""}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            if (val) clearErrors("city");
+                          }}
+                          hasError={!!errors.city}
+                        />
+                      )}
+                    />
+                    {errors.city?.message && (
+                      <p className={errorMsg}>{errors.city.message}</p>
                     )}
-                  />
-                  <p className={errorMsg}>{errors.city?.message}</p>
+                  </div>
                 </div>
               </CardContent>
 
@@ -381,13 +388,15 @@ export default function AddRequestForTutor() {
           <TabsContent value="tutorDetails">
             <Card>
               <CardHeader>
-                <CardTitle>Tutor Details</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Tutor Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="medium">
-                    Medium *
+                  <Label className="text-sm" htmlFor="medium">
+                    Medium <span className="text-red-500">*</span>
                   </Label>
                   <select
                     id="medium"
@@ -406,8 +415,8 @@ export default function AddRequestForTutor() {
 
                 {/* Grade */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="grade">
-                    Grade *
+                  <Label className="text-sm" htmlFor="grade">
+                    Grade <span className="text-red-500">*</span>
                   </Label>
                   <select
                     id="grade"
@@ -428,7 +437,7 @@ export default function AddRequestForTutor() {
 
                 {/* Number of Tutors */}
                 <div className={fieldWrapper}>
-                  <Label className="text-[15px]" htmlFor="tutorCount">
+                  <Label className="text-sm" htmlFor="tutorCount">
                     Number of Tutors
                   </Label>
                   <select
@@ -462,17 +471,14 @@ export default function AddRequestForTutor() {
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
-                      <Label
-                        className="text-[15px]"
-                        htmlFor={`subject-${index}`}
-                      >
-                        Subject *
+                      <Label className="text-sm" htmlFor={`subject-${index}`}>
+                        Subject <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
                         disabled={!selectedGradeId}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:opacity-50 disabled:cursor-not-allowed`}
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:bg-gray-100 disabled:cursor-not-allowed`}
                       >
                         <option value="" disabled hidden>
                           {selectedGradeId
@@ -494,10 +500,10 @@ export default function AddRequestForTutor() {
                       {/* Duration */}
                       <div className={fieldWrapper}>
                         <Label
-                          className="text-[15px]"
+                          className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
-                          Duration *
+                          Duration <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`duration-${index}`}
@@ -519,10 +525,10 @@ export default function AddRequestForTutor() {
                       {/* Frequency */}
                       <div className={fieldWrapper}>
                         <Label
-                          className="text-[15px]"
+                          className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
-                          Frequency *
+                          Frequency <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`frequency-${index}`}
@@ -544,11 +550,9 @@ export default function AddRequestForTutor() {
 
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
-                      <Label
-                        className="text-[15px]"
-                        htmlFor={`tutorType-${index}`}
-                      >
-                        Preferred Tutor Type *
+                      <Label className="text-sm" htmlFor={`tutorType-${index}`}>
+                        Preferred Tutor Type{" "}
+                        <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`tutorType-${index}`}
