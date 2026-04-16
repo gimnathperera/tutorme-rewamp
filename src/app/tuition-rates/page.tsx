@@ -16,7 +16,6 @@ const TuitionRatesPage = () => {
         </h3>
         <TuitionRatesByLevel />
       </div>
-      <TuitionRatesByLevel />
       <WhatsAppButton />
     </div>
   );
