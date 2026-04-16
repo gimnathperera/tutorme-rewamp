@@ -1,7 +1,7 @@
 import AboutUs from "@/components/home-page/about-us";
 import Banner from "@/components/home-page/banner";
 import Beliefs from "@/components/home-page/beliefs";
-import Digital from "@/components/home-page/digital";
+
 import Faqs from "@/components/home-page/faq";
 import KeepInTouch from "@/components/home-page/keep-in-touch";
 import OurTeam from "@/components/home-page/our-team";
@@ -18,7 +18,6 @@ export default function Home() {
       {/* space-y controls consistent inter-section gaps on all screen sizes */}
       <div className="space-y-3 sm:space-y-5">
         <AboutUs />
-        <Digital />
         <Beliefs />
         <OurTeam />
         <Faqs />
