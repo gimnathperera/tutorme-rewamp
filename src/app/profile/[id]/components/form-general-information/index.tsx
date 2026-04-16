@@ -26,6 +26,10 @@ type Props = {
   isSubmitting: boolean;
 };
 
+const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
+const collapseSpaces = (value: string) =>
+  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
+
 const FormGeneralInfo: FC<Props> = ({
   dropdownOptionData: {
     gradesOptions,
@@ -60,6 +64,13 @@ const FormGeneralInfo: FC<Props> = ({
                 placeholder="First Name"
                 name="name"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("name", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("name", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
 
               <InputText
@@ -86,30 +97,65 @@ const FormGeneralInfo: FC<Props> = ({
                 placeholder="City"
                 name="city"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("city", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("city", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
               <InputText
                 label="State / Province *"
                 placeholder="State / Province"
                 name="state"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("state", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("state", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
               <InputText
                 label="Region *"
                 placeholder="Region"
                 name="region"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("region", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("region", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
               <InputText
                 label="ZIP / Postal code *"
                 placeholder="ZIP / Postal code"
                 name="zip"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("zip", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("zip", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
               <InputText
                 label="Address *"
                 placeholder="Address"
                 name="address"
                 type="text"
+                onChange={(e) => {
+                  const cleaned = stripLeadingSpaces(e.target.value);
+                  form.setValue("address", cleaned, { shouldValidate: true });
+                }}
+                onBlur={(e) => {
+                  form.setValue("address", collapseSpaces(e.target.value), { shouldValidate: true });
+                }}
               />
               <InputText
                 label="Birthday *"
