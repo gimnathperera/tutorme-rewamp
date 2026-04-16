@@ -3,8 +3,8 @@ import TutorImage from "../../../../public/images/banner/banner2.webp";
 
 const OurTeam = () => {
   return (
-    <div className="px-4 lg:px-8">
-      <div className="mx-auto max-w-7xl py-8 lg:py-12">
+    <div className="px-4 pb-8 lg:px-8 lg:pb-12">
+      <div className="mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] animate-on-scroll">
