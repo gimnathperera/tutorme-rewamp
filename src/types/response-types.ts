@@ -41,9 +41,10 @@ export type TuitionRateItem = {
   title: string;
   grade: Grade;
   subject: Subject;
-  govTuitionRate: Rate[];
-  partTimeTuitionRate: Rate[];
-  fullTimeTuitionRate: Rate[];
+  onlineIndividualTuitionRate: Rate[];
+  onlineGroupTuitionRate: Rate[];
+  physicalIndividualTuitionRate: Rate[];
+  physicalGroupTuitionRate: Rate[];
 };
 export type Rate = {
   minimumRate: string;
