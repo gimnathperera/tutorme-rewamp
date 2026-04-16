@@ -1,5 +1,6 @@
 import React from "react";
 import TuitionRatesByLevel from "./components/all-tuition-rates";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const TuitionRatesPage = () => {
   return (
@@ -15,6 +16,7 @@ const TuitionRatesPage = () => {
         </h3>
         <TuitionRatesByLevel />
       </div>
+      <WhatsAppButton />
     </div>
   );
 };

@@ -18,6 +18,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 import { X, BookOpen } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const GRADE_LIMIT = 1000;
 
@@ -117,7 +118,6 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
               )}
             </div>
           </div>
-
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -249,6 +249,7 @@ const GradesPage: FC = () => {
         gradeId={selectedGradeId}
         onClose={() => setSelectedGradeId(null)}
       />
+      <WhatsAppButton />
     </div>
   );
 };
