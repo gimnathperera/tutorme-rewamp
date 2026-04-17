@@ -45,6 +45,7 @@ const TestPapers = () => {
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading}
           isSubjectsLoading={isSubjectsLoading}
+          isMediumsLoading={isPapersLoading}
         />
       </div>
 

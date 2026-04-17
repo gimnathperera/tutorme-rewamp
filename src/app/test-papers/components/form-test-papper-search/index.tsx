@@ -15,6 +15,7 @@ type Props = {
   testPaperSearchForm: UseFormReturn<PaperSearchSchema>;
   isGradesLoading: boolean;
   isSubjectsLoading: boolean;
+  isMediumsLoading: boolean;
 };
 
 const FormTestPaperSearch: FC<Props> = ({
@@ -24,13 +25,16 @@ const FormTestPaperSearch: FC<Props> = ({
   testPaperSearchForm,
   isGradesLoading,
   isSubjectsLoading,
+  isMediumsLoading,
 }) => {
   const onSubmit = (data: PaperSearchSchema) => {
     console.log("Form Submitted", data);
   };
 
   const selectedGrade = testPaperSearchForm.watch("grade");
+  const selectedSubject = testPaperSearchForm.watch("subject");
   const prevGradeRef = useRef<string | null>(null);
+  const prevSubjectRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (
@@ -45,6 +49,20 @@ const FormTestPaperSearch: FC<Props> = ({
 
     prevGradeRef.current = selectedGrade;
   }, [selectedGrade, testPaperSearchForm]);
+
+  useEffect(() => {
+    if (
+      prevSubjectRef.current !== null &&
+      prevSubjectRef.current !== selectedSubject
+    ) {
+      testPaperSearchForm.setValue("medium", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+
+    prevSubjectRef.current = selectedSubject;
+  }, [selectedSubject, testPaperSearchForm]);
 
   return (
     <FormProvider {...testPaperSearchForm}>
@@ -81,6 +99,13 @@ const FormTestPaperSearch: FC<Props> = ({
             label="Select Medium"
             name="medium"
             options={mediumOptions}
+            disabled={
+              !selectedGrade ||
+              !selectedSubject ||
+              isMediumsLoading ||
+              mediumOptions.length === 0
+            }
+            loading={isMediumsLoading}
           />
         </div>
       </form>

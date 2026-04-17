@@ -1,12 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
-import { MEDIUM_OPTIONS } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
 import {
   useFetchGradesQuery,
   useLazyFetchGradeByIdQuery,
 } from "@/store/api/splits/grades";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import { Paper } from "@/types/response-types";
@@ -19,21 +18,82 @@ import {
 
 const normalizeFilterValue = (value: string) => value.trim().toLowerCase();
 
-const extractStringValues = (value: unknown): string[] => {
-  if (typeof value === "string") {
-    return [normalizeFilterValue(value)];
+const extractRawStringValues = (value: unknown): string[] => {
+  if (typeof value === "string" || typeof value === "number") {
+    const trimmedValue = String(value).trim();
+
+    return trimmedValue ? [trimmedValue] : [];
   }
 
   if (Array.isArray(value)) {
-    return value.flatMap(extractStringValues);
+    return value.flatMap(extractRawStringValues);
   }
 
   if (value && typeof value === "object") {
     const record = value as Record<string, unknown>;
 
-    return ["title", "name", "value"].flatMap((key) =>
-      extractStringValues(record[key]),
+    return ["title", "name", "label", "text", "value", "id"].flatMap((key) =>
+      extractRawStringValues(record[key]),
     );
+  }
+
+  return [];
+};
+
+const extractStringValues = (value: unknown): string[] => {
+  return extractRawStringValues(value).map(normalizeFilterValue);
+};
+
+const getFirstRawStringValue = (...values: unknown[]) =>
+  values.flatMap(extractRawStringValues)[0] || "";
+
+const extractMediumOptions = (value: unknown): Option[] => {
+  if (typeof value === "string" || typeof value === "number") {
+    const trimmedValue = String(value).trim();
+
+    return trimmedValue
+      ? [
+          {
+            label: trimmedValue,
+            value: trimmedValue,
+          },
+        ]
+      : [];
+  }
+
+  if (Array.isArray(value)) {
+    return value.flatMap(extractMediumOptions);
+  }
+
+  if (value && typeof value === "object") {
+    const record = value as Record<string, unknown>;
+    const label = getFirstRawStringValue(
+      record.title,
+      record.name,
+      record.label,
+      record.text,
+      record.value,
+      record.id,
+    );
+    const optionValue = getFirstRawStringValue(
+      record.id,
+      record.value,
+      record.title,
+      record.name,
+      record.label,
+      record.text,
+    );
+
+    return label && optionValue
+      ? [
+          {
+            label,
+            value: optionValue,
+          },
+        ]
+      : ["title", "name", "label", "text", "value", "id"].flatMap((key) =>
+          extractMediumOptions(record[key]),
+        );
   }
 
   return [];
@@ -48,6 +108,31 @@ const getPaperMediumValues = (paper: Paper): string[] => {
     rawPaper.languages,
     rawPaper.mediums,
   ].flatMap(extractStringValues);
+};
+
+const getPaperMediumOptions = (papers: Paper[]): Option[] => {
+  const optionsMap = new Map<string, Option>();
+
+  papers.forEach((paper) => {
+    const rawPaper = paper as Paper & Record<string, unknown>;
+
+    [
+      rawPaper.medium,
+      rawPaper.language,
+      rawPaper.languages,
+      rawPaper.mediums,
+    ]
+      .flatMap(extractMediumOptions)
+      .forEach((option) => {
+        const optionKey = normalizeFilterValue(String(option.value));
+
+        if (optionKey && !optionsMap.has(optionKey)) {
+          optionsMap.set(optionKey, option);
+        }
+      });
+  });
+
+  return Array.from(optionsMap.values());
 };
 
 type LogicReturnType = {
@@ -153,10 +238,31 @@ const useLogic = (): LogicReturnType => {
       value: grade.id.toString(),
     })) || [];
 
-  const mediumOptions = MEDIUM_OPTIONS.map((option) => ({
-    label: option.text,
-    value: option.value,
-  }));
+  const mediumOptions = useMemo(() => getPaperMediumOptions(papers), [papers]);
+
+  useEffect(() => {
+    if (!selectedGrade || !selectedSubject) {
+      setPapers([]);
+      testPaperSearchForm.setValue("medium", "", {
+        shouldValidate: true,
+      });
+    }
+  }, [selectedGrade, selectedSubject, testPaperSearchForm]);
+
+  useEffect(() => {
+    if (!selectedMedium) return;
+
+    const selectedMediumExists = mediumOptions.some(
+      (option) => String(option.value) === selectedMedium,
+    );
+
+    if (!selectedMediumExists) {
+      testPaperSearchForm.setValue("medium", "", {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    }
+  }, [mediumOptions, selectedMedium, testPaperSearchForm]);
 
   const normalizedSearchTerm = normalizeFilterValue(searchTerm);
   const normalizedSelectedMedium = normalizeFilterValue(selectedMedium);
@@ -178,7 +284,6 @@ const useLogic = (): LogicReturnType => {
     const paperMediumValues = getPaperMediumValues(paper);
     const matchesMedium =
       !normalizedSelectedMedium ||
-      paperMediumValues.length === 0 ||
       paperMediumValues.some(
         (value) =>
           value.includes(normalizedSelectedMedium) ||
