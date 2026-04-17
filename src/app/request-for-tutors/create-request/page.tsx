@@ -77,7 +77,7 @@ export default function AddRequestForTutor() {
     setValue,
     trigger,
     clearErrors,
-    formState: { errors },
+    formState: { errors, isValid },
     reset,
   } = useForm<CreateRequestTutorSchema>({
     resolver: zodResolver(createRequestTutorSchema),
@@ -89,6 +89,11 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
+  const [watchName, watchEmail, watchPhone, watchCity] = watch(["name", "email", "phoneNumber", "city"]);
+
+  const isStep1Complete =
+    !!watchName && !!watchEmail && !!watchPhone && !!selectedDistrict && !!watchCity &&
+    !errors.name && !errors.email && !errors.phoneNumber && !errors.district && !errors.city;
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -121,6 +126,7 @@ export default function AddRequestForTutor() {
           duration: "",
           frequency: "",
           preferredTutorType: "",
+          preferredClassType: "",
         });
       }
       setValue("tutors", newTutors);
@@ -346,7 +352,9 @@ export default function AddRequestForTutor() {
                         />
                       )}
                     />
-                    {errors.district?.message && <p className={errorMsg}>{errors.district.message}</p>}
+                    {errors.district?.message && (
+                      <p className={errorMsg}>{errors.district.message}</p>
+                    )}
                   </div>
 
                   {/* City */}
@@ -377,7 +385,11 @@ export default function AddRequestForTutor() {
               </CardContent>
 
               <CardFooter className="flex justify-end">
-                <Button type="button" onClick={nextStep}>
+                <Button
+                  type="button"
+                  onClick={nextStep}
+                  className={isStep1Complete ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
+                >
                   Next
                 </Button>
               </CardFooter>
@@ -548,33 +560,53 @@ export default function AddRequestForTutor() {
                       </div>
                     </div>
 
-                    {/* Preferred Tutor Type */}
-                    <div className={`${fieldWrapper} mt-4`}>
-                      <Label className="text-sm" htmlFor={`tutorType-${index}`}>
-                        Preferred Tutor Type{" "}
-                        <span className="text-red-500">*</span>
-                      </Label>
-                      <select
-                        id={`tutorType-${index}`}
-                        {...register(`tutors.${index}.preferredTutorType`)}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
-                      >
-                        <option value="" disabled hidden>
-                          Select preferred tutor type
-                        </option>
-                        <option value="Part Time Tutors">
-                          Part Time Tutors
-                        </option>
-                        <option value="Full Time Tutors">
-                          Full Time Tutors
-                        </option>
-                        <option value="Ex / Current Government School Tutors">
-                          Ex / Current Government School Tutors
-                        </option>
-                      </select>
-                      <p className={errorMsg}>
-                        {errors.tutors?.[index]?.preferredTutorType?.message}
-                      </p>
+                    {/* Preferred Tutor Type + Preferred Class Type */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                      <div className={fieldWrapper}>
+                        <Label className="text-sm" htmlFor={`tutorType-${index}`}>
+                          Preferred Tutor Type{" "}
+                          <span className="text-red-500">*</span>
+                        </Label>
+                        <select
+                          id={`tutorType-${index}`}
+                          {...register(`tutors.${index}.preferredTutorType`)}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
+                        >
+                          <option value="" disabled hidden>
+                            Select preferred tutor type
+                          </option>
+                          <option value="Private Tutor">Private Tutor</option>
+                          <option value="Government Teacher">Government Teacher</option>
+                          <option value="University Student">University Student</option>
+                          <option value="Coach">Coach</option>
+                        </select>
+                        <p className={errorMsg}>
+                          {errors.tutors?.[index]?.preferredTutorType?.message}
+                        </p>
+                      </div>
+
+                      <div className={fieldWrapper}>
+                        <Label className="text-sm" htmlFor={`classType-${index}`}>
+                          Preferred Class Type{" "}
+                          <span className="text-red-500">*</span>
+                        </Label>
+                        <select
+                          id={`classType-${index}`}
+                          {...register(`tutors.${index}.preferredClassType`)}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredClassType)}`}
+                        >
+                          <option value="" disabled hidden>
+                            Select preferred class type
+                          </option>
+                          <option value="Online - Individual">Online - Individual</option>
+                          <option value="Online - Group">Online - Group</option>
+                          <option value="Physical - Individual">Physical - Individual</option>
+                          <option value="Physical - Group">Physical - Group</option>
+                        </select>
+                        <p className={errorMsg}>
+                          {errors.tutors?.[index]?.preferredClassType?.message}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -584,7 +616,11 @@ export default function AddRequestForTutor() {
                 <Button type="button" variant="outline" onClick={prevStep}>
                   Previous
                 </Button>
-                <Button type="submit" disabled={isLoading}>
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className={isValid ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
+                >
                   {isLoading ? "Submitting..." : "Submit"}
                 </Button>
               </CardFooter>
@@ -620,7 +656,7 @@ export default function AddRequestForTutor() {
           </div>
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">
-              Request Submitted!
+              Request is processing
             </DialogTitle>
             <DialogDescription className="text-center text-base">
               Your tutor request has been submitted successfully. We&apos;ll
