@@ -194,8 +194,10 @@ export default function EditBlogPage() {
   const onSubmit = async (data: UpdateArticleSchema) => {
     if (!user) return toast.error("Please authenticate");
 
+    const wasRejected = blog?.status === "rejected";
+
     try {
-      const payload = {
+      const payload: any = {
         id: blogId,
         blogId: blogId,
         title: data.title,
@@ -204,7 +206,6 @@ export default function EditBlogPage() {
         relatedArticles: data.relatedArticles ?? [],
         tags: data.tags ?? [],
         faqs: data.faqs ?? [],
-        status: (data.status || "pending") as "pending" | "published" | "draft",
       };
 
       const result = await updateBlog(payload);
@@ -223,7 +224,7 @@ export default function EditBlogPage() {
         }
         return;
       }
-      toast.success("Blog updated successfully!");
+      toast.success(wasRejected ? "Blog resubmitted for review." : "Blog updated successfully!");
       router.push(`/blogs/${blogId}`);
     } catch (err) {
       console.error(err);
