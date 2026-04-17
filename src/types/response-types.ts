@@ -105,6 +105,17 @@ export type Grade = BaseEntity &
     subjects: Subject[];
   };
 
+type PaperMedium =
+  | string
+  | {
+      id?: string;
+      title?: string;
+      name?: string;
+      label?: string;
+      text?: string;
+      value?: string;
+    };
+
 // Paper
 export type Paper = BaseEntity &
   WithTitleDescription & {
@@ -113,6 +124,10 @@ export type Paper = BaseEntity &
     subject: Subject;
     year: string;
     url: string;
+    medium?: PaperMedium;
+    language?: PaperMedium;
+    languages?: PaperMedium[];
+    mediums?: PaperMedium[];
   };
 
 export type Blogs = BaseEntity &
