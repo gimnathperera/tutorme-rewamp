@@ -11,7 +11,7 @@ const RatePage = () => {
 
   const { data: rate, isLoading } = useFetchTuitionRatesQuery({
     page: 1,
-    limit: 100000,
+    limit: 1000,
   });
 
   if (isLoading) return <p>Loading tuition rates...</p>;
@@ -39,20 +39,26 @@ const RatePage = () => {
                     {rate.subject?.title || "Unknown Subject"}
                   </h4>
                   <p className="mb-1">
-                    <strong>Full-Time:</strong>{" "}
-                    {rate.fullTimeTuitionRate
+                    <strong>Online - Individual:</strong>{" "}
+                    {rate.onlineIndividualTuitionRate
                       ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
                       .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
-                    <strong>Part-Time:</strong>{" "}
-                    {rate.partTimeTuitionRate
+                    <strong>Online - Group:</strong>{" "}
+                    {rate.onlineGroupTuitionRate
                       ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
                       .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
-                    <strong>Government:</strong>{" "}
-                    {rate.govTuitionRate
+                    <strong>Physical - Individual:</strong>{" "}
+                    {rate.physicalIndividualTuitionRate
+                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                      .join(", ") || "N/A"}
+                  </p>
+                  <p className="mb-1">
+                    <strong>Physical - Group:</strong>{" "}
+                    {rate.physicalGroupTuitionRate
                       ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
                       .join(", ") || "N/A"}
                   </p>

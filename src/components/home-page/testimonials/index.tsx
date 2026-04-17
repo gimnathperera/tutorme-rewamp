@@ -246,7 +246,7 @@ const Testimonials: FC = () => {
 
   return (
     <section
-      className="bg-testimonial py-8 lg:py-12"
+      className="bg-testimonial pb-6 lg:pb-8"
       aria-label="Testimonials"
       id="testimonials-section"
       onMouseEnter={() => setIsPaused(true)}

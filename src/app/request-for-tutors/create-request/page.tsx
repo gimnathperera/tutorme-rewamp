@@ -204,7 +204,9 @@ export default function AddRequestForTutor() {
           <TabsContent value="contact">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base font-medium">Contact Details</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Contact Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
@@ -323,7 +325,7 @@ export default function AddRequestForTutor() {
                 </div>
 
                 {/* District + City – grouped to reduce spacing between them */}
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-4">
                   {/* District */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="district">
@@ -344,7 +346,7 @@ export default function AddRequestForTutor() {
                         />
                       )}
                     />
-                    <p className={errorMsg}>{errors.district?.message}</p>
+                    {errors.district?.message && <p className={errorMsg}>{errors.district.message}</p>}
                   </div>
 
                   {/* City */}
@@ -367,7 +369,9 @@ export default function AddRequestForTutor() {
                         />
                       )}
                     />
-                    <p className={errorMsg}>{errors.city?.message}</p>
+                    {errors.city?.message && (
+                      <p className={errorMsg}>{errors.city.message}</p>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -384,7 +388,9 @@ export default function AddRequestForTutor() {
           <TabsContent value="tutorDetails">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base font-medium">Tutor Details</CardTitle>
+                <CardTitle className="text-base font-medium">
+                  Tutor Details
+                </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
@@ -465,10 +471,7 @@ export default function AddRequestForTutor() {
 
                     {/* Subject */}
                     <div className={`${fieldWrapper} mb-4`}>
-                      <Label
-                        className="text-sm"
-                        htmlFor={`subject-${index}`}
-                      >
+                      <Label className="text-sm" htmlFor={`subject-${index}`}>
                         Subject <span className="text-red-500">*</span>
                       </Label>
                       <select
@@ -547,11 +550,9 @@ export default function AddRequestForTutor() {
 
                     {/* Preferred Tutor Type */}
                     <div className={`${fieldWrapper} mt-4`}>
-                      <Label
-                        className="text-sm"
-                        htmlFor={`tutorType-${index}`}
-                      >
-                        Preferred Tutor Type <span className="text-red-500">*</span>
+                      <Label className="text-sm" htmlFor={`tutorType-${index}`}>
+                        Preferred Tutor Type{" "}
+                        <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`tutorType-${index}`}
