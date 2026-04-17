@@ -4,7 +4,7 @@ import InputSelect from "@/components/shared/input-select";
 import InputText from "@/components/shared/input-text";
 import { Option } from "@/types/shared-types";
 import { Search } from "lucide-react";
-import { FC, useEffect, useRef } from "react";
+import { FC } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { PaperSearchSchema } from "./schema";
 
@@ -30,39 +30,6 @@ const FormTestPaperSearch: FC<Props> = ({
   const onSubmit = (data: PaperSearchSchema) => {
     console.log("Form Submitted", data);
   };
-
-  const selectedGrade = testPaperSearchForm.watch("grade");
-  const selectedSubject = testPaperSearchForm.watch("subject");
-  const prevGradeRef = useRef<string | null>(null);
-  const prevSubjectRef = useRef<string | null>(null);
-
-  useEffect(() => {
-    if (
-      prevGradeRef.current !== null &&
-      prevGradeRef.current !== selectedGrade
-    ) {
-      testPaperSearchForm.setValue("subject", "", {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-
-    prevGradeRef.current = selectedGrade;
-  }, [selectedGrade, testPaperSearchForm]);
-
-  useEffect(() => {
-    if (
-      prevSubjectRef.current !== null &&
-      prevSubjectRef.current !== selectedSubject
-    ) {
-      testPaperSearchForm.setValue("medium", "", {
-        shouldValidate: true,
-        shouldDirty: true,
-      });
-    }
-
-    prevSubjectRef.current = selectedSubject;
-  }, [selectedSubject, testPaperSearchForm]);
 
   return (
     <FormProvider {...testPaperSearchForm}>
@@ -92,19 +59,13 @@ const FormTestPaperSearch: FC<Props> = ({
             label="Select Subject"
             name="subject"
             options={subjectOptions}
-            disabled={!selectedGrade}
             loading={isSubjectsLoading}
           />
           <InputSelect
             label="Select Medium"
             name="medium"
             options={mediumOptions}
-            disabled={
-              !selectedGrade ||
-              !selectedSubject ||
-              isMediumsLoading ||
-              mediumOptions.length === 0
-            }
+            disabled={isMediumsLoading || mediumOptions.length === 0}
             loading={isMediumsLoading}
           />
         </div>
