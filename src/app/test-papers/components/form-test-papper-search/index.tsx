@@ -69,7 +69,7 @@ const FormTestPaperSearch: FC<Props> = ({
       <form onSubmit={testPaperSearchForm.handleSubmit(onSubmit)}>
         <div className="relative mb-6">
           <Search
-            className="pointer-events-none absolute left-3 top-[2.6rem] z-10 h-4 w-4 text-gray-400"
+            className="pointer-events-none absolute left-3 top-[2.45rem] z-10 h-4 w-4 text-gray-400"
             aria-hidden="true"
           />
           <InputText
