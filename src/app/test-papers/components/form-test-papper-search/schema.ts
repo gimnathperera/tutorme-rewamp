@@ -1,11 +1,41 @@
 import { z } from "zod";
 
-export const paperSearchSchema = z.object({
-  grade: z.string().min(1, "Grade is required"),
-  subject: z.string().min(1, "Subject is required"),
-  medium: z.string().min(1, "Medium is required"),
-  search: z.string(),
-});
+export const paperSearchSchema = z
+  .object({
+    grade: z.string(),
+    subject: z.string(),
+    medium: z.string(),
+    search: z.string(),
+  })
+  .superRefine(({ grade, subject, medium }, context) => {
+    const hasAnyFilter = Boolean(grade || subject || medium);
+
+    if (!hasAnyFilter) return;
+
+    if (!grade) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Grade is required",
+        path: ["grade"],
+      });
+    }
+
+    if (!subject) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Subject is required",
+        path: ["subject"],
+      });
+    }
+
+    if (!medium) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Medium is required",
+        path: ["medium"],
+      });
+    }
+  });
 
 export type PaperSearchSchema = z.infer<typeof paperSearchSchema>;
 

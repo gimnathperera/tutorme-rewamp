@@ -18,8 +18,6 @@ const TestPapers = () => {
     forms: { testPaperSearchForm },
   } = useLogic();
 
-  const isFormValid = testPaperSearchForm.formState.isValid;
-
   return (
     <div className="px-4 pt-12 pb-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl py-4 m-3">
@@ -49,12 +47,10 @@ const TestPapers = () => {
         />
       </div>
 
-      {isFormValid && (
-        <TestPaperList
-          availablePapers={availablePapers}
-          isPapersLoading={isPapersLoading}
-        />
-      )}
+      <TestPaperList
+        availablePapers={availablePapers}
+        isPapersLoading={isPapersLoading}
+      />
     </div>
   );
 };

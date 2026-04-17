@@ -110,6 +110,14 @@ const getPaperMediumValues = (paper: Paper): string[] => {
   ].flatMap(extractStringValues);
 };
 
+const getPaperGradeValues = (paper: Paper): string[] => {
+  return extractStringValues(paper.grade);
+};
+
+const getPaperSubjectValues = (paper: Paper): string[] => {
+  return extractStringValues(paper.subject);
+};
+
 const getPaperMediumOptions = (papers: Paper[]): Option[] => {
   const optionsMap = new Map<string, Option>();
 
@@ -199,10 +207,8 @@ const useLogic = (): LogicReturnType => {
   );
 
   const fetchTestPapers = useCallback(
-    async (grade: string, subject: string) => {
+    async () => {
       const result = await fetchPapers({
-        grade,
-        subject,
         limit: PAPER_LIMIT,
         page: 1,
       });
@@ -218,10 +224,8 @@ const useLogic = (): LogicReturnType => {
   );
 
   useEffect(() => {
-    if (selectedGrade && selectedSubject) {
-      fetchTestPapers(selectedGrade, selectedSubject);
-    }
-  }, [fetchTestPapers, selectedGrade, selectedSubject]);
+    fetchTestPapers();
+  }, [fetchTestPapers]);
 
   useEffect(() => {
     if (selectedGrade) {
@@ -238,11 +242,31 @@ const useLogic = (): LogicReturnType => {
       value: grade.id.toString(),
     })) || [];
 
-  const mediumOptions = useMemo(() => getPaperMediumOptions(papers), [papers]);
+  const papersForMediumOptions = useMemo(() => {
+    if (!selectedGrade || !selectedSubject) return [];
+
+    const normalizedSelectedGrade = normalizeFilterValue(selectedGrade);
+    const normalizedSelectedSubject = normalizeFilterValue(selectedSubject);
+
+    return papers.filter((paper) => {
+      const matchesGrade = getPaperGradeValues(paper).includes(
+        normalizedSelectedGrade,
+      );
+      const matchesSubject = getPaperSubjectValues(paper).includes(
+        normalizedSelectedSubject,
+      );
+
+      return matchesGrade && matchesSubject;
+    });
+  }, [papers, selectedGrade, selectedSubject]);
+
+  const mediumOptions = useMemo(
+    () => getPaperMediumOptions(papersForMediumOptions),
+    [papersForMediumOptions],
+  );
 
   useEffect(() => {
     if (!selectedGrade || !selectedSubject) {
-      setPapers([]);
       testPaperSearchForm.setValue("medium", "", {
         shouldValidate: true,
       });
@@ -265,7 +289,14 @@ const useLogic = (): LogicReturnType => {
   }, [mediumOptions, selectedMedium, testPaperSearchForm]);
 
   const normalizedSearchTerm = normalizeFilterValue(searchTerm);
+  const normalizedSelectedGrade = normalizeFilterValue(selectedGrade);
+  const normalizedSelectedSubject = normalizeFilterValue(selectedSubject);
   const normalizedSelectedMedium = normalizeFilterValue(selectedMedium);
+  const hasCompleteSelectFilter = Boolean(
+    normalizedSelectedGrade &&
+      normalizedSelectedSubject &&
+      normalizedSelectedMedium,
+  );
 
   const filteredPapers = papers.filter((paper) => {
     const searchableContent = [
@@ -281,16 +312,25 @@ const useLogic = (): LogicReturnType => {
       !normalizedSearchTerm ||
       searchableContent.includes(normalizedSearchTerm);
 
+    if (!hasCompleteSelectFilter) {
+      return matchesSearch;
+    }
+
+    const matchesGrade = getPaperGradeValues(paper).includes(
+      normalizedSelectedGrade,
+    );
+    const matchesSubject = getPaperSubjectValues(paper).includes(
+      normalizedSelectedSubject,
+    );
     const paperMediumValues = getPaperMediumValues(paper);
     const matchesMedium =
-      !normalizedSelectedMedium ||
       paperMediumValues.some(
         (value) =>
           value.includes(normalizedSelectedMedium) ||
           normalizedSelectedMedium.includes(value),
       );
 
-    return matchesSearch && matchesMedium;
+    return matchesSearch && matchesGrade && matchesSubject && matchesMedium;
   });
 
   return {
