@@ -271,11 +271,7 @@ const useLogic = (): LogicReturnType => {
     const paperMediumValues = getPaperMediumValues(paper);
     const matchesMedium =
       !normalizedSelectedMedium ||
-      paperMediumValues.some(
-        (value) =>
-          value.includes(normalizedSelectedMedium) ||
-          normalizedSelectedMedium.includes(value),
-      );
+      paperMediumValues.includes(normalizedSelectedMedium);
 
     return matchesSearch && matchesGrade && matchesSubject && matchesMedium;
   });
