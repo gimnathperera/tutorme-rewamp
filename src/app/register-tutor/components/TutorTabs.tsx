@@ -8,6 +8,7 @@ import LogoImage from "../../../../public/images/findTutor/register.png";
 import Image from "next/image";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 import {
   Card,
   CardContent,
@@ -141,6 +142,17 @@ export function TutorTabs() {
       const result = await addTutorRequest(payload);
       const error = getErrorInApiResult(result);
       if (error) {
+        // Show a prominent toast for suspended emails, generic dialog for anything else
+        if (
+          typeof error === "string" &&
+          error.toLowerCase().includes("suspended")
+        ) {
+          toast.error(
+            "Your email has been suspended. Please contact admin to resolve this.",
+            { duration: 8000, style: { maxWidth: 420 } }
+          );
+          return;
+        }
         setSubmissionResult(error);
         return;
       }
