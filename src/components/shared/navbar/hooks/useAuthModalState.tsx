@@ -4,6 +4,7 @@ import FormForgotPassword from "@/components/auth/form-forgot-password";
 import FormLogin from "@/components/auth/form-login";
 import FormSignUp from "@/components/auth/form-sign-up";
 import { useAuthContext } from "@/contexts";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export enum FormType {
@@ -28,6 +29,7 @@ const useAuthModalState = (): LogicReturnType => {
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
   const { user } = useAuthContext();
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -59,7 +61,7 @@ const useAuthModalState = (): LogicReturnType => {
       case FormType.Login:
         return (
           <FormLogin
-            onRegisterClick={() => handleOnChangeForm(FormType.SignUp)}
+            onRegisterClick={() => { handleCloseAuthModal(); router.push("/request-for-tutors/create-request"); }}
             onForgotPasswordClick={() =>
               handleOnChangeForm(FormType.ForgotPassword)
             }
@@ -82,7 +84,7 @@ const useAuthModalState = (): LogicReturnType => {
       default:
         return (
           <FormLogin
-            onRegisterClick={() => handleOnChangeForm(FormType.SignUp)}
+            onRegisterClick={() => { handleCloseAuthModal(); router.push("/request-for-tutors/create-request"); }}
             onForgotPasswordClick={() =>
               handleOnChangeForm(FormType.ForgotPassword)
             }
