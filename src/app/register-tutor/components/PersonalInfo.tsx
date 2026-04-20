@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Calendar } from "lucide-react";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-2";
@@ -149,15 +150,18 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="dateOfBirth">
           Date of Birth <span className="text-red-500">*</span>
         </Label>
-        <Input
-          id="dateOfBirth"
-          type="date"
-          {...register("dateOfBirth")}
-          onKeyDown={(e) => e.preventDefault()}
-          max={maxDate}
-          autoComplete="bday"
-          className={`${inputClass} ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
-        />
+        <div className="relative">
+          <Input
+            id="dateOfBirth"
+            type="date"
+            {...register("dateOfBirth")}
+            onKeyDown={(e) => e.preventDefault()}
+            max={maxDate}
+            autoComplete="bday"
+            className={`${inputClass} pr-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
+          />
+          <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+        </div>
         {errors.dateOfBirth ? (
           <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.dateOfBirth?.message as string}
