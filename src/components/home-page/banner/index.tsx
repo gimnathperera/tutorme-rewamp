@@ -8,6 +8,8 @@ const Banner = () => {
   const badgeRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const ctaSizeClass =
+    "w-full max-w-[18rem] !px-5 !py-3 !text-sm sm:w-auto sm:max-w-none sm:!px-9 sm:!py-3.5 sm:!text-base";
 
   const handleOnFindATutorClick = () => {
     route.push("/request-for-tutors");
@@ -77,7 +79,8 @@ const Banner = () => {
           }}
         >
           <h1 className="hero-title">
-            Personalized Home <br />
+            Personalized <br className="sm:hidden" />
+            Home <br />
             Tuition
           </h1>
         </div>
@@ -92,19 +95,22 @@ const Banner = () => {
           }}
           className="flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center mt-6 w-full px-4"
         >
-          <button className="hero-cta" onClick={handleOnFindATutorClick}>
+          <button
+            className={`hero-cta ${ctaSizeClass}`}
+            onClick={handleOnFindATutorClick}
+          >
             Request for Tutor
           </button>
 
           <button
-            className="hero-cta-secondary"
+            className={`hero-cta-secondary ${ctaSizeClass}`}
             onClick={() => route.push("/register-tutor")}
           >
             Register as a Tutor
           </button>
 
           <button
-            className="hero-cta-whatsapp"
+            className={`hero-cta-whatsapp ${ctaSizeClass}`}
             onClick={() => {
               const num = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
               const formattedNum = num.startsWith("0")

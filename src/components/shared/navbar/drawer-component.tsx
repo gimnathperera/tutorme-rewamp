@@ -25,15 +25,15 @@ const Drawer = ({
   return (
     <main
       className={
-        "fixed overflow-hidden z-10 bg-gray-900 bg-opacity-25 inset-0 transform ease-in-out " +
+        "fixed overflow-hidden z-[100] inset-0 transition-opacity duration-200 ease-in-out [-webkit-tap-highlight-color:transparent] " +
         (isOpen
-          ? "transition-opacity opacity-100 duration-500 translate-x-0"
-          : "transition-all delay-500 opacity-0 -translate-x-full")
+          ? "opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none")
       }
     >
       <section
         className={
-          "drawer-panel w-340px max-w-lg left-0 absolute bg-white h-full shadow-xl delay-400 duration-500 ease-in-out transition-all transform " +
+          "drawer-panel z-10 w-340px max-w-lg left-0 absolute bg-white h-full shadow-xl duration-300 ease-in-out transition-transform transform " +
           (isOpen ? "translate-x-0" : "-translate-x-full")
         }
       >
@@ -83,7 +83,7 @@ const Drawer = ({
 
       {/* Backdrop */}
       <section
-        className="w-screen h-full cursor-pointer"
+        className="absolute inset-0 bg-gray-900/25 cursor-pointer [-webkit-tap-highlight-color:transparent]"
         onClick={() => {
           setIsOpen(false);
         }}
