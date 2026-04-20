@@ -210,6 +210,22 @@ export default function BlogsDashboard() {
                           Tuition Lanka
                         </span>
                       </div>
+                      {(user?.role === "admin" || (blog as any).author?.id === user?.id) && (
+                          <span className={[
+                            "ml-auto px-2 py-0.5 rounded-full text-xs font-semibold",
+                            (blog as any).status === "approved"
+                              ? "bg-green-100 text-green-700"
+                              : (blog as any).status === "pending"
+                              ? "bg-yellow-100 text-yellow-700"
+                              : "bg-red-100 text-red-700",
+                          ].join(" ")}>
+                            {(blog as any).status === "approved"
+                              ? "Approved"
+                              : (blog as any).status === "pending"
+                              ? "Pending"
+                              : "Rejected"}
+                          </span>
+                        )}
                       {!imageSrc && (
                         <span className="ml-auto text-xs text-gray-400">
                           {blogDate.toLocaleDateString("en-US", {

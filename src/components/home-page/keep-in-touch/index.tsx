@@ -4,10 +4,10 @@ import Link from "next/link";
 
 const KeepInTouch = () => {
   return (
-    <div className="bg-joinus py-8 lg:py-12" id="keep-in-touch-section">
+    <div className="bg-joinus pt-6 pb-8 lg:pt-8 lg:pb-12" id="keep-in-touch-section">
       <div className="mx-auto max-w-7xl">
         <div className="text-center animate-on-scroll">
-          <h2 className="text-4xl font-bold leading-[1.2] text-[#111827] my-4">
+          <h2 className="text-4xl font-bold leading-[1.2] text-[#111827] mb-4">
             Take your learning or teaching journey
             <br className="hidden sm:block" /> to the next level.
           </h2>

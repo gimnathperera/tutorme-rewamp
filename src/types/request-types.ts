@@ -87,8 +87,9 @@ export type FetchLevelRequest = {
 export type FetchPapersRequest = {
   page: number;
   limit: number;
-  grade: string;
-  subject: string;
+  grade?: string;
+  subject?: string;
+  medium?: string;
 };
 
 export type FetchGradesRequest = {

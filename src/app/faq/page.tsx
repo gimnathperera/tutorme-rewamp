@@ -4,6 +4,7 @@ import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 type FaqItem = {
   question: string;
@@ -204,6 +205,7 @@ const FaqPage = () => {
           </div>
         )}
       </div>
+      <WhatsAppButton />
     </div>
   );
 };
