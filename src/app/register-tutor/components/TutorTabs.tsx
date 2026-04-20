@@ -31,7 +31,6 @@ import TermsAndSubmit from "./TermsAndSubmit";
 import {
   FindMyTutorForm,
   fullSchema,
-  step1Schema,
   step2Schema,
   step3Schema,
 } from "../schema";
@@ -67,6 +66,8 @@ export function TutorTabs() {
     defaultValues: {
       fullName: "",
       email: "",
+      password: "",
+      confirmPassword: "",
       contactNumber: "",
       dateOfBirth: "",
       age: 0,
@@ -74,7 +75,7 @@ export function TutorTabs() {
       nationality: "",
       race: "",
 
-      tutoringLevels: [],
+      classType: [],
       preferredLocations: [],
       tutorType: [],
       tutorMediums: [],
@@ -88,7 +89,7 @@ export function TutorTabs() {
       sellingPoints: "",
       academicDetails: "",
 
-      certificatesAndQualifications: [],
+      certificatesAndQualifications: [{ type: "", url: "" }],
       agreeTerms: false,
       agreeAssignmentInfo: false,
     },
@@ -99,13 +100,30 @@ export function TutorTabs() {
   const currentIndex = TAB_ORDER.indexOf(tab);
 
   const nextStep = async () => {
-    let schema;
-    if (tab === "personalInfo") schema = step1Schema;
-    if (tab === "qualifications") schema = step2Schema;
-    if (tab === "teachingProfile") schema = step3Schema;
+    let fieldsToValidate: string[] | undefined;
 
-    if (schema) {
-      const valid = await trigger(Object.keys(schema.shape) as any);
+    if (tab === "personalInfo") {
+      // step1Schema uses .superRefine, so we list fields explicitly
+      fieldsToValidate = [
+        "fullName",
+        "email",
+        "password",
+        "confirmPassword",
+        "contactNumber",
+        "dateOfBirth",
+        "gender",
+        "age",
+        "nationality",
+        "race",
+      ];
+    } else if (tab === "qualifications") {
+      fieldsToValidate = Object.keys(step2Schema.shape);
+    } else if (tab === "teachingProfile") {
+      fieldsToValidate = Object.keys(step3Schema.shape);
+    }
+
+    if (fieldsToValidate) {
+      const valid = await trigger(fieldsToValidate as any);
       if (!valid) return;
     }
 
@@ -118,7 +136,9 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
-      const result = await addTutorRequest(data);
+      // Strip confirmPassword — it is front-end only and must not reach the API
+      const { confirmPassword: _omit, ...payload } = data;
+      const result = await addTutorRequest(payload);
       const error = getErrorInApiResult(result);
       if (error) {
         setSubmissionResult(error);
@@ -145,6 +165,7 @@ export function TutorTabs() {
     isLoading ||
     !certificates ||
     certificates.length === 0 ||
+    !certificates.some((c: { type: string; url: string }) => c.type && c.url) ||
     !agreeTerms ||
     !agreeAssignmentInfo;
 
@@ -169,7 +190,7 @@ export function TutorTabs() {
                   <PersonalInfo />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button type="button" onClick={nextStep}>
+                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
                     Next
                   </Button>
                 </CardFooter>
@@ -188,7 +209,7 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep}>
+                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
                     Next
                   </Button>
                 </CardFooter>
@@ -207,7 +228,7 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep}>
+                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
                     Next
                   </Button>
                 </CardFooter>
@@ -228,7 +249,7 @@ export function TutorTabs() {
                   </Button>
                   <Button
                     type="submit"
-                    className="ml-auto"
+                    className="ml-auto bg-blue-600 text-white"
                     disabled={isSubmitDisabled}
                   >
                     Submit {isLoading ? <Spinner /> : ""}

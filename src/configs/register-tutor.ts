@@ -53,6 +53,13 @@ export const TUTORING_LEVEL_OPTIONS: SelectOption[] = [
   { value: "Music & Arts", text: "Music & Arts" },
   { value: "Special Skills", text: "Special Skills" },
 ];
+
+export const CLASS_TYPE_OPTIONS: SelectOption[] = [
+  { value: "Online - Individual", text: "Online - Individual" },
+  { value: "Online - Group", text: "Online - Group" },
+  { value: "Physical - Individual", text: "Physical - Individual" },
+  { value: "Physical - Group", text: "Physical - Group" },
+];
 export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   {
     value: "Kollupitiya (Colombo 3)",
@@ -116,12 +123,10 @@ export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "No Preference", text: "No Preference" },
 ];
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  { value: "Full-Time", text: "Full-Time" },
-  { value: "Part-Time", text: "Part-Time" },
-  { value: "Online", text: "Online" },
-  { value: "School Teacher Tutors", text: "School Teacher Tutors" },
-  { value: "Group Tutors", text: "Group Tutors" },
-  { value: "Exam Coaches", text: "Exam Coaches" },
+  { value: "Private Tutor", text: "Private Tutor" },
+  { value: "Government Teacher", text: "Government Teacher" },
+  { value: "University Student", text: "University Student" },
+  { value: "Coach", text: "Coach" },
 ];
 export const HIGHEST_EDUCATION_LEVELS: SelectOption[] = [
   { value: "PhD", text: "PhD" },

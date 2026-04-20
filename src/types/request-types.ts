@@ -169,6 +169,7 @@ export type FetchTuitionAssignmentsRequest = {
 export type FindMyTutorRequest = {
   fullName: string;
   email: string;
+  password: string;
   contactNumber: string;
   dateOfBirth: string;
   age: number;
@@ -176,7 +177,7 @@ export type FindMyTutorRequest = {
   nationality: string;
   race: string;
 
-  tutoringLevels: string[];
+  classType: string[];
   preferredLocations: string[];
 
   tutorType: string[];
@@ -191,7 +192,7 @@ export type FindMyTutorRequest = {
   sellingPoints: string;
   academicDetails: string;
 
-  certificatesAndQualifications: string[];
+  certificatesAndQualifications: { type: string; url: string }[];
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
 };
