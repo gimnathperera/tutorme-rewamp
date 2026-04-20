@@ -9,6 +9,7 @@ const TestPapers = () => {
     derivedData: {
       gradesOptions,
       subjectOptions,
+      mediumOptions,
       isGradesLoading,
       isSubjectsLoading,
       papers: availablePapers,
@@ -16,8 +17,6 @@ const TestPapers = () => {
     },
     forms: { testPaperSearchForm },
   } = useLogic();
-
-  const isFormValid = testPaperSearchForm.formState.isValid;
 
   return (
     <div className="px-4 pt-12 pb-24 sm:px-6 lg:px-8">
@@ -40,18 +39,18 @@ const TestPapers = () => {
         <FormTestPaperSearch
           gradesOptions={gradesOptions}
           subjectOptions={subjectOptions}
+          mediumOptions={mediumOptions}
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading}
           isSubjectsLoading={isSubjectsLoading}
+          isMediumsLoading={isPapersLoading}
         />
       </div>
 
-      {isFormValid && (
-        <TestPaperList
-          availablePapers={availablePapers}
-          isPapersLoading={isPapersLoading}
-        />
-      )}
+      <TestPaperList
+        availablePapers={availablePapers}
+        isPapersLoading={isPapersLoading}
+      />
     </div>
   );
 };

@@ -59,7 +59,6 @@ export const createArticleSchema = z.object({
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
     .optional(),
-  status: z.enum(["pending", "published", "draft"]),
 });
 
 export type CreateArticleSchema = z.infer<typeof createArticleSchema>;
@@ -71,5 +70,4 @@ export const initialFormValues: CreateArticleSchema = {
   relatedArticles: [],
   tags: [],
   faqs: [],
-  status: "pending",
 };

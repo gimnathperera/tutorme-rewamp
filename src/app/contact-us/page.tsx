@@ -13,6 +13,7 @@ import {
   ContactUsPageSchema,
   initialFormValues,
 } from "./schema";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const CONTACT_INFO = [
   {
@@ -201,6 +202,7 @@ const ContactUsPage = () => {
         </div>
 
       </div>
+      <WhatsAppButton /> 
     </div>
   );
 };

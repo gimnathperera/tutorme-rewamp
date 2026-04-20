@@ -12,9 +12,10 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 type Rate = { minimumRate: string; maximumRate: string };
 type SubjectRate = {
   title: string;
-  fullTime: Rate[];
-  partTime: Rate[];
-  gov: Rate[];
+  onlineIndividual: Rate[];
+  onlineGroup: Rate[];
+  physicalIndividual: Rate[];
+  physicalGroup: Rate[];
 };
 
 type GradeGroup = {
@@ -44,7 +45,7 @@ function RateCell({ rates }: { rates: Rate[] }) {
 export default function TuitionRatesByGrade() {
   const { data, isLoading, error } = useFetchTuitionRatesQuery({
     page: 1,
-    limit: 20000,
+    limit: 1000,
   });
 
   if (isLoading) {
@@ -77,9 +78,10 @@ export default function TuitionRatesByGrade() {
         }
         acc[gradeTitle].subjects.push({
           title: item.subject?.title || "Unknown Subject",
-          fullTime: item.fullTimeTuitionRate || [],
-          partTime: item.partTimeTuitionRate || [],
-          gov: item.govTuitionRate || [],
+          onlineIndividual: item.onlineIndividualTuitionRate || [],
+          onlineGroup: item.onlineGroupTuitionRate || [],
+          physicalIndividual: item.physicalIndividualTuitionRate || [],
+          physicalGroup: item.physicalGroupTuitionRate || [],
         });
         return acc;
       },
@@ -133,25 +135,31 @@ export default function TuitionRatesByGrade() {
                   <table className="w-full min-w-[560px] text-sm">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           Subject
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                            Full-Time
+                            Online - Individual
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                            Part-Time
+                            Online - Group
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/4">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                            Government
+                            Physical - Individual
+                          </span>
+                        </th>
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                          <span className="inline-flex items-center gap-1.5">
+                            <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
+                            Physical - Group
                           </span>
                         </th>
                       </tr>
@@ -173,13 +181,16 @@ export default function TuitionRatesByGrade() {
                             </span>
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.fullTime} />
+                            <RateCell rates={subject.onlineIndividual} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.partTime} />
+                            <RateCell rates={subject.onlineGroup} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.gov} />
+                            <RateCell rates={subject.physicalIndividual} />
+                          </td>
+                          <td className="px-5 py-3.5">
+                            <RateCell rates={subject.physicalGroup} />
                           </td>
                         </tr>
                       ))}
