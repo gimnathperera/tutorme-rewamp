@@ -79,7 +79,8 @@ const Banner = () => {
           }}
         >
           <h1 className="hero-title">
-            Personalized Home <br />
+            Personalized <br className="sm:hidden" />
+            Home <br />
             Tuition
           </h1>
         </div>
