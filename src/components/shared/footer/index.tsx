@@ -47,8 +47,8 @@ const products: ProductType[] = [
 const footer = () => {
   return (
     <div className="bg-black" id="first-section">
-      <div className="mx-auto max-w-2xl pt-4 pb-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-        <div className="mt-4 mb-5 grid grid-cols-2 gap-y-8 gap-x-6 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-12 lg:gap-x-16 xl:gap-x-8">
+      <div className="mx-auto max-w-7xl pt-2 px-4 mb-3">
+        <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 lg:grid-cols-12 xl:gap-x-8">
           {/* COLUMN-1 */}
           <div className="col-span-2 lg:col-span-4">
             <h3 className="text-white text-2xl font-bold leading-snug mb-4 lg:mb-10">
@@ -88,8 +88,8 @@ const footer = () => {
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src={"/images/footer/instagram.svg"}
-                    alt="instagram"
+                    src={"/images/footer/tiktok.svg"}
+                    alt="tiktok"
                     width={20}
                     height={20}
                   />
@@ -101,8 +101,8 @@ const footer = () => {
           {/* COLUMN-2/3 */}
 
           {products.map((product) => (
-            <div key={product.id} className="group relative col-span-1 sm:col-span-1 lg:col-span-2">
-              <p className="text-white text-sm font-bold uppercase tracking-widest mb-2">
+            <div key={product.id} className="group relative col-span-2">
+              <p className="text-white text-sm font-semibold uppercase tracking-widest mb-2">
                 {product.section}
               </p>
               <ul>
@@ -122,9 +122,9 @@ const footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-2xl lg:max-w-7xl">
-        <div className="pb-5 px-4 sm:px-6 lg:px-4 border-solid border-t border-footer">
-          <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
+      <div className="mx-auto max-w-7xl px-4">
+        <div className="pb-5 border-solid border-t border-footer">
+          <div className="mt-4 grid grid-cols-1 gap-y-10 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <p className="text-center md:text-start text-offwhite text-sm">
                 @2026 - All Rights Reserved by tuitionlanka.com
