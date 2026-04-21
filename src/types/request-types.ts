@@ -116,13 +116,13 @@ export type UpdateBlogRequest = {
   faqs?: Array<{ _id?: string; question: string; answer: string }>;
   tags?: string[];
   relatedArticles?: string[];
-  status?: "pending" | "published" | "draft";
+  status?: "pending" | "approved" | "rejected";
 };
 
 export type FetchBlogsRequest = {
   blogId?: string;
   id?: string;
-  status?: "pending" | "published" | "draft";
+  status?: "pending" | "approved" | "rejected";
   authorName?: string;
   title?: string;
   page?: number;

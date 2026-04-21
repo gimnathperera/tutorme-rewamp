@@ -112,11 +112,11 @@ const Faqs = () => {
 
   const totalItems = data?.totalResults || 0;
 
-  const loadMore = () => {
-    if (faqs.length < totalItems) {
-      setPage((prev) => prev + 1);
-    }
-  };
+  // const loadMore = () => {
+  //   if (faqs.length < totalItems) {
+  //     setPage((prev) => prev + 1);
+  //   }
+  // };
 
   useEffect(() => {
     if (data?.results) {
