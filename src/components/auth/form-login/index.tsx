@@ -33,12 +33,14 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     if (isAuthError) {
       toast.error("Invalid credentials. Email or password wrong.", {
         id: "login-error",
+        duration: 3000,
       });
     }
   }, [isAuthError]);
 
   const onSubmit = (data: LoginSchema) => {
-    if (isAuthError) setIsAuthError(null);
+    toast.dismiss("login-error");
+    setIsAuthError(null);
     login(data);
   };
 

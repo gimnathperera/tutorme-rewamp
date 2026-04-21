@@ -59,7 +59,7 @@ export const updateArticleSchema = z.object({
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
     .optional(),
-  status: z.enum(["pending", "published", "draft"]),
+  status: z.enum(["pending", "approved", "rejected"]),
 });
 
 export type UpdateArticleSchema = z.infer<typeof updateArticleSchema>;
