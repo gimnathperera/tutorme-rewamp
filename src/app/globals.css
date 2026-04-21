@@ -10,23 +10,23 @@
 @import "slick-carousel/slick/slick-theme.css";
 
 html {
-  --site-navbar-height: 72px;
+  --site-shell-offset: 72px;
   --scroll-behavior: smooth !important;
   scroll-behavior: smooth !important;
-  scroll-padding-top: var(--site-navbar-height);
+  scroll-padding-top: var(--site-shell-offset);
   max-width: 100%;
   overflow-x: clip;
 }
 
 @media (min-width: 640px) {
   html {
-    --site-navbar-height: 104px;
+    --site-shell-offset: 72px;
   }
 }
 
 @media (min-width: 768px) {
   html {
-    --site-navbar-height: 112px;
+    --site-shell-offset: 80px;
   }
 }
 
@@ -54,7 +54,7 @@ body {
 .site-shell {
   min-height: 100vh;
   min-height: 100dvh;
-  padding-top: var(--site-navbar-height);
+  padding-top: var(--site-shell-offset);
 }
 
 /* 
@@ -468,7 +468,7 @@ html:not([data-scroll="0"]) .border-right {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: calc(var(--site-navbar-height) * -1);
+  margin-top: calc(var(--site-shell-offset) * -1);
 }
 
 .hero-video {
