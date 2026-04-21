@@ -18,13 +18,15 @@ const ProfilePage: FC = () => {
   } = useLogic();
 
   return (
-    <div className="container mx-auto pb-8">
-      <div className="mx-auto w-full max-w-7xl py-4">
-        <div className="mb-6 text-left">
-          <h1 className="text-3xl font-bold text-gray-900">Profile settings</h1>
+    <div className="container mx-auto py-4">
+      <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8 sm:py-6">
+        <div className="mb-5 text-left sm:mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            Profile settings
+          </h1>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <ProfilePicSettings />
 
           <FormLanguageTime
@@ -45,7 +47,7 @@ const ProfilePage: FC = () => {
           <FormPasswordInfo />
         </div>
       </div>
-      <WhatsAppButton /> 
+      <WhatsAppButton />
     </div>
   );
 };

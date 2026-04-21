@@ -31,12 +31,14 @@ const FormLanguageTime: FC<Props> = ({
   };
 
   return (
-    <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
-      <h3 className="mb-4 text-xl font-semibold ">Language & Time Settings </h3>
+    <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        Language &amp; Time Settings
+      </h3>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
               <InputSelect
                 label="Select language"
                 name="language"
@@ -50,7 +52,7 @@ const FormLanguageTime: FC<Props> = ({
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton
-                className="peer font-semibold rounded-lg text-base px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
                 title="Update Language & Time"
