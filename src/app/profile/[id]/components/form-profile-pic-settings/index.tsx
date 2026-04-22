@@ -77,36 +77,50 @@ const ProfilePicSettings = () => {
   };
 
   return (
-    <div className="flex justify-center rounded-2xl bg-white px-4 py-6 shadow-sm sm:rounded-3xl sm:px-6 sm:py-8">
-      <div className="relative h-28 w-28 sm:h-36 sm:w-36">
-        <img
-          src={avatarUrl}
-          alt="User profile picture"
-          className="h-full w-full rounded-full border object-cover"
-        />
+    <div className="rounded-2xl bg-white px-4 py-6 shadow-sm sm:rounded-3xl sm:px-6 sm:py-8">
+      <div className="mb-6 text-center">
+        <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+          Profile Photo
+        </h3>
+        <p className="mt-2 text-sm text-gray-500">
+          Choose a clear, professional photo for your public tutor profile.
+        </p>
+      </div>
 
-        <button
-          onClick={() => setOpen(true)}
-          className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
-          aria-label="Edit profile picture"
-        >
-          <Pencil size={16} className="sm:h-[18px] sm:w-[18px]" />
-        </button>
+      <div className="flex justify-center">
+        <div className="relative h-28 w-28 sm:h-36 sm:w-36">
+          <img
+            src={avatarUrl}
+            alt="User profile picture"
+            className="h-full w-full rounded-full border object-cover"
+          />
 
-        <button
-          onClick={() => setConfirmDeleteOpen(true)}
-          className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
-          aria-label="Delete profile picture"
-        >
-          <Trash2 size={16} className="text-red-600 sm:h-[18px] sm:w-[18px]" />
-        </button>
+          <button
+            onClick={() => setOpen(true)}
+            className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
+            aria-label="Edit profile picture"
+          >
+            <Pencil size={16} className="sm:h-[18px] sm:w-[18px]" />
+          </button>
+
+          <button
+            onClick={() => setConfirmDeleteOpen(true)}
+            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
+            aria-label="Delete profile picture"
+          >
+            <Trash2
+              size={16}
+              className="text-red-600 sm:h-[18px] sm:w-[18px]"
+            />
+          </button>
+        </div>
       </div>
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-md rounded-xl bg-white p-4 sm:p-6">
             <h3 className="mb-2 text-lg font-semibold sm:text-xl">
-              Change profile picture
+              Change profile photo
             </h3>
 
             <p className="mb-4 text-sm text-gray-500">
@@ -146,7 +160,7 @@ const ProfilePicSettings = () => {
             </h3>
 
             <p className="mb-6 text-sm text-gray-500">
-              This will permanently remove your profile picture.
+              This will permanently remove your current profile photo.
             </p>
 
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
