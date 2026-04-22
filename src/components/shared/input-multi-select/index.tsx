@@ -50,6 +50,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
             {...field}
             isLoading={isLoading}
             isMulti
+            isSearchable={false}
             placeholder="Select an option"
             options={options}
             className={`basic-multi-select ${
@@ -64,8 +65,15 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
             styles={{
               placeholder: (base) => ({
                 ...base,
-                color: "#000",
+                color: "#6B7280",
                 fontSize: "0.875rem",
+                marginLeft: "2px",
+              }),
+              input: (base) => ({
+                ...base,
+                margin: "0",
+                padding: "0",
+                caretColor: "transparent",
               }),
               control: (base) => ({
                 ...base,
