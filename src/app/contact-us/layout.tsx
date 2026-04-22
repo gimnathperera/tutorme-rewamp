@@ -1,8 +1,8 @@
 import { createMetadata, seoPages } from "@/lib/seo";
 
-export const metadata = createMetadata(seoPages.gradesAndSubjects);
+export const metadata = createMetadata(seoPages.contactUs);
 
-export default function GradesAndSubjectsLayout({
+export default function ContactUsLayout({
   children,
 }: {
   children: React.ReactNode;
