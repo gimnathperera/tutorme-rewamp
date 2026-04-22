@@ -53,8 +53,18 @@ export type UpdateProfileRequest = {
     tutorType?: string;
     gender?: string;
     duration?: string;
+    frequency?: string;
     timeZone?: string;
     language?: string;
+    availability?: string;
+    rate?: string;
+    tutoringLevels?: string[];
+    preferredLocations?: string[];
+    tutorTypes?: string[];
+    highestEducation?: string;
+    yearsExperience?: number;
+    tutorMediums?: string[];
+    avatar?: string;
   };
 };
 

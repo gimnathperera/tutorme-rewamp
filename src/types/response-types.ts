@@ -289,6 +289,15 @@ export type ProfileResponse = {
   frequency: string;
   timeZone: string;
   language: string;
+  availability?: string;
+  rate?: string;
+  avatar?: string;
+  tutoringLevels?: string[];
+  preferredLocations?: string[];
+  tutorTypes?: string[];
+  highestEducation?: string;
+  yearsExperience?: number;
+  tutorMediums?: string[];
 } & Id &
   Timestamp;
 
