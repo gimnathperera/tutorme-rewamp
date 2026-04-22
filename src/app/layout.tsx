@@ -2,6 +2,7 @@ import NavBar from "@/components/shared/navbar";
 import Script from "next/script";
 import Footer from "@/components/shared/footer";
 import BackToTop from "@/components/shared/back-to-top";
+import RouteScrollManager from "@/components/shared/route-scroll-manager";
 import "./globals.css";
 import { WithProviders } from "@/hocs/with-providers";
 
@@ -23,7 +24,8 @@ export default function RootLayout({
       <body>
         <Script src="/env-config.js" strategy="afterInteractive" />
         <WithProviders>
-          <main className="bg-lightwhite pt-12 sm:pt-20 flex flex-col min-h-screen">
+          <RouteScrollManager />
+          <main className="site-shell bg-lightwhite flex flex-col">
             <NavBar />
             <div className="flex-1">{children}</div>
             <Footer />
