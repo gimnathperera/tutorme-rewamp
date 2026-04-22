@@ -24,7 +24,14 @@ const InputPassword: React.FC<InputPasswordProps> = React.memo(
       <div className="flex flex-col">
         {label && (
           <label className="mb-1 text-sm font-medium text-gray-700">
-            {label}
+            {label.includes("*") ? (
+              <>
+                {label.replace(" *", "")}
+                <span className="text-red-500"> *</span>
+              </>
+            ) : (
+              label
+            )}
           </label>
         )}
 
