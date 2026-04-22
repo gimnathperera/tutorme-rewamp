@@ -3,7 +3,6 @@ import { FC } from "react";
 import useLogic from "./hooks/useLogic";
 import ProfilePicSettings from "./components/form-profile-pic-settings";
 import FormLanguageTime from "./components/form-language-time";
-import SocialAccounts from "./components/form-social-accounts";
 import FormGeneralInfo from "./components/form-general-information";
 import FormPasswordInfo from "./components/form-password-information";
 import WhatsAppButton from "@/components/shared/whatapp-button";
@@ -19,12 +18,13 @@ const ProfilePage: FC = () => {
   } = useLogic();
 
   return (
-    <div className="container pb-8">
-      <div className="grid grid-cols-1 px-4 pt-6 xl:grid-cols-3 xl:gap-4">
-        <div className="mb-4 col-span-full xl:mb-2">
+    <div className="container mx-auto pb-8">
+      <div className="mx-auto w-full max-w-7xl py-4">
+        <div className="mb-6 text-left">
           <h1 className="text-3xl font-bold text-gray-900">Profile settings</h1>
         </div>
-        <div className="col-span-full xl:col-auto">
+
+        <div className="space-y-6">
           <ProfilePicSettings />
 
           <FormLanguageTime
@@ -35,15 +35,13 @@ const ProfilePage: FC = () => {
             isSubmitting={isGeneralFormSubmitting}
           />
 
-          <SocialAccounts />
-        </div>
-        <div className="col-span-2">
           <FormGeneralInfo
             dropdownOptionData={dropdownOptionData}
             form={generalInfoForm}
             onFormSubmit={onGeneralInfoFormSubmission}
             isSubmitting={isGeneralFormSubmitting}
           />
+
           <FormPasswordInfo />
         </div>
       </div>

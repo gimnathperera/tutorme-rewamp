@@ -53,7 +53,7 @@ export default function BlogsDashboard() {
     setPage(1);
   }, [activeTag]);
 
-  const recentArticles = allBlogs.slice(0, 5);
+  // const recentArticles = allBlogs.slice(0, 5);
 
   if (isBlogsLoading || isTagsLoading)
     return (
@@ -116,10 +116,11 @@ export default function BlogsDashboard() {
           <div className="flex flex-wrap gap-4">
             <button
               onClick={() => setActiveTag(null)}
-              className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${!activeTag
-                ? "bg-blue-600 text-white shadow-sm"
-                : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                }`}
+              className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                !activeTag
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "bg-gray-100 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+              }`}
             >
               All
             </button>
@@ -127,10 +128,11 @@ export default function BlogsDashboard() {
               <button
                 key={tag.id}
                 onClick={() => setActiveTag(tag.id)}
-                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${activeTag === tag.id
-                  ? "bg-blue-600 text-white shadow-sm"
-                  : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
-                  }`}
+                className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  activeTag === tag.id
+                    ? "bg-blue-600 text-white shadow-sm"
+                    : "bg-gray-200 text-gray-700 hover:bg-blue-50 hover:text-blue-600"
+                }`}
               >
                 {tag.name}
               </button>
@@ -144,8 +146,8 @@ export default function BlogsDashboard() {
                 blog.image ||
                 (
                   blog.content.find((c) => c.type === "image") as
-                  | { type: "image"; src: string; caption?: string }
-                  | undefined
+                    | { type: "image"; src: string; caption?: string }
+                    | undefined
                 )?.src;
               const blogDate = new Date(blog.createdAt);
               const avatarSrc = DEFAULT_AVATAR;

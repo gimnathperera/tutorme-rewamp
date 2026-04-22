@@ -88,8 +88,8 @@ const footer = () => {
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src={"/images/footer/instagram.svg"}
-                    alt="instagram"
+                    src={"/images/footer/tiktok.svg"}
+                    alt="tiktok"
                     width={20}
                     height={20}
                   />

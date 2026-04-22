@@ -5,10 +5,10 @@ import BackToTop from "@/components/shared/back-to-top";
 import RouteScrollManager from "@/components/shared/route-scroll-manager";
 import "./globals.css";
 import { WithProviders } from "@/hocs/with-providers";
+import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = {
-  title: "Tuition Lanka",
-  description: "Change how you learn with a tutor",
+  ...createMetadata(seoPages.home),
   icons: {
     icon: "/favicon.svg",
   },
@@ -24,12 +24,14 @@ export default function RootLayout({
       <body>
         <Script src="/env-config.js" strategy="afterInteractive" />
         <WithProviders>
-          <RouteScrollManager />
-          <main className="site-shell bg-lightwhite flex flex-col">
-            <NavBar />
-            <div className="flex-1">{children}</div>
-            <Footer />
-          </main>
+          <>
+            <RouteScrollManager />
+            <main className="site-shell bg-lightwhite flex flex-col">
+              <NavBar />
+              <div className="flex-1">{children}</div>
+              <Footer />
+            </main>
+          </>
         </WithProviders>
         <BackToTop />
       </body>
