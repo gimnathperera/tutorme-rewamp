@@ -68,7 +68,7 @@ const FormPasswordInfo: FC = () => {
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Password information
+        Account Security
       </h3>
 
       <FormProvider {...passwordInfoForm}>
