@@ -258,10 +258,10 @@ const Testimonials: FC = () => {
           <h2 className="text-4xl font-bold text-black leading-[1.2] my-1">
             See what others are saying.
           </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden sm:block">
+          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden md:block">
             See what others are saying.
           </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden sm:block">
+          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden md:block">
             See what others are saying.
           </h2>
         </div>
