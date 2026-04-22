@@ -10,7 +10,7 @@ import {
 } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
-import { GeneralInfoSchema } from "./schema";
+import { EducationInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
 
@@ -18,14 +18,9 @@ type Props = {
   dropdownOptionData: {
     gradesOptions: Option[];
     subjectsOptions: Option[];
-    durationOptions: Option[];
-    frequencyOptions: Option[];
-    tutorTypesOptions: Option[];
-    genderOptions: Option[];
-    countryOptions: Option[];
   };
   form: ReturnType<any>;
-  onFormSubmit: SubmitHandler<GeneralInfoSchema>;
+  onFormSubmit: SubmitHandler<EducationInfoSchema>;
   isSubmitting: boolean;
 };
 
@@ -60,39 +55,45 @@ const FormEducationInfo: FC<Props> = ({
   const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
 
   return (
-    <div className="p-4 mb-4 bg-white rounded-3xl 2xl:col-span-2 sm:p-6">
-      <h3 className="mb-4 text-xl font-semibold">Education information</h3>
+    <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        Experience & Qualifications
+      </h3>
+      <p className="mb-5 text-sm text-gray-500">
+        Use this section to present the academic background and teaching scope
+        that management wants highlighted in tutor profiles.
+      </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6">
               <InputMultiSelect
-                label="Tutoring Levels *"
+                label="Teaching Categories / Levels *"
                 name="tutoringLevels"
                 options={tutoringLevelsOptions}
               />
 
               <InputMultiSelect
-                label="Preferred Locations *"
+                label="Preferred Teaching Locations *"
                 name="preferredLocations"
                 options={preferredLocationsOptions}
               />
 
               <InputMultiSelect
-                label="Tutor Types *"
-                name="tutorType"
+                label="Tutor Categories *"
+                name="tutorTypes"
                 options={tutorTypeOptions}
               />
 
               <InputSelect
-                label="Highest Education Level *"
+                label="Education *"
                 name="highestEducation"
                 options={highestEducationOptions}
               />
 
               <InputText
                 label="Years of Experience *"
-                placeholder="Years of Experience"
+                placeholder="Enter total years of experience"
                 name="yearsExperience"
                 type="number"
                 min={0}
@@ -101,19 +102,19 @@ const FormEducationInfo: FC<Props> = ({
               />
 
               <InputMultiSelect
-                label="Tutor Mediums *"
+                label="Teaching Languages *"
                 name="tutorMediums"
                 options={tutorMediumOptions}
               />
 
               <InputMultiSelect
-                label="Grades *"
+                label="Grades Taught *"
                 name="grades"
                 options={gradesOptions}
               />
 
               <InputMultiSelect
-                label="Subjects *"
+                label="Subjects Taught *"
                 name="subjects"
                 options={subjectsOptions}
                 isDisabled={isEmpty(selectedGrades)}
@@ -121,10 +122,10 @@ const FormEducationInfo: FC<Props> = ({
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton
-                className="peer mt-5 rounded-lg bg-primary-700 px-5 py-2.5 text-center text-base font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400"
+                className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update Education Information"
+                title="Update Experience & Qualifications"
                 disabled={isButtonDisabled}
               />
             </div>
