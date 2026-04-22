@@ -55,15 +55,19 @@ const FormGeneralInfo: FC<Props> = ({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        General information
+        Candidate Snapshot
       </h3>
+      <p className="mb-5 text-sm text-gray-500">
+        Keep your core public profile details current so families can quickly
+        assess your fit.
+      </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
               <InputText
-                label="Full Name *"
-                placeholder="First Name"
+                label="Tutor Name *"
+                placeholder="Enter your full name"
                 name="name"
                 type="text"
                 onChange={(e) => {
@@ -77,14 +81,14 @@ const FormGeneralInfo: FC<Props> = ({
 
               <InputText
                 label="Email *"
-                placeholder="Email"
+                placeholder="Email address"
                 name="email"
                 type="text"
                 disabled
               />
               <InputText
                 label="Contact Number *"
-                placeholder="Contact Number"
+                placeholder="Enter your contact number"
                 name="phoneNumber"
                 type="tel"
               />
@@ -160,30 +164,30 @@ const FormGeneralInfo: FC<Props> = ({
                 }}
               />
               <InputText
-                label="Birthday *"
+                label="Date of Birth *"
                 name="birthday"
                 type="date"
                 max={new Date().toISOString().split("T")[0]}
                 onKeyDown={(e) => e.preventDefault()}
               />
               <InputMultiSelect
-                label="Grade/Level"
+                label="Levels / Grades Taught"
                 name="grades"
                 options={gradesOptions}
               />
               <InputMultiSelect
-                label="Subjects"
+                label="Subjects Taught"
                 name="subjects"
                 options={subjectsOptions}
                 isDisabled={isEmpty(selectedGrades)}
               />
               <InputSelect
-                label="Duration"
+                label="Lesson Duration"
                 name="duration"
                 options={durationOptions}
               />
               <InputSelect
-                label="Frequency"
+                label="Lesson Frequency"
                 name="frequency"
                 options={frequencyOptions}
               />
@@ -193,7 +197,7 @@ const FormGeneralInfo: FC<Props> = ({
                 options={genderOptions}
               />
               <RadioGroup
-                label="Please select your preferred tutor type"
+                label="Tutor Type"
                 name="tutorType"
                 options={tutorTypesOptions}
               />
@@ -203,7 +207,7 @@ const FormGeneralInfo: FC<Props> = ({
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update General Information"
+                title="Update Candidate Snapshot"
                 disabled={isButtonDisabled}
               />
             </div>
