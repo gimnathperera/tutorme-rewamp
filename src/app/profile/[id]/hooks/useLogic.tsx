@@ -9,43 +9,61 @@ import {
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/store/api/splits/users";
+import { Option } from "@/types/shared-types";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { size } from "lodash-es";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import {
+  EducationInfoSchema,
+  educationInfoSchema,
+  initialEducationInfoFormValues,
+} from "../components/form-education-information/schema";
 import {
   GeneralInfoSchema,
   generalInfoSchema,
   initialGeneralInfoFormValues,
 } from "../components/form-general-information/schema";
 import {
-  LogicReturnType,
-  durationOptions,
-  frequencyOptions,
-  tutorTypesOptions,
-  genderOptions,
-  countryOptions,
-  languageOptions,
-  timeZoneOptions,
-} from "./util";
-import { Option } from "@/types/shared-types";
-import { size } from "lodash-es";
-import {
   initialLanguageAndTimeFormValues,
   LanguageOptionsSchema,
   languageOptionsSchema,
 } from "../components/form-language-time/schema";
+import {
+  LogicReturnType,
+  countryOptions,
+  durationOptions,
+  frequencyOptions,
+  genderOptions,
+  languageOptions,
+  timeZoneOptions,
+  tutorTypesOptions,
+} from "./util";
+
+const getProfileSubjectIds = (profile: ProfileResponse) =>
+  profile.subjects.map(({ id }) => id);
+
+const getProfileGradeIds = (profile: ProfileResponse) =>
+  profile.grades.map(({ id }) => id);
+
+const formatBirthdayForInput = (birthday?: string) =>
+  birthday ? birthday.slice(0, 10) : "";
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
   const userId = params?.id as string;
   const { user, isUserLoaded } = useAuthContext();
+
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
   const [subjectsOptions, setSubjectsOptions] = useState<Option[]>([]);
+  const [educationSubjectsOptions, setEducationSubjectsOptions] = useState<
+    Option[]
+  >([]);
 
   const [fetchProfileData, { isLoading: isProfileDataLoading }] =
     useLazyGetProfileQuery();
@@ -58,16 +76,8 @@ const useLogic = (): LogicReturnType => {
   );
 
   const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
-  const [handleGeneralInfoFormSubmit, { isLoading: isGeneralFormSubmitting }] =
+  const [handleProfileSubmit, { isLoading: isGeneralFormSubmitting }] =
     useUpdateProfileMutation();
-
-  // TODO: may be find a better way to handle this
-  const forceRedirectUser = useCallback(() => {
-    if (isUserLoaded && !user) {
-      router.push("/");
-      return;
-    }
-  }, [isUserLoaded, router, user]);
 
   const generalInfoForm = useForm<GeneralInfoSchema>({
     resolver: zodResolver(generalInfoSchema),
@@ -75,162 +85,148 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const languageAndTimeForm = useForm({
+  const educationInfoForm = useForm<EducationInfoSchema>({
+    resolver: zodResolver(educationInfoSchema),
+    defaultValues: initialEducationInfoFormValues,
+    mode: "onChange",
+  });
+
+  const languageAndTimeForm = useForm<LanguageOptionsSchema>({
     resolver: zodResolver(languageOptionsSchema),
     defaultValues: initialLanguageAndTimeFormValues as LanguageOptionsSchema,
     mode: "onChange",
   });
 
-  const [grades] = generalInfoForm.watch(["grades"]);
-  /** Tracks which subject IDs belong to each grade: gradeId → Set<subjectId> */
-  const gradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
-  /** Snapshot of grades from the previous render, used to detect removals */
-  const prevGradesRef = useRef<string[]>([]);
+  const [selectedGeneralGrades] = generalInfoForm.watch(["grades"]);
+  const [selectedEducationGrades] = educationInfoForm.watch(["grades"]);
+
+  const generalGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
+  const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
+  const prevGeneralGradesRef = useRef<string[]>([]);
+  const prevEducationGradesRef = useRef<string[]>([]);
+  const hasInitialGeneralSubjectsBeenSet = useRef(false);
+  const hasInitialEducationSubjectsBeenSet = useRef(false);
+
+  const forceRedirectUser = useCallback(() => {
+    if (isUserLoaded && !user) {
+      router.push("/");
+    }
+  }, [isUserLoaded, router, user]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
-      if (!userRawData) return;
-      const {
-        name,
-        email,
-        phoneNumber,
-        country,
-        city,
-        state,
-        region,
-        zip,
-        address,
-        birthday,
-        duration,
-        frequency,
-        gender,
-        tutorType,
-        grades,
-        subjects,
-      } = profile;
-
-      generalInfoForm.setValue("name", name);
-      generalInfoForm.setValue("email", email);
-      generalInfoForm.setValue("phoneNumber", phoneNumber);
-      generalInfoForm.setValue("country", country);
-      generalInfoForm.setValue("city", city);
-      generalInfoForm.setValue("state", state);
-      generalInfoForm.setValue("region", region);
-      generalInfoForm.setValue("zip", zip);
-      generalInfoForm.setValue("address", address);
-      generalInfoForm.setValue("birthday", birthday ? new Date(birthday) : "");
-      generalInfoForm.setValue("duration", duration);
-      generalInfoForm.setValue("frequency", frequency);
-      generalInfoForm.setValue("gender", gender);
-      generalInfoForm.setValue(
-        "subjects",
-        subjects.map((subject) => subject.id),
-      );
-      generalInfoForm.setValue("tutorType", tutorType);
-      generalInfoForm.setValue(
-        "grades",
-        grades.map((grade) => grade.id),
-      );
+      generalInfoForm.reset({
+        name: profile.name ?? "",
+        email: profile.email ?? "",
+        phoneNumber: profile.phoneNumber ?? "",
+        country: profile.country ?? "",
+        city: profile.city ?? "",
+        state: profile.state ?? "",
+        region: profile.region ?? "",
+        zip: profile.zip ?? "",
+        address: profile.address ?? "",
+        birthday: formatBirthdayForInput(profile.birthday) as any,
+        tutorType: profile.tutorType ?? "",
+        gender: profile.gender ?? "",
+        grades: getProfileGradeIds(profile),
+        subjects: getProfileSubjectIds(profile),
+        duration: profile.duration ?? "",
+        frequency: profile.frequency ?? "",
+      });
     },
+    [generalInfoForm],
+  );
 
-    [generalInfoForm, userRawData],
+  const prePopulateEducationForm = useCallback(
+    (profile: ProfileResponse) => {
+      educationInfoForm.reset({
+        tutoringLevels: profile.tutoringLevels ?? [],
+        preferredLocations: profile.preferredLocations ?? [],
+        tutorTypes:
+          profile.tutorTypes ??
+          (profile.tutorType ? [profile.tutorType] : []),
+        highestEducation: profile.highestEducation ?? "",
+        yearsExperience:
+          profile.yearsExperience ??
+          initialEducationInfoFormValues.yearsExperience,
+        tutorMediums: profile.tutorMediums ?? [],
+        grades: getProfileGradeIds(profile),
+        subjects: getProfileSubjectIds(profile),
+      });
+    },
+    [educationInfoForm],
   );
 
   const prePopulateLanguageAndTimeForm = useCallback(
     (profile: ProfileResponse) => {
-      if (!userRawData) return;
-      const { timeZone, language } = profile;
-
-      languageAndTimeForm.setValue("timeZone", timeZone);
-      languageAndTimeForm.setValue("language", language);
+      languageAndTimeForm.reset({
+        timeZone: profile.timeZone ?? "",
+        language: profile.language ?? "",
+        availability: profile.availability ?? "",
+        rate: profile.rate ?? "",
+      });
     },
-    [languageAndTimeForm, userRawData],
+    [languageAndTimeForm],
   );
-
-  // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
-  // IMPORTANT: Only runs once when initial data is loaded, NOT on subsequent subjectsOptions changes
-  const hasInitialSubjectsBeenSet = useRef(false);
-
-  useEffect(() => {
-    if (
-      userRawData &&
-      size(subjectsOptions) > 0 &&
-      !hasInitialSubjectsBeenSet.current
-    ) {
-      const { subjects } = userRawData;
-
-      generalInfoForm.setValue(
-        "subjects",
-        subjects
-          .filter(({ id }) =>
-            subjectsOptions.some((option) => option.value === id),
-          )
-          .map((subject) => subject.id),
-      );
-
-      hasInitialSubjectsBeenSet.current = true;
-    }
-  }, [userRawData, subjectsOptions, generalInfoForm]);
 
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
     const error = getErrorInApiResult(result);
+
     if (error) {
       toast.error("Failed to load profile data. Please try again later.");
       return;
     }
+
     if (result.data) {
+      hasInitialGeneralSubjectsBeenSet.current = false;
+      hasInitialEducationSubjectsBeenSet.current = false;
+
       setUserRawData(result.data);
       prePopulateGeneralForm(result.data);
+      prePopulateEducationForm(result.data);
       prePopulateLanguageAndTimeForm(result.data);
     }
   }, [
     fetchProfileData,
+    prePopulateEducationForm,
     prePopulateGeneralForm,
     prePopulateLanguageAndTimeForm,
     userId,
   ]);
 
-  const init = useCallback(async () => {
-    await getUserRawData();
-  }, [getUserRawData]);
+  const syncGeneralSubjectOptions = useCallback(async () => {
+    const currentGrades: string[] = selectedGeneralGrades ?? [];
+    const prevGrades = prevGeneralGradesRef.current;
 
-  const handleOnGradeChangeSubjectFetch = useCallback(async () => {
-    const currentGrades: string[] = grades ?? [];
-    const prevGrades = prevGradesRef.current;
-
-    // ── Handle removed grades ──────────────────────────────────────────────
     const removedGrades = prevGrades.filter(
-      (id) => !currentGrades.includes(id),
+      (gradeId) => !currentGrades.includes(gradeId),
     );
+
     if (removedGrades.length > 0) {
-      // Collect all subject IDs that belong to removed grades
       const removedSubjectIds = new Set<string>();
+
       removedGrades.forEach((gradeId) => {
-        (gradeSubjectsMapRef.current.get(gradeId) ?? []).forEach((sid) =>
-          removedSubjectIds.add(sid),
+        (generalGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
+          (subjectId) => removedSubjectIds.add(subjectId),
         );
-        gradeSubjectsMapRef.current.delete(gradeId);
+        generalGradeSubjectsMapRef.current.delete(gradeId);
       });
 
-      // Remove those subjects from the options list
       setSubjectsOptions((prev) =>
-        prev.filter((opt) => !removedSubjectIds.has(opt.value)),
+        prev.filter((option) => !removedSubjectIds.has(option.value)),
       );
 
-      // Remove those subjects from the form's selected subjects
-      const currentSubjects: string[] =
-        generalInfoForm.getValues("subjects") ?? [];
+      const currentSubjects = generalInfoForm.getValues("subjects") ?? [];
       generalInfoForm.setValue(
         "subjects",
-        currentSubjects.filter((sid) => !removedSubjectIds.has(sid)),
+        currentSubjects.filter((subjectId) => !removedSubjectIds.has(subjectId)),
         { shouldDirty: true },
       );
     }
 
-    // ── Handle added grades ────────────────────────────────────────────────
     for (const gradeId of currentGrades) {
-      if (gradeSubjectsMapRef.current.has(gradeId)) continue; // already fetched
+      if (generalGradeSubjectsMapRef.current.has(gradeId)) continue;
 
       const result = await fetchSubjectsByGrade(gradeId);
       const error = getErrorInApiResult(result);
@@ -242,20 +238,20 @@ const useLogic = (): LogicReturnType => {
 
       if (result.data) {
         const existingIds = new Set(
-          Array.from(gradeSubjectsMapRef.current.values()).flat(),
+          Array.from(generalGradeSubjectsMapRef.current.values()).flat(),
         );
         const newSubjects: Subject[] = result.data.subjects.filter(
-          ({ id }: Subject) => !existingIds.has(id),
+          ({ id }) => !existingIds.has(id),
         );
 
-        gradeSubjectsMapRef.current.set(
+        generalGradeSubjectsMapRef.current.set(
           gradeId,
-          result.data.subjects.map(({ id }: Subject) => id),
+          result.data.subjects.map(({ id }) => id),
         );
 
         setSubjectsOptions((prev) => [
           ...prev,
-          ...newSubjects.map(({ title, id }: Subject) => ({
+          ...newSubjects.map(({ title, id }) => ({
             label: title,
             value: id,
           })),
@@ -263,18 +259,125 @@ const useLogic = (): LogicReturnType => {
       }
     }
 
-    prevGradesRef.current = currentGrades;
-  }, [fetchSubjectsByGrade, grades, generalInfoForm]);
+    prevGeneralGradesRef.current = currentGrades;
+  }, [fetchSubjectsByGrade, generalInfoForm, selectedGeneralGrades]);
+
+  const syncEducationSubjectOptions = useCallback(async () => {
+    const currentGrades: string[] = selectedEducationGrades ?? [];
+    const prevGrades = prevEducationGradesRef.current;
+
+    const removedGrades = prevGrades.filter(
+      (gradeId) => !currentGrades.includes(gradeId),
+    );
+
+    if (removedGrades.length > 0) {
+      const removedSubjectIds = new Set<string>();
+
+      removedGrades.forEach((gradeId) => {
+        (educationGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
+          (subjectId) => removedSubjectIds.add(subjectId),
+        );
+        educationGradeSubjectsMapRef.current.delete(gradeId);
+      });
+
+      setEducationSubjectsOptions((prev) =>
+        prev.filter((option) => !removedSubjectIds.has(option.value)),
+      );
+
+      const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
+      educationInfoForm.setValue(
+        "subjects",
+        currentSubjects.filter((subjectId) => !removedSubjectIds.has(subjectId)),
+        { shouldDirty: true },
+      );
+    }
+
+    for (const gradeId of currentGrades) {
+      if (educationGradeSubjectsMapRef.current.has(gradeId)) continue;
+
+      const result = await fetchSubjectsByGrade(gradeId);
+      const error = getErrorInApiResult(result);
+
+      if (error) {
+        toast.error(error);
+        continue;
+      }
+
+      if (result.data) {
+        const existingIds = new Set(
+          Array.from(educationGradeSubjectsMapRef.current.values()).flat(),
+        );
+        const newSubjects: Subject[] = result.data.subjects.filter(
+          ({ id }) => !existingIds.has(id),
+        );
+
+        educationGradeSubjectsMapRef.current.set(
+          gradeId,
+          result.data.subjects.map(({ id }) => id),
+        );
+
+        setEducationSubjectsOptions((prev) => [
+          ...prev,
+          ...newSubjects.map(({ title, id }) => ({
+            label: title,
+            value: id,
+          })),
+        ]);
+      }
+    }
+
+    prevEducationGradesRef.current = currentGrades;
+  }, [educationInfoForm, fetchSubjectsByGrade, selectedEducationGrades]);
+
+  useEffect(() => {
+    if (
+      userRawData &&
+      size(subjectsOptions) > 0 &&
+      !hasInitialGeneralSubjectsBeenSet.current
+    ) {
+      generalInfoForm.setValue(
+        "subjects",
+        userRawData.subjects
+          .filter(({ id }) => subjectsOptions.some((option) => option.value === id))
+          .map(({ id }) => id),
+      );
+
+      hasInitialGeneralSubjectsBeenSet.current = true;
+    }
+  }, [generalInfoForm, subjectsOptions, userRawData]);
+
+  useEffect(() => {
+    if (
+      userRawData &&
+      size(educationSubjectsOptions) > 0 &&
+      !hasInitialEducationSubjectsBeenSet.current
+    ) {
+      educationInfoForm.setValue(
+        "subjects",
+        userRawData.subjects
+          .filter(({ id }) =>
+            educationSubjectsOptions.some((option) => option.value === id),
+          )
+          .map(({ id }) => id),
+      );
+
+      hasInitialEducationSubjectsBeenSet.current = true;
+    }
+  }, [educationInfoForm, educationSubjectsOptions, userRawData]);
 
   useEffect(() => {
     forceRedirectUser();
     if (!userId || !user) return;
-    init();
-  }, [forceRedirectUser, init, user, userId]);
+    getUserRawData();
+  }, [forceRedirectUser, getUserRawData, user, userId]);
 
   useEffect(() => {
-    handleOnGradeChangeSubjectFetch();
-  }, [grades, handleOnGradeChangeSubjectFetch]);
+    syncGeneralSubjectOptions();
+  }, [selectedGeneralGrades, syncGeneralSubjectOptions]);
+
+  useEffect(() => {
+    syncEducationSubjectOptions();
+  }, [selectedEducationGrades, syncEducationSubjectOptions]);
 
   const gradesOptions =
     gradeRawData?.results.map((grade) => ({
@@ -283,7 +386,7 @@ const useLogic = (): LogicReturnType => {
     })) || [];
 
   const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
-    const result = await handleGeneralInfoFormSubmit({
+    const result = await handleProfileSubmit({
       id: userId,
       payload: data,
     });
@@ -292,17 +395,32 @@ const useLogic = (): LogicReturnType => {
 
     if (error) {
       toast.error("Failed to update settings");
+      return;
     }
 
-    if (result.data) {
-      toast.success("Settings updated successfully");
+    toast.success("Settings updated successfully");
+  };
+
+  const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    const result = await handleProfileSubmit({
+      id: userId,
+      payload: data,
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update settings");
+      return;
     }
+
+    toast.success("Settings updated successfully");
   };
 
   const onLanguageAndTimeFormSubmission = async (
     data: LanguageOptionsSchema,
   ) => {
-    const result = await handleGeneralInfoFormSubmit({
+    const result = await handleProfileSubmit({
       id: userId,
       payload: data,
     });
@@ -311,11 +429,10 @@ const useLogic = (): LogicReturnType => {
 
     if (error) {
       toast.error("Failed to update settings");
+      return;
     }
 
-    if (result.data) {
-      toast.success("Settings updated successfully");
-    }
+    toast.success("Settings updated successfully");
   };
 
   return {
@@ -323,6 +440,7 @@ const useLogic = (): LogicReturnType => {
       dropdownOptionData: {
         gradesOptions,
         subjectsOptions,
+        educationSubjectsOptions,
         durationOptions,
         frequencyOptions,
         tutorTypesOptions,
@@ -339,10 +457,12 @@ const useLogic = (): LogicReturnType => {
     },
     forms: {
       generalInfoForm,
+      educationInfoForm,
       languageAndTimeForm,
     },
     handlers: {
       onGeneralInfoFormSubmission,
+      onEducationInfoFormSubmission,
       onLanguageAndTimeFormSubmission,
     },
   };

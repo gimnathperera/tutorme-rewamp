@@ -1,6 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Option } from "@/types/shared-types";
+import { EducationInfoSchema } from "../components/form-education-information/schema";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
 import { LanguageOptionsSchema } from "../components/form-language-time/schema";
 
@@ -9,6 +10,7 @@ export type LogicReturnType = {
     dropdownOptionData: {
       gradesOptions: Option[];
       subjectsOptions: Option[];
+      educationSubjectsOptions: Option[];
       durationOptions: Option[];
       frequencyOptions: Option[];
       tutorTypesOptions: Option[];
@@ -25,10 +27,12 @@ export type LogicReturnType = {
   };
   forms: {
     generalInfoForm: ReturnType<any>;
+    educationInfoForm: ReturnType<any>;
     languageAndTimeForm: ReturnType<any>;
   };
   handlers: {
     onGeneralInfoFormSubmission: (data: GeneralInfoSchema) => void;
+    onEducationInfoFormSubmission: (data: EducationInfoSchema) => void;
     onLanguageAndTimeFormSubmission: (data: LanguageOptionsSchema) => void;
   };
 };
