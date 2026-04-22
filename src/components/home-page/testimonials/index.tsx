@@ -64,7 +64,7 @@ const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
     <div
       className="bg-white rounded-2xl shadow-md p-5 flex flex-col gap-3 cursor-pointer select-none"
       style={{
-        /* Fixed collapsed height; expands on hover via max-height transition */
+        height: expanded ? "auto" : "220px",
         maxHeight: expanded ? "600px" : "220px",
         transition:
           "max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
