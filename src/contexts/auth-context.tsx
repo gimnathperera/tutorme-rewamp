@@ -9,6 +9,7 @@ import {
   useLoginMutation,
   useLogoutMutation,
 } from "@/store/api/splits/auth";
+import { env } from "@/configs/env";
 import { AuthUserData, Tokens } from "@/types/auth-types";
 import { UserLoginResponse } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
@@ -118,6 +119,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLocalStorageItem(LocalStorageKey.USER_DATA, userData);
     setLocalStorageItem(LocalStorageKey.TOKENS, tokens);
     setUser(user);
+
+    if (userData.role === "admin") {
+      window.location.assign(env.urls.adminPortalUrl);
+    }
   };
 
   const logout = async () => {
@@ -135,8 +140,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     removeLocalStorageItem(LocalStorageKey.USER_DATA);
     removeLocalStorageItem(LocalStorageKey.TOKENS);
     localStorage.clear();
-    window.location.reload();
-    window.location.reload();
+    window.location.assign("/");
   };
 
   const updateUser = (userData: Partial<AuthUserData>) => {

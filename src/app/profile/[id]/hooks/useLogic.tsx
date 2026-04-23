@@ -12,6 +12,7 @@ import {
 import { Option } from "@/types/shared-types";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
+import { env } from "@/configs/env";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { size } from "lodash-es";
 import { useParams, useRouter } from "next/navigation";
@@ -194,8 +195,22 @@ const useLogic = (): LogicReturnType => {
   const forceRedirectUser = useCallback(() => {
     if (isUserLoaded && !user) {
       router.push("/");
+      return;
     }
-  }, [isUserLoaded, router, user]);
+
+    if (!isUserLoaded || !user) {
+      return;
+    }
+
+    if (user.role === "admin") {
+      window.location.assign(env.urls.adminPortalUrl);
+      return;
+    }
+
+    if (user.role !== "tutor" || String(user.id) !== String(userId)) {
+      router.push("/");
+    }
+  }, [isUserLoaded, router, user, userId]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -373,7 +388,7 @@ const useLogic = (): LogicReturnType => {
 
   useEffect(() => {
     forceRedirectUser();
-    if (!userId || !user) return;
+    if (!userId || !user || user.role !== "tutor" || String(user.id) !== String(userId)) return;
     getUserRawData();
   }, [forceRedirectUser, getUserRawData, user, userId]);
 
