@@ -15,6 +15,7 @@ import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
+import { ArrowLeft } from "lucide-react";
 
 const BlogRenderer = dynamic(
   () => import("../components/blog-renderer/BlogRenderer"),
@@ -116,6 +117,16 @@ export default function ViewBlogPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-10">
       <div className="mb-2 lg:mb-4">
+        <div className="mb-4 mt-6 lg:mt-0 lg:mb-6">
+          <Link
+            href="/blogs"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition-colors duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            Back to Blogs
+          </Link>
+        </div>
+
         {user && (blog.author?.id === user.id || user.role === "admin") && (
           <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
             {/* Admin approve/reject — only shown when blog is pending or needs status change */}
