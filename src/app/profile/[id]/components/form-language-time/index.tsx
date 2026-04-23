@@ -1,7 +1,6 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { FormProvider } from "react-hook-form";
-import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
@@ -13,6 +12,7 @@ import AvailabilityScheduler from "./availability-scheduler";
 type Props = {
   languageOptions: Option[];
   timeZoneOptions: Option[];
+  rateOptions: Option[];
   form: ReturnType<any>;
   isSubmitting: boolean;
   onFormSubmit: (data: LanguageOptionsSchema) => void;
@@ -21,12 +21,24 @@ type Props = {
 const FormLanguageTime: FC<Props> = ({
   languageOptions,
   timeZoneOptions,
+  rateOptions,
   form,
   onFormSubmit,
   isSubmitting,
 }) => {
   const { isDirty, errors } = form.formState;
   const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
+  const currentRate = form.watch("rate");
+  const normalizedRateOptions =
+    currentRate && !rateOptions.some((option) => option.value === currentRate)
+      ? [
+          {
+            label: `Current selection: ${currentRate}`,
+            value: currentRate,
+          },
+          ...rateOptions,
+        ]
+      : rateOptions;
 
   const onSubmit = (data: LanguageOptionsSchema) => {
     onFormSubmit(data);
@@ -44,27 +56,28 @@ const FormLanguageTime: FC<Props> = ({
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
-            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
+            <div className="my-4">
+              <AvailabilityScheduler />
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 mb-4">
               <InputSelect
-                label="Primary Language"
+                label="Primary Language *"
                 name="language"
                 options={languageOptions}
               />
               <InputSelect
-                label="Operating Time Zone"
+                label="Operating Time Zone *"
                 name="timeZone"
                 options={timeZoneOptions}
               />
-              <InputText
-                label="Rate"
+              <InputSelect
+                label="Per Hour Charge *"
                 name="rate"
-                type="text"
-                placeholder="e.g. $95/Hour"
+                options={normalizedRateOptions}
+                helperText="Choose the hourly charge range."
               />
             </div>
-            <div className="mt-4">
-              <AvailabilityScheduler />
-            </div>
+
             <div className="col-span-6 sm:col-full">
               <SubmitButton
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
