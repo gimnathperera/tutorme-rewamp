@@ -38,7 +38,14 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
           htmlFor={name}
           className="block text-sm font-medium leading-6 text-gray-900"
         >
-          {label}
+          {label.includes("*") ? (
+            <>
+              {label.replace(" *", "")}
+              <span className="text-red-500"> *</span>
+            </>
+          ) : (
+            label
+          )}
         </label>
       )}
 

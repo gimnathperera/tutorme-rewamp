@@ -9,43 +9,150 @@ import {
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/store/api/splits/users";
+import { Option } from "@/types/shared-types";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
+import { env } from "@/configs/env";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { size } from "lodash-es";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import {
+  EducationInfoSchema,
+  educationInfoSchema,
+  initialEducationInfoFormValues,
+} from "../components/form-education-information/schema";
 import {
   GeneralInfoSchema,
   generalInfoSchema,
   initialGeneralInfoFormValues,
 } from "../components/form-general-information/schema";
 import {
-  LogicReturnType,
-  durationOptions,
-  frequencyOptions,
-  tutorTypesOptions,
-  genderOptions,
-  countryOptions,
-  languageOptions,
-  timeZoneOptions,
-} from "./util";
-import { Option } from "@/types/shared-types";
-import { size } from "lodash-es";
-import {
   initialLanguageAndTimeFormValues,
   LanguageOptionsSchema,
   languageOptionsSchema,
 } from "../components/form-language-time/schema";
+import { normalizeAvailabilityValue } from "../components/form-language-time/availability";
+import {
+  LogicReturnType,
+  languageOptions,
+  rateOptions,
+  timeZoneOptions,
+} from "./util";
+
+const getProfileSubjectIds = (profile: ProfileResponse) =>
+  profile.subjects.map(({ id }) => id);
+
+const getProfileGradeIds = (profile: ProfileResponse) =>
+  profile.grades.map(({ id }) => id);
+
+const MONTH_BY_SHORT_NAME: Record<string, string> = {
+  Jan: "01",
+  Feb: "02",
+  Mar: "03",
+  Apr: "04",
+  May: "05",
+  Jun: "06",
+  Jul: "07",
+  Aug: "08",
+  Sep: "09",
+  Oct: "10",
+  Nov: "11",
+  Dec: "12",
+};
+
+const formatDatePartsForInput = (year: number, month: number, day: number) =>
+  `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+const formatBirthdayForInput = (birthday?: string | Date) => {
+  if (!birthday) return "";
+
+  if (birthday instanceof Date) {
+    if (Number.isNaN(birthday.getTime())) return "";
+
+    return formatDatePartsForInput(
+      birthday.getFullYear(),
+      birthday.getMonth() + 1,
+      birthday.getDate(),
+    );
+  }
+
+  const trimmedBirthday = birthday.trim();
+  const isoDateMatch = trimmedBirthday.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (isoDateMatch) {
+    return `${isoDateMatch[1]}-${isoDateMatch[2]}-${isoDateMatch[3]}`;
+  }
+
+  const legacyDateMatch = trimmedBirthday.match(
+    /^[A-Za-z]{3}\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/,
+  );
+
+  if (legacyDateMatch) {
+    const [, monthName, day, year] = legacyDateMatch;
+    const month = MONTH_BY_SHORT_NAME[monthName];
+
+    return month ? `${year}-${month}-${day.padStart(2, "0")}` : "";
+  }
+
+  const parsedBirthday = new Date(trimmedBirthday);
+  if (Number.isNaN(parsedBirthday.getTime())) return "";
+
+  return formatDatePartsForInput(
+    parsedBirthday.getFullYear(),
+    parsedBirthday.getMonth() + 1,
+    parsedBirthday.getDate(),
+  );
+};
+
+const getProfileBirthday = (profile: ProfileResponse) =>
+  profile.birthday || profile.dateOfBirth || "";
+
+const serializeBirthdayForPayload = (birthday: GeneralInfoSchema["birthday"]) =>
+  birthday instanceof Date ? birthday.toISOString().slice(0, 10) : birthday;
+
+const calculateAgeFromBirthday = (birthday?: string) => {
+  if (!birthday) return initialGeneralInfoFormValues.age;
+
+  const dob = new Date(birthday);
+
+  if (Number.isNaN(dob.getTime())) return initialGeneralInfoFormValues.age;
+
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age >= 0 ? age : initialGeneralInfoFormValues.age;
+};
+
+const normalizeTutorTypeValues = (profile: ProfileResponse) => {
+  if (Array.isArray(profile.tutorTypes) && profile.tutorTypes.length > 0) {
+    return profile.tutorTypes;
+  }
+
+  if (Array.isArray(profile.tutorType)) {
+    return profile.tutorType;
+  }
+
+  return profile.tutorType ? [profile.tutorType] : [];
+};
 
 const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
   const userId = params?.id as string;
   const { user, isUserLoaded } = useAuthContext();
+
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
-  const [subjectsOptions, setSubjectsOptions] = useState<Option[]>([]);
+  const [educationSubjectsOptions, setEducationSubjectsOptions] = useState<
+    Option[]
+  >([]);
 
   const [fetchProfileData, { isLoading: isProfileDataLoading }] =
     useLazyGetProfileQuery();
@@ -58,16 +165,8 @@ const useLogic = (): LogicReturnType => {
   );
 
   const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
-  const [handleGeneralInfoFormSubmit, { isLoading: isGeneralFormSubmitting }] =
+  const [handleProfileSubmit, { isLoading: isGeneralFormSubmitting }] =
     useUpdateProfileMutation();
-
-  // TODO: may be find a better way to handle this
-  const forceRedirectUser = useCallback(() => {
-    if (isUserLoaded && !user) {
-      router.push("/");
-      return;
-    }
-  }, [isUserLoaded, router, user]);
 
   const generalInfoForm = useForm<GeneralInfoSchema>({
     resolver: zodResolver(generalInfoSchema),
@@ -75,162 +174,164 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const languageAndTimeForm = useForm({
+  const educationInfoForm = useForm<EducationInfoSchema>({
+    resolver: zodResolver(educationInfoSchema),
+    defaultValues: initialEducationInfoFormValues,
+    mode: "onChange",
+  });
+
+  const languageAndTimeForm = useForm<LanguageOptionsSchema>({
     resolver: zodResolver(languageOptionsSchema),
     defaultValues: initialLanguageAndTimeFormValues as LanguageOptionsSchema,
     mode: "onChange",
   });
 
-  const [grades] = generalInfoForm.watch(["grades"]);
-  /** Tracks which subject IDs belong to each grade: gradeId → Set<subjectId> */
-  const gradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
-  /** Snapshot of grades from the previous render, used to detect removals */
-  const prevGradesRef = useRef<string[]>([]);
+  const [selectedEducationGrades] = educationInfoForm.watch(["grades"]);
+
+  const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
+  const prevEducationGradesRef = useRef<string[]>([]);
+  const hasInitialEducationSubjectsBeenSet = useRef(false);
+
+  const forceRedirectUser = useCallback(() => {
+    if (isUserLoaded && !user) {
+      router.push("/");
+      return;
+    }
+
+    if (!isUserLoaded || !user) {
+      return;
+    }
+
+    if (user.role === "admin") {
+      window.location.assign(env.urls.adminPortalUrl);
+      return;
+    }
+
+    if (user.role !== "tutor" || String(user.id) !== String(userId)) {
+      router.push("/");
+    }
+  }, [isUserLoaded, router, user, userId]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
-      if (!userRawData) return;
-      const {
-        name,
-        email,
-        phoneNumber,
-        country,
-        city,
-        state,
-        region,
-        zip,
-        address,
-        birthday,
-        duration,
-        frequency,
-        gender,
-        tutorType,
-        grades,
-        subjects,
-      } = profile;
+      const birthday = getProfileBirthday(profile);
 
-      generalInfoForm.setValue("name", name);
-      generalInfoForm.setValue("email", email);
-      generalInfoForm.setValue("phoneNumber", phoneNumber);
-      generalInfoForm.setValue("country", country);
-      generalInfoForm.setValue("city", city);
-      generalInfoForm.setValue("state", state);
-      generalInfoForm.setValue("region", region);
-      generalInfoForm.setValue("zip", zip);
-      generalInfoForm.setValue("address", address);
-      generalInfoForm.setValue("birthday", birthday ? new Date(birthday) : "");
-      generalInfoForm.setValue("duration", duration);
-      generalInfoForm.setValue("frequency", frequency);
-      generalInfoForm.setValue("gender", gender);
-      generalInfoForm.setValue(
-        "subjects",
-        subjects.map((subject) => subject.id),
-      );
-      generalInfoForm.setValue("tutorType", tutorType);
-      generalInfoForm.setValue(
-        "grades",
-        grades.map((grade) => grade.id),
-      );
+      generalInfoForm.reset({
+        name: profile.name || profile.fullName || "",
+        email: profile.email ?? "",
+        phoneNumber: profile.phoneNumber || profile.contactNumber || "",
+        birthday: formatBirthdayForInput(birthday) as any,
+        age:
+          typeof profile.age === "number"
+            ? profile.age
+            : calculateAgeFromBirthday(birthday),
+        gender:
+          profile.gender === "None" ? "" : ((profile.gender ?? "") as string),
+        nationality: profile.nationality ?? "",
+        race: profile.race ?? "",
+      });
     },
+    [generalInfoForm],
+  );
 
-    [generalInfoForm, userRawData],
+  const prePopulateEducationForm = useCallback(
+    (profile: ProfileResponse) => {
+      educationInfoForm.reset({
+        tutoringLevels: profile.tutoringLevels ?? [],
+        preferredLocations: profile.preferredLocations ?? [],
+        tutorTypes: normalizeTutorTypeValues(profile),
+        highestEducation: profile.highestEducation ?? "",
+        yearsExperience:
+          profile.yearsExperience ??
+          initialEducationInfoFormValues.yearsExperience,
+        tutorMediums: profile.tutorMediums ?? [],
+        grades: getProfileGradeIds(profile),
+        subjects: getProfileSubjectIds(profile),
+        academicDetails: profile.academicDetails ?? "",
+        certificatesAndQualifications:
+          profile.certificatesAndQualifications ?? [],
+      });
+    },
+    [educationInfoForm],
   );
 
   const prePopulateLanguageAndTimeForm = useCallback(
     (profile: ProfileResponse) => {
-      if (!userRawData) return;
-      const { timeZone, language } = profile;
-
-      languageAndTimeForm.setValue("timeZone", timeZone);
-      languageAndTimeForm.setValue("language", language);
+      languageAndTimeForm.reset({
+        timeZone: profile.timeZone ?? "",
+        language: profile.language ?? "",
+        availability: normalizeAvailabilityValue(profile.availability),
+        rate: profile.rate ?? "",
+      });
     },
-    [languageAndTimeForm, userRawData],
+    [languageAndTimeForm],
   );
 
-  // Rechecks and revalidate subject prepopulated data, since the subjects options are fetched asynchronously
-  // IMPORTANT: Only runs once when initial data is loaded, NOT on subsequent subjectsOptions changes
-  const hasInitialSubjectsBeenSet = useRef(false);
-
-  useEffect(() => {
-    if (
-      userRawData &&
-      size(subjectsOptions) > 0 &&
-      !hasInitialSubjectsBeenSet.current
-    ) {
-      const { subjects } = userRawData;
-
-      generalInfoForm.setValue(
-        "subjects",
-        subjects
-          .filter(({ id }) =>
-            subjectsOptions.some((option) => option.value === id),
-          )
-          .map((subject) => subject.id),
-      );
-
-      hasInitialSubjectsBeenSet.current = true;
-    }
-  }, [userRawData, subjectsOptions, generalInfoForm]);
+  const hydrateProfileForms = useCallback(
+    (profile: ProfileResponse) => {
+      hasInitialEducationSubjectsBeenSet.current = false;
+      setUserRawData(profile);
+      prePopulateGeneralForm(profile);
+      prePopulateEducationForm(profile);
+      prePopulateLanguageAndTimeForm(profile);
+    },
+    [
+      prePopulateEducationForm,
+      prePopulateGeneralForm,
+      prePopulateLanguageAndTimeForm,
+    ],
+  );
 
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
     const error = getErrorInApiResult(result);
+
     if (error) {
       toast.error("Failed to load profile data. Please try again later.");
       return;
     }
+
     if (result.data) {
-      setUserRawData(result.data);
-      prePopulateGeneralForm(result.data);
-      prePopulateLanguageAndTimeForm(result.data);
+      hydrateProfileForms(result.data);
     }
   }, [
     fetchProfileData,
-    prePopulateGeneralForm,
-    prePopulateLanguageAndTimeForm,
+    hydrateProfileForms,
     userId,
   ]);
 
-  const init = useCallback(async () => {
-    await getUserRawData();
-  }, [getUserRawData]);
+  const syncEducationSubjectOptions = useCallback(async () => {
+    const currentGrades: string[] = selectedEducationGrades ?? [];
+    const prevGrades = prevEducationGradesRef.current;
 
-  const handleOnGradeChangeSubjectFetch = useCallback(async () => {
-    const currentGrades: string[] = grades ?? [];
-    const prevGrades = prevGradesRef.current;
-
-    // ── Handle removed grades ──────────────────────────────────────────────
     const removedGrades = prevGrades.filter(
-      (id) => !currentGrades.includes(id),
+      (gradeId) => !currentGrades.includes(gradeId),
     );
+
     if (removedGrades.length > 0) {
-      // Collect all subject IDs that belong to removed grades
       const removedSubjectIds = new Set<string>();
+
       removedGrades.forEach((gradeId) => {
-        (gradeSubjectsMapRef.current.get(gradeId) ?? []).forEach((sid) =>
-          removedSubjectIds.add(sid),
+        (educationGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
+          (subjectId) => removedSubjectIds.add(subjectId),
         );
-        gradeSubjectsMapRef.current.delete(gradeId);
+        educationGradeSubjectsMapRef.current.delete(gradeId);
       });
 
-      // Remove those subjects from the options list
-      setSubjectsOptions((prev) =>
-        prev.filter((opt) => !removedSubjectIds.has(opt.value)),
+      setEducationSubjectsOptions((prev) =>
+        prev.filter((option) => !removedSubjectIds.has(option.value)),
       );
 
-      // Remove those subjects from the form's selected subjects
-      const currentSubjects: string[] =
-        generalInfoForm.getValues("subjects") ?? [];
-      generalInfoForm.setValue(
+      const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
+      educationInfoForm.setValue(
         "subjects",
-        currentSubjects.filter((sid) => !removedSubjectIds.has(sid)),
+        currentSubjects.filter((subjectId) => !removedSubjectIds.has(subjectId)),
         { shouldDirty: true },
       );
     }
 
-    // ── Handle added grades ────────────────────────────────────────────────
     for (const gradeId of currentGrades) {
-      if (gradeSubjectsMapRef.current.has(gradeId)) continue; // already fetched
+      if (educationGradeSubjectsMapRef.current.has(gradeId)) continue;
 
       const result = await fetchSubjectsByGrade(gradeId);
       const error = getErrorInApiResult(result);
@@ -242,20 +343,20 @@ const useLogic = (): LogicReturnType => {
 
       if (result.data) {
         const existingIds = new Set(
-          Array.from(gradeSubjectsMapRef.current.values()).flat(),
+          Array.from(educationGradeSubjectsMapRef.current.values()).flat(),
         );
         const newSubjects: Subject[] = result.data.subjects.filter(
-          ({ id }: Subject) => !existingIds.has(id),
+          ({ id }) => !existingIds.has(id),
         );
 
-        gradeSubjectsMapRef.current.set(
+        educationGradeSubjectsMapRef.current.set(
           gradeId,
-          result.data.subjects.map(({ id }: Subject) => id),
+          result.data.subjects.map(({ id }) => id),
         );
 
-        setSubjectsOptions((prev) => [
+        setEducationSubjectsOptions((prev) => [
           ...prev,
-          ...newSubjects.map(({ title, id }: Subject) => ({
+          ...newSubjects.map(({ title, id }) => ({
             label: title,
             value: id,
           })),
@@ -263,18 +364,37 @@ const useLogic = (): LogicReturnType => {
       }
     }
 
-    prevGradesRef.current = currentGrades;
-  }, [fetchSubjectsByGrade, grades, generalInfoForm]);
+    prevEducationGradesRef.current = currentGrades;
+  }, [educationInfoForm, fetchSubjectsByGrade, selectedEducationGrades]);
+
+  useEffect(() => {
+    if (
+      userRawData &&
+      size(educationSubjectsOptions) > 0 &&
+      !hasInitialEducationSubjectsBeenSet.current
+    ) {
+      educationInfoForm.setValue(
+        "subjects",
+        userRawData.subjects
+          .filter(({ id }) =>
+            educationSubjectsOptions.some((option) => option.value === id),
+          )
+          .map(({ id }) => id),
+      );
+
+      hasInitialEducationSubjectsBeenSet.current = true;
+    }
+  }, [educationInfoForm, educationSubjectsOptions, userRawData]);
 
   useEffect(() => {
     forceRedirectUser();
-    if (!userId || !user) return;
-    init();
-  }, [forceRedirectUser, init, user, userId]);
+    if (!userId || !user || user.role !== "tutor" || String(user.id) !== String(userId)) return;
+    getUserRawData();
+  }, [forceRedirectUser, getUserRawData, user, userId]);
 
   useEffect(() => {
-    handleOnGradeChangeSubjectFetch();
-  }, [grades, handleOnGradeChangeSubjectFetch]);
+    syncEducationSubjectOptions();
+  }, [selectedEducationGrades, syncEducationSubjectOptions]);
 
   const gradesOptions =
     gradeRawData?.results.map((grade) => ({
@@ -283,26 +403,65 @@ const useLogic = (): LogicReturnType => {
     })) || [];
 
   const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
-    const result = await handleGeneralInfoFormSubmit({
+    const birthday = serializeBirthdayForPayload(data.birthday);
+
+    const result = await handleProfileSubmit({
       id: userId,
-      payload: data,
+      payload: {
+        ...data,
+        birthday,
+        fullName: data.name,
+        contactNumber: data.phoneNumber,
+        dateOfBirth: birthday,
+      },
     });
 
     const error = getErrorInApiResult(result);
 
     if (error) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update personal information");
+      return;
     }
 
-    if (result.data) {
-      toast.success("Settings updated successfully");
+    generalInfoForm.reset({
+      ...data,
+      birthday: formatBirthdayForInput(birthday as string) as any,
+    });
+    toast.success("Personal information updated successfully");
+  };
+
+  const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    const result = await handleProfileSubmit({
+      id: userId,
+      payload: {
+        tutoringLevels: data.tutoringLevels,
+        preferredLocations: data.preferredLocations,
+        tutorType: data.tutorTypes,
+        highestEducation: data.highestEducation,
+        yearsExperience: Number(data.yearsExperience),
+        tutorMediums: data.tutorMediums,
+        grades: data.grades,
+        subjects: data.subjects,
+        academicDetails: data.academicDetails,
+        certificatesAndQualifications: data.certificatesAndQualifications,
+      },
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update qualifications");
+      return;
     }
+
+    educationInfoForm.reset(data);
+    toast.success("Qualifications updated successfully");
   };
 
   const onLanguageAndTimeFormSubmission = async (
     data: LanguageOptionsSchema,
   ) => {
-    const result = await handleGeneralInfoFormSubmit({
+    const result = await handleProfileSubmit({
       id: userId,
       payload: data,
     });
@@ -310,26 +469,22 @@ const useLogic = (): LogicReturnType => {
     const error = getErrorInApiResult(result);
 
     if (error) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update languages and availability");
+      return;
     }
 
-    if (result.data) {
-      toast.success("Settings updated successfully");
-    }
+    languageAndTimeForm.reset(data);
+    toast.success("Languages and availability updated successfully");
   };
 
   return {
     derivedData: {
       dropdownOptionData: {
         gradesOptions,
-        subjectsOptions,
-        durationOptions,
-        frequencyOptions,
-        tutorTypesOptions,
-        genderOptions,
-        countryOptions,
+        educationSubjectsOptions,
         languageOptions,
         timeZoneOptions,
+        rateOptions,
       },
       loading: {
         isProfileDataLoading,
@@ -339,10 +494,12 @@ const useLogic = (): LogicReturnType => {
     },
     forms: {
       generalInfoForm,
+      educationInfoForm,
       languageAndTimeForm,
     },
     handlers: {
       onGeneralInfoFormSubmission,
+      onEducationInfoFormSubmission,
       onLanguageAndTimeFormSubmission,
     },
   };

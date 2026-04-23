@@ -2,25 +2,17 @@
 
 import InputText from "@/components/shared/input-text";
 import { FormProvider } from "react-hook-form";
-import InputMultiSelect from "@/components/shared/input-multi-select";
-import RadioGroup from "@/components/shared/input-radio";
 import InputSelect from "@/components/shared/input-select";
-import { Option } from "@/types/shared-types";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty } from "lodash-es";
+import {
+  GENDER_OPTIONS,
+  NATIONALITY_OPTIONS,
+  RACE_OPTIONS,
+} from "@/configs/register-tutor";
 
 type Props = {
-  dropdownOptionData: {
-    gradesOptions: Option[];
-    subjectsOptions: Option[];
-    durationOptions: Option[];
-    frequencyOptions: Option[];
-    tutorTypesOptions: Option[];
-    genderOptions: Option[];
-    countryOptions: Option[];
-  };
   form: ReturnType<any>;
   onFormSubmit: (data: GeneralInfoSchema) => void;
   isSubmitting: boolean;
@@ -30,38 +22,98 @@ const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
 const collapseSpaces = (value: string) =>
   value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
 
-const FormGeneralInfo: FC<Props> = ({
-  dropdownOptionData: {
-    gradesOptions,
-    subjectsOptions,
-    durationOptions,
-    frequencyOptions,
-    tutorTypesOptions,
-    genderOptions,
-    countryOptions,
-  },
-  form,
-  onFormSubmit,
-  isSubmitting,
-}) => {
+const toOptions = (options: Array<{ value: string; text: string }>) =>
+  options.map(({ value, text }) => ({ value, label: text }));
+
+const genderOptions = toOptions(GENDER_OPTIONS);
+const nationalityOptions = toOptions(NATIONALITY_OPTIONS);
+const raceOptions = toOptions(RACE_OPTIONS);
+
+const calculateAge = (birthday?: string) => {
+  if (!birthday) return "";
+
+  const dob = new Date(birthday);
+
+  if (Number.isNaN(dob.getTime())) return "";
+
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age >= 0 ? age : "";
+};
+
+const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const onSubmit = (data: GeneralInfoSchema) => {
     onFormSubmit(data);
   };
 
-  const { isDirty, errors } = form.formState;
-  const [selectedGrades] = form.watch(["grades"]);
-  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
+  const { isDirty, isValid } = form.formState;
+  const birthday = form.watch("birthday");
+  const [name, email, phoneNumber, age, gender, nationality, race] = form.watch([
+    "name",
+    "email",
+    "phoneNumber",
+    "age",
+    "gender",
+    "nationality",
+    "race",
+  ]);
+  const hasBirthday =
+    birthday instanceof Date
+      ? !Number.isNaN(birthday.getTime())
+      : typeof birthday === "string" && birthday.trim().length > 0;
+  const hasAllRequiredFields =
+    typeof name === "string" &&
+    name.trim().length > 0 &&
+    typeof email === "string" &&
+    email.trim().length > 0 &&
+    typeof phoneNumber === "string" &&
+    phoneNumber.trim().length > 0 &&
+    age !== "" &&
+    age !== null &&
+    age !== undefined &&
+    typeof gender === "string" &&
+    gender.trim().length > 0 &&
+    typeof nationality === "string" &&
+    nationality.trim().length > 0 &&
+    typeof race === "string" &&
+    race.trim().length > 0 &&
+    hasBirthday;
+  const isButtonDisabled =
+    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
+
+  useEffect(() => {
+    const nextAge = calculateAge(
+      typeof birthday === "string" ? birthday : birthday?.toISOString?.(),
+    );
+
+    form.setValue("age", nextAge as unknown as number, {
+      shouldValidate: true,
+      shouldDirty: false,
+    });
+  }, [birthday, form]);
 
   return (
-    <div className="p-4 mb-4 bg-white  rounded-3xl 2xl:col-span-2  sm:p-6">
-      <h3 className="mb-4 text-xl font-semibold ">General information</h3>
+    <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        Personal Information
+      </h3>
+      <p className="mb-5 text-sm text-gray-500">
+        Keep your tutor profile aligned with the same personal details used
+        during tutor registration.
+      </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols- gap-6">
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
               <InputText
                 label="Full Name *"
-                placeholder="First Name"
+                placeholder="e.g. Nimal Perera"
                 name="name"
                 type="text"
                 onChange={(e) => {
@@ -77,143 +129,55 @@ const FormGeneralInfo: FC<Props> = ({
 
               <InputText
                 label="Email *"
-                placeholder="Email"
+                placeholder="Email address"
                 name="email"
                 type="text"
                 disabled
               />
               <InputText
                 label="Contact Number *"
-                placeholder="Contact Number"
+                placeholder="e.g. 0771234567"
                 name="phoneNumber"
                 type="tel"
-              />
-              <InputSelect
-                label="Country *"
-                placeholder="Country"
-                name="country"
-                options={countryOptions}
+                inputMode="numeric"
+                maxLength={10}
               />
               <InputText
-                label="City *"
-                placeholder="City"
-                name="city"
-                type="text"
-                onChange={(e) => {
-                  const cleaned = stripLeadingSpaces(e.target.value);
-                  form.setValue("city", cleaned, { shouldValidate: true });
-                }}
-                onBlur={(e) => {
-                  form.setValue("city", collapseSpaces(e.target.value), {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-              <InputText
-                label="State / Province *"
-                placeholder="State / Province"
-                name="state"
-                type="text"
-                onChange={(e) => {
-                  const cleaned = stripLeadingSpaces(e.target.value);
-                  form.setValue("state", cleaned, { shouldValidate: true });
-                }}
-                onBlur={(e) => {
-                  form.setValue("state", collapseSpaces(e.target.value), {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-              <InputText
-                label="Region *"
-                placeholder="Region"
-                name="region"
-                type="text"
-                onChange={(e) => {
-                  const cleaned = stripLeadingSpaces(e.target.value);
-                  form.setValue("region", cleaned, { shouldValidate: true });
-                }}
-                onBlur={(e) => {
-                  form.setValue("region", collapseSpaces(e.target.value), {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-              <InputText
-                label="ZIP / Postal code *"
-                placeholder="ZIP / Postal code"
-                name="zip"
-                type="text"
-                onChange={(e) => {
-                  const cleaned = stripLeadingSpaces(e.target.value);
-                  form.setValue("zip", cleaned, { shouldValidate: true });
-                }}
-                onBlur={(e) => {
-                  form.setValue("zip", collapseSpaces(e.target.value), {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-              <InputText
-                label="Address *"
-                placeholder="Address"
-                name="address"
-                type="text"
-                onChange={(e) => {
-                  const cleaned = stripLeadingSpaces(e.target.value);
-                  form.setValue("address", cleaned, { shouldValidate: true });
-                }}
-                onBlur={(e) => {
-                  form.setValue("address", collapseSpaces(e.target.value), {
-                    shouldValidate: true,
-                  });
-                }}
-              />
-              <InputText
-                label="Birthday *"
+                label="Date of Birth *"
                 name="birthday"
                 type="date"
                 max={new Date().toISOString().split("T")[0]}
                 onKeyDown={(e) => e.preventDefault()}
               />
-              <InputMultiSelect
-                label="Grade/Level"
-                name="grades"
-                options={gradesOptions}
-              />
-              <InputMultiSelect
-                label="Subjects"
-                name="subjects"
-                options={subjectsOptions}
-                isDisabled={isEmpty(selectedGrades)}
+              <InputText
+                label="Age *"
+                name="age"
+                type="number"
+                disabled
+                placeholder="Auto-calculated"
               />
               <InputSelect
-                label="Duration"
-                name="duration"
-                options={durationOptions}
-              />
-              <InputSelect
-                label="Frequency"
-                name="frequency"
-                options={frequencyOptions}
-              />
-              <InputSelect
-                label="Gender"
+                label="Gender *"
                 name="gender"
                 options={genderOptions}
               />
-              <RadioGroup
-                label="Please select your preferred tutor type"
-                name="tutorType"
-                options={tutorTypesOptions}
+              <InputSelect
+                label="Nationality *"
+                name="nationality"
+                options={nationalityOptions}
+              />
+              <InputSelect
+                label="Race *"
+                name="race"
+                options={raceOptions}
               />
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton
-                className="peer font-semibold rounded-lg text-base px-5 py-2.5 mt-5 text-center bg-primary-700 text-white hover:bg-primary-800 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed"
+                className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update General Information"
+                title="Update Personal Information"
                 disabled={isButtonDisabled}
               />
             </div>

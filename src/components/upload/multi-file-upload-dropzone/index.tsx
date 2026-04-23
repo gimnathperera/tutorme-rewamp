@@ -178,6 +178,20 @@ const ACCEPTED_TYPES = {
   "application/pdf": [".pdf"],
 };
 
+const buildItemsFromUrls = (urls: string[]): FileItem[] =>
+  urls.map((url) => ({ file: null, url }));
+
+const getUploadedUrls = (items: FileItem[]): string[] =>
+  items.filter((item) => item.url).map((item) => item.url!);
+
+const areUrlsEqual = (items: FileItem[], urls: string[]): boolean => {
+  const currentUrls = getUploadedUrls(items);
+  return (
+    currentUrls.length === urls.length &&
+    currentUrls.every((url, index) => url === urls[index])
+  );
+};
+
 // ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
@@ -192,20 +206,40 @@ export default function MultiFileUploadDropzone({
   // Lazy initializer: seed from pre-existing URLs so the list is populated
   // immediately on mount without an extra render / useEffect flash.
   const [files, setFiles] = useState<FileItem[]>(() =>
-    (initialUrls ?? []).map((url) => ({ file: null, url })),
+    buildItemsFromUrls(initialUrls ?? []),
   );
+  const filesRef = useRef<FileItem[]>(files);
 
   const [previewItem, setPreviewItem] = useState<FileItem | null>(null);
+
+  useEffect(() => {
+    filesRef.current = files;
+  }, [files]);
+
+  useEffect(() => {
+    const urls = initialUrls ?? [];
+
+    setFiles((prev) => {
+      if (areUrlsEqual(prev, urls)) return prev;
+
+      const pendingFiles = prev.filter((fileItem) => !fileItem.url);
+      const hydratedFiles = urls.map(
+        (url) => prev.find((fileItem) => fileItem.url === url) ?? { file: null, url },
+      );
+
+      const nextFiles = [...hydratedFiles, ...pendingFiles];
+      filesRef.current = nextFiles;
+      return nextFiles;
+    });
+  }, [initialUrls]);
 
   // Revoke any blob URLs on unmount to avoid memory leaks
   useEffect(() => {
     return () => {
-      files.forEach((f) => {
+      filesRef.current.forEach((f) => {
         if (f.blobUrl) URL.revokeObjectURL(f.blobUrl);
       });
     };
-    // intentionally only on unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onDrop = useCallback(
@@ -273,15 +307,16 @@ export default function MultiFileUploadDropzone({
           if (!uploadRes.ok) throw new Error("Upload failed");
 
           // Save uploaded URL
-          fileObj.url = uploadUrl.split("?")[0];
-          setFiles((prev) => [...prev]); // refresh state
-
-          // Update form with all uploaded URLs
-          onUploaded(
-            [...files.filter((f) => f.url), fileObj]
-              .filter((f) => f.url)
-              .map((f) => f.url!),
-          );
+          const uploadedUrl = uploadUrl.split("?")[0];
+          fileObj.url = uploadedUrl;
+          setFiles((prev) => {
+            const nextFiles = prev.map((item) =>
+              item === fileObj ? { ...item, url: uploadedUrl } : item,
+            );
+            filesRef.current = nextFiles;
+            onUploaded(getUploadedUrls(nextFiles));
+            return nextFiles;
+          });
         } catch (err) {
           console.error(err);
           alert(`Upload failed for ${file.name}`);
@@ -290,7 +325,7 @@ export default function MultiFileUploadDropzone({
         }
       }
     },
-    [files, onUploaded],
+    [onUploaded],
   );
 
   const removeFile = (index: number, e: MouseEvent<HTMLButtonElement>) => {
@@ -301,7 +336,8 @@ export default function MultiFileUploadDropzone({
     const updatedFiles = [...files];
     updatedFiles.splice(index, 1);
     setFiles(updatedFiles);
-    onUploaded(updatedFiles.filter((f) => f.url).map((f) => f.url!));
+    filesRef.current = updatedFiles;
+    onUploaded(getUploadedUrls(updatedFiles));
   };
 
   const openPreview = (

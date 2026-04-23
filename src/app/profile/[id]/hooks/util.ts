@@ -1,6 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Option } from "@/types/shared-types";
+import { EducationInfoSchema } from "../components/form-education-information/schema";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
 import { LanguageOptionsSchema } from "../components/form-language-time/schema";
 
@@ -8,14 +9,10 @@ export type LogicReturnType = {
   derivedData: {
     dropdownOptionData: {
       gradesOptions: Option[];
-      subjectsOptions: Option[];
-      durationOptions: Option[];
-      frequencyOptions: Option[];
-      tutorTypesOptions: Option[];
-      genderOptions: Option[];
-      countryOptions: Option[];
+      educationSubjectsOptions: Option[];
       languageOptions: Option[];
       timeZoneOptions: Option[];
+      rateOptions: Option[];
     };
     loading: {
       isProfileDataLoading: boolean;
@@ -25,39 +22,15 @@ export type LogicReturnType = {
   };
   forms: {
     generalInfoForm: ReturnType<any>;
+    educationInfoForm: ReturnType<any>;
     languageAndTimeForm: ReturnType<any>;
   };
   handlers: {
     onGeneralInfoFormSubmission: (data: GeneralInfoSchema) => void;
+    onEducationInfoFormSubmission: (data: EducationInfoSchema) => void;
     onLanguageAndTimeFormSubmission: (data: LanguageOptionsSchema) => void;
   };
 };
-
-export const durationOptions = [
-  { value: "30 minutes", label: "30 minutes" },
-  { value: "1 hour", label: "1 hour" },
-  { value: "2 hours", label: "2 hours" },
-];
-
-export const frequencyOptions = [
-  { value: "Once a week", label: "Once a week" },
-  { value: "Twice a week", label: "Twice a week" },
-  { value: "Daily", label: "Daily" },
-];
-
-export const tutorTypesOptions = [
-  { label: "Part Time Tutors", value: "part-time" },
-  { label: "Full Time Tutors", value: "full-time" },
-  {
-    label: "Ex / Current Government School Tutors",
-    value: "gov",
-  },
-];
-
-export const genderOptions = [
-  { label: "Male", value: "Male" },
-  { label: "Female", value: "Female" },
-];
 
 export const countryOptions: Option[] = [
   { label: "Afghanistan", value: "AF" },
@@ -267,4 +240,15 @@ export const timeZoneOptions = [
   { value: "UTC+1", label: "Central European Time" },
   { value: "UTC+9", label: "Japan Standard Time" },
   { value: "UTC+5:30", label: "Sri Lanka Standard Time" },
+];
+
+export const rateOptions: Option[] = [
+  { value: "Rs. 500 - 1,000", label: "Rs. 500 - 1,000 per hour" },
+  { value: "Rs. 1,000 - 1,500", label: "Rs. 1,000 - 1,500 per hour" },
+  { value: "Rs. 1,500 - 2,000", label: "Rs. 1,500 - 2,000 per hour" },
+  { value: "Rs. 2,000 - 2,500", label: "Rs. 2,000 - 2,500 per hour" },
+  { value: "Rs. 2,500 - 3,000", label: "Rs. 2,500 - 3,000 per hour" },
+  { value: "Rs. 3,000 - 4,000", label: "Rs. 3,000 - 4,000 per hour" },
+  { value: "Rs. 4,000 - 5,000", label: "Rs. 4,000 - 5,000 per hour" },
+  { value: "Rs. 5,000+", label: "Rs. 5,000+ per hour" },
 ];
