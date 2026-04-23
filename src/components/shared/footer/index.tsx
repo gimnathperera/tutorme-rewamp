@@ -46,7 +46,7 @@ const products: ProductType[] = [
 
 const footer = () => {
   return (
-    <div className="bg-black" id="first-section">
+    <div className="bg-navyblue" id="first-section">
       <div className="mx-auto max-w-2xl pt-4 pb-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-4 mb-5 grid grid-cols-2 gap-y-8 gap-x-6 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-12 lg:gap-x-16 xl:gap-x-8">
           {/* COLUMN-1 */}
