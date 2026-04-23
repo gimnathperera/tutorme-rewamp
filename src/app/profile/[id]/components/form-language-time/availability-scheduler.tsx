@@ -4,12 +4,11 @@ import { useMemo, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { getNestedError } from "@/utils/form";
 import { Clock3 } from "lucide-react";
-
-type ScheduleSlot = {
-  day: string;
-  start: string;
-  end: string;
-};
+import {
+  parseAvailabilityValue,
+  ScheduleSlot,
+  serializeAvailabilitySlots,
+} from "./availability";
 
 const DAYS = [
   { label: "Mon", value: "Monday" },
@@ -26,38 +25,6 @@ const getTimeLabel = (value: string) =>
     hour: "numeric",
     minute: "2-digit",
   });
-
-const serializeSlots = (slots: ScheduleSlot[]) =>
-  JSON.stringify(
-    [...slots].sort((a, b) => {
-      const dayDiff =
-        DAYS.findIndex(({ value }) => value === a.day) -
-        DAYS.findIndex(({ value }) => value === b.day);
-
-      if (dayDiff !== 0) return dayDiff;
-
-      return a.start.localeCompare(b.start);
-    }),
-  );
-
-const parseLegacyAvailability = (value: string): ScheduleSlot[] => {
-  const trimmedValue = value.trim();
-  if (!trimmedValue) return [];
-
-  try {
-    const parsed = JSON.parse(trimmedValue);
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed.filter(
-      (slot): slot is ScheduleSlot =>
-        typeof slot?.day === "string" &&
-        typeof slot?.start === "string" &&
-        typeof slot?.end === "string",
-    );
-  } catch {
-    return [];
-  }
-};
 
 const AvailabilityScheduler = () => {
   const { control, formState } = useFormContext();
@@ -82,9 +49,11 @@ const AvailabilityScheduler = () => {
       name="availability"
       control={control}
       render={({ field }) => {
-        const slots = parseLegacyAvailability(field.value ?? "");
+        const slots = parseAvailabilityValue(field.value);
         const hasLegacyText =
-          !!field.value && slots.length === 0 && String(field.value).trim() !== "";
+          typeof field.value === "string" &&
+          field.value.trim() !== "" &&
+          slots.length === 0;
 
         const scheduleByDay = groupedSlots.map((day) => ({
           ...day,
@@ -121,7 +90,7 @@ const AvailabilityScheduler = () => {
           }
 
           setLocalError("");
-          field.onChange(serializeSlots([...slots, nextSlot]));
+          field.onChange(serializeAvailabilitySlots([...slots, nextSlot]));
         };
 
         const removeSlot = (slotToRemove: ScheduleSlot) => {
@@ -134,7 +103,9 @@ const AvailabilityScheduler = () => {
               ),
           );
 
-          field.onChange(nextSlots.length > 0 ? serializeSlots(nextSlots) : "");
+          field.onChange(
+            nextSlots.length > 0 ? serializeAvailabilitySlots(nextSlots) : "",
+          );
         };
 
         return (

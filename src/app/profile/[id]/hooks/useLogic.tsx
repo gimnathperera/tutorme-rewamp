@@ -33,6 +33,7 @@ import {
   LanguageOptionsSchema,
   languageOptionsSchema,
 } from "../components/form-language-time/schema";
+import { normalizeAvailabilityValue } from "../components/form-language-time/availability";
 import {
   LogicReturnType,
   countryOptions,
@@ -162,7 +163,7 @@ const useLogic = (): LogicReturnType => {
       languageAndTimeForm.reset({
         timeZone: profile.timeZone ?? "",
         language: profile.language ?? "",
-        availability: profile.availability ?? "",
+        availability: normalizeAvailabilityValue(profile.availability),
         rate: profile.rate ?? "",
       });
     },

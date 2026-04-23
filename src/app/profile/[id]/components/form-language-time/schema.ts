@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeAvailabilityValue } from "./availability";
 
 const optionalProfileField = z.preprocess(
   (value) => (typeof value === "string" ? value.trim() : value),
@@ -8,7 +9,7 @@ const optionalProfileField = z.preprocess(
 export const languageOptionsSchema = z.object({
   timeZone: optionalProfileField,
   language: optionalProfileField,
-  availability: optionalProfileField,
+  availability: z.preprocess(normalizeAvailabilityValue, z.string().optional()),
   rate: optionalProfileField,
 });
 
