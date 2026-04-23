@@ -77,41 +77,41 @@ export const seoPages = {
   home: {
     path: "/",
     title:
-      "Home Tutors & Teaching Vacancies in Sri Lanka | Qualified Matching",
+      "Home Tutors and Teaching Vacancies in Sri Lanka | Qualified Matching",
     description:
       "Find expert home tutors for personalized support or browse tutor vacancies in Colombo and Sri Lanka. We connect parents with teachers for primary teaching vacancies and online teaching jobs.",
   },
   registerTutor: {
     path: "/register-tutor",
     title:
-      "tutor & Teaching Vacancies in Sri Lanka | Register as a Home Tutor",
+      "tutor and Teaching Vacancies in Sri Lanka | Register as a Home Tutor",
     description:
       "Looking for tutor vacancies in Colombo or online teaching jobs in Sri Lanka? Join our platform and get matched with parents seeking qualified home tutors for personalised academic support.",
   },
   requestForTutors: {
     path: "/request-for-tutors",
     title:
-      "Find a Home Tutor by Grade & Subject | Maths, English, Science & More in Sri Lanka",
+      "Find a Home Tutor by Grade and Subject | Maths, English, Science and More in Sri Lanka",
     description:
       "Browse tutors by grade and subject from O/L Maths and A/L Physics to Spoken English and Elocution. Find qualified home tutors for all grades in Sinhala or English medium across Sri Lanka.",
   },
   testPapers: {
     path: "/test-papers",
     title:
-      "Past Papers Sri Lanka | O/L & A/L Maths Past Papers and Test Papers Free Download",
+      "Past Papers Sri Lanka | O/L and A/L Maths Past Papers and Test Papers Free Download",
     description:
       "Access O/L and A/L past papers and test papers including Maths, Science, and more. Download free past papers and test papers to help students prepare and excel in exams across Sri Lanka.",
   },
   gradesAndSubjects: {
     path: "/grades-and-subjects",
     title:
-      "Explore Tuition Grades & Subjects | Maths, Science, English in Sri Lanka",
+      "Explore Tuition Grades and Subjects | Maths, Science, English in Sri Lanka",
     description:
       "Browse our comprehensive list of subjects and grades for home tuition in Sri Lanka. Find expert tutors for O/L, A/L, primary, and specialized subjects today.",
   },
   tuitionRates: {
     path: "/tuition-rates",
-    title: "Home Tuition Rates & Fees in Sri Lanka | Tuition Lanka",
+    title: "Home Tuition Rates and Fees in Sri Lanka | Tuition Lanka",
     description:
       "Compare affordable home tuition rates and fees across Sri Lanka. Find detailed pricing for primary, O/L, A/L, and online classes to easily suit your budget.",
   },
@@ -123,13 +123,13 @@ export const seoPages = {
   },
   blogs: {
     path: "/blogs",
-    title: "Tuition Lanka Blog | Education Tips, Exam Guides & Tutor Advice",
+    title: "Tuition Lanka Blog | Education Tips, Exam Guides and Tutor Advice",
     description:
       "Read the latest articles on exam preparation, study tips, and education news in Sri Lanka. Discover expert advice tailored for students, parents, and home tutors.",
   },
   contactUs: {
     path: "/contact-us",
-    title: "Contact Tuition Lanka | Support for Parents & Tutors in Sri Lanka",
+    title: "Contact Tuition Lanka | Support for Parents and Tutors in Sri Lanka",
     description:
       "Get in touch with Tuition Lanka for inquiries about finding a home tutor, tutor vacancies, or website support. We're here to help students and teachers succeed.",
   },
