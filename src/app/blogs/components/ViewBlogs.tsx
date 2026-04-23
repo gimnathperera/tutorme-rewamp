@@ -53,7 +53,7 @@ export default function BlogsDashboard() {
     setPage(1);
   }, [activeTag]);
 
-  const recentArticles = allBlogs.slice(0, 5);
+  // const recentArticles = allBlogs.slice(0, 5);
 
   if (isBlogsLoading || isTagsLoading)
     return (

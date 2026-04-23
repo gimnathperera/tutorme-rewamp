@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
-  TUTORING_LEVEL_OPTIONS,
+  CLASS_TYPE_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
@@ -86,23 +86,23 @@ const AcademicExperience = () => {
       {/* ROW 1 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className={fieldWrapper}>
-          <Label className="text-sm" htmlFor="tutoringLevels">
-            Tutoring Levels <span className="text-red-500">*</span>
+          <Label className="text-sm" htmlFor="classType">
+            Class Type <span className="text-red-500">*</span>
           </Label>
           <Controller
-            name="tutoringLevels"
+            name="classType"
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={TUTORING_LEVEL_OPTIONS}
+                options={CLASS_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
-                hasError={!!errors.tutoringLevels}
+                hasError={!!errors.classType}
               />
             )}
           />
           <p className="text-xs text-red-500 min-h-[1.25rem]">
-            {errors.tutoringLevels?.message as string}
+            {errors.classType?.message as string}
           </p>
         </div>
 

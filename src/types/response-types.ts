@@ -139,7 +139,7 @@ export type Blogs = BaseEntity &
     slug?: string;
     image: string;
     type: string;
-    status: "pending" | "published" | "draft";
+    status: "pending" | "approved" | "rejected";
     author: {
       /** MongoDB ObjectId of the user who created the blog */
       id: string;

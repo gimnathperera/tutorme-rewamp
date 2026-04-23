@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "lucide-react";
+import Icon from "@/components/shared/icon";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-2";
@@ -24,8 +24,14 @@ const PersonalInfo = () => {
     register,
     watch,
     setValue,
+    trigger,
     formState: { errors },
   } = useFormContext();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
 
   const dateOfBirth = watch("dateOfBirth");
 
@@ -99,6 +105,76 @@ const PersonalInfo = () => {
         )}
       </div>
 
+      {/* Password */}
+      <div className={fieldWrapper}>
+        <Label className="text-sm" htmlFor="password">
+          Password <span className="text-red-500">*</span>
+        </Label>
+        <div className="relative">
+          <Input
+            id="password"
+            type={showPassword ? "text" : "password"}
+            {...register("password", {
+              onChange: () => {
+                trigger("password");
+                // Re-validate confirmPassword so mismatch clears when password changes
+                trigger("confirmPassword");
+              },
+            })}
+            autoComplete="new-password"
+            className={`${inputClass} pr-10 ${errors.password ? "border-red-500" : "border-gray-300"}`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((v) => !v)}
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label={showPassword ? "Hide password" : "Show password"}
+          >
+            {showPassword ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
+          </button>
+        </div>
+        {errors.password ? (
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
+            {errors.password?.message as string}
+          </p>
+        ) : (
+          <Hint>8–12 chars, at least one letter and one number</Hint>
+        )}
+      </div>
+
+      {/* Confirm Password */}
+      <div className={fieldWrapper}>
+        <Label className="text-sm" htmlFor="confirmPassword">
+          Confirm Password <span className="text-red-500">*</span>
+        </Label>
+        <div className="relative">
+          <Input
+            id="confirmPassword"
+            type={showConfirm ? "text" : "password"}
+            {...register("confirmPassword", {
+              onChange: () => trigger("confirmPassword"),
+            })}
+            autoComplete="new-password"
+            className={`${inputClass} pr-10 ${errors.confirmPassword ? "border-red-500" : "border-gray-300"}`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowConfirm((v) => !v)}
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+            aria-label={showConfirm ? "Hide password" : "Show password"}
+          >
+            {showConfirm ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
+          </button>
+        </div>
+        {errors.confirmPassword ? (
+          <p className="text-xs text-red-500 min-h-[1.25rem]">
+            {errors.confirmPassword?.message as string}
+          </p>
+        ) : (
+          <Hint>Re-enter your password to confirm</Hint>
+        )}
+      </div>
+
       {/* Contact Number */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="contactNumber">
@@ -150,17 +226,26 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="dateOfBirth">
           Date of Birth <span className="text-red-500">*</span>
         </Label>
-        <div className="relative">
+        <div
+          className="relative cursor-pointer"
+          onClick={() => dateInputRef.current?.showPicker()}
+        >
           <Input
             id="dateOfBirth"
             type="date"
             {...register("dateOfBirth")}
+            ref={(el) => {
+              register("dateOfBirth").ref(el);
+              dateInputRef.current = el;
+            }}
             onKeyDown={(e) => e.preventDefault()}
             max={maxDate}
             autoComplete="bday"
-            className={`${inputClass} pr-10 [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:cursor-pointer ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
+            className={`${inputClass} pr-10 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
           />
-          <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+            <Icon name="Calendar" size={16} />
+          </span>
         </div>
         {errors.dateOfBirth ? (
           <p className="text-xs text-red-500 min-h-[1.25rem]">
@@ -232,7 +317,6 @@ const PersonalInfo = () => {
           <option value="Tamil">Tamil</option>
           <option value="Muslim">Muslim</option>
           <option value="Burgher">Burgher</option>
-          <option value="Others">Others</option>
         </select>
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.race?.message as string}
