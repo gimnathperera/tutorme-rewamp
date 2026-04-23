@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { addYears, isBefore } from "date-fns";
 
 const normalizeText = (value: unknown) =>
   typeof value === "string" ? value.trim().replace(/\s+/g, " ") : value;
@@ -7,10 +6,27 @@ const normalizeText = (value: unknown) =>
 const trimOnly = (value: unknown) =>
   typeof value === "string" ? value.trim() : value;
 
-const calculateAge = (birthday: string) => {
-  const dob = new Date(birthday);
+const parseBirthday = (birthday: string | Date) => {
+  if (birthday instanceof Date) {
+    return Number.isNaN(birthday.getTime()) ? undefined : birthday;
+  }
 
-  if (Number.isNaN(dob.getTime())) return undefined;
+  const dateOnlyMatch = birthday.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+  if (dateOnlyMatch) {
+    const [, year, month, day] = dateOnlyMatch;
+    const parsedDate = new Date(Number(year), Number(month) - 1, Number(day));
+    return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
+  }
+
+  const parsedDate = new Date(birthday);
+  return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
+};
+
+const calculateAge = (birthday: string | Date) => {
+  const dob = parseBirthday(birthday);
+
+  if (!dob) return undefined;
 
   const today = new Date();
   let age = today.getFullYear() - dob.getFullYear();
@@ -49,7 +65,17 @@ export const generalInfoSchema = z.object({
     .refine(
       (date) => {
         if (!date) return true;
-        return isBefore(new Date(date), new Date());
+        const dob = parseBirthday(date);
+        if (!dob) return false;
+
+        const today = new Date();
+        const todayStart = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        );
+
+        return dob < todayStart;
       },
       {
         message: "Birthday cannot be a future date",
@@ -58,9 +84,8 @@ export const generalInfoSchema = z.object({
     .refine(
       (date) => {
         if (!date) return true;
-        const today = new Date();
-        const minDate = addYears(today, -18);
-        return isBefore(new Date(date), minDate);
+        const derivedAge = calculateAge(date);
+        return typeof derivedAge === "number" && derivedAge >= 18;
       },
       {
         message: "You must be at least 18 years old",
@@ -100,14 +125,7 @@ export const generalInfoSchema = z.object({
       },
     ),
 }).superRefine((data, context) => {
-  const birthday =
-    typeof data.birthday === "string"
-      ? data.birthday
-      : data.birthday instanceof Date
-        ? data.birthday.toISOString()
-        : "";
-
-  const derivedAge = calculateAge(birthday);
+  const derivedAge = data.birthday ? calculateAge(data.birthday) : undefined;
 
   if (typeof derivedAge === "number" && derivedAge !== data.age) {
     context.addIssue({
