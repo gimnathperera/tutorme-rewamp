@@ -154,7 +154,7 @@ export function TutorTabs() {
         ) {
           toast.error(
             "Your email has been suspended. Please contact admin to resolve this.",
-            { duration: 8000, style: { maxWidth: 420 } }
+            { duration: 8000, style: { maxWidth: 420 } },
           );
           return;
         }
@@ -201,13 +201,19 @@ export function TutorTabs() {
             <TabsContent value="personalInfo">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Personal Information</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Personal Information
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <PersonalInfo />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -217,7 +223,9 @@ export function TutorTabs() {
             <TabsContent value="qualifications">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Qualifications</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Qualifications
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <AcademicExperience />
@@ -226,7 +234,11 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -236,7 +248,9 @@ export function TutorTabs() {
             <TabsContent value="teachingProfile">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Teaching Profile</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Teaching Profile
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TutorProfile />
@@ -245,7 +259,11 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep} className="bg-blue-600 text-white">
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -255,7 +273,9 @@ export function TutorTabs() {
             <TabsContent value="verification">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Verification & Agreement</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Verification & Agreement
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TermsAndSubmit />

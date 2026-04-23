@@ -69,7 +69,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("name", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("name", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("name", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
 
@@ -102,7 +104,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("city", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("city", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("city", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
               <InputText
@@ -115,7 +119,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("state", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("state", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("state", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
               <InputText
@@ -128,7 +134,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("region", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("region", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("region", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
               <InputText
@@ -141,7 +149,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("zip", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("zip", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("zip", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
               <InputText
@@ -154,7 +164,9 @@ const FormGeneralInfo: FC<Props> = ({
                   form.setValue("address", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("address", collapseSpaces(e.target.value), { shouldValidate: true });
+                  form.setValue("address", collapseSpaces(e.target.value), {
+                    shouldValidate: true,
+                  });
                 }}
               />
               <InputText

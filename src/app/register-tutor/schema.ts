@@ -1,4 +1,11 @@
-import { PASSWORD_LETTER_NUMBER_MSG, PASSWORD_LETTER_NUMBER_REGEX, PASSWORD_MAX, PASSWORD_MIN, PASSWORD_TOO_LONG, PASSWORD_TOO_SHORT } from "@/configs/password";
+import {
+  PASSWORD_LETTER_NUMBER_MSG,
+  PASSWORD_LETTER_NUMBER_REGEX,
+  PASSWORD_MAX,
+  PASSWORD_MIN,
+  PASSWORD_TOO_LONG,
+  PASSWORD_TOO_SHORT,
+} from "@/configs/password";
 import { z } from "zod";
 
 const normalizeText = (value: unknown) =>
@@ -76,7 +83,11 @@ const step1BaseSchema = z.object({
 });
 
 /** Cross-field refinement shared between step1Schema and fullSchema */
-const passwordMatchRefinement = (password: string, confirmPassword: string, ctx: z.RefinementCtx) => {
+const passwordMatchRefinement = (
+  password: string,
+  confirmPassword: string,
+  ctx: z.RefinementCtx,
+) => {
   if (confirmPassword && password !== confirmPassword) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,

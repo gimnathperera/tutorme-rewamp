@@ -55,7 +55,8 @@ export default function ViewBlogPage() {
   const { data: allBlogs } = useFetchBlogsQuery({});
   const { user } = useAuthContext();
   const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
-  const [updateBlogStatus, { isLoading: isStatusUpdating }] = useUpdateBlogStatusMutation();
+  const [updateBlogStatus, { isLoading: isStatusUpdating }] =
+    useUpdateBlogStatusMutation();
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleDelete = async () => {
@@ -73,7 +74,9 @@ export default function ViewBlogPage() {
     if (!blog) return;
     try {
       await updateBlogStatus({ id: blog.id, status }).unwrap();
-      toast.success(status === "approved" ? "Blog approved successfully" : "Blog rejected");
+      toast.success(
+        status === "approved" ? "Blog approved successfully" : "Blog rejected",
+      );
     } catch {
       toast.error("Failed to update blog status");
     }

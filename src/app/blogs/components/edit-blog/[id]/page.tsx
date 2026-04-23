@@ -237,7 +237,11 @@ export default function EditBlogPage() {
         }
         return;
       }
-      toast.success(wasRejected ? "Blog resubmitted for review." : "Blog updated successfully!");
+      toast.success(
+        wasRejected
+          ? "Blog resubmitted for review."
+          : "Blog updated successfully!",
+      );
       router.push(`/blogs/${blogId}`);
     } catch (err) {
       console.error(err);

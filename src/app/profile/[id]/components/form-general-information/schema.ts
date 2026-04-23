@@ -18,7 +18,10 @@ export const generalInfoSchema = z.object({
   city: z
     .string()
     .min(1, "City is required")
-    .regex(/^[A-Za-z\s]+$/, "City cannot contain special characters or numbers"),
+    .regex(
+      /^[A-Za-z\s]+$/,
+      "City cannot contain special characters or numbers",
+    ),
 
   state: z
     .string()

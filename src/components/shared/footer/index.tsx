@@ -101,7 +101,10 @@ const footer = () => {
           {/* COLUMN-2/3 */}
 
           {products.map((product) => (
-            <div key={product.id} className="group relative col-span-1 sm:col-span-1 lg:col-span-2">
+            <div
+              key={product.id}
+              className="group relative col-span-1 sm:col-span-1 lg:col-span-2"
+            >
               <p className="text-white text-sm font-bold uppercase tracking-widest mb-2">
                 {product.section}
               </p>

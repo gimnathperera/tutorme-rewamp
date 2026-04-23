@@ -142,7 +142,9 @@ const Faqs = () => {
         {/* FAQ list — two columns */}
         {isFetching && page === 1 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto">
-            {Array.from({ length: FAQ_LIMIT }, (_, i) => <FaqSkeleton key={i} />)}
+            {Array.from({ length: FAQ_LIMIT }, (_, i) => (
+              <FaqSkeleton key={i} />
+            ))}
           </div>
         ) : isError ? (
           <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
@@ -151,26 +153,30 @@ const Faqs = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto items-start">
             <div className="flex flex-col gap-3">
-              {faqs.filter((_, i) => i % 2 === 0).map((faq, i) => (
-                <FaqPill
-                  key={i * 2}
-                  question={faq.question}
-                  answer={faq.answer}
-                  isOpen={openIndex === i * 2}
-                  onToggle={() => handleToggle(i * 2)}
-                />
-              ))}
+              {faqs
+                .filter((_, i) => i % 2 === 0)
+                .map((faq, i) => (
+                  <FaqPill
+                    key={i * 2}
+                    question={faq.question}
+                    answer={faq.answer}
+                    isOpen={openIndex === i * 2}
+                    onToggle={() => handleToggle(i * 2)}
+                  />
+                ))}
             </div>
             <div className="flex flex-col gap-3">
-              {faqs.filter((_, i) => i % 2 !== 0).map((faq, i) => (
-                <FaqPill
-                  key={i * 2 + 1}
-                  question={faq.question}
-                  answer={faq.answer}
-                  isOpen={openIndex === i * 2 + 1}
-                  onToggle={() => handleToggle(i * 2 + 1)}
-                />
-              ))}
+              {faqs
+                .filter((_, i) => i % 2 !== 0)
+                .map((faq, i) => (
+                  <FaqPill
+                    key={i * 2 + 1}
+                    question={faq.question}
+                    answer={faq.answer}
+                    isOpen={openIndex === i * 2 + 1}
+                    onToggle={() => handleToggle(i * 2 + 1)}
+                  />
+                ))}
             </div>
           </div>
         )}

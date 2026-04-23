@@ -14,10 +14,9 @@ const OurTeam = () => {
 
             <p className="text-base font-normal text-[#4B5563] pt-5 leading-relaxed animate-on-scroll stagger-1">
               We&apos;re dedicated to helping students and tutors connect
-              through a trusted, easy-to-use platform.
-              
-              Every learner deserves quality education - and every tutor
-              deserves recognition for their effort.
+              through a trusted, easy-to-use platform. Every learner deserves
+              quality education - and every tutor deserves recognition for their
+              effort.
             </p>
           </div>
           <div className="lg:w-1/2 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2">

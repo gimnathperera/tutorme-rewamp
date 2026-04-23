@@ -139,12 +139,7 @@ const getPaperMediumOptions = (papers: Paper[]): Option[] => {
   papers.forEach((paper) => {
     const rawPaper = paper as Paper & Record<string, unknown>;
 
-    [
-      rawPaper.medium,
-      rawPaper.language,
-      rawPaper.languages,
-      rawPaper.mediums,
-    ]
+    [rawPaper.medium, rawPaper.language, rawPaper.languages, rawPaper.mediums]
       .flatMap(extractMediumOptions)
       .forEach((option) => {
         const optionKey = normalizeFilterValue(String(option.value));
@@ -195,22 +190,19 @@ const useLogic = (): LogicReturnType => {
   const [fetchPapers, { isLoading: isPapersLoading }] =
     useLazyFetchPapersQuery();
 
-  const fetchTestPapers = useCallback(
-    async () => {
-      const result = await fetchPapers({
-        limit: PAPER_LIMIT,
-        page: 1,
-      });
-      const error = getErrorInApiResult(result);
-      if (error) {
-        return toast.error(error);
-      }
-      if (result.data) {
-        setPapers(result.data.results);
-      }
-    },
-    [fetchPapers],
-  );
+  const fetchTestPapers = useCallback(async () => {
+    const result = await fetchPapers({
+      limit: PAPER_LIMIT,
+      page: 1,
+    });
+    const error = getErrorInApiResult(result);
+    if (error) {
+      return toast.error(error);
+    }
+    if (result.data) {
+      setPapers(result.data.results);
+    }
+  }, [fetchPapers]);
 
   useEffect(() => {
     fetchTestPapers();
@@ -222,11 +214,11 @@ const useLogic = (): LogicReturnType => {
       value: grade.id.toString(),
     })) || [];
 
-  const subjectOptions = useMemo(() => getPaperSubjectOptions(papers), [papers]);
-  const mediumOptions = useMemo(
-    () => getPaperMediumOptions(papers),
+  const subjectOptions = useMemo(
+    () => getPaperSubjectOptions(papers),
     [papers],
   );
+  const mediumOptions = useMemo(() => getPaperMediumOptions(papers), [papers]);
 
   useEffect(() => {
     if (!selectedMedium) return;
@@ -259,8 +251,7 @@ const useLogic = (): LogicReturnType => {
       .toLowerCase();
 
     const matchesSearch =
-      !normalizedSearchTerm ||
-      searchableContent.includes(normalizedSearchTerm);
+      !normalizedSearchTerm || searchableContent.includes(normalizedSearchTerm);
 
     const matchesGrade =
       !normalizedSelectedGrade ||

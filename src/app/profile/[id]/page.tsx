@@ -45,7 +45,7 @@ const ProfilePage: FC = () => {
           <FormPasswordInfo />
         </div>
       </div>
-      <WhatsAppButton /> 
+      <WhatsAppButton />
     </div>
   );
 };

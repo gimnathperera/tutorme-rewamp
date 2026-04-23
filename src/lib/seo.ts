@@ -129,7 +129,8 @@ export const seoPages = {
   },
   contactUs: {
     path: "/contact-us",
-    title: "Contact Tuition Lanka | Support for Parents and Tutors in Sri Lanka",
+    title:
+      "Contact Tuition Lanka | Support for Parents and Tutors in Sri Lanka",
     description:
       "Get in touch with Tuition Lanka for inquiries about finding a home tutor, tutor vacancies, or website support. We're here to help students and teachers succeed.",
   },
