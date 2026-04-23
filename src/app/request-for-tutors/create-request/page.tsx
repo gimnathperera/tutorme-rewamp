@@ -115,6 +115,11 @@ export default function AddRequestForTutor() {
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
+  const changeStep = (nextTab: TabKey) => {
+    setTab(nextTab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   useEffect(() => {
     const currentCount = tutors.length;
     if (selectedTutorCount > currentCount) {
@@ -162,11 +167,11 @@ export default function AddRequestForTutor() {
       ]);
       if (!valid) return;
     }
-    setTab(TAB_ORDER[currentIndex + 1]);
+    changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
   const prevStep = () => {
-    setTab(TAB_ORDER[currentIndex - 1]);
+    changeStep(TAB_ORDER[currentIndex - 1]);
   };
 
   const onSubmit = async (data: CreateRequestTutorSchema) => {
