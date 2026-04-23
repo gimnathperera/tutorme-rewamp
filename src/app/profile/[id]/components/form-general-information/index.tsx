@@ -6,7 +6,6 @@ import InputSelect from "@/components/shared/input-select";
 import { FC, useEffect } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty } from "lodash-es";
 import {
   GENDER_OPTIONS,
   NATIONALITY_OPTIONS,
@@ -53,9 +52,40 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     onFormSubmit(data);
   };
 
-  const { isDirty, errors } = form.formState;
+  const { isDirty, isValid } = form.formState;
   const birthday = form.watch("birthday");
-  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
+  const [name, email, phoneNumber, age, gender, nationality, race] = form.watch([
+    "name",
+    "email",
+    "phoneNumber",
+    "age",
+    "gender",
+    "nationality",
+    "race",
+  ]);
+  const hasBirthday =
+    birthday instanceof Date
+      ? !Number.isNaN(birthday.getTime())
+      : typeof birthday === "string" && birthday.trim().length > 0;
+  const hasAllRequiredFields =
+    typeof name === "string" &&
+    name.trim().length > 0 &&
+    typeof email === "string" &&
+    email.trim().length > 0 &&
+    typeof phoneNumber === "string" &&
+    phoneNumber.trim().length > 0 &&
+    age !== "" &&
+    age !== null &&
+    age !== undefined &&
+    typeof gender === "string" &&
+    gender.trim().length > 0 &&
+    typeof nationality === "string" &&
+    nationality.trim().length > 0 &&
+    typeof race === "string" &&
+    race.trim().length > 0 &&
+    hasBirthday;
+  const isButtonDisabled =
+    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
 
   useEffect(() => {
     const nextAge = calculateAge(

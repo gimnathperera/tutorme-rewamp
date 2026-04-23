@@ -47,8 +47,70 @@ const getProfileSubjectIds = (profile: ProfileResponse) =>
 const getProfileGradeIds = (profile: ProfileResponse) =>
   profile.grades.map(({ id }) => id);
 
-const formatBirthdayForInput = (birthday?: string) =>
-  birthday ? birthday.slice(0, 10) : "";
+const MONTH_BY_SHORT_NAME: Record<string, string> = {
+  Jan: "01",
+  Feb: "02",
+  Mar: "03",
+  Apr: "04",
+  May: "05",
+  Jun: "06",
+  Jul: "07",
+  Aug: "08",
+  Sep: "09",
+  Oct: "10",
+  Nov: "11",
+  Dec: "12",
+};
+
+const formatDatePartsForInput = (year: number, month: number, day: number) =>
+  `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+
+const formatBirthdayForInput = (birthday?: string | Date) => {
+  if (!birthday) return "";
+
+  if (birthday instanceof Date) {
+    if (Number.isNaN(birthday.getTime())) return "";
+
+    return formatDatePartsForInput(
+      birthday.getFullYear(),
+      birthday.getMonth() + 1,
+      birthday.getDate(),
+    );
+  }
+
+  const trimmedBirthday = birthday.trim();
+  const isoDateMatch = trimmedBirthday.match(/^(\d{4})-(\d{2})-(\d{2})/);
+
+  if (isoDateMatch) {
+    return `${isoDateMatch[1]}-${isoDateMatch[2]}-${isoDateMatch[3]}`;
+  }
+
+  const legacyDateMatch = trimmedBirthday.match(
+    /^[A-Za-z]{3}\s+([A-Za-z]{3})\s+(\d{1,2})\s+(\d{4})/,
+  );
+
+  if (legacyDateMatch) {
+    const [, monthName, day, year] = legacyDateMatch;
+    const month = MONTH_BY_SHORT_NAME[monthName];
+
+    return month ? `${year}-${month}-${day.padStart(2, "0")}` : "";
+  }
+
+  const parsedBirthday = new Date(trimmedBirthday);
+  if (Number.isNaN(parsedBirthday.getTime())) return "";
+
+  return formatDatePartsForInput(
+    parsedBirthday.getFullYear(),
+    parsedBirthday.getMonth() + 1,
+    parsedBirthday.getDate(),
+  );
+};
+
+const getProfileBirthday = (profile: ProfileResponse) =>
+  profile.birthday || profile.dateOfBirth || "";
+
+const serializeBirthdayForPayload = (birthday: GeneralInfoSchema["birthday"]) =>
+  birthday instanceof Date ? birthday.toISOString().slice(0, 10) : birthday;
 
 const calculateAgeFromBirthday = (birthday?: string) => {
   if (!birthday) return initialGeneralInfoFormValues.age;
@@ -66,6 +128,18 @@ const calculateAgeFromBirthday = (birthday?: string) => {
   }
 
   return age >= 0 ? age : initialGeneralInfoFormValues.age;
+};
+
+const normalizeTutorTypeValues = (profile: ProfileResponse) => {
+  if (Array.isArray(profile.tutorTypes) && profile.tutorTypes.length > 0) {
+    return profile.tutorTypes;
+  }
+
+  if (Array.isArray(profile.tutorType)) {
+    return profile.tutorType;
+  }
+
+  return profile.tutorType ? [profile.tutorType] : [];
 };
 
 const useLogic = (): LogicReturnType => {
@@ -125,15 +199,17 @@ const useLogic = (): LogicReturnType => {
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
+      const birthday = getProfileBirthday(profile);
+
       generalInfoForm.reset({
-        name: profile.name ?? "",
+        name: profile.name || profile.fullName || "",
         email: profile.email ?? "",
-        phoneNumber: profile.phoneNumber ?? "",
-        birthday: formatBirthdayForInput(profile.birthday) as any,
+        phoneNumber: profile.phoneNumber || profile.contactNumber || "",
+        birthday: formatBirthdayForInput(birthday) as any,
         age:
           typeof profile.age === "number"
             ? profile.age
-            : calculateAgeFromBirthday(profile.birthday),
+            : calculateAgeFromBirthday(birthday),
         gender:
           profile.gender === "None" ? "" : ((profile.gender ?? "") as string),
         nationality: profile.nationality ?? "",
@@ -148,9 +224,7 @@ const useLogic = (): LogicReturnType => {
       educationInfoForm.reset({
         tutoringLevels: profile.tutoringLevels ?? [],
         preferredLocations: profile.preferredLocations ?? [],
-        tutorTypes:
-          profile.tutorTypes ??
-          (profile.tutorType ? [profile.tutorType] : []),
+        tutorTypes: normalizeTutorTypeValues(profile),
         highestEducation: profile.highestEducation ?? "",
         yearsExperience:
           profile.yearsExperience ??
@@ -158,6 +232,9 @@ const useLogic = (): LogicReturnType => {
         tutorMediums: profile.tutorMediums ?? [],
         grades: getProfileGradeIds(profile),
         subjects: getProfileSubjectIds(profile),
+        academicDetails: profile.academicDetails ?? "",
+        certificatesAndQualifications:
+          profile.certificatesAndQualifications ?? [],
       });
     },
     [educationInfoForm],
@@ -175,6 +252,21 @@ const useLogic = (): LogicReturnType => {
     [languageAndTimeForm],
   );
 
+  const hydrateProfileForms = useCallback(
+    (profile: ProfileResponse) => {
+      hasInitialEducationSubjectsBeenSet.current = false;
+      setUserRawData(profile);
+      prePopulateGeneralForm(profile);
+      prePopulateEducationForm(profile);
+      prePopulateLanguageAndTimeForm(profile);
+    },
+    [
+      prePopulateEducationForm,
+      prePopulateGeneralForm,
+      prePopulateLanguageAndTimeForm,
+    ],
+  );
+
   const getUserRawData = useCallback(async () => {
     const result = await fetchProfileData({ userId });
     const error = getErrorInApiResult(result);
@@ -185,18 +277,11 @@ const useLogic = (): LogicReturnType => {
     }
 
     if (result.data) {
-      hasInitialEducationSubjectsBeenSet.current = false;
-
-      setUserRawData(result.data);
-      prePopulateGeneralForm(result.data);
-      prePopulateEducationForm(result.data);
-      prePopulateLanguageAndTimeForm(result.data);
+      hydrateProfileForms(result.data);
     }
   }, [
     fetchProfileData,
-    prePopulateEducationForm,
-    prePopulateGeneralForm,
-    prePopulateLanguageAndTimeForm,
+    hydrateProfileForms,
     userId,
   ]);
 
@@ -303,9 +388,17 @@ const useLogic = (): LogicReturnType => {
     })) || [];
 
   const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
+    const birthday = serializeBirthdayForPayload(data.birthday);
+
     const result = await handleProfileSubmit({
       id: userId,
-      payload: data,
+      payload: {
+        ...data,
+        birthday,
+        fullName: data.name,
+        contactNumber: data.phoneNumber,
+        dateOfBirth: birthday,
+      },
     });
 
     const error = getErrorInApiResult(result);
@@ -315,13 +408,28 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    generalInfoForm.reset({
+      ...data,
+      birthday: formatBirthdayForInput(birthday as string) as any,
+    });
     toast.success("Personal information updated successfully");
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
     const result = await handleProfileSubmit({
       id: userId,
-      payload: data,
+      payload: {
+        tutoringLevels: data.tutoringLevels,
+        preferredLocations: data.preferredLocations,
+        tutorType: data.tutorTypes,
+        highestEducation: data.highestEducation,
+        yearsExperience: Number(data.yearsExperience),
+        tutorMediums: data.tutorMediums,
+        grades: data.grades,
+        subjects: data.subjects,
+        academicDetails: data.academicDetails,
+        certificatesAndQualifications: data.certificatesAndQualifications,
+      },
     });
 
     const error = getErrorInApiResult(result);
@@ -331,6 +439,7 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    educationInfoForm.reset(data);
     toast.success("Qualifications updated successfully");
   };
 
@@ -349,6 +458,7 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    languageAndTimeForm.reset(data);
     toast.success("Languages and availability updated successfully");
   };
 

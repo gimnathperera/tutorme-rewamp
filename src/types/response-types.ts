@@ -274,16 +274,19 @@ export type ProfileResponse = {
   grades: Grade[];
   subjects: Subject[];
   name: string;
+  fullName?: string;
   email: string;
   country: string;
   phoneNumber: string;
+  contactNumber?: string;
   city: string;
   state: string;
   region: string;
   zip: string;
   address: string;
   birthday: string;
-  tutorType: string;
+  dateOfBirth?: string;
+  tutorType: string | string[];
   gender: "Male" | "Female" | "Others" | "None";
   age?: number;
   nationality?: string;
@@ -301,6 +304,8 @@ export type ProfileResponse = {
   highestEducation?: string;
   yearsExperience?: number;
   tutorMediums?: string[];
+  academicDetails?: string;
+  certificatesAndQualifications?: string[];
 } & Id &
   Timestamp;
 

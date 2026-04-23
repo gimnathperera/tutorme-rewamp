@@ -6,8 +6,8 @@ import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { LanguageOptionsSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty } from "lodash-es";
 import AvailabilityScheduler from "./availability-scheduler";
+import { parseAvailabilityValue } from "./availability";
 
 type Props = {
   languageOptions: Option[];
@@ -26,9 +26,24 @@ const FormLanguageTime: FC<Props> = ({
   onFormSubmit,
   isSubmitting,
 }) => {
-  const { isDirty, errors } = form.formState;
-  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
-  const currentRate = form.watch("rate");
+  const { isDirty, isValid } = form.formState;
+  const [currentRate, language, timeZone, availability] = form.watch([
+    "rate",
+    "language",
+    "timeZone",
+    "availability",
+  ]);
+  const hasAvailabilitySlots = parseAvailabilityValue(availability).length > 0;
+  const hasAllRequiredFields =
+    typeof language === "string" &&
+    language.trim().length > 0 &&
+    typeof timeZone === "string" &&
+    timeZone.trim().length > 0 &&
+    typeof currentRate === "string" &&
+    currentRate.trim().length > 0 &&
+    hasAvailabilitySlots;
+  const isButtonDisabled =
+    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
   const normalizedRateOptions =
     currentRate && !rateOptions.some((option) => option.value === currentRate)
       ? [
@@ -47,11 +62,11 @@ const FormLanguageTime: FC<Props> = ({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Languages & Availability
+        Languages, Availability & Rate
       </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Set the communication language and working time zone used to coordinate
-        lessons.
+        Set the communication language, working time zone, weekly availability,
+        and hourly rate used to coordinate lessons.
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>

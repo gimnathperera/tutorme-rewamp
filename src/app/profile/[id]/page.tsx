@@ -66,7 +66,9 @@ const ProfilePage: FC = () => {
               >
                 <CalendarClock className="h-4 w-4 shrink-0" />
                 <span className="sm:hidden">Availability</span>
-                <span className="hidden sm:inline">Languages & Availability</span>
+                <span className="hidden sm:inline">
+                  Languages, Availability & Rate
+                </span>
               </TabsTrigger>
               <TabsTrigger
                 value="security"

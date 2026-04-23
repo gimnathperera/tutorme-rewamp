@@ -1,7 +1,9 @@
 import InputText from "@/components/shared/input-text";
-import { FormProvider, SubmitHandler } from "react-hook-form";
+import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
+import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
+import { Textarea } from "@/components/ui/textarea";
 import {
   MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
@@ -43,6 +45,7 @@ const highestEducationOptions: Option[] = [
   },
   { label: "Advanced Level (A/L)", value: "AL" },
 ];
+const CHAR_LIMIT = 500;
 
 const FormEducationInfo: FC<Props> = ({
   dropdownOptionData: { gradesOptions, subjectsOptions },
@@ -50,9 +53,54 @@ const FormEducationInfo: FC<Props> = ({
   onFormSubmit,
   isSubmitting,
 }) => {
-  const { isDirty, errors } = form.formState;
-  const [selectedGrades] = form.watch(["grades"]);
-  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
+  const { isDirty, isValid } = form.formState;
+  const [
+    tutoringLevels,
+    preferredLocations,
+    tutorTypes,
+    highestEducation,
+    yearsExperience,
+    tutorMediums,
+    selectedGrades,
+    subjects,
+    academicDetails,
+    certificatesAndQualifications,
+  ] = form.watch([
+    "tutoringLevels",
+    "preferredLocations",
+    "tutorTypes",
+    "highestEducation",
+    "yearsExperience",
+    "tutorMediums",
+    "grades",
+    "subjects",
+    "academicDetails",
+    "certificatesAndQualifications",
+  ]);
+  const hasAllRequiredFields =
+    Array.isArray(tutoringLevels) &&
+    tutoringLevels.length > 0 &&
+    Array.isArray(preferredLocations) &&
+    preferredLocations.length > 0 &&
+    Array.isArray(tutorTypes) &&
+    tutorTypes.length > 0 &&
+    typeof highestEducation === "string" &&
+    highestEducation.trim().length > 0 &&
+    yearsExperience !== "" &&
+    yearsExperience !== null &&
+    yearsExperience !== undefined &&
+    Array.isArray(tutorMediums) &&
+    tutorMediums.length > 0 &&
+    Array.isArray(selectedGrades) &&
+    selectedGrades.length > 0 &&
+    Array.isArray(subjects) &&
+    subjects.length > 0 &&
+    typeof academicDetails === "string" &&
+    academicDetails.trim().length > 0 &&
+    Array.isArray(certificatesAndQualifications) &&
+    certificatesAndQualifications.length > 0;
+  const isButtonDisabled =
+    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
@@ -118,6 +166,63 @@ const FormEducationInfo: FC<Props> = ({
                 name="subjects"
                 options={subjectsOptions}
                 isDisabled={isEmpty(selectedGrades)}
+              />
+            </div>
+
+            <div className="mt-5 grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
+              <Controller
+                name="academicDetails"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex flex-col gap-1">
+                    <label
+                      htmlFor="academicDetails"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Summary of Teaching Experience & Academic Achievements
+                      <span className="text-red-500"> *</span>
+                    </label>
+                    <Textarea
+                      id="academicDetails"
+                      {...field}
+                      rows={4}
+                      maxLength={CHAR_LIMIT}
+                      placeholder="Achievements & subjects taught, such as number of students, years, and results"
+                      className={`resize-y bg-white text-sm ${
+                        fieldState.error ? "border-red-500" : "border-gray-300"
+                      }`}
+                    />
+                    <div className="flex min-h-[1.25rem] items-center justify-between gap-3">
+                      <span className="text-xs text-red-500">
+                        {fieldState.error?.message}
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        {(field.value ?? "").length} / {CHAR_LIMIT}
+                      </span>
+                    </div>
+                  </div>
+                )}
+              />
+
+              <Controller
+                name="certificatesAndQualifications"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <div className="flex flex-col gap-1">
+                    <label className="block text-sm font-medium leading-6 text-gray-900">
+                      Certificates <span className="text-red-500">*</span>
+                    </label>
+                    <MultiFileUploadDropzone
+                      initialUrls={field.value}
+                      onUploaded={(urls) => field.onChange(urls ?? [])}
+                    />
+                    {fieldState.error?.message && (
+                      <span className="text-xs text-red-500">
+                        {fieldState.error.message}
+                      </span>
+                    )}
+                  </div>
+                )}
               />
             </div>
             <div className="col-span-6 sm:col-full">
