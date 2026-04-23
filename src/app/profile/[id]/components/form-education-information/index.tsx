@@ -57,36 +57,36 @@ const FormEducationInfo: FC<Props> = ({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Experience & Qualifications
+        Qualifications
       </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Use this section to present the academic background and teaching scope
-        that management wants highlighted in tutor profiles.
+        Keep your tutor qualifications aligned with the same teaching and
+        academic details used during tutor registration.
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6">
               <InputMultiSelect
-                label="Teaching Categories / Levels *"
+                label="Tutoring Levels *"
                 name="tutoringLevels"
                 options={tutoringLevelsOptions}
               />
 
               <InputMultiSelect
-                label="Preferred Teaching Locations *"
+                label="Preferred Locations *"
                 name="preferredLocations"
                 options={preferredLocationsOptions}
               />
 
               <InputMultiSelect
-                label="Tutor Categories *"
+                label="Tutor Types *"
                 name="tutorTypes"
                 options={tutorTypeOptions}
               />
 
               <InputSelect
-                label="Education *"
+                label="Highest Education Level *"
                 name="highestEducation"
                 options={highestEducationOptions}
               />
@@ -102,19 +102,19 @@ const FormEducationInfo: FC<Props> = ({
               />
 
               <InputMultiSelect
-                label="Teaching Languages *"
+                label="Tutor Mediums *"
                 name="tutorMediums"
                 options={tutorMediumOptions}
               />
 
               <InputMultiSelect
-                label="Grades Taught *"
+                label="Grades *"
                 name="grades"
                 options={gradesOptions}
               />
 
               <InputMultiSelect
-                label="Subjects Taught *"
+                label="Subjects *"
                 name="subjects"
                 options={subjectsOptions}
                 isDisabled={isEmpty(selectedGrades)}
@@ -125,7 +125,7 @@ const FormEducationInfo: FC<Props> = ({
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update Experience & Qualifications"
+                title="Update Qualifications"
                 disabled={isButtonDisabled}
               />
             </div>
