@@ -1,50 +1,49 @@
 import { z } from "zod";
 import { addYears, isBefore } from "date-fns";
 
+const normalizeText = (value: unknown) =>
+  typeof value === "string" ? value.trim().replace(/\s+/g, " ") : value;
+
+const trimOnly = (value: unknown) =>
+  typeof value === "string" ? value.trim() : value;
+
+const calculateAge = (birthday: string) => {
+  const dob = new Date(birthday);
+
+  if (Number.isNaN(dob.getTime())) return undefined;
+
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age;
+};
+
 export const generalInfoSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "First Name is required")
-    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z
-    .string()
-    .trim()
-    .min(1, "Contact Number is required")
-    .regex(/^\d+$/, "Contact Number must contain numeric values only")
-    .length(10, "Contact Number should be exactly 10 digits"),
-  country: z.string().min(1, "Country is required"),
-  city: z
-    .string()
-    .min(1, "City is required")
-    .regex(/^[A-Za-z\s]+$/, "City cannot contain special characters or numbers"),
-
-  state: z
-    .string()
-    .min(1, "State is required")
-    .regex(
-      /^[A-Za-z\s]+$/,
-      "State cannot contain special characters or numbers",
-    ),
-
-  region: z
-    .string()
-    .min(1, "Region is required")
-    .regex(
-      /^[A-Za-z\s]+$/,
-      "Region cannot contain special characters or numbers",
-    ),
-  zip: z
-    .string()
-    .trim()
-    .min(1, "ZIP / Postal code is required")
-    .regex(/^\d{5}$/, "Zip/Postal code should be exactly 5 digits"),
-  address: z.string().min(1, "Address is required"),
+  name: z.preprocess(
+    normalizeText,
+    z
+      .string()
+      .min(1, "Full Name is required")
+      .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
+  ),
+  email: z.preprocess(trimOnly, z.string().email("Invalid email address")),
+  phoneNumber: z.preprocess(
+    trimOnly,
+    z
+      .string()
+      .min(1, "Contact Number is required")
+      .regex(/^\d+$/, "Contact Number must contain numeric values only")
+      .length(10, "Contact Number should be exactly 10 digits"),
+  ),
   birthday: z
     .union([z.string(), z.date()])
     .refine((val) => val !== "" && val !== null && val !== undefined, {
-      message: "Birthday is required",
+      message: "Date of Birth is required",
     })
     .transform((value) => (value === "" ? undefined : value))
     .refine(
@@ -67,34 +66,67 @@ export const generalInfoSchema = z.object({
         message: "You must be at least 18 years old",
       },
     ),
+  age: z.preprocess(
+    (value) => {
+      if (value === "" || value === null || value === undefined) {
+        return undefined;
+      }
+
+      return Number(value);
+    },
+    z
+      .number({
+        invalid_type_error: "Age is required",
+        required_error: "Age is required",
+      })
+      .int()
+      .min(18, "You must be at least 18 years old")
+      .max(80, "Age must be below 80"),
+  ),
   gender: z
-    .union([z.enum(["Male", "Female", "None"]), z.literal("")])
-    .refine((val) => val !== "", { message: "Gender is required" })
-    .optional(),
-  tutorType: z.string().min(1, "Tutor type is required").optional(),
-  grades: z.array(z.string()).optional(),
-  subjects: z.array(z.string()).optional(),
-  duration: z.string().min(1, "Duration is required").optional(),
-  frequency: z.string().min(1, "Frequency is required").optional(),
+    .string()
+    .refine((v) => ["Male", "Female", "Others"].includes(v), {
+      message: "Gender is required",
+    }),
+  nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
+    message: "Nationality is required",
+  }),
+  race: z
+    .string()
+    .refine(
+      (v) => ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
+      {
+        message: "Race is required",
+      },
+    ),
+}).superRefine((data, context) => {
+  const birthday =
+    typeof data.birthday === "string"
+      ? data.birthday
+      : data.birthday instanceof Date
+        ? data.birthday.toISOString()
+        : "";
+
+  const derivedAge = calculateAge(birthday);
+
+  if (typeof derivedAge === "number" && derivedAge !== data.age) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Age does not match the selected date of birth",
+      path: ["age"],
+    });
+  }
 });
 
 export const initialGeneralInfoFormValues = {
   name: "",
   email: "",
   phoneNumber: "",
-  country: "",
-  city: "",
-  state: "",
-  region: "",
-  zip: "",
-  address: "",
   birthday: "" as any, //TODO: fix the type issue here
-  tutorType: "",
+  age: "" as unknown as number,
   gender: "",
-  grades: [] as unknown,
-  subjects: [] as unknown,
-  duration: "",
-  frequency: "",
+  nationality: "",
+  race: "",
 };
 
 export type GeneralInfoSchema = z.infer<typeof generalInfoSchema>;

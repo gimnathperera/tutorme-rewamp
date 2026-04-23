@@ -50,8 +50,11 @@ export type UpdateProfileRequest = {
     zip?: string;
     address?: string;
     birthday?: string | Date;
+    age?: number;
     tutorType?: string;
     gender?: string;
+    nationality?: string;
+    race?: string;
     duration?: string;
     frequency?: string;
     timeZone?: string;

@@ -284,7 +284,10 @@ export type ProfileResponse = {
   address: string;
   birthday: string;
   tutorType: string;
-  gender: "Male" | "Female" | "None";
+  gender: "Male" | "Female" | "Others" | "None";
+  age?: number;
+  nationality?: string;
+  race?: string;
   duration: string;
   frequency: string;
   timeZone: string;

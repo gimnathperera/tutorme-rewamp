@@ -36,14 +36,9 @@ import {
 import { normalizeAvailabilityValue } from "../components/form-language-time/availability";
 import {
   LogicReturnType,
-  countryOptions,
-  durationOptions,
-  frequencyOptions,
-  genderOptions,
   languageOptions,
   rateOptions,
   timeZoneOptions,
-  tutorTypesOptions,
 } from "./util";
 
 const getProfileSubjectIds = (profile: ProfileResponse) =>
@@ -55,6 +50,24 @@ const getProfileGradeIds = (profile: ProfileResponse) =>
 const formatBirthdayForInput = (birthday?: string) =>
   birthday ? birthday.slice(0, 10) : "";
 
+const calculateAgeFromBirthday = (birthday?: string) => {
+  if (!birthday) return initialGeneralInfoFormValues.age;
+
+  const dob = new Date(birthday);
+
+  if (Number.isNaN(dob.getTime())) return initialGeneralInfoFormValues.age;
+
+  const today = new Date();
+  let age = today.getFullYear() - dob.getFullYear();
+  const monthDiff = today.getMonth() - dob.getMonth();
+
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age >= 0 ? age : initialGeneralInfoFormValues.age;
+};
+
 const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
@@ -62,7 +75,6 @@ const useLogic = (): LogicReturnType => {
   const { user, isUserLoaded } = useAuthContext();
 
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
-  const [subjectsOptions, setSubjectsOptions] = useState<Option[]>([]);
   const [educationSubjectsOptions, setEducationSubjectsOptions] = useState<
     Option[]
   >([]);
@@ -99,14 +111,10 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
-  const [selectedGeneralGrades] = generalInfoForm.watch(["grades"]);
   const [selectedEducationGrades] = educationInfoForm.watch(["grades"]);
 
-  const generalGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
   const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
-  const prevGeneralGradesRef = useRef<string[]>([]);
   const prevEducationGradesRef = useRef<string[]>([]);
-  const hasInitialGeneralSubjectsBeenSet = useRef(false);
   const hasInitialEducationSubjectsBeenSet = useRef(false);
 
   const forceRedirectUser = useCallback(() => {
@@ -121,19 +129,15 @@ const useLogic = (): LogicReturnType => {
         name: profile.name ?? "",
         email: profile.email ?? "",
         phoneNumber: profile.phoneNumber ?? "",
-        country: profile.country ?? "",
-        city: profile.city ?? "",
-        state: profile.state ?? "",
-        region: profile.region ?? "",
-        zip: profile.zip ?? "",
-        address: profile.address ?? "",
         birthday: formatBirthdayForInput(profile.birthday) as any,
-        tutorType: profile.tutorType ?? "",
-        gender: profile.gender ?? "",
-        grades: getProfileGradeIds(profile),
-        subjects: getProfileSubjectIds(profile),
-        duration: profile.duration ?? "",
-        frequency: profile.frequency ?? "",
+        age:
+          typeof profile.age === "number"
+            ? profile.age
+            : calculateAgeFromBirthday(profile.birthday),
+        gender:
+          profile.gender === "None" ? "" : ((profile.gender ?? "") as string),
+        nationality: profile.nationality ?? "",
+        race: profile.race ?? "",
       });
     },
     [generalInfoForm],
@@ -181,7 +185,6 @@ const useLogic = (): LogicReturnType => {
     }
 
     if (result.data) {
-      hasInitialGeneralSubjectsBeenSet.current = false;
       hasInitialEducationSubjectsBeenSet.current = false;
 
       setUserRawData(result.data);
@@ -196,73 +199,6 @@ const useLogic = (): LogicReturnType => {
     prePopulateLanguageAndTimeForm,
     userId,
   ]);
-
-  const syncGeneralSubjectOptions = useCallback(async () => {
-    const currentGrades: string[] = selectedGeneralGrades ?? [];
-    const prevGrades = prevGeneralGradesRef.current;
-
-    const removedGrades = prevGrades.filter(
-      (gradeId) => !currentGrades.includes(gradeId),
-    );
-
-    if (removedGrades.length > 0) {
-      const removedSubjectIds = new Set<string>();
-
-      removedGrades.forEach((gradeId) => {
-        (generalGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
-          (subjectId) => removedSubjectIds.add(subjectId),
-        );
-        generalGradeSubjectsMapRef.current.delete(gradeId);
-      });
-
-      setSubjectsOptions((prev) =>
-        prev.filter((option) => !removedSubjectIds.has(option.value)),
-      );
-
-      const currentSubjects = generalInfoForm.getValues("subjects") ?? [];
-      generalInfoForm.setValue(
-        "subjects",
-        currentSubjects.filter((subjectId) => !removedSubjectIds.has(subjectId)),
-        { shouldDirty: true },
-      );
-    }
-
-    for (const gradeId of currentGrades) {
-      if (generalGradeSubjectsMapRef.current.has(gradeId)) continue;
-
-      const result = await fetchSubjectsByGrade(gradeId);
-      const error = getErrorInApiResult(result);
-
-      if (error) {
-        toast.error(error);
-        continue;
-      }
-
-      if (result.data) {
-        const existingIds = new Set(
-          Array.from(generalGradeSubjectsMapRef.current.values()).flat(),
-        );
-        const newSubjects: Subject[] = result.data.subjects.filter(
-          ({ id }) => !existingIds.has(id),
-        );
-
-        generalGradeSubjectsMapRef.current.set(
-          gradeId,
-          result.data.subjects.map(({ id }) => id),
-        );
-
-        setSubjectsOptions((prev) => [
-          ...prev,
-          ...newSubjects.map(({ title, id }) => ({
-            label: title,
-            value: id,
-          })),
-        ]);
-      }
-    }
-
-    prevGeneralGradesRef.current = currentGrades;
-  }, [fetchSubjectsByGrade, generalInfoForm, selectedGeneralGrades]);
 
   const syncEducationSubjectOptions = useCallback(async () => {
     const currentGrades: string[] = selectedEducationGrades ?? [];
@@ -334,23 +270,6 @@ const useLogic = (): LogicReturnType => {
   useEffect(() => {
     if (
       userRawData &&
-      size(subjectsOptions) > 0 &&
-      !hasInitialGeneralSubjectsBeenSet.current
-    ) {
-      generalInfoForm.setValue(
-        "subjects",
-        userRawData.subjects
-          .filter(({ id }) => subjectsOptions.some((option) => option.value === id))
-          .map(({ id }) => id),
-      );
-
-      hasInitialGeneralSubjectsBeenSet.current = true;
-    }
-  }, [generalInfoForm, subjectsOptions, userRawData]);
-
-  useEffect(() => {
-    if (
-      userRawData &&
       size(educationSubjectsOptions) > 0 &&
       !hasInitialEducationSubjectsBeenSet.current
     ) {
@@ -372,10 +291,6 @@ const useLogic = (): LogicReturnType => {
     if (!userId || !user) return;
     getUserRawData();
   }, [forceRedirectUser, getUserRawData, user, userId]);
-
-  useEffect(() => {
-    syncGeneralSubjectOptions();
-  }, [selectedGeneralGrades, syncGeneralSubjectOptions]);
 
   useEffect(() => {
     syncEducationSubjectOptions();
@@ -441,13 +356,7 @@ const useLogic = (): LogicReturnType => {
     derivedData: {
       dropdownOptionData: {
         gradesOptions,
-        subjectsOptions,
         educationSubjectsOptions,
-        durationOptions,
-        frequencyOptions,
-        tutorTypesOptions,
-        genderOptions,
-        countryOptions,
         languageOptions,
         timeZoneOptions,
         rateOptions,

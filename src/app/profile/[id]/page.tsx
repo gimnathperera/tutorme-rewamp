@@ -39,7 +39,6 @@ const ProfilePage: FC = () => {
           <ProfilePicSettings />
 
           <FormGeneralInfo
-            dropdownOptionData={dropdownOptionData}
             form={generalInfoForm}
             onFormSubmit={onGeneralInfoFormSubmission}
             isSubmitting={isGeneralFormSubmitting}
