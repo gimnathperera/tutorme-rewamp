@@ -26,6 +26,11 @@ const getTimeLabel = (value: string) =>
     minute: "2-digit",
   });
 
+const slotsOverlap = (
+  first: Pick<ScheduleSlot, "start" | "end">,
+  second: Pick<ScheduleSlot, "start" | "end">,
+) => first.start < second.end && first.end > second.start;
+
 const AvailabilityScheduler = () => {
   const { control, formState } = useFormContext();
   const [selectedDay, setSelectedDay] = useState(DAYS[0].value);
@@ -86,6 +91,19 @@ const AvailabilityScheduler = () => {
 
           if (duplicateSlot) {
             setLocalError("That time slot is already added.");
+            return;
+          }
+
+          const overlappingSlot = slots.find(
+            (slot) => slot.day === nextSlot.day && slotsOverlap(slot, nextSlot),
+          );
+
+          if (overlappingSlot) {
+            setLocalError(
+              `This overlaps with an existing slot on ${overlappingSlot.day}: ${getTimeLabel(
+                overlappingSlot.start,
+              )} - ${getTimeLabel(overlappingSlot.end)}.`,
+            );
             return;
           }
 
@@ -175,6 +193,12 @@ const AvailabilityScheduler = () => {
                 </div>
               </div>
 
+              {(localError || error) && (
+                <span className="mt-3 block text-xs text-red-500">
+                  {localError || error}
+                </span>
+              )}
+
               <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
                 {scheduleByDay.map((day) => (
                   <div
@@ -217,12 +241,6 @@ const AvailabilityScheduler = () => {
                   Existing availability is stored as plain text. Add or remove a
                   slot to replace it with the new schedule format.
                 </p>
-              )}
-
-              {(localError || error) && (
-                <span className="mt-3 text-xs text-red-500">
-                  {localError || error}
-                </span>
               )}
             </div>
 

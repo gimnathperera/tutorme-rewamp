@@ -311,11 +311,11 @@ const useLogic = (): LogicReturnType => {
     const error = getErrorInApiResult(result);
 
     if (error) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update personal information");
       return;
     }
 
-    toast.success("Settings updated successfully");
+    toast.success("Personal information updated successfully");
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
@@ -327,11 +327,11 @@ const useLogic = (): LogicReturnType => {
     const error = getErrorInApiResult(result);
 
     if (error) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update qualifications");
       return;
     }
 
-    toast.success("Settings updated successfully");
+    toast.success("Qualifications updated successfully");
   };
 
   const onLanguageAndTimeFormSubmission = async (
@@ -345,11 +345,11 @@ const useLogic = (): LogicReturnType => {
     const error = getErrorInApiResult(result);
 
     if (error) {
-      toast.error("Failed to update settings");
+      toast.error("Failed to update languages and availability");
       return;
     }
 
-    toast.success("Settings updated successfully");
+    toast.success("Languages and availability updated successfully");
   };
 
   return {
