@@ -317,6 +317,7 @@ const PersonalInfo = () => {
           <option value="Tamil">Tamil</option>
           <option value="Muslim">Muslim</option>
           <option value="Burgher">Burgher</option>
+          <option value="Others">Others</option>
         </select>
         <p className="text-sm text-red-500 min-h-[1.25rem]">
           {errors.race?.message as string}
