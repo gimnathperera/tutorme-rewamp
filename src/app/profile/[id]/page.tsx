@@ -54,15 +54,14 @@ const ProfilePage: FC = () => {
             onFormSubmit={onEducationInfoFormSubmission}
             isSubmitting={isGeneralFormSubmitting}
           />
-
           <FormLanguageTime
             timeZoneOptions={dropdownOptionData.timeZoneOptions}
             languageOptions={dropdownOptionData.languageOptions}
+            rateOptions={dropdownOptionData.rateOptions}
             form={languageAndTimeForm}
             onFormSubmit={onLanguageAndTimeFormSubmission}
             isSubmitting={isGeneralFormSubmitting}
           />
-
           <FormPasswordInfo />
         </div>
       </div>

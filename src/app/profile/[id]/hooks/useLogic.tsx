@@ -41,6 +41,7 @@ import {
   frequencyOptions,
   genderOptions,
   languageOptions,
+  rateOptions,
   timeZoneOptions,
   tutorTypesOptions,
 } from "./util";
@@ -449,6 +450,7 @@ const useLogic = (): LogicReturnType => {
         countryOptions,
         languageOptions,
         timeZoneOptions,
+        rateOptions,
       },
       loading: {
         isProfileDataLoading,

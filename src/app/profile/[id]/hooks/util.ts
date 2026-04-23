@@ -18,6 +18,7 @@ export type LogicReturnType = {
       countryOptions: Option[];
       languageOptions: Option[];
       timeZoneOptions: Option[];
+      rateOptions: Option[];
     };
     loading: {
       isProfileDataLoading: boolean;
@@ -271,4 +272,15 @@ export const timeZoneOptions = [
   { value: "UTC+1", label: "Central European Time" },
   { value: "UTC+9", label: "Japan Standard Time" },
   { value: "UTC+5:30", label: "Sri Lanka Standard Time" },
+];
+
+export const rateOptions: Option[] = [
+  { value: "Rs. 500 - 1,000", label: "Rs. 500 - 1,000 per hour" },
+  { value: "Rs. 1,000 - 1,500", label: "Rs. 1,000 - 1,500 per hour" },
+  { value: "Rs. 1,500 - 2,000", label: "Rs. 1,500 - 2,000 per hour" },
+  { value: "Rs. 2,000 - 2,500", label: "Rs. 2,000 - 2,500 per hour" },
+  { value: "Rs. 2,500 - 3,000", label: "Rs. 2,500 - 3,000 per hour" },
+  { value: "Rs. 3,000 - 4,000", label: "Rs. 3,000 - 4,000 per hour" },
+  { value: "Rs. 4,000 - 5,000", label: "Rs. 4,000 - 5,000 per hour" },
+  { value: "Rs. 5,000+", label: "Rs. 5,000+ per hour" },
 ];
