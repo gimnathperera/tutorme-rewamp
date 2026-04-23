@@ -384,7 +384,7 @@ export default function AddRequestForTutor() {
                 </div>
               </CardContent>
 
-              <CardFooter className="flex justify-end">
+              <CardFooter className="flex justify-end bg-blue-600">
                 <Button
                   type="button"
                   onClick={nextStep}
