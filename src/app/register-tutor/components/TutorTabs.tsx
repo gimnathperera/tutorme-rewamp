@@ -100,6 +100,11 @@ export function TutorTabs() {
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
+  const changeStep = (nextTab: TabKey) => {
+    setTab(nextTab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const nextStep = async () => {
     let fieldsToValidate: string[] | undefined;
 
@@ -128,11 +133,11 @@ export function TutorTabs() {
       if (!valid) return;
     }
 
-    setTab(TAB_ORDER[currentIndex + 1]);
+    changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
   const prevStep = () => {
-    setTab(TAB_ORDER[currentIndex - 1]);
+    changeStep(TAB_ORDER[currentIndex - 1]);
   };
 
   const onSubmit = async (data: FindMyTutorForm) => {
