@@ -88,8 +88,8 @@ const footer = () => {
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src={"/images/footer/tiktok.svg"}
-                    alt="tiktok"
+                    src={"/images/footer/instagram.svg"}
+                    alt="instagram"
                     width={20}
                     height={20}
                   />
@@ -131,11 +131,13 @@ const footer = () => {
               </p>
             </div>
             <div className="flex justify-center md:justify-end">
-              <Link href="/">
-                <p className="text-offwhite text-sm pr-6">Privacy policy</p>
+              <Link href="/privacy-policy">
+                <p className="text-offwhite text-sm pr-6 hover:text-gray-300 transition">
+                  Privacy policy
+                </p>
               </Link>
-              <Link href="/">
-                <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer">
+              <Link href="/terms-and-conditions">
+                <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer hover:text-gray-300 transition">
                   Terms &amp; conditions
                 </p>
               </Link>
