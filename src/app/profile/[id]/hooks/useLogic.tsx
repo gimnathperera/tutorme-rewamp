@@ -110,6 +110,9 @@ const formatBirthdayForInput = (birthday?: string | Date) => {
 const getProfileBirthday = (profile: ProfileResponse) =>
   profile.birthday || profile.dateOfBirth || "";
 
+const getProfileDisplayName = (profile: ProfileResponse) =>
+  profile.fullName || profile.name || "";
+
 const serializeBirthdayForPayload = (birthday: GeneralInfoSchema["birthday"]) =>
   birthday instanceof Date ? birthday.toISOString().slice(0, 10) : birthday;
 
@@ -147,7 +150,7 @@ const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
   const userId = params?.id as string;
-  const { user, isUserLoaded } = useAuthContext();
+  const { user, isUserLoaded, updateUser } = useAuthContext();
 
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
   const [educationSubjectsOptions, setEducationSubjectsOptions] = useState<
@@ -217,7 +220,7 @@ const useLogic = (): LogicReturnType => {
       const birthday = getProfileBirthday(profile);
 
       generalInfoForm.reset({
-        name: profile.name || profile.fullName || "",
+        name: getProfileDisplayName(profile),
         email: profile.email ?? "",
         phoneNumber: profile.phoneNumber || profile.contactNumber || "",
         birthday: formatBirthdayForInput(birthday) as any,
@@ -423,10 +426,21 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
-    generalInfoForm.reset({
-      ...data,
-      birthday: formatBirthdayForInput(birthday as string) as any,
-    });
+    const updatedProfile = result.data;
+    const resolvedName = updatedProfile
+      ? getProfileDisplayName(updatedProfile)
+      : data.name;
+
+    if (updatedProfile) {
+      hydrateProfileForms(updatedProfile);
+    } else {
+      generalInfoForm.reset({
+        ...data,
+        birthday: formatBirthdayForInput(birthday as string) as any,
+      });
+    }
+
+    updateUser({ name: resolvedName });
     toast.success("Personal information updated successfully");
   };
 
