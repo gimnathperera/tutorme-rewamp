@@ -41,7 +41,6 @@ const InputText: React.FC<InputTextProps> = ({
         render={({ field }) => (
           <>
             <input
-              {...field}
               {...props}
               onChange={(event) => {
                 field.onChange(event);
@@ -57,7 +56,11 @@ const InputText: React.FC<InputTextProps> = ({
             />
 
             {(error || helperText) && (
-              <span className="text-xs text-red-500 mt-1">
+              <span
+                className={`mt-1 text-xs ${
+                  error ? "text-red-500" : "text-gray-500"
+                }`}
+              >
                 {error || helperText}
               </span>
             )}
