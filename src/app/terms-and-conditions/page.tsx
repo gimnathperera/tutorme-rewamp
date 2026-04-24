@@ -2,9 +2,9 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   path: "/terms-and-conditions",
-  title: "Terms and Conditions | Tuition Lanka",
+  title: "Terms and Conditions for Tuition Lanka Users | Tuition Lanka",
   description:
-    "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor.",
+    "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor, including service rules and responsibilities.",
 });
 
 const termsSections = [

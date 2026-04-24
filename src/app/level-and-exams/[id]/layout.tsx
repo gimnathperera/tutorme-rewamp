@@ -3,9 +3,9 @@ import { createMetadata, seoPages } from "@/lib/seo";
 export function generateMetadata({ params }: { params: { id: string } }) {
   return createMetadata({
     ...seoPages.levelAndExams,
-    title: "Exam and Level Tuition Details | Tuition Lanka",
+    title: "Exam Level and Subject Tuition Details | Tuition Lanka",
     description:
-      "Find level-specific tuition support, subject coverage, tutor expectations, and tuition rates for students in Sri Lanka.",
+      "Find level-specific tuition support, subject coverage, tutor expectations, and home tuition rates for students and parents in Sri Lanka.",
     path: `/level-and-exams/${params.id}`,
   });
 }

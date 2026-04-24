@@ -2,9 +2,9 @@ import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = createMetadata({
   ...seoPages.requestForTutors,
-  title: "Request a Home Tutor | Tuition Lanka",
+  title: "Submit a Home Tutor Request in Sri Lanka | Tuition Lanka",
   description:
-    "Submit your tutor request and tell Tuition Lanka what grade, subject, medium, and learning support you need.",
+    "Complete your tutor request with grade, subject, medium, location, and learning needs so Tuition Lanka can match the right home tutor.",
   path: "/request-for-tutors/create-request",
 });
 

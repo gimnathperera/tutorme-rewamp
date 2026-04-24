@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-const siteUrl = "https://www.tuitionlanka.com";
+const siteUrl = "https://tuitionlanka.com";
 const siteName = "Tuition Lanka";
-const defaultImage = "/images/banner/banner.png";
+const defaultImage = "https://tuitionlanka.com/assets/preview.jpg";
 
 export type SeoConfig = {
   title: string;
@@ -38,7 +38,7 @@ export function createMetadata({
     description,
     keywords,
     alternates: {
-      canonical: canonicalPath,
+      canonical: canonicalUrl,
     },
     openGraph: {
       title,
@@ -76,94 +76,88 @@ export function createMetadata({
 export const seoPages = {
   home: {
     path: "/",
-    title:
-      "Home Tutors and Teaching Vacancies in Sri Lanka | Qualified Matching",
+    title: "Find Home Tutors in Sri Lanka | Tuition Lanka",
     description:
-      "Find expert home tutors for personalized support or browse tutor vacancies in Colombo and Sri Lanka. We connect parents with teachers for primary teaching vacancies and online teaching jobs.",
+      "Tuition Lanka matches parents with verified home tutors across Sri Lanka. One-to-one and small group classes for all subjects and grades.",
   },
   registerTutor: {
     path: "/register-tutor",
-    title:
-      "tutor and Teaching Vacancies in Sri Lanka | Register as a Home Tutor",
+    title: "Register as a Home Tutor in Sri Lanka | Tuition Lanka",
     description:
-      "Looking for tutor vacancies in Colombo or online teaching jobs in Sri Lanka? Join our platform and get matched with parents seeking qualified home tutors for personalised academic support.",
+      "Join Tuition Lanka as a verified home tutor in Sri Lanka. Earn flexible income by offering one-to-one or small group tuition.",
   },
   requestForTutors: {
     path: "/request-for-tutors",
-    title:
-      "Find a Home Tutor by Grade and Subject | Maths, English, Science and More in Sri Lanka",
+    title: "Request a Home Tutor in Sri Lanka | Tuition Lanka",
     description:
-      "Browse tutors by grade and subject from O/L Maths and A/L Physics to Spoken English and Elocution. Find qualified home tutors for all grades in Sinhala or English medium across Sri Lanka.",
+      "Submit your tutor request and get matched with a verified home tutor in Sri Lanka. One-to-one and small group classes for primary, O Level, and A Level.",
   },
   testPapers: {
     path: "/test-papers",
-    title:
-      "Past Papers Sri Lanka | O/L and A/L Maths Past Papers and Test Papers Free Download",
+    title: "Free O Level and A Level Test Papers | Tuition Lanka",
     description:
-      "Access O/L and A/L past papers and test papers including Maths, Science, and more. Download free past papers and test papers to help students prepare and excel in exams across Sri Lanka.",
+      "Download free O Level and A Level test papers in Sri Lanka. Practice with past exam papers and improve your results with quality study materials.",
   },
   gradesAndSubjects: {
     path: "/grades-and-subjects",
-    title:
-      "Explore Tuition Grades and Subjects | Maths, Science, English in Sri Lanka",
+    title: "O Level and A Level Tuition Subjects | Tuition Lanka",
     description:
-      "Browse our comprehensive list of subjects and grades for home tuition in Sri Lanka. Find expert tutors for O/L, A/L, primary, and specialized subjects today.",
+      "Find verified home tutors in Sri Lanka for primary, O Level, and A Level subjects. Browse tutors for maths, science, English, and more.",
   },
   tuitionRates: {
     path: "/tuition-rates",
-    title: "Home Tuition Rates and Fees in Sri Lanka | Tuition Lanka",
+    title: "Home Tuition Rates in Sri Lanka | Tuition Lanka",
     description:
-      "Compare affordable home tuition rates and fees across Sri Lanka. Find detailed pricing for primary, O/L, A/L, and online classes to easily suit your budget.",
+      "Explore home tuition rates in Sri Lanka. Compare one-to-one and small group tuition fees by subject, grade, and tutor experience to find the right option.",
   },
   faq: {
     path: "/faq",
-    title: "Frequently Asked Questions | Tuition Lanka Help Center",
+    title: "Home Tuition FAQ | Tutor Matching | Tuition Lanka",
     description:
-      "Have questions about finding a home tutor or registering as a teacher in Sri Lanka? Read our FAQs for parents and tutors to get all the answers you need.",
+      "Learn how home tutor matching works in Sri Lanka. Find answers about pricing, tutor qualifications, payments, and tutor registration.",
   },
   blogs: {
     path: "/blogs",
-    title: "Tuition Lanka Blog | Education Tips, Exam Guides and Tutor Advice",
+    title: "Study Tips and Exam Guides | Tuition Lanka Blog",
     description:
-      "Read the latest articles on exam preparation, study tips, and education news in Sri Lanka. Discover expert advice tailored for students, parents, and home tutors.",
+      "Read study tips, exam preparation strategies, and expert insights for students in Sri Lanka. Practical advice to improve exam performance and learning outcomes.",
   },
   contactUs: {
     path: "/contact-us",
-    title:
-      "Contact Tuition Lanka | Support for Parents and Tutors in Sri Lanka",
+    title: "Contact Us | Home Tutor Support in Sri Lanka | Tuition Lanka",
     description:
-      "Get in touch with Tuition Lanka for inquiries about finding a home tutor, tutor vacancies, or website support. We're here to help students and teachers succeed.",
+      "Contact Tuition Lanka for help with finding a home tutor or registering as a tutor in Sri Lanka. Support for all tutor matching enquiries.",
   },
   findTutor: {
     path: "/find-a-tutor",
     title: "Find a Tutor in Sri Lanka | Request Home Tuition Support",
     description:
-      "Request a qualified home tutor in Sri Lanka for personalized academic support across grades, subjects, and learning needs.",
+      "Find a verified tutor in Sri Lanka for one-to-one and small group home tuition across grades, subjects, mediums, and learning needs.",
   },
   levelAndExams: {
     path: "/level-and-exams",
     title: "Levels and Exams Tuition in Sri Lanka | Tuition Lanka",
     description:
-      "Explore tuition support by academic level and exam category, including primary, O/L, A/L, and specialized learning paths in Sri Lanka.",
+      "Explore tuition support by academic level and exam category, including primary, O Level, A Level, and specialized paths in Sri Lanka.",
   },
   tuitionAssignments: {
     path: "/tuition-assignments",
-    title: "Tuition Assignments in Sri Lanka | Find Teaching Opportunities",
+    title: "Home Tuition Assignments in Sri Lanka | Tuition Lanka",
     description:
       "Browse tuition assignments and teaching opportunities in Sri Lanka for tutors seeking students and parents looking for qualified educators.",
   },
   profile: {
     path: "/profile",
-    title: "Profile Settings | Tuition Lanka",
+    title: "Manage Your Tuition Lanka Tutor Profile Settings Securely",
     description:
-      "Manage your Tuition Lanka profile, contact details, teaching preferences, languages, availability, and account settings.",
+      "Manage your Tuition Lanka tutor profile, contact details, teaching preferences, languages, availability, rates, and secure account settings.",
     noIndex: true,
   },
   resetPassword: {
     path: "/reset-password",
-    title: "Reset Password | Tuition Lanka",
+    title: "Reset Your Tuition Lanka Account Password Securely",
     description:
-      "Reset your Tuition Lanka account password securely and regain access to your tutor or admin account.",
+      "Reset your Tuition Lanka account password securely and regain access to your tutor, parent, or admin account with protected account recovery.",
     noIndex: true,
   },
 };

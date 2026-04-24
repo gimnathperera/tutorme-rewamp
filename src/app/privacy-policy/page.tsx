@@ -2,7 +2,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   path: "/privacy-policy",
-  title: "Privacy Policy | Tuition Lanka",
+  title: "Privacy Policy for Tuition Lanka Users | Tuition Lanka",
   description:
     "Read how Tuition Lanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
 });
