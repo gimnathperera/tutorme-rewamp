@@ -1,3 +1,6 @@
+import LegalDocument, {
+  type LegalSection,
+} from "@/components/shared/legal-document";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
@@ -7,132 +10,343 @@ export const metadata = createMetadata({
     "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor, including service rules and responsibilities.",
 });
 
-const termsSections = [
+const termsSections: LegalSection[] = [
   {
-    title: "Acceptance of Terms",
-    body: [
-      "By accessing or using Tuition Lanka, submitting a tutor request, registering as a tutor, or communicating with us, you agree to these Terms and Conditions.",
-      "If you do not agree with these terms, please do not use the website or submit information through our platform.",
+    title: "Introduction and Acceptance",
+    blocks: [
+      {
+        type: "paragraph",
+        text: 'These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at tuitionlanka.com ("Platform"). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).',
+      },
+      {
+        type: "paragraph",
+        text: "By registering on, accessing, or using the Platform in any capacity whether as a tutor, a parent, or a visitor you confirm that you have read, understood, and agree to be bound by these Terms. If you do not agree, you must not use the Platform.",
+      },
     ],
   },
   {
-    title: "Our Service",
-    body: [
-      "Tuition Lanka helps students, parents, and tutors connect for home tuition, online tuition, tuition requests, tutor registrations, and related educational support.",
-      "We may review requests, share relevant details with suitable tutors or parents, and help coordinate introductions, but we do not guarantee that a particular tutor, student, assignment, result, or learning outcome will be available.",
+    title: "Nature of the Platform",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "TuitionLanka is a tutor matching platform. Our role is limited to:",
+      },
+      {
+        type: "list",
+        items: [
+          "Accepting tutor registrations and verifying their qualifications through a manual review process",
+          "Accepting tutor requests from parents and matching them with suitable verified tutors",
+          "Facilitating the initial connection between parents and tutors",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "TuitionLanka is not a tutoring agency and does not employ tutors. We do not supervise, direct, or control the tutoring sessions that take place between tutors and students. Once contact details are shared following a confirmed match, TuitionLanka's role in that engagement ends, except as described in these Terms.",
+      },
     ],
   },
   {
-    title: "User Responsibilities",
-    body: [
-      "You agree to provide accurate, current, and complete information when using our forms, registering, requesting a tutor, or updating your profile.",
-      "You must not misuse the website, submit false information, impersonate another person, interfere with platform security, or use Tuition Lanka for unlawful, harmful, or misleading activity.",
+    title: "Eligibility",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "To use the Platform, you must meet the following requirements:",
+      },
+      {
+        type: "subheading",
+        text: "All Users",
+      },
+      {
+        type: "list",
+        items: [
+          "You must be at least 18 years of age",
+          "You must provide accurate and truthful information when using the Platform",
+          "You must not use the Platform for any unlawful or unauthorised purpose",
+        ],
+      },
+      {
+        type: "subheading",
+        text: "Tutors",
+      },
+      {
+        type: "list",
+        items: [
+          "You must be at least 18 years of age",
+          "You must hold valid qualifications or credentials relevant to the subjects and grades you wish to teach",
+          "You must submit supporting documentation for verification as required by TuitionLanka",
+        ],
+      },
+      {
+        type: "subheading",
+        text: "Parents / Guardians",
+      },
+      {
+        type: "list",
+        items: [
+          "You must be the parent or legal guardian of the student for whom you are requesting a tutor",
+          "You must ensure that the information you provide about your tutoring requirements is accurate",
+        ],
+      },
     ],
   },
   {
-    title: "Tutor Responsibilities",
-    body: [
-      "Tutors are responsible for the accuracy of their qualifications, experience, teaching subjects, availability, fees, and profile information.",
-      "Tutors must conduct themselves professionally, communicate respectfully, protect student information, and comply with applicable laws and educational standards.",
+    title: "Tutor Registration and Verification",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "Tutors register on the Platform by completing the registration form and submitting supporting verification documents. By registering, tutors agree to the following:",
+      },
+      {
+        type: "list",
+        items: [
+          "All information provided, including personal details, qualifications, experience, fees, and profile content, is accurate, current, and not misleading",
+          "Submitted verification documents are genuine and belong to the registering tutor",
+          "Tutors will promptly update their profile if any information changes",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "TuitionLanka will review submitted documents manually. A tutor will be designated as a Verified Tutor upon successful completion of this review. TuitionLanka reserves the right to reject any registration, remove verification status, or suspend an account if submitted information is found to be false, misleading, or in violation of these Terms.",
+      },
+      {
+        type: "paragraph",
+        text: "Registration on the Platform is free of charge for tutors.",
+      },
     ],
   },
   {
-    title: "Parent and Student Responsibilities",
-    body: [
-      "Parents, guardians, and students are responsible for reviewing tutor suitability, confirming lesson arrangements, and ensuring a safe and appropriate learning environment.",
-      "Any tuition arrangement, schedule, fee, cancellation, or lesson-specific agreement should be clearly discussed and confirmed between the relevant parties.",
+    title: "Tutor Profiles and Session Fees",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "Tutors are responsible for setting and advertising their own per session fees on their profile. By listing a fee on the Platform, tutors confirm that:",
+      },
+      {
+        type: "list",
+        items: [
+          "The fee is accurate and reflects what they charge for a tutoring session",
+          "They understand that the first session fee will be collected by TuitionLanka and not paid directly to them, as described in Section 7",
+          "From the second session onwards, all fees are settled directly between the tutor and the parent",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "TuitionLanka is not responsible for any disputes arising from fee arrangements made directly between tutors and parents from the second session onwards.",
+      },
     ],
   },
   {
-    title: "Payments and Arrangements",
-    body: [
-      "Unless Tuition Lanka expressly states otherwise for a specific service, tuition fees and lesson arrangements are agreed directly between the parent, student, and tutor.",
-      "Tuition Lanka is not responsible for private payment disputes, missed lessons, cancellations, refunds, or separate agreements made outside the platform.",
+    title: "Parent Tutor Requests",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "Parents may submit a tutor request by completing the request form on the Platform. Upon submission, TuitionLanka will review the request and suggest a list of matching verified tutors based on the parent's stated preferences, including subject, grade, medium, location, class type, and fee range.",
+      },
+      {
+        type: "paragraph",
+        text: "The parent will then select one tutor from the suggested options. The match is confirmed upon receipt of the first session payment as described in Section 7.",
+      },
     ],
   },
   {
-    title: "Content and Intellectual Property",
-    body: [
-      "The website design, branding, text, graphics, features, and other platform content belong to Tuition Lanka or its licensors and may not be copied or reused without permission.",
-      "When you submit content such as profile details, requests, images, or documents, you confirm that you have the right to share it and allow Tuition Lanka to use it for operating and improving the service.",
+    title: "Payment Terms",
+    blocks: [
+      {
+        type: "subheading",
+        text: "7.1 First Session Payment",
+      },
+      {
+        type: "paragraph",
+        text: "Upon selecting a tutor, the parent is required to pay the first session fee of that tutor to TuitionLanka via bank transfer, prior to receiving the tutor's contact details. This payment represents the tutor's advertised per session fee for the first session and is retained by TuitionLanka as our service fee.",
+      },
+      {
+        type: "paragraph",
+        text: "The tutor's contact details will be shared with the parent only after TuitionLanka confirms receipt of the payment.",
+      },
+      {
+        type: "subheading",
+        text: "7.2 Non Refundable Policy",
+      },
+      {
+        type: "paragraph",
+        text: "All first session payments made to TuitionLanka are strictly non refundable. By making a payment, parents acknowledge and accept this policy.",
+      },
+      {
+        type: "subheading",
+        text: "7.3 Tutor Replacement",
+      },
+      {
+        type: "paragraph",
+        text: "If, after completing the first session, the parent is not satisfied with the assigned tutor, they may request a replacement. In such cases, TuitionLanka will suggest a new set of matching tutors. The parent may then select a new tutor and the full process including a new first session payment will begin from the start.",
+      },
+      {
+        type: "paragraph",
+        text: "No credit, carry forward, or waiver of the first session payment will apply from a previous selection.",
+      },
+      {
+        type: "subheading",
+        text: "7.4 From the Second Session Onwards",
+      },
+      {
+        type: "paragraph",
+        text: "TuitionLanka is not involved in any fee arrangements from the second session onwards. All payments, scheduling, and agreements between the tutor and parent from that point are the sole responsibility of the respective parties.",
+      },
+    ],
+  },
+  {
+    title: "Tutor Conduct and Responsibilities",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "By registering as a tutor on TuitionLanka, you agree to:",
+      },
+      {
+        type: "list",
+        items: [
+          "Attend confirmed sessions punctually and deliver tutoring to a reasonable professional standard",
+          "Treat students and parents with respect and professionalism at all times",
+          "Not engage in any conduct that is harmful, inappropriate, or unlawful towards students, particularly minors",
+          "Not misrepresent your qualifications, experience, or identity to parents or students",
+          "Not engage in any activity that brings TuitionLanka into disrepute",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "TuitionLanka reserves the right to suspend or permanently remove any tutor from the Platform who is found to be in breach of these conduct standards, without notice and without refund of any kind.",
+      },
+    ],
+  },
+  {
+    title: "Parent and Student Conduct",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "Parents using the Platform agree to:",
+      },
+      {
+        type: "list",
+        items: [
+          "Provide accurate information in tutor requests",
+          "Treat tutors with respect and professionalism",
+          "Not engage in any misleading, abusive, or fraudulent behaviour towards tutors or TuitionLanka",
+          "Ensure that the environment in which home tuition sessions take place is safe and appropriate",
+        ],
+      },
     ],
   },
   {
     title: "Limitation of Liability",
-    body: [
-      "Tuition Lanka aims to provide a reliable and helpful platform, but the website and services are provided on an as-available basis.",
-      "To the fullest extent permitted by law, Tuition Lanka is not liable for indirect loss, academic outcomes, private disputes, service interruptions, or actions of users, tutors, students, parents, or third parties.",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "TuitionLanka acts solely as an intermediary platform. To the fullest extent permitted by applicable law:",
+      },
+      {
+        type: "list",
+        items: [
+          "We do not guarantee the quality, suitability, or fitness of any tutor for any particular student",
+          "We are not liable for any loss, damage, or injury arising from tutoring sessions arranged through the Platform",
+          "We are not responsible for the conduct, actions, or omissions of any tutor or parent using the Platform",
+          "We are not liable for any disputes arising between tutors and parents regarding sessions, fees, or conduct after the first session",
+          "We do not guarantee the continuous, uninterrupted, or error free operation of the Platform",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Our total liability to any user, for any claim arising out of or in connection with the Platform, shall not exceed the amount paid by that user to TuitionLanka.",
+      },
+    ],
+  },
+  {
+    title: "Intellectual Property",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "All content on the Platform, including but not limited to text, graphics, logos, and design, is the property of TuitionLanka or its licensors and is protected by applicable intellectual property laws. You may not reproduce, distribute, or use any content from the Platform without our prior written consent.",
+      },
+      {
+        type: "paragraph",
+        text: "Tutor profile content submitted by tutors remains the intellectual property of the respective tutor. By submitting profile content, tutors grant TuitionLanka a non-exclusive licence to display that content on the Platform for the purpose of facilitating tutor-parent matching.",
+      },
+    ],
+  },
+  {
+    title: "Account Suspension and Termination",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "TuitionLanka reserves the right to suspend or terminate any user account, tutor or parent, at any time and without prior notice, if:",
+      },
+      {
+        type: "list",
+        items: [
+          "The user is found to have provided false or misleading information",
+          "The user has breached any provision of these Terms",
+          "The user has engaged in conduct harmful to other users, students, or the Platform",
+          "Required by law or regulatory authority",
+        ],
+      },
+      {
+        type: "paragraph",
+        text: "Tutors may deactivate their account at any time by contacting us at support.tuitionlanka@gmail.com.",
+      },
+    ],
+  },
+  {
+    title: "Privacy",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "Your use of the Platform is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy at tuitionlanka.com/privacy-policy to understand our data collection and use practices.",
+      },
+    ],
+  },
+  {
+    title: "Governing Law",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "These Terms shall be governed by and construed in accordance with the laws of Sri Lanka. Any disputes arising in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of Sri Lanka.",
+      },
     ],
   },
   {
     title: "Changes to These Terms",
-    body: [
-      "We may update these Terms and Conditions from time to time to reflect changes in our services, legal requirements, or platform operations.",
-      "The updated version will be posted on this page with a revised last updated date. Continued use of Tuition Lanka after changes are posted means you accept the updated terms.",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "We reserve the right to update or modify these Terms at any time. Material changes will be communicated by updating the effective date at the top of this document. Your continued use of the Platform after any changes constitutes your acceptance of the revised Terms.",
+      },
     ],
   },
   {
     title: "Contact Us",
-    body: [
-      "If you have questions about these Terms and Conditions, contact us at support.tuitionlanka@gmail.com.",
+    blocks: [
+      {
+        type: "paragraph",
+        text: "If you have any questions or concerns about these Terms, please contact us at:",
+      },
+      {
+        type: "list",
+        items: [
+          "SOFTVIL TECHNOLOGIES (PVT) LTD",
+          "Email: support.tuitionlanka@gmail.com",
+          "Website: https://tuitionlanka.com",
+        ],
+      },
     ],
   },
 ];
 
 const TermsAndConditionsPage = () => {
   return (
-    <div className="mx-auto max-w-7xl mt-10 p-3 pb-10 md:p-4 md:pb-10">
-      <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden mb-8">
-        <div className="relative z-10">
-          <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
-            TuitionLanka Legal
-          </p>
-          <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
-            Terms and Conditions
-          </h1>
-          <p className="text-sm md:text-base text-white/80 mt-1">
-            The rules and responsibilities for using Tuition Lanka.
-          </p>
-        </div>
-        <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
-        <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
-      </div>
-
-      <div className="rounded-3xl bg-lightgrey px-4 py-8 sm:px-8 lg:px-10">
-        <div className="mb-6 rounded-2xl border border-blue-100 bg-white p-5 shadow-sm">
-          <p className="text-sm font-semibold text-blue-600">
-            Last updated: April 23, 2026
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            These Terms and Conditions govern your use of Tuition Lanka as a
-            student, parent, guardian, tutor, visitor, or registered user.
-          </p>
-        </div>
-
-        <div className="space-y-4">
-          {termsSections.map((section) => (
-            <section
-              key={section.title}
-              className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
-            >
-              <h2 className="text-lg font-bold text-gray-900">
-                {section.title}
-              </h2>
-              <div className="mt-3 space-y-3">
-                {section.body.map((paragraph) => (
-                  <p
-                    key={paragraph}
-                    className="text-sm leading-relaxed text-gray-600"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </div>
-    </div>
+    <LegalDocument
+      eyebrow="Terms and Conditions"
+      title="Terms and Conditions"
+      subtitle="TuitionLanka"
+      intro="This page includes the full Terms and Conditions content provided in the official TuitionLanka document."
+      sections={termsSections}
+    />
   );
 };
 
