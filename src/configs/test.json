@@ -1,53 +1,38 @@
 {
-    "fullName": "Jayathu Shehan Dewmina",
-    "email": "jayathushehan@gmail.com",
-    "password": "Shehan1234",
-    "contactNumber": "0785360752",
-    "dateOfBirth": "2008-04-16",
-    "gender": "Male",
-    "age": 18,
-    "nationality": "Sri Lankan",
-    "race": "Sinhalese",
-    "classType": [
-        "Online - Individual",
-        "Online - Group"
-    ],
-    "preferredLocations": [
-        "Kollupitiya (Colombo 3)",
-        "Havelock Town (Colombo 5)"
-    ],
-    "tutorType": [
-        "Private Tutor",
-        "Government Teacher"
-    ],
-    "tutorMediums": [
-        "Sinhala",
-        "English"
-    ],
-    "highestEducation": "PhD",
-    "grades": [
-        "69d79165c6b6954ecfb179bf",
-        "69d7917fc6b695cfa6b179cb"
-    ],
-    "subjects": [
-        "69d783d0c6b6958478b178e2",
-        "69d783d0c6b6951c4db178e4"
-    ],
-    "yearsExperience": 7,
-    "teachingSummary": "Labore molestias nostrum dolor id quos illum ad dolor et sed excepteur soluta iusto voluptate maxime possimus placeat",
-    "studentResults": "Molestiae quo pariatur Ullamco unde anim magna sequi rem elit unde alias adipisci aut in incidunt porro",
-    "sellingPoints": "Adipisci autem earum cum dolorem cillum qui voluptas voluptas autem reiciendis pariatur Provident et blanditiis ea neque ab",
-    "academicDetails": "Voluptate ut enim blanditiis quia vel tempor repellendus Est enim itaque nobis",
-    "certificatesAndQualifications": [
-        {
-            "type": "Passport",
-            "url": "https://tutormeuploads.blob.core.windows.net/uploads/1776675546648-Screenshot_20260324_022401.png"
-        },
-        {
-            "type": "Driving License",
-            "url": "https://tutormeuploads.blob.core.windows.net/uploads/1776675560854-Screenshot_20260324_022323.png"
-        }
-    ],
-    "agreeTerms": true,
-    "agreeAssignmentInfo": true
+  "fullName": "Jayathu Shehan Dewmina",
+  "email": "jayathushehan@gmail.com",
+  "password": "Shehan1234",
+  "contactNumber": "0785360752",
+  "dateOfBirth": "2008-04-16",
+  "gender": "Male",
+  "age": 18,
+  "nationality": "Sri Lankan",
+  "race": "Sinhalese",
+  "classType": ["Online - Individual", "Online - Group"],
+  "preferredLocations": [
+    "Kollupitiya (Colombo 3)",
+    "Havelock Town (Colombo 5)"
+  ],
+  "tutorType": ["Private Tutor", "Government Teacher"],
+  "tutorMediums": ["Sinhala", "English"],
+  "highestEducation": "PhD",
+  "grades": ["69d79165c6b6954ecfb179bf", "69d7917fc6b695cfa6b179cb"],
+  "subjects": ["69d783d0c6b6958478b178e2", "69d783d0c6b6951c4db178e4"],
+  "yearsExperience": 7,
+  "teachingSummary": "Labore molestias nostrum dolor id quos illum ad dolor et sed excepteur soluta iusto voluptate maxime possimus placeat",
+  "studentResults": "Molestiae quo pariatur Ullamco unde anim magna sequi rem elit unde alias adipisci aut in incidunt porro",
+  "sellingPoints": "Adipisci autem earum cum dolorem cillum qui voluptas voluptas autem reiciendis pariatur Provident et blanditiis ea neque ab",
+  "academicDetails": "Voluptate ut enim blanditiis quia vel tempor repellendus Est enim itaque nobis",
+  "certificatesAndQualifications": [
+    {
+      "type": "Passport",
+      "url": "https://tutormeuploads.blob.core.windows.net/uploads/1776675546648-Screenshot_20260324_022401.png"
+    },
+    {
+      "type": "Driving License",
+      "url": "https://tutormeuploads.blob.core.windows.net/uploads/1776675560854-Screenshot_20260324_022323.png"
+    }
+  ],
+  "agreeTerms": true,
+  "agreeAssignmentInfo": true
 }

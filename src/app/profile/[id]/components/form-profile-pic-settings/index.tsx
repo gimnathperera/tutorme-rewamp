@@ -24,7 +24,6 @@ const ProfilePicSettings = () => {
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
-  /* ---------------- Fetch avatar ---------------- */
   useEffect(() => {
     if (userId) fetchProfile({ userId: String(userId) });
   }, [userId, fetchProfile]);
@@ -35,12 +34,10 @@ const ProfilePicSettings = () => {
     }
   }, [userData]);
 
-  /* ---------------- Upload preview ---------------- */
   const handleUploaded = (url: string) => {
     setTempAvatar(url);
   };
 
-  /* ---------------- Save ---------------- */
   const handleSave = async () => {
     if (!tempAvatar || !userId) return;
 
@@ -50,7 +47,7 @@ const ProfilePicSettings = () => {
         payload: { avatar: tempAvatar } as any,
       }).unwrap();
 
-      setAvatarUrl(tempAvatar); // 🔥 instant UI update
+      setAvatarUrl(tempAvatar);
       updateUser({ avatar: tempAvatar });
       setTempAvatar(null);
       setOpen(false);
@@ -60,7 +57,6 @@ const ProfilePicSettings = () => {
     }
   };
 
-  /* ---------------- Delete ---------------- */
   const handleDelete = async () => {
     if (!userId) return;
 
@@ -80,56 +76,66 @@ const ProfilePicSettings = () => {
     }
   };
 
-  /* ================================================= */
-
   return (
-    <div className="flex justify-center p-10">
-      {/* -------- Avatar + Pen Icon -------- */}
-      <div className="relative w-36 h-36">
-        <img
-          src={avatarUrl}
-          alt="User profile picture"
-          className="w-full h-full rounded-full object-cover border"
-        />
-
-        {/* Edit Icon */}
-        <button
-          onClick={() => setOpen(true)}
-          className="absolute bottom-1 right-1 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-        >
-          <Pencil size={18} />
-        </button>
-
-        {/* Delete Icon */}
-        <button
-          onClick={() => setConfirmDeleteOpen(true)}
-          className="absolute bottom-1 left-1 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-        >
-          <Trash2 size={18} className="text-red-600" />
-        </button>
+    <div className="rounded-2xl bg-white px-4 py-6 shadow-sm sm:rounded-3xl sm:px-6 sm:py-8">
+      <div className="mb-6 text-center">
+        <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
+          Profile Photo
+        </h3>
+        <p className="mt-2 text-sm text-gray-500">
+          Choose a clear, professional photo for your public tutor profile.
+        </p>
       </div>
 
-      {/* -------- Modal -------- */}
+      <div className="flex justify-center">
+        <div className="relative h-28 w-28 sm:h-36 sm:w-36">
+          <img
+            src={avatarUrl}
+            alt="User profile picture"
+            className="h-full w-full rounded-full border object-cover"
+          />
+
+          <button
+            onClick={() => setOpen(true)}
+            className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
+            aria-label="Edit profile picture"
+          >
+            <Pencil size={16} className="sm:h-[18px] sm:w-[18px]" />
+          </button>
+
+          <button
+            onClick={() => setConfirmDeleteOpen(true)}
+            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
+            aria-label="Delete profile picture"
+          >
+            <Trash2
+              size={16}
+              className="text-red-600 sm:h-[18px] sm:w-[18px]"
+            />
+          </button>
+        </div>
+      </div>
+
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-          <div className="bg-white w-[400px] p-6 rounded-xl">
-            <h3 className="text-xl font-semibold mb-2">
-              Change profile picture
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-4 sm:p-6">
+            <h3 className="mb-2 text-lg font-semibold sm:text-xl">
+              Change profile photo
             </h3>
 
-            <p className="text-sm text-gray-500 mb-4">
-              JPG, PNG or GIF — Max 800KB
+            <p className="mb-4 text-sm text-gray-500">
+              JPG, PNG or GIF - Max 800KB
             </p>
 
             <FileUploadDropzone onUploaded={handleUploaded} />
 
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => {
                   setTempAvatar(null);
                   setOpen(false);
                 }}
-                className="px-4 py-2 text-base font-semibold border rounded-lg"
+                className="rounded-lg border px-4 py-2.5 text-sm font-semibold sm:text-base"
               >
                 Cancel
               </button>
@@ -137,7 +143,7 @@ const ProfilePicSettings = () => {
               <button
                 disabled={!tempAvatar || isLoading}
                 onClick={handleSave}
-                className="px-4 py-2 text-base font-semibold rounded-lg bg-primary-700 text-white disabled:opacity-50"
+                className="rounded-lg bg-primary-700 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 sm:text-base"
               >
                 Save
               </button>
@@ -147,20 +153,20 @@ const ProfilePicSettings = () => {
       )}
 
       {confirmDeleteOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-          <div className="bg-white w-[360px] p-6 rounded-xl">
-            <h3 className="text-xl font-semibold mb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-sm rounded-xl bg-white p-4 sm:p-6">
+            <h3 className="mb-2 text-lg font-semibold sm:text-xl">
               Remove profile picture?
             </h3>
 
-            <p className="text-sm text-gray-500 mb-6">
-              This will permanently remove your profile picture.
+            <p className="mb-6 text-sm text-gray-500">
+              This will permanently remove your current profile photo.
             </p>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => setConfirmDeleteOpen(false)}
-                className="px-4 py-2 text-base font-semibold border rounded-lg"
+                className="rounded-lg border px-4 py-2.5 text-sm font-semibold sm:text-base"
               >
                 Cancel
               </button>
@@ -170,7 +176,7 @@ const ProfilePicSettings = () => {
                   await handleDelete();
                   setConfirmDeleteOpen(false);
                 }}
-                className="px-4 py-2 text-base font-semibold rounded-lg bg-red-600 text-white"
+                className="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white sm:text-base"
               >
                 Delete
               </button>

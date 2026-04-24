@@ -89,11 +89,24 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
-  const [watchName, watchEmail, watchPhone, watchCity] = watch(["name", "email", "phoneNumber", "city"]);
+  const [watchName, watchEmail, watchPhone, watchCity] = watch([
+    "name",
+    "email",
+    "phoneNumber",
+    "city",
+  ]);
 
   const isStep1Complete =
-    !!watchName && !!watchEmail && !!watchPhone && !!selectedDistrict && !!watchCity &&
-    !errors.name && !errors.email && !errors.phoneNumber && !errors.district && !errors.city;
+    !!watchName &&
+    !!watchEmail &&
+    !!watchPhone &&
+    !!selectedDistrict &&
+    !!watchCity &&
+    !errors.name &&
+    !errors.email &&
+    !errors.phoneNumber &&
+    !errors.district &&
+    !errors.city;
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -114,6 +127,11 @@ export default function AddRequestForTutor() {
   const [createTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
 
   const currentIndex = TAB_ORDER.indexOf(tab);
+
+  const changeStep = (nextTab: TabKey) => {
+    setTab(nextTab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const currentCount = tutors.length;
@@ -162,11 +180,11 @@ export default function AddRequestForTutor() {
       ]);
       if (!valid) return;
     }
-    setTab(TAB_ORDER[currentIndex + 1]);
+    changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
   const prevStep = () => {
-    setTab(TAB_ORDER[currentIndex - 1]);
+    changeStep(TAB_ORDER[currentIndex - 1]);
   };
 
   const onSubmit = async (data: CreateRequestTutorSchema) => {
@@ -388,7 +406,11 @@ export default function AddRequestForTutor() {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className={isStep1Complete ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
+                  className={
+                    isStep1Complete
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      : ""
+                  }
                 >
                   Next
                 </Button>
@@ -563,7 +585,10 @@ export default function AddRequestForTutor() {
                     {/* Preferred Tutor Type + Preferred Class Type */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                       <div className={fieldWrapper}>
-                        <Label className="text-sm" htmlFor={`tutorType-${index}`}>
+                        <Label
+                          className="text-sm"
+                          htmlFor={`tutorType-${index}`}
+                        >
                           Preferred Tutor Type{" "}
                           <span className="text-red-500">*</span>
                         </Label>
@@ -576,8 +601,12 @@ export default function AddRequestForTutor() {
                             Select preferred tutor type
                           </option>
                           <option value="Private Tutor">Private Tutor</option>
-                          <option value="Government Teacher">Government Teacher</option>
-                          <option value="University Student">University Student</option>
+                          <option value="Government Teacher">
+                            Government Teacher
+                          </option>
+                          <option value="University Student">
+                            University Student
+                          </option>
                           <option value="Coach">Coach</option>
                         </select>
                         <p className={errorMsg}>
@@ -586,7 +615,10 @@ export default function AddRequestForTutor() {
                       </div>
 
                       <div className={fieldWrapper}>
-                        <Label className="text-sm" htmlFor={`classType-${index}`}>
+                        <Label
+                          className="text-sm"
+                          htmlFor={`classType-${index}`}
+                        >
                           Preferred Class Type{" "}
                           <span className="text-red-500">*</span>
                         </Label>
@@ -598,10 +630,16 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select preferred class type
                           </option>
-                          <option value="Online - Individual">Online - Individual</option>
+                          <option value="Online - Individual">
+                            Online - Individual
+                          </option>
                           <option value="Online - Group">Online - Group</option>
-                          <option value="Physical - Individual">Physical - Individual</option>
-                          <option value="Physical - Group">Physical - Group</option>
+                          <option value="Physical - Individual">
+                            Physical - Individual
+                          </option>
+                          <option value="Physical - Group">
+                            Physical - Group
+                          </option>
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.preferredClassType?.message}
@@ -619,7 +657,9 @@ export default function AddRequestForTutor() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className={isValid ? "bg-blue-600 hover:bg-blue-700 text-white" : ""}
+                  className={
+                    isValid ? "bg-blue-600 hover:bg-blue-700 text-white" : ""
+                  }
                 >
                   {isLoading ? "Submitting..." : "Submit"}
                 </Button>

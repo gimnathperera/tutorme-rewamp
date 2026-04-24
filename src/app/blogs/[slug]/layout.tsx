@@ -1,10 +1,6 @@
 import { createMetadata, seoPages } from "@/lib/seo";
 
-export function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}) {
+export function generateMetadata({ params }: { params: { slug: string } }) {
   return createMetadata({
     ...seoPages.blogs,
     title: "Tuition Lanka Blog Article | Education Tips & Exam Guides",

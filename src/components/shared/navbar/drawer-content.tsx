@@ -39,11 +39,14 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
   const pathname = usePathname();
   const [openDropdowns, setOpenDropdowns] = useState<Set<number>>(new Set());
 
-  const isActiveHref = useCallback((href: string) => {
-    if (href === "/") return pathname === "/";
+  const isActiveHref = useCallback(
+    (href: string) => {
+      if (href === "/") return pathname === "/";
 
-    return pathname.startsWith(href);
-  }, [pathname]);
+      return pathname.startsWith(href);
+    },
+    [pathname],
+  );
 
   const isActiveItem = (item: NavigationItem) => {
     if (item.dropdown) {
@@ -105,9 +108,7 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
                   <ChevronDown
                     className={`w-4 h-4 transition-transform duration-200 ${
                       isActive ? "text-blue-600" : "text-gray-400"
-                    } ${
-                      isOpen ? "rotate-180" : ""
-                    }`}
+                    } ${isOpen ? "rotate-180" : ""}`}
                   />
                 </button>
                 {isOpen && (

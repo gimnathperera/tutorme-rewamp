@@ -31,7 +31,16 @@ const InputSelect: FC<InputSelectProps> = ({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="text-sm font-medium text-gray-700">{label}</label>
+        <label className="text-sm font-medium text-gray-700">
+          {label.includes("*") ? (
+            <>
+              {label.replace(" *", "")}
+              <span className="text-red-500"> *</span>
+            </>
+          ) : (
+            label
+          )}
+        </label>
       )}
 
       <Controller
