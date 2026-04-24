@@ -83,6 +83,12 @@ const CONTACT_INFO = [
   },
 ];
 
+const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
+const collapseSpaces = (value: string) =>
+  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
+const sanitizeContactNumber = (value: string) =>
+  value.replace(/\D/g, "").slice(0, 10);
+
 const ContactUsPage = () => {
   const form = useForm<ContactUsPageSchema>({
     resolver: zodResolver(contactUsPageSchema),
@@ -176,15 +182,7 @@ const ContactUsPage = () => {
             })}
           </div>
 
-          {/* Bottom decorative dots */}
-          <div className="relative z-10 mt-10 flex gap-2">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className={`w-2 h-2 rounded-full ${i === 0 ? "bg-primary-600" : "bg-white/25"}`}
-              />
-            ))}
-          </div>
+          
         </div>
 
         {/* ── Right panel — white form card ── */}
@@ -206,6 +204,7 @@ const ContactUsPage = () => {
             <FormProvider {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
+                noValidate
                 className="space-y-5"
               >
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -213,12 +212,40 @@ const ContactUsPage = () => {
                     label="Full Name *"
                     name="name"
                     placeholder="e.g. Nimal Perera"
+                    onChange={(e) => {
+                      const cleaned = stripLeadingSpaces(e.target.value);
+                      if (cleaned !== e.target.value) {
+                        form.setValue("name", cleaned, {
+                          shouldValidate: true,
+                        });
+                      }
+                    }}
+                    onBlur={(e) => {
+                      form.setValue("name", collapseSpaces(e.target.value), {
+                        shouldValidate: true,
+                      });
+                    }}
                   />
                   <InputText
                     label="Email *"
                     name="email"
                     placeholder="e.g. nimal@example.com"
-                    type="email"
+                    type="text"
+                    inputMode="email"
+                    autoComplete="email"
+                    onChange={(e) => {
+                      const noSpaces = e.target.value.replace(/ /g, "");
+                      if (noSpaces !== e.target.value) {
+                        form.setValue("email", noSpaces, {
+                          shouldValidate: true,
+                        });
+                      }
+                    }}
+                    onBlur={(e) => {
+                      form.setValue("email", e.target.value.replace(/ /g, ""), {
+                        shouldValidate: true,
+                      });
+                    }}
                   />
                 </div>
 
@@ -227,6 +254,22 @@ const ContactUsPage = () => {
                   name="contactNumber"
                   placeholder="e.g. 0771234567"
                   type="tel"
+                  inputMode="numeric"
+                  maxLength={10}
+                  autoComplete="tel"
+                  onChange={(e) => {
+                    const sanitized = sanitizeContactNumber(e.target.value);
+                    if (sanitized !== e.target.value) {
+                      form.setValue("contactNumber", sanitized, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                  onBlur={(e) => {
+                    form.setValue("contactNumber", sanitizeContactNumber(e.target.value), {
+                      shouldValidate: true,
+                    });
+                  }}
                 />
 
                 <InputMultiLineText
@@ -234,6 +277,19 @@ const ContactUsPage = () => {
                   name="message"
                   placeholder="Type your message here..."
                   rows={4}
+                  onChange={(e) => {
+                    const cleaned = stripLeadingSpaces(e.target.value);
+                    if (cleaned !== e.target.value) {
+                      form.setValue("message", cleaned, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                  onBlur={(e) => {
+                    form.setValue("message", collapseSpaces(e.target.value), {
+                      shouldValidate: true,
+                    });
+                  }}
                 />
 
                 <SubmitButton
