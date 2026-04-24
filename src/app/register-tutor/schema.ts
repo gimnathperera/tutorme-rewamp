@@ -42,7 +42,7 @@ const step1BaseSchema = z.object({
       message: PASSWORD_LETTER_NUMBER_MSG,
     }),
 
-  confirmPassword: z.string().trim().nonempty("Please confirm your password."),
+  confirmPassword: z.string().trim().nonempty("Confirm Password is required."),
 
   contactNumber: z.preprocess(
     trimOnly,
