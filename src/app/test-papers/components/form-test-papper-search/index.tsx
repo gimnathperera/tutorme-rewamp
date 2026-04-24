@@ -54,12 +54,14 @@ const FormTestPaperSearch: FC<Props> = ({
             name="grade"
             options={gradesOptions}
             loading={isGradesLoading}
+            placeholder="All Grades"
           />
           <InputSelect
             label="Select Subject"
             name="subject"
             options={subjectOptions}
             loading={isSubjectsLoading}
+            placeholder="All Subjects"
           />
           <InputSelect
             label="Select Medium"
@@ -67,6 +69,7 @@ const FormTestPaperSearch: FC<Props> = ({
             options={mediumOptions}
             disabled={isMediumsLoading || mediumOptions.length === 0}
             loading={isMediumsLoading}
+            placeholder="All Mediums"
           />
         </div>
       </form>

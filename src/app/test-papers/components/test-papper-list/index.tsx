@@ -98,7 +98,9 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
           <h2 className="text-base font-semibold text-gray-700">
             No Test Papers Available
           </h2>
-          <p className="text-sm text-gray-500 mt-2">Please search again!</p>
+          <p className="text-sm text-gray-500 mt-2">
+            No papers found for the selected filters. Try adjusting your search.
+          </p>
         </div>
       )}
     </div>

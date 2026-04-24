@@ -4,7 +4,7 @@ import FormForgotPassword from "@/components/auth/form-forgot-password";
 import FormLogin from "@/components/auth/form-login";
 import FormSignUp from "@/components/auth/form-sign-up";
 import { useAuthContext } from "@/contexts";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export enum FormType {
@@ -30,6 +30,13 @@ const useAuthModalState = (): LogicReturnType => {
   const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
   const { user } = useAuthContext();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("login") === "true") {
+      setIsSignUpModalOpen(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
