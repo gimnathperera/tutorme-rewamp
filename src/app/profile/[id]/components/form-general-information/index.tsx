@@ -128,11 +128,12 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
               />
 
               <InputText
-                label="Email *"
+                label="Email"
                 placeholder="Email address"
                 name="email"
                 type="text"
                 disabled
+                helperText="Email is read-only here. Contact support if you need to change it."
               />
               <InputText
                 label="Contact Number *"
@@ -155,6 +156,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 type="number"
                 disabled
                 placeholder="Auto-calculated"
+                helperText="Age is read-only and updates automatically from your date of birth."
               />
               <InputSelect
                 label="Gender *"
