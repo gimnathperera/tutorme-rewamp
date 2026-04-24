@@ -59,25 +59,32 @@ const Avatar: FC<{ src: string; name: string }> = ({ src, name }) => {
 /* ─── Single card ───────────────────────────────────────── */
 const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
   const [expanded, setExpanded] = useState(false);
+  const leaveTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  const handleMouseEnter = () => {
+    clearTimeout(leaveTimer.current);
+    setExpanded(true);
+  };
+
+  const handleMouseLeave = () => {
+    leaveTimer.current = setTimeout(() => setExpanded(false), 150);
+  };
 
   return (
     <div
-      className="bg-white rounded-2xl shadow-md p-5 flex flex-col gap-3 cursor-pointer select-none"
+      className="bg-white rounded-2xl shadow-md p-5 flex flex-col gap-3 cursor-default select-none"
       style={{
-        height: expanded ? "auto" : "220px",
+        minHeight: "220px",
         maxHeight: expanded ? "600px" : "220px",
         transition:
-          "max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1), transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
+          "max-height 0.55s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         overflow: "hidden",
-        transform: expanded
-          ? "translateY(-3px) scale(1.012)"
-          : "translateY(0) scale(1)",
         boxShadow: expanded
           ? "0 12px 40px rgba(59,130,246,0.18)"
           : "0 2px 12px rgba(0,0,0,0.06)",
       }}
-      onMouseEnter={() => setExpanded(true)}
-      onMouseLeave={() => setExpanded(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Quote text + fade */}
       <div className="relative flex-1 min-h-0">
@@ -246,22 +253,16 @@ const Testimonials: FC = () => {
 
   return (
     <section
-      className="bg-testimonial pb-6 lg:pb-8"
+      className="bg-testimonial  pb-6 lg:py-8"
       aria-label="Testimonials"
       id="testimonials-section"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
-        {/* ── Stacked heading ── */}
-        <div className="text-center overflow-hidden animate-fade-in mb-10">
-          <h2 className="text-4xl font-bold text-black leading-[1.2] my-1">
-            See what others are saying.
-          </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden sm:block">
-            See what others are saying.
-          </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden sm:block">
+        {/* ── Heading ── */}
+        <div className="text-center animate-fade-in mb-10">
+          <h2 className="text-4xl font-bold text-black leading-[1.2]">
             See what others are saying.
           </h2>
         </div>
