@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
-const siteUrl = "https://tuitionlanka.com";
+const siteUrl = "https://www.tuitionlanka.com";
 const siteName = "Tuition Lanka";
-const defaultImage = "https://tuitionlanka.com/assets/preview.jpg";
+const defaultImage = "https://www.tuitionlanka.com/assets/preview.jpg";
 
 export type SeoConfig = {
   title: string;
