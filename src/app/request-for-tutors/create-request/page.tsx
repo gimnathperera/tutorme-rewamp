@@ -46,6 +46,7 @@ const selectClass =
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
+const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
@@ -77,7 +78,7 @@ export default function AddRequestForTutor() {
     setValue,
     trigger,
     clearErrors,
-    formState: { errors, isValid },
+    formState: { errors },
     reset,
   } = useForm<CreateRequestTutorSchema>({
     resolver: zodResolver(createRequestTutorSchema),
@@ -89,24 +90,6 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
-  const [watchName, watchEmail, watchPhone, watchCity] = watch([
-    "name",
-    "email",
-    "phoneNumber",
-    "city",
-  ]);
-
-  const isStep1Complete =
-    !!watchName &&
-    !!watchEmail &&
-    !!watchPhone &&
-    !!selectedDistrict &&
-    !!watchCity &&
-    !errors.name &&
-    !errors.email &&
-    !errors.phoneNumber &&
-    !errors.district &&
-    !errors.city;
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -406,11 +389,7 @@ export default function AddRequestForTutor() {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className={
-                    isStep1Complete
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : ""
-                  }
+                  className={primaryActionButtonClassName}
                 >
                   Next
                 </Button>
@@ -657,9 +636,7 @@ export default function AddRequestForTutor() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className={
-                    isValid ? "bg-blue-600 hover:bg-blue-700 text-white" : ""
-                  }
+                  className={primaryActionButtonClassName}
                 >
                   {isLoading ? "Submitting..." : "Submit"}
                 </Button>
