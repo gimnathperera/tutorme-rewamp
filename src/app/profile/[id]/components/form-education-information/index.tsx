@@ -15,6 +15,7 @@ import { FC } from "react";
 import { EducationInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
+import { collapseTextSpaces } from "@/utils/form-normalizers";
 
 type Props = {
   dropdownOptionData: {
@@ -185,6 +186,10 @@ const FormEducationInfo: FC<Props> = ({
                     <Textarea
                       id="academicDetails"
                       {...field}
+                      onBlur={(event) => {
+                        field.onBlur();
+                        field.onChange(collapseTextSpaces(event.target.value));
+                      }}
                       rows={4}
                       maxLength={CHAR_LIMIT}
                       placeholder="Achievements & subjects taught, such as number of students, years, and results"

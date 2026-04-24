@@ -6,18 +6,17 @@ import {
   PASSWORD_TOO_LONG,
   PASSWORD_TOO_SHORT,
 } from "@/configs/password";
+import {
+  normalizeTextSpaces,
+  removeWhitespace,
+  trimText,
+} from "@/utils/form-normalizers";
 import { z } from "zod";
-
-const normalizeText = (value: unknown) =>
-  typeof value === "string" ? value.trim().replace(/\s+/g, " ") : value;
-
-const trimOnly = (value: unknown) =>
-  typeof value === "string" ? value.trim() : value;
 
 /** Plain ZodObject used for .merge() in fullSchema */
 const step1BaseSchema = z.object({
   fullName: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Full Name is required")
@@ -25,27 +24,32 @@ const step1BaseSchema = z.object({
   ),
 
   email: z.preprocess(
-    trimOnly,
+    removeWhitespace,
     z
       .string()
       .min(1, "Email is required")
       .email("Please enter a valid email address"),
   ),
 
-  password: z
-    .string()
-    .trim()
-    .nonempty("Password is required.")
-    .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
-    .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
-    .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-      message: PASSWORD_LETTER_NUMBER_MSG,
-    }),
+  password: z.preprocess(
+    removeWhitespace,
+    z
+      .string()
+      .nonempty("Password is required.")
+      .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
+      .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
+      .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+        message: PASSWORD_LETTER_NUMBER_MSG,
+      }),
+  ),
 
-  confirmPassword: z.string().trim().nonempty("Confirm Password is required."),
+  confirmPassword: z.preprocess(
+    removeWhitespace,
+    z.string().nonempty("Confirm Password is required."),
+  ),
 
   contactNumber: z.preprocess(
-    trimOnly,
+    removeWhitespace,
     z
       .string()
       .min(1, "Contact Number is required")
@@ -54,7 +58,7 @@ const step1BaseSchema = z.object({
   ),
 
   dateOfBirth: z.preprocess(
-    trimOnly,
+    trimText,
     z.string().min(1, "Date of Birth is required"),
   ),
 
@@ -164,7 +168,7 @@ export const step2Schema = z.object({
 
 export const step3Schema = z.object({
   teachingSummary: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Teaching Summary is required")
@@ -172,7 +176,7 @@ export const step3Schema = z.object({
   ),
 
   studentResults: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Student Results is required")
@@ -180,7 +184,7 @@ export const step3Schema = z.object({
   ),
 
   sellingPoints: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Selling Points is required")
@@ -188,7 +192,7 @@ export const step3Schema = z.object({
   ),
 
   academicDetails: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Academic Details is required")
