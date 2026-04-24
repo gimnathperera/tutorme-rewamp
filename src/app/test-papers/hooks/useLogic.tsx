@@ -177,6 +177,7 @@ const useLogic = (): LogicReturnType => {
     defaultValues: initialFormValues,
     mode: "onChange",
   });
+  const { setValue } = testPaperSearchForm;
 
   const [selectedGrade, selectedSubject, selectedMedium, searchTerm] =
     testPaperSearchForm.watch(["grade", "subject", "medium", "search"]);
@@ -238,12 +239,12 @@ const useLogic = (): LogicReturnType => {
     );
 
     if (!selectedMediumExists) {
-      testPaperSearchForm.setValue("medium", "", {
+      setValue("medium", "", {
         shouldValidate: true,
         shouldDirty: true,
       });
     }
-  }, [mediumOptions, selectedMedium, testPaperSearchForm]);
+  }, [mediumOptions, selectedMedium, setValue]);
 
   const isFirstGradeMount = useRef(true);
   useEffect(() => {
@@ -251,11 +252,11 @@ const useLogic = (): LogicReturnType => {
       isFirstGradeMount.current = false;
       return;
     }
-    testPaperSearchForm.setValue("subject", "", {
+    setValue("subject", "", {
       shouldValidate: false,
       shouldDirty: true,
     });
-  }, [selectedGrade]);
+  }, [selectedGrade, setValue]);
 
   const normalizedSearchTerm = normalizeFilterValue(searchTerm);
   const normalizedSelectedGrade = normalizeFilterValue(selectedGrade);

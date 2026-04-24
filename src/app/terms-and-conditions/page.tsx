@@ -1,6 +1,3 @@
-import LegalDocument, {
-  type LegalSection,
-} from "@/components/shared/legal-document";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({

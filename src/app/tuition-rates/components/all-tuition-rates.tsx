@@ -27,31 +27,6 @@ type GradeCount = {
   tuitionRateCount: number;
 };
 
-type TuitionRateGroup = {
-  gradeId: string;
-  gradeTitle: string;
-  subjects: SubjectRate[];
-};
-
-type TuitionRatesResponse = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: Array<{
-    _id: string;
-    grade: { _id: string; title: string };
-    subject: { _id: string; title: string };
-    fullTimeTuitionRate?: Rate[];
-    partTimeTuitionRate?: Rate[];
-    govTuitionRate?: Rate[];
-  }>;
-};
-
-type GradeCountResponse = {
-  count: number;
-  grades: GradeCount[];
-};
-
 function RateCell({ rates }: { rates: Rate[] }) {
   const min = rates?.[0]?.minimumRate;
   const max = rates?.[0]?.maximumRate;
@@ -226,7 +201,6 @@ export default function TuitionRatesByGrade() {
   }
 
   const grades = data.grades || [];
-  const defaultValue = grades.length > 0 ? grades[0]._id : undefined;
 
   return (
     <div className="px-2 sm:px-0">
