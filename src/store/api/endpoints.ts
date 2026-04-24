@@ -15,6 +15,8 @@ export const Endpoints = {
   ChangePassword: "/v1/users/change-password",
   RegisterTutor: "/v1/tutors",
   TuitionRates: "/v1/tuitionRates",
+  TuitionRatesByGrade: "/v1/tuitionRates/by-grade",
+  GradesWithCounts: "/v1/grades/with-counts",
   Levels: "/v1/levels",
   TuitionAssignments: "/v1/tuition-assignments",
   RequestTutors: "/v1/requestTutor",
