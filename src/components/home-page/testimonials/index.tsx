@@ -255,13 +255,13 @@ const Testimonials: FC = () => {
       <div className="mx-auto max-w-7xl px-4 lg:px-8">
         {/* ── Stacked heading ── */}
         <div className="text-center overflow-hidden animate-fade-in mb-10">
-          <h2 className="text-4xl font-bold text-black leading-[1.2] my-1">
+          <h2 className="text-[clamp(1.5rem,6vw,2.25rem)] font-bold text-black leading-[1.2] my-1 whitespace-nowrap">
             See what others are saying.
           </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 hidden md:block">
+          <h2 className="text-[clamp(1.5rem,6vw,2.25rem)] font-bold text-black leading-[1.2] opacity-40 lg:mr-48 my-1 whitespace-nowrap hidden min-[900px]:block">
             See what others are saying.
           </h2>
-          <h2 className="text-4xl font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 hidden md:block">
+          <h2 className="text-[clamp(1.5rem,6vw,2.25rem)] font-bold text-black leading-[1.2] opacity-20 lg:-mr-32 my-1 whitespace-nowrap hidden min-[900px]:block">
             See what others are saying.
           </h2>
         </div>
