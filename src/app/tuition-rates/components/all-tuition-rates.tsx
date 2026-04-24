@@ -12,10 +12,9 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 type Rate = { minimumRate: string; maximumRate: string };
 type SubjectRate = {
   title: string;
-  onlineIndividual: Rate[];
-  onlineGroup: Rate[];
-  physicalIndividual: Rate[];
-  physicalGroup: Rate[];
+  fullTime: Rate[];
+  partTime: Rate[];
+  government: Rate[];
 };
 
 type GradeGroup = {
@@ -78,10 +77,9 @@ export default function TuitionRatesByGrade() {
         }
         acc[gradeTitle].subjects.push({
           title: item.subject?.title || "Unknown Subject",
-          onlineIndividual: item.onlineIndividualTuitionRate || [],
-          onlineGroup: item.onlineGroupTuitionRate || [],
-          physicalIndividual: item.physicalIndividualTuitionRate || [],
-          physicalGroup: item.physicalGroupTuitionRate || [],
+          fullTime: item.fullTimeTuitionRate || [],
+          partTime: item.partTimeTuitionRate || [],
+          government: item.govTuitionRate || [],
         });
         return acc;
       },
@@ -135,31 +133,25 @@ export default function TuitionRatesByGrade() {
                   <table className="w-full min-w-[560px] text-sm">
                     <thead>
                       <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-2/6">
                           Subject
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/6">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                            Online - Individual
+                            Full Time
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/6">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                            Online - Group
+                            Part Time
                           </span>
                         </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
+                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/6">
                           <span className="inline-flex items-center gap-1.5">
                             <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                            Physical - Individual
-                          </span>
-                        </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
-                            Physical - Group
+                            Government
                           </span>
                         </th>
                       </tr>
@@ -181,16 +173,13 @@ export default function TuitionRatesByGrade() {
                             </span>
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.onlineIndividual} />
+                            <RateCell rates={subject.fullTime} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.onlineGroup} />
+                            <RateCell rates={subject.partTime} />
                           </td>
                           <td className="px-5 py-3.5">
-                            <RateCell rates={subject.physicalIndividual} />
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <RateCell rates={subject.physicalGroup} />
+                            <RateCell rates={subject.government} />
                           </td>
                         </tr>
                       ))}

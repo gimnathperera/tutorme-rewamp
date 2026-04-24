@@ -19,7 +19,17 @@ const RatePage = () => {
     return <p>No tuition rates found.</p>;
 
   // Group subjects by grade
-  const gradesMap: Record<string, TuitionRateItem[]> = {};
+  const gradesMap: Record<string, TuitionRateItem[]> = rate.results.reduce(
+    (map, item) => {
+      const gradeTitle = item.grade?.title || "Unknown Grade";
+      if (!map[gradeTitle]) {
+        map[gradeTitle] = [];
+      }
+      map[gradeTitle].push(item);
+      return map;
+    },
+    {} as Record<string, TuitionRateItem[]>,
+  );
 
   return (
     <div className="px-6 py-8 max-w-5xl mx-auto">
@@ -39,27 +49,21 @@ const RatePage = () => {
                     {rate.subject?.title || "Unknown Subject"}
                   </h4>
                   <p className="mb-1">
-                    <strong>Online - Individual:</strong>{" "}
-                    {rate.onlineIndividualTuitionRate
-                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                    <strong>Full Time:</strong>{" "}
+                    {rate.fullTimeTuitionRate
+                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
                       .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
-                    <strong>Online - Group:</strong>{" "}
-                    {rate.onlineGroupTuitionRate
-                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                    <strong>Part Time:</strong>{" "}
+                    {rate.partTimeTuitionRate
+                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
                       .join(", ") || "N/A"}
                   </p>
                   <p className="mb-1">
-                    <strong>Physical - Individual:</strong>{" "}
-                    {rate.physicalIndividualTuitionRate
-                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
-                      .join(", ") || "N/A"}
-                  </p>
-                  <p className="mb-1">
-                    <strong>Physical - Group:</strong>{" "}
-                    {rate.physicalGroupTuitionRate
-                      ?.map((r) => `${r.minimumRate} - ${r.maximumRate} LKR`)
+                    <strong>Government:</strong>{" "}
+                    {rate.govTuitionRate
+                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
                       .join(", ") || "N/A"}
                   </p>
                 </CardContent>
