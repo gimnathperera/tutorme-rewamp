@@ -139,7 +139,7 @@ export type Blogs = BaseEntity &
     slug?: string;
     image: string;
     type: string;
-    status: "pending" | "published" | "draft";
+    status: "pending" | "approved" | "rejected";
     author: {
       /** MongoDB ObjectId of the user who created the blog */
       id: string;
@@ -274,17 +274,23 @@ export type ProfileResponse = {
   grades: Grade[];
   subjects: Subject[];
   name: string;
+  fullName?: string;
   email: string;
   country: string;
   phoneNumber: string;
+  contactNumber?: string;
   city: string;
   state: string;
   region: string;
   zip: string;
   address: string;
   birthday: string;
-  tutorType: string;
-  gender: "Male" | "Female" | "None";
+  dateOfBirth?: string;
+  tutorType: string | string[];
+  gender: "Male" | "Female" | "Others" | "None";
+  age?: number;
+  nationality?: string;
+  race?: string;
   duration: string;
   frequency: string;
   timeZone: string;
@@ -298,6 +304,8 @@ export type ProfileResponse = {
   highestEducation?: string;
   yearsExperience?: number;
   tutorMediums?: string[];
+  academicDetails?: string;
+  certificatesAndQualifications?: string[];
 } & Id &
   Timestamp;
 

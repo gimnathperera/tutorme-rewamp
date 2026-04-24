@@ -46,7 +46,7 @@ const products: ProductType[] = [
 
 const footer = () => {
   return (
-    <div className="bg-black" id="first-section">
+    <div className="bg-navyblue" id="first-section">
       <div className="mx-auto max-w-2xl pt-4 pb-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <div className="mt-4 mb-5 grid grid-cols-2 gap-y-8 gap-x-6 text-center sm:grid-cols-2 sm:text-left lg:grid-cols-12 lg:gap-x-16 xl:gap-x-8">
           {/* COLUMN-1 */}
@@ -101,7 +101,10 @@ const footer = () => {
           {/* COLUMN-2/3 */}
 
           {products.map((product) => (
-            <div key={product.id} className="group relative col-span-1 sm:col-span-1 lg:col-span-2">
+            <div
+              key={product.id}
+              className="group relative col-span-1 sm:col-span-1 lg:col-span-2"
+            >
               <p className="text-white text-sm font-bold uppercase tracking-widest mb-2">
                 {product.section}
               </p>
@@ -131,11 +134,13 @@ const footer = () => {
               </p>
             </div>
             <div className="flex justify-center md:justify-end">
-              <Link href="/">
-                <p className="text-offwhite text-sm pr-6">Privacy policy</p>
+              <Link href="/privacy-policy">
+                <p className="text-offwhite text-sm pr-6 hover:text-gray-300 transition">
+                  Privacy policy
+                </p>
               </Link>
-              <Link href="/">
-                <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer">
+              <Link href="/terms-and-conditions">
+                <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer hover:text-gray-300 transition">
                   Terms &amp; conditions
                 </p>
               </Link>

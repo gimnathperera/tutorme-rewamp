@@ -17,6 +17,7 @@ const envSchema = z
       .enum(["development", "test", "production"])
       .default("development"),
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().min(10).max(15),
+    NEXT_PUBLIC_ADMIN_PORTAL_URL: z.string().url(),
   })
   .strict();
 
@@ -38,6 +39,9 @@ const ENV_VARIABLES = {
 
   NEXT_PUBLIC_WHATSAPP_NUMBER:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "1234567890",
+
+  NEXT_PUBLIC_ADMIN_PORTAL_URL:
+    process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL || "http://localhost:3001",
 };
 
 /**
@@ -62,5 +66,6 @@ export const env = {
 
   urls: {
     apiUrl: ENV.NEXT_PUBLIC_API_URL,
+    adminPortalUrl: ENV.NEXT_PUBLIC_ADMIN_PORTAL_URL,
   },
 };

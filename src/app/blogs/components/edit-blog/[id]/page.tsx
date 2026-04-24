@@ -98,6 +98,19 @@ export default function EditBlogPage() {
     return txt.value;
   };
 
+  const getEditableStatus = (
+    status?: string,
+  ): UpdateArticleSchema["status"] => {
+    switch (status) {
+      case "pending":
+      case "approved":
+      case "rejected":
+        return status;
+      default:
+        return "pending";
+    }
+  };
+
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
@@ -131,7 +144,7 @@ export default function EditBlogPage() {
       reset({
         title: blog.title,
         image: blog.image,
-        status: blog.status || "pending",
+        status: getEditableStatus(blog.status),
         relatedArticles: relatedIds,
         tags: tagIds,
         content: blog.content.map((c) => {
@@ -224,7 +237,11 @@ export default function EditBlogPage() {
         }
         return;
       }
-      toast.success(wasRejected ? "Blog resubmitted for review." : "Blog updated successfully!");
+      toast.success(
+        wasRejected
+          ? "Blog resubmitted for review."
+          : "Blog updated successfully!",
+      );
       router.push(`/blogs/${blogId}`);
     } catch (err) {
       console.error(err);

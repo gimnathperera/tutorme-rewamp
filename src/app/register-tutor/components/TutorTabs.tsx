@@ -8,6 +8,7 @@ import LogoImage from "../../../../public/images/findTutor/register.png";
 import Image from "next/image";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import toast from "react-hot-toast";
 import {
   Card,
   CardContent,
@@ -31,7 +32,6 @@ import TermsAndSubmit from "./TermsAndSubmit";
 import {
   FindMyTutorForm,
   fullSchema,
-  step1Schema,
   step2Schema,
   step3Schema,
 } from "../schema";
@@ -67,6 +67,8 @@ export function TutorTabs() {
     defaultValues: {
       fullName: "",
       email: "",
+      password: "",
+      confirmPassword: "",
       contactNumber: "",
       dateOfBirth: "",
       age: 0,
@@ -74,7 +76,7 @@ export function TutorTabs() {
       nationality: "",
       race: "",
 
-      tutoringLevels: [],
+      classType: [],
       preferredLocations: [],
       tutorType: [],
       tutorMediums: [],
@@ -88,7 +90,7 @@ export function TutorTabs() {
       sellingPoints: "",
       academicDetails: "",
 
-      certificatesAndQualifications: [],
+      certificatesAndQualifications: [{ type: "", url: "" }],
       agreeTerms: false,
       agreeAssignmentInfo: false,
     },
@@ -98,29 +100,64 @@ export function TutorTabs() {
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
-  const nextStep = async () => {
-    let schema;
-    if (tab === "personalInfo") schema = step1Schema;
-    if (tab === "qualifications") schema = step2Schema;
-    if (tab === "teachingProfile") schema = step3Schema;
+  const changeStep = (nextTab: TabKey) => {
+    setTab(nextTab);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-    if (schema) {
-      const valid = await trigger(Object.keys(schema.shape) as any);
+  const nextStep = async () => {
+    let fieldsToValidate: string[] | undefined;
+
+    if (tab === "personalInfo") {
+      // step1Schema uses .superRefine, so we list fields explicitly
+      fieldsToValidate = [
+        "fullName",
+        "email",
+        "password",
+        "confirmPassword",
+        "contactNumber",
+        "dateOfBirth",
+        "gender",
+        "age",
+        "nationality",
+        "race",
+      ];
+    } else if (tab === "qualifications") {
+      fieldsToValidate = Object.keys(step2Schema.shape);
+    } else if (tab === "teachingProfile") {
+      fieldsToValidate = Object.keys(step3Schema.shape);
+    }
+
+    if (fieldsToValidate) {
+      const valid = await trigger(fieldsToValidate as any);
       if (!valid) return;
     }
 
-    setTab(TAB_ORDER[currentIndex + 1]);
+    changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
   const prevStep = () => {
-    setTab(TAB_ORDER[currentIndex - 1]);
+    changeStep(TAB_ORDER[currentIndex - 1]);
   };
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
-      const result = await addTutorRequest(data);
+      // Strip confirmPassword — it is front-end only and must not reach the API
+      const { confirmPassword: _omit, ...payload } = data;
+      const result = await addTutorRequest(payload);
       const error = getErrorInApiResult(result);
       if (error) {
+        // Show a prominent toast for suspended emails, generic dialog for anything else
+        if (
+          typeof error === "string" &&
+          error.toLowerCase().includes("suspended")
+        ) {
+          toast.error(
+            "Your email has been suspended. Please contact admin to resolve this.",
+            { duration: 8000, style: { maxWidth: 420 } },
+          );
+          return;
+        }
         setSubmissionResult(error);
         return;
       }
@@ -145,6 +182,7 @@ export function TutorTabs() {
     isLoading ||
     !certificates ||
     certificates.length === 0 ||
+    !certificates.some((c: { type: string; url: string }) => c.type && c.url) ||
     !agreeTerms ||
     !agreeAssignmentInfo;
 
@@ -163,13 +201,19 @@ export function TutorTabs() {
             <TabsContent value="personalInfo">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Personal Information</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Personal Information
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <PersonalInfo />
                 </CardContent>
                 <CardFooter className="flex justify-end">
-                  <Button type="button" onClick={nextStep}>
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -179,7 +223,9 @@ export function TutorTabs() {
             <TabsContent value="qualifications">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Qualifications</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Qualifications
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <AcademicExperience />
@@ -188,7 +234,11 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep}>
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -198,7 +248,9 @@ export function TutorTabs() {
             <TabsContent value="teachingProfile">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Teaching Profile</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Teaching Profile
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TutorProfile />
@@ -207,7 +259,11 @@ export function TutorTabs() {
                   <Button type="button" variant="outline" onClick={prevStep}>
                     Previous
                   </Button>
-                  <Button type="button" onClick={nextStep}>
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="bg-blue-600 text-white"
+                  >
                     Next
                   </Button>
                 </CardFooter>
@@ -217,7 +273,9 @@ export function TutorTabs() {
             <TabsContent value="verification">
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base font-medium">Verification & Agreement</CardTitle>
+                  <CardTitle className="text-base font-medium">
+                    Verification & Agreement
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <TermsAndSubmit />
@@ -228,7 +286,7 @@ export function TutorTabs() {
                   </Button>
                   <Button
                     type="submit"
-                    className="ml-auto"
+                    className="ml-auto bg-blue-600 text-white"
                     disabled={isSubmitDisabled}
                   >
                     Submit {isLoading ? <Spinner /> : ""}

@@ -39,31 +39,40 @@ export type UpdateProfileRequest = {
   id: string;
   payload: {
     name?: string;
+    fullName?: string;
     email?: string;
     grade?: string;
     subjects?: string[];
     country?: string;
     phoneNumber?: string;
+    contactNumber?: string;
     city?: string;
     state?: string;
     region?: string;
     zip?: string;
     address?: string;
     birthday?: string | Date;
-    tutorType?: string;
+    dateOfBirth?: string | Date;
+    age?: number;
+    tutorType?: string | string[];
     gender?: string;
+    nationality?: string;
+    race?: string;
     duration?: string;
     frequency?: string;
     timeZone?: string;
     language?: string;
     availability?: string;
     rate?: string;
+    grades?: string[];
     tutoringLevels?: string[];
     preferredLocations?: string[];
     tutorTypes?: string[];
     highestEducation?: string;
     yearsExperience?: number;
     tutorMediums?: string[];
+    academicDetails?: string;
+    certificatesAndQualifications?: string[];
     avatar?: string;
   };
 };
@@ -126,13 +135,13 @@ export type UpdateBlogRequest = {
   faqs?: Array<{ _id?: string; question: string; answer: string }>;
   tags?: string[];
   relatedArticles?: string[];
-  status?: "pending" | "published" | "draft";
+  status?: "pending" | "approved" | "rejected";
 };
 
 export type FetchBlogsRequest = {
   blogId?: string;
   id?: string;
-  status?: "pending" | "published" | "draft";
+  status?: "pending" | "approved" | "rejected";
   authorName?: string;
   title?: string;
   page?: number;
@@ -179,6 +188,7 @@ export type FetchTuitionAssignmentsRequest = {
 export type FindMyTutorRequest = {
   fullName: string;
   email: string;
+  password: string;
   contactNumber: string;
   dateOfBirth: string;
   age: number;
@@ -186,7 +196,7 @@ export type FindMyTutorRequest = {
   nationality: string;
   race: string;
 
-  tutoringLevels: string[];
+  classType: string[];
   preferredLocations: string[];
 
   tutorType: string[];
@@ -201,7 +211,7 @@ export type FindMyTutorRequest = {
   sellingPoints: string;
   academicDetails: string;
 
-  certificatesAndQualifications: string[];
+  certificatesAndQualifications: { type: string; url: string }[];
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
 };

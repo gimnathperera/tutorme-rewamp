@@ -111,7 +111,9 @@ const AddBlog = () => {
         }
         return;
       }
-      toast.success("Your blog has been submitted and is pending admin approval.");
+      toast.success(
+        "Your blog has been submitted and is pending admin approval.",
+      );
       onRegisterSuccess();
     } catch (error) {
       console.error("Unexpected error during blog creation:", error);
@@ -746,7 +748,6 @@ const AddBlog = () => {
                 </div>
               ))}
             </div>
-
           </div>
         ) : (
           <>

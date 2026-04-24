@@ -6,10 +6,7 @@ export const contactUsPageSchema = z.object({
     .min(1, "Full Name is required")
     .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
 
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Invalid email address"),
+  email: z.string().min(1, "Email is required").email("Invalid email address"),
 
   contactNumber: z
     .string()

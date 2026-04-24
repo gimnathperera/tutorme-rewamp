@@ -61,7 +61,10 @@ const useAuthModalState = (): LogicReturnType => {
       case FormType.Login:
         return (
           <FormLogin
-            onRegisterClick={() => { handleCloseAuthModal(); router.push("/request-for-tutors/create-request"); }}
+            onRegisterClick={() => {
+              handleCloseAuthModal();
+              router.push("/register-tutor");
+            }}
             onForgotPasswordClick={() =>
               handleOnChangeForm(FormType.ForgotPassword)
             }
@@ -84,7 +87,10 @@ const useAuthModalState = (): LogicReturnType => {
       default:
         return (
           <FormLogin
-            onRegisterClick={() => { handleCloseAuthModal(); router.push("/request-for-tutors/create-request"); }}
+            onRegisterClick={() => {
+              handleCloseAuthModal();
+              router.push("/request-for-tutors/create-request");
+            }}
             onForgotPasswordClick={() =>
               handleOnChangeForm(FormType.ForgotPassword)
             }

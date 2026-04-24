@@ -62,13 +62,19 @@ export const BlogsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Blogs"],
     }),
 
-    updateBlogStatus: build.mutation<Blogs, { id: string; status: "approved" | "rejected" | "pending" }>({
+    updateBlogStatus: build.mutation<
+      Blogs,
+      { id: string; status: "approved" | "rejected" | "pending" }
+    >({
       query: ({ id, status }) => ({
         url: `${Endpoints.Blogs}/${id}/status`,
         method: "PATCH",
         body: { status },
       }),
-      invalidatesTags: (result, error, { id }) => [{ type: "Blogs", id }, "Blogs"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Blogs", id },
+        "Blogs",
+      ],
     }),
   }),
   overrideExisting: false,

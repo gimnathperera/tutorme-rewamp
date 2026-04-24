@@ -7,7 +7,7 @@ export const TutorRequestApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     addTutorRequest: build.mutation<FindMyTutorResponse, FindMyTutorRequest>({
       query: (data) => ({
-        url: Endpoints.FindATutor,
+        url: Endpoints.RegisterTutor,
         method: "POST",
         body: data,
       }),

@@ -1,9 +1,6 @@
-import type { Metadata } from "next";
+import { createMetadata, seoPages } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Grades & Subjects | Tuition Lanka",
-  description: "Browse grades and explore the subjects offered by Tuition Lanka.",
-};
+export const metadata = createMetadata(seoPages.gradesAndSubjects);
 
 export default function GradesAndSubjectsLayout({
   children,

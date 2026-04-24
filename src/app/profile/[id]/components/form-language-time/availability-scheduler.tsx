@@ -4,12 +4,11 @@ import { useMemo, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { getNestedError } from "@/utils/form";
 import { Clock3 } from "lucide-react";
-
-type ScheduleSlot = {
-  day: string;
-  start: string;
-  end: string;
-};
+import {
+  parseAvailabilityValue,
+  ScheduleSlot,
+  serializeAvailabilitySlots,
+} from "./availability";
 
 const DAYS = [
   { label: "Mon", value: "Monday" },
@@ -27,37 +26,10 @@ const getTimeLabel = (value: string) =>
     minute: "2-digit",
   });
 
-const serializeSlots = (slots: ScheduleSlot[]) =>
-  JSON.stringify(
-    [...slots].sort((a, b) => {
-      const dayDiff =
-        DAYS.findIndex(({ value }) => value === a.day) -
-        DAYS.findIndex(({ value }) => value === b.day);
-
-      if (dayDiff !== 0) return dayDiff;
-
-      return a.start.localeCompare(b.start);
-    }),
-  );
-
-const parseLegacyAvailability = (value: string): ScheduleSlot[] => {
-  const trimmedValue = value.trim();
-  if (!trimmedValue) return [];
-
-  try {
-    const parsed = JSON.parse(trimmedValue);
-    if (!Array.isArray(parsed)) return [];
-
-    return parsed.filter(
-      (slot): slot is ScheduleSlot =>
-        typeof slot?.day === "string" &&
-        typeof slot?.start === "string" &&
-        typeof slot?.end === "string",
-    );
-  } catch {
-    return [];
-  }
-};
+const slotsOverlap = (
+  first: Pick<ScheduleSlot, "start" | "end">,
+  second: Pick<ScheduleSlot, "start" | "end">,
+) => first.start < second.end && first.end > second.start;
 
 const AvailabilityScheduler = () => {
   const { control, formState } = useFormContext();
@@ -82,9 +54,11 @@ const AvailabilityScheduler = () => {
       name="availability"
       control={control}
       render={({ field }) => {
-        const slots = parseLegacyAvailability(field.value ?? "");
+        const slots = parseAvailabilityValue(field.value);
         const hasLegacyText =
-          !!field.value && slots.length === 0 && String(field.value).trim() !== "";
+          typeof field.value === "string" &&
+          field.value.trim() !== "" &&
+          slots.length === 0;
 
         const scheduleByDay = groupedSlots.map((day) => ({
           ...day,
@@ -120,8 +94,21 @@ const AvailabilityScheduler = () => {
             return;
           }
 
+          const overlappingSlot = slots.find(
+            (slot) => slot.day === nextSlot.day && slotsOverlap(slot, nextSlot),
+          );
+
+          if (overlappingSlot) {
+            setLocalError(
+              `This overlaps with an existing slot on ${overlappingSlot.day}: ${getTimeLabel(
+                overlappingSlot.start,
+              )} - ${getTimeLabel(overlappingSlot.end)}.`,
+            );
+            return;
+          }
+
           setLocalError("");
-          field.onChange(serializeSlots([...slots, nextSlot]));
+          field.onChange(serializeAvailabilitySlots([...slots, nextSlot]));
         };
 
         const removeSlot = (slotToRemove: ScheduleSlot) => {
@@ -134,13 +121,15 @@ const AvailabilityScheduler = () => {
               ),
           );
 
-          field.onChange(nextSlots.length > 0 ? serializeSlots(nextSlots) : "");
+          field.onChange(
+            nextSlots.length > 0 ? serializeAvailabilitySlots(nextSlots) : "",
+          );
         };
 
         return (
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-700">
-              Weekly Availability
+              Weekly Availability<span className="text-red-500"> *</span>
             </label>
 
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
@@ -204,6 +193,12 @@ const AvailabilityScheduler = () => {
                 </div>
               </div>
 
+              {(localError || error) && (
+                <span className="mt-3 block text-xs text-red-500">
+                  {localError || error}
+                </span>
+              )}
+
               <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
                 {scheduleByDay.map((day) => (
                   <div
@@ -246,12 +241,6 @@ const AvailabilityScheduler = () => {
                   Existing availability is stored as plain text. Add or remove a
                   slot to replace it with the new schedule format.
                 </p>
-              )}
-
-              {(localError || error) && (
-                <span className="mt-3 text-xs text-red-500">
-                  {localError || error}
-                </span>
               )}
             </div>
 

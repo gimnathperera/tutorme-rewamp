@@ -1,18 +1,18 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { FormProvider } from "react-hook-form";
-import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { LanguageOptionsSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
-import { isEmpty } from "lodash-es";
 import AvailabilityScheduler from "./availability-scheduler";
+import { parseAvailabilityValue } from "./availability";
 
 type Props = {
   languageOptions: Option[];
   timeZoneOptions: Option[];
+  rateOptions: Option[];
   form: ReturnType<any>;
   isSubmitting: boolean;
   onFormSubmit: (data: LanguageOptionsSchema) => void;
@@ -21,12 +21,39 @@ type Props = {
 const FormLanguageTime: FC<Props> = ({
   languageOptions,
   timeZoneOptions,
+  rateOptions,
   form,
   onFormSubmit,
   isSubmitting,
 }) => {
-  const { isDirty, errors } = form.formState;
-  const isButtonDisabled = !isDirty || isSubmitting || !isEmpty(errors);
+  const { isDirty, isValid } = form.formState;
+  const [currentRate, language, timeZone, availability] = form.watch([
+    "rate",
+    "language",
+    "timeZone",
+    "availability",
+  ]);
+  const hasAvailabilitySlots = parseAvailabilityValue(availability).length > 0;
+  const hasAllRequiredFields =
+    typeof language === "string" &&
+    language.trim().length > 0 &&
+    typeof timeZone === "string" &&
+    timeZone.trim().length > 0 &&
+    typeof currentRate === "string" &&
+    currentRate.trim().length > 0 &&
+    hasAvailabilitySlots;
+  const isButtonDisabled =
+    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
+  const normalizedRateOptions =
+    currentRate && !rateOptions.some((option) => option.value === currentRate)
+      ? [
+          {
+            label: `Current selection: ${currentRate}`,
+            value: currentRate,
+          },
+          ...rateOptions,
+        ]
+      : rateOptions;
 
   const onSubmit = (data: LanguageOptionsSchema) => {
     onFormSubmit(data);
@@ -35,36 +62,37 @@ const FormLanguageTime: FC<Props> = ({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Languages & Availability
+        Languages, Availability & Rate
       </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Set the communication language and working time zone used to coordinate
-        lessons.
+        Set the communication language, working time zone, weekly availability,
+        and hourly rate used to coordinate lessons.
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
-            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
+            <div className="my-4">
+              <AvailabilityScheduler />
+            </div>
+            <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 mb-4">
               <InputSelect
-                label="Primary Language"
+                label="Primary Language *"
                 name="language"
                 options={languageOptions}
               />
               <InputSelect
-                label="Operating Time Zone"
+                label="Operating Time Zone *"
                 name="timeZone"
                 options={timeZoneOptions}
               />
-              <InputText
-                label="Rate"
+              <InputSelect
+                label="Per Hour Charge *"
                 name="rate"
-                type="text"
-                placeholder="e.g. $95/Hour"
+                options={normalizedRateOptions}
+                helperText="Choose the hourly charge range."
               />
             </div>
-            <div className="mt-4">
-              <AvailabilityScheduler />
-            </div>
+
             <div className="col-span-6 sm:col-full">
               <SubmitButton
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"

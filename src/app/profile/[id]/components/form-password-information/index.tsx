@@ -67,31 +67,34 @@ const FormPasswordInfo: FC = () => {
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+      <h3 className="mb-2 text-lg font-semibold sm:text-xl">
         Account Security
       </h3>
+      <p className="mb-5 text-sm text-gray-500">
+        Change your password using your current password for verification.
+      </p>
 
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
+          <div className="grid max-w-xl grid-cols-1 gap-4 sm:gap-5">
             <InputPassword
-              label="Current password"
+              label="Current password *"
               name="currentPassword"
-              placeholder="*******"
+              placeholder="Enter current password"
             />
             <InputPassword
-              label="New password"
+              label="New password *"
               name="newPassword"
-              placeholder="*******"
+              placeholder="Enter new password"
             />
             <InputPassword
-              label="Confirm password"
+              label="Confirm password *"
               name="confirmPassword"
-              placeholder="*******"
+              placeholder="Re-enter new password"
             />
           </div>
 
-          <div className="col-span-6 sm:col-full">
+          <div className="max-w-xl">
             <SubmitButton
               className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
               type="submit"

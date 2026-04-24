@@ -1,3 +1,11 @@
+import {
+  PASSWORD_LETTER_NUMBER_MSG,
+  PASSWORD_LETTER_NUMBER_REGEX,
+  PASSWORD_MAX,
+  PASSWORD_MIN,
+  PASSWORD_TOO_LONG,
+  PASSWORD_TOO_SHORT,
+} from "@/configs/password";
 import { z } from "zod";
 
 const normalizeText = (value: unknown) =>
@@ -6,7 +14,8 @@ const normalizeText = (value: unknown) =>
 const trimOnly = (value: unknown) =>
   typeof value === "string" ? value.trim() : value;
 
-export const step1Schema = z.object({
+/** Plain ZodObject used for .merge() in fullSchema */
+const step1BaseSchema = z.object({
   fullName: z.preprocess(
     normalizeText,
     z
@@ -22,6 +31,18 @@ export const step1Schema = z.object({
       .min(1, "Email is required")
       .email("Please enter a valid email address"),
   ),
+
+  password: z
+    .string()
+    .trim()
+    .nonempty("Password is required.")
+    .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
+    .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
+    .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+      message: PASSWORD_LETTER_NUMBER_MSG,
+    }),
+
+  confirmPassword: z.string().trim().nonempty("Please confirm your password."),
 
   contactNumber: z.preprocess(
     trimOnly,
@@ -61,8 +82,44 @@ export const step1Schema = z.object({
     ),
 });
 
+/** Cross-field refinement shared between step1Schema and fullSchema */
+const passwordMatchRefinement = (
+  password: string,
+  confirmPassword: string,
+  ctx: z.RefinementCtx,
+) => {
+  if (confirmPassword && password !== confirmPassword) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Passwords do not match",
+      path: ["confirmPassword"],
+    });
+  }
+};
+
+/** Step-1 schema with password-match refinement (ZodEffects — cannot .merge) */
+export const step1Schema = step1BaseSchema.superRefine(
+  ({ password, confirmPassword }, ctx) =>
+    passwordMatchRefinement(password, confirmPassword, ctx),
+);
+
 export const step2Schema = z.object({
-  tutoringLevels: z.array(z.string()).min(1, "Tutoring Levels are required"),
+  classType: z
+    .array(
+      z
+        .string()
+        .refine(
+          (v) =>
+            [
+              "Online - Individual",
+              "Online - Group",
+              "Physical - Individual",
+              "Physical - Group",
+            ].includes(v),
+          { message: "Invalid class type selected" },
+        ),
+    )
+    .min(1, "Class Type is required"),
 
   preferredLocations: z
     .array(z.string())
@@ -141,17 +198,25 @@ export const step3Schema = z.object({
 
 export const step4Schema = z.object({
   certificatesAndQualifications: z
-    .array(z.string())
-    .min(1, "Certificates and Qualifications are required"),
+    .array(
+      z.object({
+        type: z.string().min(1, "Document type is required"),
+        url: z.string().min(1, "Please upload a file"),
+      }),
+    )
+    .min(1, "At least one document is required"),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()
     .refine((v) => v, "You must confirm assignment info"),
 });
 
-export const fullSchema = step1Schema
+export const fullSchema = step1BaseSchema
   .merge(step2Schema)
   .merge(step3Schema)
-  .merge(step4Schema);
+  .merge(step4Schema)
+  .superRefine(({ password, confirmPassword }, ctx) =>
+    passwordMatchRefinement(password, confirmPassword, ctx),
+  );
 
 export type FindMyTutorForm = z.infer<typeof fullSchema>;

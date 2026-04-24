@@ -27,6 +27,14 @@ export const educationInfoSchema = z.object({
   tutorMediums: requiredMultiSelect("Tutor Mediums are required"),
   grades: requiredMultiSelect("Grades are required"),
   subjects: requiredMultiSelect("Subjects are required"),
+  academicDetails: z
+    .string()
+    .trim()
+    .min(1, "Academic Details are required")
+    .max(500, "Academic Details cannot exceed 500 characters"),
+  certificatesAndQualifications: z
+    .array(z.string())
+    .min(1, "Certificates are required"),
 });
 
 export const initialEducationInfoFormValues = {
@@ -38,6 +46,8 @@ export const initialEducationInfoFormValues = {
   tutorMediums: [] as string[],
   grades: [] as string[],
   subjects: [] as string[],
+  academicDetails: "",
+  certificatesAndQualifications: [] as string[],
 };
 
 export type EducationInfoSchema = z.infer<typeof educationInfoSchema>;

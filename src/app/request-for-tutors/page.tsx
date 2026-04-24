@@ -10,7 +10,6 @@ const RequestForTutorsPage = () => {
       {/* <RequestTutorTabs /> */}
       <WhatsAppButton />
     </div>
-    
   );
 };
 
