@@ -3,7 +3,7 @@
 import InputText from "@/components/shared/input-text";
 import { FormProvider } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
-import { FC, useEffect } from "react";
+import { FC, KeyboardEvent, useEffect } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import {
@@ -11,6 +11,11 @@ import {
   NATIONALITY_OPTIONS,
   RACE_OPTIONS,
 } from "@/configs/register-tutor";
+import {
+  collapseTextSpaces,
+  removeWhitespace,
+  stripLeadingSpaces,
+} from "@/utils/form-normalizers";
 
 type Props = {
   form: ReturnType<any>;
@@ -18,9 +23,11 @@ type Props = {
   isSubmitting: boolean;
 };
 
-const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
-const collapseSpaces = (value: string) =>
-  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
+const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
+  if (/\s/.test(event.key)) {
+    event.preventDefault();
+  }
+};
 
 const toOptions = (options: Array<{ value: string; text: string }>) =>
   options.map(({ value, text }) => ({ value, label: text }));
@@ -118,10 +125,13 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 type="text"
                 onChange={(e) => {
                   const cleaned = stripLeadingSpaces(e.target.value);
+                  if (cleaned !== e.target.value) {
+                    e.target.value = cleaned;
+                  }
                   form.setValue("name", cleaned, { shouldValidate: true });
                 }}
                 onBlur={(e) => {
-                  form.setValue("name", collapseSpaces(e.target.value), {
+                  form.setValue("name", collapseTextSpaces(e.target.value), {
                     shouldValidate: true,
                   });
                 }}
@@ -142,6 +152,21 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 type="tel"
                 inputMode="numeric"
                 maxLength={10}
+                onKeyDown={preventWhitespaceKey}
+                onChange={(e) => {
+                  const noSpaces = removeWhitespace(e.target.value);
+                  if (noSpaces !== e.target.value) {
+                    e.target.value = noSpaces;
+                  }
+                  form.setValue("phoneNumber", noSpaces, {
+                    shouldValidate: true,
+                  });
+                }}
+                onBlur={(e) => {
+                  form.setValue("phoneNumber", removeWhitespace(e.target.value), {
+                    shouldValidate: true,
+                  });
+                }}
               />
               <InputText
                 label="Date of Birth *"

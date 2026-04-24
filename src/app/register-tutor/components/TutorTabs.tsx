@@ -51,6 +51,7 @@ const TAB_ORDER: TabKey[] = [
   "teachingProfile",
   "verification",
 ];
+const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 
 export function TutorTabs() {
   const router = useRouter();
@@ -212,7 +213,7 @@ export function TutorTabs() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="bg-blue-600 text-white"
+                    className={primaryActionButtonClassName}
                   >
                     Next
                   </Button>
@@ -237,7 +238,7 @@ export function TutorTabs() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="bg-blue-600 text-white"
+                    className={primaryActionButtonClassName}
                   >
                     Next
                   </Button>
@@ -262,7 +263,7 @@ export function TutorTabs() {
                   <Button
                     type="button"
                     onClick={nextStep}
-                    className="bg-blue-600 text-white"
+                    className={primaryActionButtonClassName}
                   >
                     Next
                   </Button>
@@ -286,7 +287,7 @@ export function TutorTabs() {
                   </Button>
                   <Button
                     type="submit"
-                    className="ml-auto bg-blue-600 text-white"
+                    className={`ml-auto ${primaryActionButtonClassName}`}
                     disabled={isSubmitDisabled}
                   >
                     Submit {isLoading ? <Spinner /> : ""}

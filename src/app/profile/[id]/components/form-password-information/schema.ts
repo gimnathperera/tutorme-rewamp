@@ -8,22 +8,30 @@ import {
   PASSWORD_LETTER_NUMBER_MSG,
   CURRENT_PASSWORD_REQUIRED,
 } from "../../../../../configs/password";
+import { removeWhitespace } from "@/utils/form-normalizers";
 
 export const passwordInfoSchema = z
   .object({
-    currentPassword: z.string().min(1, { message: CURRENT_PASSWORD_REQUIRED }),
+    currentPassword: z.preprocess(
+      removeWhitespace,
+      z.string().min(1, { message: CURRENT_PASSWORD_REQUIRED }),
+    ),
 
-    newPassword: z
-      .string()
-      .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
-      .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
-      .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-        message: PASSWORD_LETTER_NUMBER_MSG,
-      }),
+    newPassword: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
+        .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
+        .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+          message: PASSWORD_LETTER_NUMBER_MSG,
+        }),
+    ),
 
-    confirmPassword: z
-      .string()
-      .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT }),
+    confirmPassword: z.preprocess(
+      removeWhitespace,
+      z.string().min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT }),
+    ),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "Confirm Password must match New Password",
