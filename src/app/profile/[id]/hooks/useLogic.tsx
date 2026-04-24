@@ -432,7 +432,8 @@ const useLogic = (): LogicReturnType => {
       : data.name;
 
     if (updatedProfile) {
-      hydrateProfileForms(updatedProfile);
+      setUserRawData(updatedProfile);
+      prePopulateGeneralForm(updatedProfile);
     } else {
       generalInfoForm.reset({
         ...data,
