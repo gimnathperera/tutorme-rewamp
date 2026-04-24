@@ -25,7 +25,7 @@ const products: ProductType[] = [
     link: [
       { label: "Blog", url: "/blogs" },
       { label: "Testimonials", url: "/#testimonials-section" },
-      { label: "FAQs", url: "/#faq-section" },
+      { label: "FAQs", url: "/faq" },
       { label: "About Us", url: "/#aboutus-section" },
     ],
   },
