@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { Option } from "@/types/shared-types";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { getErrorInApiResult } from "@/utils/api";
 import toast from "react-hot-toast";
 import { Paper } from "@/types/response-types";
@@ -214,10 +214,20 @@ const useLogic = (): LogicReturnType => {
       value: grade.id.toString(),
     })) || [];
 
-  const subjectOptions = useMemo(
-    () => getPaperSubjectOptions(papers),
-    [papers],
-  );
+  const subjectOptions = useMemo(() => {
+    if (selectedGrade) {
+      const selectedGradeData = gradesRowData?.results.find(
+        (g) => g.id.toString() === selectedGrade,
+      );
+      if (selectedGradeData?.subjects?.length) {
+        return selectedGradeData.subjects.map((s) => ({
+          label: s.title,
+          value: s.id,
+        }));
+      }
+    }
+    return getPaperSubjectOptions(papers);
+  }, [selectedGrade, gradesRowData, papers]);
   const mediumOptions = useMemo(() => getPaperMediumOptions(papers), [papers]);
 
   useEffect(() => {
@@ -234,6 +244,18 @@ const useLogic = (): LogicReturnType => {
       });
     }
   }, [mediumOptions, selectedMedium, testPaperSearchForm]);
+
+  const isFirstGradeMount = useRef(true);
+  useEffect(() => {
+    if (isFirstGradeMount.current) {
+      isFirstGradeMount.current = false;
+      return;
+    }
+    testPaperSearchForm.setValue("subject", "", {
+      shouldValidate: false,
+      shouldDirty: true,
+    });
+  }, [selectedGrade]);
 
   const normalizedSearchTerm = normalizeFilterValue(searchTerm);
   const normalizedSelectedGrade = normalizeFilterValue(selectedGrade);

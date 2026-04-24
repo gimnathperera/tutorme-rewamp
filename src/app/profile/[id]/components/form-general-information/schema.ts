@@ -1,10 +1,8 @@
 import { z } from "zod";
-
-const normalizeText = (value: unknown) =>
-  typeof value === "string" ? value.trim().replace(/\s+/g, " ") : value;
-
-const trimOnly = (value: unknown) =>
-  typeof value === "string" ? value.trim() : value;
+import {
+  normalizeTextSpaces,
+  removeWhitespace,
+} from "@/utils/form-normalizers";
 
 const parseBirthday = (birthday: string | Date) => {
   if (birthday instanceof Date) {
@@ -41,15 +39,21 @@ const calculateAge = (birthday: string | Date) => {
 
 export const generalInfoSchema = z.object({
   name: z.preprocess(
-    normalizeText,
+    normalizeTextSpaces,
     z
       .string()
       .min(1, "Full Name is required")
-      .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
+      .regex(
+        /^[A-Za-z][A-Za-z\s'.-]*$/,
+        "Full Name can contain letters, spaces, apostrophes, periods, and hyphens only",
+      ),
   ),
-  email: z.preprocess(trimOnly, z.string().email("Invalid email address")),
+  email: z.preprocess(
+    removeWhitespace,
+    z.string().email("Invalid email address"),
+  ),
   phoneNumber: z.preprocess(
-    trimOnly,
+    removeWhitespace,
     z
       .string()
       .min(1, "Contact Number is required")

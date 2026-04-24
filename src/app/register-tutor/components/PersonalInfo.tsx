@@ -5,6 +5,11 @@ import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Icon from "@/components/shared/icon";
+import {
+  collapseTextSpaces,
+  removeWhitespace,
+  stripLeadingSpaces,
+} from "@/utils/form-normalizers";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-2";
@@ -18,6 +23,12 @@ const selectBorder = (hasError: boolean) =>
 const Hint = ({ children }: { children: React.ReactNode }) => (
   <p className="text-xs text-muted-foreground min-h-[1.25rem]">{children}</p>
 );
+
+const preventWhitespaceKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  if (/\s/.test(event.key)) {
+    event.preventDefault();
+  }
+};
 
 const PersonalInfo = () => {
   const {
@@ -69,7 +80,20 @@ const PersonalInfo = () => {
         </Label>
         <Input
           id="fullName"
-          {...register("fullName")}
+          {...register("fullName", {
+            onChange: (e) => {
+              const cleaned = stripLeadingSpaces(e.target.value);
+              if (cleaned !== e.target.value) {
+                e.target.value = cleaned;
+                setValue("fullName", cleaned, { shouldValidate: true });
+              }
+            },
+            onBlur: (e) => {
+              setValue("fullName", collapseTextSpaces(e.target.value), {
+                shouldValidate: true,
+              });
+            },
+          })}
           placeholder="e.g. Nimal Perera"
           autoComplete="name"
           className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
@@ -91,7 +115,21 @@ const PersonalInfo = () => {
         <Input
           id="email"
           type="email"
-          {...register("email")}
+          onKeyDown={preventWhitespaceKey}
+          {...register("email", {
+            onChange: (e) => {
+              const noSpaces = removeWhitespace(e.target.value);
+              if (noSpaces !== e.target.value) {
+                e.target.value = noSpaces;
+                setValue("email", noSpaces, { shouldValidate: true });
+              }
+            },
+            onBlur: (e) => {
+              setValue("email", removeWhitespace(e.target.value), {
+                shouldValidate: true,
+              });
+            },
+          })}
           placeholder="e.g. nimal@example.com"
           autoComplete="email"
           className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
@@ -114,8 +152,14 @@ const PersonalInfo = () => {
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
+            onKeyDown={preventWhitespaceKey}
             {...register("password", {
-              onChange: () => {
+              onChange: (e) => {
+                const noSpaces = removeWhitespace(e.target.value);
+                if (noSpaces !== e.target.value) {
+                  e.target.value = noSpaces;
+                  setValue("password", noSpaces, { shouldValidate: true });
+                }
                 trigger("password");
                 // Re-validate confirmPassword so mismatch clears when password changes
                 trigger("confirmPassword");
@@ -151,8 +195,18 @@ const PersonalInfo = () => {
           <Input
             id="confirmPassword"
             type={showConfirm ? "text" : "password"}
+            onKeyDown={preventWhitespaceKey}
             {...register("confirmPassword", {
-              onChange: () => trigger("confirmPassword"),
+              onChange: (e) => {
+                const noSpaces = removeWhitespace(e.target.value);
+                if (noSpaces !== e.target.value) {
+                  e.target.value = noSpaces;
+                  setValue("confirmPassword", noSpaces, {
+                    shouldValidate: true,
+                  });
+                }
+                trigger("confirmPassword");
+              },
             })}
             autoComplete="new-password"
             className={`${inputClass} pr-10 ${errors.confirmPassword ? "border-red-500" : "border-gray-300"}`}
@@ -185,7 +239,23 @@ const PersonalInfo = () => {
           type="tel"
           inputMode="numeric"
           maxLength={10}
-          {...register("contactNumber")}
+          onKeyDown={preventWhitespaceKey}
+          {...register("contactNumber", {
+            onChange: (e) => {
+              const noSpaces = removeWhitespace(e.target.value);
+              if (noSpaces !== e.target.value) {
+                e.target.value = noSpaces;
+                setValue("contactNumber", noSpaces, {
+                  shouldValidate: true,
+                });
+              }
+            },
+            onBlur: (e) => {
+              setValue("contactNumber", removeWhitespace(e.target.value), {
+                shouldValidate: true,
+              });
+            },
+          })}
           placeholder="e.g. 0771234567"
           autoComplete="tel"
           className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}

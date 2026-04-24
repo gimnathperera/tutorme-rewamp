@@ -10,7 +10,7 @@ interface InputPasswordProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputPassword: React.FC<InputPasswordProps> = React.memo(
-  ({ label, helperText, className = "", name, ...props }) => {
+  ({ label, helperText, className = "", name, onBlur, onChange, ...props }) => {
     const { control, formState } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
 
@@ -43,11 +43,19 @@ const InputPassword: React.FC<InputPasswordProps> = React.memo(
               <div className="relative">
                 <input
                   {...field}
+                  {...props}
                   type={showPassword ? "text" : "password"}
+                  onChange={(event) => {
+                    onChange?.(event);
+                    field.onChange(event);
+                  }}
+                  onBlur={(event) => {
+                    field.onBlur();
+                    onBlur?.(event);
+                  }}
                   className={`relative block w-full appearance-none rounded-md border px-3 py-[0.625rem] text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm ${
                     error ? "border-red-500" : "border-gray-300"
                   } ${className}`}
-                  {...props}
                 />
                 <button
                   type="button"

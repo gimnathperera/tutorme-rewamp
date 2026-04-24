@@ -1,32 +1,39 @@
 import { z } from "zod";
+import {
+  normalizeTextSpaces,
+  removeWhitespace,
+  trimText,
+} from "@/utils/form-normalizers";
 
 export const createRequestTutorSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(1, "Full Name is required")
-    .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only")
-    .refine(
-      (v) => !/ {2,}/.test(v),
-      "Multiple consecutive spaces are not allowed",
-    ),
+  name: z.preprocess(
+    normalizeTextSpaces,
+    z
+      .string()
+      .min(1, "Full Name is required")
+      .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
+  ),
 
-  email: z
-    .string()
-    .trim()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
+  email: z.preprocess(
+    removeWhitespace,
+    z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address"),
+  ),
 
-  city: z.string().trim().min(1, "City is required"),
+  city: z.preprocess(trimText, z.string().min(1, "City is required")),
 
-  district: z.string().trim().min(1, "District is required"),
+  district: z.preprocess(trimText, z.string().min(1, "District is required")),
 
-  phoneNumber: z
-    .string()
-    .trim()
-    .min(1, "Contact Number is required")
-    .regex(/^\d+$/, "Contact Number must contain numeric values only")
-    .length(10, "Contact Number should be exactly 10 digits"),
+  phoneNumber: z.preprocess(
+    removeWhitespace,
+    z
+      .string()
+      .min(1, "Contact Number is required")
+      .regex(/^\d+$/, "Contact Number must contain numeric values only")
+      .length(10, "Contact Number should be exactly 10 digits"),
+  ),
 
   medium: z.string().nonempty("Medium is required"),
 

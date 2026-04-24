@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { normalizeTextSpaces } from "@/utils/form-normalizers";
 
 const requiredMultiSelect = (message: string) =>
   z.array(z.string()).min(1, message);
@@ -27,11 +28,13 @@ export const educationInfoSchema = z.object({
   tutorMediums: requiredMultiSelect("Tutor Mediums are required"),
   grades: requiredMultiSelect("Grades are required"),
   subjects: requiredMultiSelect("Subjects are required"),
-  academicDetails: z
-    .string()
-    .trim()
-    .min(1, "Academic Details are required")
-    .max(500, "Academic Details cannot exceed 500 characters"),
+  academicDetails: z.preprocess(
+    normalizeTextSpaces,
+    z
+      .string()
+      .min(1, "Academic Details are required")
+      .max(500, "Academic Details cannot exceed 500 characters"),
+  ),
   certificatesAndQualifications: z
     .array(z.string())
     .min(1, "Certificates are required"),

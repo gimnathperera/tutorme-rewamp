@@ -37,6 +37,11 @@ import Image from "next/image";
 import { districts } from "@/configs/districts";
 import CitySelect from "@/components/citySelect";
 import DistrictSelect from "@/components/districtSelect";
+import {
+  collapseTextSpaces,
+  removeWhitespace,
+  stripLeadingSpaces,
+} from "@/utils/form-normalizers";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -46,17 +51,16 @@ const selectClass =
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
+const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 
 const FETCH_LIMIT = LIMITS_CONFIG.FETCH_LIMIT;
 const MAX_TUTOR_OPTIONS = LIMITS_CONFIG.MAX_TUTOR_OPTIONS;
 
-/**
- * Strip leading spaces immediately; on blur collapse multiple internal spaces
- * so the stored value is always clean.
- */
-const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
-const collapseSpaces = (value: string) =>
-  value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
+const preventWhitespaceKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  if (/\s/.test(event.key)) {
+    event.preventDefault();
+  }
+};
 
 type TabKey = "contact" | "tutorDetails";
 const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
@@ -77,7 +81,7 @@ export default function AddRequestForTutor() {
     setValue,
     trigger,
     clearErrors,
-    formState: { errors, isValid },
+    formState: { errors },
     reset,
   } = useForm<CreateRequestTutorSchema>({
     resolver: zodResolver(createRequestTutorSchema),
@@ -89,24 +93,6 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
-  const [watchName, watchEmail, watchPhone, watchCity] = watch([
-    "name",
-    "email",
-    "phoneNumber",
-    "city",
-  ]);
-
-  const isStep1Complete =
-    !!watchName &&
-    !!watchEmail &&
-    !!watchPhone &&
-    !!selectedDistrict &&
-    !!watchCity &&
-    !errors.name &&
-    !errors.email &&
-    !errors.phoneNumber &&
-    !errors.district &&
-    !errors.city;
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -245,12 +231,13 @@ export default function AddRequestForTutor() {
                         // strip leading spaces as the user types
                         const cleaned = stripLeadingSpaces(e.target.value);
                         if (cleaned !== e.target.value) {
+                          e.target.value = cleaned;
                           setValue("name", cleaned, { shouldValidate: true });
                         }
                       },
                       onBlur: (e) => {
                         // fully normalize on blur (collapse multiple spaces too)
-                        setValue("name", collapseSpaces(e.target.value), {
+                        setValue("name", collapseTextSpaces(e.target.value), {
                           shouldValidate: true,
                         });
                       },
@@ -279,20 +266,26 @@ export default function AddRequestForTutor() {
                       type="email"
                       placeholder="e.g. johndoe@gmail.com"
                       autoComplete="email"
+                      onKeyDown={preventWhitespaceKey}
                       {...register("email", {
                         onChange: (e) => {
                           // strip every space character as the user types
-                          const noSpaces = e.target.value.replace(/ /g, "");
+                          const noSpaces = removeWhitespace(e.target.value);
                           if (noSpaces !== e.target.value) {
+                            e.target.value = noSpaces;
                             setValue("email", noSpaces, {
                               shouldValidate: true,
                             });
                           }
                         },
                         onBlur: (e) => {
-                          setValue("email", e.target.value.replace(/ /g, ""), {
-                            shouldValidate: true,
-                          });
+                          setValue(
+                            "email",
+                            removeWhitespace(e.target.value),
+                            {
+                              shouldValidate: true,
+                            },
+                          );
                         },
                       })}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
@@ -316,11 +309,13 @@ export default function AddRequestForTutor() {
                       maxLength={10}
                       placeholder="e.g. 0712345678"
                       autoComplete="tel"
+                      onKeyDown={preventWhitespaceKey}
                       {...register("phoneNumber", {
                         onChange: (e) => {
                           // strip every space character as the user types
-                          const noSpaces = e.target.value.replace(/ /g, "");
+                          const noSpaces = removeWhitespace(e.target.value);
                           if (noSpaces !== e.target.value) {
+                            e.target.value = noSpaces;
                             setValue("phoneNumber", noSpaces, {
                               shouldValidate: true,
                             });
@@ -329,7 +324,7 @@ export default function AddRequestForTutor() {
                         onBlur: (e) => {
                           setValue(
                             "phoneNumber",
-                            e.target.value.replace(/ /g, ""),
+                            removeWhitespace(e.target.value),
                             {
                               shouldValidate: true,
                             },
@@ -406,11 +401,7 @@ export default function AddRequestForTutor() {
                 <Button
                   type="button"
                   onClick={nextStep}
-                  className={
-                    isStep1Complete
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : ""
-                  }
+                  className={primaryActionButtonClassName}
                 >
                   Next
                 </Button>
@@ -657,9 +648,7 @@ export default function AddRequestForTutor() {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className={
-                    isValid ? "bg-blue-600 hover:bg-blue-700 text-white" : ""
-                  }
+                  className={primaryActionButtonClassName}
                 >
                   {isLoading ? "Submitting..." : "Submit"}
                 </Button>

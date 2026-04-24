@@ -4,9 +4,10 @@ import InputPassword from "@/components/shared/input-password";
 import SubmitButton from "@/components/shared/submit-button";
 import { useUpdateUserPasswordMutation } from "@/store/api/splits/users";
 import { getErrorInApiResult } from "@/utils/api";
+import { removeWhitespace } from "@/utils/form-normalizers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
-import { FC } from "react";
+import { ChangeEvent, FC, KeyboardEvent } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -14,6 +15,12 @@ import {
   PasswordInfoSchema,
   passwordInfoSchema,
 } from "./schema";
+
+const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
+  if (/\s/.test(event.key)) {
+    event.preventDefault();
+  }
+};
 
 const FormPasswordInfo: FC = () => {
   const params = useParams();
@@ -65,6 +72,19 @@ const FormPasswordInfo: FC = () => {
     handleOnPasswordChangeSubmit(data);
   };
 
+  const sanitizePasswordField =
+    (fieldName: keyof PasswordInfoSchema) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const noSpaces = removeWhitespace(event.target.value);
+      if (noSpaces !== event.target.value) {
+        event.target.value = noSpaces;
+      }
+      passwordInfoForm.setValue(fieldName, noSpaces, {
+        shouldValidate: true,
+        shouldDirty: true,
+      });
+    };
+
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-2 text-lg font-semibold sm:text-xl">
@@ -81,16 +101,22 @@ const FormPasswordInfo: FC = () => {
               label="Current password *"
               name="currentPassword"
               placeholder="Enter current password"
+              onKeyDown={preventWhitespaceKey}
+              onChange={sanitizePasswordField("currentPassword")}
             />
             <InputPassword
               label="New password *"
               name="newPassword"
               placeholder="Enter new password"
+              onKeyDown={preventWhitespaceKey}
+              onChange={sanitizePasswordField("newPassword")}
             />
             <InputPassword
               label="Confirm password *"
               name="confirmPassword"
               placeholder="Re-enter new password"
+              onKeyDown={preventWhitespaceKey}
+              onChange={sanitizePasswordField("confirmPassword")}
             />
           </div>
 

@@ -3,6 +3,7 @@
 import FormTestPaperSearch from "./components/form-test-papper-search";
 import TestPaperList from "./components/test-papper-list";
 import useLogic from "./hooks/useLogic";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const TestPapers = () => {
   const {
@@ -51,6 +52,7 @@ const TestPapers = () => {
         availablePapers={availablePapers}
         isPapersLoading={isPapersLoading}
       />
+      <WhatsAppButton />
     </div>
   );
 };
