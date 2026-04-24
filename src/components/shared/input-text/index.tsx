@@ -42,15 +42,18 @@ const InputText: React.FC<InputTextProps> = ({
           <>
             <input
               {...props}
+              name={field.name}
+              ref={field.ref}
+              value={field.value ?? ""}
               onChange={(event) => {
                 field.onChange(event);
                 onChange?.(event);
               }}
               onBlur={(event) => {
-                field.onBlur();
                 onBlur?.(event);
+                field.onBlur();
               }}
-              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 ${
+              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:opacity-100 ${
                 error ? "border-red-500" : "border-linegrey"
               } ${className}`}
             />
