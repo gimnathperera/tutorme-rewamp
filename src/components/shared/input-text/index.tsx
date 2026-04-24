@@ -13,6 +13,8 @@ const InputText: React.FC<InputTextProps> = ({
   helperText,
   className = "",
   name,
+  onBlur,
+  onChange,
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -41,6 +43,14 @@ const InputText: React.FC<InputTextProps> = ({
             <input
               {...field}
               {...props}
+              onChange={(event) => {
+                field.onChange(event);
+                onChange?.(event);
+              }}
+              onBlur={(event) => {
+                field.onBlur();
+                onBlur?.(event);
+              }}
               className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 ${
                 error ? "border-red-500" : "border-linegrey"
               } ${className}`}
