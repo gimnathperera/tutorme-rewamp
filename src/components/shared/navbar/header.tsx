@@ -5,6 +5,7 @@ import { useAuthContext } from "@/contexts";
 import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Modal from "../modal";
 import Drawer from "./drawer-component";
@@ -187,34 +188,34 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   };
 
   const heroLinkColor = isHeroTop ? "rgba(255,255,255,0.92)" : "";
-  const heroLogoBlack = isHeroTop ? "#ffffff" : "";
-  const heroLogoBlue = isHeroTop ? "rgba(37, 99, 235)" : "";
   const heroBtnBorder = isHeroTop
     ? "1px solid rgba(255,255,255,0.5)"
     : undefined;
   const heroBtnColor = isHeroTop ? "rgba(255,255,255,0.92)" : undefined;
   const heroHamburger = isHeroTop ? "#ffffff" : "";
+  const logoSrc = isHeroTop
+    ? "/images/logo/DarkThemeLogoFull.svg"
+    : "/images/logo/LightThemeLogoFull.svg";
 
   return (
     <Disclosure as="nav" className="navbar">
       <div className="mx-auto max-w-7xl p-3 md:p-4">
         <div className="relative flex h-12 sm:h-20 items-center">
           <div className="flex flex-1 items-center sm:justify-between">
-            <div className="flex flex-shrink-0 items-start">
-              <Link href="/" className="text-3xl sm:text-4xl flex font-bold">
-                <div
-                  className="font-bold transition-colors duration-300"
-                  style={{ color: heroLogoBlack || undefined }}
-                >
-                  Tuition
-                </div>
-                <div
-                  className="font-bold transition-colors duration-300"
-                  style={{ color: heroLogoBlue || "rgb(37,99,235)" }}
-                >
-                  {" "}
-                  Lanka
-                </div>
+            <div className="flex flex-shrink-0 items-center">
+              <Link
+                href="/"
+                className="relative block h-12 w-[180px] sm:h-14 sm:w-[220px] lg:h-16 lg:w-[250px]"
+                aria-label="Tuition Lanka home"
+              >
+                <Image
+                  src={logoSrc}
+                  alt="Tuition Lanka"
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 250px, (min-width: 640px) 220px, 180px"
+                  className="object-contain"
+                />
               </Link>
             </div>
 
@@ -363,7 +364,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         ? { border: heroBtnBorder, color: heroBtnColor }
                         : undefined
                     }
-                    className="text-base font-medium text-white py-2 px-5 bg-primary-700 rounded-full hover:bg-primary-800 transition-colors duration-200"
+                    className="text-base font-medium text-white py-2 px-5 bg-primary-800 rounded-full hover:bg-primary-800 transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     Login

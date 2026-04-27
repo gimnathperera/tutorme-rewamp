@@ -14,7 +14,9 @@ export const metadata = {
     google: "euNzGr2NazmC3paB9xamB2El7bk8uGq0wYv_l90lj7Q",
   },
   icons: {
-    icon: "/favicon.svg",
+    icon: "/images/logo/LightThemeLogoIcon.svg",
+    shortcut: "/images/logo/LightThemeLogoIcon.svg",
+    apple: "/images/logo/LightThemeLogoIcon.svg",
   },
 };
 

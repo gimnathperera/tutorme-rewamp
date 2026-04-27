@@ -4,7 +4,7 @@ export const siteUrl = "https://www.tuitionlanka.com";
 export const siteName = "Tuition Lanka";
 export const defaultImage = "https://www.tuitionlanka.com/assets/preview.jpg";
 export const logoUrl =
-  "https://www.tuitionlanka.com/images/logo/tuitionlanka.png";
+  "https://www.tuitionlanka.com/images/logo/LightThemeLogoFull.svg";
 
 export type SeoConfig = {
   title: string;

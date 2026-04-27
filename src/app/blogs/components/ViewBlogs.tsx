@@ -9,7 +9,7 @@ import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 import Image from "next/image";
 
-const DEFAULT_AVATAR = "/images/logo/tuitionlanka.png";
+const DEFAULT_AVATAR = "/images/logo/LightThemeLogoIcon.svg";
 
 export default function BlogsDashboard() {
   const [page, setPage] = useState(1);

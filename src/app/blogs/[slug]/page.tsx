@@ -227,7 +227,7 @@ export default function ViewBlogPage() {
           <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-lg leading-relaxed">
             <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
               <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
-                <AvatarImage src="/images/logo/tuitionlanka.png" />
+                <AvatarImage src="/images/logo/LightThemeLogoIcon.svg" />
                 <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl uppercase">
                   TL
                 </AvatarFallback>
