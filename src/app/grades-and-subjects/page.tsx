@@ -21,6 +21,37 @@ import "react-loading-skeleton/dist/skeleton.css";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const GRADE_LIMIT = 1000;
+const AL_STREAM_ORDER = [
+  "physical science",
+  "biological science",
+  "commerce",
+  "technology",
+  "art",
+];
+const UNKNOWN_AL_STREAM_ORDER = AL_STREAM_ORDER.length;
+
+const normalizeTitle = (title: string) => title.toLowerCase();
+
+const getAlStreamOrder = (title: string) => {
+  const normalizedTitle = normalizeTitle(title);
+  const streamIndex = AL_STREAM_ORDER.findIndex((stream) =>
+    normalizedTitle.includes(stream),
+  );
+
+  return streamIndex === -1 ? UNKNOWN_AL_STREAM_ORDER : streamIndex;
+};
+
+const isAdvancedLevelTitle = (title: string) =>
+  /a\/?l|advanced\s+level/i.test(title);
+
+const getGradePriority = (title: string) => {
+  if (/grade\s*\d+/i.test(title)) return 1;
+  if (/o\/?l|ordinary level/i.test(title)) return 2;
+  if (isAdvancedLevelTitle(title)) return 3;
+  if (/extracurricular activities/i.test(title)) return 4;
+  if (/other activities/i.test(title)) return 5;
+  return 99;
+};
 
 // ── Grade detail popup ────────────────────────────────────────────────────────
 interface GradeDetailDialogProps {
@@ -175,17 +206,15 @@ const GradesPage: FC = () => {
   });
 
   const grades = (data?.results || []).slice().sort((a, b) => {
-    const getPriority = (title: string) => {
-      if (/grade\s*\d+/i.test(title)) return 1;
-      if (/o\/?l/i.test(title)) return 2;
-      if (/a\/?l/i.test(title)) return 3;
-      if (/extracurricular activities/i.test(title)) return 4;
-      if (/other activities/i.test(title)) return 5;
-      return 99;
-    };
+    if (isAdvancedLevelTitle(a.title) && isAdvancedLevelTitle(b.title)) {
+      const streamOrderDiff =
+        getAlStreamOrder(a.title) - getAlStreamOrder(b.title);
+      if (streamOrderDiff !== 0) return streamOrderDiff;
+      return a.title.localeCompare(b.title);
+    }
 
-    const priorityA = getPriority(a.title);
-    const priorityB = getPriority(b.title);
+    const priorityA = getGradePriority(a.title);
+    const priorityB = getGradePriority(b.title);
 
     // Step 1: category sorting
     if (priorityA !== priorityB) {
@@ -199,7 +228,7 @@ const GradesPage: FC = () => {
       return numA - numB;
     }
 
-    return 0;
+    return a.title.localeCompare(b.title);
   });
 
   return (
