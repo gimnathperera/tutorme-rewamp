@@ -48,6 +48,14 @@ export const seoKeywords = [
 
 const cleanMetaText = (value: string) => value.replace(/\s*&\s*/g, " and ");
 
+const cleanTitleText = (value: string) =>
+  cleanMetaText(value)
+    .replace(/\s*\|\s*(?:https?:\/\/)?(?:www\.)?tuitionlanka\.com\b/gi, "")
+    .replace(/\s*-\s*(?:https?:\/\/)?(?:www\.)?tuitionlanka\.com\b/gi, "")
+    .replace(/\s+(?:https?:\/\/)?(?:www\.)?tuitionlanka\.com\b/gi, "")
+    .replace(/\s{2,}/g, " ")
+    .trim();
+
 export function normalizePath(path: string) {
   if (!path || path === "/") return "/";
   return path.startsWith("/") ? path : `/${path}`;
@@ -75,7 +83,7 @@ export function createMetadata({
   keywords = seoKeywords,
   noIndex = false,
 }: SeoConfig): Metadata {
-  const safeTitle = cleanMetaText(title);
+  const safeTitle = cleanTitleText(title);
   const safeDescription = cleanMetaText(description);
   const canonicalUrl = getCanonicalUrl(path);
   const imageUrl = toAbsoluteUrl(image);
