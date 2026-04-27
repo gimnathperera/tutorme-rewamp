@@ -23,7 +23,7 @@ const InputSelect: FC<InputSelectProps> = ({
   name,
   className = "",
   loading = false,
-  placeholder = "All",
+  placeholder = "Select an option",
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -58,7 +58,7 @@ const InputSelect: FC<InputSelectProps> = ({
               disabled={loading}
               {...props}
             >
-              <option value="" className="text-gray-500">
+              <option value="" disabled className="text-gray-500">
                 {placeholder}
               </option>
               {options.map((option, index) => (
