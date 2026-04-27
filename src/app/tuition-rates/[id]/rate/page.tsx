@@ -3,11 +3,20 @@
 import { useParams } from "next/navigation";
 import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { TuitionRateItem } from "@/types/response-types";
+import { Rate, TuitionRateItem } from "@/types/response-types";
+
+const formatRate = (rate?: Rate | Rate[]) => {
+  const ranges = Array.isArray(rate) ? rate : rate ? [rate] : [];
+  const formatted = ranges
+    .filter((range) => range.minimumRate || range.maximumRate)
+    .map((range) => `Rs. ${range.minimumRate} - Rs. ${range.maximumRate}`);
+
+  return formatted.join(", ") || "N/A";
+};
 
 const RatePage = () => {
   const params = useParams();
-  const { levelId } = params;
+  const levelId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const { data: rate, isLoading } = useFetchTuitionRatesQuery({
     page: 1,
@@ -50,21 +59,15 @@ const RatePage = () => {
                   </h4>
                   <p className="mb-1">
                     <strong>Full Time:</strong>{" "}
-                    {rate.fullTimeTuitionRate
-                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
-                      .join(", ") || "N/A"}
+                    {formatRate(rate.fullTimeTutorRate)}
                   </p>
                   <p className="mb-1">
                     <strong>Part Time:</strong>{" "}
-                    {rate.partTimeTuitionRate
-                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
-                      .join(", ") || "N/A"}
+                    {formatRate(rate.partTimeTutorRate)}
                   </p>
                   <p className="mb-1">
                     <strong>Government:</strong>{" "}
-                    {rate.govTuitionRate
-                      ?.map((r) => `Rs. ${r.minimumRate} - Rs. ${r.maximumRate}`)
-                      .join(", ") || "N/A"}
+                    {formatRate(rate.moeTeacherRate)}
                   </p>
                 </CardContent>
                 <CardFooter>

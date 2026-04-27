@@ -1,3 +1,4 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = createMetadata({
@@ -13,5 +14,19 @@ export default function CreateTutorRequestLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumbJsonLd
+        name="Create Tutor Request"
+        path="/request-for-tutors/create-request"
+        parents={[
+          {
+            name: "Request for Tutors",
+            path: seoPages.requestForTutors.path,
+          },
+        ]}
+      />
+      {children}
+    </>
+  );
 }

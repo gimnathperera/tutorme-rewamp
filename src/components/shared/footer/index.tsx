@@ -130,7 +130,7 @@ const footer = () => {
           <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <p className="text-center md:text-start text-offwhite text-sm">
-                @2026 - All Rights Reserved by tuitionlanka.com
+                @2026 - All Rights Reserved by www.tuitionlanka.com
               </p>
             </div>
             <div className="flex justify-center md:justify-end">

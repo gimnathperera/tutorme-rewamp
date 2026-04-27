@@ -1,3 +1,4 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata, seoPages } from "@/lib/seo";
 
 export function generateMetadata({ params }: { params: { id: string } }) {
@@ -12,8 +13,24 @@ export function generateMetadata({ params }: { params: { id: string } }) {
 
 export default function TuitionRateDetailLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { id: string };
 }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumbJsonLd
+        name="Tuition Rate Details"
+        path={`/tuition-rates/${params.id}/rate`}
+        parents={[
+          {
+            name: "Tuition Rates",
+            path: seoPages.tuitionRates.path,
+          },
+        ]}
+      />
+      {children}
+    </>
+  );
 }

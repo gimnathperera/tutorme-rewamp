@@ -1,15 +1,39 @@
 import type { Metadata } from "next";
 
-const siteUrl = "https://www.tuitionlanka.com";
-const siteName = "Tuition Lanka";
-const defaultImage = "https://www.tuitionlanka.com/assets/preview.jpg";
+export const siteUrl = "https://www.tuitionlanka.com";
+export const siteName = "Tuition Lanka";
+export const defaultImage = "https://www.tuitionlanka.com/assets/preview.jpg";
+export const logoUrl =
+  "https://www.tuitionlanka.com/images/logo/tuitionlanka.png";
 
 export type SeoConfig = {
   title: string;
   description: string;
   path: string;
+  image?: string;
+  imageAlt?: string;
   keywords?: string[];
   noIndex?: boolean;
+};
+
+type BreadcrumbItem = {
+  name: string;
+  path: string;
+};
+
+type FaqJsonLdItem = {
+  question?: string | null;
+  answer?: string | null;
+};
+
+type ArticleJsonLdConfig = {
+  headline: string;
+  description: string;
+  image?: string | null;
+  authorName?: string;
+  datePublished?: string | null;
+  dateModified?: string | null;
+  path: string;
 };
 
 export const seoKeywords = [
@@ -22,44 +46,68 @@ export const seoKeywords = [
   "past papers Sri Lanka",
 ];
 
+const cleanMetaText = (value: string) => value.replace(/\s*&\s*/g, " and ");
+
+export function normalizePath(path: string) {
+  if (!path || path === "/") return "/";
+  return path.startsWith("/") ? path : `/${path}`;
+}
+
+export function getCanonicalUrl(path: string) {
+  return new URL(normalizePath(path), siteUrl).toString();
+}
+
+export function toAbsoluteUrl(url?: string | null) {
+  if (!url) return defaultImage;
+  try {
+    return new URL(url, siteUrl).toString();
+  } catch {
+    return defaultImage;
+  }
+}
+
 export function createMetadata({
   title,
   description,
   path,
+  image = defaultImage,
+  imageAlt = siteName,
   keywords = seoKeywords,
   noIndex = false,
 }: SeoConfig): Metadata {
-  const canonicalPath = path.startsWith("/") ? path : `/${path}`;
-  const canonicalUrl = new URL(canonicalPath, siteUrl).toString();
+  const safeTitle = cleanMetaText(title);
+  const safeDescription = cleanMetaText(description);
+  const canonicalUrl = getCanonicalUrl(path);
+  const imageUrl = toAbsoluteUrl(image);
 
   return {
     metadataBase: new URL(siteUrl),
-    title,
-    description,
+    title: safeTitle,
+    description: safeDescription,
     keywords,
     alternates: {
       canonical: canonicalUrl,
     },
     openGraph: {
-      title,
-      description,
+      title: safeTitle,
+      description: safeDescription,
       url: canonicalUrl,
       siteName,
       type: "website",
       images: [
         {
-          url: defaultImage,
+          url: imageUrl,
           width: 1200,
           height: 630,
-          alt: siteName,
+          alt: imageAlt,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title,
-      description,
-      images: [defaultImage],
+      title: safeTitle,
+      description: safeDescription,
+      images: [imageUrl],
     },
     robots: noIndex
       ? {
@@ -70,6 +118,83 @@ export function createMetadata({
           index: true,
           follow: true,
         },
+  };
+}
+
+export function createOrganizationJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteName,
+    url: siteUrl,
+    logo: logoUrl,
+  };
+}
+
+export function createBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: getCanonicalUrl(item.path),
+    })),
+  };
+}
+
+export function createFaqJsonLd(faqs: FaqJsonLdItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs
+      .filter((faq) => faq.question?.trim() && faq.answer?.trim())
+      .map((faq) => ({
+        "@type": "Question",
+        name: faq.question?.trim(),
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: faq.answer?.trim(),
+        },
+      })),
+  };
+}
+
+export function createArticleJsonLd({
+  headline,
+  description,
+  image,
+  authorName = siteName,
+  datePublished,
+  dateModified,
+  path,
+}: ArticleJsonLdConfig) {
+  const canonicalUrl = getCanonicalUrl(path);
+  const publishedDate = datePublished || dateModified || new Date().toISOString();
+  const modifiedDate = dateModified || publishedDate;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    image: toAbsoluteUrl(image),
+    author: {
+      "@type": "Organization",
+      name: authorName,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: siteName,
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+      },
+    },
+    datePublished: publishedDate,
+    dateModified: modifiedDate,
+    mainEntityOfPage: canonicalUrl,
   };
 }
 
