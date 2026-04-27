@@ -36,20 +36,22 @@ export type Level = {
   title: string;
 };
 
+export type Rate = {
+  minimumRate: string | number;
+  maximumRate: string | number;
+};
+
 export type TuitionRateItem = {
   _id: string;
   title: string;
   grade: Grade;
   subject: Subject;
-  onlineIndividualTuitionRate: Rate[];
-  onlineGroupTuitionRate: Rate[];
-  physicalIndividualTuitionRate: Rate[];
-  physicalGroupTuitionRate: Rate[];
+  universityStudentsRate: Rate;
+  partTimeTutorRate: Rate;
+  fullTimeTutorRate: Rate;
+  moeTeacherRate: Rate;
 };
-export type Rate = {
-  minimumRate: string;
-  maximumRate: string;
-};
+
 export type TuitionRateGroup = {
   grade: any;
   subjects: any;

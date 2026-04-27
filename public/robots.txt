@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+Disallow: /profile
+Disallow: /reset-password
+Disallow: /api/
+Disallow: /blogs/components/
+Disallow: /tuition-assignments/selected
+
+Sitemap: https://www.tuitionlanka.com/sitemap.xml

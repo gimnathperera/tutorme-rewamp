@@ -16,6 +16,8 @@ export const Endpoints = {
   RegisterTutor: "/v1/tutors",
   RegisterTutorEmailAvailability: "/v1/tutors/email-availability",
   TuitionRates: "/v1/tuitionRates",
+  TuitionRatesByGrade: "/v1/tuitionRates/by-grade",
+  GradesWithCounts: "/v1/grades/with-counts",
   Levels: "/v1/levels",
   TuitionAssignments: "/v1/tuition-assignments",
   RequestTutors: "/v1/requestTutor",

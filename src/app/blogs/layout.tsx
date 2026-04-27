@@ -1,3 +1,4 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = createMetadata(seoPages.blogs);
@@ -7,5 +8,10 @@ export default function BlogsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumbJsonLd name="Blogs" path={seoPages.blogs.path} />
+      {children}
+    </>
+  );
 }

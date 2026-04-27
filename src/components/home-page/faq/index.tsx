@@ -101,7 +101,7 @@ const FaqSkeleton = () => (
 );
 
 const Faqs = () => {
-  const [page, setPage] = useState(1);
+  const page = 1;
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 

@@ -1,6 +1,8 @@
 "use client";
 
 import DOMPurify from "isomorphic-dompurify";
+import Image from "next/image";
+import { useState } from "react";
 
 interface BlogContentBlock {
   type: string;
@@ -19,6 +21,23 @@ interface BlogContentBlock {
 interface BlogRendererProps {
   content: BlogContentBlock[];
 }
+
+const BlogContentImage = ({ src, alt }: { src: string; alt: string }) => {
+  const [hidden, setHidden] = useState(false);
+
+  if (hidden) return null;
+
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={900}
+      height={360}
+      className="rounded-2xl object-cover max-h-[360px] w-full h-auto shadow-lg border dark:border-gray-700 hover:scale-[1.01] transition-transform duration-300"
+      onError={() => setHidden(true)}
+    />
+  );
+};
 
 export default function BlogRenderer({ content }: BlogRendererProps) {
   if (!content || !Array.isArray(content)) {
@@ -91,13 +110,9 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
             if (!block.src) return null;
             return (
               <figure key={index} className="block-image flex flex-col">
-                <img
+                <BlogContentImage
                   src={block.src}
                   alt={block.caption || "Blog image"}
-                  className="rounded-2xl object-cover max-h-[360px] w-full shadow-lg border dark:border-gray-700 hover:scale-[1.01] transition-transform duration-300"
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = "none";
-                  }}
                 />
                 {block.caption && (
                   <figcaption className="text-sm text-gray-500 mt-2 italic">

@@ -1,202 +1,231 @@
 "use client";
 
-import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
+import { useEffect, useMemo, useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
+import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
 } from "@/components/ui/accordion";
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { useFetchGradesQuery } from "@/store/api/splits/grades";
+import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
+import { Grade, TuitionRateItem } from "@/types/response-types";
 
-type Rate = { minimumRate: string; maximumRate: string };
-type SubjectRate = {
-  title: string;
-  onlineIndividual: Rate[];
-  onlineGroup: Rate[];
-  physicalIndividual: Rate[];
-  physicalGroup: Rate[];
-};
+type Rate = { minimumRate: string | number; maximumRate: string | number };
 
-type GradeGroup = {
-  grade: { id: string; title: string } | null;
-  subjects: SubjectRate[];
-};
+function formatRateValue(value: string | number) {
+  const numericValue = typeof value === "number" ? value : Number(value);
+  if (Number.isFinite(numericValue)) {
+    return new Intl.NumberFormat("en-US").format(numericValue);
+  }
+  return String(value);
+}
 
-function RateCell({ rates }: { rates: Rate[] }) {
-  const min = rates?.[0]?.minimumRate;
-  const max = rates?.[0]?.maximumRate;
-  if (!min && !max) {
+function RateCell({ rate }: { rate?: Rate }) {
+  if (!rate?.minimumRate && !rate?.maximumRate) {
     return <span className="text-gray-400 italic text-sm">N/A</span>;
   }
+
   return (
-    <span className="inline-flex flex-col sm:flex-row sm:items-center gap-1 text-sm font-medium text-gray-700">
-      <span className="bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full text-xs font-semibold">
-        Rs. {min}
+    <span className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-gray-700">
+      <span className="inline-flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="tracking-wide text-[10px] opacity-70">Rs</span>
+        <span>{formatRateValue(rate.minimumRate)}</span>
       </span>
-      <span className="text-gray-400 hidden sm:inline">—</span>
-      <span className="bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold">
-        Rs. {max}
+      <span className="text-gray-400">-</span>
+      <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="tracking-wide text-[10px] opacity-70">Rs</span>
+        <span>{formatRateValue(rate.maximumRate)}</span>
       </span>
     </span>
   );
 }
 
-export default function TuitionRatesByGrade() {
-  const { data, isLoading, error } = useFetchTuitionRatesQuery({
-    page: 1,
-    limit: 1000,
-  });
-
-  if (isLoading) {
+function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
+  if (!items.length) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-12 h-12 rounded-full border-4 border-[#FCA627] border-t-transparent animate-spin" />
-        <p className="text-gray-500 font-medium">Loading tuition rates…</p>
+      <div className="px-6 py-12 text-center text-sm text-gray-500">
+        No tuition rates found for this grade.
       </div>
     );
   }
 
-  if (error) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[920px] text-sm table-fixed">
+        <thead>
+          <tr className="bg-gray-50 border-b border-gray-200">
+            <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[24%] whitespace-nowrap">
+              Subject
+            </th>
+            <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[19%] whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
+                University Students
+              </span>
+            </th>
+            <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[19%] whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
+                Part Time Tutor
+              </span>
+            </th>
+            <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[19%] whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
+                Full Time Tutor
+              </span>
+            </th>
+            <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[19%] whitespace-nowrap">
+              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
+                Ex / Current MOE Teachers
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, idx) => (
+            <tr
+              key={item._id || idx}
+              className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
+                idx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
+              }`}
+            >
+              <td className="px-5 py-4 align-middle">
+                <span className="inline-flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
+                  <span className="font-semibold text-gray-800 whitespace-nowrap">
+                    {item.subject?.title || "Unknown Subject"}
+                  </span>
+                </span>
+              </td>
+              <td className="px-5 py-4 align-middle">
+                <RateCell rate={item.universityStudentsRate} />
+              </td>
+              <td className="px-5 py-4 align-middle">
+                <RateCell rate={item.partTimeTutorRate} />
+              </td>
+              <td className="px-5 py-4 align-middle">
+                <RateCell rate={item.fullTimeTutorRate} />
+              </td>
+              <td className="px-5 py-4 align-middle">
+                <RateCell rate={item.moeTeacherRate} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default function TuitionRatesByGrade() {
+  const [activeGrade, setActiveGrade] = useState<string | undefined>();
+  const {
+    data: gradesData,
+    isLoading: isGradesLoading,
+    isError: isGradesError,
+  } = useFetchGradesQuery({
+    page: 1,
+    limit: 1000,
+  });
+  const {
+    data: tuitionRatesData,
+    isLoading: isRatesLoading,
+    isError: isRatesError,
+  } = useFetchTuitionRatesQuery({
+    page: 1,
+    limit: 1000,
+  });
+
+  const grades = gradesData?.results || [];
+
+  useEffect(() => {
+    if (!activeGrade && gradesData?.results?.[0]?.id) {
+      setActiveGrade(gradesData.results[0].id);
+    }
+  }, [activeGrade, gradesData?.results]);
+
+  const tuitionRatesByGradeId = useMemo(() => {
+    const tuitionRates = tuitionRatesData?.results || [];
+
+    return tuitionRates.reduce<Record<string, TuitionRateItem[]>>(
+      (acc, item) => {
+        const gradeId = item.grade?.id || "unknown";
+        if (!acc[gradeId]) acc[gradeId] = [];
+        acc[gradeId].push(item);
+        return acc;
+      },
+      {},
+    );
+  }, [tuitionRatesData?.results]);
+
+  if (isGradesLoading || isRatesLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 gap-4">
+        <div className="w-12 h-12 rounded-full border-4 border-[#FCA627] border-t-transparent animate-spin" />
+        <p className="text-gray-500 font-medium">Loading tuition rates...</p>
+      </div>
+    );
+  }
+
+  if (isGradesError || isRatesError) {
     return (
       <div className="flex items-center justify-center py-20">
         <p className="text-red-500 font-medium">
-          Failed to load tuition rates.
+          Failed to load grades with tuition counts.
         </p>
       </div>
     );
   }
 
-  const results = data?.results || [];
-
-  const groupedData: Record<string, GradeGroup> =
-    results?.reduce(
-      (acc: Record<string, GradeGroup>, item) => {
-        const gradeTitle = item.grade?.title || "Unknown Grade";
-        if (!acc[gradeTitle]) {
-          acc[gradeTitle] = { grade: item.grade ?? null, subjects: [] };
-        }
-        acc[gradeTitle].subjects.push({
-          title: item.subject?.title || "Unknown Subject",
-          onlineIndividual: item.onlineIndividualTuitionRate || [],
-          onlineGroup: item.onlineGroupTuitionRate || [],
-          physicalIndividual: item.physicalIndividualTuitionRate || [],
-          physicalGroup: item.physicalGroupTuitionRate || [],
-        });
-        return acc;
-      },
-      {} as Record<string, GradeGroup>,
-    ) || {};
-
-  const gradeEntries = Object.values(groupedData);
-
-  // First grade is open by default
-  const defaultValue =
-    gradeEntries.length > 0
-      ? gradeEntries[0].grade?.id || "grade-0"
-      : undefined;
+  if (!grades.length) {
+    return <p>No grades found</p>;
+  }
 
   return (
     <div className="px-2 sm:px-0">
       <Accordion
         type="single"
         collapsible
-        defaultValue={defaultValue}
+        value={activeGrade}
+        onValueChange={(value) => setActiveGrade(value || undefined)}
         className="space-y-3"
       >
-        {gradeEntries.map((gradeGroup, idx) => {
-          const itemValue = gradeGroup.grade?.id || `grade-${idx}`;
+        {grades.map((grade: Grade, idx: number) => {
+          const itemValue = grade.id || `grade-${idx}`;
+          const gradeRates = tuitionRatesByGradeId[grade.id] || [];
+
           return (
             <AccordionItem
               key={itemValue}
               value={itemValue}
               className="rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-white"
             >
-              {/* Custom styled trigger that keeps the gradient header */}
               <AccordionPrimitive.Header className="flex">
-                <AccordionPrimitive.Trigger className="flex w-full min-w-0 items-center gap-2 sm:gap-3 px-3 sm:px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-left [&[data-state=open]_.chevron]:rotate-180">
-                  <div className="bg-white/20 rounded-full p-1.5 shrink-0">
-                    <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                <AccordionPrimitive.Trigger className="flex w-full min-w-0 items-center justify-between gap-3 px-3 sm:px-5 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-left [&[data-state=open]_.chevron]:rotate-180">
+                  <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                    <div className="bg-white/20 rounded-full p-1.5 shrink-0">
+                      <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                    </div>
+                    <h2 className="text-white font-bold text-base sm:text-lg tracking-wide min-w-0 truncate">
+                      {grade.title}
+                    </h2>
                   </div>
-                  <h2 className="text-white font-bold text-base sm:text-lg tracking-wide flex-1 min-w-0 truncate">
-                    {gradeGroup.grade?.title || "Unknown Grade"}
-                  </h2>
-                  <span className="hidden sm:inline-flex bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full shrink-0">
-                    {gradeGroup.subjects.length} Subject
-                    {gradeGroup.subjects.length !== 1 ? "s" : ""}
-                  </span>
-                  <ChevronDown className="chevron w-5 h-5 text-white shrink-0 ml-1 transition-transform duration-300" />
+                  <div className="flex items-center gap-3 shrink-0">
+                    <span className="hidden sm:inline-flex items-center bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
+                      {gradeRates.length} item
+                      {gradeRates.length === 1 ? "" : "s"}
+                    </span>
+                    <ChevronDown className="chevron w-5 h-5 text-white shrink-0 transition-transform duration-300" />
+                  </div>
                 </AccordionPrimitive.Trigger>
               </AccordionPrimitive.Header>
 
-              {/* Table revealed with smooth slide animation */}
               <AccordionContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[560px] text-sm">
-                    <thead>
-                      <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          Subject
-                        </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                            Online - Individual
-                          </span>
-                        </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                            Online - Group
-                          </span>
-                        </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                            Physical - Individual
-                          </span>
-                        </th>
-                        <th className="text-left px-5 py-3 font-semibold text-gray-600 w-1/5">
-                          <span className="inline-flex items-center gap-1.5">
-                            <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
-                            Physical - Group
-                          </span>
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {gradeGroup.subjects.map((subject, subIdx) => (
-                        <tr
-                          key={subIdx}
-                          className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
-                            subIdx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
-                          }`}
-                        >
-                          <td className="px-5 py-3.5">
-                            <span className="inline-flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
-                              <span className="font-semibold text-gray-800">
-                                {subject.title}
-                              </span>
-                            </span>
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <RateCell rates={subject.onlineIndividual} />
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <RateCell rates={subject.onlineGroup} />
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <RateCell rates={subject.physicalIndividual} />
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <RateCell rates={subject.physicalGroup} />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                <TuitionRateTable items={gradeRates} />
               </AccordionContent>
             </AccordionItem>
           );

@@ -7,10 +7,21 @@ import OurTeam from "@/components/home-page/our-team";
 import Testimonials from "@/components/home-page/testimonials";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import ScrollAnimationProvider from "@/components/shared/scroll-animation-provider";
+import JsonLd from "@/components/seo/json-ld";
+import {
+  createBreadcrumbJsonLd,
+  createOrganizationJsonLd,
+} from "@/lib/seo";
 
 export default function Home() {
   return (
     <>
+      <JsonLd
+        data={[
+          createOrganizationJsonLd(),
+          createBreadcrumbJsonLd([{ name: "Home", path: "/" }]),
+        ]}
+      />
       <ScrollAnimationProvider />
       {/* Hero banner - full screen, outside the section gap container */}
       <Banner />
