@@ -14,6 +14,14 @@ import { Grade, TuitionRateItem } from "@/types/response-types";
 
 type Rate = { minimumRate: string | number; maximumRate: string | number };
 
+function formatRateValue(value: string | number) {
+  const numericValue = typeof value === "number" ? value : Number(value);
+  if (Number.isFinite(numericValue)) {
+    return new Intl.NumberFormat("en-US").format(numericValue);
+  }
+  return String(value);
+}
+
 function RateCell({ rate }: { rate?: Rate }) {
   if (!rate?.minimumRate && !rate?.maximumRate) {
     return <span className="text-gray-400 italic text-sm">N/A</span>;
@@ -21,12 +29,18 @@ function RateCell({ rate }: { rate?: Rate }) {
 
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap text-sm font-medium text-gray-700">
-      <span className="bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
-        Rs. {rate.minimumRate}
+      <span className="inline-flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="uppercase tracking-wide text-[10px] opacity-70">
+          Rs
+        </span>
+        <span>{formatRateValue(rate.minimumRate)}</span>
       </span>
       <span className="text-gray-400">-</span>
-      <span className="bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
-        Rs. {rate.maximumRate}
+      <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="uppercase tracking-wide text-[10px] opacity-70">
+          Rs
+        </span>
+        <span>{formatRateValue(rate.maximumRate)}</span>
       </span>
     </span>
   );
