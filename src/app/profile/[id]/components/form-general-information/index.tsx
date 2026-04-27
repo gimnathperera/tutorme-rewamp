@@ -54,12 +54,22 @@ const calculateAge = (birthday?: string) => {
   return age >= 0 ? age : "";
 };
 
+const normalizeBirthdayValue = (birthday: unknown) => {
+  if (birthday instanceof Date) {
+    return Number.isNaN(birthday.getTime())
+      ? ""
+      : birthday.toISOString().slice(0, 10);
+  }
+
+  return typeof birthday === "string" ? birthday.trim() : "";
+};
+
 const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const onSubmit = (data: GeneralInfoSchema) => {
     onFormSubmit(data);
   };
 
-  const { isDirty, isValid } = form.formState;
+  const { defaultValues, isValid } = form.formState;
   const birthday = form.watch("birthday");
   const [name, email, phoneNumber, age, gender, nationality, race] = form.watch([
     "name",
@@ -91,8 +101,20 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     typeof race === "string" &&
     race.trim().length > 0 &&
     hasBirthday;
+  const hasMeaningfulChanges =
+    collapseTextSpaces(name ?? "") !==
+      collapseTextSpaces(defaultValues?.name ?? "") ||
+    removeWhitespace(email ?? "") !== removeWhitespace(defaultValues?.email ?? "") ||
+    removeWhitespace(phoneNumber ?? "") !==
+      removeWhitespace(defaultValues?.phoneNumber ?? "") ||
+    normalizeBirthdayValue(birthday) !==
+      normalizeBirthdayValue(defaultValues?.birthday) ||
+    Number(age) !== Number(defaultValues?.age) ||
+    gender !== defaultValues?.gender ||
+    nationality !== defaultValues?.nationality ||
+    race !== defaultValues?.race;
   const isButtonDisabled =
-    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
+    !hasMeaningfulChanges || isSubmitting || !hasAllRequiredFields || !isValid;
 
   useEffect(() => {
     const nextAge = calculateAge(
