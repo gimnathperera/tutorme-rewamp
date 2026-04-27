@@ -126,6 +126,11 @@ export type FetchTuitionRatesRequest = {
   page?: number;
   limit?: number;
 };
+
+export type TuitionRateBandRequest = {
+  minimumRate: number;
+  maximumRate: number;
+};
 export type UpdateBlogRequest = {
   id: string;
   blogId: string;
