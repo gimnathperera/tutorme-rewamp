@@ -35,7 +35,7 @@ function RateLine({ rate }: { rate?: Rate }) {
 
 const RatePage = () => {
   const params = useParams();
-  const { levelId } = params;
+  const levelId = Array.isArray(params.id) ? params.id[0] : params.id;
 
   const { data: rate, isLoading } = useFetchTuitionRatesQuery({
     page: 1,

@@ -1,15 +1,18 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   path: "/privacy-policy",
-  title: "Privacy Policy | Tuition Lanka",
+  title: "Privacy Policy for Tuition Lanka Users | Tuition Lanka",
   description:
     "Read how Tuition Lanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
 });
 
 const PrivacyPolicyPage = () => {
   return (
-    <div className="mx-auto max-w-7xl mt-10 p-3 pb-10 md:p-4 md:pb-10">
+    <>
+      <PageBreadcrumbJsonLd name="Privacy Policy" path="/privacy-policy" />
+      <div className="mx-auto max-w-7xl mt-10 p-3 pb-10 md:p-4 md:pb-10">
       <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden mb-8">
         <div className="relative z-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
@@ -45,7 +48,7 @@ const PrivacyPolicyPage = () => {
             <h2 className="text-lg font-bold text-gray-900">1. Introduction</h2>
             <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-600">
               <p>
-                TuitionLanka (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is an online platform that connects parents and students with qualified and verified home tutors across Sri Lanka. We are committed to protecting the privacy of all users who access or use our website at tuitionlanka.com (the &quot;Platform&quot;). This Privacy Policy explains what personal information we collect, how we use it, and the rights you have in relation to it.
+                TuitionLanka (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is an online platform that connects parents and students with qualified and verified home tutors across Sri Lanka. We are committed to protecting the privacy of all users who access or use our website at www.tuitionlanka.com (the &quot;Platform&quot;). This Privacy Policy explains what personal information we collect, how we use it, and the rights you have in relation to it.
               </p>
               <p>
                 By using the Platform, you agree to the collection and use of information in accordance with this policy.
@@ -66,7 +69,7 @@ const PrivacyPolicyPage = () => {
               </p>
               <p>
                 <span className="font-semibold text-gray-800">Website:</span>{" "}
-                https://tuitionlanka.com
+                https://www.tuitionlanka.com
               </p>
             </div>
           </section>
@@ -327,14 +330,15 @@ const PrivacyPolicyPage = () => {
               </p>
               <p>
                 <span className="font-semibold text-gray-800">Website:</span>{" "}
-                https://tuitionlanka.com
+                https://www.tuitionlanka.com
               </p>
             </div>
           </section>
 
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

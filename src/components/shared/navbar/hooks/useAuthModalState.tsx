@@ -36,7 +36,7 @@ const useAuthModalState = (): LogicReturnType => {
     if (searchParams.get("login") === "true") {
       setIsSignUpModalOpen(true);
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     if (user) {

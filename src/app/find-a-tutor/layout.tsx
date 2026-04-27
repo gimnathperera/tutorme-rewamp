@@ -1,3 +1,4 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = createMetadata(seoPages.findTutor);
@@ -7,5 +8,10 @@ export default function FindATutorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumbJsonLd name="Find a Tutor" path={seoPages.findTutor.path} />
+      {children}
+    </>
+  );
 }

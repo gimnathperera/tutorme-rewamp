@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
@@ -122,23 +122,35 @@ function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
 }
 
 export default function TuitionRatesByGrade() {
-  const { data: gradesData, isLoading: isGradesLoading } = useFetchGradesQuery({
+  const [activeGrade, setActiveGrade] = useState<string | undefined>();
+  const {
+    data: gradesData,
+    isLoading: isGradesLoading,
+    isError: isGradesError,
+  } = useFetchGradesQuery({
     page: 1,
     limit: 1000,
   });
   const {
     data: tuitionRatesData,
     isLoading: isRatesLoading,
-    error,
+    isError: isRatesError,
   } = useFetchTuitionRatesQuery({
     page: 1,
     limit: 1000,
   });
 
   const grades = gradesData?.results || [];
-  const tuitionRates = tuitionRatesData?.results || [];
+
+  useEffect(() => {
+    if (!activeGrade && gradesData?.results?.[0]?.id) {
+      setActiveGrade(gradesData.results[0].id);
+    }
+  }, [activeGrade, gradesData?.results]);
 
   const tuitionRatesByGradeId = useMemo(() => {
+    const tuitionRates = tuitionRatesData?.results || [];
+
     return tuitionRates.reduce<Record<string, TuitionRateItem[]>>(
       (acc, item) => {
         const gradeId = item.grade?.id || "unknown";
@@ -148,7 +160,7 @@ export default function TuitionRatesByGrade() {
       },
       {},
     );
-  }, [tuitionRates]);
+  }, [tuitionRatesData?.results]);
 
   if (isGradesLoading || isRatesLoading) {
     return (
@@ -159,11 +171,11 @@ export default function TuitionRatesByGrade() {
     );
   }
 
-  if (error) {
+  if (isGradesError || isRatesError) {
     return (
       <div className="flex items-center justify-center py-20">
         <p className="text-red-500 font-medium">
-          Failed to load tuition rates.
+          Failed to load grades with tuition counts.
         </p>
       </div>
     );
@@ -173,14 +185,13 @@ export default function TuitionRatesByGrade() {
     return <p>No grades found</p>;
   }
 
-  const defaultValue = grades[0]?.id || "grade-0";
-
   return (
     <div className="px-2 sm:px-0">
       <Accordion
         type="single"
         collapsible
-        defaultValue={defaultValue}
+        value={activeGrade}
+        onValueChange={(value) => setActiveGrade(value || undefined)}
         className="space-y-3"
       >
         {grades.map((grade: Grade, idx: number) => {
