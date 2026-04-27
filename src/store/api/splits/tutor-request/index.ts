@@ -1,5 +1,8 @@
 import { FindMyTutorRequest } from "@/types/request-types";
-import { FindMyTutorResponse } from "@/types/response-types";
+import {
+  FindMyTutorResponse,
+  TutorEmailAvailabilityResponse,
+} from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -12,9 +15,21 @@ export const TutorRequestApi = baseApi.injectEndpoints({
         body: data,
       }),
     }),
+    getTutorEmailAvailability: build.query<
+      TutorEmailAvailabilityResponse,
+      string
+    >({
+      query: (email) => ({
+        url: `${Endpoints.RegisterTutorEmailAvailability}?email=${encodeURIComponent(email)}`,
+        method: "GET",
+      }),
+    }),
   }),
 
   overrideExisting: false,
 });
 
-export const { useAddTutorRequestMutation } = TutorRequestApi;
+export const {
+  useAddTutorRequestMutation,
+  useLazyGetTutorEmailAvailabilityQuery,
+} = TutorRequestApi;

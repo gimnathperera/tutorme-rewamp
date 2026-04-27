@@ -366,6 +366,11 @@ export type FindMyTutorResponse = {
 } & Id &
   Timestamp;
 
+export type TutorEmailAvailabilityResponse = {
+  available: boolean;
+  message: string;
+};
+
 export type FaqResponse = PaginatedResponse<Faq>;
 export type SubjectResponse = PaginatedResponse<Subject>;
 export type GradeResponse = PaginatedResponse<Grade>;
