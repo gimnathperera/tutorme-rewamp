@@ -9,6 +9,7 @@ import {
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
 } from "@/store/api/splits/users";
+import { useLazyGetTutorRegistrationQuery } from "@/store/api/splits/tutor-request";
 import { Option } from "@/types/shared-types";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
@@ -42,11 +43,22 @@ import {
   timeZoneOptions,
 } from "./util";
 
+type ProfileEntity = { id?: string; _id?: string };
+type ProfileLike = Partial<ProfileResponse> & Record<string, any>;
+
+const getEntityIds = (entities?: Array<string | ProfileEntity>) =>
+  (entities ?? [])
+    .map((entity) => {
+      if (typeof entity === "string") return entity;
+      return entity.id ?? entity._id ?? "";
+    })
+    .filter(Boolean);
+
 const getProfileSubjectIds = (profile: ProfileResponse) =>
-  profile.subjects.map(({ id }) => id);
+  getEntityIds(profile.subjects as any);
 
 const getProfileGradeIds = (profile: ProfileResponse) =>
-  profile.grades.map(({ id }) => id);
+  getEntityIds(profile.grades as any);
 
 const MONTH_BY_SHORT_NAME: Record<string, string> = {
   Jan: "01",
@@ -146,6 +158,221 @@ const normalizeTutorTypeValues = (profile: ProfileResponse) => {
   return profile.tutorType ? [profile.tutorType] : [];
 };
 
+const normalizeArrayValue = (value: unknown): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === "string");
+  }
+
+  return typeof value === "string" && value ? [value] : [];
+};
+
+const preferFilledString = (
+  primary: unknown,
+  fallback: unknown,
+  finalFallback = "",
+) => {
+  if (typeof primary === "string" && primary.trim().length > 0) {
+    return primary;
+  }
+
+  if (typeof fallback === "string" && fallback.trim().length > 0) {
+    return fallback;
+  }
+
+  return finalFallback;
+};
+
+const preferFilledOptionalString = (primary: unknown, fallback: unknown) => {
+  const value = preferFilledString(primary, fallback);
+  return value || undefined;
+};
+
+const preferFilledArray = <T,>(primary: T[] | undefined, fallback: T[] = []) =>
+  Array.isArray(primary) && primary.length > 0 ? primary : fallback;
+
+const normalizeGender = (
+  value: unknown,
+): ProfileResponse["gender"] | undefined => {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+
+  const normalizedValue = value.trim().toLowerCase();
+
+  if (normalizedValue === "male") return "Male";
+  if (normalizedValue === "female") return "Female";
+  if (normalizedValue === "others" || normalizedValue === "other") {
+    return "Others";
+  }
+};
+
+const normalizeCertificateUrls = (
+  certificates: ProfileResponse["certificatesAndQualifications"],
+) =>
+  (certificates ?? [])
+    .map((certificate) =>
+      typeof certificate === "string" ? certificate : certificate.url,
+    )
+    .filter((url): url is string => Boolean(url));
+
+const hasTutorRegistrationFields = (candidate: ProfileLike) =>
+  Boolean(
+    candidate.fullName ||
+      candidate.contactNumber ||
+      candidate.dateOfBirth ||
+      normalizeGender(candidate.gender) ||
+      candidate.classType ||
+      candidate.preferredLocations ||
+      candidate.tutorType ||
+      candidate.tutorTypes ||
+      candidate.tutorMediums ||
+      candidate.highestEducation ||
+      candidate.teachingSummary ||
+      candidate.studentResults ||
+      candidate.sellingPoints ||
+      candidate.academicDetails ||
+      candidate.certificatesAndQualifications,
+  );
+
+const resolveTutorRegistrationData = (
+  response: unknown,
+  profile: ProfileResponse,
+): ProfileLike | null => {
+  if (!response || typeof response !== "object") return null;
+
+  const data = response as ProfileLike;
+  const candidates = [
+    data,
+    data.tutor,
+    data.tutorProfile,
+    data.profile,
+    data.data,
+    data.data?.tutor,
+    data.data?.profile,
+  ].filter(Boolean) as ProfileLike[];
+
+  const collection =
+    Array.isArray(data) ? data :
+    Array.isArray(data.results) ? data.results :
+    Array.isArray(data.data) ? data.data :
+    Array.isArray(data.data?.results) ? data.data.results :
+    [];
+
+  const isProfileMatch = (item: ProfileLike) => {
+    const itemUserId = item.userId ?? item.user?.id ?? item.user?._id;
+    return (
+      item.email === profile.email ||
+      String(itemUserId ?? "") === String(profile.id)
+    );
+  };
+
+  const matchedFromCollection = collection.find(
+    (item: ProfileLike) => isProfileMatch(item) && hasTutorRegistrationFields(item),
+  );
+
+  if (matchedFromCollection) return matchedFromCollection;
+
+  return candidates.find(
+    (candidate) =>
+      hasTutorRegistrationFields(candidate) &&
+      (isProfileMatch(candidate) ||
+        candidate.fullName ||
+        candidate.classType ||
+        candidate.teachingSummary),
+  ) ?? null;
+};
+
+const mergeTutorRegistrationIntoProfile = (
+  profile: ProfileResponse,
+  tutorRegistration: unknown,
+): ProfileResponse => {
+  const registration = resolveTutorRegistrationData(tutorRegistration, profile);
+  if (!registration) return profile;
+
+  return {
+    ...profile,
+    fullName: preferFilledOptionalString(profile.fullName, registration.fullName),
+    name: preferFilledString(
+      profile.name,
+      registration.fullName || registration.name,
+    ),
+    contactNumber:
+      profile.contactNumber ??
+      registration.contactNumber ??
+      registration.phoneNumber,
+    phoneNumber:
+      preferFilledString(
+        profile.phoneNumber,
+        registration.phoneNumber || registration.contactNumber,
+      ),
+    dateOfBirth: profile.dateOfBirth ?? registration.dateOfBirth,
+    birthday: preferFilledString(
+      profile.birthday,
+      registration.birthday || registration.dateOfBirth,
+    ),
+    age: profile.age ?? registration.age,
+    gender:
+      profile.gender === "None" || !profile.gender
+        ? normalizeGender(registration.gender) ?? "None"
+        : profile.gender,
+    nationality: preferFilledOptionalString(
+      profile.nationality,
+      registration.nationality,
+    ),
+    race: preferFilledOptionalString(profile.race, registration.race),
+    classType: preferFilledArray(
+      profile.classType,
+      registration.classType ?? registration.tutoringLevels ?? [],
+    ),
+    tutoringLevels: preferFilledArray(
+      profile.tutoringLevels,
+      registration.tutoringLevels ?? registration.classType ?? [],
+    ),
+    preferredLocations: preferFilledArray(
+      profile.preferredLocations,
+      registration.preferredLocations ?? [],
+    ),
+    tutorType: profile.tutorType ?? registration.tutorType,
+    tutorTypes: preferFilledArray(
+      profile.tutorTypes,
+      registration.tutorTypes ?? normalizeArrayValue(registration.tutorType),
+    ),
+    highestEducation: preferFilledOptionalString(
+      profile.highestEducation,
+      registration.highestEducation,
+    ),
+    yearsExperience: profile.yearsExperience ?? registration.yearsExperience,
+    tutorMediums: preferFilledArray(
+      profile.tutorMediums,
+      registration.tutorMediums ?? [],
+    ),
+    grades: profile.grades?.length ? profile.grades : registration.grades ?? [],
+    subjects: profile.subjects?.length
+      ? profile.subjects
+      : registration.subjects ?? [],
+    teachingSummary: preferFilledOptionalString(
+      profile.teachingSummary,
+      registration.teachingSummary,
+    ),
+    academicDetails: preferFilledOptionalString(
+      profile.academicDetails,
+      registration.academicDetails,
+    ),
+    studentResults: preferFilledOptionalString(
+      profile.studentResults,
+      registration.studentResults,
+    ),
+    sellingPoints: preferFilledOptionalString(
+      profile.sellingPoints,
+      registration.sellingPoints,
+    ),
+    certificatesAndQualifications:
+      profile.certificatesAndQualifications?.length
+        ? profile.certificatesAndQualifications
+        : registration.certificatesAndQualifications,
+  };
+};
+
 const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
@@ -159,6 +386,7 @@ const useLogic = (): LogicReturnType => {
 
   const [fetchProfileData, { isLoading: isProfileDataLoading }] =
     useLazyGetProfileQuery();
+  const [fetchTutorRegistration] = useLazyGetTutorRegistrationQuery();
 
   const { data: gradeRawData, isLoading: isGradeLoading } = useFetchGradesQuery(
     {
@@ -240,7 +468,7 @@ const useLogic = (): LogicReturnType => {
   const prePopulateEducationForm = useCallback(
     (profile: ProfileResponse) => {
       educationInfoForm.reset({
-        tutoringLevels: profile.tutoringLevels ?? [],
+        tutoringLevels: profile.tutoringLevels ?? profile.classType ?? [],
         preferredLocations: profile.preferredLocations ?? [],
         tutorTypes: normalizeTutorTypeValues(profile),
         highestEducation: profile.highestEducation ?? "",
@@ -252,7 +480,7 @@ const useLogic = (): LogicReturnType => {
         subjects: getProfileSubjectIds(profile),
         academicDetails: profile.academicDetails ?? "",
         certificatesAndQualifications:
-          profile.certificatesAndQualifications ?? [],
+          normalizeCertificateUrls(profile.certificatesAndQualifications),
       });
     },
     [educationInfoForm],
@@ -295,10 +523,27 @@ const useLogic = (): LogicReturnType => {
     }
 
     if (result.data) {
-      hydrateProfileForms(result.data);
+      let profileData = result.data;
+
+      if (profileData.email) {
+        const tutorRegistrationResult = await fetchTutorRegistration({
+          userId,
+          email: profileData.email,
+        });
+
+        if (tutorRegistrationResult.data) {
+          profileData = mergeTutorRegistrationIntoProfile(
+            profileData,
+            tutorRegistrationResult.data,
+          );
+        }
+      }
+
+      hydrateProfileForms(profileData);
     }
   }, [
     fetchProfileData,
+    fetchTutorRegistration,
     hydrateProfileForms,
     userId,
   ]);
@@ -378,11 +623,9 @@ const useLogic = (): LogicReturnType => {
     ) {
       educationInfoForm.setValue(
         "subjects",
-        userRawData.subjects
-          .filter(({ id }) =>
-            educationSubjectsOptions.some((option) => option.value === id),
-          )
-          .map(({ id }) => id),
+        getProfileSubjectIds(userRawData).filter((subjectId) =>
+          educationSubjectsOptions.some((option) => option.value === subjectId),
+        ),
       );
 
       hasInitialEducationSubjectsBeenSet.current = true;

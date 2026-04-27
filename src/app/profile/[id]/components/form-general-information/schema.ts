@@ -43,10 +43,7 @@ export const generalInfoSchema = z.object({
     z
       .string()
       .min(1, "Full Name is required")
-      .regex(
-        /^[A-Za-z][A-Za-z\s'.-]*$/,
-        "Full Name can contain letters, spaces, apostrophes, periods, and hyphens only",
-      ),
+      .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
   ),
   email: z.preprocess(
     removeWhitespace,

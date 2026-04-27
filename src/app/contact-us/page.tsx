@@ -8,12 +8,14 @@ import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { FormProvider, useForm } from "react-hook-form";
+import type { KeyboardEvent } from "react";
 import {
   contactUsPageSchema,
   ContactUsPageSchema,
   initialFormValues,
 } from "./schema";
 import WhatsAppButton from "@/components/shared/whatapp-button";
+import { removeWhitespace } from "@/utils/form-normalizers";
 
 const CONTACT_INFO = [
   {
@@ -86,8 +88,11 @@ const CONTACT_INFO = [
 const stripLeadingSpaces = (value: string) => value.replace(/^ +/, "");
 const collapseSpaces = (value: string) =>
   value.replace(/^ +/, "").replace(/ {2,}/g, " ").trimEnd();
-const sanitizeContactNumber = (value: string) =>
-  value.replace(/\D/g, "").slice(0, 10);
+const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
+  if (/\s/.test(event.key)) {
+    event.preventDefault();
+  }
+};
 
 const ContactUsPage = () => {
   const form = useForm<ContactUsPageSchema>({
@@ -257,18 +262,23 @@ const ContactUsPage = () => {
                   inputMode="numeric"
                   maxLength={10}
                   autoComplete="tel"
+                  onKeyDown={preventWhitespaceKey}
                   onChange={(e) => {
-                    const sanitized = sanitizeContactNumber(e.target.value);
-                    if (sanitized !== e.target.value) {
-                      form.setValue("contactNumber", sanitized, {
+                    const noSpaces = removeWhitespace(e.target.value);
+                    if (noSpaces !== e.target.value) {
+                      form.setValue("contactNumber", noSpaces, {
                         shouldValidate: true,
                       });
                     }
                   }}
                   onBlur={(e) => {
-                    form.setValue("contactNumber", sanitizeContactNumber(e.target.value), {
-                      shouldValidate: true,
-                    });
+                    form.setValue(
+                      "contactNumber",
+                      removeWhitespace(e.target.value),
+                      {
+                        shouldValidate: true,
+                      },
+                    );
                   }}
                 />
 

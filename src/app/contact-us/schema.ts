@@ -1,3 +1,4 @@
+import { removeWhitespace } from "@/utils/form-normalizers";
 import { z } from "zod";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,12 +34,14 @@ export const contactUsPageSchema = z.object({
       }
     }),
 
-  contactNumber: z
-    .string()
-    .trim()
-    .min(1, "Contact Number is required")
-    .regex(/^\d+$/, "Contact Number must contain numeric values only")
-    .length(10, "Contact Number should be exactly 10 digits"),
+  contactNumber: z.preprocess(
+    removeWhitespace,
+    z
+      .string()
+      .min(1, "Contact Number is required")
+      .regex(/^\d+$/, "Contact Number must contain numeric values only")
+      .length(10, "Contact Number should be exactly 10 digits"),
+  ),
 
   message: z.string().trim().min(1, "Message is required"),
 });

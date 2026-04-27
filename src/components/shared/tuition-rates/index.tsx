@@ -12,9 +12,38 @@ import {
 import { useFetchTuitionRatesQuery } from "@/store/api/splits/tuition-rates";
 import { Card } from "@/components/ui/card";
 
-// filter by level title
+type Rate = { minimumRate: string | number; maximumRate: string | number };
+
 interface TuitionRatesByLevelProps {
   levelTitle: string;
+}
+
+function formatRateValue(value: string | number) {
+  const numericValue = typeof value === "number" ? value : Number(value);
+  if (Number.isFinite(numericValue)) {
+    return new Intl.NumberFormat("en-US").format(numericValue);
+  }
+  return String(value);
+}
+
+function RateCell({ rate }: { rate?: Rate }) {
+  if (!rate?.minimumRate && !rate?.maximumRate) {
+    return <span className="text-gray-400 italic text-sm">N/A</span>;
+  }
+
+  return (
+    <span className="inline-flex items-center gap-2 font-medium text-gray-700 whitespace-nowrap">
+      <span className="inline-flex items-center gap-1 bg-teal-50 text-teal-700 border border-teal-200 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="tracking-wide text-[10px] opacity-70">Rs</span>
+        <span>{formatRateValue(rate.minimumRate)}</span>
+      </span>
+      <span className="text-gray-400">-</span>
+      <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
+        <span className="tracking-wide text-[10px] opacity-70">Rs</span>
+        <span>{formatRateValue(rate.maximumRate)}</span>
+      </span>
+    </span>
+  );
 }
 
 const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
@@ -27,7 +56,6 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
     return <p className="text-red-500">Failed to load tuition rates</p>;
   if (!data?.results?.length) return <p>No tuition rates found</p>;
 
-  // Filter by level title
   const levelResults = data.results.filter(
     (item: any) =>
       item.level &&
@@ -38,7 +66,6 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
   if (!levelResults.length)
     return <p>No tuition rates available for &quot;{levelTitle}&quot;</p>;
 
-  // Group by grade
   const groupedByGrade = levelResults.reduce(
     (acc: any, item: any) => {
       const gradeId = item.grade?.id || "unknown";
@@ -51,9 +78,10 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
 
       acc[gradeId].subjects.push({
         title: item.subject?.title || "N/A",
-        fullTime: item.fullTimeTuitionRate || [],
-        partTime: item.partTimeTuitionRate || [],
-        gov: item.govTuitionRate || [],
+        universityStudentsRate: item.universityStudentsRate,
+        partTimeTutorRate: item.partTimeTutorRate,
+        fullTimeTutorRate: item.fullTimeTutorRate,
+        moeTeacherRate: item.moeTeacherRate,
       });
 
       return acc;
@@ -75,15 +103,20 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
             <Table className="mt-2">
               <TableHeader>
                 <TableRow className="text-white font-bold">
-                  <TableHead className="bg-[#FCA627] w-1/4">Subjects</TableHead>
-                  <TableHead className="bg-[#FCA627] w-1/4">
-                    Full Time (Min - Max)
+                  <TableHead className="bg-[#FCA627] w-1/5 whitespace-nowrap">
+                    Subjects
                   </TableHead>
-                  <TableHead className="bg-[#FCA627] w-1/4">
-                    Part Time (Min - Max)
+                  <TableHead className="bg-[#FCA627] w-1/5 whitespace-nowrap">
+                    University Students
                   </TableHead>
-                  <TableHead className="bg-[#FCA627] w-1/4">
-                    Government (Min - Max)
+                  <TableHead className="bg-[#FCA627] w-1/5 whitespace-nowrap">
+                    Part Time Tutor
+                  </TableHead>
+                  <TableHead className="bg-[#FCA627] w-1/5 whitespace-nowrap">
+                    Full Time Tutor
+                  </TableHead>
+                  <TableHead className="bg-[#FCA627] w-1/5 whitespace-nowrap">
+                    Ex / Current MOE Teachers
                   </TableHead>
                 </TableRow>
               </TableHeader>
@@ -94,16 +127,16 @@ const TuitionRatesByLevelComponent: React.FC<TuitionRatesByLevelProps> = ({
                       {subject.title}
                     </TableCell>
                     <TableCell className="bg-gray-100">
-                      Rs.{subject.fullTime?.[0]?.minimumRate || "N/A"} - Rs.{" "}
-                      {subject.fullTime?.[0]?.maximumRate || "N/A"}
+                      <RateCell rate={subject.universityStudentsRate} />
                     </TableCell>
                     <TableCell className="bg-gray-100">
-                      Rs. {subject.partTime?.[0]?.minimumRate || "N/A"} - Rs.{" "}
-                      {subject.partTime?.[0]?.maximumRate || "N/A"}
+                      <RateCell rate={subject.partTimeTutorRate} />
                     </TableCell>
                     <TableCell className="bg-gray-100">
-                      Rs. {subject.gov?.[0]?.minimumRate || "N/A"} - Rs.{" "}
-                      {subject.gov?.[0]?.maximumRate || "N/A"}
+                      <RateCell rate={subject.fullTimeTutorRate} />
+                    </TableCell>
+                    <TableCell className="bg-gray-100">
+                      <RateCell rate={subject.moeTeacherRate} />
                     </TableCell>
                   </TableRow>
                 ))}

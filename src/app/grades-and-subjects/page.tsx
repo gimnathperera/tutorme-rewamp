@@ -21,6 +21,37 @@ import "react-loading-skeleton/dist/skeleton.css";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 
 const GRADE_LIMIT = 1000;
+const AL_STREAM_ORDER = [
+  "physical science",
+  "biological science",
+  "commerce",
+  "technology",
+  "art",
+];
+const UNKNOWN_AL_STREAM_ORDER = AL_STREAM_ORDER.length;
+
+const normalizeTitle = (title: string) => title.toLowerCase();
+
+const getAlStreamOrder = (title: string) => {
+  const normalizedTitle = normalizeTitle(title);
+  const streamIndex = AL_STREAM_ORDER.findIndex((stream) =>
+    normalizedTitle.includes(stream),
+  );
+
+  return streamIndex === -1 ? UNKNOWN_AL_STREAM_ORDER : streamIndex;
+};
+
+const isAdvancedLevelTitle = (title: string) =>
+  /a\/?l|advanced\s+level/i.test(title);
+
+const getGradePriority = (title: string) => {
+  if (/grade\s*\d+/i.test(title)) return 1;
+  if (/o\/?l|ordinary level/i.test(title)) return 2;
+  if (isAdvancedLevelTitle(title)) return 3;
+  if (/extracurricular activities/i.test(title)) return 4;
+  if (/other activities/i.test(title)) return 5;
+  return 99;
+};
 
 // ── Grade detail popup ────────────────────────────────────────────────────────
 interface GradeDetailDialogProps {
@@ -136,15 +167,15 @@ const GradeCard: FC<GradeCardProps> = ({
   description,
   onShowDetails,
 }) => (
-  <Card className="flex flex-col m-2 bg-white">
-    <CardContent className="flex-grow p-6">
+  <Card className="flex h-full flex-col bg-white">
+    <CardContent className="flex-grow p-5">
       {/* Icon */}
-      <div className="h-16 flex items-center justify-center">
+      <div className="flex h-12 items-center justify-center">
         <Icon name="ScrollText" size={32} />
       </div>
 
       {/* Title */}
-      <h2 className="text-xl font-semibold text-center mb-2">{title}</h2>
+      <h2 className="mb-2 text-center text-xl font-semibold">{title}</h2>
 
       {/* Description — always clamped to 4 lines */}
       <div className="text-center">
@@ -154,7 +185,7 @@ const GradeCard: FC<GradeCardProps> = ({
       </div>
     </CardContent>
 
-    <CardFooter className="p-6 pt-0 mt-auto">
+    <CardFooter className="mt-auto px-5 pb-5 pt-0">
       <button
         className="py-3 px-5 text-base disabled:opacity-50 font-semibold w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:opacity-90"
         onClick={onShowDetails}
@@ -175,17 +206,15 @@ const GradesPage: FC = () => {
   });
 
   const grades = (data?.results || []).slice().sort((a, b) => {
-    const getPriority = (title: string) => {
-      if (/grade\s*\d+/i.test(title)) return 1;
-      if (/o\/?l/i.test(title)) return 2;
-      if (/a\/?l/i.test(title)) return 3;
-      if (/extracurricular activities/i.test(title)) return 4;
-      if (/other activities/i.test(title)) return 5;
-      return 99;
-    };
+    if (isAdvancedLevelTitle(a.title) && isAdvancedLevelTitle(b.title)) {
+      const streamOrderDiff =
+        getAlStreamOrder(a.title) - getAlStreamOrder(b.title);
+      if (streamOrderDiff !== 0) return streamOrderDiff;
+      return a.title.localeCompare(b.title);
+    }
 
-    const priorityA = getPriority(a.title);
-    const priorityB = getPriority(b.title);
+    const priorityA = getGradePriority(a.title);
+    const priorityB = getGradePriority(b.title);
 
     // Step 1: category sorting
     if (priorityA !== priorityB) {
@@ -199,22 +228,22 @@ const GradesPage: FC = () => {
       return numA - numB;
     }
 
-    return 0;
+    return a.title.localeCompare(b.title);
   });
 
   return (
-    <div className="px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl py-4 m-3">
+    <div className="px-4 pb-12 pt-8 sm:px-6 lg:px-8">
+      <div className="mx-auto mb-5 max-w-7xl text-center">
         <h2 className="text-4xl font-bold text-center">
           Grades &amp; Subjects
         </h2>
-        <h3 className="text-xl font-normal text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal opacity-50">
           Browse the available grades and explore the subjects offered in each
           one.
         </h3>
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-16 lg:px-10 rounded-3xl bg-lightgrey grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:py-10 lg:px-10 rounded-3xl bg-lightgrey grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {isLoading
           ? Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="flex flex-col m-2 bg-white">
