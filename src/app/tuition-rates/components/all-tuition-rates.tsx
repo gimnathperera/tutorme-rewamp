@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BookOpen, ChevronDown } from "lucide-react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
@@ -16,9 +16,11 @@ type Rate = { minimumRate: string | number; maximumRate: string | number };
 
 function formatRateValue(value: string | number) {
   const numericValue = typeof value === "number" ? value : Number(value);
+
   if (Number.isFinite(numericValue)) {
     return new Intl.NumberFormat("en-US").format(numericValue);
   }
+
   return String(value);
 }
 
@@ -33,7 +35,9 @@ function RateCell({ rate }: { rate?: Rate }) {
         <span className="tracking-wide text-[10px] opacity-70">Rs</span>
         <span>{formatRateValue(rate.minimumRate)}</span>
       </span>
+
       <span className="text-gray-400">-</span>
+
       <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap">
         <span className="tracking-wide text-[10px] opacity-70">Rs</span>
         <span>{formatRateValue(rate.maximumRate)}</span>
@@ -85,6 +89,7 @@ function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
             </th>
           </tr>
         </thead>
+
         <tbody>
           {items.map((item, idx) => (
             <tr
@@ -101,15 +106,19 @@ function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
                   </span>
                 </span>
               </td>
+
               <td className="px-5 py-4 align-middle">
                 <RateCell rate={item.universityStudentsRate} />
               </td>
+
               <td className="px-5 py-4 align-middle">
                 <RateCell rate={item.partTimeTutorRate} />
               </td>
+
               <td className="px-5 py-4 align-middle">
                 <RateCell rate={item.fullTimeTutorRate} />
               </td>
+
               <td className="px-5 py-4 align-middle">
                 <RateCell rate={item.moeTeacherRate} />
               </td>
@@ -122,10 +131,15 @@ function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
 }
 
 export default function TuitionRatesByGrade() {
+  const [activeAccordion, setActiveAccordion] = useState<string | undefined>(
+    undefined,
+  );
+
   const { data: gradesData, isLoading: isGradesLoading } = useFetchGradesQuery({
     page: 1,
     limit: 1000,
   });
+
   const {
     data: tuitionRatesData,
     isLoading: isRatesLoading,
@@ -135,20 +149,30 @@ export default function TuitionRatesByGrade() {
     limit: 1000,
   });
 
-  const grades = gradesData?.results || [];
+  const grades = useMemo(() => gradesData?.results || [], [gradesData]);
   const tuitionRates = tuitionRatesData?.results || [];
 
   const tuitionRatesByGradeId = useMemo(() => {
     return tuitionRates.reduce<Record<string, TuitionRateItem[]>>(
       (acc, item) => {
         const gradeId = item.grade?.id || "unknown";
-        if (!acc[gradeId]) acc[gradeId] = [];
+
+        if (!acc[gradeId]) {
+          acc[gradeId] = [];
+        }
+
         acc[gradeId].push(item);
         return acc;
       },
       {},
     );
   }, [tuitionRates]);
+
+  useEffect(() => {
+    if (grades.length > 0 && activeAccordion === undefined) {
+      setActiveAccordion(grades[0].id || "grade-0");
+    }
+  }, [grades, activeAccordion]);
 
   if (isGradesLoading || isRatesLoading) {
     return (
@@ -173,14 +197,13 @@ export default function TuitionRatesByGrade() {
     return <p>No grades found</p>;
   }
 
-  const defaultValue = grades[0]?.id || "grade-0";
-
   return (
     <div className="px-2 sm:px-0">
       <Accordion
         type="single"
         collapsible
-        defaultValue={defaultValue}
+        value={activeAccordion}
+        onValueChange={setActiveAccordion}
         className="space-y-3"
       >
         {grades.map((grade: Grade, idx: number) => {
@@ -199,15 +222,18 @@ export default function TuitionRatesByGrade() {
                     <div className="bg-white/20 rounded-full p-1.5 shrink-0">
                       <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                     </div>
+
                     <h2 className="text-white font-bold text-base sm:text-lg tracking-wide min-w-0 truncate">
                       {grade.title}
                     </h2>
                   </div>
+
                   <div className="flex items-center gap-3 shrink-0">
                     <span className="hidden sm:inline-flex items-center bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
                       {gradeRates.length} item
                       {gradeRates.length === 1 ? "" : "s"}
                     </span>
+
                     <ChevronDown className="chevron w-5 h-5 text-white shrink-0 transition-transform duration-300" />
                   </div>
                 </AccordionPrimitive.Trigger>
