@@ -1,3 +1,4 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata, seoPages } from "@/lib/seo";
 
 export const metadata = createMetadata(seoPages.tuitionAssignments);
@@ -7,5 +8,13 @@ export default function TuitionAssignmentsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <PageBreadcrumbJsonLd
+        name="Tuition Assignments"
+        path={seoPages.tuitionAssignments.path}
+      />
+      {children}
+    </>
+  );
 }

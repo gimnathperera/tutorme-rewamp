@@ -23,6 +23,9 @@ const ProfilePicSettings = () => {
   const [tempAvatar, setTempAvatar] = useState<string | null>(null);
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [open, setOpen] = useState(false);
+  const hasProfilePicture = Boolean(
+    avatarUrl.trim() && avatarUrl !== DEFAULT_AVATAR,
+  );
 
   useEffect(() => {
     if (userId) fetchProfile({ userId: String(userId) });
@@ -59,6 +62,10 @@ const ProfilePicSettings = () => {
 
   const handleDelete = async () => {
     if (!userId) return;
+    if (!hasProfilePicture) {
+      toast.error("No profile picture to remove.");
+      return;
+    }
 
     try {
       await updateProfile({
@@ -104,9 +111,22 @@ const ProfilePicSettings = () => {
           </button>
 
           <button
-            onClick={() => setConfirmDeleteOpen(true)}
-            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
+            onClick={() => {
+              if (!hasProfilePicture) {
+                toast.error("No profile picture to remove.");
+                return;
+              }
+
+              setConfirmDeleteOpen(true);
+            }}
+            disabled={!hasProfilePicture || isLoading}
+            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5"
             aria-label="Delete profile picture"
+            title={
+              hasProfilePicture
+                ? "Delete profile picture"
+                : "No profile picture to remove"
+            }
           >
             <Trash2
               size={16}

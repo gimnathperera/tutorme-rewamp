@@ -1,15 +1,21 @@
+import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
   path: "/terms-and-conditions",
-  title: "Terms and Conditions | Tuition Lanka",
+  title: "Terms and Conditions for Tuition Lanka Users | Tuition Lanka",
   description:
-    "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor.",
+    "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor, including service rules and responsibilities.",
 });
 
 const TermsAndConditionsPage = () => {
   return (
-    <div className="mx-auto max-w-7xl mt-10 p-3 pb-10 md:p-4 md:pb-10">
+    <>
+      <PageBreadcrumbJsonLd
+        name="Terms and Conditions"
+        path="/terms-and-conditions"
+      />
+      <div className="mx-auto max-w-7xl mt-10 p-3 pb-10 md:p-4 md:pb-10">
       <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden mb-8">
         <div className="relative z-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
@@ -32,7 +38,7 @@ const TermsAndConditionsPage = () => {
             Last updated: April 23, 2026
           </p>
           <p className="mt-2 text-sm leading-relaxed text-gray-600">
-            These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at tuitionlanka.com (&quot;Platform&quot;). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).
+            These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at www.tuitionlanka.com (&quot;Platform&quot;). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).
           </p>
         </div>
 
@@ -43,7 +49,7 @@ const TermsAndConditionsPage = () => {
             <h2 className="text-lg font-bold text-gray-900">1. Introduction and Acceptance</h2>
             <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-600">
               <p>
-                These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at tuitionlanka.com (&quot;Platform&quot;). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).
+                These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at www.tuitionlanka.com (&quot;Platform&quot;). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).
               </p>
               <p>
                 By registering on, accessing, or using the Platform in any capacity whether as a tutor, a parent, or a visitor you confirm that you have read, understood, and agree to be bound by these Terms. If you do not agree, you must not use the Platform.
@@ -274,7 +280,7 @@ const TermsAndConditionsPage = () => {
             <h2 className="text-lg font-bold text-gray-900">13. Privacy</h2>
             <div className="mt-3 text-sm leading-relaxed text-gray-600">
               <p>
-                Your use of the Platform is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy at tuitionlanka.com/privacy-policy to understand our data collection and use practices.
+                Your use of the Platform is also governed by our Privacy Policy, which is incorporated into these Terms by reference. Please review our Privacy Policy at www.tuitionlanka.com/privacy-policy to understand our data collection and use practices.
               </p>
             </div>
           </section>
@@ -311,14 +317,15 @@ const TermsAndConditionsPage = () => {
               </p>
               <p>
                 <span className="font-semibold text-gray-800">Website:</span>{" "}
-                https://tuitionlanka.com
+                https://www.tuitionlanka.com
               </p>
             </div>
           </section>
 
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

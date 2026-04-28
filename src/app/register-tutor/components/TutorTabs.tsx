@@ -35,9 +35,13 @@ import {
   step2Schema,
   step3Schema,
 } from "../schema";
-import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+import {
+  useAddTutorRequestMutation,
+  useLazyGetTutorEmailAvailabilityQuery,
+} from "@/store/api/splits/tutor-request";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
+import { getEmailFormatError } from "@/utils/email-validation";
 
 type TabKey =
   | "personalInfo"
@@ -52,11 +56,23 @@ const TAB_ORDER: TabKey[] = [
   "verification",
 ];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
+const DUPLICATE_EMAIL_MESSAGE = "Email already exists";
+
+const isDuplicateEmailError = (error: string) => {
+  const normalizedError = error.toLowerCase();
+  return (
+    normalizedError.includes("email") &&
+    (normalizedError.includes("already exists") ||
+      normalizedError.includes("already in use") ||
+      normalizedError.includes("already taken"))
+  );
+};
 
 export function TutorTabs() {
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
+  const [checkTutorEmailAvailability] = useLazyGetTutorEmailAvailabilityQuery();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
     "success" | string | null
@@ -97,7 +113,8 @@ export function TutorTabs() {
     },
   });
 
-  const { handleSubmit, trigger, reset } = methods;
+  const { handleSubmit, trigger, reset, setError, setFocus, getValues } =
+    methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
@@ -134,6 +151,30 @@ export function TutorTabs() {
       if (!valid) return;
     }
 
+    if (tab === "personalInfo") {
+      const email = getValues("email").toLowerCase();
+      const formatError = getEmailFormatError(email);
+      if (formatError) {
+        setError("email", {
+          type: "manual",
+          message: formatError,
+        });
+        setFocus("email");
+        return;
+      }
+
+      const result = await checkTutorEmailAvailability(email, true);
+
+      if (result.data && !result.data.available) {
+        setError("email", {
+          type: "server",
+          message: result.data.message || DUPLICATE_EMAIL_MESSAGE,
+        });
+        setFocus("email");
+        return;
+      }
+    }
+
     changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
@@ -148,6 +189,17 @@ export function TutorTabs() {
       const result = await addTutorRequest(payload);
       const error = getErrorInApiResult(result);
       if (error) {
+        if (typeof error === "string" && isDuplicateEmailError(error)) {
+          setError("email", {
+            type: "server",
+            message: DUPLICATE_EMAIL_MESSAGE,
+          });
+          changeStep("personalInfo");
+          setTimeout(() => setFocus("email"), 0);
+          toast.error(DUPLICATE_EMAIL_MESSAGE);
+          return;
+        }
+
         // Show a prominent toast for suspended emails, generic dialog for anything else
         if (
           typeof error === "string" &&
@@ -373,7 +425,9 @@ export function TutorTabs() {
               Submission Failed
             </DialogTitle>
             <DialogDescription className="text-center text-base">
-              Something went wrong.
+              {typeof submissionResult === "string"
+                ? submissionResult
+                : "Something went wrong."}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">

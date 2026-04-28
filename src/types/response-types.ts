@@ -300,14 +300,22 @@ export type ProfileResponse = {
   availability?: string;
   rate?: string;
   avatar?: string;
+  classType?: string[];
   tutoringLevels?: string[];
   preferredLocations?: string[];
   tutorTypes?: string[];
   highestEducation?: string;
   yearsExperience?: number;
   tutorMediums?: string[];
+  teachingSummary?: string;
+  studentResults?: string;
+  sellingPoints?: string;
   academicDetails?: string;
-  certificatesAndQualifications?: string[];
+  certificatesAndQualifications?: Array<
+    string | { type?: string; url?: string }
+  >;
+  tutor?: Partial<ProfileResponse>;
+  tutorProfile?: Partial<ProfileResponse>;
 } & Id &
   Timestamp;
 
@@ -367,6 +375,11 @@ export type FindMyTutorResponse = {
   tutorTypeInfo: TutorTypeInfo;
 } & Id &
   Timestamp;
+
+export type TutorEmailAvailabilityResponse = {
+  available: boolean;
+  message: string;
+};
 
 export type FaqResponse = PaginatedResponse<Faq>;
 export type SubjectResponse = PaginatedResponse<Subject>;

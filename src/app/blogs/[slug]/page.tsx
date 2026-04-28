@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
 
 const BlogRenderer = dynamic(
   () => import("../components/blog-renderer/BlogRenderer"),
@@ -200,11 +201,14 @@ export default function ViewBlogPage() {
           </div>
         )}
         {blog.image && (
-          <div className="relative w-full rounded-lg overflow-hidden shadow-lg">
-            <img
+          <div className="relative w-full h-[250px] md:h-[350px] rounded-lg overflow-hidden shadow-lg">
+            <Image
               src={blog.image}
               alt={blog.title || "Cover Image"}
-              className="w-full h-[250px] md:h-[350px] object-cover"
+              fill
+              priority
+              sizes="(min-width: 1280px) 1280px, 100vw"
+              className="object-cover"
             />
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
@@ -223,7 +227,7 @@ export default function ViewBlogPage() {
           <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-lg leading-relaxed">
             <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
               <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
-                <AvatarImage src="/images/logo/tuitionlanka.png" />
+                <AvatarImage src="/images/logo/LightThemeLogoIcon.svg" />
                 <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl uppercase">
                   TL
                 </AvatarFallback>
@@ -325,13 +329,14 @@ export default function ViewBlogPage() {
                       (window.location.href = `/blogs/${related.slug || related.id}`)
                     }
                   >
-                    <img
+                    <Image
                       src={related.image || "/images/profile/pp.png"}
-                      alt="thumbnail"
+                      alt={related.title || "Related blog thumbnail"}
+                      width={56}
+                      height={56}
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                       onError={(e) => {
-                        (e.target as HTMLImageElement).src =
-                          "/images/profile/pp.png";
+                        e.currentTarget.src = "/images/profile/pp.png";
                       }}
                     />
                     <div>

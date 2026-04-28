@@ -4,12 +4,15 @@ import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Spinner } from "@/components/ui/spinner";
 import Icon from "@/components/shared/icon";
 import {
   collapseTextSpaces,
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
+import { getEmailFormatError } from "@/utils/email-validation";
+import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-2";
@@ -18,6 +21,7 @@ const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
+const EMAIL_CHECK_DELAY_MS = 500;
 
 /** Hint text shown below a field while it has no error */
 const Hint = ({ children }: { children: React.ReactNode }) => (
@@ -30,10 +34,14 @@ const preventWhitespaceKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
+type EmailAvailabilityState = "available" | "unavailable" | null;
+
 const PersonalInfo = () => {
   const {
     register,
     watch,
+    clearErrors,
+    setError,
     setValue,
     trigger,
     formState: { errors },
@@ -41,10 +49,16 @@ const PersonalInfo = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [emailAvailability, setEmailAvailability] =
+    useState<EmailAvailabilityState>(null);
+  const [checkTutorEmailAvailability, { isFetching: isCheckingEmail }] =
+    useLazyGetTutorEmailAvailabilityQuery();
 
   const dateInputRef = useRef<HTMLInputElement | null>(null);
+  const latestEmailRef = useRef("");
 
   const dateOfBirth = watch("dateOfBirth");
+  const email = watch("email");
 
   /** Latest selectable date = today minus 18 years (tutor must be ≥ 18) */
   const maxDate = (() => {
@@ -70,6 +84,58 @@ const PersonalInfo = () => {
       setValue("age", age, { shouldValidate: true });
     }
   }, [dateOfBirth, setValue]);
+
+  useEffect(() => {
+    const normalizedEmail =
+      typeof email === "string" ? removeWhitespace(email).toLowerCase() : "";
+    latestEmailRef.current = normalizedEmail;
+
+    if (!normalizedEmail) {
+      setEmailAvailability(null);
+      return;
+    }
+
+    const formatError = getEmailFormatError(normalizedEmail);
+    if (formatError) {
+      setEmailAvailability("unavailable");
+      setError("email", {
+        type: "manual",
+        message: formatError,
+      });
+      return;
+    }
+
+    const timeoutId = window.setTimeout(async () => {
+      const result = await checkTutorEmailAvailability(normalizedEmail, true);
+      if (latestEmailRef.current !== normalizedEmail) return;
+      if (!result.data) {
+        setEmailAvailability(null);
+        return;
+      }
+
+      if (!result.data.available) {
+        setEmailAvailability("unavailable");
+        setError("email", {
+          type: "server",
+          message: result.data.message || "Email already exists",
+        });
+        return;
+      }
+
+      setEmailAvailability("available");
+      if ((errors.email as { type?: string } | undefined)?.type === "server") {
+        clearErrors("email");
+      }
+    }, EMAIL_CHECK_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [
+    checkTutorEmailAvailability,
+    clearErrors,
+    email,
+    errors.email,
+    setError,
+  ]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -112,31 +178,55 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="email">
           Email <span className="text-red-500">*</span>
         </Label>
-        <Input
-          id="email"
-          type="email"
-          onKeyDown={preventWhitespaceKey}
-          {...register("email", {
-            onChange: (e) => {
-              const noSpaces = removeWhitespace(e.target.value);
-              if (noSpaces !== e.target.value) {
-                e.target.value = noSpaces;
-                setValue("email", noSpaces, { shouldValidate: true });
-              }
-            },
-            onBlur: (e) => {
-              setValue("email", removeWhitespace(e.target.value), {
-                shouldValidate: true,
-              });
-            },
-          })}
-          placeholder="e.g. nimal@example.com"
-          autoComplete="email"
-          className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
-        />
+        <div className="relative">
+          <Input
+            id="email"
+            type="email"
+            onKeyDown={preventWhitespaceKey}
+            {...register("email", {
+              onChange: (e) => {
+                const noSpaces = removeWhitespace(e.target.value);
+                setEmailAvailability(null);
+                if (
+                  (errors.email as { type?: string } | undefined)?.type ===
+                  "server"
+                ) {
+                  clearErrors("email");
+                }
+                if (noSpaces !== e.target.value) {
+                  e.target.value = noSpaces;
+                  setValue("email", noSpaces, { shouldValidate: true });
+                }
+              },
+              onBlur: (e) => {
+                setValue("email", removeWhitespace(e.target.value), {
+                  shouldValidate: true,
+                });
+              },
+            })}
+            placeholder="e.g. nimal@example.com"
+            autoComplete="email"
+            className={`${inputClass} pr-10 ${errors.email ? "border-red-500" : "border-gray-300"}`}
+          />
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
+            {isCheckingEmail ? (
+              <Spinner className="text-gray-400" />
+            ) : errors.email || emailAvailability === "unavailable" ? (
+              <Icon name="CircleX" size={18} className="text-red-500" />
+            ) : emailAvailability === "available" ? (
+              <Icon name="CircleCheck" size={18} className="text-green-600" />
+            ) : null}
+          </span>
+        </div>
         {errors.email ? (
           <p className="text-xs text-red-500 min-h-[1.25rem]">
             {errors.email?.message as string}
+          </p>
+        ) : isCheckingEmail ? (
+          <Hint>Checking email availability...</Hint>
+        ) : emailAvailability === "available" ? (
+          <p className="text-xs text-green-600 min-h-[1.25rem]">
+            Email is available
           </p>
         ) : (
           <Hint>Enter a valid email address</Hint>

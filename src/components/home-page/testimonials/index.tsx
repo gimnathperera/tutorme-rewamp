@@ -3,6 +3,7 @@ import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
+import Image from "next/image";
 
 /* ─── Grid slide-in keyframe injected once ───────────────── */
 const GRID_ANIM_STYLE = `
@@ -47,9 +48,11 @@ const Avatar: FC<{ src: string; name: string }> = ({ src, name }) => {
     );
   }
   return (
-    <img
+    <Image
       src={src}
       alt={name}
+      width={40}
+      height={40}
       onError={() => setBroken(true)}
       className="w-10 h-10 rounded-full object-cover flex-shrink-0 border-2 border-white shadow-sm"
     />

@@ -14,7 +14,7 @@ type Props = {
   user?: AuthUserData;
 };
 
-const DEFAULT_AVATAR = "/images/testimonial/user1.svg";
+const DEFAULT_AVATAR = "/images/profile/pp.png";
 
 const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const { logout, isUserLogoutLoading } = useAuthContext();

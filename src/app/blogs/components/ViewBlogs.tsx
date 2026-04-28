@@ -7,8 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
+import Image from "next/image";
 
-const DEFAULT_AVATAR = "/images/logo/tuitionlanka.png";
+const DEFAULT_AVATAR = "/images/logo/LightThemeLogoIcon.svg";
 
 export default function BlogsDashboard() {
   const [page, setPage] = useState(1);
@@ -176,10 +177,12 @@ export default function BlogsDashboard() {
                   {/* Cover image */}
                   {imageSrc ? (
                     <div className="relative h-44 bg-gray-100 overflow-hidden">
-                      <img
+                      <Image
                         src={imageSrc}
                         alt={blog.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       <div className="absolute bottom-2.5 right-2.5 bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
                         {blogDate.toLocaleDateString("en-US", {
@@ -197,12 +200,14 @@ export default function BlogsDashboard() {
                   <div className="p-4 flex flex-col flex-1 gap-2">
                     {/* Author row */}
                     <div className="flex items-center gap-2.5">
-                      <img
+                      <Image
                         src={avatarSrc}
                         alt="Blog post thumbnail"
+                        width={28}
+                        height={28}
                         className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = DEFAULT_AVATAR;
+                          e.currentTarget.src = DEFAULT_AVATAR;
                         }}
                       />
                       <div className="flex flex-col leading-tight">

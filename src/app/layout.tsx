@@ -1,5 +1,6 @@
 import NavBar from "@/components/shared/navbar";
 import Script from "next/script";
+import { Suspense } from "react";
 import Footer from "@/components/shared/footer";
 import BackToTop from "@/components/shared/back-to-top";
 import RouteScrollManager from "@/components/shared/route-scroll-manager";
@@ -13,7 +14,9 @@ export const metadata = {
     google: "euNzGr2NazmC3paB9xamB2El7bk8uGq0wYv_l90lj7Q",
   },
   icons: {
-    icon: "/favicon.svg",
+    icon: "/images/logo/LightThemeLogoIcon.svg",
+    shortcut: "/images/logo/LightThemeLogoIcon.svg",
+    apple: "/images/logo/LightThemeLogoIcon.svg",
   },
 };
 
@@ -30,7 +33,9 @@ export default function RootLayout({
           <>
             <RouteScrollManager />
             <main className="site-shell bg-lightwhite flex flex-col">
-              <NavBar />
+              <Suspense fallback={null}>
+                <NavBar />
+              </Suspense>
               <div className="flex-1">{children}</div>
               <Footer />
             </main>
