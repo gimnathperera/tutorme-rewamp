@@ -1,6 +1,8 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Option } from "@/types/shared-types";
+import { AuthUserData } from "@/types/auth-types";
+import { ProfileResponse } from "@/types/response-types";
 import { EducationInfoSchema } from "../components/form-education-information/schema";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
 import { LanguageOptionsSchema } from "../components/form-language-time/schema";
@@ -19,6 +21,9 @@ export type LogicReturnType = {
       isGradeLoading: boolean;
       isGeneralFormSubmitting: boolean;
     };
+    profileData: ProfileResponse | null;
+    currentUser: AuthUserData | null;
+    isAdminProfile: boolean;
   };
   forms: {
     generalInfoForm: ReturnType<any>;

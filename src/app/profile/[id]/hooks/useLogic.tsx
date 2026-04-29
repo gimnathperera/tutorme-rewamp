@@ -13,7 +13,6 @@ import { useLazyGetTutorRegistrationQuery } from "@/store/api/splits/tutor-reque
 import { Option } from "@/types/shared-types";
 import { ProfileResponse, Subject } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
-import { env } from "@/configs/env";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { size } from "lodash-es";
 import { useParams, useRouter } from "next/navigation";
@@ -422,6 +421,9 @@ const useLogic = (): LogicReturnType => {
   const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
   const prevEducationGradesRef = useRef<string[]>([]);
   const hasInitialEducationSubjectsBeenSet = useRef(false);
+  const isCurrentUserProfile =
+    Boolean(userId && user) && String(user?.id) === String(userId);
+  const isAdminProfile = isCurrentUserProfile && user?.role === "admin";
 
   const forceRedirectUser = useCallback(() => {
     if (isUserLoaded && !user) {
@@ -433,15 +435,14 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
-    if (user.role === "admin") {
-      window.location.assign(env.urls.adminPortalUrl);
+    if (user.role === "admin" && isCurrentUserProfile) {
       return;
     }
 
-    if (user.role !== "tutor" || String(user.id) !== String(userId)) {
+    if (user.role !== "tutor" || !isCurrentUserProfile) {
       router.push("/");
     }
-  }, [isUserLoaded, router, user, userId]);
+  }, [isCurrentUserProfile, isUserLoaded, router, user]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -525,7 +526,7 @@ const useLogic = (): LogicReturnType => {
     if (result.data) {
       let profileData = result.data;
 
-      if (profileData.email) {
+      if (user?.role === "tutor" && profileData.email) {
         const tutorRegistrationResult = await fetchTutorRegistration({
           userId,
           email: profileData.email,
@@ -545,6 +546,7 @@ const useLogic = (): LogicReturnType => {
     fetchProfileData,
     fetchTutorRegistration,
     hydrateProfileForms,
+    user?.role,
     userId,
   ]);
 
@@ -634,9 +636,22 @@ const useLogic = (): LogicReturnType => {
 
   useEffect(() => {
     forceRedirectUser();
-    if (!userId || !user || user.role !== "tutor" || String(user.id) !== String(userId)) return;
+    if (
+      !userId ||
+      !user ||
+      !isCurrentUserProfile ||
+      (user.role !== "tutor" && user.role !== "admin")
+    ) {
+      return;
+    }
     getUserRawData();
-  }, [forceRedirectUser, getUserRawData, user, userId]);
+  }, [
+    forceRedirectUser,
+    getUserRawData,
+    isCurrentUserProfile,
+    user,
+    userId,
+  ]);
 
   useEffect(() => {
     syncEducationSubjectOptions();
@@ -749,6 +764,9 @@ const useLogic = (): LogicReturnType => {
         isGradeLoading,
         isGeneralFormSubmitting,
       },
+      profileData: userRawData,
+      currentUser: user,
+      isAdminProfile,
     },
     forms: {
       generalInfoForm,
