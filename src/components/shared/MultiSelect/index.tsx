@@ -68,13 +68,17 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   }, []);
 
   const borderClass = hasError ? "border-red-500" : "border-gray-300";
+  const disabledClass = disabled
+    ? "cursor-not-allowed bg-muted/60 text-muted-foreground opacity-70"
+    : "cursor-pointer bg-background";
 
   return (
     <div className="w-full relative" ref={dropdownRef}>
       {/* CONTROL */}
       <div
         onClick={toggleDropdown}
-        className={`flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border ${borderClass} bg-background px-3 text-sm cursor-pointer`}
+        aria-disabled={disabled}
+        className={`flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border ${borderClass} px-3 text-sm ${disabledClass}`}
       >
         {selectedOptions.length > 0 ? (
           selectedOptions.map((value) => {
@@ -87,11 +91,13 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                 {option?.text}
                 <button
                   type="button"
+                  disabled={disabled}
                   onClick={(e) => {
                     e.stopPropagation();
+                    if (disabled) return;
                     removeOption(value);
                   }}
-                  className="text-muted-foreground hover:text-foreground"
+                  className="text-muted-foreground hover:text-foreground disabled:cursor-not-allowed"
                 >
                   ✕
                 </button>
