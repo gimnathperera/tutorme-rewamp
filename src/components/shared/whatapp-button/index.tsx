@@ -5,7 +5,8 @@ import { FC } from "react";
 
 const WhatsAppButton: FC = () => {
   const onWhatsAppButtonClick = () => {
-    const phoneNumber = env.app.whatsAppNumber;
+    const raw = env.app.whatsAppNumber.replace(/\D/g, "");
+    const phoneNumber = raw.startsWith("0") ? `94${raw.slice(1)}` : raw;
     const message = encodeURIComponent("Hello! I would like to inquire...");
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
 
