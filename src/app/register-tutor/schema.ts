@@ -6,6 +6,7 @@ import {
   PASSWORD_TOO_LONG,
   PASSWORD_TOO_SHORT,
 } from "@/configs/password";
+import { isPhysicalClassType } from "@/configs/register-tutor";
 import {
   normalizeTextSpaces,
   removeWhitespace,
@@ -125,9 +126,7 @@ export const step2Schema = z.object({
     )
     .min(1, "Class Type is required"),
 
-  preferredLocations: z
-    .array(z.string())
-    .min(1, "Preferred Locations are required"),
+  preferredLocations: z.array(z.string()),
 
   tutorType: z.array(z.string()).min(1, "Tutor Types are required"),
 
@@ -219,8 +218,21 @@ export const fullSchema = step1BaseSchema
   .merge(step2Schema)
   .merge(step3Schema)
   .merge(step4Schema)
-  .superRefine(({ password, confirmPassword }, ctx) =>
-    passwordMatchRefinement(password, confirmPassword, ctx),
+  .superRefine(
+    ({ password, confirmPassword, classType, preferredLocations }, ctx) => {
+      passwordMatchRefinement(password, confirmPassword, ctx);
+
+      if (
+        classType.some(isPhysicalClassType) &&
+        preferredLocations.length === 0
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Preferred Locations are required",
+          path: ["preferredLocations"],
+        });
+      }
+    },
   );
 
 export type FindMyTutorForm = z.infer<typeof fullSchema>;

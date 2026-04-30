@@ -7,6 +7,7 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
   CLASS_TYPE_OPTIONS,
+  isPhysicalClassType,
   PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
@@ -33,19 +34,34 @@ const AcademicExperience = () => {
     watch,
     setValue,
     getValues,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
+  const selectedClassTypes = watch("classType");
 
   const selectedGradeIds = useMemo<string[]>(() => {
     return Array.isArray(selectedGrades) ? selectedGrades : [];
   }, [selectedGrades]);
+  const isPreferredLocationsEnabled = useMemo(() => {
+    return (
+      Array.isArray(selectedClassTypes) &&
+      selectedClassTypes.some(isPhysicalClassType)
+    );
+  }, [selectedClassTypes]);
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; text: string }[]
   >([]);
+
+  useEffect(() => {
+    if (isPreferredLocationsEnabled) return;
+
+    setValue("preferredLocations", [], { shouldValidate: true });
+    clearErrors("preferredLocations");
+  }, [clearErrors, isPreferredLocationsEnabled, setValue]);
 
   useEffect(() => {
     if (selectedGradeIds.length === 0) {
@@ -108,7 +124,10 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="preferredLocations">
-            Preferred Locations <span className="text-red-500">*</span>
+            Preferred Locations{" "}
+            {isPreferredLocationsEnabled && (
+              <span className="text-red-500">*</span>
+            )}
           </Label>
           <Controller
             name="preferredLocations"
@@ -118,13 +137,22 @@ const AcademicExperience = () => {
                 options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
-                hasError={!!errors.preferredLocations}
+                disabled={!isPreferredLocationsEnabled}
+                hasError={
+                  isPreferredLocationsEnabled && !!errors.preferredLocations
+                }
               />
             )}
           />
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.preferredLocations?.message as string}
-          </p>
+          {isPreferredLocationsEnabled ? (
+            <p className="text-xs leading-4 text-red-500 min-h-4">
+              {errors.preferredLocations?.message as string}
+            </p>
+          ) : (
+            <p className="text-xs leading-4 text-muted-foreground min-h-4">
+              Locations apply to physical classes only
+            </p>
+          )}
         </div>
       </div>
 

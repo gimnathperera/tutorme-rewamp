@@ -60,6 +60,16 @@ export const CLASS_TYPE_OPTIONS: SelectOption[] = [
   { value: "Physical - Individual", text: "Physical - Individual" },
   { value: "Physical - Group", text: "Physical - Group" },
 ];
+export const PHYSICAL_CLASS_TYPE_VALUES = [
+  "Physical - Individual",
+  "Physical - Group",
+] as const;
+
+export const isPhysicalClassType = (value: string) =>
+  PHYSICAL_CLASS_TYPE_VALUES.includes(
+    value as (typeof PHYSICAL_CLASS_TYPE_VALUES)[number],
+  );
+
 export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   {
     value: "Kollupitiya (Colombo 3)",
