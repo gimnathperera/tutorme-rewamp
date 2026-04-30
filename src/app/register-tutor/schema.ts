@@ -55,7 +55,7 @@ const step1BaseSchema = z.object({
       .string()
       .min(1, "Contact Number is required")
       .regex(/^\d+$/, "Contact Number must contain numeric values only")
-      .length(10, "Contact Number should be exactly 10 digits"),
+      .length(10, "Contact number should be exactly 10 digits"),
   ),
 
   dateOfBirth: z.preprocess(

@@ -337,7 +337,7 @@ export default function AddRequestForTutor() {
                       <p className={errorMsg}>{errors.phoneNumber?.message}</p>
                     ) : (
                       <p className="text-xs text-muted-foreground min-h-[1.25rem]">
-                        10-digit mobile number (digits only)
+                        Contact number should be exactly 10 digits
                       </p>
                     )}
                   </div>

@@ -355,7 +355,7 @@ const PersonalInfo = () => {
             {errors.contactNumber?.message as string}
           </p>
         ) : (
-          <Hint>10-digit mobile number (digits only)</Hint>
+          <Hint>Contact number should be exactly 10 digits</Hint>
         )}
       </div>
 
