@@ -127,6 +127,14 @@ export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
   { value: "Government Teacher", text: "Government Teacher" },
   { value: "University Student", text: "University Student" },
   { value: "Coach", text: "Coach" },
+  { value: "International School Teacher", text: "International School Teacher" },
+  { value: "University Lecturer", text: "University Lecturer" },
+  { value: "Full-Time", text: "Full-Time" },
+  { value: "Part-Time", text: "Part-Time" },
+  { value: "Online", text: "Online" },
+  { value: "School Teacher Tutors", text: "School Teacher Tutors" },
+  { value: "Group Tutors", text: "Group Tutors" },
+  { value: "Exam Coaches", text: "Exam Coaches" },
 ];
 export const HIGHEST_EDUCATION_LEVELS: SelectOption[] = [
   { value: "PhD", text: "PhD" },
