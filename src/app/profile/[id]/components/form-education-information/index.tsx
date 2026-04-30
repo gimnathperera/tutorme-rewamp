@@ -8,7 +8,6 @@ import {
   MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
-  TUTORING_LEVEL_OPTIONS,
 } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
@@ -31,7 +30,6 @@ const toOptions = (
   options: Array<{ value: string; text: string }>,
 ): Option[] => options.map(({ text, value }) => ({ label: text, value }));
 
-const tutoringLevelsOptions = toOptions(TUTORING_LEVEL_OPTIONS);
 const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
@@ -56,7 +54,6 @@ const FormEducationInfo: FC<Props> = ({
 }) => {
   const { isDirty, isValid } = form.formState;
   const [
-    tutoringLevels,
     preferredLocations,
     tutorTypes,
     highestEducation,
@@ -67,7 +64,6 @@ const FormEducationInfo: FC<Props> = ({
     academicDetails,
     certificatesAndQualifications,
   ] = form.watch([
-    "tutoringLevels",
     "preferredLocations",
     "tutorTypes",
     "highestEducation",
@@ -79,8 +75,6 @@ const FormEducationInfo: FC<Props> = ({
     "certificatesAndQualifications",
   ]);
   const hasAllRequiredFields =
-    Array.isArray(tutoringLevels) &&
-    tutoringLevels.length > 0 &&
     Array.isArray(preferredLocations) &&
     preferredLocations.length > 0 &&
     Array.isArray(tutorTypes) &&
@@ -116,12 +110,6 @@ const FormEducationInfo: FC<Props> = ({
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6">
-              <InputMultiSelect
-                label="Tutoring Levels *"
-                name="tutoringLevels"
-                options={tutoringLevelsOptions}
-              />
-
               <InputMultiSelect
                 label="Preferred Locations *"
                 name="preferredLocations"
