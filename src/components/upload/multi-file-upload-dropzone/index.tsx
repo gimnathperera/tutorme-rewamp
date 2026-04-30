@@ -42,7 +42,8 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
   // Determine what to preview
   const isImage = fileItem.file
     ? fileItem.file.type.startsWith("image/")
-    : !!fileItem.previewUrl;
+    : !!fileItem.previewUrl ||
+      /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(fileItem.url ?? "");
 
   const isPdf = fileItem.file
     ? fileItem.file.type === "application/pdf"
