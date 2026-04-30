@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
-const fieldWrapper = "flex flex-col gap-2";
+const fieldWrapper = "flex flex-col gap-1.5";
 const textareaBase =
   "w-full rounded-md border bg-white px-3 py-2 text-sm placeholder:text-gray-500 text-gray-900 focus:outline-none focus:ring-1 focus:ring-ring resize-y";
 const textareaBorder = (hasError: boolean) =>
@@ -39,10 +39,10 @@ const TutorProfile = () => {
   const sellingPoints = watch("sellingPoints") ?? "";
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Teaching Summary */}
       <div className={fieldWrapper}>
-        <Label htmlFor="teachingSummary" className="text-sm mb-1 block">
+        <Label htmlFor="teachingSummary" className="text-sm block">
           Short Introduction About Yourself{" "}
           <span className="text-red-500">*</span>
         </Label>
@@ -54,8 +54,8 @@ const TutorProfile = () => {
           rows={4}
           maxLength={CHAR_LIMIT}
         />
-        <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-xs text-red-500">
+        <div className="flex items-center justify-between min-h-4">
+          <p className="text-xs leading-4 text-red-500">
             {errors.teachingSummary?.message as string}
           </p>
           <CharCounter value={teachingSummary} />
@@ -64,7 +64,7 @@ const TutorProfile = () => {
 
       {/* Academic Details */}
       <div className={fieldWrapper}>
-        <Label htmlFor="academicDetails" className="text-sm mb-1 block">
+        <Label htmlFor="academicDetails" className="text-sm block">
           Summary of Teaching Experience &amp; Academic Achievements{" "}
           <span className="text-red-500">*</span>
         </Label>
@@ -76,8 +76,8 @@ const TutorProfile = () => {
           rows={4}
           maxLength={CHAR_LIMIT}
         />
-        <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-xs text-red-500">
+        <div className="flex items-center justify-between min-h-4">
+          <p className="text-xs leading-4 text-red-500">
             {errors.academicDetails?.message as string}
           </p>
           <CharCounter value={academicDetails} />
@@ -86,7 +86,7 @@ const TutorProfile = () => {
 
       {/* Student Results */}
       <div className={fieldWrapper}>
-        <Label htmlFor="studentResults" className="text-sm mb-1 block">
+        <Label htmlFor="studentResults" className="text-sm block">
           Results of Students / Track Record{" "}
           <span className="text-red-500">*</span>
         </Label>
@@ -98,8 +98,8 @@ const TutorProfile = () => {
           rows={4}
           maxLength={CHAR_LIMIT}
         />
-        <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-xs text-red-500">
+        <div className="flex items-center justify-between min-h-4">
+          <p className="text-xs leading-4 text-red-500">
             {errors.studentResults?.message as string}
           </p>
           <CharCounter value={studentResults} />
@@ -108,7 +108,7 @@ const TutorProfile = () => {
 
       {/* Selling Points */}
       <div className={fieldWrapper}>
-        <Label htmlFor="sellingPoints" className="text-sm mb-1 block">
+        <Label htmlFor="sellingPoints" className="text-sm block">
           Other Selling Points as a Tutor{" "}
           <span className="text-red-500">*</span>
         </Label>
@@ -120,8 +120,8 @@ const TutorProfile = () => {
           rows={4}
           maxLength={CHAR_LIMIT}
         />
-        <div className="flex items-center justify-between min-h-[1.25rem]">
-          <p className="text-xs text-red-500">
+        <div className="flex items-center justify-between min-h-4">
+          <p className="text-xs leading-4 text-red-500">
             {errors.sellingPoints?.message as string}
           </p>
           <CharCounter value={sellingPoints} />
