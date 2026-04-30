@@ -5,7 +5,7 @@ const requiredMultiSelect = (message: string) =>
   z.array(z.string()).min(1, message);
 
 export const educationInfoSchema = z.object({
-  tutoringLevels: requiredMultiSelect("Tutoring Levels are required"),
+  tutoringLevels: z.array(z.string()).optional(),
   preferredLocations: requiredMultiSelect("Preferred Locations are required"),
   tutorTypes: requiredMultiSelect("Tutor Types are required"),
   highestEducation: z.string().min(1, "Highest Education Level is required"),

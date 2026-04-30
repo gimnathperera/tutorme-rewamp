@@ -22,7 +22,7 @@ export const resetPasswordSchema = z
     confirmPassword: z
       .string()
       .trim()
-      .nonempty("Please confirm your password."),
+      .nonempty("Confirm Password is required."),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
