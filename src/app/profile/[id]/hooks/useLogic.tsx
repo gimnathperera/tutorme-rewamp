@@ -34,6 +34,11 @@ import {
   LanguageOptionsSchema,
   languageOptionsSchema,
 } from "../components/form-language-time/schema";
+import {
+  initialTeachingProfileFormValues,
+  teachingProfileSchema,
+  TeachingProfileSchema,
+} from "../components/form-teaching-profile/schema";
 import { normalizeAvailabilityValue } from "../components/form-language-time/availability";
 import {
   LogicReturnType,
@@ -416,6 +421,12 @@ const useLogic = (): LogicReturnType => {
     mode: "onChange",
   });
 
+  const teachingProfileForm = useForm<TeachingProfileSchema>({
+    resolver: zodResolver(teachingProfileSchema),
+    defaultValues: initialTeachingProfileFormValues,
+    mode: "onChange",
+  });
+
   const [selectedEducationGrades] = educationInfoForm.watch(["grades"]);
 
   const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
@@ -499,6 +510,17 @@ const useLogic = (): LogicReturnType => {
     [languageAndTimeForm],
   );
 
+  const prePopulateTeachingProfileForm = useCallback(
+    (profile: ProfileResponse) => {
+      teachingProfileForm.reset({
+        teachingSummary: profile.teachingSummary ?? "",
+        studentResults: profile.studentResults ?? "",
+        sellingPoints: profile.sellingPoints ?? "",
+      });
+    },
+    [teachingProfileForm],
+  );
+
   const hydrateProfileForms = useCallback(
     (profile: ProfileResponse) => {
       hasInitialEducationSubjectsBeenSet.current = false;
@@ -506,11 +528,13 @@ const useLogic = (): LogicReturnType => {
       prePopulateGeneralForm(profile);
       prePopulateEducationForm(profile);
       prePopulateLanguageAndTimeForm(profile);
+      prePopulateTeachingProfileForm(profile);
     },
     [
       prePopulateEducationForm,
       prePopulateGeneralForm,
       prePopulateLanguageAndTimeForm,
+      prePopulateTeachingProfileForm,
     ],
   );
 
@@ -566,6 +590,13 @@ const useLogic = (): LogicReturnType => {
           (subjectId) => removedSubjectIds.add(subjectId),
         );
         educationGradeSubjectsMapRef.current.delete(gradeId);
+      });
+
+      // Keep subjects that still belong to a remaining selected grade
+      currentGrades.forEach((gradeId) => {
+        (educationGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
+          (subjectId) => removedSubjectIds.delete(subjectId),
+        );
       });
 
       setEducationSubjectsOptions((prev) =>
@@ -750,6 +781,27 @@ const useLogic = (): LogicReturnType => {
     toast.success("Languages and availability updated successfully");
   };
 
+  const onTeachingProfileFormSubmission = async (data: TeachingProfileSchema) => {
+    const result = await handleProfileSubmit({
+      id: userId,
+      payload: {
+        teachingSummary: data.teachingSummary ?? "",
+        studentResults: data.studentResults ?? "",
+        sellingPoints: data.sellingPoints ?? "",
+      },
+    });
+
+    const error = getErrorInApiResult(result);
+
+    if (error) {
+      toast.error("Failed to update teaching profile");
+      return;
+    }
+
+    teachingProfileForm.reset(data);
+    toast.success("Teaching profile updated successfully");
+  };
+
   return {
     derivedData: {
       dropdownOptionData: {
@@ -772,11 +824,13 @@ const useLogic = (): LogicReturnType => {
       generalInfoForm,
       educationInfoForm,
       languageAndTimeForm,
+      teachingProfileForm,
     },
     handlers: {
       onGeneralInfoFormSubmission,
       onEducationInfoFormSubmission,
       onLanguageAndTimeFormSubmission,
+      onTeachingProfileFormSubmission,
     },
   };
 };

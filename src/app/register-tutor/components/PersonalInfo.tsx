@@ -15,7 +15,7 @@ import { getEmailFormatError } from "@/utils/email-validation";
 import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
 
 /** Shared style tokens for the register-tutor form */
-const fieldWrapper = "flex flex-col gap-2";
+const fieldWrapper = "flex flex-col gap-1.5";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
@@ -25,7 +25,7 @@ const EMAIL_CHECK_DELAY_MS = 500;
 
 /** Hint text shown below a field while it has no error */
 const Hint = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-xs text-muted-foreground min-h-[1.25rem]">{children}</p>
+  <p className="text-xs leading-4 text-muted-foreground min-h-4">{children}</p>
 );
 
 const preventWhitespaceKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -138,7 +138,7 @@ const PersonalInfo = () => {
   ]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
       {/* Full Name */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="fullName">
@@ -165,7 +165,7 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.fullName ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.fullName?.message as string}
           </p>
         ) : (
@@ -219,13 +219,13 @@ const PersonalInfo = () => {
           </span>
         </div>
         {errors.email ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.email?.message as string}
           </p>
         ) : isCheckingEmail ? (
           <Hint>Checking email availability...</Hint>
         ) : emailAvailability === "available" ? (
-          <p className="text-xs text-green-600 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-green-600 min-h-4">
             Email is available
           </p>
         ) : (
@@ -268,7 +268,7 @@ const PersonalInfo = () => {
           </button>
         </div>
         {errors.password ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.password?.message as string}
           </p>
         ) : (
@@ -311,7 +311,7 @@ const PersonalInfo = () => {
           </button>
         </div>
         {errors.confirmPassword ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.confirmPassword?.message as string}
           </p>
         ) : (
@@ -351,11 +351,11 @@ const PersonalInfo = () => {
           className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}
         />
         {errors.contactNumber ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.contactNumber?.message as string}
           </p>
         ) : (
-          <Hint>10-digit mobile number (digits only)</Hint>
+          <Hint>Contact number should be exactly 10 digits</Hint>
         )}
       </div>
 
@@ -376,7 +376,7 @@ const PersonalInfo = () => {
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
-        <p className="text-sm text-red-500 min-h-[1.25rem]">
+        <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.gender?.message as string}
         </p>
       </div>
@@ -408,7 +408,7 @@ const PersonalInfo = () => {
           </span>
         </div>
         {errors.dateOfBirth ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.dateOfBirth?.message as string}
           </p>
         ) : (
@@ -430,7 +430,7 @@ const PersonalInfo = () => {
           className={`${inputClass} bg-muted border-gray-300`}
         />
         {errors.age ? (
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.age?.message as string}
           </p>
         ) : (
@@ -455,7 +455,7 @@ const PersonalInfo = () => {
           <option value="Sri Lankan">Sri Lankan</option>
           <option value="Others">Others</option>
         </select>
-        <p className="text-sm text-red-500 min-h-[1.25rem]">
+        <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.nationality?.message as string}
         </p>
       </div>
@@ -479,7 +479,7 @@ const PersonalInfo = () => {
           <option value="Burgher">Burgher</option>
           <option value="Others">Others</option>
         </select>
-        <p className="text-sm text-red-500 min-h-[1.25rem]">
+        <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.race?.message as string}
         </p>
       </div>

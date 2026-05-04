@@ -7,11 +7,13 @@ import FormGeneralInfo from "./components/form-general-information";
 import FormEducationInfo from "./components/form-education-information";
 import FormPasswordInfo from "./components/form-password-information";
 import AdminProfileOverview from "./components/admin-profile-overview";
+import FormTeachingProfile from "./components/form-teaching-profile";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   CalendarClock,
   GraduationCap,
+  PenLine,
   ShieldCheck,
   UserRound,
 } from "lucide-react";
@@ -25,11 +27,17 @@ const ProfilePage: FC = () => {
       isAdminProfile,
       loading: { isGeneralFormSubmitting, isProfileDataLoading },
     },
-    forms: { generalInfoForm, educationInfoForm, languageAndTimeForm },
+    forms: {
+      generalInfoForm,
+      educationInfoForm,
+      languageAndTimeForm,
+      teachingProfileForm,
+    },
     handlers: {
       onGeneralInfoFormSubmission,
       onEducationInfoFormSubmission,
       onLanguageAndTimeFormSubmission,
+      onTeachingProfileFormSubmission,
     },
   } = useLogic();
 
@@ -82,6 +90,13 @@ const ProfilePage: FC = () => {
                   </span>
                 </TabsTrigger>
                 <TabsTrigger
+                  value="teaching"
+                  className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
+                >
+                  <PenLine className="h-4 w-4 shrink-0" />
+                  Teaching Profile
+                </TabsTrigger>
+                <TabsTrigger
                   value="security"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
@@ -128,6 +143,17 @@ const ProfilePage: FC = () => {
                 rateOptions={dropdownOptionData.rateOptions}
                 form={languageAndTimeForm}
                 onFormSubmit={onLanguageAndTimeFormSubmission}
+                isSubmitting={isGeneralFormSubmitting}
+              />
+            </TabsContent>
+
+            <TabsContent
+              value="teaching"
+              className="mt-0 space-y-4 sm:space-y-6"
+            >
+              <FormTeachingProfile
+                form={teachingProfileForm}
+                onFormSubmit={onTeachingProfileFormSubmission}
                 isSubmitting={isGeneralFormSubmitting}
               />
             </TabsContent>

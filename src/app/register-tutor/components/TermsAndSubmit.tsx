@@ -52,21 +52,21 @@ const TermsAndSubmit = () => {
   const certErrors = (errors.certificatesAndQualifications as any) ?? [];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* ── Document Uploads ── */}
       <div>
         <Label className="text-sm mb-3 block">
           Certificates &amp; Documents <span className="text-red-500">*</span>
         </Label>
 
-        <div className="space-y-4">
+        <div className="space-y-3">
           {fields.map((field, index) => {
             const rowErrors = certErrors[index] ?? {};
 
             return (
               <div
                 key={field.id}
-                className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-4 rounded-lg border border-gray-200 bg-gray-50"
+                className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50"
               >
                 {/* Document Type Dropdown */}
                 <div className="flex flex-col gap-1">
@@ -188,7 +188,7 @@ const TermsAndSubmit = () => {
             </span>
           </Label>
         </div>
-        <p className="text-xs text-red-500 min-h-[1.25rem] ml-7">
+        <p className="text-xs leading-4 text-red-500 min-h-4 ml-7">
           {errors.agreeTerms?.message as string}
         </p>
 
@@ -220,7 +220,7 @@ const TermsAndSubmit = () => {
             </span>
           </Label>
         </div>
-        <p className="text-xs text-red-500 min-h-[1.25rem] ml-7">
+        <p className="text-xs leading-4 text-red-500 min-h-4 ml-7">
           {errors.agreeAssignmentInfo?.message as string}
         </p>
       </div>

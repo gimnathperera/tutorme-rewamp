@@ -6,6 +6,7 @@ import { ProfileResponse } from "@/types/response-types";
 import { EducationInfoSchema } from "../components/form-education-information/schema";
 import { GeneralInfoSchema } from "../components/form-general-information/schema";
 import { LanguageOptionsSchema } from "../components/form-language-time/schema";
+import { TeachingProfileSchema } from "../components/form-teaching-profile/schema";
 
 export type LogicReturnType = {
   derivedData: {
@@ -29,11 +30,13 @@ export type LogicReturnType = {
     generalInfoForm: ReturnType<any>;
     educationInfoForm: ReturnType<any>;
     languageAndTimeForm: ReturnType<any>;
+    teachingProfileForm: ReturnType<any>;
   };
   handlers: {
     onGeneralInfoFormSubmission: (data: GeneralInfoSchema) => void;
     onEducationInfoFormSubmission: (data: EducationInfoSchema) => void;
     onLanguageAndTimeFormSubmission: (data: LanguageOptionsSchema) => void;
+    onTeachingProfileFormSubmission: (data: TeachingProfileSchema) => void;
   };
 };
 

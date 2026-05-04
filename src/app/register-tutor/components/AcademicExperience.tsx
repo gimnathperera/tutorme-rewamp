@@ -7,6 +7,7 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
   CLASS_TYPE_OPTIONS,
+  isPhysicalClassType,
   PREFERRED_LOCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
@@ -19,7 +20,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
-const fieldWrapper = "flex flex-col gap-2";
+const fieldWrapper = "flex flex-col gap-1.5";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
@@ -33,19 +34,34 @@ const AcademicExperience = () => {
     watch,
     setValue,
     getValues,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
 
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
+  const selectedClassTypes = watch("classType");
 
   const selectedGradeIds = useMemo<string[]>(() => {
     return Array.isArray(selectedGrades) ? selectedGrades : [];
   }, [selectedGrades]);
+  const isPreferredLocationsEnabled = useMemo(() => {
+    return (
+      Array.isArray(selectedClassTypes) &&
+      selectedClassTypes.some(isPhysicalClassType)
+    );
+  }, [selectedClassTypes]);
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; text: string }[]
   >([]);
+
+  useEffect(() => {
+    if (isPreferredLocationsEnabled) return;
+
+    setValue("preferredLocations", [], { shouldValidate: true });
+    clearErrors("preferredLocations");
+  }, [clearErrors, isPreferredLocationsEnabled, setValue]);
 
   useEffect(() => {
     if (selectedGradeIds.length === 0) {
@@ -82,9 +98,9 @@ const AcademicExperience = () => {
   }, [selectedGradeIds, fetchSubjectsForGrades, setValue, getValues]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-3">
       {/* ROW 1 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="classType">
             Class Type <span className="text-red-500">*</span>
@@ -101,14 +117,17 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.classType?.message as string}
           </p>
         </div>
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="preferredLocations">
-            Preferred Locations <span className="text-red-500">*</span>
+            Preferred Locations{" "}
+            {isPreferredLocationsEnabled && (
+              <span className="text-red-500">*</span>
+            )}
           </Label>
           <Controller
             name="preferredLocations"
@@ -118,18 +137,27 @@ const AcademicExperience = () => {
                 options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={field.onChange}
-                hasError={!!errors.preferredLocations}
+                disabled={!isPreferredLocationsEnabled}
+                hasError={
+                  isPreferredLocationsEnabled && !!errors.preferredLocations
+                }
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
-            {errors.preferredLocations?.message as string}
-          </p>
+          {isPreferredLocationsEnabled ? (
+            <p className="text-xs leading-4 text-red-500 min-h-4">
+              {errors.preferredLocations?.message as string}
+            </p>
+          ) : (
+            <p className="text-xs leading-4 text-muted-foreground min-h-4">
+              Locations apply to physical classes only
+            </p>
+          )}
         </div>
       </div>
 
       {/* ROW 2 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorType">
             Tutor Types <span className="text-red-500">*</span>
@@ -146,7 +174,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.tutorType?.message as string}
           </p>
         </div>
@@ -172,14 +200,14 @@ const AcademicExperience = () => {
             </option>
             <option value="AL">Advanced Level (A/L)</option>
           </select>
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.highestEducation?.message as string}
           </p>
         </div>
       </div>
 
       {/* ROW 3 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="yearsExperience">
             Years of Experience <span className="text-red-500">*</span>
@@ -193,7 +221,7 @@ const AcademicExperience = () => {
             className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", { valueAsNumber: true })}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.yearsExperience?.message as string}
           </p>
         </div>
@@ -214,14 +242,14 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.tutorMediums?.message as string}
           </p>
         </div>
       </div>
 
       {/* ROW 4 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="grades">
             Grades <span className="text-red-500">*</span>
@@ -243,7 +271,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.grades?.message as string}
           </p>
         </div>
@@ -265,7 +293,7 @@ const AcademicExperience = () => {
               />
             )}
           />
-          <p className="text-xs text-red-500 min-h-[1.25rem]">
+          <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.subjects?.message as string}
           </p>
         </div>
