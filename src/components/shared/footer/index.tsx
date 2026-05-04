@@ -34,7 +34,7 @@ const products: ProductType[] = [
     section: "Academics",
     link: [
       { label: "Grades & Subjects", url: "/grades-and-subjects" },
-      { label: "Test Papers", url: "/test-papers" },
+      { label: "Past Exam Papers", url: "/past-exam-papers" },
     ],
   },
   {

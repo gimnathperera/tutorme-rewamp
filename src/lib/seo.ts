@@ -226,10 +226,10 @@ export const seoPages = {
       "Submit your tutor request and get matched with a verified home tutor in Sri Lanka. One-to-one and small group classes for primary, O Level, and A Level.",
   },
   testPapers: {
-    path: "/test-papers",
-    title: "Free O Level and A Level Test Papers | Tuition Lanka",
+    path: "/past-exam-papers",
+    title: "Free O Level and A Level Past Exam Papers | Tuition Lanka",
     description:
-      "Download free O Level and A Level test papers in Sri Lanka. Practice with past exam papers and improve your results with quality study materials.",
+      "Download free O Level and A Level past exam papers in Sri Lanka. Practice with past exam papers and improve your results with quality study materials.",
   },
   gradesAndSubjects: {
     path: "/grades-and-subjects",

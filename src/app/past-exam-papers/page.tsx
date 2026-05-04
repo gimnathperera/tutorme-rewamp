@@ -34,7 +34,7 @@ const TestPapers = () => {
       </div>
       <div className="max-w-4xl mx-auto p-6 bg-white rounded-3xl">
         <h2 className="text-xl font-semibold mb-6 text-gray-800">
-          Download Test Papers
+          Download Past Exam Papers
         </h2>
 
         <FormTestPaperSearch
