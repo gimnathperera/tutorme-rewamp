@@ -114,6 +114,12 @@ export default function EditBlogPage() {
   const tagsOptions: Option[] =
     tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
 
+  const blogOptions: Option[] =
+    blogsData?.results?.map((blog) => ({
+      value: blog.id,
+      text: blog.title,
+    })) || [];
+
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   // Guard 1: unauthenticated users → show a login prompt dialog
@@ -813,6 +819,23 @@ export default function EditBlogPage() {
                   className="mt-2 max-h-48 w-full rounded-lg object-cover"
                 />
               )}
+            </div>
+
+            <div>
+              <Label>Related Articles</Label>
+              <Controller
+                control={control}
+                name="relatedArticles"
+                render={({ field }) => (
+                  <MultiSelect
+                    key={JSON.stringify(field.value)}
+                    options={blogOptions}
+                    defaultSelected={field.value}
+                    onChange={field.onChange}
+                    label={""}
+                  />
+                )}
+              />
             </div>
 
             <div>
