@@ -5,6 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import { SelectButton } from "@/components/shared/select";
 import { useFetchGradesQuery } from "@/store/api/splits/grades";
 import AssignmentList from "./assignmentList";
+import { ALL_GRADES_FILTER_OPTION } from "@/configs/options";
 
 const Filter = () => {
   const [selectedGradeId, setSelectedGradeId] = useState<string>("");
@@ -16,7 +17,7 @@ const Filter = () => {
   });
 
   const gradeOptions = [
-    { label: "All Grades", value: "all" },
+    ALL_GRADES_FILTER_OPTION,
     ...(gradesData?.results.map((grade) => ({
       label: grade.title, // show name
       value: grade.id, // use id for filtering

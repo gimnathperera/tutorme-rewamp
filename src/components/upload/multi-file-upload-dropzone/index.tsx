@@ -5,6 +5,7 @@
 import { Eye, Loader2, Minus, Plus, X } from "lucide-react";
 import { useCallback, useState, MouseEvent, useRef, useEffect } from "react";
 import { useDropzone, FileRejection } from "react-dropzone";
+import { CERTIFICATE_UPLOAD_ACCEPTED_TYPES } from "@/configs/upload";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -173,11 +174,6 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
 // ---------------------------------------------------------------------------
 // Allowed types
 // ---------------------------------------------------------------------------
-
-const ACCEPTED_TYPES = {
-  "image/*": [".jpg", ".jpeg", ".png", ".gif", ".webp", ".svg"],
-  "application/pdf": [".pdf"],
-};
 
 const buildItemsFromUrls = (urls: string[]): FileItem[] =>
   urls.map((url) => ({ file: null, url }));
@@ -353,7 +349,7 @@ export default function MultiFileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
-    accept: ACCEPTED_TYPES,
+    accept: CERTIFICATE_UPLOAD_ACCEPTED_TYPES,
   });
 
   return (

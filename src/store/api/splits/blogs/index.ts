@@ -3,6 +3,7 @@ import { PaginatedResponse, Blogs } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 import { CreateArticleSchema } from "@/app/blogs/components/create-blog/schema";
+import type { BlogStatus } from "@/configs/options";
 
 export const BlogsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -64,7 +65,7 @@ export const BlogsApi = baseApi.injectEndpoints({
 
     updateBlogStatus: build.mutation<
       Blogs,
-      { id: string; status: "approved" | "rejected" | "pending" }
+      { id: string; status: BlogStatus }
     >({
       query: ({ id, status }) => ({
         url: `${Endpoints.Blogs}/${id}/status`,

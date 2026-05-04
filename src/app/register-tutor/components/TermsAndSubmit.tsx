@@ -7,23 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
-
-// ---------------------------------------------------------------------------
-// Document type options
-// ---------------------------------------------------------------------------
-
-const DOCUMENT_TYPE_OPTIONS = [
-  { value: "NIC", label: "NIC (National ID Card)" },
-  { value: "Passport", label: "Passport" },
-  { value: "Driving License", label: "Driving License" },
-  { value: "Educational Certificate", label: "Educational Certificate" },
-  { value: "Degree Certificate", label: "Degree Certificate" },
-  { value: "Diploma Certificate", label: "Diploma Certificate" },
-  { value: "Professional Certificate", label: "Professional Certificate" },
-  { value: "Teaching Certificate", label: "Teaching Certificate" },
-  { value: "Police Clearance", label: "Police Clearance Report" },
-  { value: "Other", label: "Other" },
-];
+import { DOCUMENT_TYPE_OPTIONS } from "@/configs/options";
 
 // ---------------------------------------------------------------------------
 // Select style helpers (reuse the same token as other steps)
@@ -86,7 +70,7 @@ const TermsAndSubmit = () => {
                         </option>
                         {DOCUMENT_TYPE_OPTIONS.map((opt) => (
                           <option key={opt.value} value={opt.value}>
-                            {opt.label}
+                            {opt.text}
                           </option>
                         ))}
                       </select>

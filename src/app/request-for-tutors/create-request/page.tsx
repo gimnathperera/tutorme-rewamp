@@ -43,9 +43,12 @@ import {
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
 import {
-  TUTOR_TYPE_OPTIONS,
   CLASS_TYPE_OPTIONS,
-} from "@/configs/register-tutor";
+  MEDIUM_OPTIONS,
+  REQUEST_TUTOR_DURATION_OPTIONS,
+  REQUEST_TUTOR_FREQUENCY_OPTIONS,
+  TUTOR_TYPE_OPTIONS,
+} from "@/configs/options";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -431,9 +434,11 @@ export default function AddRequestForTutor() {
                     <option value="" disabled hidden>
                       Select medium of instruction
                     </option>
-                    <option value="Sinhala">Sinhala</option>
-                    <option value="English">English</option>
-                    <option value="Tamil">Tamil</option>
+                    {MEDIUM_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.text}
+                      </option>
+                    ))}
                   </select>
                   <p className={errorMsg}>{errors.medium?.message}</p>
                 </div>
@@ -538,9 +543,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select session duration
                           </option>
-                          <option value="30 Minutes">30 Minutes</option>
-                          <option value="One Hour">1 Hour</option>
-                          <option value="Two Hours">2 Hours</option>
+                          {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.duration?.message}
@@ -563,9 +570,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select sessions per week
                           </option>
-                          <option value="Once a Week">Once a Week</option>
-                          <option value="Twice a Week">Twice a Week</option>
-                          <option value="Daily">Daily</option>
+                          {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.frequency?.message}

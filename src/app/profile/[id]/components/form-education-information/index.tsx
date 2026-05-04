@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
+  REGISTER_HIGHEST_EDUCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
 } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
@@ -32,17 +33,7 @@ const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
 const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
-const highestEducationOptions: Option[] = [
-  { label: "PhD", value: "PhD" },
-  { label: "Master's Degree", value: "Masters" },
-  { label: "Bachelor's Degree", value: "Bachelor Degree" },
-  { label: "Undergraduate", value: "Undergraduate" },
-  {
-    label: "Diploma and Professional",
-    value: "Diploma and Professional",
-  },
-  { label: "Advanced Level (A/L)", value: "AL" },
-];
+const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const CHAR_LIMIT = 500;
 
 const FormEducationInfo: FC<Props> = ({

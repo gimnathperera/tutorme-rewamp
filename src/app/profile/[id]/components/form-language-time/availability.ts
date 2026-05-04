@@ -1,18 +1,10 @@
+import { WEEK_DAY_VALUES } from "@/configs/options";
+
 export type ScheduleSlot = {
   day: string;
   start: string;
   end: string;
 };
-
-const DAYS = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
@@ -25,7 +17,8 @@ const isScheduleSlot = (value: unknown): value is ScheduleSlot =>
 
 const sortSlots = (slots: ScheduleSlot[]) =>
   [...slots].sort((a, b) => {
-    const dayDiff = DAYS.indexOf(a.day) - DAYS.indexOf(b.day);
+    const dayDiff =
+      WEEK_DAY_VALUES.indexOf(a.day) - WEEK_DAY_VALUES.indexOf(b.day);
 
     if (dayDiff !== 0) return dayDiff;
 

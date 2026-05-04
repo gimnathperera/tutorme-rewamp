@@ -11,6 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  MULTI_FILE_UPLOAD_ACCEPTED_TYPES,
+  MULTI_FILE_UPLOAD_ALLOWED_TYPES,
+} from "@/configs/upload";
 
 interface FileItem {
   file?: File;
@@ -56,20 +60,13 @@ export default function MultiFileUploadDropzone({
         name: file.name,
         type: file.type,
       }));
-      const allowedTypes = [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "application/pdf",
-      ];
       setFiles((prev) => [...prev, ...newFiles]);
 
       for (const fileObj of newFiles) {
         if (!fileObj.file) continue;
         const file = fileObj.file;
 
-        if (!allowedTypes.includes(file.type)) {
+        if (!MULTI_FILE_UPLOAD_ALLOWED_TYPES.includes(file.type)) {
           alert(`${file.name} is not a supported file type`);
           continue;
         }
@@ -147,13 +144,7 @@ export default function MultiFileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
-    accept: {
-      "image/jpeg": [".jpg", ".jpeg"],
-      "image/png": [".png"],
-      "image/gif": [".gif"],
-      "image/webp": [".webp"],
-      "application/pdf": [".pdf"],
-    },
+    accept: MULTI_FILE_UPLOAD_ACCEPTED_TYPES,
   });
 
   return (

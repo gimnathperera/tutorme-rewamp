@@ -9,16 +9,7 @@ import {
   ScheduleSlot,
   serializeAvailabilitySlots,
 } from "./availability";
-
-const DAYS = [
-  { label: "Mon", value: "Monday" },
-  { label: "Tue", value: "Tuesday" },
-  { label: "Wed", value: "Wednesday" },
-  { label: "Thu", value: "Thursday" },
-  { label: "Fri", value: "Friday" },
-  { label: "Sat", value: "Saturday" },
-  { label: "Sun", value: "Sunday" },
-];
+import { WEEK_DAY_OPTIONS } from "@/configs/options";
 
 const getTimeLabel = (value: string) =>
   new Date(`1970-01-01T${value}:00`).toLocaleTimeString([], {
@@ -33,7 +24,7 @@ const slotsOverlap = (
 
 const AvailabilityScheduler = () => {
   const { control, formState } = useFormContext();
-  const [selectedDay, setSelectedDay] = useState(DAYS[0].value);
+  const [selectedDay, setSelectedDay] = useState(WEEK_DAY_OPTIONS[0].value);
   const [selectedStart, setSelectedStart] = useState("19:30");
   const [selectedEnd, setSelectedEnd] = useState("21:00");
   const [localError, setLocalError] = useState("");
@@ -42,7 +33,7 @@ const AvailabilityScheduler = () => {
 
   const groupedSlots = useMemo(
     () =>
-      DAYS.map((day) => ({
+      WEEK_DAY_OPTIONS.map((day) => ({
         ...day,
         slots: [] as ScheduleSlot[],
       })),
@@ -143,7 +134,7 @@ const AvailabilityScheduler = () => {
                     onChange={(event) => setSelectedDay(event.target.value)}
                     className="h-12 rounded-md border border-linegrey px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   >
-                    {DAYS.map((day) => (
+                    {WEEK_DAY_OPTIONS.map((day) => (
                       <option key={day.value} value={day.value}>
                         {day.value}
                       </option>
