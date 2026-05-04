@@ -127,7 +127,7 @@ const getProfileBirthday = (profile: ProfileResponse) =>
   profile.birthday || profile.dateOfBirth || "";
 
 const getProfileDisplayName = (profile: ProfileResponse) =>
-  profile.fullName || profile.name || "";
+  profile.name || profile.fullName || "";
 
 const serializeBirthdayForPayload = (
   birthday: GeneralInfoSchema["birthday"],
@@ -704,16 +704,18 @@ const useLogic = (): LogicReturnType => {
 
   const onGeneralInfoFormSubmission = async (data: GeneralInfoSchema) => {
     const birthday = serializeBirthdayForPayload(data.birthday);
+    const submittedProfileUpdates = {
+      ...data,
+      birthday,
+      name: data.name,
+      fullName: data.name,
+      contactNumber: data.phoneNumber,
+      dateOfBirth: birthday,
+    };
 
     const result = await handleProfileSubmit({
       id: userId,
-      payload: {
-        ...data,
-        birthday,
-        fullName: data.name,
-        contactNumber: data.phoneNumber,
-        dateOfBirth: birthday,
-      },
+      payload: submittedProfileUpdates,
     });
 
     const error = getErrorInApiResult(result);
@@ -723,7 +725,9 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
-    const updatedProfile = result.data;
+    const updatedProfile = result.data
+      ? ({ ...result.data, ...submittedProfileUpdates } as ProfileResponse)
+      : null;
     const resolvedName = updatedProfile
       ? getProfileDisplayName(updatedProfile)
       : data.name;

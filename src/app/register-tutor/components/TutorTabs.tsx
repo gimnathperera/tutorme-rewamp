@@ -42,6 +42,7 @@ import {
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
 import { getEmailFormatError } from "@/utils/email-validation";
+import { isPhysicalClassType } from "@/configs/register-tutor";
 
 type TabKey =
   | "personalInfo"
@@ -57,6 +58,7 @@ const TAB_ORDER: TabKey[] = [
 ];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 const DUPLICATE_EMAIL_MESSAGE = "Email already exists";
+const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
 
 const isDuplicateEmailError = (error: string) => {
   const normalizedError = error.toLowerCase();
@@ -186,7 +188,15 @@ export function TutorTabs() {
     try {
       // Strip confirmPassword — it is front-end only and must not reach the API
       const { confirmPassword: _omit, ...payload } = data;
-      const result = await addTutorRequest(payload);
+      const normalizedPayload = {
+        ...payload,
+        preferredLocations: payload.classType.some(isPhysicalClassType)
+          ? payload.preferredLocations
+          : payload.preferredLocations.length > 0
+            ? payload.preferredLocations
+            : [ONLINE_ONLY_LOCATION_FALLBACK],
+      };
+      const result = await addTutorRequest(normalizedPayload);
       const error = getErrorInApiResult(result);
       if (error) {
         if (typeof error === "string" && isDuplicateEmailError(error)) {
