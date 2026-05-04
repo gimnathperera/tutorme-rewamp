@@ -37,6 +37,7 @@ const AddBlog = () => {
   const { user } = useAuthContext();
 
   const [isPreview, setIsPreview] = useState(false);
+  const [clearVersion, setClearVersion] = useState(0);
 
   const createBlogForm = useForm<CreateArticleSchema>({
     resolver: zodResolver(createArticleSchema),
@@ -128,6 +129,7 @@ const AddBlog = () => {
 
   const onClear = () => {
     reset(initialFormValues);
+    setClearVersion((version) => version + 1);
   };
 
   return (
@@ -651,6 +653,7 @@ const AddBlog = () => {
               <Label htmlFor="coverImage">Cover Image</Label>
 
               <FileUploadDropzone
+                key={`cover-image-${clearVersion}`}
                 onUploaded={(url) =>
                   createBlogForm.setValue("image", encodeImageUrl(url))
                 }
@@ -677,6 +680,7 @@ const AddBlog = () => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    key={`related-articles-${clearVersion}`}
                     label=""
                     options={blogOptions}
                     defaultSelected={field.value || []}
@@ -693,6 +697,7 @@ const AddBlog = () => {
                 control={control}
                 render={({ field }) => (
                   <MultiSelect
+                    key={`tags-${clearVersion}`}
                     label=""
                     options={tagOptions}
                     defaultSelected={field.value || []}
