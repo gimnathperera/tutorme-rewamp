@@ -19,15 +19,9 @@ import { X, BookOpen } from "lucide-react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import WhatsAppButton from "@/components/shared/whatapp-button";
+import { AL_STREAM_ORDER } from "@/configs/options";
 
 const GRADE_LIMIT = 1000;
-const AL_STREAM_ORDER = [
-  "physical science",
-  "biological science",
-  "commerce",
-  "technology",
-  "art",
-];
 const UNKNOWN_AL_STREAM_ORDER = AL_STREAM_ORDER.length;
 
 const normalizeTitle = (title: string) => title.toLowerCase();

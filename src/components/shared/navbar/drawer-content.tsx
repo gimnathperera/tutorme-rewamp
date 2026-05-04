@@ -19,7 +19,7 @@ const navigation: NavigationItem[] = [
     href: "/",
     dropdown: [
       { name: "Grades & Subjects", href: "/grades-and-subjects" },
-      { name: "Test Papers", href: "/test-papers" },
+      { name: "Past Exam Papers", href: "/past-exam-papers" },
     ],
   },
   {

@@ -3,6 +3,7 @@ import { PaginatedResponse, Blogs } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 import { CreateArticleSchema } from "@/app/blogs/components/create-blog/schema";
+import type { BlogStatus } from "@/configs/options";
 
 export const BlogsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -62,20 +63,19 @@ export const BlogsApi = baseApi.injectEndpoints({
       invalidatesTags: ["Blogs"],
     }),
 
-    updateBlogStatus: build.mutation<
-      Blogs,
-      { id: string; status: "approved" | "rejected" | "pending" }
-    >({
-      query: ({ id, status }) => ({
-        url: `${Endpoints.Blogs}/${id}/status`,
-        method: "PATCH",
-        body: { status },
-      }),
-      invalidatesTags: (result, error, { id }) => [
-        { type: "Blogs", id },
-        "Blogs",
-      ],
-    }),
+    updateBlogStatus: build.mutation<Blogs, { id: string; status: BlogStatus }>(
+      {
+        query: ({ id, status }) => ({
+          url: `${Endpoints.Blogs}/${id}/status`,
+          method: "PATCH",
+          body: { status },
+        }),
+        invalidatesTags: (result, error, { id }) => [
+          { type: "Blogs", id },
+          "Blogs",
+        ],
+      },
+    ),
   }),
   overrideExisting: false,
 });

@@ -5,6 +5,7 @@
 import { Loader2, X } from "lucide-react";
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { IMAGE_UPLOAD_ACCEPTED_TYPES } from "@/configs/upload";
 
 interface FileUploadDropzoneProps {
   onUploaded: (url: string) => void;
@@ -81,7 +82,7 @@ export default function FileUploadDropzone({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: false,
-    accept: { "image/*": [] },
+    accept: IMAGE_UPLOAD_ACCEPTED_TYPES,
   });
 
   return (

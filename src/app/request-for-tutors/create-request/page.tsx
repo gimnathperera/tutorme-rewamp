@@ -42,6 +42,13 @@ import {
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
+import {
+  CLASS_TYPE_OPTIONS,
+  MEDIUM_OPTIONS,
+  REQUEST_TUTOR_DURATION_OPTIONS,
+  REQUEST_TUTOR_FREQUENCY_OPTIONS,
+  TUTOR_TYPE_OPTIONS,
+} from "@/configs/options";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -279,13 +286,9 @@ export default function AddRequestForTutor() {
                           }
                         },
                         onBlur: (e) => {
-                          setValue(
-                            "email",
-                            removeWhitespace(e.target.value),
-                            {
-                              shouldValidate: true,
-                            },
-                          );
+                          setValue("email", removeWhitespace(e.target.value), {
+                            shouldValidate: true,
+                          });
                         },
                       })}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
@@ -431,9 +434,11 @@ export default function AddRequestForTutor() {
                     <option value="" disabled hidden>
                       Select medium of instruction
                     </option>
-                    <option value="Sinhala">Sinhala</option>
-                    <option value="English">English</option>
-                    <option value="Tamil">Tamil</option>
+                    {MEDIUM_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.text}
+                      </option>
+                    ))}
                   </select>
                   <p className={errorMsg}>{errors.medium?.message}</p>
                 </div>
@@ -538,9 +543,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select session duration
                           </option>
-                          <option value="30 Minutes">30 Minutes</option>
-                          <option value="One Hour">1 Hour</option>
-                          <option value="Two Hours">2 Hours</option>
+                          {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.duration?.message}
@@ -563,9 +570,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select sessions per week
                           </option>
-                          <option value="Once a Week">Once a Week</option>
-                          <option value="Twice a Week">Twice a Week</option>
-                          <option value="Daily">Daily</option>
+                          {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.frequency?.message}
@@ -591,21 +600,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select preferred tutor type
                           </option>
-                          <option value="Private Tutor">Private Tutor</option>
-                          <option value="Government Teacher">
-                            Government Teacher
-                          </option>
-                          <option value="University Student">
-                            University Student
-                          </option>
-                          <option value="Advanced Level">Advanced Level</option>
-                          <option value="Diploma Holders">Diploma Holders</option>
-                          <option value="Ex-MOE (Ministry of Education)">
-                            Ex-MOE (Ministry of Education)
-                          </option>
-                          <option value="Part-time Tutors">Part-time Tutors</option>
-                          <option value="Full-time Tutors">Full-time Tutors</option>
-                          <option value="Coach">Coach</option>
+                          {TUTOR_TYPE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.preferredTutorType?.message}
@@ -628,16 +627,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select preferred class type
                           </option>
-                          <option value="Online - Individual">
-                            Online - Individual
-                          </option>
-                          <option value="Online - Group">Online - Group</option>
-                          <option value="Physical - Individual">
-                            Physical - Individual
-                          </option>
-                          <option value="Physical - Group">
-                            Physical - Group
-                          </option>
+                          {CLASS_TYPE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.preferredClassType?.message}

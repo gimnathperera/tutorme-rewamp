@@ -1,3 +1,4 @@
+import type { BlogStatus } from "@/configs/options";
 import { Blogs } from "./response-types";
 export type ContactUsRequest = {
   message: string;
@@ -72,6 +73,9 @@ export type UpdateProfileRequest = {
     yearsExperience?: number;
     tutorMediums?: string[];
     academicDetails?: string;
+    teachingSummary?: string;
+    studentResults?: string;
+    sellingPoints?: string;
     certificatesAndQualifications?: string[];
     avatar?: string;
   };
@@ -140,13 +144,13 @@ export type UpdateBlogRequest = {
   faqs?: Array<{ _id?: string; question: string; answer: string }>;
   tags?: string[];
   relatedArticles?: string[];
-  status?: "pending" | "approved" | "rejected";
+  status?: BlogStatus;
 };
 
 export type FetchBlogsRequest = {
   blogId?: string;
   id?: string;
-  status?: "pending" | "approved" | "rejected";
+  status?: BlogStatus;
   authorName?: string;
   title?: string;
   page?: number;

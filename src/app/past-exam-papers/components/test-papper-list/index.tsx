@@ -96,7 +96,7 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
             className="inline-block m-auto mb-4"
           />
           <h2 className="text-base font-semibold text-gray-700">
-            No Test Papers Available
+            No Past Exam Papers Available
           </h2>
           <p className="text-sm text-gray-500 mt-2">
             No papers found for the selected filters. Try adjusting your search.

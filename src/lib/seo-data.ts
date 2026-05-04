@@ -25,7 +25,10 @@ export const getPlainText = (value?: string | null) =>
     .replace(/\s+/g, " ")
     .trim();
 
-const buildApiUrl = (path: string, params?: Record<string, string | number>) => {
+const buildApiUrl = (
+  path: string,
+  params?: Record<string, string | number>,
+) => {
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) return null;
 
@@ -92,9 +95,7 @@ export function getBlogPath(blog: Pick<Blogs, "id" | "slug">) {
   return `/blogs/${blog.slug || blog.id}`;
 }
 
-export function getBlogImage(
-  blog?: Pick<Blogs, "image" | "content"> | null,
-) {
+export function getBlogImage(blog?: Pick<Blogs, "image" | "content"> | null) {
   const contentImage = blog?.content?.find(
     (block): block is { type: "image"; src: string; caption?: string } =>
       block.type === "image" && Boolean(block.src),
