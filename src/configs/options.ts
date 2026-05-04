@@ -160,22 +160,13 @@ export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
 ];
 
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  {
-    value: "International School Teacher",
-    text: "International School Teacher",
-  },
+  { value: "International School Teacher", text: "International School Teacher"},
   { value: "Government School Teacher", text: "Government School Teacher" },
   { value: "University Student", text: "University Student" },
   { value: "A/L Student", text: "A/L Student" },
   { value: "Diploma Holder", text: "Diploma Holder" },
-  { value: "Degree Holder", text: "Degree Holder" },
   { value: "Part-time Tutor", text: "Part-time Tutor" },
   { value: "Full-time Tutor", text: "Full-time Tutor" },
-  {
-    value: "International Retired Teacher",
-    text: "International Retired Teacher",
-  },
-  { value: "Government Retired Teacher", text: "Government Retired Teacher" },
 ];
 
 export const REGISTER_HIGHEST_EDUCATION_OPTIONS: SelectOption[] = [
