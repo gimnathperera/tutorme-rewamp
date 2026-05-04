@@ -17,7 +17,7 @@ import {
   useFetchGradesQuery,
   useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
-import { useEffect, useMemo, useState } from "react";
+import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -26,6 +26,9 @@ const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
+type MultiSelectOnChange = NonNullable<
+  Parameters<typeof MultiSelect>[0]["onChange"]
+>;
 
 const AcademicExperience = () => {
   const {
@@ -55,6 +58,18 @@ const AcademicExperience = () => {
   const [subjectOptions, setSubjectOptions] = useState<
     { value: string; text: string }[]
   >([]);
+
+  const handleMultiSelectChange = (
+    fieldName: string,
+    onChange: MultiSelectOnChange,
+    selected: string[],
+  ) => {
+    onChange(selected);
+
+    if (selected.length > 0) {
+      clearErrors(fieldName);
+    }
+  };
 
   useEffect(() => {
     if (isPreferredLocationsEnabled) return;
@@ -88,6 +103,9 @@ const AcademicExperience = () => {
         const currentSubjects: string[] = getValues("subjects") ?? [];
         const filtered = currentSubjects.filter((id) => validIds.has(id));
         setValue("subjects", filtered);
+        if (filtered.length > 0) {
+          clearErrors("subjects");
+        }
       } catch (error) {
         console.error("Failed to load subjects", error);
         setSubjectOptions([]);
@@ -95,7 +113,13 @@ const AcademicExperience = () => {
     };
 
     loadSubjects();
-  }, [selectedGradeIds, fetchSubjectsForGrades, setValue, getValues]);
+  }, [
+    clearErrors,
+    selectedGradeIds,
+    fetchSubjectsForGrades,
+    setValue,
+    getValues,
+  ]);
 
   return (
     <div className="space-y-3">
@@ -112,7 +136,13 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={CLASS_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange(
+                    "classType",
+                    field.onChange,
+                    selected,
+                  )
+                }
                 hasError={!!errors.classType}
               />
             )}
@@ -136,7 +166,13 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={PREFERRED_LOCATION_OPTIONS}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange(
+                    "preferredLocations",
+                    field.onChange,
+                    selected,
+                  )
+                }
                 disabled={!isPreferredLocationsEnabled}
                 hasError={
                   isPreferredLocationsEnabled && !!errors.preferredLocations
@@ -169,7 +205,9 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={TUTOR_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange("tutorType", field.onChange, selected)
+                }
                 hasError={!!errors.tutorType}
               />
             )}
@@ -185,7 +223,13 @@ const AcademicExperience = () => {
           </Label>
           <select
             id="highestEducation"
-            {...register("highestEducation")}
+            {...register("highestEducation", {
+              onChange: (event: ChangeEvent<HTMLSelectElement>) => {
+                if (event.target.value) {
+                  clearErrors("highestEducation");
+                }
+              },
+            })}
             className={`${selectClass} ${selectBorder(!!errors.highestEducation)}`}
           >
             <option value="" disabled hidden>
@@ -219,7 +263,15 @@ const AcademicExperience = () => {
             max={50}
             step={1}
             className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
-            {...register("yearsExperience", { valueAsNumber: true })}
+            {...register("yearsExperience", {
+              valueAsNumber: true,
+              onChange: (event: ChangeEvent<HTMLInputElement>) => {
+                const value = event.target.valueAsNumber;
+                if (Number.isFinite(value) && value >= 1) {
+                  clearErrors("yearsExperience");
+                }
+              },
+            })}
           />
           <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.yearsExperience?.message as string}
@@ -237,7 +289,13 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={MEDIUM_OPTIONS}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange(
+                    "tutorMediums",
+                    field.onChange,
+                    selected,
+                  )
+                }
                 hasError={!!errors.tutorMediums}
               />
             )}
@@ -266,7 +324,9 @@ const AcademicExperience = () => {
                   })) || []
                 }
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange("grades", field.onChange, selected)
+                }
                 hasError={!!errors.grades}
               />
             )}
@@ -287,7 +347,9 @@ const AcademicExperience = () => {
               <MultiSelect
                 options={subjectOptions}
                 defaultSelected={field.value || []}
-                onChange={field.onChange}
+                onChange={(selected) =>
+                  handleMultiSelectChange("subjects", field.onChange, selected)
+                }
                 hasError={!!errors.subjects}
                 disabled={selectedGradeIds.length === 0}
               />
