@@ -55,6 +55,22 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     (value) => options.find((o) => o.value === value)?.text || "",
   );
 
+  const defaultSelectedKey = defaultSelected.join("|");
+  const optionSelectedKey = options
+    .filter((o) => o.selected)
+    .map((o) => o.value)
+    .join("|");
+
+  useEffect(() => {
+    setSelectedOptions(
+      defaultSelected.length > 0
+        ? defaultSelected
+        : options.filter((o) => o.selected).map((o) => o.value),
+    );
+    // Sync with form resets without reacting to every options array recreation.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultSelectedKey, optionSelectedKey]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
