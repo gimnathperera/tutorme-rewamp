@@ -186,8 +186,6 @@ const ContactUsPage = () => {
               );
             })}
           </div>
-
-          
         </div>
 
         {/* ── Right panel — white form card ── */}

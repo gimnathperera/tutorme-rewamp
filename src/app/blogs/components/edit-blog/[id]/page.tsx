@@ -29,6 +29,11 @@ const BlogRenderer = dynamic(() => import("../../blog-renderer/BlogRenderer"), {
 });
 import "react-quill/dist/quill.snow.css";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
+import {
+  BLOG_EDITOR_HEADING_OPTIONS,
+  BLOG_EDITOR_LIST_STYLE_OPTIONS,
+  BLOG_STATUS_VALUES,
+} from "@/configs/options";
 
 export default function EditBlogPage() {
   const params = useParams();
@@ -101,14 +106,9 @@ export default function EditBlogPage() {
   const getEditableStatus = (
     status?: string,
   ): UpdateArticleSchema["status"] => {
-    switch (status) {
-      case "pending":
-      case "approved":
-      case "rejected":
-        return status;
-      default:
-        return "pending";
-    }
+    return BLOG_STATUS_VALUES.includes(status as UpdateArticleSchema["status"])
+      ? (status as UpdateArticleSchema["status"])
+      : "pending";
   };
 
   const tagsOptions: Option[] =
@@ -402,12 +402,11 @@ export default function EditBlogPage() {
                             valueAsNumber: true,
                           })}
                         >
-                          <option value={1}>H1</option>
-                          <option value={2}>H2</option>
-                          <option value={3}>H3</option>
-                          <option value={4}>H4</option>
-                          <option value={5}>H5</option>
-                          <option value={6}>H6</option>
+                          {BLOG_EDITOR_HEADING_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     )}
@@ -642,8 +641,11 @@ export default function EditBlogPage() {
                             className="block w-32 rounded-md border-gray-300 py-1.5 bg-white sm:text-sm"
                             {...register(`content.${index}.style` as const)}
                           >
-                            <option value="unordered">Bullets</option>
-                            <option value="ordered">Numbered</option>
+                            {BLOG_EDITOR_LIST_STYLE_OPTIONS.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.text}
+                              </option>
+                            ))}
                           </select>
                         </div>
 

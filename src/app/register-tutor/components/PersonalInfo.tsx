@@ -13,6 +13,11 @@ import {
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
 import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
+import {
+  GENDER_OPTIONS,
+  NATIONALITY_OPTIONS,
+  RACE_OPTIONS,
+} from "@/configs/register-tutor";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -129,13 +134,7 @@ const PersonalInfo = () => {
     }, EMAIL_CHECK_DELAY_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [
-    checkTutorEmailAvailability,
-    clearErrors,
-    email,
-    errors.email,
-    setError,
-  ]);
+  }, [checkTutorEmailAvailability, clearErrors, email, errors.email, setError]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
@@ -373,8 +372,11 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             Select your gender
           </option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
+          {GENDER_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.text}
+            </option>
+          ))}
         </select>
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.gender?.message as string}
@@ -452,8 +454,11 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             Select your nationality
           </option>
-          <option value="Sri Lankan">Sri Lankan</option>
-          <option value="Others">Others</option>
+          {NATIONALITY_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.text}
+            </option>
+          ))}
         </select>
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.nationality?.message as string}
@@ -473,11 +478,11 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             Select your ethnicity
           </option>
-          <option value="Sinhalese">Sinhalese</option>
-          <option value="Tamil">Tamil</option>
-          <option value="Muslim">Muslim</option>
-          <option value="Burgher">Burgher</option>
-          <option value="Others">Others</option>
+          {RACE_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.text}
+            </option>
+          ))}
         </select>
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.race?.message as string}

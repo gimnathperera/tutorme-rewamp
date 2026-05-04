@@ -5,6 +5,10 @@ import RadioGroup from "@/components/shared/input-radio";
 import InputText from "@/components/shared/input-text";
 import InputSelect from "@/components/shared/input-select";
 import { tutorTypesOptions } from "../../hooks/utils";
+import {
+  FIND_TUTOR_GENDER_PREFERENCE_OPTIONS,
+  YES_NO_OPTIONS,
+} from "@/configs/options";
 const TutorTypeComponent = () => {
   return (
     <div className="space-y-8">
@@ -41,19 +45,13 @@ const TutorTypeComponent = () => {
         <InputSelect
           label="Gender Preference"
           name="genderPreference"
-          options={[
-            { label: "Male", value: "Male" },
-            { label: "Female", value: "Female" },
-          ]}
+          options={FIND_TUTOR_GENDER_PREFERENCE_OPTIONS}
         />
 
         <InputSelect
           label="Is Bilingual Tutor Required?"
           name="bilingualTutor"
-          options={[
-            { label: "Yes", value: "Yes" },
-            { label: "No", value: "No" },
-          ]}
+          options={YES_NO_OPTIONS}
         />
       </div>
     </div>

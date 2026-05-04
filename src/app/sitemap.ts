@@ -13,7 +13,7 @@ const staticRoutes = [
   { path: "/tuition-assignments", priority: 0.8 },
   { path: "/grades-and-subjects", priority: 0.8 },
   { path: "/level-and-exams", priority: 0.8 },
-  { path: "/test-papers", priority: 0.8 },
+  { path: "/past-exam-papers", priority: 0.8 },
   { path: "/tuition-rates", priority: 0.8 },
   { path: "/faq", priority: 0.6 },
   { path: "/blogs", priority: 0.7 },

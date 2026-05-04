@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { BLOG_EDITOR_LIST_STYLE_VALUES } from "@/configs/options";
 
 export const createArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -33,7 +34,7 @@ export const createArticleSchema = z.object({
           type: z.literal("list"),
           items: z.array(z.string()).min(1, "List must have at least one item"),
           style: z
-            .enum(["ordered", "unordered"])
+            .enum(BLOG_EDITOR_LIST_STYLE_VALUES)
             .optional()
             .default("unordered"),
         }),

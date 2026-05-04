@@ -24,8 +24,9 @@ const Beliefs = () => {
               </span>
             </h3>
             <p className="text-offwhite text-base mb-6 text-center sm:text-start leading-relaxed">
-              Join our community of passionate tutors who make learning
-              personal, flexible, and effective.
+              Join our community of passionate tutors - including university
+              students earning while they inspire the next generation. Make
+              learning personal, flexible, and effective.
             </p>
             <div className="mt-auto text-center sm:text-start">
               <button

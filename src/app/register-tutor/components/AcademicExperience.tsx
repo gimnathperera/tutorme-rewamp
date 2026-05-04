@@ -9,6 +9,7 @@ import {
   CLASS_TYPE_OPTIONS,
   isPhysicalClassType,
   PREFERRED_LOCATION_OPTIONS,
+  REGISTER_HIGHEST_EDUCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
@@ -191,14 +192,11 @@ const AcademicExperience = () => {
             <option value="" disabled hidden>
               Select highest education level
             </option>
-            <option value="PhD">PhD</option>
-            <option value="Masters">Master&apos;s Degree</option>
-            <option value="Bachelor Degree">Bachelor&apos;s Degree</option>
-            <option value="Undergraduate">Undergraduate</option>
-            <option value="Diploma and Professional">
-              Diploma and Professional
-            </option>
-            <option value="AL">Advanced Level (A/L)</option>
+            {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.text}
+              </option>
+            ))}
           </select>
           <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.highestEducation?.message as string}

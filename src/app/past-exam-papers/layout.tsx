@@ -10,7 +10,10 @@ export default function TestPapersLayout({
 }) {
   return (
     <>
-      <PageBreadcrumbJsonLd name="Test Papers" path={seoPages.testPapers.path} />
+      <PageBreadcrumbJsonLd
+        name="Past Exam Papers"
+        path={seoPages.testPapers.path}
+      />
       {children}
     </>
   );

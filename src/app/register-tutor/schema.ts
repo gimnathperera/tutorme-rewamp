@@ -6,13 +6,24 @@ import {
   PASSWORD_TOO_LONG,
   PASSWORD_TOO_SHORT,
 } from "@/configs/password";
-import { isPhysicalClassType } from "@/configs/register-tutor";
+import {
+  CLASS_TYPE_VALUES,
+  GENDER_VALUES,
+  isPhysicalClassType,
+  MEDIUM_VALUES,
+  NATIONALITY_VALUES,
+  RACE_VALUES,
+  REGISTER_HIGHEST_EDUCATION_VALUES,
+} from "@/configs/register-tutor";
 import {
   normalizeTextSpaces,
   removeWhitespace,
   trimText,
 } from "@/utils/form-normalizers";
 import { z } from "zod";
+
+const isConfiguredValue = (values: readonly string[], value: string) =>
+  values.includes(value);
 
 /** Plain ZodObject used for .merge() in fullSchema */
 const step1BaseSchema = z.object({
@@ -63,7 +74,7 @@ const step1BaseSchema = z.object({
     z.string().min(1, "Date of Birth is required"),
   ),
 
-  gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
+  gender: z.string().refine((v) => isConfiguredValue(GENDER_VALUES, v), {
     message: "Gender is required",
   }),
 
@@ -73,18 +84,15 @@ const step1BaseSchema = z.object({
     .min(18, "You must be at least 18 years old")
     .max(80, "Age must be below 80"),
 
-  nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
-    message: "Nationality is required",
-  }),
-
-  race: z
+  nationality: z
     .string()
-    .refine(
-      (v) => ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
-      {
-        message: "Race is required",
-      },
-    ),
+    .refine((v) => isConfiguredValue(NATIONALITY_VALUES, v), {
+      message: "Nationality is required",
+    }),
+
+  race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
+    message: "Race is required",
+  }),
 });
 
 /** Cross-field refinement shared between step1Schema and fullSchema */
@@ -113,16 +121,9 @@ export const step2Schema = z.object({
     .array(
       z
         .string()
-        .refine(
-          (v) =>
-            [
-              "Online - Individual",
-              "Online - Group",
-              "Physical - Individual",
-              "Physical - Group",
-            ].includes(v),
-          { message: "Invalid class type selected" },
-        ),
+        .refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
+          message: "Invalid class type selected",
+        }),
     )
     .min(1, "Class Type is required"),
 
@@ -132,7 +133,7 @@ export const step2Schema = z.object({
 
   tutorMediums: z
     .array(
-      z.string().refine((v) => ["Sinhala", "English", "Tamil"].includes(v), {
+      z.string().refine((v) => isConfiguredValue(MEDIUM_VALUES, v), {
         message: "Invalid medium selected",
       }),
     )
@@ -140,20 +141,9 @@ export const step2Schema = z.object({
 
   highestEducation: z
     .string()
-    .refine(
-      (v) =>
-        [
-          "PhD",
-          "Masters",
-          "Bachelor Degree",
-          "Undergraduate",
-          "Diploma and Professional",
-          "AL",
-        ].includes(v),
-      {
-        message: "Highest Education is required",
-      },
-    ),
+    .refine((v) => isConfiguredValue(REGISTER_HIGHEST_EDUCATION_VALUES, v), {
+      message: "Highest Education is required",
+    }),
 
   grades: z.array(z.string()).min(1, "Grades are required"),
 

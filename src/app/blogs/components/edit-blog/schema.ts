@@ -1,4 +1,8 @@
 import { z } from "zod";
+import {
+  BLOG_EDITOR_LIST_STYLE_VALUES,
+  BLOG_STATUS_VALUES,
+} from "@/configs/options";
 
 export const updateArticleSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -33,7 +37,7 @@ export const updateArticleSchema = z.object({
           type: z.literal("list"),
           items: z.array(z.string()).min(1, "List must have at least one item"),
           style: z
-            .enum(["ordered", "unordered"])
+            .enum(BLOG_EDITOR_LIST_STYLE_VALUES)
             .optional()
             .default("unordered"),
         }),
@@ -59,7 +63,7 @@ export const updateArticleSchema = z.object({
   relatedArticles: z
     .array(z.string().min(1, "Related article ID is required"))
     .optional(),
-  status: z.enum(["pending", "approved", "rejected"]),
+  status: z.enum(BLOG_STATUS_VALUES),
 });
 
 export type UpdateArticleSchema = z.infer<typeof updateArticleSchema>;

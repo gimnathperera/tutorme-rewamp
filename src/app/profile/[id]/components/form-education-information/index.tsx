@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
+  REGISTER_HIGHEST_EDUCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
 } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
@@ -26,24 +27,13 @@ type Props = {
   isSubmitting: boolean;
 };
 
-const toOptions = (
-  options: Array<{ value: string; text: string }>,
-): Option[] => options.map(({ text, value }) => ({ label: text, value }));
+const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
+  options.map(({ text, value }) => ({ label: text, value }));
 
 const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
-const highestEducationOptions: Option[] = [
-  { label: "PhD", value: "PhD" },
-  { label: "Master's Degree", value: "Masters" },
-  { label: "Bachelor's Degree", value: "Bachelor Degree" },
-  { label: "Undergraduate", value: "Undergraduate" },
-  {
-    label: "Diploma and Professional",
-    value: "Diploma and Professional",
-  },
-  { label: "Advanced Level (A/L)", value: "AL" },
-];
+const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const CHAR_LIMIT = 500;
 
 const FormEducationInfo: FC<Props> = ({
@@ -99,9 +89,7 @@ const FormEducationInfo: FC<Props> = ({
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Qualifications
-      </h3>
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">Qualifications</h3>
       <p className="mb-5 text-sm text-gray-500">
         Keep your tutor qualifications aligned with the same teaching and
         academic details used during tutor registration.

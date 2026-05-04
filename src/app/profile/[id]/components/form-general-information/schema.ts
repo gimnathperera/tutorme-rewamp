@@ -37,105 +37,108 @@ const calculateAge = (birthday: string | Date) => {
   return age;
 };
 
-export const generalInfoSchema = z.object({
-  name: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Full Name is required")
-      .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
-  ),
-  email: z.preprocess(
-    removeWhitespace,
-    z.string().email("Invalid email address"),
-  ),
-  phoneNumber: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .min(1, "Contact Number is required")
-      .regex(/^\d+$/, "Contact Number must contain numeric values only")
-      .length(10, "Contact Number should be exactly 10 digits"),
-  ),
-  birthday: z
-    .union([z.string(), z.date()])
-    .refine((val) => val !== "" && val !== null && val !== undefined, {
-      message: "Date of Birth is required",
-    })
-    .transform((value) => (value === "" ? undefined : value))
-    .refine(
-      (date) => {
-        if (!date) return true;
-        const dob = parseBirthday(date);
-        if (!dob) return false;
-
-        const today = new Date();
-        const todayStart = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-        );
-
-        return dob < todayStart;
-      },
-      {
-        message: "Birthday cannot be a future date",
-      },
-    )
-    .refine(
-      (date) => {
-        if (!date) return true;
-        const derivedAge = calculateAge(date);
-        return typeof derivedAge === "number" && derivedAge >= 18;
-      },
-      {
-        message: "You must be at least 18 years old",
-      },
+export const generalInfoSchema = z
+  .object({
+    name: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, "Full Name is required")
+        .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
     ),
-  age: z.preprocess(
-    (value) => {
-      if (value === "" || value === null || value === undefined) {
-        return undefined;
-      }
-
-      return Number(value);
-    },
-    z
-      .number({
-        invalid_type_error: "Age is required",
-        required_error: "Age is required",
+    email: z.preprocess(
+      removeWhitespace,
+      z.string().email("Invalid email address"),
+    ),
+    phoneNumber: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .min(1, "Contact Number is required")
+        .regex(/^\d+$/, "Contact Number must contain numeric values only")
+        .length(10, "Contact Number should be exactly 10 digits"),
+    ),
+    birthday: z
+      .union([z.string(), z.date()])
+      .refine((val) => val !== "" && val !== null && val !== undefined, {
+        message: "Date of Birth is required",
       })
-      .int()
-      .min(18, "You must be at least 18 years old")
-      .max(80, "Age must be below 80"),
-  ),
-  gender: z
-    .string()
-    .refine((v) => ["Male", "Female", "Others"].includes(v), {
+      .transform((value) => (value === "" ? undefined : value))
+      .refine(
+        (date) => {
+          if (!date) return true;
+          const dob = parseBirthday(date);
+          if (!dob) return false;
+
+          const today = new Date();
+          const todayStart = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+          );
+
+          return dob < todayStart;
+        },
+        {
+          message: "Birthday cannot be a future date",
+        },
+      )
+      .refine(
+        (date) => {
+          if (!date) return true;
+          const derivedAge = calculateAge(date);
+          return typeof derivedAge === "number" && derivedAge >= 18;
+        },
+        {
+          message: "You must be at least 18 years old",
+        },
+      ),
+    age: z.preprocess(
+      (value) => {
+        if (value === "" || value === null || value === undefined) {
+          return undefined;
+        }
+
+        return Number(value);
+      },
+      z
+        .number({
+          invalid_type_error: "Age is required",
+          required_error: "Age is required",
+        })
+        .int()
+        .min(18, "You must be at least 18 years old")
+        .max(80, "Age must be below 80"),
+    ),
+    gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
       message: "Gender is required",
     }),
-  nationality: z.string().refine((v) => ["Sri Lankan", "Others"].includes(v), {
-    message: "Nationality is required",
-  }),
-  race: z
-    .string()
-    .refine(
-      (v) => ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
-      {
-        message: "Race is required",
-      },
-    ),
-}).superRefine((data, context) => {
-  const derivedAge = data.birthday ? calculateAge(data.birthday) : undefined;
+    nationality: z
+      .string()
+      .refine((v) => ["Sri Lankan", "Others"].includes(v), {
+        message: "Nationality is required",
+      }),
+    race: z
+      .string()
+      .refine(
+        (v) =>
+          ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
+        {
+          message: "Race is required",
+        },
+      ),
+  })
+  .superRefine((data, context) => {
+    const derivedAge = data.birthday ? calculateAge(data.birthday) : undefined;
 
-  if (typeof derivedAge === "number" && derivedAge !== data.age) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Age does not match the selected date of birth",
-      path: ["age"],
-    });
-  }
-});
+    if (typeof derivedAge === "number" && derivedAge !== data.age) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Age does not match the selected date of birth",
+        path: ["age"],
+      });
+    }
+  });
 
 export const initialGeneralInfoFormValues = {
   name: "",

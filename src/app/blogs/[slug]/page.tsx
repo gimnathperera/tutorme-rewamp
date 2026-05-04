@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import type { BlogModerationStatus } from "@/configs/options";
 
 const BlogRenderer = dynamic(
   () => import("../components/blog-renderer/BlogRenderer"),
@@ -71,7 +72,7 @@ export default function ViewBlogPage() {
     }
   };
 
-  const handleStatusChange = async (status: "approved" | "rejected") => {
+  const handleStatusChange = async (status: BlogModerationStatus) => {
     if (!blog) return;
     try {
       await updateBlogStatus({ id: blog.id, status }).unwrap();

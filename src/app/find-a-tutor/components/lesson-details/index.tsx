@@ -5,25 +5,11 @@ import { FC, useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import lesson from "../../../../../public/images/findTutor/lesson.png";
 import { Option } from "@/types/shared-types";
-
-const durationOptions = [
-  { value: "30_min", label: "30 minutes" },
-  { value: "1_hour", label: "1 hour" },
-  { value: "2_hour", label: "2 hours" },
-];
-
-const frequencyOptions = [
-  { value: "1_week", label: "Once a week" },
-  { value: "2_week", label: "Twice a week" },
-  { value: "daily", label: "Daily" },
-];
-
-const tutorCountOptions = [
-  { label: "1", value: 1 },
-  { label: "2", value: 2 },
-  { label: "3", value: 3 },
-  { label: "4", value: 4 },
-];
+import {
+  FIND_TUTOR_COUNT_OPTIONS,
+  FIND_TUTOR_DURATION_OPTIONS,
+  FIND_TUTOR_FREQUENCY_OPTIONS,
+} from "@/configs/options";
 
 type Props = {
   subjectsOptions: Option[];
@@ -77,7 +63,7 @@ const LessonDetails: FC<Props> = ({ subjectsOptions, isSubjectsLoading }) => {
           className="sm:w-1/3"
           label="How many tutors do you need?"
           name="tutorCount"
-          options={tutorCountOptions}
+          options={FIND_TUTOR_COUNT_OPTIONS}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -95,13 +81,13 @@ const LessonDetails: FC<Props> = ({ subjectsOptions, isSubjectsLoading }) => {
               <InputSelect
                 label="Duration"
                 name={`tutors.${index}.duration`}
-                options={durationOptions}
+                options={FIND_TUTOR_DURATION_OPTIONS}
               />
 
               <InputSelect
                 label="Frequency"
                 name={`tutors.${index}.frequency`}
-                options={frequencyOptions}
+                options={FIND_TUTOR_FREQUENCY_OPTIONS}
               />
             </div>
           ))}

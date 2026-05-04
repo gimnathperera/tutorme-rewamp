@@ -29,6 +29,10 @@ import { Button } from "@/components/ui/Button/button";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import TableOfContents from "../table-of-content/TableOfContent";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
+import {
+  BLOG_EDITOR_HEADING_OPTIONS,
+  BLOG_EDITOR_LIST_STYLE_OPTIONS,
+} from "@/configs/options";
 
 const AddBlog = () => {
   const [createBlog, { isLoading }] = useCreateBlogMutation();
@@ -247,12 +251,11 @@ const AddBlog = () => {
                             valueAsNumber: true,
                           })}
                         >
-                          <option value={1}>H1</option>
-                          <option value={2}>H2</option>
-                          <option value={3}>H3</option>
-                          <option value={4}>H4</option>
-                          <option value={5}>H5</option>
-                          <option value={6}>H6</option>
+                          {BLOG_EDITOR_HEADING_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.text}
+                            </option>
+                          ))}
                         </select>
                       </div>
                     )}
@@ -487,8 +490,11 @@ const AddBlog = () => {
                             className="block w-32 rounded-md border-gray-300 py-1.5 bg-white sm:text-sm"
                             {...register(`content.${index}.style` as const)}
                           >
-                            <option value="unordered">Bullets</option>
-                            <option value="ordered">Numbered</option>
+                            {BLOG_EDITOR_LIST_STYLE_OPTIONS.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.text}
+                              </option>
+                            ))}
                           </select>
                         </div>
 
