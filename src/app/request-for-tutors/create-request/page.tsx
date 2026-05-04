@@ -42,6 +42,10 @@ import {
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
+import {
+  TUTOR_TYPE_OPTIONS,
+  CLASS_TYPE_OPTIONS,
+} from "@/configs/register-tutor";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -587,27 +591,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select preferred tutor type
                           </option>
-                          <option value="Private Tutor">Private Tutor</option>
-                          <option value="Government Teacher">
-                            Government Teacher
-                          </option>
-                          <option value="University Student">
-                            University Student
-                          </option>
-                          <option value="Advanced Level">Advanced Level</option>
-                          <option value="Diploma Holders">
-                            Diploma Holders
-                          </option>
-                          <option value="Ex-MOE (Ministry of Education)">
-                            Ex-MOE (Ministry of Education)
-                          </option>
-                          <option value="Part-time Tutors">
-                            Part-time Tutors
-                          </option>
-                          <option value="Full-time Tutors">
-                            Full-time Tutors
-                          </option>
-                          <option value="Coach">Coach</option>
+                          {TUTOR_TYPE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.preferredTutorType?.message}
@@ -630,16 +618,11 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             Select preferred class type
                           </option>
-                          <option value="Online - Individual">
-                            Online - Individual
-                          </option>
-                          <option value="Online - Group">Online - Group</option>
-                          <option value="Physical - Individual">
-                            Physical - Individual
-                          </option>
-                          <option value="Physical - Group">
-                            Physical - Group
-                          </option>
+                          {CLASS_TYPE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>
+                              {o.text}
+                            </option>
+                          ))}
                         </select>
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.preferredClassType?.message}

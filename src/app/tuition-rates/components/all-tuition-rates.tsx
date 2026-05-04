@@ -84,7 +84,7 @@ function TuitionRateTable({ items }: { items: TuitionRateItem[] }) {
             <th className="text-left px-5 py-3 font-semibold text-gray-600 w-[19%] whitespace-nowrap">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
-                Ex / Current MOE Teachers
+                Gov/International Teachers <br /> (Ex / Current)
               </span>
             </th>
           </tr>

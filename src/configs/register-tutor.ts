@@ -133,21 +133,16 @@ export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "No Preference", text: "No Preference" },
 ];
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  { value: "Private Tutor", text: "Private Tutor" },
-  { value: "Government Teacher", text: "Government Teacher" },
+  { value: "International School Teacher", text: "International School Teacher" },
+  { value: "Government School Teacher", text: "Government School Teacher" },
   { value: "University Student", text: "University Student" },
-  { value: "Coach", text: "Coach" },
-  {
-    value: "International School Teacher",
-    text: "International School Teacher",
-  },
-  { value: "University Lecturer", text: "University Lecturer" },
-  { value: "Full-Time", text: "Full-Time" },
-  { value: "Part-Time", text: "Part-Time" },
-  { value: "Online", text: "Online" },
-  { value: "School Teacher Tutors", text: "School Teacher Tutors" },
-  { value: "Group Tutors", text: "Group Tutors" },
-  { value: "Exam Coaches", text: "Exam Coaches" },
+  { value: "A/L Student", text: "A/L Student" },
+  { value: "Diploma Holder", text: "Diploma Holder" },
+  { value: "Degree Holder", text: "Degree Holder" },
+  { value: "Part-time Tutor", text: "Part-time Tutor" },
+  { value: "Full-time Tutor", text: "Full-time Tutor" },
+  { value: "International Retired Teacher", text: "International Retired Teacher" },
+  { value: "Government Retired Teacher", text: "Government Retired Teacher" },
 ];
 export const HIGHEST_EDUCATION_LEVELS: SelectOption[] = [
   { value: "PhD", text: "PhD" },
