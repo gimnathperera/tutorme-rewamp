@@ -129,7 +129,9 @@ const getProfileBirthday = (profile: ProfileResponse) =>
 const getProfileDisplayName = (profile: ProfileResponse) =>
   profile.fullName || profile.name || "";
 
-const serializeBirthdayForPayload = (birthday: GeneralInfoSchema["birthday"]) =>
+const serializeBirthdayForPayload = (
+  birthday: GeneralInfoSchema["birthday"],
+) =>
   birthday instanceof Date ? birthday.toISOString().slice(0, 10) : birthday;
 
 const calculateAgeFromBirthday = (birthday?: string) => {
@@ -222,20 +224,20 @@ const normalizeCertificateUrls = (
 const hasTutorRegistrationFields = (candidate: ProfileLike) =>
   Boolean(
     candidate.fullName ||
-      candidate.contactNumber ||
-      candidate.dateOfBirth ||
-      normalizeGender(candidate.gender) ||
-      candidate.classType ||
-      candidate.preferredLocations ||
-      candidate.tutorType ||
-      candidate.tutorTypes ||
-      candidate.tutorMediums ||
-      candidate.highestEducation ||
-      candidate.teachingSummary ||
-      candidate.studentResults ||
-      candidate.sellingPoints ||
-      candidate.academicDetails ||
-      candidate.certificatesAndQualifications,
+    candidate.contactNumber ||
+    candidate.dateOfBirth ||
+    normalizeGender(candidate.gender) ||
+    candidate.classType ||
+    candidate.preferredLocations ||
+    candidate.tutorType ||
+    candidate.tutorTypes ||
+    candidate.tutorMediums ||
+    candidate.highestEducation ||
+    candidate.teachingSummary ||
+    candidate.studentResults ||
+    candidate.sellingPoints ||
+    candidate.academicDetails ||
+    candidate.certificatesAndQualifications,
   );
 
 const resolveTutorRegistrationData = (
@@ -255,12 +257,15 @@ const resolveTutorRegistrationData = (
     data.data?.profile,
   ].filter(Boolean) as ProfileLike[];
 
-  const collection =
-    Array.isArray(data) ? data :
-    Array.isArray(data.results) ? data.results :
-    Array.isArray(data.data) ? data.data :
-    Array.isArray(data.data?.results) ? data.data.results :
-    [];
+  const collection = Array.isArray(data)
+    ? data
+    : Array.isArray(data.results)
+      ? data.results
+      : Array.isArray(data.data)
+        ? data.data
+        : Array.isArray(data.data?.results)
+          ? data.data.results
+          : [];
 
   const isProfileMatch = (item: ProfileLike) => {
     const itemUserId = item.userId ?? item.user?.id ?? item.user?._id;
@@ -271,19 +276,22 @@ const resolveTutorRegistrationData = (
   };
 
   const matchedFromCollection = collection.find(
-    (item: ProfileLike) => isProfileMatch(item) && hasTutorRegistrationFields(item),
+    (item: ProfileLike) =>
+      isProfileMatch(item) && hasTutorRegistrationFields(item),
   );
 
   if (matchedFromCollection) return matchedFromCollection;
 
-  return candidates.find(
-    (candidate) =>
-      hasTutorRegistrationFields(candidate) &&
-      (isProfileMatch(candidate) ||
-        candidate.fullName ||
-        candidate.classType ||
-        candidate.teachingSummary),
-  ) ?? null;
+  return (
+    candidates.find(
+      (candidate) =>
+        hasTutorRegistrationFields(candidate) &&
+        (isProfileMatch(candidate) ||
+          candidate.fullName ||
+          candidate.classType ||
+          candidate.teachingSummary),
+    ) ?? null
+  );
 };
 
 const mergeTutorRegistrationIntoProfile = (
@@ -295,7 +303,10 @@ const mergeTutorRegistrationIntoProfile = (
 
   return {
     ...profile,
-    fullName: preferFilledOptionalString(profile.fullName, registration.fullName),
+    fullName: preferFilledOptionalString(
+      profile.fullName,
+      registration.fullName,
+    ),
     name: preferFilledString(
       profile.name,
       registration.fullName || registration.name,
@@ -304,11 +315,10 @@ const mergeTutorRegistrationIntoProfile = (
       profile.contactNumber ??
       registration.contactNumber ??
       registration.phoneNumber,
-    phoneNumber:
-      preferFilledString(
-        profile.phoneNumber,
-        registration.phoneNumber || registration.contactNumber,
-      ),
+    phoneNumber: preferFilledString(
+      profile.phoneNumber,
+      registration.phoneNumber || registration.contactNumber,
+    ),
     dateOfBirth: profile.dateOfBirth ?? registration.dateOfBirth,
     birthday: preferFilledString(
       profile.birthday,
@@ -317,7 +327,7 @@ const mergeTutorRegistrationIntoProfile = (
     age: profile.age ?? registration.age,
     gender:
       profile.gender === "None" || !profile.gender
-        ? normalizeGender(registration.gender) ?? "None"
+        ? (normalizeGender(registration.gender) ?? "None")
         : profile.gender,
     nationality: preferFilledOptionalString(
       profile.nationality,
@@ -350,10 +360,12 @@ const mergeTutorRegistrationIntoProfile = (
       profile.tutorMediums,
       registration.tutorMediums ?? [],
     ),
-    grades: profile.grades?.length ? profile.grades : registration.grades ?? [],
+    grades: profile.grades?.length
+      ? profile.grades
+      : (registration.grades ?? []),
     subjects: profile.subjects?.length
       ? profile.subjects
-      : registration.subjects ?? [],
+      : (registration.subjects ?? []),
     teachingSummary: preferFilledOptionalString(
       profile.teachingSummary,
       registration.teachingSummary,
@@ -370,10 +382,9 @@ const mergeTutorRegistrationIntoProfile = (
       profile.sellingPoints,
       registration.sellingPoints,
     ),
-    certificatesAndQualifications:
-      profile.certificatesAndQualifications?.length
-        ? profile.certificatesAndQualifications
-        : registration.certificatesAndQualifications,
+    certificatesAndQualifications: profile.certificatesAndQualifications?.length
+      ? profile.certificatesAndQualifications
+      : registration.certificatesAndQualifications,
   };
 };
 
@@ -491,8 +502,9 @@ const useLogic = (): LogicReturnType => {
         grades: getProfileGradeIds(profile),
         subjects: getProfileSubjectIds(profile),
         academicDetails: profile.academicDetails ?? "",
-        certificatesAndQualifications:
-          normalizeCertificateUrls(profile.certificatesAndQualifications),
+        certificatesAndQualifications: normalizeCertificateUrls(
+          profile.certificatesAndQualifications,
+        ),
       });
     },
     [educationInfoForm],
@@ -606,7 +618,9 @@ const useLogic = (): LogicReturnType => {
       const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
       educationInfoForm.setValue(
         "subjects",
-        currentSubjects.filter((subjectId) => !removedSubjectIds.has(subjectId)),
+        currentSubjects.filter(
+          (subjectId) => !removedSubjectIds.has(subjectId),
+        ),
         { shouldDirty: true },
       );
     }
@@ -676,13 +690,7 @@ const useLogic = (): LogicReturnType => {
       return;
     }
     getUserRawData();
-  }, [
-    forceRedirectUser,
-    getUserRawData,
-    isCurrentUserProfile,
-    user,
-    userId,
-  ]);
+  }, [forceRedirectUser, getUserRawData, isCurrentUserProfile, user, userId]);
 
   useEffect(() => {
     syncEducationSubjectOptions();
@@ -781,7 +789,9 @@ const useLogic = (): LogicReturnType => {
     toast.success("Languages and availability updated successfully");
   };
 
-  const onTeachingProfileFormSubmission = async (data: TeachingProfileSchema) => {
+  const onTeachingProfileFormSubmission = async (
+    data: TeachingProfileSchema,
+  ) => {
     const result = await handleProfileSubmit({
       id: userId,
       payload: {

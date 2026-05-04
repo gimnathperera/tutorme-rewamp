@@ -179,7 +179,8 @@ export function createArticleJsonLd({
   path,
 }: ArticleJsonLdConfig) {
   const canonicalUrl = getCanonicalUrl(path);
-  const publishedDate = datePublished || dateModified || new Date().toISOString();
+  const publishedDate =
+    datePublished || dateModified || new Date().toISOString();
   const modifiedDate = dateModified || publishedDate;
 
   return {

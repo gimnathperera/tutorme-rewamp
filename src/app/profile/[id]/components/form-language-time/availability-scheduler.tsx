@@ -217,7 +217,8 @@ const AvailabilityScheduler = () => {
                             className="flex items-center justify-between rounded-md bg-blue-50 px-3 py-2 text-sm text-blue-900"
                           >
                             <span>
-                              {getTimeLabel(slot.start)} - {getTimeLabel(slot.end)}
+                              {getTimeLabel(slot.start)} -{" "}
+                              {getTimeLabel(slot.end)}
                             </span>
                             <button
                               type="button"
@@ -230,7 +231,9 @@ const AvailabilityScheduler = () => {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-400">No slots added</div>
+                      <div className="text-sm text-gray-400">
+                        No slots added
+                      </div>
                     )}
                   </div>
                 ))}

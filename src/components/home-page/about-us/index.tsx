@@ -25,7 +25,8 @@ const Aboutdata: datatype[] = [
   {
     heading: "Confidence Building",
     imgSrc: "/images/aboutus/imgThree.svg",
-    paragraph: "One-on-one attention from a background-checked, verified tutor boosts confidence and motivation.",
+    paragraph:
+      "One-on-one attention from a background-checked, verified tutor boosts confidence and motivation.",
     link: "Learn more",
   },
 ];

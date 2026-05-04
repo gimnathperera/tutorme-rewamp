@@ -129,13 +129,7 @@ const PersonalInfo = () => {
     }, EMAIL_CHECK_DELAY_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [
-    checkTutorEmailAvailability,
-    clearErrors,
-    email,
-    errors.email,
-    setError,
-  ]);
+  }, [checkTutorEmailAvailability, clearErrors, email, errors.email, setError]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">

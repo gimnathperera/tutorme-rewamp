@@ -14,7 +14,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/configs/env";
 import { AuthUserData } from "@/types/auth-types";
 import { ProfileResponse } from "@/types/response-types";
-import { ExternalLink, Mail, Pencil, ShieldCheck, UserRound } from "lucide-react";
+import {
+  ExternalLink,
+  Mail,
+  Pencil,
+  ShieldCheck,
+  UserRound,
+} from "lucide-react";
 import { FC, useMemo, useState } from "react";
 
 type Props = {
@@ -66,8 +72,9 @@ const getContactNumber = (profile: ProfileResponse | null) =>
   profile?.phoneNumber || profile?.contactNumber || EMPTY_VALUE;
 
 const getLocation = (profile: ProfileResponse | null) =>
-  [profile?.city, profile?.state, profile?.country].filter(Boolean).join(", ") ||
-  EMPTY_VALUE;
+  [profile?.city, profile?.state, profile?.country]
+    .filter(Boolean)
+    .join(", ") || EMPTY_VALUE;
 
 const getEmailVerification = (profile: ProfileResponse | null) => {
   if (typeof profile?.isEmailVerified !== "boolean") return EMPTY_VALUE;

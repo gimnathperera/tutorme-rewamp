@@ -225,7 +225,8 @@ export default function MultiFileUploadDropzone({
 
       const pendingFiles = prev.filter((fileItem) => !fileItem.url);
       const hydratedFiles = urls.map(
-        (url) => prev.find((fileItem) => fileItem.url === url) ?? { file: null, url },
+        (url) =>
+          prev.find((fileItem) => fileItem.url === url) ?? { file: null, url },
       );
 
       const nextFiles = [...hydratedFiles, ...pendingFiles];

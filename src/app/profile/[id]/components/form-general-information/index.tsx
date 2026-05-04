@@ -74,15 +74,9 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
 
   const { defaultValues, isValid } = form.formState;
   const birthday = form.watch("birthday");
-  const [name, email, phoneNumber, age, gender, nationality, race] = form.watch([
-    "name",
-    "email",
-    "phoneNumber",
-    "age",
-    "gender",
-    "nationality",
-    "race",
-  ]);
+  const [name, email, phoneNumber, age, gender, nationality, race] = form.watch(
+    ["name", "email", "phoneNumber", "age", "gender", "nationality", "race"],
+  );
   const hasBirthday =
     birthday instanceof Date
       ? !Number.isNaN(birthday.getTime())
@@ -107,7 +101,8 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const hasMeaningfulChanges =
     collapseTextSpaces(name ?? "") !==
       collapseTextSpaces(defaultValues?.name ?? "") ||
-    removeWhitespace(email ?? "") !== removeWhitespace(defaultValues?.email ?? "") ||
+    removeWhitespace(email ?? "") !==
+      removeWhitespace(defaultValues?.email ?? "") ||
     removeWhitespace(phoneNumber ?? "") !==
       removeWhitespace(defaultValues?.phoneNumber ?? "") ||
     normalizeBirthdayValue(birthday) !==
@@ -188,9 +183,13 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                   });
                 }}
                 onBlur={(e) => {
-                  form.setValue("phoneNumber", removeWhitespace(e.target.value), {
-                    shouldValidate: true,
-                  });
+                  form.setValue(
+                    "phoneNumber",
+                    removeWhitespace(e.target.value),
+                    {
+                      shouldValidate: true,
+                    },
+                  );
                 }}
               />
               <Controller
@@ -215,7 +214,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                         value={
                           field.value instanceof Date
                             ? field.value.toISOString().slice(0, 10)
-                            : field.value ?? ""
+                            : (field.value ?? "")
                         }
                         ref={(el) => {
                           field.ref(el);
@@ -224,7 +223,9 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                         onKeyDown={(e) => e.preventDefault()}
                         max={new Date().toISOString().split("T")[0]}
                         className={`h-10 w-full rounded-md border px-3 pr-10 text-sm text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
-                          fieldState.error ? "border-red-500" : "border-gray-300"
+                          fieldState.error
+                            ? "border-red-500"
+                            : "border-gray-300"
                         }`}
                       />
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
@@ -257,11 +258,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 name="nationality"
                 options={nationalityOptions}
               />
-              <InputSelect
-                label="Race *"
-                name="race"
-                options={raceOptions}
-              />
+              <InputSelect label="Race *" name="race" options={raceOptions} />
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton

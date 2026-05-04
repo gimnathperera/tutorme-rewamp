@@ -8,10 +8,7 @@ import Testimonials from "@/components/home-page/testimonials";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import ScrollAnimationProvider from "@/components/shared/scroll-animation-provider";
 import JsonLd from "@/components/seo/json-ld";
-import {
-  createBreadcrumbJsonLd,
-  createOrganizationJsonLd,
-} from "@/lib/seo";
+import { createBreadcrumbJsonLd, createOrganizationJsonLd } from "@/lib/seo";
 
 export default function Home() {
   return (

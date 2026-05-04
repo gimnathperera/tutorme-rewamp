@@ -41,7 +41,8 @@ const ENV_VARIABLES = {
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "0707491400",
 
   NEXT_PUBLIC_ADMIN_PORTAL_URL:
-    process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL || "https://admin.tuitionlanka.com/signin",
+    process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL ||
+    "https://admin.tuitionlanka.com/signin",
 };
 
 /**

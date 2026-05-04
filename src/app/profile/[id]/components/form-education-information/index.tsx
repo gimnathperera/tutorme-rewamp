@@ -26,9 +26,8 @@ type Props = {
   isSubmitting: boolean;
 };
 
-const toOptions = (
-  options: Array<{ value: string; text: string }>,
-): Option[] => options.map(({ text, value }) => ({ label: text, value }));
+const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
+  options.map(({ text, value }) => ({ label: text, value }));
 
 const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
@@ -99,9 +98,7 @@ const FormEducationInfo: FC<Props> = ({
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Qualifications
-      </h3>
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">Qualifications</h3>
       <p className="mb-5 text-sm text-gray-500">
         Keep your tutor qualifications aligned with the same teaching and
         academic details used during tutor registration.

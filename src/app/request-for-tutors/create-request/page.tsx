@@ -279,13 +279,9 @@ export default function AddRequestForTutor() {
                           }
                         },
                         onBlur: (e) => {
-                          setValue(
-                            "email",
-                            removeWhitespace(e.target.value),
-                            {
-                              shouldValidate: true,
-                            },
-                          );
+                          setValue("email", removeWhitespace(e.target.value), {
+                            shouldValidate: true,
+                          });
                         },
                       })}
                       className={`${inputClass} ${errors.email ? "border-red-500" : "border-gray-300"}`}
@@ -599,12 +595,18 @@ export default function AddRequestForTutor() {
                             University Student
                           </option>
                           <option value="Advanced Level">Advanced Level</option>
-                          <option value="Diploma Holders">Diploma Holders</option>
+                          <option value="Diploma Holders">
+                            Diploma Holders
+                          </option>
                           <option value="Ex-MOE (Ministry of Education)">
                             Ex-MOE (Ministry of Education)
                           </option>
-                          <option value="Part-time Tutors">Part-time Tutors</option>
-                          <option value="Full-time Tutors">Full-time Tutors</option>
+                          <option value="Part-time Tutors">
+                            Part-time Tutors
+                          </option>
+                          <option value="Full-time Tutors">
+                            Full-time Tutors
+                          </option>
                           <option value="Coach">Coach</option>
                         </select>
                         <p className={errorMsg}>

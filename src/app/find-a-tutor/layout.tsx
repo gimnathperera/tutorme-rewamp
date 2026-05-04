@@ -10,7 +10,10 @@ export default function FindATutorLayout({
 }) {
   return (
     <>
-      <PageBreadcrumbJsonLd name="Find a Tutor" path={seoPages.findTutor.path} />
+      <PageBreadcrumbJsonLd
+        name="Find a Tutor"
+        path={seoPages.findTutor.path}
+      />
       {children}
     </>
   );

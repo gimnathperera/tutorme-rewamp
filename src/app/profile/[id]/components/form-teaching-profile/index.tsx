@@ -26,7 +26,8 @@ const fields: {
   {
     name: "studentResults",
     label: "Results of Students / Track Record",
-    placeholder: "Past student results, grade improvements, examination outcomes",
+    placeholder:
+      "Past student results, grade improvements, examination outcomes",
   },
   {
     name: "sellingPoints",
@@ -35,15 +36,22 @@ const fields: {
   },
 ];
 
-const FormTeachingProfile: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
+const FormTeachingProfile: FC<Props> = ({
+  form,
+  onFormSubmit,
+  isSubmitting,
+}) => {
   const { isDirty } = form.formState;
   const isButtonDisabled = !isDirty || isSubmitting;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">Teaching Profile</h3>
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        Teaching Profile
+      </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Share your teaching background, student results, and what makes you stand out as a tutor.
+        Share your teaching background, student results, and what makes you
+        stand out as a tutor.
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
