@@ -150,10 +150,8 @@ export default function TuitionRatesByGrade() {
   });
 
   const grades = useMemo(() => gradesData?.results || [], [gradesData]);
-  const tuitionRates = tuitionRatesData?.results || [];
-
   const tuitionRatesByGradeId = useMemo(() => {
-    return tuitionRates.reduce<Record<string, TuitionRateItem[]>>(
+    return (tuitionRatesData?.results || []).reduce<Record<string, TuitionRateItem[]>>(
       (acc, item) => {
         const gradeId = item.grade?.id || "unknown";
 
@@ -166,7 +164,7 @@ export default function TuitionRatesByGrade() {
       },
       {},
     );
-  }, [tuitionRates]);
+  }, [tuitionRatesData]);
 
   useEffect(() => {
     if (grades.length > 0 && activeAccordion === undefined) {
