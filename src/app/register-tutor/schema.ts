@@ -74,11 +74,9 @@ const step1BaseSchema = z.object({
     z.string().min(1, "Date of Birth is required"),
   ),
 
-  gender: z
-    .string()
-    .refine((v) => isConfiguredValue(GENDER_VALUES, v), {
-      message: "Gender is required",
-    }),
+  gender: z.string().refine((v) => isConfiguredValue(GENDER_VALUES, v), {
+    message: "Gender is required",
+  }),
 
   age: z
     .number()
@@ -92,11 +90,9 @@ const step1BaseSchema = z.object({
       message: "Nationality is required",
     }),
 
-  race: z
-    .string()
-    .refine((v) => isConfiguredValue(RACE_VALUES, v), {
-      message: "Race is required",
-    }),
+  race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
+    message: "Race is required",
+  }),
 });
 
 /** Cross-field refinement shared between step1Schema and fullSchema */
@@ -125,10 +121,9 @@ export const step2Schema = z.object({
     .array(
       z
         .string()
-        .refine(
-          (v) => isConfiguredValue(CLASS_TYPE_VALUES, v),
-          { message: "Invalid class type selected" },
-        ),
+        .refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
+          message: "Invalid class type selected",
+        }),
     )
     .min(1, "Class Type is required"),
 

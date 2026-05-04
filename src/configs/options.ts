@@ -160,7 +160,10 @@ export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
 ];
 
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  { value: "International School Teacher", text: "International School Teacher" },
+  {
+    value: "International School Teacher",
+    text: "International School Teacher",
+  },
   { value: "Government School Teacher", text: "Government School Teacher" },
   { value: "University Student", text: "University Student" },
   { value: "A/L Student", text: "A/L Student" },
@@ -168,7 +171,10 @@ export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
   { value: "Degree Holder", text: "Degree Holder" },
   { value: "Part-time Tutor", text: "Part-time Tutor" },
   { value: "Full-time Tutor", text: "Full-time Tutor" },
-  { value: "International Retired Teacher", text: "International Retired Teacher" },
+  {
+    value: "International Retired Teacher",
+    text: "International Retired Teacher",
+  },
   { value: "Government Retired Teacher", text: "Government Retired Teacher" },
 ];
 
@@ -322,10 +328,7 @@ export const BLOG_STATUS_VALUES = ["pending", "approved", "rejected"] as const;
 
 export type BlogStatus = (typeof BLOG_STATUS_VALUES)[number];
 
-export const BLOG_MODERATION_STATUS_VALUES = [
-  "approved",
-  "rejected",
-] as const;
+export const BLOG_MODERATION_STATUS_VALUES = ["approved", "rejected"] as const;
 
 export type BlogModerationStatus =
   (typeof BLOG_MODERATION_STATUS_VALUES)[number];
@@ -344,10 +347,7 @@ export const BLOG_EDITOR_LIST_STYLE_OPTIONS = [
   { value: "ordered", text: "Numbered" },
 ] as const;
 
-export const BLOG_EDITOR_LIST_STYLE_VALUES = [
-  "ordered",
-  "unordered",
-] as const;
+export const BLOG_EDITOR_LIST_STYLE_VALUES = ["ordered", "unordered"] as const;
 
 export const PROFILE_LANGUAGE_OPTIONS: Option[] = [
   { value: "sinhala", label: "Sinhala" },
