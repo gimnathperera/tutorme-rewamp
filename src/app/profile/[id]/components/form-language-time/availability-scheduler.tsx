@@ -453,7 +453,9 @@ const AvailabilityScheduler = () => {
           }
 
           if (selectedStart >= selectedEnd) {
-            setLocalError("End time must be later than start time.");
+            setLocalError(
+              "End time must be later than start time on the same day. Overnight slots are not supported.",
+            );
             return;
           }
 
