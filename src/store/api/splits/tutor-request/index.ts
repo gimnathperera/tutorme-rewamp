@@ -17,6 +17,58 @@ type TutorRegistrationLookupResponse =
   | { results?: Partial<ProfileResponse>[]; data?: unknown }
   | null;
 
+type TutorRegistrationCandidate = Record<string, any>;
+
+const hasTutorRegistrationFields = (candidate: unknown): boolean => {
+  if (!candidate || typeof candidate !== "object") return false;
+
+  const data = candidate as TutorRegistrationCandidate;
+
+  return Boolean(
+    data.classType ||
+      data.tutoringLevels ||
+      data.grades ||
+      data.subjects ||
+      data.certificatesAndQualifications ||
+      data.academicDetails ||
+      data.teachingSummary ||
+      data.studentResults ||
+      data.sellingPoints ||
+      data.tutorType ||
+      data.tutorTypes ||
+      data.tutorMediums ||
+      data.highestEducation,
+  );
+};
+
+const hasTutorRegistrationPayload = (response: unknown): boolean => {
+  if (!response || typeof response !== "object") return false;
+
+  if (Array.isArray(response)) {
+    return response.some(hasTutorRegistrationFields);
+  }
+
+  const data = response as TutorRegistrationCandidate;
+  const candidates = [
+    data,
+    data.tutor,
+    data.tutorProfile,
+    data.profile,
+    data.data,
+    data.data?.tutor,
+    data.data?.profile,
+  ];
+
+  if (candidates.some(hasTutorRegistrationFields)) return true;
+
+  const collections = [data.results, data.data, data.data?.results];
+
+  return collections.some(
+    (collection) =>
+      Array.isArray(collection) && collection.some(hasTutorRegistrationFields),
+  );
+};
+
 export const TutorRequestApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     addTutorRequest: build.mutation<FindMyTutorResponse, FindMyTutorRequest>({
@@ -52,7 +104,7 @@ export const TutorRequestApi = baseApi.injectEndpoints({
         for (const url of candidateUrls) {
           const result = await baseQuery({ url, method: "GET" });
 
-          if (result.data) {
+          if (hasTutorRegistrationPayload(result.data)) {
             return { data: result.data as TutorRegistrationLookupResponse };
           }
         }
