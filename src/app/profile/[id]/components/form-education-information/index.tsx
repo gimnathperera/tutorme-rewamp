@@ -3,19 +3,19 @@ import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
-import { Textarea } from "@/components/ui/textarea";
 import {
+  CLASS_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
   REGISTER_HIGHEST_EDUCATION_OPTIONS,
   TUTOR_TYPE_OPTIONS,
+  isPhysicalClassType,
 } from "@/configs/register-tutor";
 import { Option } from "@/types/shared-types";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { EducationInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
-import { collapseTextSpaces } from "@/utils/form-normalizers";
 
 type Props = {
   dropdownOptionData: {
@@ -30,11 +30,11 @@ type Props = {
 const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
   options.map(({ text, value }) => ({ label: text, value }));
 
+const classTypeOptions = toOptions(CLASS_TYPE_OPTIONS);
 const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
-const CHAR_LIMIT = 500;
 
 const FormEducationInfo: FC<Props> = ({
   dropdownOptionData: { gradesOptions, subjectsOptions },
@@ -44,6 +44,7 @@ const FormEducationInfo: FC<Props> = ({
 }) => {
   const { isDirty, isValid } = form.formState;
   const [
+    classType,
     preferredLocations,
     tutorTypes,
     highestEducation,
@@ -51,9 +52,9 @@ const FormEducationInfo: FC<Props> = ({
     tutorMediums,
     selectedGrades,
     subjects,
-    academicDetails,
     certificatesAndQualifications,
   ] = form.watch([
+    "classType",
     "preferredLocations",
     "tutorTypes",
     "highestEducation",
@@ -61,12 +62,26 @@ const FormEducationInfo: FC<Props> = ({
     "tutorMediums",
     "grades",
     "subjects",
-    "academicDetails",
     "certificatesAndQualifications",
   ]);
+  const isPreferredLocationsEnabled =
+    Array.isArray(classType) && classType.some(isPhysicalClassType);
+
+  useEffect(() => {
+    if (isPreferredLocationsEnabled) return;
+
+    form.setValue("preferredLocations", [], {
+      shouldDirty: false,
+      shouldValidate: true,
+    });
+    form.clearErrors("preferredLocations");
+  }, [form, isPreferredLocationsEnabled]);
+
   const hasAllRequiredFields =
-    Array.isArray(preferredLocations) &&
-    preferredLocations.length > 0 &&
+    Array.isArray(classType) &&
+    classType.length > 0 &&
+    (!isPreferredLocationsEnabled ||
+      (Array.isArray(preferredLocations) && preferredLocations.length > 0)) &&
     Array.isArray(tutorTypes) &&
     tutorTypes.length > 0 &&
     typeof highestEducation === "string" &&
@@ -80,8 +95,6 @@ const FormEducationInfo: FC<Props> = ({
     selectedGrades.length > 0 &&
     Array.isArray(subjects) &&
     subjects.length > 0 &&
-    typeof academicDetails === "string" &&
-    academicDetails.trim().length > 0 &&
     Array.isArray(certificatesAndQualifications) &&
     certificatesAndQualifications.length > 0;
   const isButtonDisabled =
@@ -99,9 +112,21 @@ const FormEducationInfo: FC<Props> = ({
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6">
               <InputMultiSelect
-                label="Preferred Locations *"
+                label="Class Type *"
+                name="classType"
+                options={classTypeOptions}
+              />
+
+              <InputMultiSelect
+                label={`Preferred Locations${isPreferredLocationsEnabled ? " *" : ""}`}
                 name="preferredLocations"
                 options={preferredLocationsOptions}
+                isDisabled={!isPreferredLocationsEnabled}
+                helperText={
+                  isPreferredLocationsEnabled
+                    ? undefined
+                    : "Locations apply to physical classes only"
+                }
               />
 
               <InputMultiSelect
@@ -147,44 +172,6 @@ const FormEducationInfo: FC<Props> = ({
             </div>
 
             <div className="mt-5 grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
-              <Controller
-                name="academicDetails"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor="academicDetails"
-                      className="block text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Summary of Teaching Experience & Academic Achievements
-                      <span className="text-red-500"> *</span>
-                    </label>
-                    <Textarea
-                      id="academicDetails"
-                      {...field}
-                      onBlur={(event) => {
-                        field.onBlur();
-                        field.onChange(collapseTextSpaces(event.target.value));
-                      }}
-                      rows={4}
-                      maxLength={CHAR_LIMIT}
-                      placeholder="Achievements & subjects taught, such as number of students, years, and results"
-                      className={`resize-y bg-white text-sm ${
-                        fieldState.error ? "border-red-500" : "border-gray-300"
-                      }`}
-                    />
-                    <div className="flex min-h-[1.25rem] items-center justify-between gap-3">
-                      <span className="text-xs text-red-500">
-                        {fieldState.error?.message}
-                      </span>
-                      <span className="text-xs text-gray-500">
-                        {(field.value ?? "").length} / {CHAR_LIMIT}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              />
-
               <Controller
                 name="certificatesAndQualifications"
                 control={form.control}

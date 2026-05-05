@@ -24,6 +24,12 @@ const fields: {
     placeholder: "Personal qualities, teaching styles & methodologies",
   },
   {
+    name: "academicDetails",
+    label: "Summary of Teaching Experience & Academic Achievements *",
+    placeholder:
+      "Achievements & subjects taught, such as number of students, years, and results",
+  },
+  {
     name: "studentResults",
     label: "Results of Students / Track Record *",
     placeholder:
@@ -41,8 +47,8 @@ const FormTeachingProfile: FC<Props> = ({
   onFormSubmit,
   isSubmitting,
 }) => {
-  const { isDirty } = form.formState;
-  const isButtonDisabled = !isDirty || isSubmitting;
+  const { isDirty, isValid } = form.formState;
+  const isButtonDisabled = !isDirty || isSubmitting || !isValid;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
@@ -67,7 +73,10 @@ const FormTeachingProfile: FC<Props> = ({
                       htmlFor={name}
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      {label}
+                      {label.replace(" *", "")}
+                      {label.endsWith(" *") && (
+                        <span className="text-red-500"> *</span>
+                      )}
                     </label>
                     <Textarea
                       id={name}

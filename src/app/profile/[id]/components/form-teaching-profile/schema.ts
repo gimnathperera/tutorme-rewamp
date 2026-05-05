@@ -21,6 +21,7 @@ export const teachingProfileSchema = z.object({
 
 export const initialTeachingProfileFormValues = {
   teachingSummary: "",
+  academicDetails: "",
   studentResults: "",
   sellingPoints: "",
 };

@@ -66,6 +66,7 @@ export type UpdateProfileRequest = {
     availability?: string;
     rate?: string;
     grades?: string[];
+    classType?: string[];
     tutoringLevels?: string[];
     preferredLocations?: string[];
     tutorTypes?: string[];
