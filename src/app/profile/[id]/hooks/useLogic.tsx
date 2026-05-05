@@ -599,7 +599,6 @@ const useLogic = (): LogicReturnType => {
 
       educationInfoForm.reset({
         classType,
-        tutoringLevels: classType,
         preferredLocations: profile.preferredLocations ?? [],
         tutorTypes: normalizeTutorTypeValues(profile),
         highestEducation: profile.highestEducation ?? "",
@@ -861,7 +860,6 @@ const useLogic = (): LogicReturnType => {
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
     const submittedEducationUpdates = {
       classType: data.classType,
-      tutoringLevels: data.classType,
       preferredLocations: data.preferredLocations,
       tutorType: data.tutorTypes,
       highestEducation: data.highestEducation,
