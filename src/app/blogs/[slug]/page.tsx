@@ -15,7 +15,7 @@ import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
 import type { BlogModerationStatus } from "@/configs/options";
 
@@ -294,7 +294,11 @@ export default function ViewBlogPage() {
                       >
                         <span>{faq.question}</span>
                         <span className="ml-2 transform transition-transform duration-300">
-                          {openFaqs[idx] ? "▲" : "▼"}
+                          <ChevronDownIcon
+                            className={`w-5 h-5 ml-2 transition-transform duration-300 ${
+                              openFaqs[idx] ? "rotate-180" : ""
+                            }`}
+                          />
                         </span>
                       </button>
                       <div

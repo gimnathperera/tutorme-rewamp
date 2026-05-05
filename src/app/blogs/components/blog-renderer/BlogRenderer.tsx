@@ -33,6 +33,10 @@ const BlogContentImage = ({ src, alt }: { src: string; alt: string }) => {
       alt={alt}
       width={900}
       height={360}
+      sizes="(max-width: 768px) 100vw, 900px"
+      quality={80}
+      priority
+      placeholder="empty"
       className="rounded-2xl object-cover max-h-[360px] w-full h-auto shadow-lg border dark:border-gray-700 hover:scale-[1.01] transition-transform duration-300"
       onError={() => setHidden(true)}
     />
