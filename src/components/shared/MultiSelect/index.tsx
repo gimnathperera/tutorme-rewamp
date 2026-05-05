@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Check, ChevronDown } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 interface Option {
   value: string;
@@ -14,6 +14,7 @@ interface MultiSelectProps {
   onChange?: (selected: string[]) => void;
   disabled?: boolean;
   hasError?: boolean;
+  searchable?: boolean;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -22,16 +23,36 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   onChange,
   disabled = false,
   hasError = false,
+  searchable = false,
 }) => {
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(defaultSelected);
   const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const visibleOptions = useMemo(() => {
+    if (!searchable || !searchQuery.trim()) return options;
+    const q = searchQuery.toLowerCase();
+    return options.filter((o) => o.text.toLowerCase().includes(q));
+  }, [options, searchable, searchQuery]);
 
   const toggleDropdown = () => {
-    if (!disabled) setIsOpen((prev) => !prev);
+    if (disabled) return;
+    setIsOpen((prev) => {
+      const next = !prev;
+      if (!next) setSearchQuery("");
+      return next;
+    });
   };
+
+  useEffect(() => {
+    if (isOpen && searchable) {
+      setTimeout(() => searchInputRef.current?.focus(), 0);
+    }
+  }, [isOpen, searchable]);
 
   const handleSelect = (value: string) => {
     const updated = selectedOptions.includes(value)
@@ -113,17 +134,38 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
       {/* DROPDOWN */}
       {isOpen && (
-        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow">
-          {options.map((option) => (
-            <div
-              key={option.value}
-              onClick={() => handleSelect(option.value)}
-              className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-muted"
-            >
-              <span>{option.text}</span>
-              {selectedOptions.includes(option.value) && <Check size={16} />}
+        <div className="absolute z-50 mt-1 w-full rounded-md border border-gray-200 bg-white shadow">
+          {searchable && (
+            <div className="p-2 border-b border-gray-100">
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onClick={(e) => e.stopPropagation()}
+                placeholder="Search..."
+                className="w-full rounded-md border border-gray-200 px-3 py-1.5 text-sm outline-none focus:border-blue-400"
+              />
             </div>
-          ))}
+          )}
+          <div className="max-h-52 overflow-y-auto">
+            {visibleOptions.length > 0 ? (
+              visibleOptions.map((option) => (
+                <div
+                  key={option.value}
+                  onClick={() => handleSelect(option.value)}
+                  className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-muted"
+                >
+                  <span>{option.text}</span>
+                  {selectedOptions.includes(option.value) && <Check size={16} />}
+                </div>
+              ))
+            ) : (
+              <div className="px-3 py-2 text-sm text-gray-400 select-none">
+                No results for &ldquo;{searchQuery}&rdquo;
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
