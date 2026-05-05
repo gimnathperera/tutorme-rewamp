@@ -20,18 +20,18 @@ const fields: {
 }[] = [
   {
     name: "teachingSummary",
-    label: "Short Introduction About Yourself",
+    label: "Short Introduction About Yourself *",
     placeholder: "Personal qualities, teaching styles & methodologies",
   },
   {
     name: "studentResults",
-    label: "Results of Students / Track Record",
+    label: "Results of Students / Track Record *",
     placeholder:
       "Past student results, grade improvements, examination outcomes",
   },
   {
     name: "sellingPoints",
-    label: "Other Selling Points as a Tutor",
+    label: "Other Selling Points as a Tutor *",
     placeholder: "Teaching methods, commitment level, what makes you stand out",
   },
 ];

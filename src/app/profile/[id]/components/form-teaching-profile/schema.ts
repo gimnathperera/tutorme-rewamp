@@ -1,16 +1,22 @@
 import { z } from "zod";
 import { normalizeTextSpaces } from "@/utils/form-normalizers";
 
-const optionalTeachingField = (label: string) =>
+const requiredTeachingField = (label: string) =>
   z.preprocess(
     normalizeTextSpaces,
-    z.string().max(500, `${label} cannot exceed 500 characters`).optional(),
+    z
+      .string()
+      .min(1, `${label} is required`)
+      .max(500, `${label} cannot exceed 500 characters`),
   );
 
 export const teachingProfileSchema = z.object({
-  teachingSummary: optionalTeachingField("Short Introduction"),
-  studentResults: optionalTeachingField("Student Results"),
-  sellingPoints: optionalTeachingField("Selling Points"),
+  teachingSummary: requiredTeachingField("Short Introduction"),
+  academicDetails: requiredTeachingField(
+    "Summary of Teaching Experience & Academic Achievements",
+  ),
+  studentResults: requiredTeachingField("Student Results"),
+  sellingPoints: requiredTeachingField("Selling Points"),
 });
 
 export const initialTeachingProfileFormValues = {
