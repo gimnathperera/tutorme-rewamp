@@ -388,6 +388,100 @@ const mergeTutorRegistrationIntoProfile = (
   };
 };
 
+const mergeProfileUpdates = (
+  currentProfile: ProfileResponse | null,
+  ...updates: Array<Partial<ProfileResponse> | Record<string, unknown> | null>
+) => {
+  const mergedProfile = updates.reduce(
+    (profile, update) => ({ ...profile, ...(update ?? {}) }),
+    { ...(currentProfile ?? {}) } as ProfileResponse,
+  );
+
+  return mergedProfile as ProfileResponse;
+};
+
+const preferFilledProfileArray = <T,>(
+  incoming: T[] | undefined,
+  existing: T[] | undefined,
+) => (Array.isArray(incoming) && incoming.length > 0 ? incoming : existing);
+
+const preferFilledProfileString = (
+  incoming: string | undefined,
+  existing: string | undefined,
+) =>
+  typeof incoming === "string" && incoming.trim().length > 0
+    ? incoming
+    : existing;
+
+const mergeHydratedProfile = (
+  currentProfile: ProfileResponse | null,
+  incomingProfile: ProfileResponse,
+) => {
+  if (!currentProfile) return incomingProfile;
+
+  return {
+    ...currentProfile,
+    ...incomingProfile,
+    classType: preferFilledProfileArray(
+      incomingProfile.classType,
+      currentProfile.classType,
+    ),
+    tutoringLevels: preferFilledProfileArray(
+      incomingProfile.tutoringLevels,
+      currentProfile.tutoringLevels,
+    ),
+    preferredLocations:
+      incomingProfile.classType?.some((classType) =>
+        classType.startsWith("Online"),
+      )
+        ? (incomingProfile.preferredLocations ?? [])
+        : preferFilledProfileArray(
+            incomingProfile.preferredLocations,
+            currentProfile.preferredLocations,
+          ),
+    tutorTypes: preferFilledProfileArray(
+      incomingProfile.tutorTypes,
+      currentProfile.tutorTypes,
+    ),
+    tutorMediums: preferFilledProfileArray(
+      incomingProfile.tutorMediums,
+      currentProfile.tutorMediums,
+    ),
+    grades: preferFilledProfileArray(
+      incomingProfile.grades,
+      currentProfile.grades,
+    ),
+    subjects: preferFilledProfileArray(
+      incomingProfile.subjects,
+      currentProfile.subjects,
+    ),
+    certificatesAndQualifications: preferFilledProfileArray(
+      incomingProfile.certificatesAndQualifications,
+      currentProfile.certificatesAndQualifications,
+    ),
+    highestEducation: preferFilledProfileString(
+      incomingProfile.highestEducation,
+      currentProfile.highestEducation,
+    ),
+    teachingSummary: preferFilledProfileString(
+      incomingProfile.teachingSummary,
+      currentProfile.teachingSummary,
+    ),
+    academicDetails: preferFilledProfileString(
+      incomingProfile.academicDetails,
+      currentProfile.academicDetails,
+    ),
+    studentResults: preferFilledProfileString(
+      incomingProfile.studentResults,
+      currentProfile.studentResults,
+    ),
+    sellingPoints: preferFilledProfileString(
+      incomingProfile.sellingPoints,
+      currentProfile.sellingPoints,
+    ),
+  } as ProfileResponse;
+};
+
 const useLogic = (): LogicReturnType => {
   const params = useParams();
   const router = useRouter();
@@ -395,6 +489,7 @@ const useLogic = (): LogicReturnType => {
   const { user, isUserLoaded, updateUser } = useAuthContext();
 
   const [userRawData, setUserRawData] = useState<ProfileResponse | null>(null);
+  const userRawDataRef = useRef<ProfileResponse | null>(null);
   const [educationSubjectsOptions, setEducationSubjectsOptions] = useState<
     Option[]
   >([]);
@@ -443,28 +538,36 @@ const useLogic = (): LogicReturnType => {
   const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
   const prevEducationGradesRef = useRef<string[]>([]);
   const hasInitialEducationSubjectsBeenSet = useRef(false);
+  const currentUserId = user?.id;
+  const userRole = user?.role;
+  const hasUser = Boolean(user);
   const isCurrentUserProfile =
-    Boolean(userId && user) && String(user?.id) === String(userId);
-  const isAdminProfile = isCurrentUserProfile && user?.role === "admin";
+    Boolean(userId && currentUserId) && String(currentUserId) === String(userId);
+  const isAdminProfile = isCurrentUserProfile && userRole === "admin";
+
+  const setProfileSnapshot = useCallback((profile: ProfileResponse) => {
+    userRawDataRef.current = profile;
+    setUserRawData(profile);
+  }, []);
 
   const forceRedirectUser = useCallback(() => {
-    if (isUserLoaded && !user) {
+    if (isUserLoaded && !hasUser) {
       router.push("/");
       return;
     }
 
-    if (!isUserLoaded || !user) {
+    if (!isUserLoaded || !hasUser) {
       return;
     }
 
-    if (user.role === "admin" && isCurrentUserProfile) {
+    if (userRole === "admin" && isCurrentUserProfile) {
       return;
     }
 
-    if (user.role !== "tutor" || !isCurrentUserProfile) {
+    if (userRole !== "tutor" || !isCurrentUserProfile) {
       router.push("/");
     }
-  }, [isCurrentUserProfile, isUserLoaded, router, user]);
+  }, [hasUser, isCurrentUserProfile, isUserLoaded, router, userRole]);
 
   const prePopulateGeneralForm = useCallback(
     (profile: ProfileResponse) => {
@@ -490,8 +593,12 @@ const useLogic = (): LogicReturnType => {
 
   const prePopulateEducationForm = useCallback(
     (profile: ProfileResponse) => {
+      const classType = normalizeArrayValue(
+        profile.classType ?? profile.tutoringLevels,
+      );
+
       educationInfoForm.reset({
-        tutoringLevels: profile.tutoringLevels ?? profile.classType ?? [],
+        classType,
         preferredLocations: profile.preferredLocations ?? [],
         tutorTypes: normalizeTutorTypeValues(profile),
         highestEducation: profile.highestEducation ?? "",
@@ -501,7 +608,6 @@ const useLogic = (): LogicReturnType => {
         tutorMediums: profile.tutorMediums ?? [],
         grades: getProfileGradeIds(profile),
         subjects: getProfileSubjectIds(profile),
-        academicDetails: profile.academicDetails ?? "",
         certificatesAndQualifications: normalizeCertificateUrls(
           profile.certificatesAndQualifications,
         ),
@@ -526,6 +632,7 @@ const useLogic = (): LogicReturnType => {
     (profile: ProfileResponse) => {
       teachingProfileForm.reset({
         teachingSummary: profile.teachingSummary ?? "",
+        academicDetails: profile.academicDetails ?? "",
         studentResults: profile.studentResults ?? "",
         sellingPoints: profile.sellingPoints ?? "",
       });
@@ -536,7 +643,7 @@ const useLogic = (): LogicReturnType => {
   const hydrateProfileForms = useCallback(
     (profile: ProfileResponse) => {
       hasInitialEducationSubjectsBeenSet.current = false;
-      setUserRawData(profile);
+      setProfileSnapshot(profile);
       prePopulateGeneralForm(profile);
       prePopulateEducationForm(profile);
       prePopulateLanguageAndTimeForm(profile);
@@ -547,6 +654,7 @@ const useLogic = (): LogicReturnType => {
       prePopulateGeneralForm,
       prePopulateLanguageAndTimeForm,
       prePopulateTeachingProfileForm,
+      setProfileSnapshot,
     ],
   );
 
@@ -562,7 +670,7 @@ const useLogic = (): LogicReturnType => {
     if (result.data) {
       let profileData = result.data;
 
-      if (user?.role === "tutor" && profileData.email) {
+      if (userRole === "tutor" && profileData.email) {
         const tutorRegistrationResult = await fetchTutorRegistration({
           userId,
           email: profileData.email,
@@ -576,14 +684,16 @@ const useLogic = (): LogicReturnType => {
         }
       }
 
-      hydrateProfileForms(profileData);
+      hydrateProfileForms(
+        mergeHydratedProfile(userRawDataRef.current, profileData),
+      );
     }
   }, [
     fetchProfileData,
     fetchTutorRegistration,
     hydrateProfileForms,
-    user?.role,
     userId,
+    userRole,
   ]);
 
   const syncEducationSubjectOptions = useCallback(async () => {
@@ -683,14 +793,22 @@ const useLogic = (): LogicReturnType => {
     forceRedirectUser();
     if (
       !userId ||
-      !user ||
+      !hasUser ||
       !isCurrentUserProfile ||
-      (user.role !== "tutor" && user.role !== "admin")
+      (userRole !== "tutor" && userRole !== "admin")
     ) {
       return;
     }
     getUserRawData();
-  }, [forceRedirectUser, getUserRawData, isCurrentUserProfile, user, userId]);
+  }, [
+    currentUserId,
+    forceRedirectUser,
+    getUserRawData,
+    hasUser,
+    isCurrentUserProfile,
+    userId,
+    userRole,
+  ]);
 
   useEffect(() => {
     syncEducationSubjectOptions();
@@ -725,42 +843,36 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
-    const updatedProfile = result.data
-      ? ({ ...result.data, ...submittedProfileUpdates } as ProfileResponse)
-      : null;
-    const resolvedName = updatedProfile
-      ? getProfileDisplayName(updatedProfile)
-      : data.name;
+    const updatedProfile = mergeProfileUpdates(
+      userRawData,
+      result.data ?? null,
+      submittedProfileUpdates,
+    );
+    const resolvedName = getProfileDisplayName(updatedProfile) || data.name;
 
-    if (updatedProfile) {
-      setUserRawData(updatedProfile);
-      prePopulateGeneralForm(updatedProfile);
-    } else {
-      generalInfoForm.reset({
-        ...data,
-        birthday: formatBirthdayForInput(birthday as string) as any,
-      });
-    }
+    setProfileSnapshot(updatedProfile);
+    prePopulateGeneralForm(updatedProfile);
 
     updateUser({ name: resolvedName });
     toast.success("Personal information updated successfully");
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    const submittedEducationUpdates = {
+      classType: data.classType,
+      preferredLocations: data.preferredLocations,
+      tutorType: data.tutorTypes,
+      highestEducation: data.highestEducation,
+      yearsExperience: Number(data.yearsExperience),
+      tutorMediums: data.tutorMediums,
+      grades: data.grades,
+      subjects: data.subjects,
+      certificatesAndQualifications: data.certificatesAndQualifications,
+    };
+
     const result = await handleProfileSubmit({
       id: userId,
-      payload: {
-        tutoringLevels: data.tutoringLevels,
-        preferredLocations: data.preferredLocations,
-        tutorType: data.tutorTypes,
-        highestEducation: data.highestEducation,
-        yearsExperience: Number(data.yearsExperience),
-        tutorMediums: data.tutorMediums,
-        grades: data.grades,
-        subjects: data.subjects,
-        academicDetails: data.academicDetails,
-        certificatesAndQualifications: data.certificatesAndQualifications,
-      },
+      payload: submittedEducationUpdates,
     });
 
     const error = getErrorInApiResult(result);
@@ -770,6 +882,12 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    setProfileSnapshot(
+      mergeProfileUpdates(userRawData, result.data ?? null, {
+        ...submittedEducationUpdates,
+        tutorTypes: data.tutorTypes,
+      }),
+    );
     educationInfoForm.reset(data);
     toast.success("Qualifications updated successfully");
   };
@@ -777,9 +895,11 @@ const useLogic = (): LogicReturnType => {
   const onLanguageAndTimeFormSubmission = async (
     data: LanguageOptionsSchema,
   ) => {
+    const submittedLanguageAndTimeUpdates = data;
+
     const result = await handleProfileSubmit({
       id: userId,
-      payload: data,
+      payload: submittedLanguageAndTimeUpdates,
     });
 
     const error = getErrorInApiResult(result);
@@ -789,6 +909,13 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    setProfileSnapshot(
+      mergeProfileUpdates(
+        userRawData,
+        result.data ?? null,
+        submittedLanguageAndTimeUpdates,
+      ),
+    );
     languageAndTimeForm.reset(data);
     toast.success("Languages and availability updated successfully");
   };
@@ -796,13 +923,16 @@ const useLogic = (): LogicReturnType => {
   const onTeachingProfileFormSubmission = async (
     data: TeachingProfileSchema,
   ) => {
+    const submittedTeachingUpdates = {
+      teachingSummary: data.teachingSummary ?? "",
+      academicDetails: data.academicDetails ?? "",
+      studentResults: data.studentResults ?? "",
+      sellingPoints: data.sellingPoints ?? "",
+    };
+
     const result = await handleProfileSubmit({
       id: userId,
-      payload: {
-        teachingSummary: data.teachingSummary ?? "",
-        studentResults: data.studentResults ?? "",
-        sellingPoints: data.sellingPoints ?? "",
-      },
+      payload: submittedTeachingUpdates,
     });
 
     const error = getErrorInApiResult(result);
@@ -812,6 +942,13 @@ const useLogic = (): LogicReturnType => {
       return;
     }
 
+    setProfileSnapshot(
+      mergeProfileUpdates(
+        userRawData,
+        result.data ?? null,
+        submittedTeachingUpdates,
+      ),
+    );
     teachingProfileForm.reset(data);
     toast.success("Teaching profile updated successfully");
   };

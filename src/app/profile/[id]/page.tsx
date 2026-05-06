@@ -80,6 +80,13 @@ const ProfilePage: FC = () => {
                   Qualifications
                 </TabsTrigger>
                 <TabsTrigger
+                  value="teaching"
+                  className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
+                >
+                  <PenLine className="h-4 w-4 shrink-0" />
+                  Teaching Profile
+                </TabsTrigger>
+                <TabsTrigger
                   value="languages"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
@@ -88,13 +95,6 @@ const ProfilePage: FC = () => {
                   <span className="hidden sm:inline">
                     Languages, Availability & Rate
                   </span>
-                </TabsTrigger>
-                <TabsTrigger
-                  value="teaching"
-                  className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
-                >
-                  <PenLine className="h-4 w-4 shrink-0" />
-                  Teaching Profile
                 </TabsTrigger>
                 <TabsTrigger
                   value="security"
