@@ -16,8 +16,11 @@ type Props = {
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
+const getFilledString = (value: unknown) =>
+  typeof value === "string" && value.trim().length > 0 ? value.trim() : "";
+
 const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
-  const { logout, isUserLogoutLoading } = useAuthContext();
+  const { logout, isUserLogoutLoading, updateUser } = useAuthContext();
   const router = useRouter();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -31,12 +34,26 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const [avatarSrc, setAvatarSrc] = useState<string>(DEFAULT_AVATAR);
 
   const [fetchProfile, { data: profileData }] = useLazyGetProfileQuery();
+  const profileName =
+    getFilledString(profileData?.name) || getFilledString(profileData?.fullName);
+  const displayName = getFilledString(user?.name);
+  const userNameRef = useRef(user?.name);
 
   useEffect(() => {
     if (user?.id) {
       fetchProfile({ userId: String(user.id) });
     }
   }, [user?.id, fetchProfile]);
+
+  useEffect(() => {
+    userNameRef.current = user?.name;
+  }, [user?.name]);
+
+  useEffect(() => {
+    if (profileName && profileName !== userNameRef.current) {
+      updateUser({ name: profileName });
+    }
+  }, [profileData, profileName, updateUser]);
 
   useEffect(() => {
     const apiAvatar = (profileData as any)?.avatar;
@@ -113,7 +130,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
           className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
         >
           <div className="px-4 py-2 border-b border-gray-200">
-            <p className="text-gray-900 font-medium truncate">{user?.name}</p>
+            <p className="text-gray-900 font-medium truncate">{displayName}</p>
             <p className="text-gray-500 text-sm break-all">{user?.email}</p>
           </div>
           <ul>

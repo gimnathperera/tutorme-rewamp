@@ -181,6 +181,7 @@ export default function BlogsDashboard() {
                         src={imageSrc}
                         alt={blog.title}
                         fill
+                        priority
                         sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -205,6 +206,7 @@ export default function BlogsDashboard() {
                         alt="Blog post thumbnail"
                         width={28}
                         height={28}
+                        priority
                         className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
                         onError={(e) => {
                           e.currentTarget.src = DEFAULT_AVATAR;
