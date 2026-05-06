@@ -1,7 +1,7 @@
 "use client";
 
 import { useAuthContext } from "@/contexts";
-import { useState, useRef, MutableRefObject, useEffect, FC } from "react";
+import { useState, useRef, useEffect, FC } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import ConfirmationAlert from "../confirm-alert";
@@ -27,9 +27,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] =
     useState(false);
 
-  const dropdownRef = useRef(
-    null,
-  ) as unknown as MutableRefObject<HTMLInputElement>;
+  const profileMenuRef = useRef<HTMLDivElement | null>(null);
 
   const [avatarSrc, setAvatarSrc] = useState<string>(DEFAULT_AVATAR);
 
@@ -74,8 +72,8 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   useEffect(() => {
     const handleClickOutside = (event: Event) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target as Node)
       ) {
         closeDropdown();
       }
@@ -102,7 +100,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   };
 
   return (
-    <div className="relative">
+    <div ref={profileMenuRef} className="relative">
       {isLoading ? (
         <Skeleton
           circle
@@ -126,12 +124,16 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
 
       {isOpen && (
         <div
-          ref={dropdownRef}
-          className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 z-50"
+          className="absolute right-0 z-50 mt-2 w-max min-w-[16rem] max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white shadow-lg"
         >
           <div className="px-4 py-2 border-b border-gray-200">
             <p className="text-gray-900 font-medium truncate">{displayName}</p>
-            <p className="text-gray-500 text-sm break-all">{user?.email}</p>
+            <p
+              className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-500"
+              title={user?.email}
+            >
+              {user?.email}
+            </p>
           </div>
           <ul>
             <li>
