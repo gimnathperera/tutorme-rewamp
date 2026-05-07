@@ -395,7 +395,10 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             user={user}
             logout={logout}
           >
-            <DrawerContent onClose={() => handleOnChangeDrawerVisibility()} />
+            <DrawerContent
+              isDrawerOpen={isOpen}
+              onClose={() => handleOnChangeDrawerVisibility()}
+            />
           </Drawer>
         </div>
       </div>

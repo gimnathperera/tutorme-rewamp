@@ -32,10 +32,11 @@ const navigation: NavigationItem[] = [
 ];
 
 interface DrawerContentProps {
+  isDrawerOpen: boolean;
   onClose: () => void;
 }
 
-const DrawerContent = ({ onClose }: DrawerContentProps) => {
+const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
   const pathname = usePathname();
   const [openDropdowns, setOpenDropdowns] = useState<Set<number>>(new Set());
 
@@ -57,18 +58,21 @@ const DrawerContent = ({ onClose }: DrawerContentProps) => {
   };
 
   useEffect(() => {
-    setOpenDropdowns((prev) => {
-      const next = new Set(prev);
+    if (!isDrawerOpen) {
+      setOpenDropdowns(new Set());
+      return;
+    }
 
-      navigation.forEach((item, index) => {
-        if (item.dropdown?.some((sub) => isActiveHref(sub.href))) {
-          next.add(index);
-        }
-      });
+    const activeDropdowns = new Set<number>();
 
-      return next;
+    navigation.forEach((item, index) => {
+      if (item.dropdown?.some((sub) => isActiveHref(sub.href))) {
+        activeDropdowns.add(index);
+      }
     });
-  }, [isActiveHref]);
+
+    setOpenDropdowns(activeDropdowns);
+  }, [isDrawerOpen, isActiveHref]);
 
   const toggleDropdown = (index: number) => {
     setOpenDropdowns((prev) => {
