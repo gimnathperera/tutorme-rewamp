@@ -39,6 +39,13 @@ const preventWhitespaceKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
+const formatDateInputValue = (date: Date) =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+
 type EmailAvailabilityState = "available" | "unavailable" | null;
 
 const PersonalInfo = () => {
@@ -69,7 +76,7 @@ const PersonalInfo = () => {
   const maxDate = (() => {
     const d = new Date();
     d.setFullYear(d.getFullYear() - 18);
-    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
+    return formatDateInputValue(d);
   })();
 
   useEffect(() => {
