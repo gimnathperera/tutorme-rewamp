@@ -55,19 +55,6 @@ const calculateAge = (birthday?: string) => {
   return age >= 0 ? age : "";
 };
 
-const formatDateInputValue = (date: Date) =>
-  [
-    date.getFullYear(),
-    String(date.getMonth() + 1).padStart(2, "0"),
-    String(date.getDate()).padStart(2, "0"),
-  ].join("-");
-
-const getAdultBirthDateLimit = () => {
-  const date = new Date();
-  date.setFullYear(date.getFullYear() - 18);
-  return formatDateInputValue(date);
-};
-
 const normalizeBirthdayValue = (birthday: unknown) => {
   if (birthday instanceof Date) {
     return Number.isNaN(birthday.getTime())
@@ -84,7 +71,6 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   };
 
   const dateInputRef = useRef<HTMLInputElement | null>(null);
-  const maxBirthday = getAdultBirthDateLimit();
 
   const { defaultValues, isValid } = form.formState;
   const birthday = form.watch("birthday");
@@ -235,8 +221,8 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                           dateInputRef.current = el;
                         }}
                         onKeyDown={(e) => e.preventDefault()}
-                        max={maxBirthday}
-                        className={`h-11 w-full rounded-md border bg-white px-3 pr-10 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
+                        max={new Date().toISOString().split("T")[0]}
+                        className={`h-10 w-full rounded-md border px-3 pr-10 text-sm text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
                           fieldState.error
                             ? "border-red-500"
                             : "border-gray-300"
@@ -246,13 +232,9 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                         <Icon name="Calendar" size={16} />
                       </span>
                     </div>
-                    {fieldState.error ? (
-                      <span className="min-h-4 text-xs leading-4 text-red-500">
+                    {fieldState.error && (
+                      <span className="text-xs text-red-500">
                         {fieldState.error.message}
-                      </span>
-                    ) : (
-                      <span className="min-h-4 text-xs leading-4 text-muted-foreground">
-                        You must be at least 18 years old
                       </span>
                     )}
                   </div>
