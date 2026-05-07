@@ -138,11 +138,7 @@ const AcademicExperience = () => {
                 options={CLASS_TYPE_OPTIONS}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
-                  handleMultiSelectChange(
-                    "classType",
-                    field.onChange,
-                    selected,
-                  )
+                  handleMultiSelectChange("classType", field.onChange, selected)
                 }
                 hasError={!!errors.classType}
               />

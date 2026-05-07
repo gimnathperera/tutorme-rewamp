@@ -97,7 +97,10 @@ export const isPhysicalClassType = (value: string) =>
   );
 
 export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
-  { value: "International School Teacher", text: "International School Teacher"},
+  {
+    value: "International School Teacher",
+    text: "International School Teacher",
+  },
   { value: "Government School Teacher", text: "Government School Teacher" },
   { value: "University Student", text: "University Student" },
   { value: "A/L Student", text: "A/L Student" },

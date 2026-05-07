@@ -119,11 +119,9 @@ export const step1Schema = step1BaseSchema.superRefine(
 export const step2Schema = z.object({
   classType: z
     .array(
-      z
-        .string()
-        .refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
-          message: "Invalid class type selected",
-        }),
+      z.string().refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
+        message: "Invalid class type selected",
+      }),
     )
     .min(1, "Class Type is required"),
 
