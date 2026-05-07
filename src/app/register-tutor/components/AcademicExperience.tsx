@@ -178,6 +178,7 @@ const AcademicExperience = () => {
                 hasError={
                   isPreferredLocationsEnabled && !!errors.preferredLocations
                 }
+                searchable
               />
             )}
           />
