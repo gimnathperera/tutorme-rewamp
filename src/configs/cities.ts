@@ -1,3 +1,5 @@
+import type { SelectOption } from "@/configs/options";
+
 export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "Achchuvely", text: "Achchuvely" },
   { value: "Adampan", text: "Adampan" },
