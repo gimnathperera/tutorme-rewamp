@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
-import DatePicker from "@/components/ui/date-picker";
 import Icon from "@/components/shared/icon";
 import {
   collapseTextSpaces,
@@ -44,7 +43,6 @@ type EmailAvailabilityState = "available" | "unavailable" | null;
 
 const PersonalInfo = () => {
   const {
-    control,
     register,
     watch,
     clearErrors,
@@ -61,6 +59,7 @@ const PersonalInfo = () => {
   const [checkTutorEmailAvailability, { isFetching: isCheckingEmail }] =
     useLazyGetTutorEmailAvailabilityQuery();
 
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
   const latestEmailRef = useRef("");
 
   const dateOfBirth = watch("dateOfBirth");
@@ -70,7 +69,7 @@ const PersonalInfo = () => {
   const maxDate = (() => {
     const d = new Date();
     d.setFullYear(d.getFullYear() - 18);
-    return d;
+    return d.toISOString().split("T")[0]; // "YYYY-MM-DD"
   })();
 
   useEffect(() => {
@@ -386,29 +385,30 @@ const PersonalInfo = () => {
 
       {/* Date of Birth */}
       <div className={fieldWrapper}>
-        <Controller
-          name="dateOfBirth"
-          control={control}
-          render={({ field }) => (
-            <DatePicker
-              id="dateOfBirth"
-              label="Date of Birth"
-              required
-              value={field.value ?? ""}
-              onChange={(value) => {
-                field.onChange(value);
-                setValue("dateOfBirth", value, {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                });
-              }}
-              maxDate={maxDate}
-              error={errors.dateOfBirth?.message as string | undefined}
-              placeholder="Select date of birth"
-              inputClassName={inputClass}
-            />
-          )}
-        />
+        <Label className="text-sm" htmlFor="dateOfBirth">
+          Date of Birth <span className="text-red-500">*</span>
+        </Label>
+        <div
+          className="relative cursor-pointer"
+          onClick={() => dateInputRef.current?.showPicker()}
+        >
+          <Input
+            id="dateOfBirth"
+            type="date"
+            {...register("dateOfBirth")}
+            ref={(el) => {
+              register("dateOfBirth").ref(el);
+              dateInputRef.current = el;
+            }}
+            onKeyDown={(e) => e.preventDefault()}
+            max={maxDate}
+            autoComplete="bday"
+            className={`${inputClass} pr-10 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
+          />
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+            <Icon name="Calendar" size={16} />
+          </span>
+        </div>
         {errors.dateOfBirth ? (
           <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.dateOfBirth?.message as string}

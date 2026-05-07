@@ -3,8 +3,7 @@
 import InputText from "@/components/shared/input-text";
 import { FormProvider, Controller } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
-import { FC, KeyboardEvent, useEffect } from "react";
-import DatePicker from "@/components/ui/date-picker";
+import { FC, KeyboardEvent, useEffect, useRef } from "react";
 import { GeneralInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import {
@@ -17,6 +16,7 @@ import {
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
+import Icon from "@/components/shared/icon";
 
 type Props = {
   form: ReturnType<any>;
@@ -55,10 +55,17 @@ const calculateAge = (birthday?: string) => {
   return age >= 0 ? age : "";
 };
 
+const formatDateInputValue = (date: Date) =>
+  [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0"),
+  ].join("-");
+
 const getAdultBirthDateLimit = () => {
   const date = new Date();
   date.setFullYear(date.getFullYear() - 18);
-  return date;
+  return formatDateInputValue(date);
 };
 
 const normalizeBirthdayValue = (birthday: unknown) => {
@@ -76,6 +83,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     onFormSubmit(data);
   };
 
+  const dateInputRef = useRef<HTMLInputElement | null>(null);
   const maxBirthday = getAdultBirthDateLimit();
 
   const { defaultValues, isValid } = form.formState;
@@ -203,20 +211,41 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <div className="flex flex-col gap-1">
-                    <DatePicker
-                      id="birthday"
-                      label="Date of Birth"
-                      required
-                      value={
-                        field.value instanceof Date
-                          ? field.value.toISOString().slice(0, 10)
-                          : (field.value ?? "")
-                      }
-                      onChange={field.onChange}
-                      maxDate={maxBirthday}
-                      error={fieldState.error?.message}
-                      placeholder="Select date of birth"
-                    />
+                    <label
+                      htmlFor="birthday"
+                      className="block text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Date of Birth <span className="text-red-500">*</span>
+                    </label>
+                    <div
+                      className="relative cursor-pointer"
+                      onClick={() => dateInputRef.current?.showPicker()}
+                    >
+                      <input
+                        id="birthday"
+                        type="date"
+                        {...field}
+                        value={
+                          field.value instanceof Date
+                            ? field.value.toISOString().slice(0, 10)
+                            : (field.value ?? "")
+                        }
+                        ref={(el) => {
+                          field.ref(el);
+                          dateInputRef.current = el;
+                        }}
+                        onKeyDown={(e) => e.preventDefault()}
+                        max={maxBirthday}
+                        className={`h-11 w-full rounded-md border bg-white px-3 pr-10 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
+                          fieldState.error
+                            ? "border-red-500"
+                            : "border-gray-300"
+                        }`}
+                      />
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                        <Icon name="Calendar" size={16} />
+                      </span>
+                    </div>
                     {fieldState.error ? (
                       <span className="min-h-4 text-xs leading-4 text-red-500">
                         {fieldState.error.message}

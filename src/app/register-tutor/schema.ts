@@ -25,24 +25,6 @@ import { z } from "zod";
 const isConfiguredValue = (values: readonly string[], value: string) =>
   values.includes(value);
 
-const parseDateInput = (value: string) => {
-  const dateOnlyMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-
-  if (dateOnlyMatch) {
-    const [, year, month, day] = dateOnlyMatch;
-    const parsedDate = new Date(Number(year), Number(month) - 1, Number(day));
-    return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
-  }
-
-  const parsedDate = new Date(value);
-  return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
-};
-
-const getMinimumAdultBirthDate = () => {
-  const today = new Date();
-  return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
-};
-
 /** Plain ZodObject used for .merge() in fullSchema */
 const step1BaseSchema = z.object({
   fullName: z.preprocess(
@@ -89,21 +71,7 @@ const step1BaseSchema = z.object({
 
   dateOfBirth: z.preprocess(
     trimText,
-    z
-      .string()
-      .min(1, "Date of Birth is required")
-      .refine((value) => Boolean(parseDateInput(value)), {
-        message: "Date of Birth is invalid",
-      })
-      .refine(
-        (value) => {
-          const dateOfBirth = parseDateInput(value);
-          return Boolean(
-            dateOfBirth && dateOfBirth <= getMinimumAdultBirthDate(),
-          );
-        },
-        { message: "You must be at least 18 years old" },
-      ),
+    z.string().min(1, "Date of Birth is required"),
   ),
 
   gender: z.string().refine((v) => isConfiguredValue(GENDER_VALUES, v), {
