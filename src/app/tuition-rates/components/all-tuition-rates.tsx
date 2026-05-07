@@ -151,19 +151,18 @@ export default function TuitionRatesByGrade() {
 
   const grades = useMemo(() => gradesData?.results || [], [gradesData]);
   const tuitionRatesByGradeId = useMemo(() => {
-    return (tuitionRatesData?.results || []).reduce<Record<string, TuitionRateItem[]>>(
-      (acc, item) => {
-        const gradeId = item.grade?.id || "unknown";
+    return (tuitionRatesData?.results || []).reduce<
+      Record<string, TuitionRateItem[]>
+    >((acc, item) => {
+      const gradeId = item.grade?.id || "unknown";
 
-        if (!acc[gradeId]) {
-          acc[gradeId] = [];
-        }
+      if (!acc[gradeId]) {
+        acc[gradeId] = [];
+      }
 
-        acc[gradeId].push(item);
-        return acc;
-      },
-      {},
-    );
+      acc[gradeId].push(item);
+      return acc;
+    }, {});
   }, [tuitionRatesData]);
 
   useEffect(() => {

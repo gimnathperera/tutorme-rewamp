@@ -430,15 +430,14 @@ const mergeHydratedProfile = (
       incomingProfile.tutoringLevels,
       currentProfile.tutoringLevels,
     ),
-    preferredLocations:
-      incomingProfile.classType?.some((classType) =>
-        classType.startsWith("Online"),
-      )
-        ? (incomingProfile.preferredLocations ?? [])
-        : preferFilledProfileArray(
-            incomingProfile.preferredLocations,
-            currentProfile.preferredLocations,
-          ),
+    preferredLocations: incomingProfile.classType?.some((classType) =>
+      classType.startsWith("Online"),
+    )
+      ? (incomingProfile.preferredLocations ?? [])
+      : preferFilledProfileArray(
+          incomingProfile.preferredLocations,
+          currentProfile.preferredLocations,
+        ),
     tutorTypes: preferFilledProfileArray(
       incomingProfile.tutorTypes,
       currentProfile.tutorTypes,
@@ -542,7 +541,8 @@ const useLogic = (): LogicReturnType => {
   const userRole = user?.role;
   const hasUser = Boolean(user);
   const isCurrentUserProfile =
-    Boolean(userId && currentUserId) && String(currentUserId) === String(userId);
+    Boolean(userId && currentUserId) &&
+    String(currentUserId) === String(userId);
   const isAdminProfile = isCurrentUserProfile && userRole === "admin";
 
   const setProfileSnapshot = useCallback((profile: ProfileResponse) => {

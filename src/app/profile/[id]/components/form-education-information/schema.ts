@@ -34,7 +34,10 @@ export const educationInfoSchema = z
       .min(1, "Certificates are required"),
   })
   .superRefine(({ classType, preferredLocations }, ctx) => {
-    if (classType.some(isPhysicalClassType) && preferredLocations.length === 0) {
+    if (
+      classType.some(isPhysicalClassType) &&
+      preferredLocations.length === 0
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Preferred Locations are required",

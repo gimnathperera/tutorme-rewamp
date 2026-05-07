@@ -84,145 +84,145 @@ type TimeWheelColumnHandle = {
   commitCenteredOption: () => string;
 };
 
-const TimeWheelColumn = forwardRef<TimeWheelColumnHandle, TimeWheelColumnProps>(({
-  label,
-  options,
-  selectedValue,
-  onSelect,
-}, ref) => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const initialSelectedValueRef = useRef(selectedValue);
-  const isAutoScrollingRef = useRef(false);
-  const autoScrollTimeoutRef = useRef<number | null>(null);
+const TimeWheelColumn = forwardRef<TimeWheelColumnHandle, TimeWheelColumnProps>(
+  ({ label, options, selectedValue, onSelect }, ref) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const itemRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+    const initialSelectedValueRef = useRef(selectedValue);
+    const isAutoScrollingRef = useRef(false);
+    const autoScrollTimeoutRef = useRef<number | null>(null);
 
-  const scrollToOption = useCallback((
-    optionValue: string,
-    behavior: ScrollBehavior = "smooth",
-  ) => {
-    const selectedIndex = options.findIndex(
-      (option) => option.value === optionValue,
+    const scrollToOption = useCallback(
+      (optionValue: string, behavior: ScrollBehavior = "smooth") => {
+        const selectedIndex = options.findIndex(
+          (option) => option.value === optionValue,
+        );
+
+        if (selectedIndex < 0) return;
+
+        if (autoScrollTimeoutRef.current) {
+          window.clearTimeout(autoScrollTimeoutRef.current);
+        }
+
+        isAutoScrollingRef.current = true;
+        containerRef.current?.scrollTo({
+          top: selectedIndex * WHEEL_ITEM_HEIGHT,
+          behavior,
+        });
+        autoScrollTimeoutRef.current = window.setTimeout(
+          () => {
+            isAutoScrollingRef.current = false;
+          },
+          behavior === "smooth" ? 300 : 150,
+        );
+      },
+      [options],
     );
 
-    if (selectedIndex < 0) return;
+    useEffect(() => {
+      const animationFrame = window.requestAnimationFrame(() => {
+        scrollToOption(initialSelectedValueRef.current, "auto");
+      });
 
-    if (autoScrollTimeoutRef.current) {
-      window.clearTimeout(autoScrollTimeoutRef.current);
-    }
+      return () => {
+        window.cancelAnimationFrame(animationFrame);
+        if (autoScrollTimeoutRef.current) {
+          window.clearTimeout(autoScrollTimeoutRef.current);
+        }
+      };
+    }, [scrollToOption]);
 
-    isAutoScrollingRef.current = true;
-    containerRef.current?.scrollTo({
-      top: selectedIndex * WHEEL_ITEM_HEIGHT,
-      behavior,
-    });
-    autoScrollTimeoutRef.current = window.setTimeout(() => {
-      isAutoScrollingRef.current = false;
-    }, behavior === "smooth" ? 300 : 150);
-  }, [options]);
+    const getCenteredOptionValue = () => {
+      const container = containerRef.current;
+      if (!container) return selectedValue;
 
-  useEffect(() => {
-    const animationFrame = window.requestAnimationFrame(() => {
-      scrollToOption(initialSelectedValueRef.current, "auto");
-    });
+      const containerRect = container.getBoundingClientRect();
+      const containerCenter = containerRect.top + containerRect.height / 2;
+      let nearestValue = selectedValue;
+      let nearestDistance = Number.POSITIVE_INFINITY;
 
-    return () => {
-      window.cancelAnimationFrame(animationFrame);
-      if (autoScrollTimeoutRef.current) {
-        window.clearTimeout(autoScrollTimeoutRef.current);
+      options.forEach((option) => {
+        const element = itemRefs.current[option.value];
+        if (!element) return;
+
+        const elementRect = element.getBoundingClientRect();
+        const elementCenter = elementRect.top + elementRect.height / 2;
+        const distance = Math.abs(containerCenter - elementCenter);
+
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestValue = option.value;
+        }
+      });
+
+      return nearestValue;
+    };
+
+    const selectCenteredOption = () => {
+      if (isAutoScrollingRef.current) return;
+
+      const nearestValue = getCenteredOptionValue();
+
+      if (nearestValue !== selectedValue) {
+        onSelect(nearestValue);
       }
     };
-  }, [scrollToOption]);
 
-  const getCenteredOptionValue = () => {
-    const container = containerRef.current;
-    if (!container) return selectedValue;
+    useImperativeHandle(ref, () => ({
+      commitCenteredOption: () => {
+        const nearestValue = getCenteredOptionValue();
+        onSelect(nearestValue);
+        return nearestValue;
+      },
+    }));
 
-    const containerRect = container.getBoundingClientRect();
-    const containerCenter = containerRect.top + containerRect.height / 2;
-    let nearestValue = selectedValue;
-    let nearestDistance = Number.POSITIVE_INFINITY;
+    return (
+      <div className="min-w-0">
+        <div className="mb-1 text-center text-[10px] font-semibold uppercase text-gray-400">
+          {label}
+        </div>
 
-    options.forEach((option) => {
-      const element = itemRefs.current[option.value];
-      if (!element) return;
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-9 -translate-y-1/2 rounded-md border border-primary-100 bg-primary-50" />
+          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-white to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-white to-transparent" />
 
-      const elementRect = element.getBoundingClientRect();
-      const elementCenter = elementRect.top + elementRect.height / 2;
-      const distance = Math.abs(containerCenter - elementCenter);
+          <div
+            ref={containerRef}
+            onScroll={selectCenteredOption}
+            className="flex h-28 snap-y snap-mandatory flex-col overflow-y-auto overscroll-contain scroll-smooth py-[2.375rem] [scrollbar-width:none] sm:[scrollbar-width:auto] [&::-webkit-scrollbar]:hidden sm:[&::-webkit-scrollbar]:block"
+          >
+            {options.map((option) => {
+              const selected = selectedValue === option.value;
 
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestValue = option.value;
-      }
-    });
-
-    return nearestValue;
-  };
-
-  const selectCenteredOption = () => {
-    if (isAutoScrollingRef.current) return;
-
-    const nearestValue = getCenteredOptionValue();
-
-    if (nearestValue !== selectedValue) {
-      onSelect(nearestValue);
-    }
-  };
-
-  useImperativeHandle(ref, () => ({
-    commitCenteredOption: () => {
-      const nearestValue = getCenteredOptionValue();
-      onSelect(nearestValue);
-      return nearestValue;
-    },
-  }));
-
-  return (
-    <div className="min-w-0">
-      <div className="mb-1 text-center text-[10px] font-semibold uppercase text-gray-400">
-        {label}
-      </div>
-
-      <div className="relative">
-        <div className="pointer-events-none absolute inset-x-0 top-1/2 z-10 h-9 -translate-y-1/2 rounded-md border border-primary-100 bg-primary-50" />
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-6 bg-gradient-to-b from-white to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-6 bg-gradient-to-t from-white to-transparent" />
-
-        <div
-          ref={containerRef}
-          onScroll={selectCenteredOption}
-          className="flex h-28 snap-y snap-mandatory flex-col overflow-y-auto overscroll-contain scroll-smooth py-[2.375rem] [scrollbar-width:none] sm:[scrollbar-width:auto] [&::-webkit-scrollbar]:hidden sm:[&::-webkit-scrollbar]:block"
-        >
-          {options.map((option) => {
-            const selected = selectedValue === option.value;
-
-            return (
-              <button
-                key={option.value}
-                ref={(element) => {
-                  itemRefs.current[option.value] = element;
-                }}
-                type="button"
-                onClick={() => {
-                  scrollToOption(option.value);
-                  onSelect(option.value);
-                }}
-                data-selected={selected}
-                className={`relative z-20 flex h-9 shrink-0 snap-center items-center justify-center rounded-md text-center text-lg font-semibold transition-colors sm:text-sm ${
-                  selected
-                    ? "text-primary-700"
-                    : "text-gray-400 hover:text-gray-700"
-                }`}
-              >
-                {option.label}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={option.value}
+                  ref={(element) => {
+                    itemRefs.current[option.value] = element;
+                  }}
+                  type="button"
+                  onClick={() => {
+                    scrollToOption(option.value);
+                    onSelect(option.value);
+                  }}
+                  data-selected={selected}
+                  className={`relative z-20 flex h-9 shrink-0 snap-center items-center justify-center rounded-md text-center text-lg font-semibold transition-colors sm:text-sm ${
+                    selected
+                      ? "text-primary-700"
+                      : "text-gray-400 hover:text-gray-700"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 TimeWheelColumn.displayName = "TimeWheelColumn";
 
@@ -295,7 +295,8 @@ const AlarmTimePicker = ({
   useEffect(() => {
     if (!isOpen) return undefined;
 
-    const shouldLockPageScroll = window.matchMedia("(max-width: 639px)").matches;
+    const shouldLockPageScroll =
+      window.matchMedia("(max-width: 639px)").matches;
     if (!shouldLockPageScroll) return undefined;
 
     const originalOverflow = document.body.style.overflow;
@@ -353,9 +354,7 @@ const AlarmTimePicker = ({
             className="fixed inset-0 z-20 touch-none bg-black/25 backdrop-blur-[1px] sm:bg-transparent sm:backdrop-blur-none"
           />
 
-          <div
-            className="fixed left-1/2 top-1/2 z-30 w-[calc(100vw-1.5rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 overscroll-contain rounded-lg border border-gray-200 bg-white p-3 shadow-xl sm:absolute sm:inset-x-0 sm:top-[4.45rem] sm:w-auto sm:max-w-none sm:translate-x-0 sm:translate-y-0 sm:p-2.5 sm:shadow-lg"
-          >
+          <div className="fixed left-1/2 top-1/2 z-30 w-[calc(100vw-1.5rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 overscroll-contain rounded-lg border border-gray-200 bg-white p-3 shadow-xl sm:absolute sm:inset-x-0 sm:top-[4.45rem] sm:w-auto sm:max-w-none sm:translate-x-0 sm:translate-y-0 sm:p-2.5 sm:shadow-lg">
             <div className="mb-2 flex items-center justify-between sm:hidden">
               <span className="text-sm font-semibold text-gray-900">
                 {label}

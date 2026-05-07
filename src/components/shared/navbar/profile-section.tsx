@@ -35,7 +35,8 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
 
   const [fetchProfile, { data: profileData }] = useLazyGetProfileQuery();
   const profileName =
-    getFilledString(profileData?.name) || getFilledString(profileData?.fullName);
+    getFilledString(profileData?.name) ||
+    getFilledString(profileData?.fullName);
   const displayName = getFilledString(user?.name);
   const userNameRef = useRef(user?.name);
 

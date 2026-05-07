@@ -157,7 +157,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                   className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-muted"
                 >
                   <span>{option.text}</span>
-                  {selectedOptions.includes(option.value) && <Check size={16} />}
+                  {selectedOptions.includes(option.value) && (
+                    <Check size={16} />
+                  )}
                 </div>
               ))
             ) : (

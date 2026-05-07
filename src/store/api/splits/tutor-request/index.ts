@@ -26,18 +26,18 @@ const hasTutorRegistrationFields = (candidate: unknown): boolean => {
 
   return Boolean(
     data.classType ||
-      data.tutoringLevels ||
-      data.grades ||
-      data.subjects ||
-      data.certificatesAndQualifications ||
-      data.academicDetails ||
-      data.teachingSummary ||
-      data.studentResults ||
-      data.sellingPoints ||
-      data.tutorType ||
-      data.tutorTypes ||
-      data.tutorMediums ||
-      data.highestEducation,
+    data.tutoringLevels ||
+    data.grades ||
+    data.subjects ||
+    data.certificatesAndQualifications ||
+    data.academicDetails ||
+    data.teachingSummary ||
+    data.studentResults ||
+    data.sellingPoints ||
+    data.tutorType ||
+    data.tutorTypes ||
+    data.tutorMediums ||
+    data.highestEducation,
   );
 };
 
