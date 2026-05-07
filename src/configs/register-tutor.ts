@@ -19,6 +19,4 @@ export {
   TUTOR_TYPE_OPTIONS,
 } from "./options";
 
-export {
-  PREFERRED_LOCATION_OPTIONS,
-} from "./cities";
+export { PREFERRED_LOCATION_OPTIONS } from "./cities";

@@ -16,6 +16,7 @@ interface MultiSelectProps {
   className?: string;
   isDisabled?: boolean;
   isLoading?: boolean;
+  isSearchable?: boolean;
 }
 
 const InputMultiSelect: React.FC<MultiSelectProps> = ({
@@ -26,6 +27,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   className = "",
   isDisabled = false,
   isLoading = false,
+  isSearchable = false,
 }) => {
   const { control, formState } = useFormContext();
 
@@ -57,7 +59,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
             {...field}
             isLoading={isLoading}
             isMulti
-            isSearchable={false}
+            isSearchable={isSearchable}
             placeholder="Select an option"
             options={options}
             className={`basic-multi-select ${
@@ -80,7 +82,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
                 ...base,
                 margin: "0",
                 padding: "0",
-                caretColor: "transparent",
+                caretColor: isSearchable ? "auto" : "transparent",
               }),
               control: (base) => ({
                 ...base,

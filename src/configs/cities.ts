@@ -1,3 +1,5 @@
+import type { SelectOption } from "@/configs/options";
+
 export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "Achchuvely", text: "Achchuvely" },
   { value: "Adampan", text: "Adampan" },
@@ -2005,5 +2007,5 @@ export const PREFERRED_LOCATION_OPTIONS: SelectOption[] = [
   { value: "Yodaela", text: "Yodaela" },
   { value: "Yogapuram", text: "Yogapuram" },
   { value: "Yogiyana", text: "Yogiyana" },
-  { value: "Yudaganawa", text: "Yudaganawa" }
+  { value: "Yudaganawa", text: "Yudaganawa" },
 ];
