@@ -122,6 +122,7 @@ const FormEducationInfo: FC<Props> = ({
                 name="preferredLocations"
                 options={preferredLocationsOptions}
                 isDisabled={!isPreferredLocationsEnabled}
+                isSearchable
                 helperText={
                   isPreferredLocationsEnabled
                     ? undefined
