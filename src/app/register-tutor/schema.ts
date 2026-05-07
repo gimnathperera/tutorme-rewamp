@@ -30,8 +30,24 @@ const parseDateInput = (value: string) => {
 
   if (dateOnlyMatch) {
     const [, year, month, day] = dateOnlyMatch;
-    const parsedDate = new Date(Number(year), Number(month) - 1, Number(day));
-    return Number.isNaN(parsedDate.getTime()) ? undefined : parsedDate;
+    const y = Number(year);
+    const m = Number(month) - 1; // 0-indexed for Date constructor
+    const d = Number(day);
+    const parsedDate = new Date(y, m, d);
+
+    if (Number.isNaN(parsedDate.getTime())) return undefined;
+
+    // Round-trip check: reject silently-normalised overflow dates
+    // e.g. new Date(2008, 1, 31) → 2008-03-02, not 2008-02-31
+    if (
+      parsedDate.getFullYear() !== y ||
+      parsedDate.getMonth() !== m ||
+      parsedDate.getDate() !== d
+    ) {
+      return undefined;
+    }
+
+    return parsedDate;
   }
 
   const parsedDate = new Date(value);
