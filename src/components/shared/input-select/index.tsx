@@ -14,6 +14,7 @@ interface InputSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   loading?: boolean;
   placeholder?: string;
+  disablePlaceholder?: boolean;
 }
 
 const InputSelect: FC<InputSelectProps> = ({
@@ -24,6 +25,7 @@ const InputSelect: FC<InputSelectProps> = ({
   className = "",
   loading = false,
   placeholder = "Select an option",
+  disablePlaceholder = true,
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -58,7 +60,7 @@ const InputSelect: FC<InputSelectProps> = ({
               disabled={loading}
               {...props}
             >
-              <option value="" disabled className="text-gray-500">
+              <option value="" disabled={disablePlaceholder} className="text-gray-500">
                 {placeholder}
               </option>
               {options.map((option, index) => (
