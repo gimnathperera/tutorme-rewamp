@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import Icon from "../icon";
 import { AuthUserData } from "@/types/auth-types";
 
@@ -22,6 +22,35 @@ const Drawer = ({
   user,
   logout,
 }: DrawerProps) => {
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const scrollY = window.scrollY;
+    const { body, documentElement } = document;
+    const previousBodyStyles = {
+      overflow: body.style.overflow,
+      position: body.style.position,
+      top: body.style.top,
+      width: body.style.width,
+    };
+    const previousHtmlOverflow = documentElement.style.overflow;
+
+    documentElement.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    body.style.position = "fixed";
+    body.style.top = `-${scrollY}px`;
+    body.style.width = "100%";
+
+    return () => {
+      documentElement.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyStyles.overflow;
+      body.style.position = previousBodyStyles.position;
+      body.style.top = previousBodyStyles.top;
+      body.style.width = previousBodyStyles.width;
+      window.scrollTo(0, scrollY);
+    };
+  }, [isOpen]);
+
   return (
     <main
       className={
@@ -55,7 +84,7 @@ const Drawer = ({
           </header>
 
           <div
-            className="flex-1 overflow-y-auto"
+            className="flex-1 overflow-y-auto overscroll-contain"
             onClick={() => {
               setIsOpen(false);
             }}
