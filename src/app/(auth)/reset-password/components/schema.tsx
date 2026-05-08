@@ -14,6 +14,7 @@ export const resetPasswordSchema = z
       .string()
       .trim()
       .nonempty("Password is required.")
+      .regex(/^\S+$/, { message: "Password must not contain spaces." })
       .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
       .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
       .regex(PASSWORD_LETTER_NUMBER_REGEX, {
