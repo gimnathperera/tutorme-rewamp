@@ -593,9 +593,10 @@ const useLogic = (): LogicReturnType => {
 
   const prePopulateEducationForm = useCallback(
     (profile: ProfileResponse) => {
-      const classType = normalizeArrayValue(
-        profile.classType ?? profile.tutoringLevels,
-      );
+      const profileClassType = normalizeArrayValue(profile.classType);
+      const classType = profileClassType.length
+        ? profileClassType
+        : normalizeArrayValue(profile.tutoringLevels);
 
       educationInfoForm.reset({
         classType,
