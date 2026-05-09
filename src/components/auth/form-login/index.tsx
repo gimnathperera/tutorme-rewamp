@@ -31,7 +31,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
 
   useEffect(() => {
     if (isAuthError) {
-      toast.error("Invalid credentials. Email or password wrong.", {
+      toast.error(isAuthError, {
         id: "login-error",
         duration: 3000,
       });
