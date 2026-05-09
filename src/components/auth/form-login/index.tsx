@@ -26,11 +26,23 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     const subscription = loginForm.watch((values, { name }) => {
       if (isAuthError) setIsAuthError(null);
 
-      if (name === "email" && typeof values.email === "string" && /\s/.test(values.email)) {
-        loginForm.setValue("email", values.email.replace(/\s/g, ""), { shouldValidate: true });
+      if (
+        name === "email" &&
+        typeof values.email === "string" &&
+        /\s/.test(values.email)
+      ) {
+        loginForm.setValue("email", values.email.replace(/\s/g, ""), {
+          shouldValidate: true,
+        });
       }
-      if (name === "password" && typeof values.password === "string" && /\s/.test(values.password)) {
-        loginForm.setValue("password", values.password.replace(/\s/g, ""), { shouldValidate: true });
+      if (
+        name === "password" &&
+        typeof values.password === "string" &&
+        /\s/.test(values.password)
+      ) {
+        loginForm.setValue("password", values.password.replace(/\s/g, ""), {
+          shouldValidate: true,
+        });
       }
     });
     return () => subscription.unsubscribe();

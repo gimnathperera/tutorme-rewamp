@@ -40,7 +40,10 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
           {Array(4)
             .fill(null)
             .map((_, index) => (
-              <div key={index} className="rounded-2xl border border-gray-100 p-5 shadow-sm">
+              <div
+                key={index}
+                className="rounded-2xl border border-gray-100 p-5 shadow-sm"
+              >
                 <Skeleton circle width={48} height={48} className="mb-3" />
                 <Skeleton width={140} height={20} className="mb-1" />
                 <Skeleton width={90} height={16} className="mb-4" />
@@ -82,7 +85,10 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
                 {/* Grade */}
                 {paper.grade?.title && (
                   <div className="flex items-start gap-2 mb-2">
-                    <GraduationCap size={15} className="text-blue-400 mt-0.5 flex-shrink-0" />
+                    <GraduationCap
+                      size={15}
+                      className="text-blue-400 mt-0.5 flex-shrink-0"
+                    />
                     <span className="text-xs text-gray-600 leading-tight">
                       {paper.grade.title}
                     </span>
@@ -91,7 +97,10 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
 
                 {/* Paper title */}
                 <div className="flex items-start gap-2 mb-5">
-                  <BookOpen size={15} className="text-blue-400 mt-0.5 flex-shrink-0" />
+                  <BookOpen
+                    size={15}
+                    className="text-blue-400 mt-0.5 flex-shrink-0"
+                  />
                   <span className="text-xs text-gray-600 leading-tight">
                     {paper.title}
                   </span>
