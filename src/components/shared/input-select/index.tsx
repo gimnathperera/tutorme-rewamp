@@ -60,7 +60,11 @@ const InputSelect: FC<InputSelectProps> = ({
               disabled={loading}
               {...props}
             >
-              <option value="" disabled={disablePlaceholder} className="text-gray-500">
+              <option
+                value=""
+                disabled={disablePlaceholder}
+                className="text-gray-500"
+              >
                 {placeholder}
               </option>
               {options.map((option, index) => (

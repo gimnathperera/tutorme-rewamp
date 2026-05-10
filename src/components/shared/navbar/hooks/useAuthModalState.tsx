@@ -28,7 +28,7 @@ const useAuthModalState = (): LogicReturnType => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
-  const { user } = useAuthContext();
+  const { user, setIsAuthError } = useAuthContext();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -48,6 +48,7 @@ const useAuthModalState = (): LogicReturnType => {
   const handleOnChangeSignUpModalVisibility = () => {
     setIsSignUpModalOpen((show) => !show);
     setCurrentForm(FormType.Login);
+    setIsAuthError(null);
   };
 
   const handleOnChangeDrawerVisibility = () => {
@@ -57,6 +58,7 @@ const useAuthModalState = (): LogicReturnType => {
   const handleCloseAuthModal = () => {
     setIsOpen(false);
     setIsSignUpModalOpen(false);
+    setIsAuthError(null);
   };
 
   const handleOnChangeForm = (formType: FormType) => {

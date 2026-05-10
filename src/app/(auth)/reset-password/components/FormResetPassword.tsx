@@ -44,13 +44,19 @@ const FormResetPassword = () => {
 
   useEffect(() => {
     if (passwordValue && /\s/.test(passwordValue)) {
-      form.setValue("password", passwordValue.replace(/\s/g, ""), { shouldValidate: true });
+      form.setValue("password", passwordValue.replace(/\s/g, ""), {
+        shouldValidate: true,
+      });
     }
   }, [passwordValue, form]);
 
   useEffect(() => {
     if (confirmPasswordValue && /\s/.test(confirmPasswordValue)) {
-      form.setValue("confirmPassword", confirmPasswordValue.replace(/\s/g, ""), { shouldValidate: true });
+      form.setValue(
+        "confirmPassword",
+        confirmPasswordValue.replace(/\s/g, ""),
+        { shouldValidate: true },
+      );
     }
   }, [confirmPasswordValue, form]);
 
