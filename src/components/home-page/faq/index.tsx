@@ -1,10 +1,17 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DEFAULT_FAQ_CATEGORY,
+  FAQ_CATEGORY_OPTIONS,
+  type FaqCategory,
+} from "@/lib/faq-categories";
 import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Link from "next/link";
 
 type FaqItem = {
   question: string;
@@ -13,7 +20,6 @@ type FaqItem = {
 
 const FAQ_LIMIT = 4;
 
-/** Animated accordion item — slides open/closed with max-height transition */
 const FaqPill = ({
   question,
   answer,
@@ -23,7 +29,6 @@ const FaqPill = ({
   const bodyRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
 
-  // Whenever open state changes, capture the real scrollHeight
   useEffect(() => {
     if (bodyRef.current) {
       setHeight(isOpen ? bodyRef.current.scrollHeight : 0);
@@ -35,7 +40,6 @@ const FaqPill = ({
       className="w-full rounded-3xl bg-white overflow-hidden"
       style={{ animation: "fadeIn 0.35s ease both" }}
     >
-      {/* Header button */}
       <button
         onClick={onToggle}
         className="flex w-full items-center justify-between px-6 py-4 text-left gap-4 group"
@@ -56,7 +60,6 @@ const FaqPill = ({
         </span>
       </button>
 
-      {/* Animated body */}
       <div
         ref={bodyRef}
         style={{
@@ -70,7 +73,6 @@ const FaqPill = ({
         </p>
       </div>
 
-      {/* Subtle bottom accent when open */}
       <div
         style={{
           height: isOpen ? "3px" : "0px",
@@ -102,27 +104,26 @@ const FaqSkeleton = () => (
 
 const Faqs = () => {
   const page = 1;
-  const [faqs, setFaqs] = useState<FaqItem[]>([]);
+  const [activeCategory, setActiveCategory] =
+    useState<FaqCategory>(DEFAULT_FAQ_CATEGORY);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const { data, isFetching, isError } = useFetchFaqsQuery({
     page,
     limit: FAQ_LIMIT,
+    category: activeCategory,
   });
 
+  const faqs = data?.results || [];
   const totalItems = data?.totalResults || 0;
 
-  // const loadMore = () => {
-  //   if (faqs.length < totalItems) {
-  //     setPage((prev) => prev + 1);
-  //   }
-  // };
-
   useEffect(() => {
-    if (data?.results) {
-      setFaqs((prev) => [...prev, ...data.results]);
-    }
-  }, [data]);
+    setOpenIndex(null);
+  }, [activeCategory]);
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category as FaqCategory);
+  };
 
   const handleToggle = (index: number) => {
     setOpenIndex((prev) => (prev === index ? null : index));
@@ -134,54 +135,73 @@ const Faqs = () => {
         id="faq-section"
         className="mx-auto rounded-3xl max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue faq-bg"
       >
-        {/* Section heading */}
         <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
           Frequently asked <br /> questions.
         </h2>
 
-        {/* FAQ list — two columns */}
-        {isFetching && page === 1 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto">
-            {Array.from({ length: FAQ_LIMIT }, (_, i) => (
-              <FaqSkeleton key={i} />
+        <Tabs
+          value={activeCategory}
+          onValueChange={handleCategoryChange}
+          className="max-w-5xl mx-auto"
+        >
+          <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-md rounded-2xl bg-white/15 p-1 backdrop-blur">
+            {FAQ_CATEGORY_OPTIONS.map((option) => (
+              <TabsTrigger
+                key={option.value}
+                value={option.value}
+                className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white/75 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+              >
+                {option.label}
+              </TabsTrigger>
             ))}
-          </div>
-        ) : isError ? (
-          <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
-            Failed to load FAQs. Please try again later.
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 max-w-5xl mx-auto items-start">
-            <div className="flex flex-col gap-3">
-              {faqs
-                .filter((_, i) => i % 2 === 0)
-                .map((faq, i) => (
-                  <FaqPill
-                    key={i * 2}
-                    question={faq.question}
-                    answer={faq.answer}
-                    isOpen={openIndex === i * 2}
-                    onToggle={() => handleToggle(i * 2)}
-                  />
-                ))}
-            </div>
-            <div className="flex flex-col gap-3">
-              {faqs
-                .filter((_, i) => i % 2 !== 0)
-                .map((faq, i) => (
-                  <FaqPill
-                    key={i * 2 + 1}
-                    question={faq.question}
-                    answer={faq.answer}
-                    isOpen={openIndex === i * 2 + 1}
-                    onToggle={() => handleToggle(i * 2 + 1)}
-                  />
-                ))}
-            </div>
-          </div>
-        )}
+          </TabsList>
 
-        {/* Read More — navigates to the dedicated FAQ page */}
+          {isFetching && page === 1 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              {Array.from({ length: FAQ_LIMIT }, (_, i) => (
+                <FaqSkeleton key={i} />
+              ))}
+            </div>
+          ) : isError ? (
+            <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
+              Failed to load FAQs. Please try again later.
+            </div>
+          ) : faqs.length === 0 ? (
+            <p className="text-center text-white/80 py-8">
+              No FAQs available at the moment.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
+              <div className="flex flex-col gap-3">
+                {faqs
+                  .filter((_, i) => i % 2 === 0)
+                  .map((faq, i) => (
+                    <FaqPill
+                      key={i * 2}
+                      question={faq.question}
+                      answer={faq.answer}
+                      isOpen={openIndex === i * 2}
+                      onToggle={() => handleToggle(i * 2)}
+                    />
+                  ))}
+              </div>
+              <div className="flex flex-col gap-3">
+                {faqs
+                  .filter((_, i) => i % 2 !== 0)
+                  .map((faq, i) => (
+                    <FaqPill
+                      key={i * 2 + 1}
+                      question={faq.question}
+                      answer={faq.answer}
+                      isOpen={openIndex === i * 2 + 1}
+                      onToggle={() => handleToggle(i * 2 + 1)}
+                    />
+                  ))}
+              </div>
+            </div>
+          )}
+        </Tabs>
+
         {!isFetching && totalItems > 0 && (
           <div className="text-center mt-8">
             <Link
