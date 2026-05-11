@@ -1,3 +1,5 @@
+import type { FaqCategory } from "@/lib/faq-categories";
+
 export type Id = { id: string };
 export type Timestamp = { createdAt: string; updatedAt: string };
 
@@ -22,6 +24,7 @@ export type PaginatedResponse<T> = {
 
 // FAQ
 export type Faq = BaseEntity & {
+  category?: FaqCategory;
   question: string;
   answer: string;
 };

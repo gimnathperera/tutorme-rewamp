@@ -1,4 +1,5 @@
 import type { BlogStatus } from "@/configs/options";
+import type { FaqCategory } from "@/lib/faq-categories";
 import { Blogs } from "./response-types";
 export type ContactUsRequest = {
   message: string;
@@ -97,6 +98,7 @@ export type FetchProfileRequest = {
 export type FetchFaqRequest = {
   page: number;
   limit: number;
+  category?: FaqCategory;
 };
 export type FetchLevelRequest = {
   page: number;
