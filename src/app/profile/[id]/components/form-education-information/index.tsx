@@ -1,5 +1,5 @@
 import InputText from "@/components/shared/input-text";
-import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
+import { Controller, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
@@ -11,11 +11,14 @@ import {
   TUTOR_TYPE_OPTIONS,
   isPhysicalClassType,
 } from "@/configs/register-tutor";
+import { DOCUMENT_TYPE_OPTIONS } from "@/configs/options";
 import { Option } from "@/types/shared-types";
 import { FC, useEffect } from "react";
 import { EducationInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
+import { Plus, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   dropdownOptionData: {
@@ -36,6 +39,11 @@ const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 
+const selectClass =
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+const selectBorder = (hasError: boolean) =>
+  hasError ? "border-red-500" : "border-gray-300";
+
 const FormEducationInfo: FC<Props> = ({
   dropdownOptionData: { gradesOptions, subjectsOptions },
   form,
@@ -43,6 +51,14 @@ const FormEducationInfo: FC<Props> = ({
   isSubmitting,
 }) => {
   const { isDirty, isValid } = form.formState;
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "certificatesAndQualifications",
+  });
+
+  const certErrors =
+    (form.formState.errors.certificatesAndQualifications as any) ?? [];
   const [
     classType,
     preferredLocations,
@@ -172,27 +188,107 @@ const FormEducationInfo: FC<Props> = ({
               />
             </div>
 
-            <div className="mt-5 grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">
-              <Controller
-                name="certificatesAndQualifications"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <div className="flex flex-col gap-1">
-                    <label className="block text-sm font-medium leading-6 text-gray-900">
-                      Certificates <span className="text-red-500">*</span>
-                    </label>
-                    <MultiFileUploadDropzone
-                      initialUrls={field.value}
-                      onUploaded={(urls) => field.onChange(urls ?? [])}
-                    />
-                    {fieldState.error?.message && (
-                      <span className="text-xs text-red-500">
-                        {fieldState.error.message}
-                      </span>
-                    )}
-                  </div>
-                )}
-              />
+            <div className="mt-5">
+              <label className="block text-sm font-medium leading-6 text-gray-900 mb-3">
+                Certificates <span className="text-red-500">*</span>
+              </label>
+
+              <div className="space-y-3">
+                {fields.map((field, index) => {
+                  const rowErrors = certErrors[index] ?? {};
+                  return (
+                    <div
+                      key={field.id}
+                      className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50"
+                    >
+                      {/* Document Type */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-gray-500 font-medium mb-1">
+                          Document Type
+                        </span>
+                        <Controller
+                          name={`certificatesAndQualifications.${index}.type`}
+                          control={form.control}
+                          render={({ field: f }) => (
+                            <select
+                              {...f}
+                              className={`${selectClass} ${selectBorder(!!rowErrors.type)}`}
+                            >
+                              <option value="" disabled hidden>
+                                Select type…
+                              </option>
+                              {DOCUMENT_TYPE_OPTIONS.map((opt) => (
+                                <option key={opt.value} value={opt.value}>
+                                  {opt.text}
+                                </option>
+                              ))}
+                            </select>
+                          )}
+                        />
+                        {rowErrors.type && (
+                          <p className="text-xs text-red-500">
+                            {rowErrors.type.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Upload Dropzone */}
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs text-gray-500 font-medium mb-1">
+                          Upload File
+                        </span>
+                        <Controller
+                          name={`certificatesAndQualifications.${index}.url`}
+                          control={form.control}
+                          render={({ field: f }) => (
+                            <MultiFileUploadDropzone
+                              initialUrls={f.value ? [f.value] : []}
+                              onUploaded={(urls) =>
+                                f.onChange(urls[urls.length - 1] ?? "")
+                              }
+                            />
+                          )}
+                        />
+                        {rowErrors.url && (
+                          <p className="text-xs text-red-500">
+                            {rowErrors.url.message}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Remove Button */}
+                      <div className="flex items-start pt-7">
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          disabled={fields.length === 1}
+                          className="p-2 text-red-400 hover:text-red-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                          title="Remove this document"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {typeof form.formState.errors.certificatesAndQualifications?.message === "string" && (
+                <p className="text-xs text-red-500 mt-1">
+                  {form.formState.errors.certificatesAndQualifications.message}
+                </p>
+              )}
+
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                className="mt-3 flex items-center gap-1.5"
+                onClick={() => append({ type: "", url: "" })}
+              >
+                <Plus size={15} />
+                Add Document
+              </Button>
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton

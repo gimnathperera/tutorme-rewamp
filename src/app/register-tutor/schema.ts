@@ -195,10 +195,21 @@ export const step2Schema = z.object({
 
   subjects: z.array(z.string()).min(1, "Subjects are required"),
 
-  yearsExperience: z
-    .number()
-    .min(1, "Years of Experience is required")
-    .max(50, "Experience cannot exceed 50 years"),
+  yearsExperience: z.preprocess(
+    (value) => {
+      if (value === "" || value === null || value === undefined) {
+        return undefined;
+      }
+      return Number(value);
+    },
+    z
+      .number({
+        invalid_type_error: "Years of Experience is required",
+        required_error: "Years of Experience is required",
+      })
+      .min(1, "Years of Experience must be greater than 0")
+      .max(50, "Experience cannot exceed 50 years"),
+  ),
 });
 
 export const step3Schema = z.object({
