@@ -14,13 +14,11 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 type FaqItem = {
-  category?: FaqCategory;
   question: string;
   answer: string;
 };
 
 const FAQ_LIMIT = 4;
-const FAQ_FETCH_LIMIT = 12;
 
 const FaqPill = ({
   question,
@@ -112,15 +110,11 @@ const Faqs = () => {
 
   const { data, isFetching, isError } = useFetchFaqsQuery({
     page,
-    limit: FAQ_FETCH_LIMIT,
+    limit: FAQ_LIMIT,
     category: activeCategory,
   });
 
-  const faqs = (data?.results || [])
-    .filter(
-      (faq) => !faq.category || faq.category === activeCategory,
-    )
-    .slice(0, FAQ_LIMIT);
+  const faqs = data?.results || [];
   const totalItems = data?.totalResults || 0;
 
   useEffect(() => {
@@ -150,13 +144,12 @@ const Faqs = () => {
           onValueChange={handleCategoryChange}
           className="max-w-5xl mx-auto"
         >
-          <TabsList className="mx-auto mb-8 grid h-auto w-full max-w-md grid-cols-2 gap-2 rounded-2xl bg-white/15 p-1.5 backdrop-blur">
+          <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-md rounded-2xl bg-white/15 p-1 backdrop-blur">
             {FAQ_CATEGORY_OPTIONS.map((option) => (
               <TabsTrigger
                 key={option.value}
                 value={option.value}
-                onClick={() => setActiveCategory(option.value)}
-                className="!m-0 min-h-10 rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-semibold text-white shadow-none transition-colors duration-200 hover:bg-white/20 hover:text-white data-[state=active]:border-white data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+                className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white/75 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
               >
                 {option.label}
               </TabsTrigger>
