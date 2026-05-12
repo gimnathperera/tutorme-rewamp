@@ -22,31 +22,29 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     mode: "onChange",
   });
 
-  useEffect(() => {
-    const subscription = loginForm.watch((values, { name }) => {
-      if (isAuthError) setIsAuthError(null);
+  const emailValue = loginForm.watch("email");
+  const passwordValue = loginForm.watch("password");
 
-      if (
-        name === "email" &&
-        typeof values.email === "string" &&
-        /\s/.test(values.email)
-      ) {
-        loginForm.setValue("email", values.email.replace(/\s/g, ""), {
-          shouldValidate: true,
-        });
-      }
-      if (
-        name === "password" &&
-        typeof values.password === "string" &&
-        /\s/.test(values.password)
-      ) {
-        loginForm.setValue("password", values.password.replace(/\s/g, ""), {
-          shouldValidate: true,
-        });
-      }
-    });
-    return () => subscription.unsubscribe();
-  }, [isAuthError, loginForm, setIsAuthError]);
+  useEffect(() => {
+    if (isAuthError) setIsAuthError(null);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailValue, passwordValue]);
+
+  useEffect(() => {
+    if (emailValue && /\s/.test(emailValue)) {
+      loginForm.setValue("email", emailValue.replace(/\s/g, ""), {
+        shouldValidate: true,
+      });
+    }
+  }, [emailValue, loginForm]);
+
+  useEffect(() => {
+    if (passwordValue && /\s/.test(passwordValue)) {
+      loginForm.setValue("password", passwordValue.replace(/\s/g, ""), {
+        shouldValidate: true,
+      });
+    }
+  }, [passwordValue, loginForm]);
 
   useEffect(() => {
     if (isAuthError) {
@@ -71,7 +69,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             label="Email"
             name="email"
             placeholder="jhon@xyz.com"
-            type="email"
+            type="text"
           />
           <InputPassword
             label="Password"
