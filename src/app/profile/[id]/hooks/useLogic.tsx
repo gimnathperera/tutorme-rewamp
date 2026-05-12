@@ -611,7 +611,7 @@ const useLogic = (): LogicReturnType => {
         subjects: getProfileSubjectIds(profile),
         certificatesAndQualifications: normalizeCertificateUrls(
           profile.certificatesAndQualifications,
-        ),
+        ).map((url) => ({ type: "", url })),
       });
     },
     [educationInfoForm],
@@ -868,7 +868,9 @@ const useLogic = (): LogicReturnType => {
       tutorMediums: data.tutorMediums,
       grades: data.grades,
       subjects: data.subjects,
-      certificatesAndQualifications: data.certificatesAndQualifications,
+      certificatesAndQualifications: data.certificatesAndQualifications
+        .map((c) => c.url)
+        .filter(Boolean),
     };
 
     const result = await handleProfileSubmit({

@@ -23,14 +23,19 @@ export const educationInfoSchema = z
           invalid_type_error: "Years of Experience is required",
           required_error: "Years of Experience is required",
         })
-        .min(0, "Years of Experience cannot be negative")
+        .min(1, "Years of Experience must be greater than 0")
         .max(50, "Experience cannot exceed 50 years"),
     ),
     tutorMediums: requiredMultiSelect("Tutor Mediums are required"),
     grades: requiredMultiSelect("Grades are required"),
     subjects: requiredMultiSelect("Subjects are required"),
     certificatesAndQualifications: z
-      .array(z.string())
+      .array(
+        z.object({
+          type: z.string().optional().default(""),
+          url: z.string().min(1, "Please upload a file"),
+        }),
+      )
       .min(1, "Certificates are required"),
   })
   .superRefine(({ classType, preferredLocations }, ctx) => {
@@ -55,7 +60,7 @@ export const initialEducationInfoFormValues = {
   tutorMediums: [] as string[],
   grades: [] as string[],
   subjects: [] as string[],
-  certificatesAndQualifications: [] as string[],
+  certificatesAndQualifications: [] as { type: string; url: string }[],
 };
 
 export type EducationInfoSchema = z.infer<typeof educationInfoSchema>;
