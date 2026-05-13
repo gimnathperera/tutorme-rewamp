@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DEFAULT_FAQ_CATEGORY,
   FAQ_CATEGORY_OPTIONS,
+  FAQ_CATEGORY_QUERY_PARAM,
   type FaqCategory,
 } from "@/lib/faq-categories";
 import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
@@ -218,7 +219,10 @@ const Faqs = () => {
         {!isFetching && totalItems > 0 && (
           <div className="text-center mt-8">
             <Link
-              href="/faq"
+              href={{
+                pathname: "/faq",
+                query: { [FAQ_CATEGORY_QUERY_PARAM]: activeCategory },
+              }}
               className="inline-block px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
             >
               Read More

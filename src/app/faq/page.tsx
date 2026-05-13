@@ -5,11 +5,14 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DEFAULT_FAQ_CATEGORY,
   FAQ_CATEGORY_OPTIONS,
+  FAQ_CATEGORY_QUERY_PARAM,
+  isFaqCategory,
   type FaqCategory,
 } from "@/lib/faq-categories";
 import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -88,9 +91,14 @@ const FaqSkeleton = () => (
   </div>
 );
 
-const FaqPage = () => {
+const FaqPageContent = () => {
+  const searchParams = useSearchParams();
+  const selectedCategoryParam = searchParams.get(FAQ_CATEGORY_QUERY_PARAM);
+  const selectedCategory = isFaqCategory(selectedCategoryParam)
+    ? selectedCategoryParam
+    : DEFAULT_FAQ_CATEGORY;
   const [activeCategory, setActiveCategory] =
-    useState<FaqCategory>(DEFAULT_FAQ_CATEGORY);
+    useState<FaqCategory>(selectedCategory);
   const [page, setPage] = useState(1);
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
@@ -108,6 +116,10 @@ const FaqPage = () => {
     setFaqs([]);
     setOpenIndex(null);
   }, [activeCategory]);
+
+  useEffect(() => {
+    setActiveCategory(selectedCategory);
+  }, [selectedCategory]);
 
   useEffect(() => {
     if (!data?.results) return;
@@ -259,5 +271,11 @@ const FaqPage = () => {
     </div>
   );
 };
+
+const FaqPage = () => (
+  <Suspense fallback={null}>
+    <FaqPageContent />
+  </Suspense>
+);
 
 export default FaqPage;
