@@ -138,6 +138,10 @@ const FaqPage = () => {
     }
   };
 
+  const activeCategoryIndex = Math.max(
+    FAQ_CATEGORY_OPTIONS.findIndex((option) => option.value === activeCategory),
+    0,
+  );
   const leftColumn = faqs.filter((_, i) => i % 2 === 0);
   const rightColumn = faqs.filter((_, i) => i % 2 !== 0);
 
@@ -161,12 +165,20 @@ const FaqPage = () => {
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 lg:px-10 rounded-3xl bg-lightgrey">
         <Tabs value={activeCategory} onValueChange={handleCategoryChange}>
-          <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-md rounded-2xl bg-white p-1 shadow-sm">
+          <TabsList className="relative isolate mx-auto mb-8 flex h-auto w-full max-w-md overflow-hidden rounded-2xl border border-blue-200 bg-blue-50 p-1 shadow-sm">
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-1 left-1 z-0 rounded-xl bg-blue-600 shadow-md shadow-blue-600/20 transition-transform duration-300 ease-out"
+              style={{
+                width: `calc((100% - 0.5rem) / ${FAQ_CATEGORY_OPTIONS.length})`,
+                transform: `translateX(${activeCategoryIndex * 100}%)`,
+              }}
+            />
             {FAQ_CATEGORY_OPTIONS.map((option) => (
               <TabsTrigger
                 key={option.value}
                 value={option.value}
-                className="!m-0 flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-600 data-[state=active]:bg-blue-600 data-[state=active]:text-white data-[state=active]:shadow-sm"
+                className="relative z-10 !m-0 flex-1 rounded-xl bg-transparent px-4 py-2.5 text-sm font-bold text-blue-700 shadow-none transition-colors duration-200 hover:bg-white/70 hover:text-blue-800 data-[state=active]:bg-transparent data-[state=active]:text-white data-[state=active]:shadow-none"
               >
                 {option.label}
               </TabsTrigger>
