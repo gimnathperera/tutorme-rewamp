@@ -212,14 +212,52 @@ const normalizeGender = (
   }
 };
 
-const normalizeCertificateUrls = (
+const normalizeCertificateRows = (
   certificates: ProfileResponse["certificatesAndQualifications"],
 ) =>
   (certificates ?? [])
-    .map((certificate) =>
-      typeof certificate === "string" ? certificate : certificate.url,
-    )
-    .filter((url): url is string => Boolean(url));
+    .map((certificate) => {
+      if (typeof certificate === "string") {
+        return { type: "", url: certificate };
+      }
+
+      const type =
+        certificate.type ??
+        (certificate as any).documentType ??
+        (certificate as any).docType ??
+        "";
+
+      return {
+        type,
+        url: certificate.url ?? "",
+      };
+    })
+    .filter((certificate) => Boolean(certificate.url));
+
+const mergeCertificateRows = (
+  primary: ProfileResponse["certificatesAndQualifications"],
+  fallback: ProfileResponse["certificatesAndQualifications"],
+) => {
+  const fallbackByUrl = new Map(
+    normalizeCertificateRows(fallback).map((certificate) => [
+      certificate.url,
+      certificate,
+    ]),
+  );
+
+  const primaryRows = normalizeCertificateRows(primary);
+
+  if (!primaryRows.length) return normalizeCertificateRows(fallback);
+
+  return primaryRows.map((certificate) => {
+    if (certificate.type) return certificate;
+
+    return {
+      ...certificate,
+      type: fallbackByUrl.get(certificate.url)?.type ?? "",
+    };
+  });
+};
 
 const hasTutorRegistrationFields = (candidate: ProfileLike) =>
   Boolean(
@@ -382,9 +420,10 @@ const mergeTutorRegistrationIntoProfile = (
       profile.sellingPoints,
       registration.sellingPoints,
     ),
-    certificatesAndQualifications: profile.certificatesAndQualifications?.length
-      ? profile.certificatesAndQualifications
-      : registration.certificatesAndQualifications,
+    certificatesAndQualifications: mergeCertificateRows(
+      profile.certificatesAndQualifications,
+      registration.certificatesAndQualifications,
+    ),
   };
 };
 
@@ -609,9 +648,9 @@ const useLogic = (): LogicReturnType => {
         tutorMediums: profile.tutorMediums ?? [],
         grades: getProfileGradeIds(profile),
         subjects: getProfileSubjectIds(profile),
-        certificatesAndQualifications: normalizeCertificateUrls(
+        certificatesAndQualifications: normalizeCertificateRows(
           profile.certificatesAndQualifications,
-        ).map((url) => ({ type: "", url })),
+        ),
       });
     },
     [educationInfoForm],
@@ -869,8 +908,8 @@ const useLogic = (): LogicReturnType => {
       grades: data.grades,
       subjects: data.subjects,
       certificatesAndQualifications: data.certificatesAndQualifications
-        .map((c) => c.url)
-        .filter(Boolean),
+        .map(({ type, url }) => ({ type, url }))
+        .filter((certificate) => Boolean(certificate.url)),
     };
 
     const result = await handleProfileSubmit({
