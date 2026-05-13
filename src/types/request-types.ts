@@ -78,7 +78,7 @@ export type UpdateProfileRequest = {
     teachingSummary?: string;
     studentResults?: string;
     sellingPoints?: string;
-    certificatesAndQualifications?: Array<string | { type?: string; url?: string }>;
+    certificatesAndQualifications?: string[];
     avatar?: string;
   };
 };

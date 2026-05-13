@@ -898,6 +898,9 @@ const useLogic = (): LogicReturnType => {
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    const certificateRows = data.certificatesAndQualifications
+      .map(({ type, url }) => ({ type, url }))
+      .filter((certificate) => Boolean(certificate.url));
     const submittedEducationUpdates = {
       classType: data.classType,
       preferredLocations: data.preferredLocations,
@@ -907,9 +910,9 @@ const useLogic = (): LogicReturnType => {
       tutorMediums: data.tutorMediums,
       grades: data.grades,
       subjects: data.subjects,
-      certificatesAndQualifications: data.certificatesAndQualifications
-        .map(({ type, url }) => ({ type, url }))
-        .filter((certificate) => Boolean(certificate.url)),
+      certificatesAndQualifications: certificateRows
+        .map((certificate) => certificate.url)
+        .filter(Boolean),
     };
 
     const result = await handleProfileSubmit({
@@ -928,6 +931,7 @@ const useLogic = (): LogicReturnType => {
       mergeProfileUpdates(userRawData, result.data ?? null, {
         ...submittedEducationUpdates,
         tutorTypes: data.tutorTypes,
+        certificatesAndQualifications: certificateRows,
       }),
     );
     educationInfoForm.reset(data);
