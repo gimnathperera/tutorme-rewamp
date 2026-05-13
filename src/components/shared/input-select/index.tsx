@@ -15,6 +15,7 @@ interface InputSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   loading?: boolean;
   placeholder?: string;
   disablePlaceholder?: boolean;
+  reserveHelperSpace?: boolean;
 }
 
 const InputSelect: FC<InputSelectProps> = ({
@@ -26,6 +27,7 @@ const InputSelect: FC<InputSelectProps> = ({
   loading = false,
   placeholder = "Select an option",
   disablePlaceholder = true,
+  reserveHelperSpace = false,
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -35,7 +37,7 @@ const InputSelect: FC<InputSelectProps> = ({
   return (
     <div className="flex flex-col gap-1">
       {label && (
-        <label className="text-sm font-medium text-gray-700">
+        <label className="text-sm font-medium leading-6 text-gray-700">
           {label.includes("*") ? (
             <>
               {label.replace(" *", "")}
@@ -100,9 +102,13 @@ const InputSelect: FC<InputSelectProps> = ({
         )}
       />
 
-      {(error || helperText) && (
-        <span className={`text-xs ${error ? "text-red-500" : "text-gray-500"}`}>
-          {error || helperText}
+      {(error || helperText || reserveHelperSpace) && (
+        <span
+          className={`min-h-4 text-xs ${
+            error ? "text-red-500" : "text-gray-500"
+          }`}
+        >
+          {error || helperText || ""}
         </span>
       )}
     </div>
