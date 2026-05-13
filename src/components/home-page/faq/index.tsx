@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   DEFAULT_FAQ_CATEGORY,
   FAQ_CATEGORY_OPTIONS,
+  FAQ_CATEGORY_QUERY_PARAM,
   type FaqCategory,
 } from "@/lib/faq-categories";
 import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
@@ -129,6 +130,11 @@ const Faqs = () => {
     setOpenIndex((prev) => (prev === index ? null : index));
   };
 
+  const activeCategoryIndex = Math.max(
+    FAQ_CATEGORY_OPTIONS.findIndex((option) => option.value === activeCategory),
+    0,
+  );
+
   return (
     <div className="px-4 pb-8 lg:px-8 lg:pb-12">
       <div
@@ -144,12 +150,20 @@ const Faqs = () => {
           onValueChange={handleCategoryChange}
           className="max-w-5xl mx-auto"
         >
-          <TabsList className="mx-auto mb-8 flex h-auto w-full max-w-md rounded-2xl bg-white/15 p-1 backdrop-blur">
+          <TabsList className="relative isolate mx-auto mb-8 flex h-auto w-full max-w-md overflow-hidden rounded-2xl border border-white/40 bg-blue-950/25 p-1 shadow-md shadow-blue-950/10 backdrop-blur">
+            <span
+              aria-hidden="true"
+              className="absolute inset-y-1 left-1 z-0 rounded-xl bg-white shadow-lg shadow-blue-950/20 ring-1 ring-white transition-transform duration-300 ease-out"
+              style={{
+                width: `calc((100% - 0.5rem) / ${FAQ_CATEGORY_OPTIONS.length})`,
+                transform: `translateX(${activeCategoryIndex * 100}%)`,
+              }}
+            />
             {FAQ_CATEGORY_OPTIONS.map((option) => (
               <TabsTrigger
                 key={option.value}
                 value={option.value}
-                className="flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold text-white/75 data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm"
+                className="relative z-10 !m-0 flex-1 rounded-xl bg-transparent px-4 py-2.5 text-sm font-bold text-white drop-shadow-sm shadow-none transition-colors duration-200 hover:bg-white/10 hover:text-white data-[state=active]:bg-transparent data-[state=active]:text-faqblue data-[state=active]:drop-shadow-none data-[state=active]:shadow-none"
               >
                 {option.label}
               </TabsTrigger>
@@ -205,7 +219,10 @@ const Faqs = () => {
         {!isFetching && totalItems > 0 && (
           <div className="text-center mt-8">
             <Link
-              href="/faq"
+              href={{
+                pathname: "/faq",
+                query: { [FAQ_CATEGORY_QUERY_PARAM]: activeCategory },
+              }}
               className="inline-block px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
             >
               Read More
