@@ -1,4 +1,6 @@
 import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
+import LegalContactSection from "@/components/shared/legal-contact-section";
+import WhatsAppButton from "@/components/shared/whatapp-button";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = createMetadata({
@@ -497,31 +499,14 @@ const PrivacyPolicyPage = () => {
             </section>
 
             {/* 14. Contact Us */}
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <h2 className="text-lg font-bold text-gray-900">
-                14. Contact Us
-              </h2>
-              <div className="mt-3 space-y-2 text-sm leading-relaxed text-gray-600">
-                <p>
-                  If you have any questions, concerns, or requests regarding
-                  this Privacy Policy, please contact us at:
-                </p>
-                <p className="font-semibold text-gray-800">
-                  SOFTVIL TECHNOLOGIES (PVT) LTD
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-800">Email:</span>{" "}
-                  support.tuitionlanka@gmail.com
-                </p>
-                <p>
-                  <span className="font-semibold text-gray-800">Website:</span>{" "}
-                  https://www.tuitionlanka.com
-                </p>
-              </div>
-            </section>
+            <LegalContactSection
+              sectionNumber={14}
+              documentName="Privacy Policy"
+            />
           </div>
         </div>
       </div>
+      <WhatsAppButton />
     </>
   );
 };
