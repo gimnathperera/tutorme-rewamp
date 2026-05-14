@@ -36,6 +36,7 @@ const toOptions = (options: Array<{ value: string; text: string }>) =>
 const genderOptions = toOptions(GENDER_OPTIONS);
 const nationalityOptions = toOptions(NATIONALITY_OPTIONS);
 const raceOptions = toOptions(RACE_OPTIONS);
+const fieldHeightClass = "h-11";
 
 const calculateAge = (birthday?: string) => {
   if (!birthday) return "";
@@ -236,7 +237,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                         }}
                         onKeyDown={(e) => e.preventDefault()}
                         max={maxBirthday}
-                        className={`h-10 w-full rounded-md border px-3 pr-10 text-sm text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
+                        className={`${fieldHeightClass} w-full rounded-md border px-3 pr-10 text-sm text-gray-900 bg-white focus:outline-none focus:ring-1 focus:ring-ring cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${
                           fieldState.error
                             ? "border-red-500"
                             : "border-gray-300"
@@ -266,13 +267,20 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 label="Gender *"
                 name="gender"
                 options={genderOptions}
+                className={fieldHeightClass}
               />
               <InputSelect
                 label="Nationality *"
                 name="nationality"
                 options={nationalityOptions}
+                className={fieldHeightClass}
               />
-              <InputSelect label="Race *" name="race" options={raceOptions} />
+              <InputSelect
+                label="Race *"
+                name="race"
+                options={raceOptions}
+                className={fieldHeightClass}
+              />
             </div>
             <div className="col-span-6 sm:col-full">
               <SubmitButton

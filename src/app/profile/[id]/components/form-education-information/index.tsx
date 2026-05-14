@@ -38,9 +38,10 @@ const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
+const fieldControlHeightClass = "h-11";
 
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -131,12 +132,15 @@ const FormEducationInfo: FC<Props> = ({
                 label="Class Type *"
                 name="classType"
                 options={classTypeOptions}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputMultiSelect
                 label={`Preferred Locations${isPreferredLocationsEnabled ? " *" : ""}`}
                 name="preferredLocations"
                 options={preferredLocationsOptions}
+                className={fieldControlHeightClass}
                 isDisabled={!isPreferredLocationsEnabled}
                 isSearchable
                 helperText={
@@ -144,18 +148,23 @@ const FormEducationInfo: FC<Props> = ({
                     ? undefined
                     : "Locations apply to physical classes only"
                 }
+                reserveHelperSpace
               />
 
               <InputMultiSelect
                 label="Tutor Types *"
                 name="tutorTypes"
                 options={tutorTypeOptions}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputSelect
                 label="Highest Education Level *"
                 name="highestEducation"
                 options={highestEducationOptions}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputText
@@ -166,25 +175,33 @@ const FormEducationInfo: FC<Props> = ({
                 min={0}
                 max={50}
                 step={1}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputMultiSelect
                 label="Tutor Mediums *"
                 name="tutorMediums"
                 options={tutorMediumOptions}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputMultiSelect
                 label="Grades *"
                 name="grades"
                 options={gradesOptions}
+                className={fieldControlHeightClass}
+                reserveHelperSpace
               />
 
               <InputMultiSelect
                 label="Subjects *"
                 name="subjects"
                 options={subjectsOptions}
+                className={fieldControlHeightClass}
                 isDisabled={isEmpty(selectedGrades)}
+                reserveHelperSpace
               />
             </div>
 

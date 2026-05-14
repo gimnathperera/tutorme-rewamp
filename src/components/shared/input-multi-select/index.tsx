@@ -17,6 +17,7 @@ interface MultiSelectProps {
   isDisabled?: boolean;
   isLoading?: boolean;
   isSearchable?: boolean;
+  reserveHelperSpace?: boolean;
 }
 
 const InputMultiSelect: React.FC<MultiSelectProps> = ({
@@ -28,10 +29,13 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   isDisabled = false,
   isLoading = false,
   isSearchable = false,
+  reserveHelperSpace = false,
 }) => {
   const { control, formState } = useFormContext();
 
   const error = getNestedError(formState.errors, name);
+  const controlHeight = "2.75rem";
+  const innerControlHeight = "calc(2.75rem - 2px)";
 
   return (
     <div className="flex flex-col gap-1">
@@ -90,7 +94,22 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
                 "&:hover": {
                   borderColor: error ? "#EF4444" : "#D1D5DB",
                 },
-                padding: "0.2rem",
+                minHeight: controlHeight,
+                height: controlHeight,
+                padding: "0 0.2rem",
+              }),
+              valueContainer: (base) => ({
+                ...base,
+                minHeight: innerControlHeight,
+                height: innerControlHeight,
+                paddingTop: "0",
+                paddingBottom: "0",
+                overflow: "hidden",
+              }),
+              indicatorsContainer: (base) => ({
+                ...base,
+                minHeight: innerControlHeight,
+                height: innerControlHeight,
               }),
               dropdownIndicator: (base) => ({
                 ...base,
@@ -102,9 +121,13 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
         )}
       />
 
-      {(error || helperText) && (
-        <span className={`text-xs ${error ? "text-red-500" : "text-gray-500"}`}>
-          {error || helperText}
+      {(error || helperText || reserveHelperSpace) && (
+        <span
+          className={`min-h-4 text-xs ${
+            error ? "text-red-500" : "text-gray-500"
+          }`}
+        >
+          {error || helperText || ""}
         </span>
       )}
     </div>
