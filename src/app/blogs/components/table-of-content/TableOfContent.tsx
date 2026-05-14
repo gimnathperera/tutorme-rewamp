@@ -46,9 +46,18 @@ const TableOfContents = ({ html }: { html: string }) => {
 
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (!el) return;
+    document.documentElement.style.scrollBehavior = "auto";
+    const start = window.scrollY;
+    const target = el.getBoundingClientRect().top + window.scrollY - 80;
+    const startTime = performance.now();
+    const step = () => {
+      const progress = Math.min((performance.now() - startTime) / 2000, 1);
+      window.scrollTo(0, start + (target - start) * progress);
+      if (progress < 1) requestAnimationFrame(step);
+      else document.documentElement.style.scrollBehavior = "";
+    };
+    step();
   };
 
   if (headings.length === 0) return null;
