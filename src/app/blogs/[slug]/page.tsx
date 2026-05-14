@@ -337,8 +337,8 @@ export default function ViewBlogPage() {
                     <Image
                       src={related.image || "/images/profile/pp.png"}
                       alt={related.title || "Related blog thumbnail"}
-                      width={56}
-                      height={56}
+                      width={200}
+                      height={200}
                       className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
                       onError={(e) => {
                         e.currentTarget.src = "/images/profile/pp.png";
