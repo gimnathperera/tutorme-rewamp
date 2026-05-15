@@ -50,10 +50,12 @@ const TableOfContents = ({ html }: { html: string }) => {
     document.documentElement.style.scrollBehavior = "auto";
     const start = window.scrollY;
     const target = el.getBoundingClientRect().top + window.scrollY - 80;
+    const duration = 600;
     const startTime = performance.now();
     const step = () => {
-      const progress = Math.min((performance.now() - startTime) / 2000, 1);
-      window.scrollTo(0, start + (target - start) * progress);
+      const progress = Math.min((performance.now() - startTime) / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      window.scrollTo(0, start + (target - start) * ease);
       if (progress < 1) requestAnimationFrame(step);
       else document.documentElement.style.scrollBehavior = "";
     };
