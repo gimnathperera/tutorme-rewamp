@@ -173,8 +173,8 @@ const FormEducationInfo: FC<Props> = ({
                   }`}
                 >
                   {isPreferredLocationsEnabled
-                    ? (form.formState.errors.preferredLocations
-                        ?.message as string) ?? ""
+                    ? ((form.formState.errors.preferredLocations
+                        ?.message as string) ?? "")
                     : "Locations apply to physical classes only"}
                 </span>
               </div>
