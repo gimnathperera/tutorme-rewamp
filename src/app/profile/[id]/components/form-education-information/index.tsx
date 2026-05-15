@@ -1,5 +1,10 @@
 import InputText from "@/components/shared/input-text";
-import { Controller, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useFieldArray,
+} from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
@@ -40,8 +45,7 @@ const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const fieldControlHeightClass = "h-11";
 
-const selectClass =
-  `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
+const selectClass = `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -290,7 +294,8 @@ const FormEducationInfo: FC<Props> = ({
                 })}
               </div>
 
-              {typeof form.formState.errors.certificatesAndQualifications?.message === "string" && (
+              {typeof form.formState.errors.certificatesAndQualifications
+                ?.message === "string" && (
                 <p className="text-xs text-red-500 mt-1">
                   {form.formState.errors.certificatesAndQualifications.message}
                 </p>
