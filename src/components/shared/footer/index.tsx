@@ -56,45 +56,60 @@ const footer = () => {
             </h3>
 
             <div className="flex justify-center gap-4 sm:justify-start">
-              <div className="footer-icons">
-                <a
-                  href={process.env.NEXT_PUBLIC_FACEBOOK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src={"/images/footer/vec.svg"}
-                    alt="facebook"
-                    width={15}
-                    height={20}
-                  />
-                </a>
-              </div>
+              <a
+                className="footer-icons"
+                href={process.env.NEXT_PUBLIC_FACEBOOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+              >
+                <Image
+                  src={"/images/footer/vec.svg"}
+                  alt=""
+                  width={15}
+                  height={20}
+                />
+              </a>
 
-              <div className="footer-icons">
-                <a
-                  href={process.env.NEXT_PUBLIC_TIKTOK_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaTiktok className="text-white" size={20} />
-                </a>
-              </div>
+              <a
+                className="footer-icons"
+                href={process.env.NEXT_PUBLIC_TIKTOK_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+              >
+                <FaTiktok className="text-white" size={20} />
+              </a>
 
-              <div className="footer-icons">
-                <a
-                  href={process.env.NEXT_PUBLIC_INSTAGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src={"/images/footer/instagram.svg"}
-                    alt="instagram"
-                    width={20}
-                    height={20}
-                  />
-                </a>
-              </div>
+              <a
+                className="footer-icons"
+                href={process.env.NEXT_PUBLIC_INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+              >
+                <Image
+                  src={"/images/footer/instagram.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </a>
+
+              <a
+                className="footer-icons"
+                href={process.env.NEXT_PUBLIC_LINKEDIN_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+              >
+                <Image
+                  src={"/images/footer/linkedin.svg"}
+                  alt=""
+                  width={20}
+                  height={20}
+                />
+              </a>
             </div>
           </div>
 
