@@ -24,6 +24,48 @@ import { AL_STREAM_ORDER } from "@/configs/options";
 const GRADE_LIMIT = 1000;
 const UNKNOWN_AL_STREAM_ORDER = AL_STREAM_ORDER.length;
 
+const STREAM_SUBJECT_ORDER: { pattern: RegExp; order: string[] }[] = [
+  {
+    pattern: /biological\s+science/i,
+    order: [
+      "biology",
+      "physics",
+      "chemistry",
+      "agriculture",
+      "general information technology",
+      "general english",
+      "common general test",
+    ],
+  },
+  {
+    pattern: /commerce/i,
+    order: [
+      "accounting",
+      "economics",
+      "business studies",
+      "ict (advanced level)",
+      "general information technology",
+      "general english",
+      "common general test",
+    ],
+  },
+];
+
+const sortSubjects = (
+  gradeTitle: string,
+  subjects: { id: string; title: string; description: string }[],
+) => {
+  const stream = STREAM_SUBJECT_ORDER.find(({ pattern }) =>
+    pattern.test(gradeTitle),
+  );
+  if (!stream) return subjects;
+  return [...subjects].sort((a, b) => {
+    const ai = stream.order.indexOf(a.title.toLowerCase());
+    const bi = stream.order.indexOf(b.title.toLowerCase());
+    return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+  });
+};
+
 const normalizeTitle = (title: string) => title.toLowerCase();
 
 const getAlStreamOrder = (title: string) => {
@@ -61,8 +103,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
     skip: !gradeId,
   });
 
-  const subjects: { id: string; title: string; description: string }[] =
-    data?.subjects ?? [];
+  const subjects = sortSubjects(data?.title ?? "", data?.subjects ?? []);
 
   return (
     <Dialog.Root open={!!gradeId} onOpenChange={(open) => !open && onClose()}>

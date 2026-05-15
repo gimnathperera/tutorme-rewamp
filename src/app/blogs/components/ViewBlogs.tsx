@@ -58,16 +58,65 @@ export default function BlogsDashboard() {
 
   if (isBlogsLoading || isTagsLoading)
     return (
-      <div className="p-6 flex flex-col gap-6">
-        <Skeleton className="h-40 w-full rounded-xl" />
-        <div className="flex gap-2">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-8 w-20 rounded-full" />
+      <div className="flex flex-col gap-6">
+        {/* Hero banner skeleton */}
+        <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-8 py-6 flex flex-col justify-center overflow-hidden">
+          <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
+          <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
+          <div className="relative z-10 flex flex-col gap-3">
+            <Skeleton className="h-3 w-40 rounded bg-white/30" />
+            <Skeleton className="h-7 w-72 rounded bg-white/30" />
+            <Skeleton className="h-4 w-56 rounded bg-white/20" />
+          </div>
+        </div>
+
+        {/* Tag pills skeleton */}
+        <div className="flex flex-wrap gap-4">
+          <div className="h-8 px-4 rounded-full bg-blue-600 flex items-center">
+            <span className="text-sm font-semibold invisible">All</span>
+          </div>
+          {["Study Tips", "G.C.E A/L", "G.C.E O/L", "Tutor", "Parents"].map((tag) => (
+            <Skeleton key={tag} className="h-8 rounded-full">
+              <span className="text-sm font-semibold px-4 invisible">{tag}</span>
+            </Skeleton>
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-64 w-full rounded-xl" />
+
+        {/* Blog card skeletons matching real card layout */}
+        <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div
+              key={i}
+              className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col"
+            >
+              {/* Cover image area with icon placeholder */}
+              <div className="relative h-44 bg-gray-100 flex items-center justify-center">
+                <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5M21 12V6.75A2.25 2.25 0 0018.75 4.5H5.25A2.25 2.25 0 003 6.75V12" />
+                </svg>
+              </div>
+
+              {/* Card body */}
+              <div className="p-4 flex flex-col gap-3">
+                {/* Author row */}
+                <div className="flex items-center gap-2.5">
+                  <Skeleton className="h-7 w-7 rounded-full shrink-0" />
+                  <Skeleton className="h-3 w-24 rounded" />
+                </div>
+
+                <hr className="border-gray-100" />
+
+                {/* Title */}
+                <Skeleton className="h-4 w-full rounded" />
+                <Skeleton className="h-4 w-3/4 rounded" />
+
+                <hr className="border-gray-100" />
+
+                {/* Excerpt */}
+                <Skeleton className="h-3 w-full rounded" />
+                <Skeleton className="h-3 w-5/6 rounded" />
+              </div>
+            </div>
           ))}
         </div>
       </div>

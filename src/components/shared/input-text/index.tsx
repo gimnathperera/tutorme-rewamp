@@ -6,6 +6,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   name: string;
+  reserveHelperSpace?: boolean;
 }
 
 const InputText: React.FC<InputTextProps> = ({
@@ -15,6 +16,7 @@ const InputText: React.FC<InputTextProps> = ({
   name,
   onBlur,
   onChange,
+  reserveHelperSpace = false,
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -23,7 +25,7 @@ const InputText: React.FC<InputTextProps> = ({
   return (
     <div className="flex flex-col">
       {label && (
-        <label className="mb-1 text-sm font-medium text-gray-700">
+        <label className="mb-1 text-sm font-medium leading-6 text-gray-700">
           {label.includes("*") ? (
             <>
               {label.replace(" *", "")}
@@ -58,13 +60,13 @@ const InputText: React.FC<InputTextProps> = ({
               } ${className}`}
             />
 
-            {(error || helperText) && (
+            {(error || helperText || reserveHelperSpace) && (
               <span
-                className={`mt-1 text-xs ${
+                className={`mt-1 min-h-4 text-xs ${
                   error ? "text-red-500" : "text-gray-500"
                 }`}
               >
-                {error || helperText}
+                {error || helperText || ""}
               </span>
             )}
           </>

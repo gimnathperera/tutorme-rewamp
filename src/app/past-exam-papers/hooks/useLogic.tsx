@@ -165,6 +165,7 @@ type LogicReturnType = {
     isSubjectsLoading: boolean;
     isPapersLoading: boolean;
     papers: Paper[];
+    isEdexcelGradeSelected: boolean;
   };
 };
 
@@ -290,6 +291,11 @@ const useLogic = (): LogicReturnType => {
     return matchesSearch && matchesGrade && matchesSubject && matchesMedium;
   });
 
+  const isEdexcelGradeSelected = !!selectedGrade &&
+    gradesOptions.some(
+      (g) => g.value === selectedGrade && /edexcel/i.test(g.label),
+    );
+
   return {
     forms: {
       testPaperSearchForm,
@@ -302,6 +308,7 @@ const useLogic = (): LogicReturnType => {
       isSubjectsLoading: isPapersLoading,
       isPapersLoading,
       papers: filteredPapers,
+      isEdexcelGradeSelected,
     },
   };
 };
