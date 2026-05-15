@@ -16,7 +16,7 @@ const Beliefs = () => {
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* JOIN card */}
-          <div className="bg-darkblue pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-left flex flex-col">
+          <div className="bg-navyblue pt-8 px-6 sm:px-10 pb-8 sm:pb-10 rounded-3xl animate-slide-left flex flex-col">
             <h3 className="text-3xl lg:text-4xl font-bold text-white leading-[1.25] mb-4 text-center sm:text-start">
               Share{" "}
               <span className="text-grey">
