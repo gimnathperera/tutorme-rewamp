@@ -57,7 +57,7 @@ const Banner = () => {
       {/* Background Video */}
       <video
         className="hero-video"
-        src="/videos/home/home.mp4"
+        src="/videos/home/home_2.mp4"
         autoPlay
         muted
         loop

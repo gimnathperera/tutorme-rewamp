@@ -291,7 +291,8 @@ const useLogic = (): LogicReturnType => {
     return matchesSearch && matchesGrade && matchesSubject && matchesMedium;
   });
 
-  const isEdexcelGradeSelected = !!selectedGrade &&
+  const isEdexcelGradeSelected =
+    !!selectedGrade &&
     gradesOptions.some(
       (g) => g.value === selectedGrade && /edexcel/i.test(g.label),
     );

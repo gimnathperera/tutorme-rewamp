@@ -1,7 +1,13 @@
 import InputText from "@/components/shared/input-text";
-import { Controller, FormProvider, SubmitHandler, useFieldArray } from "react-hook-form";
+import {
+  Controller,
+  FormProvider,
+  SubmitHandler,
+  useFieldArray,
+} from "react-hook-form";
 import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
+import MultiSelect from "@/components/shared/MultiSelect";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
 import {
   CLASS_TYPE_OPTIONS,
@@ -34,14 +40,12 @@ const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
   options.map(({ text, value }) => ({ label: text, value }));
 
 const classTypeOptions = toOptions(CLASS_TYPE_OPTIONS);
-const preferredLocationsOptions = toOptions(PREFERRED_LOCATION_OPTIONS);
 const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
 const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const fieldControlHeightClass = "h-11";
 
-const selectClass =
-  `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
+const selectClass = `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
 
@@ -136,20 +140,44 @@ const FormEducationInfo: FC<Props> = ({
                 reserveHelperSpace
               />
 
-              <InputMultiSelect
-                label={`Preferred Locations${isPreferredLocationsEnabled ? " *" : ""}`}
-                name="preferredLocations"
-                options={preferredLocationsOptions}
-                className={fieldControlHeightClass}
-                isDisabled={!isPreferredLocationsEnabled}
-                isSearchable
-                helperText={
-                  isPreferredLocationsEnabled
-                    ? undefined
-                    : "Locations apply to physical classes only"
-                }
-                reserveHelperSpace
-              />
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Preferred Locations
+                  {isPreferredLocationsEnabled && (
+                    <span className="text-red-500"> *</span>
+                  )}
+                </label>
+                <Controller
+                  name="preferredLocations"
+                  control={form.control}
+                  render={({ field }) => (
+                    <MultiSelect
+                      options={PREFERRED_LOCATION_OPTIONS}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      disabled={!isPreferredLocationsEnabled}
+                      hasError={
+                        isPreferredLocationsEnabled &&
+                        !!form.formState.errors.preferredLocations
+                      }
+                      searchable
+                    />
+                  )}
+                />
+                <span
+                  className={`min-h-4 text-xs ${
+                    isPreferredLocationsEnabled &&
+                    form.formState.errors.preferredLocations
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {isPreferredLocationsEnabled
+                    ? ((form.formState.errors.preferredLocations
+                        ?.message as string) ?? "")
+                    : "Locations apply to physical classes only"}
+                </span>
+              </div>
 
               <InputMultiSelect
                 label="Tutor Types *"
@@ -290,7 +318,8 @@ const FormEducationInfo: FC<Props> = ({
                 })}
               </div>
 
-              {typeof form.formState.errors.certificatesAndQualifications?.message === "string" && (
+              {typeof form.formState.errors.certificatesAndQualifications
+                ?.message === "string" && (
                 <p className="text-xs text-red-500 mt-1">
                   {form.formState.errors.certificatesAndQualifications.message}
                 </p>

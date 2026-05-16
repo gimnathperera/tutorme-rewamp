@@ -17,6 +17,7 @@ interface MultiSelectProps {
   isDisabled?: boolean;
   isLoading?: boolean;
   isSearchable?: boolean;
+  isClearable?: boolean;
   reserveHelperSpace?: boolean;
 }
 
@@ -29,6 +30,7 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
   isDisabled = false,
   isLoading = false,
   isSearchable = false,
+  isClearable = false,
   reserveHelperSpace = false,
 }) => {
   const { control, formState } = useFormContext();
@@ -64,13 +66,16 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
             isLoading={isLoading}
             isMulti
             isSearchable={isSearchable}
+            isClearable={isClearable}
             placeholder="Select an option"
             options={options}
             className={`basic-multi-select ${
               error ? "border-red-500" : "border-gray-300"
             } ${className}`}
             onChange={(selected) =>
-              field.onChange(selected.map((option) => option.value))
+              field.onChange(
+                selected ? selected.map((option) => option.value) : [],
+              )
             }
             value={options.filter((option) =>
               field.value?.includes(option.value),
@@ -95,25 +100,34 @@ const InputMultiSelect: React.FC<MultiSelectProps> = ({
                   borderColor: error ? "#EF4444" : "#D1D5DB",
                 },
                 minHeight: controlHeight,
-                height: controlHeight,
+                height: isSearchable ? "auto" : controlHeight,
                 padding: "0 0.2rem",
               }),
               valueContainer: (base) => ({
                 ...base,
                 minHeight: innerControlHeight,
-                height: innerControlHeight,
-                paddingTop: "0",
-                paddingBottom: "0",
+                height: isSearchable ? "auto" : innerControlHeight,
+                paddingTop: isSearchable ? "0.2rem" : "0",
+                paddingBottom: isSearchable ? "0.2rem" : "0",
                 overflow: "hidden",
+                flexWrap: isSearchable ? "wrap" : "nowrap",
               }),
               indicatorsContainer: (base) => ({
                 ...base,
                 minHeight: innerControlHeight,
-                height: innerControlHeight,
+                alignSelf: "flex-start",
               }),
               dropdownIndicator: (base) => ({
                 ...base,
                 color: "#6A7280",
+              }),
+              clearIndicator: (base) => ({
+                ...base,
+                color: "#6A7280",
+                cursor: "pointer",
+                "&:hover": {
+                  color: "#374151",
+                },
               }),
             }}
             isDisabled={isDisabled}
