@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect } from "react";
 import { useFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +14,6 @@ export default function BlogsDashboard() {
   const [page, setPage] = useState(1);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const pageSize = 9;
-  const router = useRouter();
   const { user } = useAuthContext();
 
   const {
@@ -232,9 +230,9 @@ export default function BlogsDashboard() {
               })();
 
               return (
-                <article
+                <Link
                   key={blog.id}
-                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
+                  href={`/blogs/${blog.slug || blog.id}`}
                   className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
                 >
                   {/* Cover image */}
@@ -326,7 +324,7 @@ export default function BlogsDashboard() {
                       </>
                     )}
                   </div>
-                </article>
+                </Link>
               );
             })}
 
