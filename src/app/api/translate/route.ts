@@ -24,5 +24,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ translated });
   }
 
-  return NextResponse.json({ error: "text or texts is required" }, { status: 400 });
+  return NextResponse.json(
+    { error: "text or texts is required" },
+    { status: 400 },
+  );
 }

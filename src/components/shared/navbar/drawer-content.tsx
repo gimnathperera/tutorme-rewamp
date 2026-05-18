@@ -92,7 +92,6 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
   return (
     <div className="w-full px-4 py-2" onClick={(e) => e.stopPropagation()}>
       <nav className="flex flex-col">
-
         {navigation.map((item, index) => {
           const isActive = isActiveItem(item);
 

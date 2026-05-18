@@ -208,9 +208,7 @@ const ContactUsPage = () => {
               <br />
               <span className="text-primary-700">{t("formSubheading")}</span>
             </h2>
-            <p className="text-sm text-darkgrey mb-8">
-              {t("formIntro")}
-            </p>
+            <p className="text-sm text-darkgrey mb-8">{t("formIntro")}</p>
 
             <FormProvider {...form}>
               <form

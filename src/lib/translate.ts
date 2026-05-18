@@ -34,7 +34,12 @@ async function callGoogleTranslate(
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ q: text, source: "en", target: targetLang, format: "text" }),
+      body: JSON.stringify({
+        q: text,
+        source: "en",
+        target: targetLang,
+        format: "text",
+      }),
       next: { revalidate: 86400 }, // cache the fetch response for 24 h (Next.js)
     },
   );
@@ -50,7 +55,11 @@ async function callGoogleTranslate(
  * Returns the original text for "en" or when the API is not configured.
  */
 export async function translate(text: string, locale: string): Promise<string> {
-  if (!text || locale === "en" || !SUPPORTED_LOCALES.includes(locale as TranslatableLocale)) {
+  if (
+    !text ||
+    locale === "en" ||
+    !SUPPORTED_LOCALES.includes(locale as TranslatableLocale)
+  ) {
     return text;
   }
 
