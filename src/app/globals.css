@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700;800;900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Tamil:wght@300;400;500;600;700&display=swap");
 /* TAILWIND CSS LINKS */
 @tailwind base;
 @tailwind components;
@@ -35,6 +37,14 @@ html {
   Page 11: spacing influences reading flow and comprehension
   Page 14: poor spacing / too-small text reduces comfort and trust
 */
+:lang(si) {
+  font-family: "Noto Sans Sinhala", "Urbanist", sans-serif;
+}
+
+:lang(ta) {
+  font-family: "Noto Sans Tamil", "Urbanist", sans-serif;
+}
+
 body {
   margin: 0;
   font-family: "Urbanist", sans-serif;

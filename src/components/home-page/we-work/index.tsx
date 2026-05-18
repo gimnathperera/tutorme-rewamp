@@ -2,7 +2,7 @@
 import Slider from "react-slick";
 import React, { Component } from "react";
 import Image from "next/image";
-import LinkedInSvg from "../../../../public/images/wework/linkedin.svg";
+import LinkedInSvg from "/images/wework/linkedin.svg";
 
 // CAROUSEL DATA
 interface DataType {

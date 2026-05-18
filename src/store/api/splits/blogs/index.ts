@@ -2,7 +2,7 @@ import { FetchBlogsRequest, UpdateBlogRequest } from "@/types/request-types";
 import { PaginatedResponse, Blogs } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
-import { CreateArticleSchema } from "@/app/blogs/components/create-blog/schema";
+import { CreateArticleSchema } from "@/app/[locale]/blogs/components/create-blog/schema";
 import type { BlogStatus } from "@/configs/options";
 
 export const BlogsApi = baseApi.injectEndpoints({

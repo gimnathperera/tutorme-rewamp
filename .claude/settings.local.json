@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path src\\\\app -Recurse -Include \"page.tsx\", \"layout.tsx\", \"loading.tsx\")",
+      "Bash(Select-Object FullName)",
+      "Bash(Get-ChildItem -Path \"c:\\\\Projects\\\\TuitionLanka\\\\tutorme-rewamp\\\\src\\\\app\" -Recurse -Filter \"*provider*\" -ErrorAction SilentlyContinue)",
+      "Bash(pnpm add *)",
+      "Bash(Copy-Item messages\\\\en.json messages\\\\si.json)",
+      "Bash(Copy-Item messages\\\\en.json messages\\\\ta.json)",
+      "Bash(pnpm run *)"
+    ]
+  }
+}

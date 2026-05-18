@@ -1,45 +1,43 @@
+"use client";
+
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 interface datatype {
   heading: string;
   imgSrc: string;
   paragraph: string;
-  link: string;
 }
-
-const Aboutdata: datatype[] = [
-  {
-    heading: "Personalized Learning",
-    imgSrc: "/images/aboutus/imgOne.svg",
-    paragraph:
-      "Tutors adapt teaching methods to suit the student's learning style.",
-    link: "Learn more",
-  },
-  {
-    heading: "Academic Support",
-    imgSrc: "/images/aboutus/imgTwo.svg",
-    paragraph:
-      "Students receive help with homework, test preparation, and subject understanding.",
-    link: "Learn more",
-  },
-  {
-    heading: "Confidence Building",
-    imgSrc: "/images/aboutus/imgThree.svg",
-    paragraph:
-      "One-on-one attention from a background-checked, verified tutor boosts confidence and motivation.",
-    link: "Learn more",
-  },
-];
 
 const staggerClasses = ["stagger-1", "stagger-2", "stagger-3"];
 
 const AboutUs = () => {
+  const t = useTranslations("aboutUs");
+
+  const Aboutdata: datatype[] = [
+    {
+      heading: t("card1Heading"),
+      imgSrc: "/images/aboutus/imgOne.svg",
+      paragraph: t("card1Text"),
+    },
+    {
+      heading: t("card2Heading"),
+      imgSrc: "/images/aboutus/imgTwo.svg",
+      paragraph: t("card2Text"),
+    },
+    {
+      heading: t("card3Heading"),
+      imgSrc: "/images/aboutus/imgThree.svg",
+      paragraph: t("card3Text"),
+    },
+  ];
+
   return (
     <div id="aboutus-section" className="px-4 pb-8 lg:px-8 lg:pb-12">
       <div className="mx-auto max-w-7xl">
         {/* Section labels */}
         <h2 className="text-center text-4xl font-bold leading-[1.2] mt-2 mb-2 text-black animate-on-scroll stagger-1">
-          Why Choose Home Tuition?
+          {t("sectionHeading")}
         </h2>
 
         {/* Cards */}

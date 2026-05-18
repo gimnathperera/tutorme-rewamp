@@ -1,4 +1,4 @@
-import { CreateRequestTutorSchema } from "../../../../app/request-for-tutors/create-request/schema";
+import { CreateRequestTutorSchema } from "@/app/[locale]/request-for-tutors/create-request/schema";
 import { RequestTutors } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";

@@ -1,14 +1,14 @@
 import Image from "next/image";
 import React from "react";
-import IconOne from "../../../../public/images/what-to-except/expect-icon-1.png";
-import IconTwo from "../../../../public/images/what-to-except/expect-icon-2.png";
-import IconThree from "../../../../public/images/what-to-except/expect-icon-3.png";
-import IconFour from "../../../../public/images/what-to-except/expect-icon-4.png";
-import IconFive from "../../../../public/images/what-to-except/expect-icon-5.png";
-import IconSix from "../../../../public/images/what-to-except/expect-icon-6.png";
-import IconSeven from "../../../../public/images/what-to-except/expect-icon-7.png";
-import IconEight from "../../../../public/images/what-to-except/expect-icon-8.png";
-import IconNine from "../../../../public/images/what-to-except/expect-icon-9.png";
+import IconOne from "/images/what-to-except/expect-icon-1.png";
+import IconTwo from "/images/what-to-except/expect-icon-2.png";
+import IconThree from "/images/what-to-except/expect-icon-3.png";
+import IconFour from "/images/what-to-except/expect-icon-4.png";
+import IconFive from "/images/what-to-except/expect-icon-5.png";
+import IconSix from "/images/what-to-except/expect-icon-6.png";
+import IconSeven from "/images/what-to-except/expect-icon-7.png";
+import IconEight from "/images/what-to-except/expect-icon-8.png";
+import IconNine from "/images/what-to-except/expect-icon-9.png";
 
 const WhatToExceptFromTutorMe = (props: { name: string }) => {
   const cards = [

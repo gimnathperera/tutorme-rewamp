@@ -3,9 +3,9 @@ import Slider from "react-slick";
 import React, { Component } from "react";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
-import Article1 from "../../../../public/images/articles/article.png";
-import Article2 from "../../../../public/images/articles/article2.png";
-import Article3 from "../../../../public/images/articles/article3.png";
+import Article1 from "/images/articles/article.png";
+import Article2 from "/images/articles/article2.png";
+import Article3 from "/images/articles/article3.png";
 // CAROUSEL DATA
 
 interface DataType {

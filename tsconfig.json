@@ -21,7 +21,8 @@
     ],
     "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@public/*": ["../public/*"]
     },
     "allowSyntheticDefaultImports": true
   },

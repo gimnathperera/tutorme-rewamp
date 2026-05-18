@@ -6,35 +6,21 @@ import { Disclosure } from "@headlessui/react";
 import { Bars3Icon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { usePathname } from "@/navigation";
+import { useTranslations } from "next-intl";
 import Modal from "../modal";
 import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
 import { useAuthModalState } from "./hooks";
 import ProfileDropdown from "./profile-section";
+import LocaleSwitcher from "../locale-switcher";
 
 interface NavigationItem {
   name: string;
   href: string;
   dropdown?: { name: string; href: string }[];
 }
-
-const navigation: NavigationItem[] = [
-  { name: "Request for Tutor", href: "/request-for-tutors" },
-  { name: "Register as a Tutor", href: "/register-tutor" },
-  {
-    name: "Academics",
-    href: "/",
-    dropdown: [
-      { name: "Grades & Subjects", href: "/grades-and-subjects" },
-      { name: "Past Exam Papers", href: "/past-exam-papers" },
-    ],
-  },
-  { name: "Tuition Rates", href: "/tuition-rates" },
-  { name: "FAQ", href: "/faq" },
-  { name: "Blog", href: "/blogs" },
-  { name: "Contact Us", href: "/contact-us" },
-];
 
 interface NavbarProps {
   isHeroTop?: boolean;
@@ -43,8 +29,26 @@ interface NavbarProps {
 const NAVBAR_OFFSET = 110;
 
 const Navbar = ({ isHeroTop = false }: NavbarProps) => {
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const router = useRouter();
+
+  const navigation: NavigationItem[] = [
+    { name: t("requestForTutor"), href: "/request-for-tutors" },
+    { name: t("registerAsTutor"), href: "/register-tutor" },
+    {
+      name: t("academics"),
+      href: "/",
+      dropdown: [
+        { name: t("gradesAndSubjects"), href: "/grades-and-subjects" },
+        { name: t("pastExamPapers"), href: "/past-exam-papers" },
+      ],
+    },
+    { name: t("tuitionRates"), href: "/tuition-rates" },
+    { name: t("faq"), href: "/faq" },
+    { name: t("blog"), href: "/blogs" },
+    { name: t("contactUs"), href: "/contact-us" },
+  ];
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -350,7 +354,10 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
               </div>
             </div>
 
-            <div className="inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:pr-0">
+            <div className="inset-y-0 right-0 flex items-center gap-3 pr-2 sm:static sm:inset-auto sm:pr-0">
+              <div className="hidden lg:flex items-center">
+                <LocaleSwitcher />
+              </div>
               <div className="hidden lg:block">
                 {user?.email ? (
                   <ProfileDropdown isLoading={!isUserLoaded} user={user} />
@@ -367,7 +374,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                     className="text-base font-medium text-white py-2 px-5 bg-primary-800 rounded-full hover:bg-primary-800 transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
-                    Login
+                    {t("login")}
                   </button>
                 )}
               </div>
@@ -375,6 +382,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           </div>
 
           <div className="flex items-center gap-3 lg:hidden">
+            <LocaleSwitcher />
             {user?.email ? (
               <ProfileDropdown isLoading={!isUserLoaded} user={user} />
             ) : null}
