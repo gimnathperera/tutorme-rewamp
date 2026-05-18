@@ -27,7 +27,7 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
 
   useEffect(() => {
     if (isAuthError) setIsAuthError(null);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailValue, passwordValue]);
 
   useEffect(() => {

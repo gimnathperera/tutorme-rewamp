@@ -75,11 +75,15 @@ export default function BlogsDashboard() {
           <div className="h-8 px-4 rounded-full bg-blue-600 flex items-center">
             <span className="text-sm font-semibold invisible">All</span>
           </div>
-          {["Study Tips", "G.C.E A/L", "G.C.E O/L", "Tutor", "Parents"].map((tag) => (
-            <Skeleton key={tag} className="h-8 rounded-full">
-              <span className="text-sm font-semibold px-4 invisible">{tag}</span>
-            </Skeleton>
-          ))}
+          {["Study Tips", "G.C.E A/L", "G.C.E O/L", "Tutor", "Parents"].map(
+            (tag) => (
+              <Skeleton key={tag} className="h-8 rounded-full">
+                <span className="text-sm font-semibold px-4 invisible">
+                  {tag}
+                </span>
+              </Skeleton>
+            ),
+          )}
         </div>
 
         {/* Blog card skeletons matching real card layout */}
@@ -91,8 +95,18 @@ export default function BlogsDashboard() {
             >
               {/* Cover image area with icon placeholder */}
               <div className="relative h-44 bg-gray-100 flex items-center justify-center">
-                <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5M21 12V6.75A2.25 2.25 0 0018.75 4.5H5.25A2.25 2.25 0 003 6.75V12" />
+                <svg
+                  className="w-10 h-10 text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={1.5}
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5M21 12V6.75A2.25 2.25 0 0018.75 4.5H5.25A2.25 2.25 0 003 6.75V12"
+                  />
                 </svg>
               </div>
 

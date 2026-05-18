@@ -130,7 +130,7 @@ const ContactUsPage = () => {
     <div className="mx-auto max-w-7xl mt-10 px-6 lg:px-8 pb-10">
       <div className="rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
         {/* ── Left panel — project navyblue → darkblue gradient ── */}
-        <div className="relative flex flex-col justify-between px-10 py-12 overflow-hidden bg-gradient-to-b from-navyblue to-darkblue">
+        <div className="relative flex flex-col justify-between px-10 py-12 overflow-hidden bg-navyblue">
           {/* Decorative blurred circles */}
           <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-blue/20 blur-3xl pointer-events-none" />
           <div className="absolute top-10 -right-10 w-48 h-48 rounded-full bg-blue/10 blur-2xl pointer-events-none" />
