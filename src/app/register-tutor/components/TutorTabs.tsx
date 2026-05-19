@@ -109,6 +109,7 @@ export function TutorTabs() {
       academicDetails: "",
 
       certificatesAndQualifications: [{ type: "", url: "" }],
+      optionalCertificates: [],
       agreeTerms: false,
       agreeAssignmentInfo: false,
     },
@@ -175,10 +176,17 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
-      // Strip confirmPassword — it is front-end only and must not reach the API
-      const { confirmPassword: _omit, ...payload } = data;
+      // Strip front-end-only fields before sending to API
+      const { confirmPassword: _omit, optionalCertificates, ...payload } = data;
+      const validOptional = (optionalCertificates ?? []).filter(
+        (c) => c.type && c.url,
+      );
       const normalizedPayload = {
         ...payload,
+        certificatesAndQualifications: [
+          ...payload.certificatesAndQualifications,
+          ...validOptional,
+        ],
         preferredLocations: payload.classType.some(isPhysicalClassType)
           ? payload.preferredLocations
           : payload.preferredLocations.length > 0
