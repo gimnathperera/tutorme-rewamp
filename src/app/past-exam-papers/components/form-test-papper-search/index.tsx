@@ -41,7 +41,7 @@ const FormTestPaperSearch: FC<Props> = ({
       <form onSubmit={testPaperSearchForm.handleSubmit(onSubmit)}>
         <div className="flex items-center justify-between mb-4">
           <p className="text-sm text-gray-500">
-            Search and narrow papers by grade, subject, or medium.
+            Search by year and narrow papers by grade, subject, or medium.
           </p>
           {hasActiveFilters && (
             <button
@@ -57,7 +57,7 @@ const FormTestPaperSearch: FC<Props> = ({
 
         <div className="flex flex-col gap-1 mb-6">
           <label className="text-sm font-medium text-gray-700">
-            Search Papers
+            Search by Year
           </label>
           <div className="relative">
             <Search
@@ -67,7 +67,8 @@ const FormTestPaperSearch: FC<Props> = ({
             <input
               {...testPaperSearchForm.register("search")}
               type="text"
-              placeholder="Search by paper title, subject, or year"
+              inputMode="numeric"
+              placeholder="Search papers by the year"
               autoComplete="off"
               className="block w-full rounded-md border border-linegrey px-3 py-2 pl-10 pr-9 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm sm:leading-6"
             />

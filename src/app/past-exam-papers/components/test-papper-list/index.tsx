@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import Skeleton from "react-loading-skeleton";
 import Pagination from "@/components/shared/pagination";
 import { Paper } from "@/types/response-types";
@@ -10,29 +10,20 @@ import Empty from "../../../../../public/images/shared/empty.png";
 type Props = {
   availablePapers: Paper[];
   isPapersLoading: boolean;
+  currentPage: number;
+  totalPages: number;
+  totalResults: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
 };
 
-const PAPERS_PER_PAGE = 12;
-
-const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(availablePapers.length / PAPERS_PER_PAGE);
-
-  const visiblePapers = useMemo(() => {
-    const startIndex = (currentPage - 1) * PAPERS_PER_PAGE;
-    return availablePapers.slice(startIndex, startIndex + PAPERS_PER_PAGE);
-  }, [availablePapers, currentPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [availablePapers]);
-
-  useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
-
+const TestPaperList: FC<Props> = ({
+  availablePapers,
+  isPapersLoading,
+  currentPage,
+  totalPages,
+  totalResults,
+  onPageChange,
+}) => {
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-3xl mt-8">
       {isPapersLoading ? (
@@ -56,8 +47,14 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
         </div>
       ) : availablePapers?.length > 0 ? (
         <>
+          <div className="mb-5 flex items-center justify-between gap-3">
+            <p className="text-sm font-medium text-gray-500">
+              Showing {availablePapers.length} of {totalResults} papers
+            </p>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {visiblePapers.map((paper) => (
+            {availablePapers.map((paper) => (
               <div
                 key={paper.id}
                 className="flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm hover:shadow-md transition-shadow duration-200"
@@ -124,7 +121,7 @@ const TestPaperList: FC<Props> = ({ availablePapers, isPapersLoading }) => {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={setCurrentPage}
+            onPageChange={onPageChange}
             className="mt-6"
           />
         </>
