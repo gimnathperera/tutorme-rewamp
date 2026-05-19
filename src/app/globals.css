@@ -769,8 +769,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 .bg-testimonial {
-  background-image:
-    url("/images/wework/elipse.svg");
+  background-image: url("/images/wework/elipse.svg");
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
     55%,

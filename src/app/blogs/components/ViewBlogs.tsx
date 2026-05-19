@@ -57,7 +57,9 @@ export default function BlogsDashboard() {
 
         if (result.data) {
           const newBlogs = result.data.results as Blogs[];
-          setBlogs((prev) => (pageNum === 1 ? newBlogs : [...prev, ...newBlogs]));
+          setBlogs((prev) =>
+            pageNum === 1 ? newBlogs : [...prev, ...newBlogs],
+          );
           const totalPages = (result.data as any).totalPages ?? 1;
           setHasMore(pageNum < totalPages);
         } else {

@@ -47,7 +47,11 @@ const TableOfContents = ({ html }: { html: string }) => {
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
+    document.documentElement.style.setProperty(
+      "scroll-behavior",
+      "auto",
+      "important",
+    );
     const start = window.scrollY;
     const target = el.getBoundingClientRect().top + window.scrollY - 80;
     const duration = 1800;
