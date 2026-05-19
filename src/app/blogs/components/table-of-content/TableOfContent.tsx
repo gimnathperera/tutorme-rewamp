@@ -47,19 +47,19 @@ const TableOfContents = ({ html }: { html: string }) => {
   const scrollToHeading = (id: string) => {
     const el = document.getElementById(id);
     if (!el) return;
-    document.documentElement.style.scrollBehavior = "auto";
+    document.documentElement.style.setProperty("scroll-behavior", "auto", "important");
     const start = window.scrollY;
     const target = el.getBoundingClientRect().top + window.scrollY - 80;
-    const duration = 600;
+    const duration = 1800;
     const startTime = performance.now();
     const step = () => {
       const progress = Math.min((performance.now() - startTime) / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
       window.scrollTo(0, start + (target - start) * ease);
       if (progress < 1) requestAnimationFrame(step);
-      else document.documentElement.style.scrollBehavior = "";
+      else document.documentElement.style.removeProperty("scroll-behavior");
     };
-    step();
+    requestAnimationFrame(step);
   };
 
   if (headings.length === 0) return null;
