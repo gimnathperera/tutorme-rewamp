@@ -17,4 +17,4 @@ export const PaperApi = baseApi.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useLazyFetchPapersQuery } = PaperApi;
+export const { useFetchPapersQuery, useLazyFetchPapersQuery } = PaperApi;

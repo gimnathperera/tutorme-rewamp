@@ -257,7 +257,7 @@ const AcademicExperience = () => {
             min={0}
             max={50}
             step={1}
-            className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
+            className={`${inputClass} !block ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", {
               valueAsNumber: true,
               onChange: (event: ChangeEvent<HTMLInputElement>) => {

@@ -113,9 +113,14 @@ export type FetchLevelRequest = {
 export type FetchPapersRequest = {
   page: number;
   limit: number;
+  title?: string;
+  year?: string;
+  yearSearch?: string;
   grade?: string;
   subject?: string;
   medium?: string;
+  sortBy?: string;
+  order?: string;
 };
 
 export type FetchGradesRequest = {
@@ -128,6 +133,8 @@ export type FetchTuitionRatesRequest = {
   tutorType?: string;
   subject?: string;
   grade?: string;
+  search?: string;
+  sortBy?: string;
   maximumRate?: string;
   minimumRate?: string;
   page?: number;
