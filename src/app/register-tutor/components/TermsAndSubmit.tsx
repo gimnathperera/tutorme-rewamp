@@ -155,7 +155,8 @@ const TermsAndSubmit = () => {
             ))}
           </div>
 
-          {typeof errors.certificatesAndQualifications?.message === "string" && (
+          {typeof errors.certificatesAndQualifications?.message ===
+            "string" && (
             <p className="text-xs text-red-500 mt-1">
               {errors.certificatesAndQualifications.message}
             </p>

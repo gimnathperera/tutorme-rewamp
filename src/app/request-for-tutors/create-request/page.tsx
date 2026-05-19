@@ -619,7 +619,10 @@ export default function AddRequestForTutor() {
                         {errors.tutors?.[index]?.preferredTutorType
                           ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredTutorType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredTutorType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
@@ -649,7 +652,10 @@ export default function AddRequestForTutor() {
                         {errors.tutors?.[index]?.preferredClassType
                           ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredClassType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredClassType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
