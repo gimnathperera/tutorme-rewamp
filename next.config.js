@@ -1,9 +1,9 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
+const sentryOrg = process.env.SENTRY_ORG || "tuitionlanka";
+const sentryProject = process.env.SENTRY_PROJECT || "tutorme-rewamp";
 const canUploadSentrySourcemaps = Boolean(
-  process.env.SENTRY_AUTH_TOKEN &&
-    process.env.SENTRY_ORG &&
-    process.env.SENTRY_PROJECT,
+  process.env.SENTRY_AUTH_TOKEN && sentryOrg && sentryProject,
 );
 
 const nextConfig = {
@@ -52,6 +52,8 @@ const nextConfig = {
 };
 
 module.exports = withSentryConfig(nextConfig, {
+  org: sentryOrg,
+  project: sentryProject,
   silent: !process.env.CI,
   sourcemaps: {
     disable: !canUploadSentrySourcemaps,
