@@ -41,7 +41,6 @@ import {
 } from "@/store/api/splits/tutor-request";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
-import { getEmailFormatError } from "@/utils/email-validation";
 import { isPhysicalClassType } from "@/configs/register-tutor";
 
 type TabKey =
@@ -155,16 +154,6 @@ export function TutorTabs() {
 
     if (tab === "personalInfo") {
       const email = getValues("email").toLowerCase();
-      const formatError = getEmailFormatError(email);
-      if (formatError) {
-        setError("email", {
-          type: "manual",
-          message: formatError,
-        });
-        setFocus("email");
-        return;
-      }
-
       const result = await checkTutorEmailAvailability(email, true);
 
       if (result.data && !result.data.available) {
