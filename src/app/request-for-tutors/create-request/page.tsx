@@ -420,7 +420,7 @@ export default function AddRequestForTutor() {
                   Tutor Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col gap-4">
+              <CardContent className="flex flex-col gap-3">
                 {/* Medium */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="medium">
@@ -493,14 +493,14 @@ export default function AddRequestForTutor() {
                 {tutors.map((tutor, index) => (
                   <div
                     key={index}
-                    className="p-4 border border-gray-200 rounded-md"
+                    className="p-4 border border-gray-200 rounded-md flex flex-col gap-3"
                   >
-                    <h3 className="text-base font-semibold mb-3">
+                    <h3 className="text-base font-semibold">
                       Tutor {index + 1}
                     </h3>
 
                     {/* Subject */}
-                    <div className={`${fieldWrapper} mb-4`}>
+                    <div className={fieldWrapper}>
                       <Label className="text-sm" htmlFor={`subject-${index}`}>
                         Subject <span className="text-red-500">*</span>
                       </Label>
@@ -526,7 +526,7 @@ export default function AddRequestForTutor() {
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {/* Duration */}
                       <div className={fieldWrapper}>
                         <Label
@@ -583,7 +583,7 @@ export default function AddRequestForTutor() {
                     </div>
 
                     {/* Preferred Tutor Type + Preferred Class Type */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div className={fieldWrapper}>
                         <Label
                           className="text-sm"
