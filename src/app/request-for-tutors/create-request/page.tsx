@@ -527,7 +527,7 @@ export default function AddRequestForTutor() {
                       </select>
                       {errors.tutors?.[index]?.subject?.message && (
                         <p className={errorMsg}>
-                          {errors.tutors[index].subject?.message}
+                          {errors.tutors?.[index]?.subject?.message}
                         </p>
                       )}
                     </div>
