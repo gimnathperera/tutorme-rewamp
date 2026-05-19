@@ -121,6 +121,8 @@ export type FetchPapersRequest = {
 export type FetchGradesRequest = {
   page: number;
   limit: number;
+  title?: string;
+  sortBy?: string;
 };
 export type FetchTuitionRatesRequest = {
   tuitionRateId?: string;
