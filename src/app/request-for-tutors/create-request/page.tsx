@@ -420,7 +420,7 @@ export default function AddRequestForTutor() {
                   Tutor Details
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col gap-3">
+              <CardContent className="flex flex-col gap-4">
                 {/* Medium */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="medium">
@@ -440,7 +440,9 @@ export default function AddRequestForTutor() {
                       </option>
                     ))}
                   </select>
-                  <p className={errorMsg}>{errors.medium?.message}</p>
+                  {errors.medium?.message && (
+                    <p className={errorMsg}>{errors.medium.message}</p>
+                  )}
                 </div>
 
                 {/* Grade */}
@@ -462,7 +464,9 @@ export default function AddRequestForTutor() {
                       </option>
                     ))}
                   </select>
-                  <p className={errorMsg}>{errors.grade?.message}</p>
+                  {errors.grade?.message && (
+                    <p className={errorMsg}>{errors.grade.message}</p>
+                  )}
                 </div>
 
                 {/* Number of Tutors */}
@@ -490,10 +494,10 @@ export default function AddRequestForTutor() {
                 </div>
 
                 {/* Per-tutor fields */}
-                {tutors.map((tutor, index) => (
+                {tutors.map((_tutor, index) => (
                   <div
                     key={index}
-                    className="p-4 border border-gray-200 rounded-md flex flex-col gap-3"
+                    className="p-4 border border-gray-200 rounded-md flex flex-col gap-4"
                   >
                     <h3 className="text-base font-semibold">
                       Tutor {index + 1}
@@ -521,12 +525,14 @@ export default function AddRequestForTutor() {
                           </option>
                         ))}
                       </select>
-                      <p className={errorMsg}>
-                        {errors.tutors?.[index]?.subject?.message}
-                      </p>
+                      {errors.tutors?.[index]?.subject?.message && (
+                        <p className={errorMsg}>
+                          {errors.tutors[index].subject?.message}
+                        </p>
+                      )}
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Duration */}
                       <div className={fieldWrapper}>
                         <Label
@@ -549,9 +555,11 @@ export default function AddRequestForTutor() {
                             </option>
                           ))}
                         </select>
-                        <p className={errorMsg}>
-                          {errors.tutors?.[index]?.duration?.message}
-                        </p>
+                        {errors.tutors?.[index]?.duration?.message && (
+                          <p className={errorMsg}>
+                            {errors.tutors[index].duration?.message}
+                          </p>
+                        )}
                       </div>
 
                       {/* Frequency */}
@@ -576,14 +584,16 @@ export default function AddRequestForTutor() {
                             </option>
                           ))}
                         </select>
-                        <p className={errorMsg}>
-                          {errors.tutors?.[index]?.frequency?.message}
-                        </p>
+                        {errors.tutors?.[index]?.frequency?.message && (
+                          <p className={errorMsg}>
+                            {errors.tutors[index].frequency?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
 
                     {/* Preferred Tutor Type + Preferred Class Type */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className={fieldWrapper}>
                         <Label
                           className="text-sm"
@@ -606,9 +616,12 @@ export default function AddRequestForTutor() {
                             </option>
                           ))}
                         </select>
-                        <p className={errorMsg}>
-                          {errors.tutors?.[index]?.preferredTutorType?.message}
-                        </p>
+                        {errors.tutors?.[index]?.preferredTutorType
+                          ?.message && (
+                          <p className={errorMsg}>
+                            {errors.tutors[index].preferredTutorType?.message}
+                          </p>
+                        )}
                       </div>
 
                       <div className={fieldWrapper}>
@@ -633,9 +646,12 @@ export default function AddRequestForTutor() {
                             </option>
                           ))}
                         </select>
-                        <p className={errorMsg}>
-                          {errors.tutors?.[index]?.preferredClassType?.message}
-                        </p>
+                        {errors.tutors?.[index]?.preferredClassType
+                          ?.message && (
+                          <p className={errorMsg}>
+                            {errors.tutors[index].preferredClassType?.message}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
