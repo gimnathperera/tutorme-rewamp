@@ -379,11 +379,30 @@ export function TutorTabs() {
             <DialogTitle className="text-center text-xl font-semibold">
               Registration Submitted!
             </DialogTitle>
-            <DialogDescription className="text-center text-base">
-              Your tutor profile has been submitted successfully. Our team will
-              review it and get back to you shortly.
+            <DialogDescription className="text-center text-sm text-gray-500">
+              Your tutor profile has been submitted successfully and is
+              currently under review.
             </DialogDescription>
           </DialogHeader>
+          <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mt-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+              />
+            </svg>
+            <p className="text-sm text-blue-700 leading-snug">
+              We&apos;ll notify you via email once your account is approved.
+            </p>
+          </div>
           <DialogFooter className="justify-center mt-2">
             <Button className="w-full sm:w-auto" onClick={handleDone}>
               Done
