@@ -48,8 +48,12 @@ const TestPapers = () => {
       isSubjectsLoading,
       papers: availablePapers,
       isPapersLoading,
+      currentPage,
+      totalPages,
+      totalResults,
       isEdexcelGradeSelected,
     },
+    actions: { setCurrentPage },
     forms: { testPaperSearchForm },
   } = useLogic();
 
@@ -79,7 +83,7 @@ const TestPapers = () => {
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading}
           isSubjectsLoading={isSubjectsLoading}
-          isMediumsLoading={isPapersLoading}
+          isMediumsLoading={false}
         />
       </div>
 
@@ -89,6 +93,10 @@ const TestPapers = () => {
         <TestPaperList
           availablePapers={availablePapers}
           isPapersLoading={isPapersLoading}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalResults={totalResults}
+          onPageChange={setCurrentPage}
         />
       )}
       <WhatsAppButton />
