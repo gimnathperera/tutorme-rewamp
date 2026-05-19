@@ -1,7 +1,7 @@
 "use client";
 
 import { FC } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Icon from "@/components/shared/icon";
 import { useFetchLevelsQuery } from "@/store/api/splits/levels";
@@ -9,15 +9,9 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const LevelAndExamsPage: FC = () => {
-  const router = useRouter();
-
   const { data, isLoading } = useFetchLevelsQuery({} as any);
 
   const subjects = data?.results || [];
-
-  const onHandleSubjectClick = (id: string) => {
-    router.push(`/level-and-exams/${id}`);
-  };
 
   return (
     <div className="px-4 py-6 sm:px-6 lg:px-8">
@@ -62,12 +56,12 @@ const LevelAndExamsPage: FC = () => {
                   </h2>
                 </CardContent>
                 <CardFooter className="p-6 pt-0">
-                  <button
-                    className="py-3 px-5 text-sm disabled:opacity-50 font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:opacity-90"
-                    onClick={() => onHandleSubjectClick(id)}
+                  <Link
+                    href={`/level-and-exams/${id}`}
+                    className="py-3 px-5 text-sm font-medium w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 hover:opacity-90"
                   >
                     View Level Details
-                  </button>
+                  </Link>
                 </CardFooter>
               </Card>
             ))}

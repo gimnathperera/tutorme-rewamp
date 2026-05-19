@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useLazyFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 import Image from "next/image";
@@ -268,9 +267,9 @@ export default function BlogsDashboard() {
               const blogDate = new Date(blog.createdAt);
 
               return (
-                <article
+                <Link
                   key={blog.id}
-                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
+                  href={`/blogs/${blog.slug || blog.id}`}
                   className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
                 >
                   {imageSrc ? (
@@ -346,7 +345,7 @@ export default function BlogsDashboard() {
                       {blog.title}
                     </h2>
                   </div>
-                </article>
+                </Link>
               );
             })}
 
