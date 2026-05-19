@@ -17,6 +17,9 @@ export type PaginatedResponse<T> = {
   count: number;
   next: string | null;
   previous: string | null;
+  page?: number;
+  limit?: number;
+  totalPages?: number;
   results: T[];
   tags: T[];
   totalResults: number;

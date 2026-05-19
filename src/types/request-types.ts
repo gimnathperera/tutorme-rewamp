@@ -128,6 +128,8 @@ export type FetchTuitionRatesRequest = {
   tutorType?: string;
   subject?: string;
   grade?: string;
+  search?: string;
+  sortBy?: string;
   maximumRate?: string;
   minimumRate?: string;
   page?: number;
