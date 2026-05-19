@@ -53,7 +53,7 @@ export const TuitionRatesApi = baseApi.injectEndpoints({
     // ✅ Fetch tuition rates by grade ID
     fetchTuitionRatesByGrade: build.query<
       PaginatedResponse<TuitionRateItem>,
-      { gradeId: string; limit?: number; page?: number }
+      { gradeId: string; limit?: number; page?: number; search?: string }
     >({
       query: ({ gradeId, ...rest }) => ({
         url: `${Endpoints.TuitionRatesByGrade}/${gradeId}`,
