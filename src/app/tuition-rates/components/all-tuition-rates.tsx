@@ -235,7 +235,8 @@ function GradeTuitionRatesItem({
       const nextRates = tuitionRatesData.results || [];
       const ratesById = new Map<string, TuitionRateItem>();
 
-      const ratesToMerge = responsePage === 1 ? nextRates : prevRates.concat(nextRates);
+      const ratesToMerge =
+        responsePage === 1 ? nextRates : prevRates.concat(nextRates);
 
       ratesToMerge.forEach((rate) => {
         ratesById.set(getTuitionRateKey(rate), rate);
@@ -343,13 +344,7 @@ function GradeTuitionRatesItem({
               ) : hasMoreRates ? (
                 <span className="sr-only">Load more tuition rates</span>
               ) : tuitionRates.length > 0 ? (
-                <p className="text-sm text-gray-400">
-                  Showing {tuitionRates.length}
-                  {pagination?.totalResults
-                    ? ` of ${pagination.totalResults}`
-                    : ""}{" "}
-                  tuition rates
-                </p>
+                <div></div>
               ) : null}
             </div>
           </>
