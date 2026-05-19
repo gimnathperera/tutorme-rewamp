@@ -1,8 +1,6 @@
 import { removeWhitespace } from "@/utils/form-normalizers";
 import { z } from "zod";
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export const contactUsPageSchema = z.object({
   name: z
     .string()
@@ -17,22 +15,8 @@ export const contactUsPageSchema = z.object({
   email: z
     .string()
     .trim()
-    .superRefine((value, context) => {
-      if (!value) {
-        context.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Email is required",
-        });
-        return;
-      }
-
-      if (!EMAIL_REGEX.test(value)) {
-        context.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Please enter a valid email address",
-        });
-      }
-    }),
+    .min(1, "Email is required")
+    .email("Please enter a valid email address"),
 
   contactNumber: z.preprocess(
     removeWhitespace,
