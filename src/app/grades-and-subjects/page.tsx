@@ -1,10 +1,11 @@
 /* eslint-disable unused-imports/no-unused-vars */
 "use client";
 
-import { FC, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Icon from "@/components/shared/icon";
 import {
+  useFetchSubjectsForGradesMutation,
   useFetchGradesQuery,
   useFetchGradeByIdQuery,
 } from "@/store/api/splits/grades";
@@ -20,8 +21,10 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import { AL_STREAM_ORDER } from "@/configs/options";
+import { Grade, Subject } from "@/types/response-types";
 
-const GRADE_LIMIT = 1000;
+const GRADES_PAGE_SIZE = 12;
+const SUBJECTS_PAGE_SIZE = 10;
 const UNKNOWN_AL_STREAM_ORDER = AL_STREAM_ORDER.length;
 
 const STREAM_SUBJECT_ORDER: { pattern: RegExp; order: string[] }[] = [
@@ -51,10 +54,7 @@ const STREAM_SUBJECT_ORDER: { pattern: RegExp; order: string[] }[] = [
   },
 ];
 
-const sortSubjects = (
-  gradeTitle: string,
-  subjects: { id: string; title: string; description: string }[],
-) => {
+const sortSubjects = (gradeTitle: string, subjects: Subject[]) => {
   const stream = STREAM_SUBJECT_ORDER.find(({ pattern }) =>
     pattern.test(gradeTitle),
   );
@@ -102,8 +102,105 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
   const { data, isLoading } = useFetchGradeByIdQuery(gradeId!, {
     skip: !gradeId,
   });
+  const [currentSubjectsPage, setCurrentSubjectsPage] = useState(1);
+  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [subjectsTotalPages, setSubjectsTotalPages] = useState(0);
+  const [subjectsTotalResults, setSubjectsTotalResults] = useState(0);
+  const [fetchSubjectsForGrades, { isLoading: isSubjectsLoading }] =
+    useFetchSubjectsForGradesMutation();
+  const subjectsObserverRef = useRef<IntersectionObserver | null>(null);
+  const isRequestingNextSubjectsPageRef = useRef(false);
+  const mergedSubjectPagesRef = useRef(new Set<number>());
+  const hasMoreSubjects =
+    subjectsTotalPages > 0 && currentSubjectsPage < subjectsTotalPages;
 
-  const subjects = sortSubjects(data?.title ?? "", data?.subjects ?? []);
+  useEffect(() => {
+    setCurrentSubjectsPage(1);
+    setSubjects([]);
+    setSubjectsTotalPages(0);
+    setSubjectsTotalResults(0);
+    isRequestingNextSubjectsPageRef.current = false;
+    mergedSubjectPagesRef.current.clear();
+  }, [gradeId]);
+
+  useEffect(() => {
+    if (!gradeId) return;
+
+    const loadSubjects = async () => {
+      const result = await fetchSubjectsForGrades({
+        gradeIds: [gradeId],
+        page: currentSubjectsPage,
+        limit: SUBJECTS_PAGE_SIZE,
+        sortBy: "title:asc",
+      });
+
+      if (!("data" in result) || !result.data) {
+        isRequestingNextSubjectsPageRef.current = false;
+        return;
+      }
+
+      const responsePage = result.data.page || currentSubjectsPage;
+
+      if (mergedSubjectPagesRef.current.has(responsePage)) {
+        isRequestingNextSubjectsPageRef.current = false;
+        return;
+      }
+
+      mergedSubjectPagesRef.current.add(responsePage);
+      isRequestingNextSubjectsPageRef.current = false;
+
+      const nextSubjects = result.data.results || result.data.subjects || [];
+
+      setSubjects((previousSubjects) => {
+        const subjectsById = new Map<string, Subject>();
+        const subjectsToMerge =
+          responsePage === 1
+            ? nextSubjects
+            : previousSubjects.concat(nextSubjects);
+
+        subjectsToMerge.forEach((subject) => {
+          subjectsById.set(subject.id, subject);
+        });
+
+        return sortSubjects(
+          data?.title ?? "",
+          Array.from(subjectsById.values()),
+        );
+      });
+
+      setSubjectsTotalPages(result.data.totalPages || responsePage);
+      setSubjectsTotalResults(
+        result.data.totalResults || result.data.count || nextSubjects.length,
+      );
+    };
+
+    loadSubjects();
+  }, [currentSubjectsPage, data?.title, fetchSubjectsForGrades, gradeId]);
+
+  const loadMoreSubjectsRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (subjectsObserverRef.current) {
+        subjectsObserverRef.current.disconnect();
+      }
+
+      subjectsObserverRef.current = new IntersectionObserver((entries) => {
+        if (
+          entries[0]?.isIntersecting &&
+          hasMoreSubjects &&
+          !isSubjectsLoading &&
+          !isRequestingNextSubjectsPageRef.current
+        ) {
+          isRequestingNextSubjectsPageRef.current = true;
+          setCurrentSubjectsPage((page) => page + 1);
+        }
+      });
+
+      if (node) {
+        subjectsObserverRef.current.observe(node);
+      }
+    },
+    [hasMoreSubjects, isSubjectsLoading],
+  );
 
   return (
     <Dialog.Root open={!!gradeId} onOpenChange={(open) => !open && onClose()}>
@@ -112,9 +209,9 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
 
         {/* Panel */}
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white shadow-2xl flex flex-col max-h-[85vh] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 grid max-h-[85vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 grid-rows-[auto_minmax(0,1fr)] overflow-hidden rounded-2xl bg-white shadow-2xl focus:outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95">
           {/* Header */}
-          <div className="flex items-center gap-3 px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t-2xl shrink-0">
+          <div className="relative z-10 flex min-h-[76px] items-center gap-3 bg-gradient-to-r from-blue-500 to-indigo-600 px-6 py-4">
             <div className="bg-white/20 rounded-full p-2">
               <BookOpen className="w-5 h-5 text-white" />
             </div>
@@ -137,7 +234,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
           </div>
 
           {/* Scrollable body */}
-          <div className="overflow-y-auto flex-1 px-6 py-5 space-y-5">
+          <div className="min-h-0 overflow-y-auto px-6 pb-5 pt-4 space-y-5 [scrollbar-gutter:stable]">
             {/* Description */}
             {isLoading ? (
               <Skeleton count={4} />
@@ -152,7 +249,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
               <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-3">
                 Subjects
               </h3>
-              {isLoading ? (
+              {isLoading || (isSubjectsLoading && subjects.length === 0) ? (
                 <div className="space-y-2">
                   {[...Array(4)].map((_, i) => (
                     <Skeleton key={i} height={48} borderRadius={8} />
@@ -163,24 +260,42 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                   No subjects available for this grade.
                 </p>
               ) : (
-                <Accordion type="single" collapsible className="space-y-2">
-                  {subjects.map((subject) => (
-                    <AccordionItem
-                      key={subject.id}
-                      value={subject.id}
-                      className="border border-gray-100 rounded-xl overflow-hidden bg-gray-50/60"
-                    >
-                      <AccordionTrigger className="px-4 py-3 text-sm font-medium text-gray-800 hover:no-underline hover:bg-gray-100 transition-colors">
-                        {subject.title}
-                      </AccordionTrigger>
-                      <AccordionContent className="px-4 pb-4 pt-1">
-                        <p className="text-sm text-gray-500 leading-relaxed mb-3">
-                          {subject.description || "No description available."}
-                        </p>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
+                <>
+                  <Accordion type="single" collapsible className="space-y-2">
+                    {subjects.map((subject) => (
+                      <AccordionItem
+                        key={subject.id}
+                        value={subject.id}
+                        className="border border-gray-100 rounded-xl overflow-hidden bg-gray-50/60"
+                      >
+                        <AccordionTrigger className="px-4 py-3 text-sm font-medium text-gray-800 hover:no-underline hover:bg-gray-100 transition-colors">
+                          {subject.title}
+                        </AccordionTrigger>
+                        <AccordionContent className="px-4 pb-4 pt-1">
+                          <p className="text-sm text-gray-500 leading-relaxed mb-3">
+                            {subject.description || "No description available."}
+                          </p>
+                        </AccordionContent>
+                      </AccordionItem>
+                    ))}
+                  </Accordion>
+
+                  <div
+                    ref={loadMoreSubjectsRef}
+                    className="flex min-h-14 items-center justify-center py-4"
+                  >
+                    {isSubjectsLoading && subjects.length > 0 ? (
+                      <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
+                        <div className="w-5 h-5 rounded-full border-2 border-primary-700 border-t-transparent animate-spin" />
+                        Loading more subjects...
+                      </div>
+                    ) : hasMoreSubjects ? (
+                      <span className="sr-only">Load more subjects</span>
+                    ) : subjects.length > 0 ? (
+                      <div></div>
+                    ) : null}
+                  </div>
+                </>
               )}
             </div>
           </div>
@@ -234,37 +349,99 @@ const GradeCard: FC<GradeCardProps> = ({
 // ── Page ──────────────────────────────────────────────────────────────────────
 const GradesPage: FC = () => {
   const [selectedGradeId, setSelectedGradeId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loadedGrades, setLoadedGrades] = useState<Grade[]>([]);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const isRequestingNextPageRef = useRef(false);
+  const mergedPagesRef = useRef(new Set<number>());
 
-  const { data, isLoading } = useFetchGradesQuery({
-    page: 1,
-    limit: GRADE_LIMIT,
+  const { data, isLoading, isFetching } = useFetchGradesQuery({
+    page: currentPage,
+    limit: GRADES_PAGE_SIZE,
+    sortBy: "title:asc",
   });
 
-  const grades = (data?.results || []).slice().sort((a, b) => {
-    if (isAdvancedLevelTitle(a.title) && isAdvancedLevelTitle(b.title)) {
-      const streamOrderDiff =
-        getAlStreamOrder(a.title) - getAlStreamOrder(b.title);
-      if (streamOrderDiff !== 0) return streamOrderDiff;
+  useEffect(() => {
+    if (!data) return;
+
+    const responsePage = data.page || currentPage;
+
+    if (mergedPagesRef.current.has(responsePage)) {
+      isRequestingNextPageRef.current = false;
+      return;
+    }
+
+    mergedPagesRef.current.add(responsePage);
+    isRequestingNextPageRef.current = false;
+
+    setLoadedGrades((previousGrades) => {
+      const gradesById = new Map<string, (typeof previousGrades)[number]>();
+      const gradesToMerge =
+        responsePage === 1
+          ? data.results || []
+          : previousGrades.concat(data.results || []);
+
+      gradesToMerge.forEach((grade) => {
+        gradesById.set(grade.id, grade);
+      });
+
+      return Array.from(gradesById.values());
+    });
+  }, [currentPage, data]);
+
+  const grades = useMemo(() => {
+    return loadedGrades.slice().sort((a, b) => {
+      if (isAdvancedLevelTitle(a.title) && isAdvancedLevelTitle(b.title)) {
+        const streamOrderDiff =
+          getAlStreamOrder(a.title) - getAlStreamOrder(b.title);
+        if (streamOrderDiff !== 0) return streamOrderDiff;
+        return a.title.localeCompare(b.title);
+      }
+
+      const priorityA = getGradePriority(a.title);
+      const priorityB = getGradePriority(b.title);
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+
+      if (priorityA === 1) {
+        const numA = Number(a.title.match(/\d+/)?.[0] ?? 0);
+        const numB = Number(b.title.match(/\d+/)?.[0] ?? 0);
+        return numA - numB;
+      }
+
       return a.title.localeCompare(b.title);
-    }
+    });
+  }, [loadedGrades]);
+  const hasMoreGrades = data?.totalPages
+    ? currentPage < data.totalPages
+    : false;
 
-    const priorityA = getGradePriority(a.title);
-    const priorityB = getGradePriority(b.title);
+  const loadMoreRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
 
-    // Step 1: category sorting
-    if (priorityA !== priorityB) {
-      return priorityA - priorityB;
-    }
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (
+          entries[0]?.isIntersecting &&
+          hasMoreGrades &&
+          !isFetching &&
+          !isRequestingNextPageRef.current
+        ) {
+          isRequestingNextPageRef.current = true;
+          setCurrentPage((page) => page + 1);
+        }
+      });
 
-    // Step 2: numeric sorting inside "Grade"
-    if (priorityA === 1) {
-      const numA = Number(a.title.match(/\d+/)?.[0] ?? 0);
-      const numB = Number(b.title.match(/\d+/)?.[0] ?? 0);
-      return numA - numB;
-    }
-
-    return a.title.localeCompare(b.title);
-  });
+      if (node) {
+        observerRef.current.observe(node);
+      }
+    },
+    [hasMoreGrades, isFetching],
+  );
 
   return (
     <div className="px-4 pb-12 pt-8 sm:px-6 lg:px-8">
@@ -279,7 +456,7 @@ const GradesPage: FC = () => {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-4 sm:py-10 lg:px-10 rounded-3xl bg-lightgrey grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        {isLoading
+        {isLoading && loadedGrades.length === 0
           ? Array.from({ length: 8 }).map((_, index) => (
               <Card key={index} className="flex flex-col m-2 bg-white">
                 <CardContent className="flex-grow p-6">
@@ -306,6 +483,22 @@ const GradesPage: FC = () => {
                 onShowDetails={() => setSelectedGradeId(id)}
               />
             ))}
+      </div>
+
+      <div
+        ref={loadMoreRef}
+        className="mx-auto flex min-h-20 max-w-7xl items-center justify-center py-6"
+      >
+        {isFetching && loadedGrades.length > 0 ? (
+          <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
+            <div className="w-5 h-5 rounded-full border-2 border-primary-700 border-t-transparent animate-spin" />
+            Loading more grades...
+          </div>
+        ) : hasMoreGrades ? (
+          <span className="sr-only">Load more grades</span>
+        ) : loadedGrades.length > 0 ? (
+          <div></div>
+        ) : null}
       </div>
 
       {/* Detail popup */}

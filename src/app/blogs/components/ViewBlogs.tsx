@@ -4,7 +4,6 @@ import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { useLazyFetchBlogsQuery } from "@/store/api/splits/blogs";
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 import Image from "next/image";
@@ -29,6 +28,7 @@ export default function BlogsDashboard() {
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(6);
   const [visibleCount, setVisibleCount] = useState(6);
+  const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const { user } = useAuthContext();
@@ -42,6 +42,12 @@ export default function BlogsDashboard() {
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const loadBlogs = useCallback(
@@ -268,9 +274,9 @@ export default function BlogsDashboard() {
               const blogDate = new Date(blog.createdAt);
 
               return (
-                <article
+                <Link
                   key={blog.id}
-                  onClick={() => router.push(`/blogs/${blog.slug || blog.id}`)}
+                  href={`/blogs/${blog.slug || blog.id}`}
                   className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
                 >
                   {imageSrc ? (
@@ -346,7 +352,7 @@ export default function BlogsDashboard() {
                       {blog.title}
                     </h2>
                   </div>
-                </article>
+                </Link>
               );
             })}
 
@@ -374,7 +380,7 @@ export default function BlogsDashboard() {
         <Link
           href="/blogs/components/create-blog"
           aria-label="Add new blog"
-          className="lg:hidden fixed bottom-6 right-6 z-50 w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-lg shadow-blue-500/40 transition-all duration-200"
+          className={`lg:hidden fixed ${isScrolled ? "bottom-20" : "bottom-6"} right-4 z-50 flex items-center gap-2 px-4 h-12 rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-sm font-semibold shadow-lg shadow-blue-500/40 transition-all duration-300`}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -384,11 +390,12 @@ export default function BlogsDashboard() {
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-6 h-6"
+            className="w-5 h-5 flex-shrink-0"
           >
             <line x1="12" y1="5" x2="12" y2="19" />
             <line x1="5" y1="12" x2="19" y2="12" />
           </svg>
+          Add Blog
         </Link>
       )}
     </>

@@ -1,5 +1,5 @@
 import { FetchGradesRequest } from "@/types/request-types";
-import { Grade, PaginatedResponse } from "@/types/response-types";
+import { Grade, PaginatedResponse, Subject } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
@@ -20,8 +20,11 @@ export const GradesApi = baseApi.injectEndpoints({
       }),
     }),
     fetchSubjectsForGrades: build.mutation<
-      { count: number; subjects: any[] },
-      { gradeIds: string[] }
+      Partial<PaginatedResponse<Subject>> & {
+        count?: number;
+        subjects: Subject[];
+      },
+      { gradeIds: string[]; page?: number; limit?: number; sortBy?: string }
     >({
       query: (body) => ({
         url: Endpoints.SubjectsByGrades,
