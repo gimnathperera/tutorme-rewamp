@@ -6,6 +6,8 @@ export const sentryDsn = env.app.sentryDsn;
 
 export const appEnvironment = env.app.appEnv;
 
+export const sentryRelease = env.app.sentryRelease || undefined;
+
 export const isSentryEnabled =
   Boolean(sentryDsn) && SENTRY_ENABLED_ENVS.includes(appEnvironment);
 
@@ -13,6 +15,8 @@ export const sentryBaseConfig = {
   dsn: sentryDsn,
   environment: appEnvironment,
   enabled: isSentryEnabled,
+  release: sentryRelease,
+  autoSessionTracking: true,
   tracesSampleRate: appEnvironment === "production" ? 0.1 : 1.0,
 };
 

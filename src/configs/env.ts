@@ -22,6 +22,7 @@ const envSchema = z
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().min(10).max(15),
     NEXT_PUBLIC_ADMIN_PORTAL_URL: z.string().url(),
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+    NEXT_PUBLIC_SENTRY_RELEASE: z.string().optional(),
   })
   .strict();
 
@@ -65,6 +66,12 @@ const ENV_VARIABLES = {
 
   NEXT_PUBLIC_SENTRY_DSN:
     process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.VITE_SENTRY_DSN || "",
+
+  NEXT_PUBLIC_SENTRY_RELEASE:
+    process.env.NEXT_PUBLIC_SENTRY_RELEASE ||
+    process.env.SENTRY_RELEASE ||
+    process.env.VERCEL_GIT_COMMIT_SHA ||
+    "",
 };
 
 /**
@@ -87,6 +94,7 @@ export const env = {
     appEnv: ENV.NEXT_PUBLIC_APP_ENV,
     whatsAppNumber: ENV.NEXT_PUBLIC_WHATSAPP_NUMBER,
     sentryDsn: ENV.NEXT_PUBLIC_SENTRY_DSN,
+    sentryRelease: ENV.NEXT_PUBLIC_SENTRY_RELEASE,
   },
 
   urls: {

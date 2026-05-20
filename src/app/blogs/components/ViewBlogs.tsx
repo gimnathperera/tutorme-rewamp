@@ -30,7 +30,6 @@ export default function BlogsDashboard() {
   const [visibleCount, setVisibleCount] = useState(6);
   const [isScrolled, setIsScrolled] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
   const { user } = useAuthContext();
 
   const [fetchBlogs] = useLazyFetchBlogsQuery();
