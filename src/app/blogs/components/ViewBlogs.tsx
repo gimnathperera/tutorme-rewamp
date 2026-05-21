@@ -8,7 +8,6 @@ import { useAuthContext } from "@/contexts";
 import Link from "next/link";
 import Image from "next/image";
 import { Blogs } from "@/types/response-types";
-import { Loader2 } from "lucide-react";
 
 const DEFAULT_AVATAR = "/images/logo/LightThemeLogoIcon.svg";
 const SERVER_LIMIT = 12;
@@ -23,8 +22,10 @@ export default function BlogsDashboard() {
   const [serverPage, setServerPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isFiltering, setIsFiltering] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isError, setIsError] = useState(false);
+  const isFirstRender = useRef(true);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(6);
   const [visibleCount, setVisibleCount] = useState(6);
@@ -50,10 +51,14 @@ export default function BlogsDashboard() {
   }, []);
 
   const loadBlogs = useCallback(
-    async (pageNum: number) => {
+    async (pageNum: number, filtering = false) => {
       try {
         if (pageNum === 1) {
-          setIsInitialLoading(true);
+          if (filtering) {
+            setIsFiltering(true);
+          } else {
+            setIsInitialLoading(true);
+          }
           setIsError(false);
         } else {
           setIsFetchingMore(true);
@@ -71,6 +76,7 @@ export default function BlogsDashboard() {
         }
       } finally {
         setIsInitialLoading(false);
+        setIsFiltering(false);
         setIsFetchingMore(false);
       }
     },
@@ -81,7 +87,9 @@ export default function BlogsDashboard() {
     setServerPage(1);
     setBlogs([]);
     setHasMore(true);
-    loadBlogs(1);
+    const filtering = !isFirstRender.current;
+    isFirstRender.current = false;
+    loadBlogs(1, filtering);
   }, [activeTag, loadBlogs]);
 
   useEffect(() => {
@@ -147,18 +155,12 @@ export default function BlogsDashboard() {
 
         {/* Tag pills skeleton */}
         <div className="flex flex-wrap gap-4">
-          <div className="h-8 px-4 rounded-full bg-blue-600 flex items-center">
-            <span className="text-sm font-semibold invisible">All</span>
-          </div>
-          {["Study Tips", "G.C.E A/L", "G.C.E O/L", "Tutor", "Parents"].map(
-            (tag) => (
-              <Skeleton key={tag} className="h-8 rounded-full">
-                <span className="text-sm font-semibold px-4 invisible">
-                  {tag}
-                </span>
-              </Skeleton>
-            ),
-          )}
+          <div className="h-8 w-14 rounded-full bg-blue-600" />
+          <Skeleton className="h-8 w-24 rounded-full bg-bggrey" />
+          <Skeleton className="h-8 w-24 rounded-full bg-bggrey" />
+          <Skeleton className="h-8 w-24 rounded-full bg-bggrey" />
+          <Skeleton className="h-8 w-16 rounded-full bg-bggrey" />
+          <Skeleton className="h-8 w-20 rounded-full bg-bggrey" />
         </div>
 
         {/* Blog card skeletons */}
@@ -168,32 +170,20 @@ export default function BlogsDashboard() {
               key={i}
               className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col"
             >
-              <div className="relative h-44 bg-gray-100 flex items-center justify-center">
-                <svg
-                  className="w-10 h-10 text-gray-300"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5M21 12V6.75A2.25 2.25 0 0018.75 4.5H5.25A2.25 2.25 0 003 6.75V12"
-                  />
-                </svg>
+              <div className="relative h-44 bg-gray-200 overflow-hidden">
+                <Skeleton className="absolute inset-0 rounded-none bg-gray-200" />
+                <Skeleton className="absolute bottom-2.5 right-2.5 h-6 w-20 rounded-md bg-gray-300" />
               </div>
-              <div className="p-4 flex flex-col gap-3">
+              <div className="p-4 flex flex-col gap-2">
                 <div className="flex items-center gap-2.5">
-                  <Skeleton className="h-7 w-7 rounded-full shrink-0" />
-                  <Skeleton className="h-3 w-24 rounded" />
+                  <Skeleton className="h-7 w-7 rounded-full shrink-0 bg-gray-200" />
+                  <div className="flex flex-col gap-1">
+                    <Skeleton className="h-3 w-24 rounded bg-gray-200" />
+                  </div>
                 </div>
                 <hr className="border-gray-100" />
-                <Skeleton className="h-4 w-full rounded" />
-                <Skeleton className="h-4 w-3/4 rounded" />
-                <hr className="border-gray-100" />
-                <Skeleton className="h-3 w-full rounded" />
-                <Skeleton className="h-3 w-5/6 rounded" />
+                <Skeleton className="h-4 w-full rounded bg-gray-200" />
+                <Skeleton className="h-4 w-3/4 rounded bg-gray-200" />
               </div>
             </div>
           ))}
@@ -267,6 +257,32 @@ export default function BlogsDashboard() {
           </div>
 
           {/* Blog grid */}
+          {isFiltering ? (
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: pageSize }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                >
+                  <div className="relative h-44 bg-bggrey overflow-hidden">
+                    <Skeleton className="absolute inset-0 rounded-none bg-bggrey" />
+                    <Skeleton className="absolute bottom-2.5 right-2.5 h-6 w-20 rounded-md bg-linegrey" />
+                  </div>
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <Skeleton className="h-7 w-7 rounded-full shrink-0 bg-bggrey" />
+                      <div className="flex flex-col gap-1">
+                        <Skeleton className="h-3 w-24 rounded bg-bggrey" />
+                      </div>
+                    </div>
+                    <hr className="border-bggrey" />
+                    <Skeleton className="h-4 w-full rounded bg-bggrey" />
+                    <Skeleton className="h-4 w-3/4 rounded bg-bggrey" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
           <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
             {visibleBlogs.map((blog, index) => {
               const imageSrc = blog.image;
@@ -361,14 +377,36 @@ export default function BlogsDashboard() {
               </p>
             )}
           </div>
+          )}
 
           {/* Infinite scroll sentinel */}
           {hasMoreToShow && <div ref={sentinelRef} className="h-4" />}
 
-          {/* Spinner while fetching next server page */}
+          {/* Skeleton cards while fetching next server page */}
           {isFetchingMore && (
-            <div className="flex justify-center py-4">
-              <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden flex flex-col"
+                >
+                  <div className="relative h-44 bg-bggrey overflow-hidden">
+                    <Skeleton className="absolute inset-0 rounded-none bg-bggrey" />
+                    <Skeleton className="absolute bottom-2.5 right-2.5 h-6 w-20 rounded-md bg-linegrey" />
+                  </div>
+                  <div className="p-4 flex flex-col gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <Skeleton className="h-7 w-7 rounded-full shrink-0 bg-bggrey" />
+                      <div className="flex flex-col gap-1">
+                        <Skeleton className="h-3 w-24 rounded bg-bggrey" />
+                      </div>
+                    </div>
+                    <hr className="border-bggrey" />
+                    <Skeleton className="h-4 w-full rounded bg-bggrey" />
+                    <Skeleton className="h-4 w-3/4 rounded bg-bggrey" />
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>

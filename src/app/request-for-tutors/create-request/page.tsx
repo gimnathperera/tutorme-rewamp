@@ -54,9 +54,11 @@ import {
 const fieldWrapper = "flex flex-col gap-2";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150 text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
+const selectColor = (value: string) =>
+  value ? "text-gray-900" : "text-gray-500";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 
@@ -100,6 +102,7 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
+  const selectedMedium = watch("medium");
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -429,13 +432,13 @@ export default function AddRequestForTutor() {
                   <select
                     id="medium"
                     {...register("medium")}
-                    className={`${selectClass} ${selectBorder(!!errors.medium)}`}
+                    className={`${selectClass} ${selectBorder(!!errors.medium)} ${selectColor(selectedMedium)}`}
                   >
                     <option value="" disabled hidden>
                       Select medium of instruction
                     </option>
                     {MEDIUM_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>
+                      <option key={option.value} value={option.value} className="text-gray-900">
                         {option.text}
                       </option>
                     ))}
@@ -453,13 +456,13 @@ export default function AddRequestForTutor() {
                   <select
                     id="grade"
                     {...register("grade")}
-                    className={`${selectClass} ${selectBorder(!!errors.grade)}`}
+                    className={`${selectClass} ${selectBorder(!!errors.grade)} ${selectColor(selectedGradeId)}`}
                   >
                     <option value="" disabled hidden>
                       Select student&apos;s grade
                     </option>
                     {gradeOptions.map((g) => (
-                      <option key={g.value} value={g.value}>
+                      <option key={g.value} value={g.value} className="text-gray-900">
                         {g.text}
                       </option>
                     ))}
@@ -512,7 +515,7 @@ export default function AddRequestForTutor() {
                         id={`subject-${index}`}
                         {...register(`tutors.${index}.subject`)}
                         disabled={!selectedGradeId}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} disabled:bg-gray-100 disabled:cursor-not-allowed`}
+                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} ${selectColor(tutors[index]?.subject)} disabled:bg-gray-100 disabled:cursor-not-allowed`}
                       >
                         <option value="" disabled hidden>
                           {selectedGradeId
@@ -520,7 +523,7 @@ export default function AddRequestForTutor() {
                             : "Select a grade first"}
                         </option>
                         {subjectOptions.map((s) => (
-                          <option key={s.value} value={s.value}>
+                          <option key={s.value} value={s.value} className="text-gray-900">
                             {s.text}
                           </option>
                         ))}
@@ -544,13 +547,13 @@ export default function AddRequestForTutor() {
                         <select
                           id={`duration-${index}`}
                           {...register(`tutors.${index}.duration`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)}`}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)} ${selectColor(tutors[index]?.duration)}`}
                         >
                           <option value="" disabled hidden>
                             Select session duration
                           </option>
                           {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
+                            <option key={option.value} value={option.value} className="text-gray-900">
                               {option.text}
                             </option>
                           ))}
@@ -573,13 +576,13 @@ export default function AddRequestForTutor() {
                         <select
                           id={`frequency-${index}`}
                           {...register(`tutors.${index}.frequency`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)}`}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)} ${selectColor(tutors[index]?.frequency)}`}
                         >
                           <option value="" disabled hidden>
                             Select sessions per week
                           </option>
                           {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
+                            <option key={option.value} value={option.value} className="text-gray-900">
                               {option.text}
                             </option>
                           ))}
@@ -605,13 +608,13 @@ export default function AddRequestForTutor() {
                         <select
                           id={`tutorType-${index}`}
                           {...register(`tutors.${index}.preferredTutorType`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)}`}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)} ${selectColor(tutors[index]?.preferredTutorType)}`}
                         >
                           <option value="" disabled hidden>
                             Select preferred tutor type
                           </option>
                           {TUTOR_TYPE_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value}>
+                            <option key={o.value} value={o.value} className="text-gray-900">
                               {o.text}
                             </option>
                           ))}
@@ -638,13 +641,13 @@ export default function AddRequestForTutor() {
                         <select
                           id={`classType-${index}`}
                           {...register(`tutors.${index}.preferredClassType`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredClassType)}`}
+                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredClassType)} ${selectColor(tutors[index]?.preferredClassType)}`}
                         >
                           <option value="" disabled hidden>
                             Select preferred class type
                           </option>
                           {CLASS_TYPE_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value}>
+                            <option key={o.value} value={o.value} className="text-gray-900">
                               {o.text}
                             </option>
                           ))}
