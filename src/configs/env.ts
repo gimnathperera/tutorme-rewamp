@@ -49,12 +49,6 @@ const ENV_VARIABLES = {
       | "staging"
       | "production"
       | undefined) ||
-    (process.env.VITE_APP_ENV as
-      | "development"
-      | "test"
-      | "staging"
-      | "production"
-      | undefined) ||
     "development",
 
   NEXT_PUBLIC_WHATSAPP_NUMBER:
@@ -64,8 +58,7 @@ const ENV_VARIABLES = {
     process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL ||
     "https://admin.tuitionlanka.com/signin",
 
-  NEXT_PUBLIC_SENTRY_DSN:
-    process.env.NEXT_PUBLIC_SENTRY_DSN || process.env.VITE_SENTRY_DSN || "",
+  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || "",
 
   NEXT_PUBLIC_SENTRY_RELEASE:
     process.env.NEXT_PUBLIC_SENTRY_RELEASE ||

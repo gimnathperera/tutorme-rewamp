@@ -19,5 +19,3 @@ export const sentryBaseConfig = {
   autoSessionTracking: true,
   tracesSampleRate: appEnvironment === "production" ? 0.1 : 1.0,
 };
-
-export const shouldShowSentryTestTrigger = appEnvironment !== "production";

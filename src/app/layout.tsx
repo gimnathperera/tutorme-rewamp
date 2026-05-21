@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import Footer from "@/components/shared/footer";
 import BackToTop from "@/components/shared/back-to-top";
 import { SentryErrorBoundary } from "@/components/shared/sentry-error-boundary";
-import { SentryTestErrorButton } from "@/components/shared/sentry-test-error-button";
 import RouteScrollManager from "@/components/shared/route-scroll-manager";
 import "./globals.css";
 import { WithProviders } from "@/hocs/with-providers";
@@ -45,7 +44,6 @@ export default function RootLayout({
             </>
           </WithProviders>
           <BackToTop />
-          <SentryTestErrorButton />
         </SentryErrorBoundary>
       </body>
     </html>
