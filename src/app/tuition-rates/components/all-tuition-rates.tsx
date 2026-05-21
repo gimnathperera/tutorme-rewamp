@@ -30,6 +30,34 @@ type TuitionRatePagination = {
 
 const TUITION_RATES_PAGE_SIZE = 10;
 
+const GRADE_SORT_KEYS = [
+  "primary",
+  "scholarship",
+  "secondary",
+  "gce ordinary",
+  "physical science",
+  "biological science",
+  "commerce",
+  "art",
+  "technology",
+  "sports",
+  "communication",
+  "computing",
+  "multimedia",
+  "language",
+  "diploma",
+  "cambridge ordinary",
+  "cambridge advanced",
+  "edexcel ordinary",
+  "edexcel advanced",
+];
+
+function getGradeSortIndex(title: string): number {
+  const normalized = title.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
+  const idx = GRADE_SORT_KEYS.findIndex((key) => normalized.includes(key));
+  return idx === -1 ? GRADE_SORT_KEYS.length : idx;
+}
+
 function getTuitionRateKey(rate: TuitionRateItem) {
   return (
     rate._id ||
@@ -362,7 +390,13 @@ export default function TuitionRatesByGrade() {
 
   const { data: gradesData, isLoading: isGradesLoading } =
     useFetchGradesWithCountsQuery();
-  const grades = useMemo(() => gradesData?.grades || [], [gradesData]);
+  const grades = useMemo(
+    () =>
+      [...(gradesData?.grades || [])].sort(
+        (a, b) => getGradeSortIndex(a.title) - getGradeSortIndex(b.title),
+      ),
+    [gradesData],
+  );
 
   useEffect(() => {
     if (activeAccordion === undefined && grades.length > 0) {
