@@ -188,6 +188,9 @@ export type FetchSubjectsRequest = {
 export type FetchTestimonialsRequest = {
   page: number;
   limit: number;
+  title?: string;
+  sortBy?: string;
+  rating?: number;
 };
 
 export type FetchTuitionAssignments = {
