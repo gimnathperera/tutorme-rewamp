@@ -385,7 +385,11 @@ const PersonalInfo = () => {
             Select your gender
           </option>
           {GENDER_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value} className="text-gray-900">
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}
@@ -467,7 +471,11 @@ const PersonalInfo = () => {
             Select your nationality
           </option>
           {NATIONALITY_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value} className="text-gray-900">
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}
@@ -491,7 +499,11 @@ const PersonalInfo = () => {
             Select your ethnicity
           </option>
           {RACE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value} className="text-gray-900">
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}

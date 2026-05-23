@@ -438,7 +438,11 @@ export default function AddRequestForTutor() {
                       Select medium of instruction
                     </option>
                     {MEDIUM_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value} className="text-gray-900">
+                      <option
+                        key={option.value}
+                        value={option.value}
+                        className="text-gray-900"
+                      >
                         {option.text}
                       </option>
                     ))}
@@ -462,7 +466,11 @@ export default function AddRequestForTutor() {
                       Select student&apos;s grade
                     </option>
                     {gradeOptions.map((g) => (
-                      <option key={g.value} value={g.value} className="text-gray-900">
+                      <option
+                        key={g.value}
+                        value={g.value}
+                        className="text-gray-900"
+                      >
                         {g.text}
                       </option>
                     ))}
@@ -523,7 +531,11 @@ export default function AddRequestForTutor() {
                             : "Select a grade first"}
                         </option>
                         {subjectOptions.map((s) => (
-                          <option key={s.value} value={s.value} className="text-gray-900">
+                          <option
+                            key={s.value}
+                            value={s.value}
+                            className="text-gray-900"
+                          >
                             {s.text}
                           </option>
                         ))}
@@ -553,7 +565,11 @@ export default function AddRequestForTutor() {
                             Select session duration
                           </option>
                           {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value} className="text-gray-900">
+                            <option
+                              key={option.value}
+                              value={option.value}
+                              className="text-gray-900"
+                            >
                               {option.text}
                             </option>
                           ))}
@@ -582,7 +598,11 @@ export default function AddRequestForTutor() {
                             Select sessions per week
                           </option>
                           {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value} className="text-gray-900">
+                            <option
+                              key={option.value}
+                              value={option.value}
+                              className="text-gray-900"
+                            >
                               {option.text}
                             </option>
                           ))}
@@ -614,7 +634,11 @@ export default function AddRequestForTutor() {
                             Select preferred tutor type
                           </option>
                           {TUTOR_TYPE_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value} className="text-gray-900">
+                            <option
+                              key={o.value}
+                              value={o.value}
+                              className="text-gray-900"
+                            >
                               {o.text}
                             </option>
                           ))}
@@ -647,7 +671,11 @@ export default function AddRequestForTutor() {
                             Select preferred class type
                           </option>
                           {CLASS_TYPE_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value} className="text-gray-900">
+                            <option
+                              key={o.value}
+                              value={o.value}
+                              className="text-gray-900"
+                            >
                               {o.text}
                             </option>
                           ))}

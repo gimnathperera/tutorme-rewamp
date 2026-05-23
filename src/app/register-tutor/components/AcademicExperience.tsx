@@ -237,7 +237,11 @@ const AcademicExperience = () => {
               Select highest education level
             </option>
             {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value} className="text-gray-900">
+              <option
+                key={option.value}
+                value={option.value}
+                className="text-gray-900"
+              >
                 {option.text}
               </option>
             ))}

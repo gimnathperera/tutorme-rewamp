@@ -396,7 +396,11 @@ export default function MultiFileUploadDropzone({
                   >
                     <p
                       className="truncate flex-1 min-w-0 text-left text-sm"
-                      title={fileObj.file ? fileObj.file.name : (fileObj.url?.split("/").pop() ?? "Certificate")}
+                      title={
+                        fileObj.file
+                          ? fileObj.file.name
+                          : (fileObj.url?.split("/").pop() ?? "Certificate")
+                      }
                     >
                       {fileObj.file
                         ? fileObj.file.name
