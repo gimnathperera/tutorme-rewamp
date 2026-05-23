@@ -1,2 +1,4 @@
-allowBuilds:
-  "@sentry/cli": true
+onlyBuiltDependencies:
+  - "@sentry/cli"
+  - core-js
+  - sharp
