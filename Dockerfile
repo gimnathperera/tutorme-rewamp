@@ -7,7 +7,7 @@ WORKDIR /app
 # npm is used to bootstrap pnpm — pnpm doesn't exist yet on the base image
 RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --frozen-lockfile
 
 FROM base AS builder
