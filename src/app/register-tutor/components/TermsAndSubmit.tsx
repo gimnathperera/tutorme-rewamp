@@ -55,7 +55,11 @@ const DocumentRow = ({
                 Select type…
               </option>
               {options.map((opt) => (
-                <option key={opt.value} value={opt.value} className="text-gray-900">
+                <option
+                  key={opt.value}
+                  value={opt.value}
+                  className="text-gray-900"
+                >
                   {opt.text}
                 </option>
               ))}
@@ -134,8 +138,18 @@ const TermsAndSubmit = () => {
       {/* ── Certificates & Documents ── */}
       <div className="rounded-xl border border-bggrey overflow-hidden">
         <div className="px-5 py-3 border-b border-bggrey bg-lightwhite flex items-center gap-2">
-          <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <svg
+            className="w-4 h-4 text-primary-600 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
           </svg>
           <h3 className="text-sm font-semibold text-black">
             Certificates &amp; Documents <span className="text-red-500">*</span>
@@ -163,7 +177,8 @@ const TermsAndSubmit = () => {
               ))}
             </div>
 
-            {typeof errors.certificatesAndQualifications?.message === "string" && (
+            {typeof errors.certificatesAndQualifications?.message ===
+              "string" && (
               <p className="text-xs text-red-500 mt-1">
                 {errors.certificatesAndQualifications.message}
               </p>
@@ -220,8 +235,18 @@ const TermsAndSubmit = () => {
       {/* ── Agreements ── */}
       <div className="rounded-xl border border-bggrey overflow-hidden">
         <div className="px-5 py-3 border-b border-bggrey bg-lightwhite flex items-center gap-2">
-          <svg className="w-4 h-4 text-primary-600 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-4 h-4 text-primary-600 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2}
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <h3 className="text-sm font-semibold text-black">Agreements</h3>
         </div>
@@ -240,23 +265,25 @@ const TermsAndSubmit = () => {
                 />
               )}
             />
-            <Label htmlFor="agreeTerms" className="flex flex-col gap-1 text-sm cursor-pointer">
+            <Label
+              htmlFor="agreeTerms"
+              className="flex flex-col gap-1 text-sm cursor-pointer"
+            >
               <span className="font-semibold">
                 I agree to the{" "}
-                <span className="text-primary-600">Terms and Conditions</span>
-                {" "}<span className="text-red-500">*</span>
+                <span className="text-primary-600">Terms and Conditions</span>{" "}
+                <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
-                I agree to receiving assignment information via SMS and understand
-                that rates are subject to negotiation. Admin fees may apply for
-                successful assignments.
+                I agree to receiving assignment information via SMS and
+                understand that rates are subject to negotiation. Admin fees may
+                apply for successful assignments.
               </span>
             </Label>
           </div>
           <p className="text-xs text-red-500 min-h-4 ml-7">
             {errors.agreeTerms?.message as string}
           </p>
-
 
           <div className="flex items-start gap-3 pt-1">
             <Controller
@@ -276,8 +303,8 @@ const TermsAndSubmit = () => {
               className="flex flex-col gap-1 text-sm cursor-pointer"
             >
               <span className="font-semibold">
-                I agree to receiving assignment information regarding new Tuition
-                Assignments <span className="text-red-500">*</span>
+                I agree to receiving assignment information regarding new
+                Tuition Assignments <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
                 By checking this box, you agree to receive SMS and email

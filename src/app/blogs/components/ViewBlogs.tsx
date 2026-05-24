@@ -68,7 +68,9 @@ export default function BlogsDashboard() {
 
         if (result.data) {
           const newBlogs = result.data.results as Blogs[];
-          setBlogs((prev) => (pageNum === 1 ? newBlogs : [...prev, ...newBlogs]));
+          setBlogs((prev) =>
+            pageNum === 1 ? newBlogs : [...prev, ...newBlogs],
+          );
           const totalPages = (result.data as any).totalPages ?? 1;
           setHasMore(pageNum < totalPages);
         } else {
@@ -283,100 +285,100 @@ export default function BlogsDashboard() {
               ))}
             </div>
           ) : (
-          <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
-            {visibleBlogs.map((blog, index) => {
-              const imageSrc = blog.image;
-              const blogDate = new Date(blog.createdAt);
+            <div className="grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+              {visibleBlogs.map((blog, index) => {
+                const imageSrc = blog.image;
+                const blogDate = new Date(blog.createdAt);
 
-              return (
-                <Link
-                  key={blog.id}
-                  href={`/blogs/${blog.slug || blog.id}`}
-                  className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
-                >
-                  {imageSrc ? (
-                    <div className="relative h-44 bg-gray-100 overflow-hidden">
-                      <Image
-                        src={imageSrc}
-                        alt={blog.title}
-                        fill
-                        priority={index < 3}
-                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute bottom-2.5 right-2.5 bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
-                        {blogDate.toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "short",
-                          year: "numeric",
-                        })}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500" />
-                  )}
-
-                  <div className="p-4 flex flex-col flex-1 gap-2">
-                    <div className="flex items-center gap-2.5">
-                      <Image
-                        src={DEFAULT_AVATAR}
-                        alt="Blog post thumbnail"
-                        width={28}
-                        height={28}
-                        priority={index < 3}
-                        className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
-                      />
-                      <div className="flex flex-col leading-tight">
-                        <span className="text-xs font-semibold text-gray-800">
-                          Tuition Lanka
-                        </span>
-                      </div>
-                      {(user?.role === "admin" ||
-                        (blog as any).author?.id === user?.id) && (
-                        <span
-                          className={[
-                            "ml-auto px-2 py-0.5 rounded-full text-xs font-semibold",
-                            (blog as any).status === "approved"
-                              ? "bg-green-100 text-green-700"
-                              : (blog as any).status === "pending"
-                                ? "bg-yellow-100 text-yellow-700"
-                                : "bg-red-100 text-red-700",
-                          ].join(" ")}
-                        >
-                          {(blog as any).status === "approved"
-                            ? "Approved"
-                            : (blog as any).status === "pending"
-                              ? "Pending"
-                              : "Rejected"}
-                        </span>
-                      )}
-                      {!imageSrc && (
-                        <span className="ml-auto text-xs text-gray-400">
+                return (
+                  <Link
+                    key={blog.id}
+                    href={`/blogs/${blog.slug || blog.id}`}
+                    className="group bg-white border border-gray-100 rounded-2xl shadow-sm cursor-pointer hover:shadow-md hover:-translate-y-1 transition-all duration-250 overflow-hidden flex flex-col"
+                  >
+                    {imageSrc ? (
+                      <div className="relative h-44 bg-gray-100 overflow-hidden">
+                        <Image
+                          src={imageSrc}
+                          alt={blog.title}
+                          fill
+                          priority={index < 3}
+                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                        <div className="absolute bottom-2.5 right-2.5 bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-sm">
                           {blogDate.toLocaleDateString("en-US", {
                             day: "numeric",
                             month: "short",
                             year: "numeric",
                           })}
-                        </span>
-                      )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="h-2 bg-gradient-to-r from-blue-500 to-indigo-500" />
+                    )}
+
+                    <div className="p-4 flex flex-col flex-1 gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <Image
+                          src={DEFAULT_AVATAR}
+                          alt="Blog post thumbnail"
+                          width={28}
+                          height={28}
+                          priority={index < 3}
+                          className="w-7 h-7 rounded-full object-cover ring-1 ring-gray-200"
+                        />
+                        <div className="flex flex-col leading-tight">
+                          <span className="text-xs font-semibold text-gray-800">
+                            Tuition Lanka
+                          </span>
+                        </div>
+                        {(user?.role === "admin" ||
+                          (blog as any).author?.id === user?.id) && (
+                          <span
+                            className={[
+                              "ml-auto px-2 py-0.5 rounded-full text-xs font-semibold",
+                              (blog as any).status === "approved"
+                                ? "bg-green-100 text-green-700"
+                                : (blog as any).status === "pending"
+                                  ? "bg-yellow-100 text-yellow-700"
+                                  : "bg-red-100 text-red-700",
+                            ].join(" ")}
+                          >
+                            {(blog as any).status === "approved"
+                              ? "Approved"
+                              : (blog as any).status === "pending"
+                                ? "Pending"
+                                : "Rejected"}
+                          </span>
+                        )}
+                        {!imageSrc && (
+                          <span className="ml-auto text-xs text-gray-400">
+                            {blogDate.toLocaleDateString("en-US", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                          </span>
+                        )}
+                      </div>
+
+                      <hr className="border-gray-100 w-full" />
+
+                      <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                        {blog.title}
+                      </h2>
                     </div>
+                  </Link>
+                );
+              })}
 
-                    <hr className="border-gray-100 w-full" />
-
-                    <h2 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                      {blog.title}
-                    </h2>
-                  </div>
-                </Link>
-              );
-            })}
-
-            {visibleBlogs.length === 0 && !hasMore && (
-              <p className="col-span-full py-10 text-center text-sm text-gray-400">
-                No blogs found for this tag.
-              </p>
-            )}
-          </div>
+              {visibleBlogs.length === 0 && !hasMore && (
+                <p className="col-span-full py-10 text-center text-sm text-gray-400">
+                  No blogs found for this tag.
+                </p>
+              )}
+            </div>
           )}
 
           {/* Infinite scroll sentinel */}

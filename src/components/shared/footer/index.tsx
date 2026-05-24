@@ -16,7 +16,10 @@ const products: ProductType[] = [
       { label: "Home", url: "/" },
       { label: "Find a Tutor", url: "/find-a-tutor" },
       { label: "Request for Tutor", url: "/request-for-tutors" },
-      { label: "Submit Tutor Request", url: "/request-for-tutors/create-request" },
+      {
+        label: "Submit Tutor Request",
+        url: "/request-for-tutors/create-request",
+      },
       { label: "Register as a Tutor", url: "/register-tutor" },
       { label: "Contact Us", url: "/contact-us" },
     ],

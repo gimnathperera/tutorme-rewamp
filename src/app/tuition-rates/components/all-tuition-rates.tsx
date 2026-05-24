@@ -53,7 +53,11 @@ const GRADE_SORT_KEYS = [
 ];
 
 function getGradeSortIndex(title: string): number {
-  const normalized = title.toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
+  const normalized = title
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/\s+/g, " ")
+    .trim();
   const idx = GRADE_SORT_KEYS.findIndex((key) => normalized.includes(key));
   return idx === -1 ? GRADE_SORT_KEYS.length : idx;
 }

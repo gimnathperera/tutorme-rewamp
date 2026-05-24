@@ -48,8 +48,7 @@ const ENV_VARIABLES = {
       | "test"
       | "staging"
       | "production"
-      | undefined) ||
-    "development",
+      | undefined) || "development",
 
   NEXT_PUBLIC_WHATSAPP_NUMBER:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "0707491400",
