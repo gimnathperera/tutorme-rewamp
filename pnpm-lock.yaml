@@ -4,7 +4,7 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
   onlyBuiltDependencies:
-    - '@sentry/cli'
+    - "@sentry/cli"
     - core-js
     - sharp
 
