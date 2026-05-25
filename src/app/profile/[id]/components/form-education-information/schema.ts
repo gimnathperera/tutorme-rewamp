@@ -32,11 +32,20 @@ export const educationInfoSchema = z
     certificatesAndQualifications: z
       .array(
         z.object({
-          type: z.string().optional().default(""),
+          type: z.string().min(1, "Document type is required"),
           url: z.string().min(1, "Please upload a file"),
         }),
       )
       .min(1, "Certificates are required"),
+    optionalCertificates: z
+      .array(
+        z.object({
+          type: z.string(),
+          url: z.string(),
+        }),
+      )
+      .optional()
+      .default([]),
   })
   .superRefine(({ classType, preferredLocations }, ctx) => {
     if (
@@ -61,6 +70,7 @@ export const initialEducationInfoFormValues = {
   grades: [] as string[],
   subjects: [] as string[],
   certificatesAndQualifications: [] as { type: string; url: string }[],
+  optionalCertificates: [] as { type: string; url: string }[],
 };
 
 export type EducationInfoSchema = z.infer<typeof educationInfoSchema>;
