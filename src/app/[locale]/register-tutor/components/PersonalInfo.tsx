@@ -23,9 +23,11 @@ import {
 const fieldWrapper = "flex flex-col gap-1.5";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
+const selectColor = (value: string) =>
+  value ? "text-gray-900" : "text-gray-500";
 const EMAIL_CHECK_DELAY_MS = 500;
 
 /** Hint text shown below a field while it has no error */
@@ -71,6 +73,9 @@ const PersonalInfo = () => {
 
   const dateOfBirth = watch("dateOfBirth");
   const email = watch("email");
+  const gender = watch("gender");
+  const nationality = watch("nationality");
+  const race = watch("race");
 
   /** Latest selectable date = today minus 18 years (tutor must be ≥ 18) */
   const maxDate = (() => {
@@ -374,13 +379,17 @@ const PersonalInfo = () => {
           id="gender"
           {...register("gender")}
           autoComplete="sex"
-          className={`${selectClass} ${selectBorder(!!errors.gender)}`}
+          className={`${selectClass} ${selectBorder(!!errors.gender)} ${selectColor(gender)}`}
         >
           <option value="" disabled hidden>
             Select your gender
           </option>
           {GENDER_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}
@@ -456,13 +465,17 @@ const PersonalInfo = () => {
           id="nationality"
           {...register("nationality")}
           autoComplete="country-name"
-          className={`${selectClass} ${selectBorder(!!errors.nationality)}`}
+          className={`${selectClass} ${selectBorder(!!errors.nationality)} ${selectColor(nationality)}`}
         >
           <option value="" disabled hidden>
             Select your nationality
           </option>
           {NATIONALITY_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}
@@ -480,13 +493,17 @@ const PersonalInfo = () => {
         <select
           id="race"
           {...register("race")}
-          className={`${selectClass} ${selectBorder(!!errors.race)}`}
+          className={`${selectClass} ${selectBorder(!!errors.race)} ${selectColor(race)}`}
         >
           <option value="" disabled hidden>
             Select your ethnicity
           </option>
           {RACE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.text}
             </option>
           ))}

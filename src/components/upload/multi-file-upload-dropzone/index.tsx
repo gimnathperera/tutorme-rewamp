@@ -364,7 +364,7 @@ export default function MultiFileUploadDropzone({
 
       <div
         {...getRootProps()}
-        className="border-2 bg-white border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
+        className="w-full min-w-0 overflow-hidden border-2 bg-white border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center cursor-pointer transition-all hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-700"
       >
         <input {...getInputProps()} />
         {uploading && (
@@ -388,18 +388,25 @@ export default function MultiFileUploadDropzone({
             </p>
 
             {files.length > 0 && (
-              <div className="mt-3 flex flex-col gap-2 max-h-60 overflow-y-auto">
+              <div className="mt-3 flex flex-col gap-2 max-h-60 overflow-y-auto overflow-x-hidden">
                 {files.map((fileObj, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between border p-2 rounded bg-gray-50 dark:bg-gray-700"
+                    className="flex items-center gap-2 min-w-0 overflow-hidden border p-2 rounded bg-gray-50 dark:bg-gray-700"
                   >
-                    <p className="truncate max-w-[65%] text-left text-sm">
+                    <p
+                      className="truncate flex-1 min-w-0 text-left text-sm"
+                      title={
+                        fileObj.file
+                          ? fileObj.file.name
+                          : (fileObj.url?.split("/").pop() ?? "Certificate")
+                      }
+                    >
                       {fileObj.file
                         ? fileObj.file.name
                         : (fileObj.url?.split("/").pop() ?? "Certificate")}
                     </p>
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 shrink-0">
                       {/* Eye / preview button */}
                       <button
                         type="button"

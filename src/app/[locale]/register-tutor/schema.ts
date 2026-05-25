@@ -255,6 +255,15 @@ export const step4Schema = z.object({
       }),
     )
     .min(1, "At least one document is required"),
+  optionalCertificates: z
+    .array(
+      z.object({
+        type: z.string(),
+        url: z.string(),
+      }),
+    )
+    .optional()
+    .default([]),
   agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
   agreeAssignmentInfo: z
     .boolean()

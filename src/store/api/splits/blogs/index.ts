@@ -82,6 +82,7 @@ export const BlogsApi = baseApi.injectEndpoints({
 
 export const {
   useFetchBlogsQuery,
+  useLazyFetchBlogsQuery,
   useFetchBlogByIdQuery,
   useFetchBlogBySlugQuery,
   useUpdateBlogMutation,

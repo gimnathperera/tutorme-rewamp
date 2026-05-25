@@ -24,9 +24,11 @@ import { type ChangeEvent, useEffect, useMemo, useState } from "react";
 const fieldWrapper = "flex flex-col gap-1.5";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900";
+  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
 const selectBorder = (hasError: boolean) =>
   hasError ? "border-red-500" : "border-gray-300";
+const selectColor = (value: string) =>
+  value ? "text-gray-900" : "text-gray-500";
 type MultiSelectOnChange = NonNullable<
   Parameters<typeof MultiSelect>[0]["onChange"]
 >;
@@ -45,6 +47,7 @@ const AcademicExperience = () => {
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
   const selectedClassTypes = watch("classType");
+  const highestEducation = watch("highestEducation");
 
   const selectedGradeIds = useMemo<string[]>(() => {
     return Array.isArray(selectedGrades) ? selectedGrades : [];
@@ -228,13 +231,17 @@ const AcademicExperience = () => {
                 }
               },
             })}
-            className={`${selectClass} ${selectBorder(!!errors.highestEducation)}`}
+            className={`${selectClass} ${selectBorder(!!errors.highestEducation)} ${selectColor(highestEducation)}`}
           >
             <option value="" disabled hidden>
               Select highest education level
             </option>
             {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
+              <option
+                key={option.value}
+                value={option.value}
+                className="text-gray-900"
+              >
                 {option.text}
               </option>
             ))}
@@ -257,7 +264,7 @@ const AcademicExperience = () => {
             min={0}
             max={50}
             step={1}
-            className={`${inputClass} ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
+            className={`${inputClass} !block ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
             {...register("yearsExperience", {
               valueAsNumber: true,
               onChange: (event: ChangeEvent<HTMLInputElement>) => {

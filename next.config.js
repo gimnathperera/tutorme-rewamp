@@ -1,9 +1,16 @@
 const path = require("path");
 const createNextIntlPlugin = require("next-intl/plugin");
+const { withSentryConfig } = require("@sentry/nextjs");
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
-module.exports = withNextIntl({
+const sentryOrg = process.env.SENTRY_ORG;
+const sentryProject = process.env.SENTRY_PROJECT;
+const canUploadSentrySourcemaps = Boolean(
+  process.env.SENTRY_AUTH_TOKEN && sentryOrg && sentryProject,
+);
+
+const nextConfig = withNextIntl({
   webpack: (config) => {
     // Resolve "/images/..." imports to the public/images directory.
     // This lets you write: import X from "/images/foo.png"
@@ -48,5 +55,24 @@ module.exports = withNextIntl({
         permanent: true,
       },
     ];
+  },
+});
+
+module.exports = withSentryConfig(nextConfig, {
+  org: sentryOrg,
+  project: sentryProject,
+  silent: !process.env.CI,
+  sourcemaps: {
+    disable: !canUploadSentrySourcemaps,
+    deleteSourcemapsAfterUpload: true,
+  },
+  release: {
+    name: process.env.SENTRY_RELEASE,
+    create: canUploadSentrySourcemaps,
+  },
+  webpack: {
+    treeshake: {
+      removeDebugLogging: true,
+    },
   },
 });

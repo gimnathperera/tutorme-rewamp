@@ -222,6 +222,23 @@ export const DOCUMENT_TYPE_OPTIONS: SelectOption[] = [
   { value: "Other", text: "Other" },
 ];
 
+export const EDUCATIONAL_DOCUMENT_OPTIONS: SelectOption[] = [
+  { value: "Advanced Level Certificate", text: "Advanced Level Certificate" },
+  { value: "Ordinary Level Certificate", text: "Ordinary Level Certificate" },
+  { value: "Degree Certificate", text: "Degree Certificate" },
+  { value: "Diploma Certificate", text: "Diploma Certificate" },
+  { value: "Professional Certificate", text: "Professional Certificate" },
+  { value: "Teaching Certificate", text: "Teaching Certificate" },
+];
+
+export const OPTIONAL_DOCUMENT_OPTIONS: SelectOption[] = [
+  { value: "NIC", text: "NIC (National ID Card)" },
+  { value: "Passport", text: "Passport" },
+  { value: "Driving License", text: "Driving License" },
+  { value: "Police Clearance", text: "Police Clearance Report" },
+  { value: "Other", text: "Other" },
+];
+
 export const WEEK_DAY_VALUES = [
   "Monday",
   "Tuesday",

@@ -27,7 +27,6 @@ type TestimonialItem = {
 };
 
 /* ─── constants ─────────────────────────────────────────── */
-const PAGE_SIZE = 9; // fetch 9 at a time; show 3 per slide → 3 slides per batch
 const CARDS_PER_SLIDE = 3;
 
 /* ─── Avatar fallback ───────────────────────────────────── */
@@ -165,8 +164,6 @@ const AUTOPLAY_DELAY = 4000; // ms between auto-advances
 /* ─── Main component ─────────────────────────────────────── */
 const Testimonials: FC = () => {
   const [page, setPage] = useState(1);
-  const [allItems, setAllItems] = useState<TestimonialItem[]>([]);
-  const [slide, setSlide] = useState(0);
   const [animKey, setAnimKey] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -179,63 +176,47 @@ const Testimonials: FC = () => {
     document.head.appendChild(tag);
   }, []);
 
-  const { data, isFetching } = useFetchTestimonialsQuery({
-    page,
-    limit: PAGE_SIZE,
-    ...({ sortBy: "createdAt:desc" } as any),
-  });
+  const { data, currentData, isFetching, isLoading } =
+    useFetchTestimonialsQuery({
+      page,
+      limit: CARDS_PER_SLIDE,
+      sortBy: "createdAt:desc",
+    });
 
-  /* Accumulate pages */
-  useEffect(() => {
-    if (data?.results) {
-      setAllItems((prev) => [...prev, ...data.results]);
+  const paginationData = currentData || data;
+  const totalSlides = paginationData?.totalPages || 0;
+  const activeSlide = Math.max(page - 1, 0);
+  const visibleItems = currentData?.results || [];
+  const hasPreviousPage = page > 1;
+  const hasNextPage = totalSlides ? page < totalSlides : false;
+
+  const goTo = useCallback((nextPage: number) => {
+    setPage(nextPage);
+    setAnimKey((key) => key + 1);
+  }, []);
+
+  const prev = () => {
+    if (hasPreviousPage) {
+      goTo(page - 1);
     }
-  }, [data]);
+  };
 
-  const totalSlides =
-    Math.ceil(allItems.length / CARDS_PER_SLIDE) + (isFetching ? 1 : 0);
-  const maxKnownSlide = Math.ceil(allItems.length / CARDS_PER_SLIDE) - 1;
-
-  /* Auto-fetch next page when user reaches the last loaded slide */
-  const goTo = useCallback(
-    (idx: number) => {
-      const clamped = Math.max(0, Math.min(idx, totalSlides - 1));
-      setSlide(clamped);
-      setAnimKey((k) => k + 1); // re-trigger grid entrance animation
-
-      // If we are at the last known slide and there are more pages to load, fetch
-      const totalFetched = data?.totalResults ?? 0;
-      if (
-        clamped >= maxKnownSlide &&
-        allItems.length < totalFetched &&
-        !isFetching
-      ) {
-        setPage((p) => p + 1);
-      }
-    },
-    [
-      totalSlides,
-      maxKnownSlide,
-      allItems.length,
-      data?.totalResults,
-      isFetching,
-    ],
-  );
-
-  const prev = () => goTo(slide - 1);
-  const next = () => goTo(slide + 1);
+  const next = () => {
+    if (hasNextPage) {
+      goTo(page + 1);
+    }
+  };
 
   useEffect(() => {
-    if (isPaused || maxKnownSlide <= 0) return;
+    if (isPaused || totalSlides <= 1) return;
     const id = setInterval(() => {
-      setSlide((current) => {
-        const next = current >= maxKnownSlide ? 0 : current + 1;
-        setAnimKey((k) => k + 1);
-        return next;
-      });
+      setPage((currentPage) =>
+        currentPage >= totalSlides ? 1 : currentPage + 1,
+      );
+      setAnimKey((key) => key + 1);
     }, AUTOPLAY_DELAY);
     return () => clearInterval(id);
-  }, [isPaused, maxKnownSlide]);
+  }, [isPaused, totalSlides]);
 
   /* Keyboard support */
   useEffect(() => {
@@ -247,12 +228,8 @@ const Testimonials: FC = () => {
     return () => window.removeEventListener("keydown", handler);
   });
 
-  /* Visible cards for current slide */
-  const visibleItems = allItems.slice(
-    slide * CARDS_PER_SLIDE,
-    slide * CARDS_PER_SLIDE + CARDS_PER_SLIDE,
-  );
-  const showSkeletons = isFetching && visibleItems.length < CARDS_PER_SLIDE;
+  const showSkeletons =
+    (isLoading || isFetching) && visibleItems.length < CARDS_PER_SLIDE;
 
   return (
     <section
@@ -278,7 +255,7 @@ const Testimonials: FC = () => {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {visibleItems.map((item, i) => (
-              <div key={`${slide}-${i}`} className="testimonial-card-animate">
+              <div key={`${page}-${i}`} className="testimonial-card-animate">
                 <TestimonialCard item={item} />
               </div>
             ))}
@@ -294,12 +271,12 @@ const Testimonials: FC = () => {
         </div>
 
         {/* ── Controls ── */}
-        {(allItems.length > CARDS_PER_SLIDE || isFetching) && (
+        {(totalSlides > 1 || isFetching) && (
           <div className="mt-8 flex items-center justify-center gap-4">
             {/* Prev */}
             <button
               onClick={prev}
-              disabled={slide === 0}
+              disabled={!hasPreviousPage || isFetching}
               aria-label="Previous"
               className="w-9 h-9 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center hover:bg-blue-50 hover:border-blue-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
             >
@@ -309,18 +286,18 @@ const Testimonials: FC = () => {
             {/* Dots */}
             <div className="flex gap-2 items-center">
               {Array.from({
-                length: Math.ceil(allItems.length / CARDS_PER_SLIDE),
+                length: totalSlides,
               }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => goTo(i)}
+                  onClick={() => goTo(i + 1)}
                   aria-label={`Slide ${i + 1}`}
                   className="transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{
-                    width: slide === i ? "28px" : "8px",
+                    width: activeSlide === i ? "28px" : "8px",
                     height: "8px",
                     borderRadius: "9999px",
-                    background: slide === i ? "#2563eb" : "#d1d5db",
+                    background: activeSlide === i ? "#2563eb" : "#d1d5db",
                   }}
                 />
               ))}
@@ -332,11 +309,7 @@ const Testimonials: FC = () => {
             {/* Next */}
             <button
               onClick={next}
-              disabled={
-                slide >= maxKnownSlide &&
-                !isFetching &&
-                allItems.length >= (data?.totalResults ?? 0)
-              }
+              disabled={!hasNextPage || isFetching}
               aria-label="Next"
               className="w-9 h-9 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center hover:bg-blue-50 hover:border-blue-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-200"
             >

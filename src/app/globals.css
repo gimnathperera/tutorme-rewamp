@@ -11,6 +11,17 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
+/* Suppress native blue tap highlight on mobile */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Remove focus outline on mouse/touch — preserved for keyboard navigation */
+:focus:not(:focus-visible) {
+  outline: none;
+  box-shadow: none;
+}
+
 html {
   --site-shell-offset: 72px;
   --scroll-behavior: smooth !important;

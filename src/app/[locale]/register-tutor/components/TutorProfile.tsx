@@ -30,6 +30,7 @@ const TutorProfile = () => {
   const {
     register,
     watch,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
@@ -49,7 +50,16 @@ const TutorProfile = () => {
         <Textarea
           id="teachingSummary"
           className={`${textareaBase} ${textareaBorder(!!errors.teachingSummary)}`}
-          {...register("teachingSummary")}
+          {...register("teachingSummary", {
+            onBlur: (e) =>
+              setValue(
+                "teachingSummary",
+                e.target.value.trim().replace(/ {2,}/g, " "),
+                {
+                  shouldValidate: true,
+                },
+              ),
+          })}
           placeholder="Personal qualities, teaching styles & methodologies"
           rows={4}
           maxLength={CHAR_LIMIT}
@@ -71,7 +81,16 @@ const TutorProfile = () => {
         <Textarea
           id="academicDetails"
           className={`${textareaBase} ${textareaBorder(!!errors.academicDetails)}`}
-          {...register("academicDetails")}
+          {...register("academicDetails", {
+            onBlur: (e) =>
+              setValue(
+                "academicDetails",
+                e.target.value.trim().replace(/ {2,}/g, " "),
+                {
+                  shouldValidate: true,
+                },
+              ),
+          })}
           placeholder="Achievements & subjects taught (e.g. number of students, years, results)"
           rows={4}
           maxLength={CHAR_LIMIT}
@@ -93,7 +112,16 @@ const TutorProfile = () => {
         <Textarea
           id="studentResults"
           className={`${textareaBase} ${textareaBorder(!!errors.studentResults)}`}
-          {...register("studentResults")}
+          {...register("studentResults", {
+            onBlur: (e) =>
+              setValue(
+                "studentResults",
+                e.target.value.trim().replace(/ {2,}/g, " "),
+                {
+                  shouldValidate: true,
+                },
+              ),
+          })}
           placeholder="Past student results, grade improvements, examination outcomes"
           rows={4}
           maxLength={CHAR_LIMIT}
@@ -115,7 +143,16 @@ const TutorProfile = () => {
         <Textarea
           id="sellingPoints"
           className={`${textareaBase} ${textareaBorder(!!errors.sellingPoints)}`}
-          {...register("sellingPoints")}
+          {...register("sellingPoints", {
+            onBlur: (e) =>
+              setValue(
+                "sellingPoints",
+                e.target.value.trim().replace(/ {2,}/g, " "),
+                {
+                  shouldValidate: true,
+                },
+              ),
+          })}
           placeholder="Teaching methods, commitment level, what makes you stand out"
           rows={4}
           maxLength={CHAR_LIMIT}

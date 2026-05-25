@@ -26,6 +26,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.13",
     "@reduxjs/toolkit": "^2.4.0",
+    "@sentry/nextjs": "^10.53.1",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "20.2.0",
     "@types/react": "18.2.6",
@@ -84,6 +85,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@sentry/cli",
+      "core-js",
       "sharp"
     ]
   }

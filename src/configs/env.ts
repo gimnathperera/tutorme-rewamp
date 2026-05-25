@@ -16,8 +16,13 @@ const envSchema = z
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    NEXT_PUBLIC_APP_ENV: z
+      .enum(["development", "test", "staging", "production"])
+      .default("development"),
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().min(10).max(15),
     NEXT_PUBLIC_ADMIN_PORTAL_URL: z.string().url(),
+    NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+    NEXT_PUBLIC_SENTRY_RELEASE: z.string().optional(),
   })
   .strict();
 
@@ -37,12 +42,28 @@ const ENV_VARIABLES = {
       | "production"
       | undefined) || "development",
 
+  NEXT_PUBLIC_APP_ENV:
+    (process.env.NEXT_PUBLIC_APP_ENV as
+      | "development"
+      | "test"
+      | "staging"
+      | "production"
+      | undefined) || "development",
+
   NEXT_PUBLIC_WHATSAPP_NUMBER:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "0707491400",
 
   NEXT_PUBLIC_ADMIN_PORTAL_URL:
     process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL ||
     "https://admin.tuitionlanka.com/signin",
+
+  NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || "",
+
+  NEXT_PUBLIC_SENTRY_RELEASE:
+    process.env.NEXT_PUBLIC_SENTRY_RELEASE ||
+    process.env.SENTRY_RELEASE ||
+    process.env.VERCEL_GIT_COMMIT_SHA ||
+    "",
 };
 
 /**
@@ -62,7 +83,10 @@ const ENV = result.success ? result.data : ENV_VARIABLES;
 export const env = {
   app: {
     nodeEnv: ENV.NODE_ENV,
+    appEnv: ENV.NEXT_PUBLIC_APP_ENV,
     whatsAppNumber: ENV.NEXT_PUBLIC_WHATSAPP_NUMBER,
+    sentryDsn: ENV.NEXT_PUBLIC_SENTRY_DSN,
+    sentryRelease: ENV.NEXT_PUBLIC_SENTRY_RELEASE,
   },
 
   urls: {
