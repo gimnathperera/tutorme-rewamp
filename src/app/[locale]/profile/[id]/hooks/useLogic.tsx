@@ -46,6 +46,10 @@ import {
   rateOptions,
   timeZoneOptions,
 } from "./util";
+import {
+  EDUCATIONAL_DOCUMENT_OPTIONS,
+  OPTIONAL_DOCUMENT_OPTIONS,
+} from "@/configs/options";
 
 type ProfileEntity = { id?: string; _id?: string };
 type ProfileLike = Partial<ProfileResponse> & Record<string, any>;
@@ -233,6 +237,34 @@ const normalizeCertificateRows = (
       };
     })
     .filter((certificate) => Boolean(certificate.url));
+
+const OPTIONAL_TYPES = new Set(
+  OPTIONAL_DOCUMENT_OPTIONS.map((o) => o.value.toLowerCase()),
+);
+const EDUCATIONAL_TYPES = new Set(
+  EDUCATIONAL_DOCUMENT_OPTIONS.map((o) => o.value.toLowerCase()),
+);
+
+const splitCertificateRows = (
+  certificates: ProfileResponse["certificatesAndQualifications"],
+) => {
+  const rows = normalizeCertificateRows(certificates);
+  const educational: { type: string; url: string }[] = [];
+  const optional: { type: string; url: string }[] = [];
+
+  rows.forEach((row) => {
+    const typeLower = row.type.toLowerCase();
+    if (OPTIONAL_TYPES.has(typeLower)) {
+      optional.push(row);
+    } else if (EDUCATIONAL_TYPES.has(typeLower) || row.type) {
+      educational.push(row);
+    } else {
+      educational.push(row);
+    }
+  });
+
+  return { educational, optional };
+};
 
 const mergeCertificateRows = (
   primary: ProfileResponse["certificatesAndQualifications"],
@@ -556,7 +588,7 @@ const useLogic = (): LogicReturnType => {
   const educationInfoForm = useForm<EducationInfoSchema>({
     resolver: zodResolver(educationInfoSchema),
     defaultValues: initialEducationInfoFormValues,
-    mode: "onChange",
+    mode: "onTouched",
   });
 
   const languageAndTimeForm = useForm<LanguageOptionsSchema>({
@@ -637,6 +669,10 @@ const useLogic = (): LogicReturnType => {
         ? profileClassType
         : normalizeArrayValue(profile.tutoringLevels);
 
+      const { educational, optional } = splitCertificateRows(
+        profile.certificatesAndQualifications,
+      );
+
       educationInfoForm.reset({
         classType,
         preferredLocations: profile.preferredLocations ?? [],
@@ -648,9 +684,10 @@ const useLogic = (): LogicReturnType => {
         tutorMediums: profile.tutorMediums ?? [],
         grades: getProfileGradeIds(profile),
         subjects: getProfileSubjectIds(profile),
-        certificatesAndQualifications: normalizeCertificateRows(
-          profile.certificatesAndQualifications,
-        ),
+        certificatesAndQualifications: educational.length
+          ? educational
+          : [{ type: "", url: "" }],
+        optionalCertificates: optional,
       });
     },
     [educationInfoForm],
@@ -898,9 +935,13 @@ const useLogic = (): LogicReturnType => {
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
-    const certificateRows = data.certificatesAndQualifications
+    const eduRows = data.certificatesAndQualifications
       .map(({ type, url }) => ({ type, url }))
-      .filter((certificate) => Boolean(certificate.url));
+      .filter((c) => Boolean(c.url));
+    const optRows = (data.optionalCertificates ?? [])
+      .map(({ type, url }) => ({ type, url }))
+      .filter((c) => Boolean(c.url));
+    const certificateRows = [...eduRows, ...optRows];
     const submittedEducationUpdates = {
       classType: data.classType,
       preferredLocations: data.preferredLocations,
@@ -910,9 +951,7 @@ const useLogic = (): LogicReturnType => {
       tutorMediums: data.tutorMediums,
       grades: data.grades,
       subjects: data.subjects,
-      certificatesAndQualifications: certificateRows
-        .map((certificate) => certificate.url)
-        .filter(Boolean),
+      certificatesAndQualifications: certificateRows,
     };
 
     const result = await handleProfileSubmit({
@@ -934,7 +973,10 @@ const useLogic = (): LogicReturnType => {
         certificatesAndQualifications: certificateRows,
       }),
     );
-    educationInfoForm.reset(data);
+    educationInfoForm.reset({
+      ...data,
+      optionalCertificates: data.optionalCertificates ?? [],
+    });
     toast.success("Qualifications updated successfully");
   };
 

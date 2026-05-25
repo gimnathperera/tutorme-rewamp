@@ -11,44 +11,41 @@ interface ProductType {
   link: { label: string; url: string }[];
 }
 
-const Footer = () => {
-  const t = useTranslations("footer");
-
-  const products: ProductType[] = [
-    {
-      id: 1,
-      section: t("menuSection"),
-      link: [
-        { label: t("home"), url: "/" },
-        { label: t("requestForTutor"), url: "/request-for-tutors" },
-        { label: t("registerAsTutor"), url: "/register-tutor" },
-        { label: t("contactUs"), url: "/contact-us" },
-      ],
-    },
-    {
-      id: 2,
-      section: t("resourcesSection"),
-      link: [
-        { label: t("blog"), url: "/blogs" },
-        { label: t("testimonials"), url: "/#testimonials-section" },
-        { label: t("faqs"), url: "/faq" },
-        { label: t("aboutUs"), url: "/#aboutus-section" },
-      ],
-    },
-    {
-      id: 3,
-      section: t("academicsSection"),
-      link: [
-        { label: t("gradesAndSubjects"), url: "/grades-and-subjects" },
-        { label: t("pastExamPapers"), url: "/past-exam-papers" },
-      ],
-    },
-    {
-      id: 4,
-      section: t("tuitionSection"),
-      link: [{ label: t("tuitionRates"), url: "/tuition-rates" }],
-    },
-  ];
+const products: ProductType[] = [
+  {
+    id: 1,
+    section: "Menu",
+    link: [
+      { label: "Home", url: "/" },
+      { label: "Request for Tutor", url: "/request-for-tutors" },
+      { label: "Register as a Tutor", url: "/register-tutor" },
+      { label: "Contact Us", url: "/contact-us" },
+    ],
+  },
+  {
+    id: 2,
+    section: "Resources",
+    link: [
+      { label: "Blog", url: "/blogs" },
+      { label: "Testimonials", url: "/#testimonials-section" },
+      { label: "FAQs", url: "/faq" },
+      { label: "About Us", url: "/#aboutus-section" },
+    ],
+  },
+  {
+    id: 3,
+    section: "Academics",
+    link: [
+      { label: "Grades & Subjects", url: "/grades-and-subjects" },
+      { label: "Past Exam Papers", url: "/past-exam-papers" },
+    ],
+  },
+  {
+    id: 4,
+    section: "Tuition",
+    link: [{ label: "Tuition Rates", url: "/tuition-rates" }],
+  },
+];
 
   return (
     <div className="bg-navyblue" id="first-section">

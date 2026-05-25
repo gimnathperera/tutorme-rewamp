@@ -284,17 +284,21 @@ function GradeTuitionRatesItem({
     });
   }, [currentPage, tuitionRatesData]);
 
-  const loadMoreRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-      if (!isActive) {
-        return;
-      }
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    const sentinel = sentinelRef.current;
 
-      observerRef.current = new IntersectionObserver((entries) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+    }
+
+    if (!container || !sentinel || !isActive) return;
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
         if (
           entries[0]?.isIntersecting &&
           hasMoreRates &&
@@ -304,14 +308,16 @@ function GradeTuitionRatesItem({
           isRequestingNextPageRef.current = true;
           setCurrentPage((page) => page + 1);
         }
-      });
+      },
+      { root: container, threshold: 0.1 },
+    );
 
-      if (node) {
-        observerRef.current.observe(node);
-      }
-    },
-    [hasMoreRates, isActive, isRatesFetching],
-  );
+    observerRef.current.observe(sentinel);
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [hasMoreRates, isActive, isRatesFetching]);
 
   return (
     <AccordionItem
@@ -351,33 +357,35 @@ function GradeTuitionRatesItem({
           </div>
         ) : (
           <>
-            <TuitionRateTable
-              isInitialLoading={
-                isRatesLoading &&
-                tuitionRates.length === 0 &&
-                grade.tuitionRateCount !== 0
-              }
-              items={tuitionRates}
-            />
+            <div ref={scrollContainerRef} className="max-h-[500px] overflow-y-auto">
+              <TuitionRateTable
+                isInitialLoading={
+                  isRatesLoading &&
+                  tuitionRates.length === 0 &&
+                  grade.tuitionRateCount !== 0
+                }
+                items={tuitionRates}
+              />
 
-            <div
-              ref={loadMoreRef}
-              className="flex min-h-16 items-center justify-center py-5"
-            >
-              {isRatesFetching && tuitionRates.length > 0 ? (
-                <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
-                  <div className="w-5 h-5 rounded-full border-2 border-[#FCA627] border-t-transparent animate-spin" />
-                  Loading more tuition rates...
-                </div>
-              ) : error ? (
-                <p className="text-sm font-medium text-red-500">
-                  Failed to load more tuition rates.
-                </p>
-              ) : hasMoreRates ? (
-                <span className="sr-only">Load more tuition rates</span>
-              ) : tuitionRates.length > 0 ? (
-                <div></div>
-              ) : null}
+              <div
+                ref={sentinelRef}
+                className="flex min-h-16 items-center justify-center py-5"
+              >
+                {isRatesFetching && tuitionRates.length > 0 ? (
+                  <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
+                    <div className="w-5 h-5 rounded-full border-2 border-[#FCA627] border-t-transparent animate-spin" />
+                    Loading more tuition rates...
+                  </div>
+                ) : error ? (
+                  <p className="text-sm font-medium text-red-500">
+                    Failed to load more tuition rates.
+                  </p>
+                ) : hasMoreRates ? (
+                  <span className="sr-only">Load more tuition rates</span>
+                ) : tuitionRates.length > 0 ? (
+                  <div></div>
+                ) : null}
+              </div>
             </div>
           </>
         )}

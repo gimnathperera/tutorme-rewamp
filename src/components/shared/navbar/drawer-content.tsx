@@ -13,6 +13,20 @@ interface NavigationItem {
   dropdown?: { name: string; href: string }[];
 }
 
+const navigation: NavigationItem[] = [
+  { name: "Home", href: "/" },
+  { name: "Request for Tutor", href: "/request-for-tutors" },
+  { name: "Register as a Tutor", href: "/register-tutor" },
+  { name: "Past Exam Papers", href: "/past-exam-papers" },
+  {
+    name: "Tuition Rates",
+    href: "/tuition-rates",
+  },
+  { name: "FAQ", href: "/faq" },
+  { name: "Blog", href: "/blogs" },
+  { name: "Contact Us", href: "/contact-us" },
+];
+
 interface DrawerContentProps {
   isDrawerOpen: boolean;
   onClose: () => void;

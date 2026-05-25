@@ -1,6 +1,8 @@
 allowBuilds:
-  "@parcel/watcher": true
-  '@sentry/cli': true
-  "@swc/core": true
+  "@sentry/cli": true
   core-js: true
   sharp: true
+onlyBuiltDependencies:
+  - "@sentry/cli"
+  - core-js
+  - sharp
