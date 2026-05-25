@@ -64,7 +64,11 @@ export default function BlogsDashboard() {
           setIsFetchingMore(true);
         }
 
-        const result = await fetchBlogs({ limit: SERVER_LIMIT, page: pageNum });
+        const result = await fetchBlogs({
+          limit: SERVER_LIMIT,
+          page: pageNum,
+          sortBy: "createdAt:desc",
+        });
 
         if (result.data) {
           const newBlogs = result.data.results as Blogs[];
