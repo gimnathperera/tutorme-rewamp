@@ -15,14 +15,7 @@ const navigation: NavigationItem[] = [
   { name: "Home", href: "/" },
   { name: "Request for Tutor", href: "/request-for-tutors" },
   { name: "Register as a Tutor", href: "/register-tutor" },
-  {
-    name: "Academics",
-    href: "/",
-    dropdown: [
-      { name: "Grades & Subjects", href: "/grades-and-subjects" },
-      { name: "Past Exam Papers", href: "/past-exam-papers" },
-    ],
-  },
+  { name: "Past Exam Papers", href: "/past-exam-papers" },
   {
     name: "Tuition Rates",
     href: "/tuition-rates",

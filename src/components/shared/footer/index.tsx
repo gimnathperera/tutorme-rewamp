@@ -14,12 +14,7 @@ const products: ProductType[] = [
     section: "Menu",
     link: [
       { label: "Home", url: "/" },
-      { label: "Find a Tutor", url: "/find-a-tutor" },
       { label: "Request for Tutor", url: "/request-for-tutors" },
-      {
-        label: "Submit Tutor Request",
-        url: "/request-for-tutors/create-request",
-      },
       { label: "Register as a Tutor", url: "/register-tutor" },
       { label: "Contact Us", url: "/contact-us" },
     ],
@@ -39,17 +34,13 @@ const products: ProductType[] = [
     section: "Academics",
     link: [
       { label: "Grades & Subjects", url: "/grades-and-subjects" },
-      { label: "Levels & Exams", url: "/level-and-exams" },
       { label: "Past Exam Papers", url: "/past-exam-papers" },
     ],
   },
   {
     id: 4,
     section: "Tuition",
-    link: [
-      { label: "Tuition Rates", url: "/tuition-rates" },
-      { label: "Tuition Assignments", url: "/tuition-assignments" },
-    ],
+    link: [{ label: "Tuition Rates", url: "/tuition-rates" }],
   },
 ];
 
