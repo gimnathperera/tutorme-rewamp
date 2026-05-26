@@ -13,20 +13,6 @@ interface NavigationItem {
   dropdown?: { name: string; href: string }[];
 }
 
-const navigation: NavigationItem[] = [
-  { name: "Home", href: "/" },
-  { name: "Request for Tutor", href: "/request-for-tutors" },
-  { name: "Register as a Tutor", href: "/register-tutor" },
-  { name: "Past Exam Papers", href: "/past-exam-papers" },
-  {
-    name: "Tuition Rates",
-    href: "/tuition-rates",
-  },
-  { name: "FAQ", href: "/faq" },
-  { name: "Blog", href: "/blogs" },
-  { name: "Contact Us", href: "/contact-us" },
-];
-
 interface DrawerContentProps {
   isDrawerOpen: boolean;
   onClose: () => void;
@@ -41,14 +27,7 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
     () => [
       { name: t("requestForTutor"), href: "/request-for-tutors" },
       { name: t("registerAsTutor"), href: "/register-tutor" },
-      {
-        name: t("academics"),
-        href: "/",
-        dropdown: [
-          { name: t("gradesAndSubjects"), href: "/grades-and-subjects" },
-          { name: t("pastExamPapers"), href: "/past-exam-papers" },
-        ],
-      },
+      { name: t("Past Exam Papers"), href: "/past-exam-papers" },
       { name: t("tuitionRates"), href: "/tuition-rates" },
       { name: t("faq"), href: "/faq" },
       { name: t("blog"), href: "/blogs" },
