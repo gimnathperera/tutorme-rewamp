@@ -116,5 +116,33 @@
     "si": "සිංහල",
     "ta": "தமிழ்",
     "label": "Language"
+  },
+  "tuitionRates": {
+    "pageHeading": "Check the Hourly Tuition Rates and Let's Get Learning!",
+    "pageSubheading": "Explore courses and resources just for you! See the relative hourly tuition rates to begin an exciting and personalized learning adventure!",
+    "subject": "Subject",
+    "universityStudents": "University Students",
+    "partTimeTutor": "Part Time Tutor",
+    "fullTimeTutor": "Full Time Tutor",
+    "govTeachersLine1": "Gov/International Teachers",
+    "govTeachersLine2": "(Ex / Current)",
+    "noRatesFound": "No tuition rates found for this grade.",
+    "failedToLoad": "Failed to load tuition rates for this grade.",
+    "loadingMore": "Loading more tuition rates...",
+    "failedToLoadMore": "Failed to load more tuition rates."
+  },
+  "blogs": {
+    "heroLabel": "TuitionLanka Insights",
+    "heroTitle": "Welcome to the Tuition Lanka Blog",
+    "heroSubtitle": "Discover the latest insights, tips, and updates.",
+    "allFilter": "All",
+    "addBlog": "+ Add Blog",
+    "addBlogMobile": "Add Blog",
+    "failedToLoad": "Failed to load blogs. Please try again later.",
+    "noBlogsFound": "No blogs found for this tag.",
+    "statusApproved": "Approved",
+    "statusPending": "Pending",
+    "statusRejected": "Rejected",
+    "authorName": "Tuition Lanka"
   }
 }

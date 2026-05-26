@@ -1,12 +1,12 @@
 {
   "nav": {
-    "requestForTutor": "ගුරුවරයෙකු ඉල්ලන්න",
-    "registerAsTutor": "ගුරුවරයෙකු ලෙස ලියාපදිංචි වන්න",
+    "requestForTutor": "ගුරු ඉල්ලීම",
+    "registerAsTutor": "ගුරු ලියාපදිංචිය",
     "academics": "අධ්‍යාපනික",
     "gradesAndSubjects": "ශ්‍රේණි සහ විෂයයන්",
-    "pastExamPapers": "පසුගිය විභාග ප්‍රශ්න පත්‍ර",
+    "pastExamPapers": "විභාග ප්‍රශ්න",
     "tuitionRates": "පන්ති ගාස්තු",
-    "faq": "නිතර අසන ප්‍රශ්න",
+    "faq": "FAQ",
     "blog": "බ්ලොග්",
     "contactUs": "අප අමතන්න",
     "login": "පිවිසෙන්න"
@@ -116,5 +116,33 @@
     "si": "සිංහල",
     "ta": "தமிழ்",
     "label": "භාෂාව"
+  },
+  "tuitionRates": {
+    "pageHeading": "පැය ගාස්තු බලා ඉගෙනීම ආරම්භ කරන්න!",
+    "pageSubheading": "ඔබටම ගැළපෙන පාඨමාලා සහ සම්පත් ගවේෂණය කරන්න! ව්‍යාපෘතිමය සහ ඔබටම ගැළපෙන ඉගෙනීමේ ගමනක් ආරම්භ කිරීමට සාපේක්ෂ පැය ගෙදර පාඩම් ගාස්තු බලන්න!",
+    "subject": "විෂය",
+    "universityStudents": "විශ්ව විද්‍යාල සිසු",
+    "partTimeTutor": "අර්ධ කාලීන ගුරු",
+    "fullTimeTutor": "සම්පූර්ණ කාලීන ගුරු",
+    "govTeachersLine1": "රජයේ/ජාත්‍යන්තර ගුරුවරු",
+    "govTeachersLine2": "(හිටපු / වර්තමාන)",
+    "noRatesFound": "මෙම ශ්‍රේණිය සඳහා ගෙදර පාඩම් ගාස්තු හමු නොවිණි.",
+    "failedToLoad": "මෙම ශ්‍රේණිය සඳහා ගෙදර පාඩම් ගාස්තු පූරණය කිරීමට අසමත් විය.",
+    "loadingMore": "ගෙදර පාඩම් ගාස්තු පූරණය කරමින්...",
+    "failedToLoadMore": "ගෙදර පාඩම් ගාස්තු තව ටිකක් පූරණය කිරීමට අසමත් විය."
+  },
+  "blogs": {
+    "heroLabel": "TuitionLanka අදහස්",
+    "heroTitle": "Tuition Lanka බ්ලොග් වෙත සාදරයෙන් පිළිගනිමු",
+    "heroSubtitle": "නවතම අදහස්, ඉඟි සහ යාවත්කාලීන කිරීම් සොයා ගන්න.",
+    "allFilter": "සියල්ල",
+    "addBlog": "+ බ්ලොග් එකතු කරන්න",
+    "addBlogMobile": "බ්ලොග් එකතු කරන්න",
+    "failedToLoad": "බ්ලොග් පූරණය කිරීමට අසමත් විය. කරුණාකර පසුව නැවත උත්සාහ කරන්න.",
+    "noBlogsFound": "මෙම ටැගය සඳහා බ්ලොග් හමු නොවිණි.",
+    "statusApproved": "අනුමත කරන ලදී",
+    "statusPending": "අනුමතිය බලාපොරොත්තුවෙනි",
+    "statusRejected": "ප්‍රතික්ෂේප කරන ලදී",
+    "authorName": "Tuition Lanka"
   }
 }
