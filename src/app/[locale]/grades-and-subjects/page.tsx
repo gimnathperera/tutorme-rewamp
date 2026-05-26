@@ -9,6 +9,7 @@ import {
   useFetchGradesQuery,
   useFetchGradeByIdQuery,
 } from "@/store/api/splits/grades";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import {
   Accordion,
   AccordionContent,
@@ -113,6 +114,22 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
   const mergedSubjectPagesRef = useRef(new Set<number>());
   const hasMoreSubjects =
     subjectsTotalPages > 0 && currentSubjectsPage < subjectsTotalPages;
+
+  // Translate grade data (title + description shown in dialog header/body)
+  const gradeDataArray = data ? [data] : [];
+  const translatedGradeDataArray = useTranslateItems(
+    gradeDataArray,
+    (grade) => [grade.title, grade.description ?? ""],
+    (grade, [title, description]) => ({ ...grade, title, description }),
+  );
+  const displayGradeData = translatedGradeDataArray[0] ?? data;
+
+  // Translate subject titles and descriptions
+  const translatedSubjects = useTranslateItems(
+    subjects,
+    (subject) => [subject.title, subject.description ?? ""],
+    (subject, [title, description]) => ({ ...subject, title, description }),
+  );
 
   useEffect(() => {
     setCurrentSubjectsPage(1);
@@ -223,7 +240,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                   highlightColor="#ffffff60"
                 />
               ) : (
-                (data?.title ?? "Grade Details")
+                (displayGradeData?.title ?? "Grade Details")
               )}
             </Dialog.Title>
             <Dialog.Close asChild>
@@ -238,9 +255,9 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
             {/* Description */}
             {isLoading ? (
               <Skeleton count={4} />
-            ) : data?.description ? (
+            ) : displayGradeData?.description ? (
               <p className="text-sm text-gray-600 leading-relaxed">
-                {data.description}
+                {displayGradeData.description}
               </p>
             ) : null}
 
@@ -262,7 +279,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
               ) : (
                 <>
                   <Accordion type="single" collapsible className="space-y-2">
-                    {subjects.map((subject) => (
+                    {translatedSubjects.map((subject) => (
                       <AccordionItem
                         key={subject.id}
                         value={subject.id}
@@ -389,7 +406,7 @@ const GradesPage: FC = () => {
     });
   }, [currentPage, data]);
 
-  const grades = useMemo(() => {
+  const sortedGrades = useMemo(() => {
     return loadedGrades.slice().sort((a, b) => {
       if (isAdvancedLevelTitle(a.title) && isAdvancedLevelTitle(b.title)) {
         const streamOrderDiff =
@@ -414,6 +431,14 @@ const GradesPage: FC = () => {
       return a.title.localeCompare(b.title);
     });
   }, [loadedGrades]);
+
+  // Translate grade titles and descriptions for non-English locales
+  const grades = useTranslateItems(
+    sortedGrades,
+    (grade) => [grade.title, grade.description ?? ""],
+    (grade, [title, description]) => ({ ...grade, title, description }),
+  );
+
   const hasMoreGrades = data?.totalPages
     ? currentPage < data.totalPages
     : false;
