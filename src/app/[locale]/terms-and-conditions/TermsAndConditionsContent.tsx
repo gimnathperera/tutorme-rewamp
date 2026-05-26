@@ -17,8 +17,7 @@ type Section = { title: string; content: ContentItem[] };
 // ── Static content data ───────────────────────────────────────────────────────
 
 const HERO_TITLE = "Terms and Conditions";
-const HERO_SUBTITLE =
-  "The rules and responsibilities for using Tuition Lanka.";
+const HERO_SUBTITLE = "The rules and responsibilities for using Tuition Lanka.";
 const INTRO_TEXT =
   'These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at www.tuitionlanka.com ("Platform"). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).';
 

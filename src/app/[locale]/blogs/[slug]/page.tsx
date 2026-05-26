@@ -149,45 +149,46 @@ export default function ViewBlogPage() {
           </Link>
         </div>
 
-        {user && (displayBlog.author?.id === user.id || user.role === "admin") && (
-          <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
-            {/* Admin approve/reject — only shown when blog is pending or needs status change */}
-            {user.role === "admin" && (
-              <>
-                {(blog as any).status !== "approved" && (
-                  <button
-                    onClick={() => handleStatusChange("approved")}
-                    disabled={isStatusUpdating}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 transition-colors duration-200 shadow-sm disabled:opacity-50"
-                  >
-                    ✓ Approve
-                  </button>
-                )}
-                {(blog as any).status !== "rejected" && (
-                  <button
-                    onClick={() => handleStatusChange("rejected")}
-                    disabled={isStatusUpdating}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200 shadow-sm disabled:opacity-50"
-                  >
-                    ✕ Reject
-                  </button>
-                )}
-              </>
-            )}
-            <Link
-              href={`/blogs/components/edit-blog/${displayBlog.id}`}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
-            >
-              ✏️ Edit Blog
-            </Link>
-            <button
-              onClick={() => setConfirmDelete(true)}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200 shadow-sm"
-            >
-              🗑️ Delete
-            </button>
-          </div>
-        )}
+        {user &&
+          (displayBlog.author?.id === user.id || user.role === "admin") && (
+            <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
+              {/* Admin approve/reject — only shown when blog is pending or needs status change */}
+              {user.role === "admin" && (
+                <>
+                  {(blog as any).status !== "approved" && (
+                    <button
+                      onClick={() => handleStatusChange("approved")}
+                      disabled={isStatusUpdating}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 transition-colors duration-200 shadow-sm disabled:opacity-50"
+                    >
+                      ✓ Approve
+                    </button>
+                  )}
+                  {(blog as any).status !== "rejected" && (
+                    <button
+                      onClick={() => handleStatusChange("rejected")}
+                      disabled={isStatusUpdating}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200 shadow-sm disabled:opacity-50"
+                    >
+                      ✕ Reject
+                    </button>
+                  )}
+                </>
+              )}
+              <Link
+                href={`/blogs/components/edit-blog/${displayBlog.id}`}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+              >
+                ✏️ Edit Blog
+              </Link>
+              <button
+                onClick={() => setConfirmDelete(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200 shadow-sm"
+              >
+                🗑️ Delete
+              </button>
+            </div>
+          )}
 
         {/* Confirm delete dialog */}
         {confirmDelete && (

@@ -72,9 +72,7 @@ const TestPapers = () => {
       subject: paper.subject
         ? { ...paper.subject, title: subjectTitle }
         : paper.subject,
-      grade: paper.grade
-        ? { ...paper.grade, title: gradeTitle }
-        : paper.grade,
+      grade: paper.grade ? { ...paper.grade, title: gradeTitle } : paper.grade,
     }),
   );
 

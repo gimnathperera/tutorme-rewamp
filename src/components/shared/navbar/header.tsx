@@ -224,10 +224,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             </div>
 
             <div className="hidden lg:flex items-center">
-              <div
-                ref={dropdownRef}
-                className="flex justify-end relative"
-              >
+              <div ref={dropdownRef} className="flex justify-end relative">
                 {navigation.map((item) => {
                   const active = isActive(item);
 
@@ -239,7 +236,9 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         aria-haspopup="true"
                         style={{
                           fontSize: navFontSize,
-                          ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                          ...(!active && isHeroTop
+                            ? { color: heroLinkColor }
+                            : {}),
                         }}
                         className={[
                           `group ${navPx} py-2 rounded-md font-medium flex items-center gap-1 whitespace-nowrap transition-colors duration-150`,
@@ -305,7 +304,9 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       }}
                       style={{
                         fontSize: navFontSize,
-                        ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                        ...(!active && isHeroTop
+                          ? { color: heroLinkColor }
+                          : {}),
                       }}
                       className={[
                         `relative ${navPx} py-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer`,
@@ -329,7 +330,9 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       onClick={() => setOpenDropdown(null)}
                       style={{
                         fontSize: navFontSize,
-                        ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                        ...(!active && isHeroTop
+                          ? { color: heroLinkColor }
+                          : {}),
                       }}
                       className={[
                         `relative ${navPx} py-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150`,

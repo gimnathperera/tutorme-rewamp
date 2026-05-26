@@ -254,10 +254,7 @@ export function useTranslateBlog<T extends BlogLike>(
       if (cancelled) return;
 
       // ── Deep-clone and apply ─────────────────────────────────────────────
-      const result = JSON.parse(JSON.stringify(cur)) as Record<
-        string,
-        unknown
-      >;
+      const result = JSON.parse(JSON.stringify(cur)) as Record<string, unknown>;
 
       textItems.forEach(({ path }, idx) => {
         applyPath(result, path, translatedTexts[idx] ?? textItems[idx].text);
