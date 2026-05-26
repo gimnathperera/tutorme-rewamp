@@ -23,6 +23,9 @@ const envSchema = z
     NEXT_PUBLIC_ADMIN_PORTAL_URL: z.string().url(),
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
     NEXT_PUBLIC_SENTRY_RELEASE: z.string().optional(),
+    NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER: z
+      .enum(["true", "false"])
+      .default("false"),
   })
   .strict();
 
@@ -64,6 +67,12 @@ const ENV_VARIABLES = {
     process.env.SENTRY_RELEASE ||
     process.env.VERCEL_GIT_COMMIT_SHA ||
     "",
+
+  NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER:
+    (process.env.NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER as
+      | "true"
+      | "false"
+      | undefined) || "false",
 };
 
 /**
@@ -87,6 +96,8 @@ export const env = {
     whatsAppNumber: ENV.NEXT_PUBLIC_WHATSAPP_NUMBER,
     sentryDsn: ENV.NEXT_PUBLIC_SENTRY_DSN,
     sentryRelease: ENV.NEXT_PUBLIC_SENTRY_RELEASE,
+    enableSentryTestLogger:
+      ENV.NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER === "true",
   },
 
   urls: {

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { env } from "@/configs/env";
 
 const SENTRY_ENABLED_ENVS = ["production", "staging"];
@@ -16,6 +17,10 @@ export const sentryBaseConfig = {
   environment: appEnvironment,
   enabled: isSentryEnabled,
   release: sentryRelease,
+  integrations: [
+    Sentry.consoleLoggingIntegration({ levels: ["log", "warn", "error"] }),
+  ],
+  enableLogs: true,
   autoSessionTracking: true,
   tracesSampleRate: appEnvironment === "production" ? 0.1 : 1.0,
 };

@@ -5,6 +5,7 @@ if (isSentryEnabled) {
   Sentry.init({
     ...sentryBaseConfig,
     integrations: [
+      ...sentryBaseConfig.integrations,
       Sentry.replayIntegration({
         maskAllText: true,
         maskAllInputs: true,
