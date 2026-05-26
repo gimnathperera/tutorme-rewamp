@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { locales, type Locale } from "@/i18n/config";
 import {
   Select,
@@ -19,13 +19,13 @@ const LOCALE_LABELS: Record<Locale, { short: string; full: string }> = {
 
 const LocaleSwitcher = () => {
   const locale = useLocale() as Locale;
-  const router = useRouter();
   const pathname = usePathname();
 
   const handleChange = (newLocale: Locale) => {
     const localePrefix = new RegExp(`^/(${locales.join("|")})`);
     const pathWithoutLocale = pathname.replace(localePrefix, "");
-    router.replace(`/${newLocale}${pathWithoutLocale}`);
+    // Hard reload so all translated content (backend data, cached state) refreshes
+    window.location.href = `/${newLocale}${pathWithoutLocale}`;
   };
 
   return (
