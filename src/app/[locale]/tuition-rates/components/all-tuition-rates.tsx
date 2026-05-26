@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { RefCallback } from "react";
+import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { BookOpen, ChevronDown } from "lucide-react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
@@ -109,6 +111,8 @@ function TuitionRateTable({
   isInitialLoading: boolean;
   items: TuitionRateItem[];
 }) {
+  const t = useTranslations("tuitionRates");
+
   if (isInitialLoading) {
     return (
       <div className="flex items-center justify-center px-6 py-12">
@@ -120,7 +124,7 @@ function TuitionRateTable({
   if (!items.length) {
     return (
       <div className="px-6 py-12 text-center text-sm text-gray-500">
-        No tuition rates found for this grade.
+        {t("noRatesFound")}
       </div>
     );
   }
@@ -131,31 +135,31 @@ function TuitionRateTable({
         <thead>
           <tr className="bg-gray-50 border-b border-gray-200">
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
-              Subject
+              {t("subject")}
             </th>
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                University Students
+                {t("universityStudents")}
               </span>
             </th>
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                Part Time Tutor
+                {t("partTimeTutor")}
               </span>
             </th>
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
               <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                Full Time Tutor
+                {t("fullTimeTutor")}
               </span>
             </th>
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[240px]">
               <span className="inline-flex items-start gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
                 <span className="leading-5">
-                  Gov/International Teachers <br /> (Ex / Current)
+                  {t("govTeachersLine1")} <br /> {t("govTeachersLine2")}
                 </span>
               </span>
             </th>
@@ -213,6 +217,7 @@ function GradeTuitionRatesItem({
   isActive: boolean;
   registerTrigger: RefCallback<HTMLButtonElement>;
 }) {
+  const t = useTranslations("tuitionRates");
   const [currentPage, setCurrentPage] = useState(1);
   const [tuitionRates, setTuitionRates] = useState<TuitionRateItem[]>([]);
   const [pagination, setPagination] = useState<TuitionRatePagination | null>(
@@ -241,6 +246,18 @@ function GradeTuitionRatesItem({
   const hasMoreRates = pagination ? currentPage < pagination.totalPages : false;
   const visibleCount =
     grade.tuitionRateCount ?? pagination?.totalResults ?? tuitionRates.length;
+
+  // Translate subject titles for non-English locales
+  const translatedRates = useTranslateItems(
+    tuitionRates,
+    (rate) => [rate.subject?.title ?? ""],
+    (rate, [subjectTitle]) => ({
+      ...rate,
+      subject: rate.subject
+        ? { ...rate.subject, title: subjectTitle }
+        : rate.subject,
+    }),
+  );
 
   useEffect(() => {
     setCurrentPage(1);
@@ -353,7 +370,7 @@ function GradeTuitionRatesItem({
       <AccordionContent>
         {error && tuitionRates.length === 0 ? (
           <div className="px-6 py-12 text-center text-sm font-medium text-red-500">
-            Failed to load tuition rates for this grade.
+            {t("failedToLoad")}
           </div>
         ) : (
           <>
@@ -367,7 +384,7 @@ function GradeTuitionRatesItem({
                   tuitionRates.length === 0 &&
                   grade.tuitionRateCount !== 0
                 }
-                items={tuitionRates}
+                items={translatedRates}
               />
 
               <div
@@ -377,11 +394,11 @@ function GradeTuitionRatesItem({
                 {isRatesFetching && tuitionRates.length > 0 ? (
                   <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
                     <div className="w-5 h-5 rounded-full border-2 border-[#FCA627] border-t-transparent animate-spin" />
-                    Loading more tuition rates...
+                    {t("loadingMore")}
                   </div>
                 ) : error ? (
                   <p className="text-sm font-medium text-red-500">
-                    Failed to load more tuition rates.
+                    {t("failedToLoadMore")}
                   </p>
                 ) : hasMoreRates ? (
                   <span className="sr-only">Load more tuition rates</span>
@@ -411,6 +428,13 @@ export default function TuitionRatesByGrade() {
         (a, b) => getGradeSortIndex(a.title) - getGradeSortIndex(b.title),
       ),
     [gradesData],
+  );
+
+  // Translate grade titles for non-English locales
+  const translatedGrades = useTranslateItems(
+    grades,
+    (grade) => [grade.title],
+    (grade, [title]) => ({ ...grade, title: title ?? grade.title }),
   );
 
   useEffect(() => {
@@ -466,7 +490,7 @@ export default function TuitionRatesByGrade() {
         onValueChange={handleAccordionChange}
         className="space-y-3"
       >
-        {grades.map((grade: GradeWithCount, idx: number) => {
+        {translatedGrades.map((grade: GradeWithCount, idx: number) => {
           const itemValue = grade.id || grade._id || `grade-${idx}`;
 
           return (
