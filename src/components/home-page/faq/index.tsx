@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 type FaqItem = {
   question: string;
@@ -125,6 +126,17 @@ const Faqs = () => {
   const faqs = data?.results || [];
   const totalItems = data?.totalResults || 0;
 
+  // Translate FAQ questions and answers for non-English locales
+  const translatedFaqs = useTranslateItems(
+    faqs,
+    (faq) => [faq.question, faq.answer],
+    (faq, [question, answer]) => ({
+      ...faq,
+      question: question ?? faq.question,
+      answer: answer ?? faq.answer,
+    }),
+  );
+
   useEffect(() => {
     setOpenIndex(null);
   }, [activeCategory]);
@@ -194,7 +206,7 @@ const Faqs = () => {
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
               <div className="flex flex-col gap-3">
-                {faqs
+                {translatedFaqs
                   .filter((_, i) => i % 2 === 0)
                   .map((faq, i) => (
                     <FaqPill
@@ -207,7 +219,7 @@ const Faqs = () => {
                   ))}
               </div>
               <div className="flex flex-col gap-3">
-                {faqs
+                {translatedFaqs
                   .filter((_, i) => i % 2 !== 0)
                   .map((faq, i) => (
                     <FaqPill
