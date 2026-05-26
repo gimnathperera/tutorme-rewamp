@@ -16,6 +16,7 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 type FaqItem = {
   id?: string;
@@ -157,12 +158,23 @@ const FaqPageContent = () => {
     }
   };
 
+  // Translate backend text for non-English locales
+  const translatedFaqs = useTranslateItems(
+    faqs,
+    (faq) => [faq.question, faq.answer],
+    (faq, [question, answer]) => ({
+      ...faq,
+      question: question ?? faq.question,
+      answer: answer ?? faq.answer,
+    }),
+  );
+
   const activeCategoryIndex = Math.max(
     FAQ_CATEGORY_OPTIONS.findIndex((option) => option.value === activeCategory),
     0,
   );
-  const leftColumn = faqs.filter((_, i) => i % 2 === 0);
-  const rightColumn = faqs.filter((_, i) => i % 2 !== 0);
+  const leftColumn = translatedFaqs.filter((_, i) => i % 2 === 0);
+  const rightColumn = translatedFaqs.filter((_, i) => i % 2 !== 0);
 
   return (
     <div className="mx-auto max-w-7xl mt-10 px-6 lg:px-8 pb-10">
