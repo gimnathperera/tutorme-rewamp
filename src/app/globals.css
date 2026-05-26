@@ -16,6 +16,20 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+/* Always reserve scrollbar gutter space so Radix UI portals (Select,
+   Dialog, etc.) never need to compensate with padding-right on <body>,
+   which would cause a visible layout shift on the right side. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Belt-and-suspenders: also zero out any padding/margin Radix injects
+   via the data-scroll-locked attribute as an inline style fallback. */
+body[data-scroll-locked] {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
 /* Remove focus outline on mouse/touch — preserved for keyboard navigation */
 :focus:not(:focus-visible) {
   outline: none;
