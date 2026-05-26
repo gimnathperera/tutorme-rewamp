@@ -5,6 +5,7 @@ import TestPaperList from "./components/test-papper-list";
 import useLogic from "./hooks/useLogic";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import { ExternalLink } from "lucide-react";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 const PEARSON_URL =
   "https://qualifications.pearson.com/en/support/support-topics/exams/past-papers.html";
@@ -57,6 +58,39 @@ const TestPapers = () => {
     forms: { testPaperSearchForm },
   } = useLogic();
 
+  // Translate paper fields for non-English locales
+  const translatedPapers = useTranslateItems(
+    availablePapers,
+    (paper) => [
+      paper.subject?.title ?? "",
+      paper.grade?.title ?? "",
+      paper.title ?? "",
+    ],
+    (paper, [subjectTitle, gradeTitle, title]) => ({
+      ...paper,
+      title: title ?? paper.title,
+      subject: paper.subject
+        ? { ...paper.subject, title: subjectTitle }
+        : paper.subject,
+      grade: paper.grade
+        ? { ...paper.grade, title: gradeTitle }
+        : paper.grade,
+    }),
+  );
+
+  // Translate dropdown options for the search form (labels only; values/IDs stay intact)
+  const translatedGradesOptions = useTranslateItems(
+    gradesOptions,
+    (opt) => [opt.label],
+    (opt, [label]) => ({ ...opt, label: label ?? opt.label }),
+  );
+
+  const translatedSubjectOptions = useTranslateItems(
+    subjectOptions,
+    (opt) => [opt.label],
+    (opt, [label]) => ({ ...opt, label: label ?? opt.label }),
+  );
+
   return (
     <div className=" max-w-7xl mx-auto pt-12 pb-24 ">
       <div className=" py-4 m-3">
@@ -77,8 +111,8 @@ const TestPapers = () => {
         </h2>
 
         <FormTestPaperSearch
-          gradesOptions={gradesOptions}
-          subjectOptions={subjectOptions}
+          gradesOptions={translatedGradesOptions}
+          subjectOptions={translatedSubjectOptions}
           mediumOptions={mediumOptions}
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading}
@@ -91,7 +125,7 @@ const TestPapers = () => {
         <EdexcelRedirectNotice />
       ) : (
         <TestPaperList
-          availablePapers={availablePapers}
+          availablePapers={translatedPapers}
           isPapersLoading={isPapersLoading}
           currentPage={currentPage}
           totalPages={totalPages}
