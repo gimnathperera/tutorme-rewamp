@@ -82,7 +82,7 @@ async function fetchTranslations(
 /** Write a value at a dot-separated path inside a mutable object. */
 function applyPath(obj: Record<string, unknown>, path: string, value: string) {
   const keys = path.split(".");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   let cur: any = obj;
   for (let i = 0; i < keys.length - 1; i++) {
     cur = cur?.[keys[i]];
