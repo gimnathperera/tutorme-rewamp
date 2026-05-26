@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { usePathname } from "@/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import Modal from "../modal";
 import Drawer from "./drawer-component";
 import DrawerContent from "./drawer-content";
@@ -30,8 +30,15 @@ const NAVBAR_OFFSET = 110;
 
 const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   const t = useTranslations("nav");
+  const locale = useLocale();
   const pathname = usePathname();
   const router = useRouter();
+
+  // Sinhala/Tamil nav text is longer — use locale-specific compact sizes
+  const navFontSize =
+    locale === "ta" ? "13px" : locale === "si" ? "14.5px" : undefined;
+  const navPx =
+    locale === "ta" ? "px-1.5" : locale === "si" ? "px-2" : "px-2.5";
 
   const navigation: NavigationItem[] = [
     { name: t("requestForTutor"), href: "/request-for-tutors" },
@@ -219,7 +226,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             <div className="hidden lg:flex items-center">
               <div
                 ref={dropdownRef}
-                className="flex justify-end space-x-1 relative"
+                className="flex justify-end relative"
               >
                 {navigation.map((item) => {
                   const active = isActive(item);
@@ -230,13 +237,12 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         onClick={() => toggleDropdown(item.name)}
                         aria-expanded={openDropdown === item.name}
                         aria-haspopup="true"
-                        style={
-                          !active && isHeroTop
-                            ? { color: heroLinkColor }
-                            : undefined
-                        }
+                        style={{
+                          fontSize: navFontSize,
+                          ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                        }}
                         className={[
-                          "group px-3 py-2 rounded-md text-base font-medium flex items-center gap-1 transition-colors duration-150",
+                          `group ${navPx} py-2 rounded-md font-medium flex items-center gap-1 whitespace-nowrap transition-colors duration-150`,
                           active
                             ? "text-blue-600 font-semibold"
                             : "navlinks hover:text-blue-600",
@@ -245,12 +251,12 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         {item.name}
                         <ChevronDownIcon
                           className={[
-                            "w-4 h-4 transition-transform duration-200",
+                            "w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200",
                             openDropdown === item.name ? "rotate-180" : "",
                           ].join(" ")}
                         />
                         {active && (
-                          <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-blue-600 rounded-full" />
+                          <span className="absolute bottom-0 left-1.5 right-1.5 h-[2px] bg-blue-600 rounded-full" />
                         )}
                       </button>
 
@@ -272,7 +278,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                                 href={subItem.href}
                                 onClick={() => setOpenDropdown(null)}
                                 className={[
-                                  "flex items-center gap-2 px-4 py-2.5 mx-1.5 rounded-lg text-base transition-colors duration-100",
+                                  "flex items-center gap-2 px-4 py-2.5 mx-1.5 rounded-lg text-sm transition-colors duration-100",
                                   idx !== 0 ? "" : "",
                                   subActive
                                     ? "text-blue-600 font-semibold bg-blue-50"
@@ -297,13 +303,12 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         e.preventDefault();
                         handleAnchorNavigation(item.href);
                       }}
-                      style={
-                        !active && isHeroTop
-                          ? { color: heroLinkColor }
-                          : undefined
-                      }
+                      style={{
+                        fontSize: navFontSize,
+                        ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                      }}
                       className={[
-                        "relative px-3 py-2 rounded-md text-base font-medium transition-colors duration-150 cursor-pointer",
+                        `relative ${navPx} py-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer`,
                         active
                           ? "text-blue-600 font-semibold"
                           : "navlinks hover:text-blue-600",
@@ -312,7 +317,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       {item.name}
                       <span
                         className={[
-                          "absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
+                          "absolute bottom-0 left-1.5 right-1.5 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
                           active ? "scale-x-100" : "scale-x-0",
                         ].join(" ")}
                       />
@@ -322,13 +327,12 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       key={item.name}
                       href={item.href}
                       onClick={() => setOpenDropdown(null)}
-                      style={
-                        !active && isHeroTop
-                          ? { color: heroLinkColor }
-                          : undefined
-                      }
+                      style={{
+                        fontSize: navFontSize,
+                        ...(!active && isHeroTop ? { color: heroLinkColor } : {}),
+                      }}
                       className={[
-                        "relative px-3 py-2 rounded-md text-base font-medium transition-colors duration-150",
+                        `relative ${navPx} py-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150`,
                         active
                           ? "text-blue-600 font-semibold"
                           : "navlinks hover:text-blue-600",
@@ -337,7 +341,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                       {item.name}
                       <span
                         className={[
-                          "absolute bottom-0 left-3 right-3 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
+                          "absolute bottom-0 left-1.5 right-1.5 h-[2px] rounded-full bg-blue-600 transition-transform duration-200 origin-left",
                           active ? "scale-x-100" : "scale-x-0",
                         ].join(" ")}
                       />
@@ -364,7 +368,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         ? { border: heroBtnBorder, color: heroBtnColor }
                         : undefined
                     }
-                    className="h-10 text-base font-medium text-white py-2 px-5 bg-primary-800 rounded-full hover:bg-primary-800 transition-colors duration-200"
+                    className="h-10 text-sm font-medium text-white py-2 px-4 bg-primary-800 rounded-full hover:bg-primary-800 transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     {t("login")}

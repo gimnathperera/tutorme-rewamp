@@ -27,7 +27,7 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
     () => [
       { name: t("requestForTutor"), href: "/request-for-tutors" },
       { name: t("registerAsTutor"), href: "/register-tutor" },
-      { name: t("Past Exam Papers"), href: "/past-exam-papers" },
+      { name: t("pastExamPapers"), href: "/past-exam-papers" },
       { name: t("tuitionRates"), href: "/tuition-rates" },
       { name: t("faq"), href: "/faq" },
       { name: t("blog"), href: "/blogs" },
