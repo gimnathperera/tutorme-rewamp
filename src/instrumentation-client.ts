@@ -1,5 +1,9 @@
 import * as Sentry from "@sentry/nextjs";
-import { isSentryEnabled, sentryBaseConfig } from "@/lib/sentry";
+import {
+  isSentryEnabled,
+  sentryBaseConfig,
+  sentryReplaySessionSampleRate,
+} from "@/lib/sentry";
 
 if (isSentryEnabled) {
   Sentry.init({
@@ -12,7 +16,7 @@ if (isSentryEnabled) {
         blockAllMedia: true,
       }),
     ],
-    replaysSessionSampleRate: 0.1,
+    replaysSessionSampleRate: sentryReplaySessionSampleRate,
     replaysOnErrorSampleRate: 1.0,
   });
 }

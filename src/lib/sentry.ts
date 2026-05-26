@@ -9,6 +9,9 @@ export const appEnvironment = env.app.appEnv;
 
 export const sentryRelease = env.app.sentryRelease || undefined;
 
+export const sentryReplaySessionSampleRate =
+  appEnvironment === "production" ? 0.1 : 1.0;
+
 export const isSentryEnabled =
   Boolean(sentryDsn) && SENTRY_ENABLED_ENVS.includes(appEnvironment);
 

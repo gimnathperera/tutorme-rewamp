@@ -19,6 +19,7 @@ export function SentryLogTestClient() {
 
     Sentry.metrics.count("test_metric", 1);
     Sentry.metrics.distribution("sentry_test_metric_value", 150);
+    Sentry.captureException(new Error("Sentry replay test error"));
 
     console.log("Sentry console log test", { log_source: "sentry_test" });
     console.warn("Sentry console warn test", { log_source: "sentry_test" });
@@ -47,7 +48,8 @@ export function SentryLogTestClient() {
           User triggered test log
         </span>
         {" "}and Sentry Metrics for
-        <span className="font-medium text-gray-950"> test_metric</span>.
+        <span className="font-medium text-gray-950"> test_metric</span>. It
+        also sends a frontend test error to force a sampled replay.
       </p>
       <button
         type="button"
