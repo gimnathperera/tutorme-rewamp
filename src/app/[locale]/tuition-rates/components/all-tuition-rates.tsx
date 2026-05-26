@@ -357,7 +357,10 @@ function GradeTuitionRatesItem({
           </div>
         ) : (
           <>
-            <div ref={scrollContainerRef} className="max-h-[500px] overflow-y-auto">
+            <div
+              ref={scrollContainerRef}
+              className="max-h-[500px] overflow-y-auto"
+            >
               <TuitionRateTable
                 isInitialLoading={
                   isRatesLoading &&

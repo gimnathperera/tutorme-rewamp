@@ -47,6 +47,9 @@ const products: ProductType[] = [
   },
 ];
 
+const Footer = () => {
+  const t = useTranslations();
+
   return (
     <div className="bg-navyblue" id="first-section">
       <div className="mx-auto max-w-2xl pt-4 pb-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
