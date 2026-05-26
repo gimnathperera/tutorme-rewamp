@@ -14,6 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import TableOfContents from "../components/table-of-content/TableOfContent";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import { useTranslateBlog } from "@/hooks/useTranslateBlog";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import toast from "react-hot-toast";
 import { ArrowLeft, ChevronDownIcon } from "lucide-react";
 import Image from "next/image";
@@ -98,15 +100,30 @@ export default function ViewBlogPage() {
     );
   };
 
-  if (isLoading) return <LoadingIndicator />;
-  if (error || !blog) return <p>Blog not found.</p>;
+  // ── Translations (hooks must run before any early return) ─────────────────
+  // Translate entire blog: title, content blocks, inline FAQs, tag names
+  const displayBlog = useTranslateBlog(blog);
 
-  const relatedArticles =
-    allBlogs?.results.filter((b) =>
-      blog.relatedArticles?.some((ra) => ra.id === b.id),
-    ) ||
-    blog.relatedArticles ||
-    [];
+  // Compute related articles list (empty while blog is loading)
+  const relatedArticlesRaw =
+    blog != null
+      ? allBlogs?.results.filter((b) =>
+          blog.relatedArticles?.some((ra) => ra.id === b.id),
+        ) ||
+        blog.relatedArticles ||
+        []
+      : [];
+
+  // Translate related article titles
+  const translatedRelated = useTranslateItems(
+    relatedArticlesRaw,
+    (a) => [(a as any).title ?? ""],
+    (a, [title]) => ({ ...a, title }),
+  );
+  // ─────────────────────────────────────────────────────────────────────────
+
+  if (isLoading) return <LoadingIndicator />;
+  if (error || !displayBlog) return <p>Blog not found.</p>;
 
   const tagColors = [
     "bg-red-100 text-red-800",
@@ -132,7 +149,7 @@ export default function ViewBlogPage() {
           </Link>
         </div>
 
-        {user && (blog.author?.id === user.id || user.role === "admin") && (
+        {user && (displayBlog.author?.id === user.id || user.role === "admin") && (
           <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
             {/* Admin approve/reject — only shown when blog is pending or needs status change */}
             {user.role === "admin" && (
@@ -158,7 +175,7 @@ export default function ViewBlogPage() {
               </>
             )}
             <Link
-              href={`/blogs/components/edit-blog/${blog.id}`}
+              href={`/blogs/components/edit-blog/${displayBlog.id}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
             >
               ✏️ Edit Blog
@@ -201,11 +218,11 @@ export default function ViewBlogPage() {
             </div>
           </div>
         )}
-        {blog.image && (
+        {displayBlog.image && (
           <div className="relative w-full h-[250px] md:h-[350px] rounded-lg overflow-hidden shadow-lg">
             <Image
-              src={blog.image}
-              alt={blog.title || "Cover Image"}
+              src={displayBlog.image}
+              alt={displayBlog.title || "Cover Image"}
               fill
               priority
               sizes="(min-width: 1280px) 1280px, 100vw"
@@ -216,7 +233,7 @@ export default function ViewBlogPage() {
 
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
               <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
-                {blog.title || "Untitled Blog"}
+                {displayBlog.title || "Untitled Blog"}
               </h1>
             </div>
           </div>
@@ -238,7 +255,7 @@ export default function ViewBlogPage() {
                   Tuition Lanka
                 </p>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
-                  {new Date(blog.createdAt).toLocaleDateString("en-US", {
+                  {new Date(displayBlog.createdAt).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -248,7 +265,7 @@ export default function ViewBlogPage() {
             </div>
 
             <div className="flex flex-wrap gap-2.5">
-              {blog.tags?.map((t: any, idx: number) => (
+              {displayBlog.tags?.map((t: any, idx: number) => (
                 <span
                   key={t.id}
                   className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${
@@ -262,7 +279,7 @@ export default function ViewBlogPage() {
 
             <TableOfContents
               html={
-                blog.content
+                displayBlog.content
                   ?.filter(
                     (b: any) => b.type === "heading" || b.type === "paragraph",
                   )
@@ -276,16 +293,16 @@ export default function ViewBlogPage() {
             />
 
             <div className="mt-10 blog-renderer-wrapper">
-              <BlogRenderer content={blog.content} />
+              <BlogRenderer content={displayBlog.content} />
             </div>
 
-            {blog.faqs?.length > 0 && (
+            {displayBlog.faqs?.length > 0 && (
               <div className="mt-10 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   FAQs
                 </h2>
                 <div className="space-y-2">
-                  {blog.faqs.map((faq: any, idx: number) => (
+                  {displayBlog.faqs.map((faq: any, idx: number) => (
                     <div key={idx} className="border-b last:border-b-0 pb-2">
                       <button
                         type="button"
@@ -324,8 +341,8 @@ export default function ViewBlogPage() {
               Related Articles
             </h3>
             <ul className="space-y-4">
-              {relatedArticles.length > 0 ? (
-                relatedArticles.map((related: any, idx: number) => (
+              {translatedRelated.length > 0 ? (
+                translatedRelated.map((related: any, idx: number) => (
                   <li
                     key={idx}
                     className="flex items-center gap-3 p-2 rounded-lg shadow-sm transition-transform hover:scale-105 cursor-pointer bg-white dark:bg-gray-800"
