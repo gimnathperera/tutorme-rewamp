@@ -1,17 +1,22 @@
 import * as Sentry from "@sentry/nextjs";
-import { isSentryEnabled, sentryBaseConfig } from "@/lib/sentry";
+import {
+  isSentryEnabled,
+  sentryBaseConfig,
+  sentryReplaySessionSampleRate,
+} from "@/lib/sentry";
 
 if (isSentryEnabled) {
   Sentry.init({
     ...sentryBaseConfig,
     integrations: [
+      ...sentryBaseConfig.integrations,
       Sentry.replayIntegration({
         maskAllText: true,
         maskAllInputs: true,
         blockAllMedia: true,
       }),
     ],
-    replaysSessionSampleRate: 0.1,
+    replaysSessionSampleRate: sentryReplaySessionSampleRate,
     replaysOnErrorSampleRate: 1.0,
   });
 }
