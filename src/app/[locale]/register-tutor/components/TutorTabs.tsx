@@ -39,6 +39,7 @@ import {
   useAddTutorRequestMutation,
   useLazyGetTutorEmailAvailabilityQuery,
 } from "@/store/api/splits/tutor-request";
+import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
 import { isPhysicalClassType } from "@/configs/register-tutor";
@@ -74,6 +75,7 @@ export function TutorTabs() {
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const [checkTutorEmailAvailability] = useLazyGetTutorEmailAvailabilityQuery();
+  const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
     "success" | string | null
@@ -151,6 +153,39 @@ export function TutorTabs() {
     if (fieldsToValidate) {
       const valid = await trigger(fieldsToValidate as any);
       if (!valid) return;
+    }
+
+    if (tab === "qualifications") {
+      const grades = getValues("grades") as string[];
+      const subjects = getValues("subjects") as string[];
+      const selectedSubjectSet = new Set(subjects);
+
+      const perGradeResults = await Promise.all(
+        grades.map(async (gradeId) => {
+          const res = await fetchSubjectsForGrades({
+            gradeIds: [gradeId],
+          }).unwrap();
+          return {
+            gradeId,
+            subjectIds: res.subjects.map((s: any) => s.id as string),
+          };
+        }),
+      );
+
+      const hasGradeWithoutSubject = perGradeResults.some(
+        ({ subjectIds }) =>
+          subjectIds.length > 0 &&
+          !subjectIds.some((id) => selectedSubjectSet.has(id)),
+      );
+
+      if (hasGradeWithoutSubject) {
+        setError("subjects", {
+          type: "manual",
+          message:
+            "Please select at least one subject for each selected grade.",
+        });
+        return;
+      }
     }
 
     if (tab === "personalInfo") {
