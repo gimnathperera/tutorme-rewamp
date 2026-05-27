@@ -156,8 +156,8 @@ function TuitionRateTable({
               </span>
             </th>
             <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[240px]">
-              <span className="inline-flex items-start gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block" />
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block flex-shrink-0" />
                 <span className="leading-5">
                   {t("govTeachersLine1")} <br /> {t("govTeachersLine2")}
                 </span>
