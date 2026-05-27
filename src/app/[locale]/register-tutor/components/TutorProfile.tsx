@@ -3,6 +3,7 @@
 import { useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { useTranslations } from "next-intl";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -27,6 +28,7 @@ const CharCounter = ({ value }: { value: string }) => {
 };
 
 const TutorProfile = () => {
+  const t = useTranslations("registerTutor");
   const {
     register,
     watch,
@@ -44,7 +46,7 @@ const TutorProfile = () => {
       {/* Teaching Summary */}
       <div className={fieldWrapper}>
         <Label htmlFor="teachingSummary" className="text-sm block">
-          Short Introduction About Yourself{" "}
+          {t("teachingSummary")}{" "}
           <span className="text-red-500">*</span>
         </Label>
         <Textarea
@@ -60,7 +62,7 @@ const TutorProfile = () => {
                 },
               ),
           })}
-          placeholder="Personal qualities, teaching styles & methodologies"
+          placeholder={t("teachingSummaryPlaceholder")}
           rows={4}
           maxLength={CHAR_LIMIT}
         />
@@ -75,7 +77,7 @@ const TutorProfile = () => {
       {/* Academic Details */}
       <div className={fieldWrapper}>
         <Label htmlFor="academicDetails" className="text-sm block">
-          Summary of Teaching Experience &amp; Academic Achievements{" "}
+          {t("academicDetails")}{" "}
           <span className="text-red-500">*</span>
         </Label>
         <Textarea
@@ -91,7 +93,7 @@ const TutorProfile = () => {
                 },
               ),
           })}
-          placeholder="Achievements & subjects taught (e.g. number of students, years, results)"
+          placeholder={t("academicDetailsPlaceholder")}
           rows={4}
           maxLength={CHAR_LIMIT}
         />
@@ -106,7 +108,7 @@ const TutorProfile = () => {
       {/* Student Results */}
       <div className={fieldWrapper}>
         <Label htmlFor="studentResults" className="text-sm block">
-          Results of Students / Track Record{" "}
+          {t("studentResults")}{" "}
           <span className="text-red-500">*</span>
         </Label>
         <Textarea
@@ -122,7 +124,7 @@ const TutorProfile = () => {
                 },
               ),
           })}
-          placeholder="Past student results, grade improvements, examination outcomes"
+          placeholder={t("studentResultsPlaceholder")}
           rows={4}
           maxLength={CHAR_LIMIT}
         />
@@ -137,7 +139,7 @@ const TutorProfile = () => {
       {/* Selling Points */}
       <div className={fieldWrapper}>
         <Label htmlFor="sellingPoints" className="text-sm block">
-          Other Selling Points as a Tutor{" "}
+          {t("sellingPoints")}{" "}
           <span className="text-red-500">*</span>
         </Label>
         <Textarea
@@ -153,7 +155,7 @@ const TutorProfile = () => {
                 },
               ),
           })}
-          placeholder="Teaching methods, commitment level, what makes you stand out"
+          placeholder={t("sellingPointsPlaceholder")}
           rows={4}
           maxLength={CHAR_LIMIT}
         />

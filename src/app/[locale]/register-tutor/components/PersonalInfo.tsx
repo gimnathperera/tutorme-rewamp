@@ -18,6 +18,7 @@ import {
   NATIONALITY_OPTIONS,
   RACE_OPTIONS,
 } from "@/configs/register-tutor";
+import { useTranslations } from "next-intl";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -51,6 +52,7 @@ const formatDateInputValue = (date: Date) =>
 type EmailAvailabilityState = "available" | "unavailable" | null;
 
 const PersonalInfo = () => {
+  const t = useTranslations("registerTutor");
   const {
     register,
     watch,
@@ -153,7 +155,7 @@ const PersonalInfo = () => {
       {/* Full Name */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="fullName">
-          Full Name <span className="text-red-500">*</span>
+          {t("fullName")} <span className="text-red-500">*</span>
         </Label>
         <Input
           id="fullName"
@@ -180,14 +182,14 @@ const PersonalInfo = () => {
             {errors.fullName?.message as string}
           </p>
         ) : (
-          <Hint>Letters and spaces only</Hint>
+          <Hint>{t("fullNameHint")}</Hint>
         )}
       </div>
 
       {/* Email */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="email">
-          Email <span className="text-red-500">*</span>
+          {t("email")} <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
           <Input
@@ -234,20 +236,20 @@ const PersonalInfo = () => {
             {errors.email?.message as string}
           </p>
         ) : isCheckingEmail ? (
-          <Hint>Checking email availability...</Hint>
+          <Hint>{t("emailChecking")}</Hint>
         ) : emailAvailability === "available" ? (
           <p className="text-xs leading-4 text-green-600 min-h-4">
-            Email is available
+            {t("emailAvailable")}
           </p>
         ) : (
-          <Hint>Enter a valid email address</Hint>
+          <Hint>{t("emailHint")}</Hint>
         )}
       </div>
 
       {/* Password */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="password">
-          Password <span className="text-red-500">*</span>
+          {t("password")} <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
           <Input
@@ -283,14 +285,14 @@ const PersonalInfo = () => {
             {errors.password?.message as string}
           </p>
         ) : (
-          <Hint>8–12 chars, at least one letter and one number</Hint>
+          <Hint>{t("passwordHint")}</Hint>
         )}
       </div>
 
       {/* Confirm Password */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="confirmPassword">
-          Confirm Password <span className="text-red-500">*</span>
+          {t("confirmPassword")} <span className="text-red-500">*</span>
         </Label>
         <div className="relative">
           <Input
@@ -326,14 +328,14 @@ const PersonalInfo = () => {
             {errors.confirmPassword?.message as string}
           </p>
         ) : (
-          <Hint>Re-enter your password to confirm</Hint>
+          <Hint>{t("confirmPasswordHint")}</Hint>
         )}
       </div>
 
       {/* Contact Number */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="contactNumber">
-          Contact Number <span className="text-red-500">*</span>
+          {t("contactNumber")} <span className="text-red-500">*</span>
         </Label>
         <Input
           id="contactNumber"
@@ -366,14 +368,14 @@ const PersonalInfo = () => {
             {errors.contactNumber?.message as string}
           </p>
         ) : (
-          <Hint>Contact number should be exactly 10 digits</Hint>
+          <Hint>{t("contactNumberHint")}</Hint>
         )}
       </div>
 
       {/* Gender */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="gender">
-          Gender <span className="text-red-500">*</span>
+          {t("gender")} <span className="text-red-500">*</span>
         </Label>
         <select
           id="gender"
@@ -382,7 +384,7 @@ const PersonalInfo = () => {
           className={`${selectClass} ${selectBorder(!!errors.gender)} ${selectColor(gender)}`}
         >
           <option value="" disabled hidden>
-            Select your gender
+            {t("genderPlaceholder")}
           </option>
           {GENDER_OPTIONS.map((option) => (
             <option
@@ -402,7 +404,7 @@ const PersonalInfo = () => {
       {/* Date of Birth */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="dateOfBirth">
-          Date of Birth <span className="text-red-500">*</span>
+          {t("dateOfBirth")} <span className="text-red-500">*</span>
         </Label>
         <div
           className="relative cursor-pointer"
@@ -430,21 +432,21 @@ const PersonalInfo = () => {
             {errors.dateOfBirth?.message as string}
           </p>
         ) : (
-          <Hint>You must be at least 18 years old</Hint>
+          <Hint>{t("dateOfBirthHint")}</Hint>
         )}
       </div>
 
       {/* Age — auto-calculated */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="age">
-          Age <span className="text-red-500">*</span>
+          {t("age")} <span className="text-red-500">*</span>
         </Label>
         <Input
           id="age"
           type="number"
           {...register("age", { valueAsNumber: true })}
           disabled
-          placeholder="Auto-calculated"
+          placeholder={t("agePlaceholder")}
           className={`${inputClass} bg-muted border-gray-300`}
         />
         {errors.age ? (
@@ -452,14 +454,14 @@ const PersonalInfo = () => {
             {errors.age?.message as string}
           </p>
         ) : (
-          <Hint>Calculated from your date of birth</Hint>
+          <Hint>{t("ageHint")}</Hint>
         )}
       </div>
 
       {/* Nationality */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="nationality">
-          Nationality <span className="text-red-500">*</span>
+          {t("nationality")} <span className="text-red-500">*</span>
         </Label>
         <select
           id="nationality"
@@ -468,7 +470,7 @@ const PersonalInfo = () => {
           className={`${selectClass} ${selectBorder(!!errors.nationality)} ${selectColor(nationality)}`}
         >
           <option value="" disabled hidden>
-            Select your nationality
+            {t("nationalityPlaceholder")}
           </option>
           {NATIONALITY_OPTIONS.map((option) => (
             <option
@@ -488,7 +490,7 @@ const PersonalInfo = () => {
       {/* Race */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="race">
-          Race <span className="text-red-500">*</span>
+          {t("race")} <span className="text-red-500">*</span>
         </Label>
         <select
           id="race"
@@ -496,7 +498,7 @@ const PersonalInfo = () => {
           className={`${selectClass} ${selectBorder(!!errors.race)} ${selectColor(race)}`}
         >
           <option value="" disabled hidden>
-            Select your ethnicity
+            {t("racePlaceholder")}
           </option>
           {RACE_OPTIONS.map((option) => (
             <option
