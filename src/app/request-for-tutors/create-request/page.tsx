@@ -349,8 +349,8 @@ export default function AddRequestForTutor() {
                   </div>
                 </div>
 
-                {/* District + City – grouped to reduce spacing between them */}
-                <div className="flex flex-col gap-4">
+                {/* District + City */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* District */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="district">
@@ -424,60 +424,63 @@ export default function AddRequestForTutor() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
-                {/* Medium */}
-                <div className={fieldWrapper}>
-                  <Label className="text-sm" htmlFor="medium">
-                    Medium <span className="text-red-500">*</span>
-                  </Label>
-                  <select
-                    id="medium"
-                    {...register("medium")}
-                    className={`${selectClass} ${selectBorder(!!errors.medium)} ${selectColor(selectedMedium)}`}
-                  >
-                    <option value="" disabled hidden>
-                      Select medium of instruction
-                    </option>
-                    {MEDIUM_OPTIONS.map((option) => (
-                      <option
-                        key={option.value}
-                        value={option.value}
-                        className="text-gray-900"
-                      >
-                        {option.text}
+                {/* Medium + Grade */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Medium */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="medium">
+                      Medium <span className="text-red-500">*</span>
+                    </Label>
+                    <select
+                      id="medium"
+                      {...register("medium")}
+                      className={`${selectClass} ${selectBorder(!!errors.medium)} ${selectColor(selectedMedium)}`}
+                    >
+                      <option value="" disabled hidden>
+                        Select medium of instruction
                       </option>
-                    ))}
-                  </select>
-                  {errors.medium?.message && (
-                    <p className={errorMsg}>{errors.medium.message}</p>
-                  )}
-                </div>
+                      {MEDIUM_OPTIONS.map((option) => (
+                        <option
+                          key={option.value}
+                          value={option.value}
+                          className="text-gray-900"
+                        >
+                          {option.text}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.medium?.message && (
+                      <p className={errorMsg}>{errors.medium.message}</p>
+                    )}
+                  </div>
 
-                {/* Grade */}
-                <div className={fieldWrapper}>
-                  <Label className="text-sm" htmlFor="grade">
-                    Grade <span className="text-red-500">*</span>
-                  </Label>
-                  <select
-                    id="grade"
-                    {...register("grade")}
-                    className={`${selectClass} ${selectBorder(!!errors.grade)} ${selectColor(selectedGradeId)}`}
-                  >
-                    <option value="" disabled hidden>
-                      Select student&apos;s grade
-                    </option>
-                    {gradeOptions.map((g) => (
-                      <option
-                        key={g.value}
-                        value={g.value}
-                        className="text-gray-900"
-                      >
-                        {g.text}
+                  {/* Grade */}
+                  <div className={fieldWrapper}>
+                    <Label className="text-sm" htmlFor="grade">
+                      Grade <span className="text-red-500">*</span>
+                    </Label>
+                    <select
+                      id="grade"
+                      {...register("grade")}
+                      className={`${selectClass} ${selectBorder(!!errors.grade)} ${selectColor(selectedGradeId)}`}
+                    >
+                      <option value="" disabled hidden>
+                        Select student&apos;s grade
                       </option>
-                    ))}
-                  </select>
-                  {errors.grade?.message && (
-                    <p className={errorMsg}>{errors.grade.message}</p>
-                  )}
+                      {gradeOptions.map((g) => (
+                        <option
+                          key={g.value}
+                          value={g.value}
+                          className="text-gray-900"
+                        >
+                          {g.text}
+                        </option>
+                      ))}
+                    </select>
+                    {errors.grade?.message && (
+                      <p className={errorMsg}>{errors.grade.message}</p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Number of Tutors */}
