@@ -95,6 +95,12 @@ export function createMetadata({
     keywords,
     alternates: {
       canonical: canonicalUrl,
+      languages: {
+        en: `${siteUrl}/en${normalizePath(path)}`,
+        si: `${siteUrl}/si${normalizePath(path)}`,
+        ta: `${siteUrl}/ta${normalizePath(path)}`,
+        "x-default": `${siteUrl}/en${normalizePath(path)}`,
+      },
     },
     openGraph: {
       title: safeTitle,

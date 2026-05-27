@@ -2,8 +2,10 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { FaWhatsapp } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 const Banner = () => {
+  const t = useTranslations("banner");
   const route = useRouter();
   const badgeRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLDivElement>(null);
@@ -78,10 +80,7 @@ const Banner = () => {
             transition: "opacity 0.6s ease, transform 0.6s ease",
           }}
         >
-          <h1 className="hero-title">
-            Personalized & Verified <br className="sm:hidden" />
-            Home Tuition
-          </h1>
+          <h1 className="hero-title">{t("headline")}</h1>
         </div>
 
         {/* CTA Buttons */}
@@ -98,14 +97,14 @@ const Banner = () => {
             className={`hero-cta ${ctaSizeClass}`}
             onClick={handleOnFindATutorClick}
           >
-            Request for Tutor
+            {t("requestForTutor")}
           </button>
 
           <button
             className={`hero-cta-secondary ${ctaSizeClass}`}
             onClick={() => route.push("/register-tutor")}
           >
-            Register as a Tutor
+            {t("registerAsTutor")}
           </button>
 
           <button
@@ -119,7 +118,7 @@ const Banner = () => {
             }}
           >
             <FaWhatsapp size={20} />
-            Enquire on Whatsapp
+            {t("enquireWhatsapp")}
           </button>
         </div>
       </div>

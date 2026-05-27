@@ -11,8 +11,10 @@ import { useFetchFaqsQuery } from "@/store/api/splits/faqs";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 type FaqItem = {
   question: string;
@@ -103,7 +105,13 @@ const FaqSkeleton = () => (
   </div>
 );
 
+const CATEGORY_TRANSLATION_KEYS = {
+  for_parents: "forParents",
+  for_tutors: "forTutors",
+} as const;
+
 const Faqs = () => {
+  const t = useTranslations("faq");
   const page = 1;
   const [activeCategory, setActiveCategory] =
     useState<FaqCategory>(DEFAULT_FAQ_CATEGORY);
@@ -117,6 +125,17 @@ const Faqs = () => {
 
   const faqs = data?.results || [];
   const totalItems = data?.totalResults || 0;
+
+  // Translate FAQ questions and answers for non-English locales
+  const translatedFaqs = useTranslateItems(
+    faqs,
+    (faq) => [faq.question, faq.answer],
+    (faq, [question, answer]) => ({
+      ...faq,
+      question: question ?? faq.question,
+      answer: answer ?? faq.answer,
+    }),
+  );
 
   useEffect(() => {
     setOpenIndex(null);
@@ -142,7 +161,7 @@ const Faqs = () => {
         className="mx-auto rounded-3xl max-w-7xl py-8 lg:py-12 px-4 lg:px-12 bg-faqblue faq-bg"
       >
         <h2 className="text-4xl font-bold text-center text-white leading-[1.2] mb-10">
-          Frequently asked <br /> questions.
+          {t("sectionHeading")}
         </h2>
 
         <Tabs
@@ -165,7 +184,7 @@ const Faqs = () => {
                 value={option.value}
                 className="relative z-10 !m-0 flex-1 rounded-xl bg-transparent px-4 py-2.5 text-sm font-bold text-white drop-shadow-sm shadow-none transition-colors duration-200 hover:bg-white/10 hover:text-white data-[state=active]:bg-transparent data-[state=active]:text-faqblue data-[state=active]:drop-shadow-none data-[state=active]:shadow-none"
               >
-                {option.label}
+                {t(CATEGORY_TRANSLATION_KEYS[option.value])}
               </TabsTrigger>
             ))}
           </TabsList>
@@ -178,16 +197,16 @@ const Faqs = () => {
             </div>
           ) : isError ? (
             <div className="w-full rounded-2xl bg-red-100 py-4 px-6 text-center text-red-700">
-              Failed to load FAQs. Please try again later.
+              {t("failedToLoad")}
             </div>
           ) : faqs.length === 0 ? (
             <p className="text-center text-white/80 py-8">
-              No FAQs available at the moment.
+              {t("noFaqsAvailable")}
             </p>
           ) : (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 items-start">
               <div className="flex flex-col gap-3">
-                {faqs
+                {translatedFaqs
                   .filter((_, i) => i % 2 === 0)
                   .map((faq, i) => (
                     <FaqPill
@@ -200,7 +219,7 @@ const Faqs = () => {
                   ))}
               </div>
               <div className="flex flex-col gap-3">
-                {faqs
+                {translatedFaqs
                   .filter((_, i) => i % 2 !== 0)
                   .map((faq, i) => (
                     <FaqPill
@@ -225,7 +244,7 @@ const Faqs = () => {
               }}
               className="inline-block px-8 py-3 border-2 border-white text-white text-base font-semibold rounded-xl hover:bg-white hover:text-blue-600 transition-all duration-300"
             >
-              Read More
+              {t("readMore")}
             </Link>
           </div>
         )}

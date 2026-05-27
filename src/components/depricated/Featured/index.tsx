@@ -2,8 +2,8 @@
 import Slider from "react-slick";
 import React, { Component } from "react";
 import Image, { StaticImageData } from "next/image";
-import Feat1 from "../../../../public/images/featured/feat1.jpg";
-import Feat2 from "../../../../public/images/featured/feat2.jpg";
+import Feat1 from "/images/featured/feat1.jpg";
+import Feat2 from "/images/featured/feat2.jpg";
 
 // CAROUSEL DATA
 

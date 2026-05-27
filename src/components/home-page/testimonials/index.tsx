@@ -4,6 +4,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
 import Image from "next/image";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /* ─── Grid slide-in keyframe injected once ───────────────── */
 const GRID_ANIM_STYLE = `
@@ -187,6 +188,17 @@ const Testimonials: FC = () => {
   const totalSlides = paginationData?.totalPages || 0;
   const activeSlide = Math.max(page - 1, 0);
   const visibleItems = currentData?.results || [];
+
+  // Translate testimonial content and owner role for non-English locales
+  const translatedItems = useTranslateItems(
+    visibleItems,
+    (item) => [item.content ?? "", item.owner?.role ?? ""],
+    (item, [content, role]) => ({
+      ...item,
+      content: content ?? item.content,
+      owner: { ...item.owner, role: role ?? item.owner?.role ?? "" },
+    }),
+  );
   const hasPreviousPage = page > 1;
   const hasNextPage = totalSlides ? page < totalSlides : false;
 
@@ -254,7 +266,7 @@ const Testimonials: FC = () => {
             key={animKey}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
-            {visibleItems.map((item, i) => (
+            {translatedItems.map((item, i) => (
               <div key={`${page}-${i}`} className="testimonial-card-animate">
                 <TestimonialCard item={item} />
               </div>

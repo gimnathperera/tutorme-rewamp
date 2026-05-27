@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { usePathname } from "@/navigation";
+import { useTranslations } from "next-intl";
 import { ChevronDown } from "lucide-react";
+import LocaleSwitcher from "../locale-switcher";
 
 interface NavigationItem {
   name: string;
@@ -11,28 +13,28 @@ interface NavigationItem {
   dropdown?: { name: string; href: string }[];
 }
 
-const navigation: NavigationItem[] = [
-  { name: "Home", href: "/" },
-  { name: "Request for Tutor", href: "/request-for-tutors" },
-  { name: "Register as a Tutor", href: "/register-tutor" },
-  { name: "Past Exam Papers", href: "/past-exam-papers" },
-  {
-    name: "Tuition Rates",
-    href: "/tuition-rates",
-  },
-  { name: "FAQ", href: "/faq" },
-  { name: "Blog", href: "/blogs" },
-  { name: "Contact Us", href: "/contact-us" },
-];
-
 interface DrawerContentProps {
   isDrawerOpen: boolean;
   onClose: () => void;
 }
 
 const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
+  const t = useTranslations("nav");
   const pathname = usePathname();
   const [openDropdowns, setOpenDropdowns] = useState<Set<number>>(new Set());
+
+  const navigation: NavigationItem[] = useMemo(
+    () => [
+      { name: t("requestForTutor"), href: "/request-for-tutors" },
+      { name: t("registerAsTutor"), href: "/register-tutor" },
+      { name: t("pastExamPapers"), href: "/past-exam-papers" },
+      { name: t("tuitionRates"), href: "/tuition-rates" },
+      { name: t("faq"), href: "/faq" },
+      { name: t("blog"), href: "/blogs" },
+      { name: t("contactUs"), href: "/contact-us" },
+    ],
+    [t],
+  );
 
   const isActiveHref = useCallback(
     (href: string) => {
@@ -66,7 +68,7 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
     });
 
     setOpenDropdowns(activeDropdowns);
-  }, [isDrawerOpen, isActiveHref]);
+  }, [isDrawerOpen, isActiveHref, navigation]);
 
   const toggleDropdown = (index: number) => {
     setOpenDropdowns((prev) => {
@@ -163,6 +165,9 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
           );
         })}
       </nav>
+      <div className="mt-4 border-t border-gray-100 pt-4">
+        <LocaleSwitcher />
+      </div>
     </div>
   );
 };

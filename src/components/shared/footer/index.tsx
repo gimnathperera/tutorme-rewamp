@@ -1,50 +1,49 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { FaTiktok } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
-interface ProductType {
-  id: number;
-  section: string;
-  link: { label: string; url: string }[];
-}
+const Footer = () => {
+  const t = useTranslations("footer");
 
-const products: ProductType[] = [
-  {
-    id: 1,
-    section: "Menu",
-    link: [
-      { label: "Home", url: "/" },
-      { label: "Request for Tutor", url: "/request-for-tutors" },
-      { label: "Register as a Tutor", url: "/register-tutor" },
-      { label: "Contact Us", url: "/contact-us" },
-    ],
-  },
-  {
-    id: 2,
-    section: "Resources",
-    link: [
-      { label: "Blog", url: "/blogs" },
-      { label: "Testimonials", url: "/#testimonials-section" },
-      { label: "FAQs", url: "/faq" },
-      { label: "About Us", url: "/#aboutus-section" },
-    ],
-  },
-  {
-    id: 3,
-    section: "Academics",
-    link: [
-      { label: "Grades & Subjects", url: "/grades-and-subjects" },
-      { label: "Past Exam Papers", url: "/past-exam-papers" },
-    ],
-  },
-  {
-    id: 4,
-    section: "Tuition",
-    link: [{ label: "Tuition Rates", url: "/tuition-rates" }],
-  },
-];
+  const products = [
+    {
+      id: 1,
+      section: t("menuSection"),
+      link: [
+        { label: t("home"), url: "/" },
+        { label: t("requestForTutor"), url: "/request-for-tutors" },
+        { label: t("registerAsTutor"), url: "/register-tutor" },
+        { label: t("contactUs"), url: "/contact-us" },
+      ],
+    },
+    {
+      id: 2,
+      section: t("resourcesSection"),
+      link: [
+        { label: t("blog"), url: "/blogs" },
+        { label: t("testimonials"), url: "/#testimonials-section" },
+        { label: t("faqs"), url: "/faq" },
+        { label: t("aboutUs"), url: "/#aboutus-section" },
+      ],
+    },
+    {
+      id: 3,
+      section: t("academicsSection"),
+      link: [
+        { label: t("gradesAndSubjects"), url: "/grades-and-subjects" },
+        { label: t("pastExamPapers"), url: "/past-exam-papers" },
+      ],
+    },
+    {
+      id: 4,
+      section: t("tuitionSection"),
+      link: [{ label: t("tuitionRates"), url: "/tuition-rates" }],
+    },
+  ];
 
-const footer = () => {
   return (
     <div className="bg-navyblue" id="first-section">
       <div className="mx-auto max-w-2xl pt-4 pb-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -52,7 +51,7 @@ const footer = () => {
           {/* COLUMN-1 */}
           <div className="col-span-2 lg:col-span-4">
             <h3 className="text-white text-2xl font-bold leading-snug mb-4 lg:mb-10">
-              Tuition Lanka
+              {t("brandName")}
             </h3>
 
             <div className="flex justify-center gap-4 sm:justify-start">
@@ -114,7 +113,6 @@ const footer = () => {
           </div>
 
           {/* COLUMN-2/3 */}
-
           {products.map((product) => (
             <div
               key={product.id}
@@ -145,18 +143,18 @@ const footer = () => {
           <div className="mt-4 grid grid-cols-1 gap-y-5 gap-x-16 sm:grid-cols-2 xl:gap-x-8">
             <div>
               <p className="text-center md:text-start text-offwhite text-sm">
-                @2026 - All Rights Reserved by Tuition Lanka
+                {t("copyright")}
               </p>
             </div>
             <div className="flex justify-center md:justify-end">
               <Link href="/privacy-policy">
                 <p className="text-offwhite text-sm pr-6 hover:text-gray-300 transition">
-                  Privacy policy
+                  {t("privacyPolicy")}
                 </p>
               </Link>
               <Link href="/terms-and-conditions">
                 <p className="text-offwhite text-sm pl-6 border-solid border-l border-footer hover:text-gray-300 transition">
-                  Terms &amp; conditions
+                  {t("termsAndConditions")}
                 </p>
               </Link>
             </div>
@@ -167,4 +165,4 @@ const footer = () => {
   );
 };
 
-export default footer;
+export default Footer;

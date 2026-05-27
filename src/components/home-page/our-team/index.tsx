@@ -1,22 +1,23 @@
+"use client";
+
 import Image from "next/image";
-import TutorImage from "../../../../public/images/beliefs/teaching.png";
+import TutorImage from "/images/beliefs/teaching.png";
+import { useTranslations } from "next-intl";
 
 const OurTeam = () => {
+  const t = useTranslations("ourTeam");
+
   return (
     <div className="px-4 pb-8 lg:px-8 lg:pb-12">
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row items-center gap-8">
           <div className="lg:w-1/2 text-center lg:text-left">
             <h2 className="text-3xl sm:text-4xl font-semibold text-black leading-[1.2] animate-on-scroll">
-              Our team believes you deserve <br className="hidden md:block" />{" "}
-              only the best learning experience.
+              {t("heading")}
             </h2>
 
             <p className="text-base font-normal text-[#4B5563] pt-5 leading-relaxed animate-on-scroll stagger-1">
-              We&apos;re dedicated to helping students and tutors connect
-              through a safe, trusted, easy-to-use platform. Every learner
-              deserves quality education in the comfort of their own home - and
-              every tutor deserves recognition for their effort.
+              {t("body")}
             </p>
           </div>
           <div className="lg:w-1/2 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2">

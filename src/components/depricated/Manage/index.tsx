@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Switch } from "@headlessui/react";
-import RightSvg from "../../../../public/images/manage/right.svg";
-import ToggleSvg from "../../../../public/images/manage/toggle.svg";
+import RightSvg from "/images/manage/right.svg";
+import ToggleSvg from "/images/manage/toggle.svg";
 import Image from "next/image";
 
 const names = [

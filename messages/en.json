@@ -1,0 +1,148 @@
+{
+  "nav": {
+    "requestForTutor": "Request for Tutor",
+    "registerAsTutor": "Register as a Tutor",
+    "academics": "Academics",
+    "gradesAndSubjects": "Grades & Subjects",
+    "pastExamPapers": "Past Exam Papers",
+    "tuitionRates": "Tuition Rates",
+    "faq": "FAQ",
+    "blog": "Blog",
+    "contactUs": "Contact Us",
+    "login": "Login"
+  },
+  "footer": {
+    "brandName": "Tuition Lanka",
+    "menuSection": "Menu",
+    "resourcesSection": "Resources",
+    "academicsSection": "Academics",
+    "tuitionSection": "Tuition",
+    "home": "Home",
+    "requestForTutor": "Request for Tutor",
+    "registerAsTutor": "Register as a Tutor",
+    "contactUs": "Contact Us",
+    "blog": "Blog",
+    "testimonials": "Testimonials",
+    "faqs": "FAQs",
+    "aboutUs": "About Us",
+    "gradesAndSubjects": "Grades & Subjects",
+    "pastExamPapers": "Past Exam Papers",
+    "tuitionRates": "Tuition Rates",
+    "copyright": "@2026 - All Rights Reserved by Tuition Lanka",
+    "privacyPolicy": "Privacy policy",
+    "termsAndConditions": "Terms & conditions"
+  },
+  "banner": {
+    "headline": "Personalized & Verified Home Tuition",
+    "requestForTutor": "Request for Tutor",
+    "registerAsTutor": "Register as a Tutor",
+    "enquireWhatsapp": "Enquire on Whatsapp"
+  },
+  "aboutUs": {
+    "sectionHeading": "Why Choose Home Tuition?",
+    "card1Heading": "Personalized Learning",
+    "card1Text": "Tutors adapt teaching methods to suit the student's learning style.",
+    "card2Heading": "Academic Support",
+    "card2Text": "Students receive help with homework, test preparation, and subject understanding.",
+    "card3Heading": "Confidence Building",
+    "card3Text": "One-on-one attention from a background-checked, verified tutor boosts confidence and motivation."
+  },
+  "beliefs": {
+    "joinHeadingMain": "Share",
+    "joinHeadingHighlight": "knowledge and inspire students worldwide.",
+    "joinBody": "Join our community of passionate tutors - including university students earning while they inspire the next generation. Make learning personal, flexible, and effective.",
+    "becomeTutor": "Become a Tutor",
+    "findHeadingHighlight": "Find",
+    "findHeadingMain": "the perfect tutor for any subject, anytime.",
+    "findBody": "Discover experienced tutors who match your learning goals and schedule.",
+    "requestForTutor": "Request for Tutor"
+  },
+  "ourTeam": {
+    "heading": "Our team believes you deserve only the best learning experience.",
+    "body": "We're dedicated to helping students and tutors connect through a safe, trusted, easy-to-use platform. Every learner deserves quality education in the comfort of their own home - and every tutor deserves recognition for their effort."
+  },
+  "keepInTouch": {
+    "heading": "Take your learning or teaching journey to the next level.",
+    "body": "Stay connected with us for updates, tips, and the latest tutoring opportunities. Whether you're a tutor sharing knowledge or a student chasing goals, our community is here to support your growth every step of the way.",
+    "cta": "Send us a message"
+  },
+  "faq": {
+    "sectionHeading": "Frequently asked questions.",
+    "forParents": "For Parents",
+    "forTutors": "For Tutors",
+    "noFaqsAvailable": "No FAQs available at the moment.",
+    "failedToLoad": "Failed to load FAQs. Please try again later.",
+    "readMore": "Read More",
+    "pageHeading": "Frequently Asked Questions",
+    "pageSubheading": "Find answers to common questions about TuitionLanka.",
+    "tuitionLankaHelp": "TuitionLanka Help",
+    "loadMore": "Load More"
+  },
+  "contactUs": {
+    "pageHeading": "Contact Us",
+    "pageSubtitle": "Get In Touch",
+    "pageIntro": "Not sure what you need? Our team at TuitionLanka will be happy to listen to you and help you find the right tutor.",
+    "emailLabel": "Email us",
+    "callLabel": "Call us",
+    "visitLabel": "Visit us",
+    "visitValue": "Colombo, Sri Lanka",
+    "formHeading": "We'd love to hear from you!",
+    "formSubheading": "Let's get in touch",
+    "formIntro": "Fill in the form and our team will get back to you shortly.",
+    "fullNameLabel": "Full Name *",
+    "fullNamePlaceholder": "e.g. Nimal Perera",
+    "emailInputLabel": "Email *",
+    "emailPlaceholder": "e.g. nimal@example.com",
+    "contactNumberLabel": "Contact Number *",
+    "contactNumberPlaceholder": "e.g. 0771234567",
+    "messageLabel": "Message *",
+    "messagePlaceholder": "Type your message here...",
+    "sendMessage": "Send Message",
+    "successMessage": "Your message has been sent successfully!"
+  },
+  "notFound": {
+    "heading": "Something is missing.",
+    "body": "Sorry, we can't find that page. You will find lots to explore on the home page.",
+    "backToHome": "Back to Homepage"
+  },
+  "findATutor": {
+    "heading": "Request for Tutor"
+  },
+  "tuitionAssignments": {
+    "heading": "Find An Assignment"
+  },
+  "localeSwitcher": {
+    "en": "English",
+    "si": "සිංහල",
+    "ta": "தமிழ்",
+    "label": "Language"
+  },
+  "tuitionRates": {
+    "pageHeading": "Check the Hourly Tuition Rates and Let's Get Learning!",
+    "pageSubheading": "Explore courses and resources just for you! See the relative hourly tuition rates to begin an exciting and personalized learning adventure!",
+    "subject": "Subject",
+    "universityStudents": "University Students",
+    "partTimeTutor": "Part Time Tutor",
+    "fullTimeTutor": "Full Time Tutor",
+    "govTeachersLine1": "Gov/International Teachers",
+    "govTeachersLine2": "(Ex / Current)",
+    "noRatesFound": "No tuition rates found for this grade.",
+    "failedToLoad": "Failed to load tuition rates for this grade.",
+    "loadingMore": "Loading more tuition rates...",
+    "failedToLoadMore": "Failed to load more tuition rates."
+  },
+  "blogs": {
+    "heroLabel": "TuitionLanka Insights",
+    "heroTitle": "Welcome to the Tuition Lanka Blog",
+    "heroSubtitle": "Discover the latest insights, tips, and updates.",
+    "allFilter": "All",
+    "addBlog": "+ Add Blog",
+    "addBlogMobile": "Add Blog",
+    "failedToLoad": "Failed to load blogs. Please try again later.",
+    "noBlogsFound": "No blogs found for this tag.",
+    "statusApproved": "Approved",
+    "statusPending": "Pending",
+    "statusRejected": "Rejected",
+    "authorName": "Tuition Lanka"
+  }
+}

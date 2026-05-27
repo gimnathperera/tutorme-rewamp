@@ -1,4 +1,8 @@
+const path = require("path");
+const createNextIntlPlugin = require("next-intl/plugin");
 const { withSentryConfig } = require("@sentry/nextjs");
+
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 const sentryOrg = process.env.SENTRY_ORG;
 const sentryProject = process.env.SENTRY_PROJECT;
@@ -6,7 +10,14 @@ const canUploadSentrySourcemaps = Boolean(
   process.env.SENTRY_AUTH_TOKEN && sentryOrg && sentryProject,
 );
 
-const nextConfig = {
+const nextConfig = withNextIntl({
+  webpack: (config) => {
+    // Resolve "/images/..." imports to the public/images directory.
+    // This lets you write: import X from "/images/foo.png"
+    // instead of fragile relative paths like "../../../public/images/foo.png"
+    config.resolve.alias["/images"] = path.join(__dirname, "public", "images");
+    return config;
+  },
   // standalone output requires symlink support (Linux/Docker only).
   // On Windows, set BUILD_STANDALONE=true only when building for Docker.
   output: process.env.BUILD_STANDALONE === "true" ? "standalone" : undefined,
@@ -45,7 +56,7 @@ const nextConfig = {
       },
     ];
   },
-};
+});
 
 module.exports = withSentryConfig(nextConfig, {
   org: sentryOrg,
