@@ -358,7 +358,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                         ? { border: heroBtnBorder, color: heroBtnColor }
                         : undefined
                     }
-                    className="text-base font-medium text-white py-2 px-5 bg-primary-800 rounded-full hover:bg-primary-800 transition-colors duration-200"
+                    className="text-base font-medium text-white py-2 px-5 bg-primary-600 rounded-full hover:bg-primary-700 transition-colors duration-200"
                     onClick={handleOnChangeSignUpModalVisibility}
                   >
                     Login
