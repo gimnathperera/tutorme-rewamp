@@ -229,7 +229,7 @@ small,
 .blog-content p a,
 .blog-content-renderer p.ql-align-justify a,
 .blog-content-renderer p a {
-  color: #2563eb;
+  color: #235ED5;
 }
 
 .blog-content h2 {
@@ -292,7 +292,7 @@ small,
 
 .blog-content a,
 .blog-content-renderer a {
-  color: #2563eb;
+  color: #235ED5;
   text-decoration: none;
 }
 
@@ -537,10 +537,10 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 .hero-cta {
-  background: #2563eb;
+  background: #235ED5;
   color: #ffffff;
-  border: 1.5px solid #2563eb;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
+  border: 1.5px solid #235ED5;
+  box-shadow: 0 4px 15px rgba(35, 94, 213, 0.4);
 }
 
 .hero-cta:hover {
@@ -560,7 +560,7 @@ html:not([data-scroll="0"]) .border-right {
 
 .hero-cta-secondary:hover {
   background: rgba(255, 255, 255, 1);
-  color: #2563eb;
+  color: #235ED5;
   border-color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
