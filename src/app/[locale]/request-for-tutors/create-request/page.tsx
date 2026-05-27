@@ -49,6 +49,7 @@ import {
   REQUEST_TUTOR_FREQUENCY_OPTIONS,
   TUTOR_TYPE_OPTIONS,
 } from "@/configs/options";
+import { useTranslations } from "next-intl";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -75,6 +76,7 @@ type TabKey = "contact" | "tutorDetails";
 const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
 
 export default function AddRequestForTutor() {
+  const t = useTranslations("requestForTutor");
   const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
   /** null = closed, "success" = success dialog, string = error message dialog */
@@ -215,7 +217,7 @@ export default function AddRequestForTutor() {
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-        <h1 className="text-3xl text-white font-bold">Request for Tutor</h1>
+        <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -225,14 +227,14 @@ export default function AddRequestForTutor() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base font-medium">
-                  Contact Details
+                  {t("contactDetails")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 {/* Full Name */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="name">
-                    Full Name <span className="text-red-500">*</span>
+                    {t("fullName")} <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -260,7 +262,7 @@ export default function AddRequestForTutor() {
                     <p className={errorMsg}>{errors.name?.message}</p>
                   ) : (
                     <p className="text-xs text-muted-foreground min-h-[1.25rem]">
-                      Letters and spaces only
+                      {t("fullNameHint")}
                     </p>
                   )}
                 </div>
@@ -269,7 +271,7 @@ export default function AddRequestForTutor() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="email">
-                      Email <span className="text-red-500">*</span>
+                      {t("email")} <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="email"
@@ -300,13 +302,13 @@ export default function AddRequestForTutor() {
                       <p className={errorMsg}>{errors.email?.message}</p>
                     ) : (
                       <p className="text-xs text-muted-foreground min-h-[1.25rem]">
-                        Enter a valid email address
+                        {t("emailHint")}
                       </p>
                     )}
                   </div>
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="phoneNumber">
-                      Contact Number <span className="text-red-500">*</span>
+                      {t("contactNumber")} <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phoneNumber"
@@ -343,7 +345,7 @@ export default function AddRequestForTutor() {
                       <p className={errorMsg}>{errors.phoneNumber?.message}</p>
                     ) : (
                       <p className="text-xs text-muted-foreground min-h-[1.25rem]">
-                        Contact number should be exactly 10 digits
+                        {t("contactNumberHint")}
                       </p>
                     )}
                   </div>
@@ -354,7 +356,7 @@ export default function AddRequestForTutor() {
                   {/* District */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="district">
-                      District <span className="text-red-500">*</span>
+                      {t("district")} <span className="text-red-500">*</span>
                     </Label>
                     <Controller
                       control={control}
@@ -379,7 +381,7 @@ export default function AddRequestForTutor() {
                   {/* City */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="city">
-                      City <span className="text-red-500">*</span>
+                      {t("city")} <span className="text-red-500">*</span>
                     </Label>
                     <Controller
                       control={control}
@@ -409,7 +411,7 @@ export default function AddRequestForTutor() {
                   onClick={nextStep}
                   className={primaryActionButtonClassName}
                 >
-                  Next
+                  {t("next")}
                 </Button>
               </CardFooter>
             </Card>
@@ -420,7 +422,7 @@ export default function AddRequestForTutor() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base font-medium">
-                  Tutor Details
+                  {t("tutorDetails")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
@@ -429,7 +431,7 @@ export default function AddRequestForTutor() {
                   {/* Medium */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="medium">
-                      Medium <span className="text-red-500">*</span>
+                      {t("medium")} <span className="text-red-500">*</span>
                     </Label>
                     <select
                       id="medium"
@@ -437,7 +439,7 @@ export default function AddRequestForTutor() {
                       className={`${selectClass} ${selectBorder(!!errors.medium)} ${selectColor(selectedMedium)}`}
                     >
                       <option value="" disabled hidden>
-                        Select medium of instruction
+                        {t("mediumPlaceholder")}
                       </option>
                       {MEDIUM_OPTIONS.map((option) => (
                         <option
@@ -457,7 +459,7 @@ export default function AddRequestForTutor() {
                   {/* Grade */}
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="grade">
-                      Grade <span className="text-red-500">*</span>
+                      {t("grade")} <span className="text-red-500">*</span>
                     </Label>
                     <select
                       id="grade"
@@ -465,7 +467,7 @@ export default function AddRequestForTutor() {
                       className={`${selectClass} ${selectBorder(!!errors.grade)} ${selectColor(selectedGradeId)}`}
                     >
                       <option value="" disabled hidden>
-                        Select student&apos;s grade
+                        {t("gradePlaceholder")}
                       </option>
                       {gradeOptions.map((g) => (
                         <option
@@ -486,7 +488,7 @@ export default function AddRequestForTutor() {
                 {/* Number of Tutors */}
                 <div className={fieldWrapper}>
                   <Label className="text-sm" htmlFor="tutorCount">
-                    Number of Tutors
+                    {t("numberOfTutors")}
                   </Label>
                   <select
                     id="tutorCount"
@@ -501,7 +503,7 @@ export default function AddRequestForTutor() {
                       (_, i) => i + 1,
                     ).map((n) => (
                       <option key={n} value={n}>
-                        {n} {n === 1 ? "tutor" : "tutors"}
+                        {n} {n === 1 ? t("tutor") : t("tutors")}
                       </option>
                     ))}
                   </select>
@@ -514,13 +516,13 @@ export default function AddRequestForTutor() {
                     className="p-4 border border-gray-200 rounded-md flex flex-col gap-4"
                   >
                     <h3 className="text-base font-semibold">
-                      Tutor {index + 1}
+                      {t("tutorNumber", { n: index + 1 })}
                     </h3>
 
                     {/* Subject */}
                     <div className={fieldWrapper}>
                       <Label className="text-sm" htmlFor={`subject-${index}`}>
-                        Subject <span className="text-red-500">*</span>
+                        {t("subject")} <span className="text-red-500">*</span>
                       </Label>
                       <select
                         id={`subject-${index}`}
@@ -530,8 +532,8 @@ export default function AddRequestForTutor() {
                       >
                         <option value="" disabled hidden>
                           {selectedGradeId
-                            ? "Select subject"
-                            : "Select a grade first"}
+                            ? t("subjectPlaceholder")
+                            : t("selectGradeFirst")}
                         </option>
                         {subjectOptions.map((s) => (
                           <option
@@ -557,7 +559,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
-                          Duration <span className="text-red-500">*</span>
+                          {t("duration")} <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`duration-${index}`}
@@ -565,7 +567,7 @@ export default function AddRequestForTutor() {
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)} ${selectColor(tutors[index]?.duration)}`}
                         >
                           <option value="" disabled hidden>
-                            Select session duration
+                            {t("durationPlaceholder")}
                           </option>
                           {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
                             <option
@@ -590,7 +592,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
-                          Frequency <span className="text-red-500">*</span>
+                          {t("frequency")} <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`frequency-${index}`}
@@ -598,7 +600,7 @@ export default function AddRequestForTutor() {
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)} ${selectColor(tutors[index]?.frequency)}`}
                         >
                           <option value="" disabled hidden>
-                            Select sessions per week
+                            {t("frequencyPlaceholder")}
                           </option>
                           {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
                             <option
@@ -625,7 +627,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`tutorType-${index}`}
                         >
-                          Preferred Tutor Type{" "}
+                          {t("preferredTutorType")}{" "}
                           <span className="text-red-500">*</span>
                         </Label>
                         <select
@@ -634,7 +636,7 @@ export default function AddRequestForTutor() {
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)} ${selectColor(tutors[index]?.preferredTutorType)}`}
                         >
                           <option value="" disabled hidden>
-                            Select preferred tutor type
+                            {t("preferredTutorTypePlaceholder")}
                           </option>
                           {TUTOR_TYPE_OPTIONS.map((o) => (
                             <option
@@ -662,7 +664,7 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`classType-${index}`}
                         >
-                          Preferred Class Type{" "}
+                          {t("preferredClassType")}{" "}
                           <span className="text-red-500">*</span>
                         </Label>
                         <select
@@ -671,7 +673,7 @@ export default function AddRequestForTutor() {
                           className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredClassType)} ${selectColor(tutors[index]?.preferredClassType)}`}
                         >
                           <option value="" disabled hidden>
-                            Select preferred class type
+                            {t("preferredClassTypePlaceholder")}
                           </option>
                           {CLASS_TYPE_OPTIONS.map((o) => (
                             <option
@@ -700,14 +702,14 @@ export default function AddRequestForTutor() {
 
               <CardFooter className="flex justify-between">
                 <Button type="button" variant="outline" onClick={prevStep}>
-                  Previous
+                  {t("previous")}
                 </Button>
                 <Button
                   type="submit"
                   disabled={isLoading}
                   className={primaryActionButtonClassName}
                 >
-                  {isLoading ? "Submitting..." : "Submit"}
+                  {isLoading ? t("submitting") : t("submit")}
                 </Button>
               </CardFooter>
             </Card>
@@ -742,11 +744,10 @@ export default function AddRequestForTutor() {
           </div>
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">
-              Request is processing
+              {t("successTitle")}
             </DialogTitle>
             <DialogDescription className="text-center text-base">
-              Your tutor request has been submitted successfully. We&apos;ll
-              match you with a suitable tutor and get back to you shortly.
+              {t("successDesc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-col sm:flex-row gap-2 mt-2">
@@ -755,7 +756,7 @@ export default function AddRequestForTutor() {
               className="w-full sm:w-auto"
               onClick={handleSuccessClose}
             >
-              Submit Another Request
+              {t("submitAnother")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -790,14 +791,14 @@ export default function AddRequestForTutor() {
           </div>
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">
-              Submission Failed
+              {t("errorTitle")}
             </DialogTitle>
             <DialogDescription className="text-center text-base">
-              Something went wrong.
+              {t("errorDesc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>Try Again</Button>
+            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

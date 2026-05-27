@@ -13,6 +13,7 @@ import {
   TUTOR_TYPE_OPTIONS,
   MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
+import { useTranslations } from "next-intl";
 
 import {
   useFetchGradesQuery,
@@ -34,6 +35,7 @@ type MultiSelectOnChange = NonNullable<
 >;
 
 const AcademicExperience = () => {
+  const t = useTranslations("registerTutor");
   const {
     register,
     control,
@@ -131,7 +133,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="classType">
-            Class Type <span className="text-red-500">*</span>
+            {t("classType")} <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="classType"
@@ -154,7 +156,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="preferredLocations">
-            Preferred Locations{" "}
+            {t("preferredLocations")}{" "}
             {isPreferredLocationsEnabled && (
               <span className="text-red-500">*</span>
             )}
@@ -187,7 +189,7 @@ const AcademicExperience = () => {
             </p>
           ) : (
             <p className="text-xs leading-4 text-muted-foreground min-h-4">
-              Locations apply to physical classes only
+              {t("locationsHint")}
             </p>
           )}
         </div>
@@ -197,7 +199,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorType">
-            Tutor Types <span className="text-red-500">*</span>
+            {t("tutorTypes")} <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorType"
@@ -220,7 +222,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="highestEducation">
-            Highest Education Level <span className="text-red-500">*</span>
+            {t("highestEducation")} <span className="text-red-500">*</span>
           </Label>
           <select
             id="highestEducation"
@@ -234,7 +236,7 @@ const AcademicExperience = () => {
             className={`${selectClass} ${selectBorder(!!errors.highestEducation)} ${selectColor(highestEducation)}`}
           >
             <option value="" disabled hidden>
-              Select highest education level
+              {t("highestEducationPlaceholder")}
             </option>
             {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
               <option
@@ -256,7 +258,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="yearsExperience">
-            Years of Experience <span className="text-red-500">*</span>
+            {t("yearsExperience")} <span className="text-red-500">*</span>
           </Label>
           <Input
             id="yearsExperience"
@@ -282,7 +284,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorMediums">
-            Tutor Mediums <span className="text-red-500">*</span>
+            {t("tutorMediums")} <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="tutorMediums"
@@ -312,7 +314,7 @@ const AcademicExperience = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="grades">
-            Grades <span className="text-red-500">*</span>
+            {t("grades")} <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="grades"
@@ -340,7 +342,7 @@ const AcademicExperience = () => {
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="subjects">
-            Subjects <span className="text-red-500">*</span>
+            {t("subjects")} <span className="text-red-500">*</span>
           </Label>
           <Controller
             name="subjects"

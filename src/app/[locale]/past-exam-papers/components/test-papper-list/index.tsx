@@ -1,9 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import React, { Dispatch, FC, SetStateAction } from "react";
 import Skeleton from "react-loading-skeleton";
 import Pagination from "@/components/shared/pagination";
 import { Paper } from "@/types/response-types";
 import { Download, FileText, GraduationCap, BookOpen } from "lucide-react";
+import { useTranslations } from "next-intl";
 import "react-loading-skeleton/dist/skeleton.css";
 import Empty from "/images/shared/empty.png";
 
@@ -24,6 +27,8 @@ const TestPaperList: FC<Props> = ({
   totalResults,
   onPageChange,
 }) => {
+  const t = useTranslations("pastExamPapers");
+
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-3xl mt-8">
       {isPapersLoading ? (
@@ -49,7 +54,10 @@ const TestPaperList: FC<Props> = ({
         <>
           <div className="mb-5 flex items-center justify-between gap-3">
             <p className="text-sm font-medium text-gray-500">
-              Showing {availablePapers.length} of {totalResults} papers
+              {t("showing", {
+                count: availablePapers.length,
+                total: totalResults,
+              })}
             </p>
           </div>
 
@@ -112,7 +120,7 @@ const TestPaperList: FC<Props> = ({
                     className="flex items-center justify-center gap-2 w-full rounded-xl border border-blue-500 py-2 text-sm font-semibold text-blue-500 hover:bg-blue-50 transition-colors duration-150"
                   >
                     <Download size={15} />
-                    Download Paper
+                    {t("downloadPaper")}
                   </a>
                 </div>
               </div>
@@ -135,11 +143,9 @@ const TestPaperList: FC<Props> = ({
             className="inline-block m-auto mb-4"
           />
           <h2 className="text-base font-semibold text-gray-700">
-            No Past Exam Papers Available
+            {t("noPapersHeading")}
           </h2>
-          <p className="text-sm text-gray-500 mt-2">
-            No papers found for the selected filters. Try adjusting your search.
-          </p>
+          <p className="text-sm text-gray-500 mt-2">{t("noPapersBody")}</p>
         </div>
       )}
     </div>

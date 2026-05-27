@@ -6,6 +6,7 @@ import { Search, X } from "lucide-react";
 import { FC } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { initialFormValues, PaperSearchSchema } from "./schema";
+import { useTranslations } from "next-intl";
 
 type Props = {
   gradesOptions: Option[];
@@ -26,6 +27,8 @@ const FormTestPaperSearch: FC<Props> = ({
   isSubjectsLoading,
   isMediumsLoading,
 }) => {
+  const t = useTranslations("pastExamPapers");
+
   const onSubmit = (data: PaperSearchSchema) => {
     console.log("Form Submitted", data);
   };
@@ -40,9 +43,7 @@ const FormTestPaperSearch: FC<Props> = ({
     <FormProvider {...testPaperSearchForm}>
       <form onSubmit={testPaperSearchForm.handleSubmit(onSubmit)}>
         <div className="flex items-center justify-between mb-4">
-          <p className="text-sm text-gray-500">
-            Search by year and narrow papers by grade, subject, or medium.
-          </p>
+          <p className="text-sm text-gray-500">{t("searchHint")}</p>
           {hasActiveFilters && (
             <button
               type="button"
@@ -50,14 +51,14 @@ const FormTestPaperSearch: FC<Props> = ({
               className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-red-500 transition-colors"
             >
               <X size={14} />
-              Clear filters
+              {t("clearFilters")}
             </button>
           )}
         </div>
 
         <div className="flex flex-col gap-1 mb-6">
           <label className="text-sm font-medium text-gray-700">
-            Search by Year
+            {t("searchByYear")}
           </label>
           <div className="relative">
             <Search
@@ -68,7 +69,7 @@ const FormTestPaperSearch: FC<Props> = ({
               {...testPaperSearchForm.register("search")}
               type="text"
               inputMode="numeric"
-              placeholder="Search papers by the year"
+              placeholder={t("searchPlaceholder")}
               autoComplete="off"
               className="block w-full rounded-md border border-linegrey px-3 py-2 pl-10 pr-9 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm sm:leading-6"
             />
@@ -91,28 +92,28 @@ const FormTestPaperSearch: FC<Props> = ({
 
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           <InputSelect
-            label="Select Grade"
+            label={t("selectGrade")}
             name="grade"
             options={gradesOptions}
             loading={isGradesLoading}
-            placeholder="All Grades"
+            placeholder={t("allGrades")}
             disablePlaceholder={false}
           />
           <InputSelect
-            label="Select Subject"
+            label={t("selectSubject")}
             name="subject"
             options={subjectOptions}
             loading={isSubjectsLoading}
-            placeholder="All Subjects"
+            placeholder={t("allSubjects")}
             disablePlaceholder={false}
           />
           <InputSelect
-            label="Select Medium"
+            label={t("selectMedium")}
             name="medium"
             options={mediumOptions}
             disabled={isMediumsLoading || mediumOptions.length === 0}
             loading={isMediumsLoading}
-            placeholder="All Mediums"
+            placeholder={t("allMediums")}
             disablePlaceholder={false}
           />
         </div>
