@@ -94,12 +94,12 @@ const TestPapers = () => {
   );
 
   return (
-    <div className=" max-w-7xl mx-auto pt-12 pb-24 ">
+    <div className="max-w-7xl mx-auto py-10">
       <div className=" py-4 m-3">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+        <h2 className="text-4xl font-bold text-center">
           {t("pageHeading")}
         </h2>
-        <h3 className="text-xl sm:text-2xl font-normal text-center pt-4 sm:pt-10 opacity-50">
+        <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal text-center opacity-50">
           {t("pageSubheading")}
         </h3>
       </div>
