@@ -469,7 +469,7 @@ const GradesPage: FC = () => {
   );
 
   return (
-    <div className="px-4 pb-12 pt-8 sm:px-6 lg:px-8">
+    <div className="px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto mb-5 max-w-7xl text-center">
         <h2 className="text-4xl font-bold text-center">
           Grades &amp; Subjects
