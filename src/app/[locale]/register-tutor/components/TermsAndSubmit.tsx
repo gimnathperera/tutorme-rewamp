@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
@@ -284,7 +285,15 @@ const TermsAndSubmit = () => {
               className="flex flex-col gap-1 text-sm cursor-pointer"
             >
               <span className="font-semibold">
-                {t("agreeTermsLabel")}{" "}
+                I agree to the{" "}
+                <Link
+                  href="/terms-and-conditions"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-600 underline hover:text-primary-700"
+                >
+                  Terms and Conditions
+                </Link>{" "}
                 <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
