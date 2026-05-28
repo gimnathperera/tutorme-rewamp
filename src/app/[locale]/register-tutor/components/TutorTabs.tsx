@@ -29,6 +29,7 @@ import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
 import TutorProfile from "./TutorProfile";
 import TermsAndSubmit from "./TermsAndSubmit";
+import { useTranslations } from "next-intl";
 import {
   FindMyTutorForm,
   fullSchema,
@@ -71,6 +72,7 @@ const isDuplicateEmailError = (error: string) => {
 };
 
 export function TutorTabs() {
+  const t = useTranslations("registerTutor");
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
@@ -288,7 +290,7 @@ export function TutorTabs() {
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt="Logo image" />
             <h1 className="text-3xl text-white font-bold">
-              Register As A Tutor
+              {t("pageTitle")}
             </h1>
           </div>
 
@@ -297,7 +299,7 @@ export function TutorTabs() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base font-medium">
-                    Personal Information
+                    {t("personalInfo")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -309,7 +311,7 @@ export function TutorTabs() {
                     onClick={nextStep}
                     className={primaryActionButtonClassName}
                   >
-                    Next
+                    {t("next")}
                   </Button>
                 </CardFooter>
               </Card>
@@ -319,7 +321,7 @@ export function TutorTabs() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base font-medium">
-                    Qualifications
+                    {t("qualifications")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -327,14 +329,14 @@ export function TutorTabs() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button type="button" variant="outline" onClick={prevStep}>
-                    Previous
+                    {t("previous")}
                   </Button>
                   <Button
                     type="button"
                     onClick={nextStep}
                     className={primaryActionButtonClassName}
                   >
-                    Next
+                    {t("next")}
                   </Button>
                 </CardFooter>
               </Card>
@@ -344,7 +346,7 @@ export function TutorTabs() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base font-medium">
-                    Teaching Profile
+                    {t("teachingProfile")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -352,14 +354,14 @@ export function TutorTabs() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button type="button" variant="outline" onClick={prevStep}>
-                    Previous
+                    {t("previous")}
                   </Button>
                   <Button
                     type="button"
                     onClick={nextStep}
                     className={primaryActionButtonClassName}
                   >
-                    Next
+                    {t("next")}
                   </Button>
                 </CardFooter>
               </Card>
@@ -369,7 +371,7 @@ export function TutorTabs() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base font-medium">
-                    Verification & Agreement
+                    {t("verification")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -377,14 +379,14 @@ export function TutorTabs() {
                 </CardContent>
                 <CardFooter className="flex justify-start">
                   <Button type="button" variant="outline" onClick={prevStep}>
-                    Previous
+                    {t("previous")}
                   </Button>
                   <Button
                     type="submit"
                     className={`ml-auto ${primaryActionButtonClassName}`}
                     disabled={isSubmitDisabled}
                   >
-                    Submit {isLoading ? <Spinner /> : ""}
+                    {t("submit")} {isLoading ? <Spinner /> : ""}
                   </Button>
                 </CardFooter>
               </Card>
@@ -420,11 +422,10 @@ export function TutorTabs() {
           </div>
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">
-              Registration Submitted!
+              {t("successTitle")}
             </DialogTitle>
             <DialogDescription className="text-center text-sm text-gray-500">
-              Your tutor profile has been submitted successfully and is
-              currently under review.
+              {t("successDesc")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex items-start gap-3 bg-blue-50 border border-blue-100 rounded-lg px-4 py-3 mt-1">
@@ -443,12 +444,12 @@ export function TutorTabs() {
               />
             </svg>
             <p className="text-sm text-blue-700 leading-snug">
-              We&apos;ll notify you via email once your account is approved.
+              {t("successEmail")}
             </p>
           </div>
           <DialogFooter className="justify-center mt-2">
             <Button className="w-full sm:w-auto" onClick={handleDone}>
-              Done
+              {t("done")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -483,7 +484,7 @@ export function TutorTabs() {
           </div>
           <DialogHeader>
             <DialogTitle className="text-center text-xl font-semibold">
-              Submission Failed
+              {t("errorTitle")}
             </DialogTitle>
             <DialogDescription className="text-center text-base">
               {typeof submissionResult === "string"
@@ -492,7 +493,7 @@ export function TutorTabs() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>Try Again</Button>
+            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

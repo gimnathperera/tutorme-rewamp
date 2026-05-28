@@ -1,3 +1,5 @@
+"use client";
+
 import { env } from "@/configs/env";
 import {
   ArrowUpRight,
@@ -6,6 +8,7 @@ import {
   Mail,
   MessageCircle,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type LegalContactSectionProps = {
   sectionNumber: number;
@@ -38,18 +41,16 @@ const LegalContactSection = ({
   sectionNumber,
   documentName,
 }: LegalContactSectionProps) => {
+  const t = useTranslations("legalContact");
   const whatsApp = getWhatsAppContact();
 
   return (
     <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <h2 className="text-lg font-bold text-gray-900">
-        {sectionNumber}. Contact Us
+        {sectionNumber}. {t("heading")}
       </h2>
       <div className="mt-3 space-y-3 text-sm leading-relaxed text-gray-600">
-        <p>
-          If you have any questions, concerns, or requests regarding this{" "}
-          {documentName}, please contact us at:
-        </p>
+        <p>{t("intro", { documentName })}</p>
 
         <div className="space-y-2 rounded-xl border border-gray-100 p-3">
           <p className="flex items-start gap-2 font-semibold text-gray-800">
@@ -67,7 +68,8 @@ const LegalContactSection = ({
             >
               <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span className="min-w-0 break-all">
-                <span className="text-gray-800">Email:</span> {SUPPORT_EMAIL}
+                <span className="text-gray-800">{t("emailLabel")}:</span>{" "}
+                {SUPPORT_EMAIL}
               </span>
               <ArrowUpRight
                 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2"
@@ -83,7 +85,7 @@ const LegalContactSection = ({
             >
               <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span className="min-w-0">
-                <span className="text-gray-800">WhatsApp:</span>{" "}
+                <span className="text-gray-800">{t("whatsappLabel")}:</span>{" "}
                 {whatsApp.displayNumber}
               </span>
               <ArrowUpRight
@@ -100,7 +102,8 @@ const LegalContactSection = ({
             >
               <Globe2 className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span className="min-w-0 break-all">
-                <span className="text-gray-800">Website:</span> {WEBSITE_URL}
+                <span className="text-gray-800">{t("websiteLabel")}:</span>{" "}
+                {WEBSITE_URL}
               </span>
               <ArrowUpRight
                 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2"

@@ -6,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
 import {
@@ -28,6 +29,9 @@ const DocumentRow = ({
   errors,
   onRemove,
   removable,
+  documentTypeLabel,
+  uploadFileLabel,
+  selectTypePlaceholder,
 }: {
   fieldName: string;
   index: number;
@@ -36,13 +40,16 @@ const DocumentRow = ({
   errors: any;
   onRemove: () => void;
   removable: boolean;
+  documentTypeLabel: string;
+  uploadFileLabel: string;
+  selectTypePlaceholder: string;
 }) => {
   const rowErrors = errors[index] ?? {};
   return (
     <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50">
       <div className="flex flex-col gap-1">
         <span className="text-xs text-gray-500 font-medium mb-1">
-          Document Type
+          {documentTypeLabel}
         </span>
         <Controller
           name={`${fieldName}.${index}.type`}
@@ -53,7 +60,7 @@ const DocumentRow = ({
               className={`${selectClass} ${selectBorder(!!rowErrors.type)} ${selectColor(f.value)}`}
             >
               <option value="" disabled hidden>
-                Select type…
+                {selectTypePlaceholder}
               </option>
               {options.map((opt) => (
                 <option
@@ -74,7 +81,7 @@ const DocumentRow = ({
 
       <div className="flex flex-col gap-1 min-w-0 overflow-hidden">
         <span className="text-xs text-gray-500 font-medium mb-1">
-          Upload File
+          {uploadFileLabel}
         </span>
         <Controller
           name={`${fieldName}.${index}.url`}
@@ -109,6 +116,7 @@ const DocumentRow = ({
 };
 
 const TermsAndSubmit = () => {
+  const t = useTranslations("registerTutor");
   const {
     control,
     formState: { errors },
@@ -153,7 +161,7 @@ const TermsAndSubmit = () => {
             />
           </svg>
           <h3 className="text-sm font-semibold text-black">
-            Certificates &amp; Documents <span className="text-red-500">*</span>
+            {t("certificatesTitle")} <span className="text-red-500">*</span>
           </h3>
         </div>
 
@@ -161,7 +169,7 @@ const TermsAndSubmit = () => {
           {/* Educational Details — mandatory */}
           <div>
             <p className="text-xs font-semibold text-darkgrey mb-2">
-              Educational Details <span className="text-red-500">*</span>
+              {t("educationalDetails")} <span className="text-red-500">*</span>
             </p>
             <div className="space-y-3">
               {eduFields.map((field, index) => (
@@ -174,6 +182,9 @@ const TermsAndSubmit = () => {
                   errors={certErrors}
                   onRemove={() => removeEdu(index)}
                   removable={eduFields.length > 1}
+                  documentTypeLabel={t("documentType")}
+                  uploadFileLabel={t("uploadFile")}
+                  selectTypePlaceholder={t("selectType")}
                 />
               ))}
             </div>
@@ -193,7 +204,7 @@ const TermsAndSubmit = () => {
               onClick={() => appendEdu({ type: "", url: "" })}
             >
               <Plus size={15} />
-              Add Document
+              {t("addDocument")}
             </Button>
           </div>
 
@@ -202,7 +213,7 @@ const TermsAndSubmit = () => {
           {/* Optional Details */}
           <div>
             <p className="text-xs font-semibold text-darkgrey mb-2">
-              Optional Details
+              {t("optionalDetails")}
             </p>
             <div className="space-y-3">
               {optFields.map((field, index) => (
@@ -215,6 +226,9 @@ const TermsAndSubmit = () => {
                   errors={[]}
                   onRemove={() => removeOpt(index)}
                   removable={true}
+                  documentTypeLabel={t("documentType")}
+                  uploadFileLabel={t("uploadFile")}
+                  selectTypePlaceholder={t("selectType")}
                 />
               ))}
             </div>
@@ -227,7 +241,7 @@ const TermsAndSubmit = () => {
               onClick={() => appendOpt({ type: "", url: "" })}
             >
               <Plus size={15} />
-              Add Document
+              {t("addDocument")}
             </Button>
           </div>
         </div>
@@ -249,7 +263,7 @@ const TermsAndSubmit = () => {
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <h3 className="text-sm font-semibold text-black">Agreements</h3>
+          <h3 className="text-sm font-semibold text-black">{t("agreements")}</h3>
         </div>
 
         <div className="p-5 space-y-1">
@@ -283,9 +297,7 @@ const TermsAndSubmit = () => {
                 <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
-                I agree to receiving assignment information via SMS and
-                understand that rates are subject to negotiation. Admin fees may
-                apply for successful assignments.
+                {t("agreeTermsDesc")}
               </span>
             </Label>
           </div>
@@ -311,13 +323,10 @@ const TermsAndSubmit = () => {
               className="flex flex-col gap-1 text-sm cursor-pointer"
             >
               <span className="font-semibold">
-                I agree to receiving assignment information regarding new
-                Tuition Assignments <span className="text-red-500">*</span>
+                {t("agreeAssignmentLabel")} <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
-                By checking this box, you agree to receive SMS and email
-                notifications about new tutoring assignments that match your
-                preferences.
+                {t("agreeAssignmentDesc")}
               </span>
             </Label>
           </div>

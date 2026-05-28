@@ -38,18 +38,16 @@ export function SentryLogTestClient() {
 
   return (
     <div className="mx-auto flex min-h-[60vh] w-full max-w-xl flex-col items-center justify-center px-6 py-16 text-center">
-      <h1 className="text-3xl font-semibold text-gray-950">
-        Sentry Test
-      </h1>
+      <h1 className="text-3xl font-semibold text-gray-950">Sentry Test</h1>
       <p className="mt-4 text-base leading-7 text-gray-600">
         Click the button once, then check Sentry Logs for
         <span className="font-medium text-gray-950">
           {" "}
           User triggered test log
-        </span>
-        {" "}and Sentry Metrics for
-        <span className="font-medium text-gray-950"> test_metric</span>. It
-        also sends a frontend test error to force a sampled replay.
+        </span>{" "}
+        and Sentry Metrics for
+        <span className="font-medium text-gray-950"> test_metric</span>. It also
+        sends a frontend test error to force a sampled replay.
       </p>
       <button
         type="button"
