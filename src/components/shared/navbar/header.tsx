@@ -218,7 +218,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                   fill
                   priority
                   sizes="(min-width: 1024px) 250px, (min-width: 640px) 220px, 180px"
-                  className="object-contain"
+                  className="object-contain object-left"
                 />
               </Link>
             </div>
