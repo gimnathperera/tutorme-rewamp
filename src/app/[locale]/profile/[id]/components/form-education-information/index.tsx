@@ -1,6 +1,7 @@
 "use client";
 
 import InputText from "@/components/shared/input-text";
+import NumberStepper from "@/components/shared/number-stepper";
 import {
   Controller,
   FormProvider,
@@ -302,15 +303,12 @@ const FormEducationInfo: FC<Props> = ({
                 reserveHelperSpace
               />
 
-              <InputText
-                label="Years of Experience *"
-                placeholder="Enter total years of experience"
+              <NumberStepper
                 name="yearsExperience"
-                type="number"
                 min={0}
                 max={50}
-                step={1}
-                className={fieldControlHeightClass}
+                label="Years of Experience"
+                required
                 reserveHelperSpace
               />
 
