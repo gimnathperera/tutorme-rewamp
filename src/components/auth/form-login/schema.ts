@@ -1,21 +1,22 @@
 import { z } from "zod";
 
-export const loginSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, { message: "Email is not allowed to be empty" })
-    .email({ message: "Invalid email address" }),
+export const createLoginSchema = (t: (key: string) => string) =>
+  z.object({
+    email: z
+      .string()
+      .trim()
+      .min(1, { message: t("emailRequired") })
+      .email({ message: t("emailInvalid") }),
 
-  password: z
-    .string()
-    .trim()
-    .min(1, { message: "Password is not allowed to be empty" })
-    .regex(/^\S+$/, { message: "Password must not contain spaces." })
-    .min(8, { message: "Password must be at least 8 characters long" }),
-});
+    password: z
+      .string()
+      .trim()
+      .min(1, { message: t("passwordRequired") })
+      .regex(/^\S+$/, { message: t("passwordNoSpaces") })
+      .min(8, { message: t("passwordTooShort") }),
+  });
 
-export type LoginSchema = z.infer<typeof loginSchema>;
+export type LoginSchema = z.infer<ReturnType<typeof createLoginSchema>>;
 
 export const initialFormValues = {
   email: "",
