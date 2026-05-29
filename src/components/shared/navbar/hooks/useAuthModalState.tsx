@@ -6,6 +6,7 @@ import FormSignUp from "@/components/auth/form-sign-up";
 import { useAuthContext } from "@/contexts";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export enum FormType {
   Login = "Login",
@@ -25,6 +26,7 @@ type LogicReturnType = {
 };
 
 const useAuthModalState = (): LogicReturnType => {
+  const t = useTranslations("auth");
   const [isOpen, setIsOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [currentForm, setCurrentForm] = useState<FormType>(FormType.Login);
@@ -111,26 +113,26 @@ const useAuthModalState = (): LogicReturnType => {
   const getFormTitle = () => {
     switch (currentForm) {
       case FormType.Login:
-        return "Login";
+        return t("loginTitle");
       case FormType.SignUp:
-        return "Sign Up";
+        return t("signUpTitle");
       case FormType.ForgotPassword:
-        return "Forgot Password";
+        return t("forgotPasswordTitle");
       default:
-        return "Login";
+        return t("loginTitle");
     }
   };
 
   const getFormDescription = () => {
     switch (currentForm) {
       case FormType.Login:
-        return "Login to access to your account";
+        return t("loginDescription");
       case FormType.SignUp:
-        return "Sign up to create an account";
+        return t("signUpDescription");
       case FormType.ForgotPassword:
-        return "Please enter your email to reset your password";
+        return t("forgotPasswordDescription");
       default:
-        return "Login to access to your account";
+        return t("loginDescription");
     }
   };
 

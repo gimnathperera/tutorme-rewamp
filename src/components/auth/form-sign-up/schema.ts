@@ -3,53 +3,50 @@ import {
   PASSWORD_MIN,
   PASSWORD_MAX,
   PASSWORD_LETTER_NUMBER_REGEX,
-  PASSWORD_TOO_SHORT,
-  PASSWORD_TOO_LONG,
-  PASSWORD_LETTER_NUMBER_MSG,
 } from "../../../configs/password";
 
-// Normalize text: trim + remove extra spaces
 const normalizeText = (value: string) => value.trim().replace(/\s+/g, " ");
 
-export const signUpSchema = z
-  .object({
-    name: z
-      .string()
-      .transform(normalizeText)
-      .refine((val) => val.length > 0, {
-        message: "Full Name is required",
-      })
-      .refine((val) => /^[A-Za-z\s]+$/.test(val), {
-        message: "Name can contain letters and spaces only",
-      }),
+export const createSignUpSchema = (t: (key: string) => string) =>
+  z
+    .object({
+      name: z
+        .string()
+        .transform(normalizeText)
+        .refine((val) => val.length > 0, {
+          message: t("nameRequired"),
+        })
+        .refine((val) => /^[A-Za-z\s]+$/.test(val), {
+          message: t("nameLettersOnly"),
+        }),
 
-    email: z
-      .string()
-      .trim()
-      .nonempty("Email is required.")
-      .email({ message: "Invalid email address" }),
+      email: z
+        .string()
+        .trim()
+        .nonempty(t("emailRequired"))
+        .email({ message: t("emailInvalid") }),
 
-    password: z
-      .string()
-      .trim()
-      .nonempty("Password is required.")
-      .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
-      .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
-      .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-        message: PASSWORD_LETTER_NUMBER_MSG,
-      }),
+      password: z
+        .string()
+        .trim()
+        .nonempty(t("passwordRequired"))
+        .min(PASSWORD_MIN, { message: t("passwordTooShort") })
+        .max(PASSWORD_MAX, { message: t("passwordTooLong") })
+        .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+          message: t("passwordLetterNumber"),
+        }),
 
-    confirmPassword: z
-      .string()
-      .trim()
-      .nonempty("Please confirm your password."),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-  });
+      confirmPassword: z
+        .string()
+        .trim()
+        .nonempty(t("confirmPasswordRequired")),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("passwordsNoMatch"),
+      path: ["confirmPassword"],
+    });
 
-export type SignUpSchema = z.infer<typeof signUpSchema>;
+export type SignUpSchema = z.infer<ReturnType<typeof createSignUpSchema>>;
 
 export const initialFormValues = {
   name: "",
