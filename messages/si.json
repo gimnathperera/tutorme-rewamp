@@ -279,6 +279,9 @@
     "statusRejected": "ප්‍රතික්ෂේප කරන ලදී",
     "authorName": "Tuition Lanka"
   },
+  "testimonials": {
+    "sectionHeading": "අනෙක් අය කිනම් දේ කියනවාදැයි බලන්න."
+  },
   "legalContact": {
     "heading": "අප අමතන්න",
     "intro": "මෙම {documentName} සම්බන්ධව ඔබට ප්‍රශ්න, කනස්සල්ල හෝ ඉල්ලීම් ඇත්නම්, කරුණාකර අප හා සම්බන්ධ වන්න:",

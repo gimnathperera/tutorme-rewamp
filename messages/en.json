@@ -279,6 +279,9 @@
     "statusRejected": "Rejected",
     "authorName": "Tuition Lanka"
   },
+  "testimonials": {
+    "sectionHeading": "See what others are saying."
+  },
   "legalContact": {
     "heading": "Contact Us",
     "intro": "If you have any questions, concerns, or requests regarding this {documentName}, please contact us at:",
