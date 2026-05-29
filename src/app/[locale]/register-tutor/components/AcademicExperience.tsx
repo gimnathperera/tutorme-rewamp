@@ -1,9 +1,9 @@
 "use client";
 
 import { useFormContext, Controller } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MultiSelect from "@/components/shared/MultiSelect";
+import NumberStepper from "@/components/shared/number-stepper";
 
 import {
   CLASS_TYPE_OPTIONS,
@@ -19,7 +19,7 @@ import {
   useFetchGradesQuery,
   useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
-import { type ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -256,31 +256,13 @@ const AcademicExperience = () => {
 
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-        <div className={fieldWrapper}>
-          <Label className="text-sm" htmlFor="yearsExperience">
-            {t("yearsExperience")} <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="yearsExperience"
-            type="number"
-            min={0}
-            max={50}
-            step={1}
-            className={`${inputClass} !block ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
-            {...register("yearsExperience", {
-              valueAsNumber: true,
-              onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                const value = event.target.valueAsNumber;
-                if (Number.isFinite(value) && value >= 1) {
-                  clearErrors("yearsExperience");
-                }
-              },
-            })}
-          />
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.yearsExperience?.message as string}
-          </p>
-        </div>
+        <NumberStepper
+          name="yearsExperience"
+          min={0}
+          max={50}
+          label={t("yearsExperience")}
+          required
+        />
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorMediums">
