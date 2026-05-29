@@ -277,7 +277,25 @@
     "submitAnother": "மற்றொரு கோரிக்கையை சமர்ப்பிக்கவும்",
     "errorTitle": "சமர்ப்பிப்பு தோல்வியுற்றது",
     "errorDesc": "ஏதோ தவறு நடந்தது.",
-    "tryAgain": "மீண்டும் முயற்சிக்கவும்"
+    "tryAgain": "மீண்டும் முயற்சிக்கவும்",
+    "nameRequired": "முழு பெயர் தேவை",
+    "nameLettersOnly": "பெயரில் எழுத்துக்கள் மற்றும் இடைவெளிகள் மட்டுமே இருக்கலாம்",
+    "emailRequired": "மின்னஞ்சல் தேவை",
+    "emailInvalid": "சரியான மின்னஞ்சல் முகவரியை உள்ளிடுங்கள்",
+    "cityRequired": "நகரம் தேவை",
+    "districtRequired": "மாவட்டம் தேவை",
+    "contactRequired": "தொலைபேசி எண் தேவை",
+    "contactNumeric": "தொலைபேசி எண் எண்களை மட்டுமே கொண்டிருக்க வேண்டும்",
+    "contactLength": "தொலைபேசி எண் சரியாக 10 இலக்கங்களாக இருக்க வேண்டும்",
+    "mediumRequired": "ஊடகம் தேவை",
+    "gradeRequired": "தரம் தேவை",
+    "subjectRequired": "பாடம் தேவை",
+    "durationRequired": "காலம் தேவை",
+    "frequencyRequired": "அதிர்வெண் தேவை",
+    "tutorTypeRequired": "ஆசிரியர் வகை தேவை",
+    "classTypeRequired": "வகுப்பு வகை தேவை",
+    "tutorCountRequired": "ஆசிரியர் எண்ணிக்கை தேவை",
+    "unexpectedError": "கோரிக்கையை உருவாக்குவதில் எதிர்பாராத பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்."
   },
   "testimonials": {
     "sectionHeading": "மற்றவர்கள் என்ன சொல்கிறார்கள் என்று பாருங்கள்."

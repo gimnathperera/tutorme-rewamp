@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -77,6 +77,7 @@ const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
 
 export default function AddRequestForTutor() {
   const t = useTranslations("requestForTutor");
+  const schema = useMemo(() => createRequestTutorSchema(t), [t]);
   const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
   /** null = closed, "success" = success dialog, string = error message dialog */
@@ -95,7 +96,7 @@ export default function AddRequestForTutor() {
     formState: { errors },
     reset,
   } = useForm<CreateRequestTutorSchema>({
-    resolver: zodResolver(createRequestTutorSchema),
+    resolver: zodResolver(schema),
     mode: "onTouched",
     reValidateMode: "onChange",
     defaultValues: initialFormValues,
@@ -199,9 +200,7 @@ export default function AddRequestForTutor() {
       }
     } catch (err) {
       console.error(err);
-      setSubmissionResult(
-        "Unexpected error occurred while creating the request. Please try again.",
-      );
+      setSubmissionResult(t("unexpectedError"));
     }
   };
 

@@ -201,7 +201,7 @@
     "agreeAssignmentDesc": "මෙම කොටුව ගෙනහිරවීමෙන්, ඔබේ මනාපයන්ට ගැළපෙන නව ගෙදර පාඩම් පැවරුම් ගැන SMS සහ ඊමේල් දැනුම්දීම් ලබා ගැනීමට ඔබ එකඟ වේ."
   },
   "requestForTutor": {
-    "pageTitle": "ගුරු කෙනෙකු ඉල්ලන්න",
+    "pageTitle": "ගුරුවරයෙකු ඉල්ලන්න",
     "contactDetails": "සම්බන්ධතා විස්තර",
     "fullName": "සම්පූර්ණ නම",
     "fullNameHint": "අකුරු සහ හිස්තැන් පමණි",
@@ -240,7 +240,25 @@
     "submitAnother": "තවත් ඉල්ලීමක් ඉදිරිපත් කරන්න",
     "errorTitle": "ඉදිරිපත් කිරීම අසාර්ථකයි",
     "errorDesc": "දෝෂයක් ඇති විය.",
-    "tryAgain": "නැවත උත්සාහ කරන්න"
+    "tryAgain": "නැවත උත්සාහ කරන්න",
+    "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
+    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "emailRequired": "ඊමේල් අවශ්‍යයි",
+    "emailInvalid": "වලංගු ඊමේල් ලිපිනයක් ඇතුළත් කරන්න",
+    "cityRequired": "නගරය අවශ්‍යයි",
+    "districtRequired": "දිස්ත්‍රික්කය අවශ්‍යයි",
+    "contactRequired": "දූරකථන අංකය අවශ්‍යයි",
+    "contactNumeric": "දූරකථන අංකය ඉලක්කම් පමණක් අඩංගු විය යුතුය",
+    "contactLength": "දූරකථන අංකය හරියටම ඉලක්කම් 10ක් විය යුතුය",
+    "mediumRequired": "මාධ්‍යය අවශ්‍යයි",
+    "gradeRequired": "ශ්‍රේණිය අවශ්‍යයි",
+    "subjectRequired": "විෂය අවශ්‍යයි",
+    "durationRequired": "කාලය අවශ්‍යයි",
+    "frequencyRequired": "සංඛ්‍යාතය අවශ්‍යයි",
+    "tutorTypeRequired": "ගුරු වර්ගය අවශ්‍යයි",
+    "classTypeRequired": "පන්ති වර්ගය අවශ්‍යයි",
+    "tutorCountRequired": "ගුරු ගණන අවශ්‍යයි",
+    "unexpectedError": "ඉල්ලීම සෑදීමේදී අනපේක්ෂිත දෝෂයක් ඇති විය. කරුණාකර නැවත උත්සාහ කරන්න."
   },
   "pastExamPapers": {
     "pageHeading": "ශ්‍රී ලංකා පසු විභාග ප්‍රශ්න පත්‍ර නොමිලේ බාගන්න",

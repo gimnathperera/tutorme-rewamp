@@ -5,55 +5,58 @@ import {
   trimText,
 } from "@/utils/form-normalizers";
 
-export const createRequestTutorSchema = z.object({
-  name: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Full Name is required")
-      .regex(/^[A-Za-z\s]+$/, "Name can contain letters and spaces only"),
-  ),
+export const createRequestTutorSchema = (t: (key: string) => string) =>
+  z.object({
+    name: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("nameRequired"))
+        .regex(/^[A-Za-z\s]+$/, t("nameLettersOnly")),
+    ),
 
-  email: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-  ),
+    email: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .min(1, t("emailRequired"))
+        .email(t("emailInvalid")),
+    ),
 
-  city: z.preprocess(trimText, z.string().min(1, "City is required")),
+    city: z.preprocess(trimText, z.string().min(1, t("cityRequired"))),
 
-  district: z.preprocess(trimText, z.string().min(1, "District is required")),
+    district: z.preprocess(trimText, z.string().min(1, t("districtRequired"))),
 
-  phoneNumber: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .min(1, "Contact Number is required")
-      .regex(/^\d+$/, "Contact Number must contain numeric values only")
-      .length(10, "Contact number should be exactly 10 digits"),
-  ),
+    phoneNumber: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .min(1, t("contactRequired"))
+        .regex(/^\d+$/, t("contactNumeric"))
+        .length(10, t("contactLength")),
+    ),
 
-  medium: z.string().nonempty("Medium is required"),
+    medium: z.string().nonempty(t("mediumRequired")),
 
-  grade: z.string().nonempty("Grade is required"),
+    grade: z.string().nonempty(t("gradeRequired")),
 
-  tutors: z
-    .array(
-      z.object({
-        subject: z.string().nonempty("Subject is required"),
-        assignedTutor: z.string().optional().default(""),
-        duration: z.string().nonempty("Duration is required"),
-        frequency: z.string().nonempty("Frequency is required"),
-        preferredTutorType: z.string().nonempty("Tutor type is required"),
-        preferredClassType: z.string().nonempty("Class type is required"),
-      }),
-    )
-    .min(1, "Tutor count is required"),
-});
+    tutors: z
+      .array(
+        z.object({
+          subject: z.string().nonempty(t("subjectRequired")),
+          assignedTutor: z.string().optional().default(""),
+          duration: z.string().nonempty(t("durationRequired")),
+          frequency: z.string().nonempty(t("frequencyRequired")),
+          preferredTutorType: z.string().nonempty(t("tutorTypeRequired")),
+          preferredClassType: z.string().nonempty(t("classTypeRequired")),
+        }),
+      )
+      .min(1, t("tutorCountRequired")),
+  });
 
-export type CreateRequestTutorSchema = z.infer<typeof createRequestTutorSchema>;
+export type CreateRequestTutorSchema = z.infer<
+  ReturnType<typeof createRequestTutorSchema>
+>;
 
 export const initialFormValues: CreateRequestTutorSchema = {
   name: "",
