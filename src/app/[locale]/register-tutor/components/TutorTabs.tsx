@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,12 +29,13 @@ import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
 import TutorProfile from "./TutorProfile";
 import TermsAndSubmit from "./TermsAndSubmit";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { translateTextsToEnglish } from "@/utils/translateToEnglish";
 import {
   FindMyTutorForm,
-  fullSchema,
-  step2Schema,
-  step3Schema,
+  createFullSchema,
+  STEP2_FIELDS,
+  STEP3_FIELDS,
 } from "../schema";
 import {
   useAddTutorRequestMutation,
@@ -73,6 +74,8 @@ const isDuplicateEmailError = (error: string) => {
 
 export function TutorTabs() {
   const t = useTranslations("registerTutor");
+  const locale = useLocale();
+  const schema = useMemo(() => createFullSchema(t), [t]);
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
@@ -83,7 +86,7 @@ export function TutorTabs() {
     "success" | string | null
   >(null);
   const methods = useForm<FindMyTutorForm>({
-    resolver: zodResolver(fullSchema),
+    resolver: zodResolver(schema),
     mode: "onTouched",
     reValidateMode: "onChange",
     defaultValues: {
@@ -147,9 +150,9 @@ export function TutorTabs() {
         "race",
       ];
     } else if (tab === "qualifications") {
-      fieldsToValidate = Object.keys(step2Schema.shape);
+      fieldsToValidate = [...STEP2_FIELDS];
     } else if (tab === "teachingProfile") {
-      fieldsToValidate = Object.keys(step3Schema.shape);
+      fieldsToValidate = [...STEP3_FIELDS];
     }
 
     if (fieldsToValidate) {
@@ -183,8 +186,7 @@ export function TutorTabs() {
       if (hasGradeWithoutSubject) {
         setError("subjects", {
           type: "manual",
-          message:
-            "Please select at least one subject for each selected grade.",
+          message: t("subjectPerGradeRequired"),
         });
         return;
       }
@@ -213,8 +215,29 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
+      // Translate free-text fields to English before sending to backend
+      let processedData = data;
+      if (locale !== "en") {
+        const textFields = [
+          "teachingSummary",
+          "studentResults",
+          "sellingPoints",
+          "academicDetails",
+        ] as const;
+        const texts = textFields.map((f) => data[f] ?? "");
+        const translated = await translateTextsToEnglish(texts, locale);
+        processedData = {
+          ...data,
+          teachingSummary: translated[0] ?? data.teachingSummary,
+          studentResults: translated[1] ?? data.studentResults,
+          sellingPoints: translated[2] ?? data.sellingPoints,
+          academicDetails: translated[3] ?? data.academicDetails,
+        };
+      }
+
       // Strip front-end-only fields before sending to API
-      const { confirmPassword: _omit, optionalCertificates, ...payload } = data;
+      const { confirmPassword: _omit, optionalCertificates, ...payload } =
+        processedData;
       const validOptional = (optionalCertificates ?? []).filter(
         (c) => c.type && c.url,
       );
@@ -260,7 +283,7 @@ export function TutorTabs() {
       }
       setSubmissionResult("success");
     } catch {
-      setSubmissionResult("Something went wrong. Please try again.");
+      setSubmissionResult(t("somethingWentWrong"));
     }
   };
 

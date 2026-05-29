@@ -15,6 +15,8 @@ interface MultiSelectProps {
   disabled?: boolean;
   hasError?: boolean;
   searchable?: boolean;
+  placeholder?: string;
+  searchPlaceholder?: string;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -24,6 +26,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   disabled = false,
   hasError = false,
   searchable = false,
+  placeholder = "Select option",
+  searchPlaceholder = "Search...",
 }) => {
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(defaultSelected);
@@ -126,7 +130,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             );
           })
         ) : (
-          <span className="text-muted-foreground">Select option</span>
+          <span className="text-muted-foreground">{placeholder}</span>
         )}
 
         <ChevronDown className="ml-auto h-4 w-4 text-muted-foreground" />
@@ -144,7 +148,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  placeholder="Search..."
+                  placeholder={searchPlaceholder}
                   className="w-full rounded-md border border-gray-200 px-3 py-1.5 pr-8 text-sm outline-none focus:border-blue-400"
                 />
                 {searchQuery && (

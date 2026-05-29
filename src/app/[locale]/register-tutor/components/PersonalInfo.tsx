@@ -173,7 +173,7 @@ const PersonalInfo = () => {
               });
             },
           })}
-          placeholder="e.g. Nimal Perera"
+          placeholder={t("fullNamePlaceholder")}
           autoComplete="name"
           className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
         />
@@ -217,7 +217,7 @@ const PersonalInfo = () => {
                 });
               },
             })}
-            placeholder="e.g. nimal@example.com"
+            placeholder={t("emailPlaceholder")}
             autoComplete="email"
             className={`${inputClass} pr-10 ${errors.email ? "border-red-500" : "border-gray-300"}`}
           />
@@ -359,7 +359,7 @@ const PersonalInfo = () => {
               });
             },
           })}
-          placeholder="e.g. 0771234567"
+          placeholder={t("contactNumberPlaceholder")}
           autoComplete="tel"
           className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}
         />

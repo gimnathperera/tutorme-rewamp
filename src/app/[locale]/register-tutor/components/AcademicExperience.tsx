@@ -20,6 +20,7 @@ import {
   useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
 import { type ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -34,8 +35,12 @@ type MultiSelectOnChange = NonNullable<
   Parameters<typeof MultiSelect>[0]["onChange"]
 >;
 
+type OptionItem = { value: string; text: string };
+
 const AcademicExperience = () => {
   const t = useTranslations("registerTutor");
+  const selectPlaceholder = t("selectOption");
+  const searchPh = t("searchPlaceholder");
   const {
     register,
     control,
@@ -61,9 +66,27 @@ const AcademicExperience = () => {
     );
   }, [selectedClassTypes]);
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
-  const [subjectOptions, setSubjectOptions] = useState<
-    { value: string; text: string }[]
-  >([]);
+  const [subjectOptions, setSubjectOptions] = useState<OptionItem[]>([]);
+
+  // Raw grade options — values are IDs, text is translated for display
+  const rawGradeOptions = useMemo<OptionItem[]>(
+    () =>
+      gradeData?.results?.map((g: any) => ({ value: g.id, text: g.title })) ??
+      [],
+    [gradeData],
+  );
+  const gradeOptions = useTranslateItems(
+    rawGradeOptions,
+    (g) => [g.text],
+    (g, [text]) => ({ ...g, text: text ?? g.text }),
+  );
+
+  // Subject options translated for display (values remain IDs)
+  const translatedSubjectOptions = useTranslateItems(
+    subjectOptions,
+    (s) => [s.text],
+    (s, [text]) => ({ ...s, text: text ?? s.text }),
+  );
 
   const handleMultiSelectChange = (
     fieldName: string,
@@ -146,6 +169,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("classType", field.onChange, selected)
                 }
                 hasError={!!errors.classType}
+                placeholder={selectPlaceholder}
               />
             )}
           />
@@ -180,6 +204,8 @@ const AcademicExperience = () => {
                   isPreferredLocationsEnabled && !!errors.preferredLocations
                 }
                 searchable
+                placeholder={selectPlaceholder}
+                searchPlaceholder={searchPh}
               />
             )}
           />
@@ -212,6 +238,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("tutorType", field.onChange, selected)
                 }
                 hasError={!!errors.tutorType}
+                placeholder={selectPlaceholder}
               />
             )}
           />
@@ -301,6 +328,7 @@ const AcademicExperience = () => {
                   )
                 }
                 hasError={!!errors.tutorMediums}
+                placeholder={selectPlaceholder}
               />
             )}
           />
@@ -321,17 +349,13 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={
-                  gradeData?.results?.map((g: any) => ({
-                    value: g.id,
-                    text: g.title,
-                  })) || []
-                }
+                options={gradeOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange("grades", field.onChange, selected)
                 }
                 hasError={!!errors.grades}
+                placeholder={selectPlaceholder}
               />
             )}
           />
@@ -349,13 +373,14 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={subjectOptions}
+                options={translatedSubjectOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange("subjects", field.onChange, selected)
                 }
                 hasError={!!errors.subjects}
                 disabled={selectedGradeIds.length === 0}
+                placeholder={selectPlaceholder}
               />
             )}
           />
