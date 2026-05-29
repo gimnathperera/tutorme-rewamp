@@ -2,9 +2,11 @@ import InputText from "@/components/shared/input-text";
 import SubmitButton from "@/components/shared/submit-button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
-import { ForgotPasswordSchema, forgotPasswordSchema } from "./schema";
+import { ForgotPasswordSchema, createForgotPasswordSchema } from "./schema";
 import { useAuthContext } from "@/contexts";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 
 type Props = {
   onLoginClick: () => void;
@@ -12,8 +14,11 @@ type Props = {
 };
 
 const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
+  const t = useTranslations("auth");
   const { forgotPassword, isAuthError, setIsAuthError, isLoading } =
     useAuthContext();
+
+  const forgotPasswordSchema = useMemo(() => createForgotPasswordSchema(t), [t]);
 
   const forgotPasswordForm = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -26,12 +31,11 @@ const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
 
     try {
       await forgotPassword(data);
-      toast.success("Password reset link sent to your email.");
+      toast.success(t("passwordResetSent"));
       forgotPasswordForm.reset();
       onSuccess();
     } catch (error: any) {
-      const errorMessage =
-        error?.message || "Something went wrong. Please try again.";
+      const errorMessage = error?.message || t("somethingWentWrong");
       setIsAuthError(errorMessage);
     }
   };
@@ -41,7 +45,7 @@ const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
       <form onSubmit={forgotPasswordForm.handleSubmit(onSubmit)}>
         <div className="space-y-3">
           <InputText
-            label="Email"
+            label={t("emailLabel")}
             name="email"
             placeholder="jhon@xyz.com"
             type="email"
@@ -54,19 +58,19 @@ const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
 
         <div className="space-y-2 mt-4">
           <SubmitButton
-            title={isLoading ? "Sending..." : "Send Verification Link"}
+            title={isLoading ? t("sending") : t("sendVerificationLink")}
             type="submit"
             disabled={isLoading}
           />
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900">
-              Already have an account?{" "}
+              {t("alreadyHaveAccount")}{" "}
               <span
                 className="text-blue cursor-pointer hover:underline"
                 onClick={onLoginClick}
               >
-                Login
+                {t("loginButton")}
               </span>
             </p>
           </div>
