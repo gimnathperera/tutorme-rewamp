@@ -645,6 +645,19 @@
     "passwordTooLong": "මුරපදය අකුරු 12 ඉක්මවිය නොහැකිය",
     "passwordLetterNumber": "මුරපදයේ අවම වශයෙන් එක් අකුරක් සහ ඉලක්කමක් තිබිය යුතුය"
   },
+  "gradesAndSubjects": {
+    "pageTitle": "ශ්‍රේණි සහ විෂයයන්",
+    "pageSubtitle": "ලබා ගත හැකි ශ්‍රේණි ගවේෂණය කර ඒ සෑම ශ්‍රේණියකම ඉදිරිපත් කෙරෙන විෂයයන් බලන්න.",
+    "seeMore": "තව බලන්න",
+    "gradeDetails": "ශ්‍රේණි විස්තර",
+    "subjectsHeading": "විෂයයන්",
+    "noSubjectsAvailable": "මෙම ශ්‍රේණිය සඳහා විෂයයන් නොමැත.",
+    "noDescriptionAvailable": "විස්තරයක් නොමැත.",
+    "loadingMoreSubjects": "විෂයයන් පූරණය කරමින්...",
+    "loadMoreSubjects": "තව විෂයයන් පූරණය කරන්න",
+    "loadingMoreGrades": "ශ්‍රේණි පූරණය කරමින්...",
+    "loadMoreGrades": "තව ශ්‍රේණි පූරණය කරන්න"
+  },
   "legalContact": {
     "heading": "අප අමතන්න",
     "intro": "මෙම {documentName} සම්බන්ධව ඔබට ප්‍රශ්න, කනස්සල්ල හෝ ඉල්ලීම් ඇත්නම්, කරුණාකර අප හා සම්බන්ධ වන්න:",

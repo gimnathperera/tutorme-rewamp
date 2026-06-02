@@ -645,6 +645,19 @@
     "passwordTooLong": "Password cannot exceed 12 characters",
     "passwordLetterNumber": "Password must contain at least one letter and one number"
   },
+  "gradesAndSubjects": {
+    "pageTitle": "Grades & Subjects",
+    "pageSubtitle": "Browse the available grades and explore the subjects offered in each one.",
+    "seeMore": "See More",
+    "gradeDetails": "Grade Details",
+    "subjectsHeading": "Subjects",
+    "noSubjectsAvailable": "No subjects available for this grade.",
+    "noDescriptionAvailable": "No description available.",
+    "loadingMoreSubjects": "Loading more subjects...",
+    "loadMoreSubjects": "Load more subjects",
+    "loadingMoreGrades": "Loading more grades...",
+    "loadMoreGrades": "Load more grades"
+  },
   "legalContact": {
     "heading": "Contact Us",
     "intro": "If you have any questions, concerns, or requests regarding this {documentName}, please contact us at:",

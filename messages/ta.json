@@ -645,6 +645,19 @@
     "passwordTooLong": "கடவுச்சொல் 12 எழுத்துக்களை தாண்டக்கூடாது",
     "passwordLetterNumber": "கடவுச்சொல்லில் குறைந்தது ஒரு எழுத்தும் ஒரு எண்ணும் இருக்க வேண்டும்"
   },
+  "gradesAndSubjects": {
+    "pageTitle": "தரங்கள் & பாடங்கள்",
+    "pageSubtitle": "கிடைக்கும் தரங்களை ஆராய்ந்து ஒவ்வொரு தரத்திலும் வழங்கப்படும் பாடங்களை பாருங்கள்.",
+    "seeMore": "மேலும் காண்க",
+    "gradeDetails": "தர விவரங்கள்",
+    "subjectsHeading": "பாடங்கள்",
+    "noSubjectsAvailable": "இந்த தரத்திற்கு பாடங்கள் இல்லை.",
+    "noDescriptionAvailable": "விளக்கம் இல்லை.",
+    "loadingMoreSubjects": "பாடங்கள் ஏற்றுகிறோம்...",
+    "loadMoreSubjects": "மேலும் பாடங்கள் ஏற்று",
+    "loadingMoreGrades": "தரங்கள் ஏற்றுகிறோம்...",
+    "loadMoreGrades": "மேலும் தரங்கள் ஏற்று"
+  },
   "legalContact": {
     "heading": "எங்களை தொடர்பு கொள்ளுங்கள்",
     "intro": "இந்த {documentName} தொடர்பான கேள்விகள், கவலைகள் அல்லது கோரிக்கைகள் இருந்தால், எங்களை தொடர்பு கொள்ளவும்:",
