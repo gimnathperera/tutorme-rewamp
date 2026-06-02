@@ -98,7 +98,16 @@
     "messageLabel": "Message *",
     "messagePlaceholder": "Type your message here...",
     "sendMessage": "Send Message",
-    "successMessage": "Your message has been sent successfully!"
+    "successMessage": "Your message has been sent successfully!",
+    "nameRequired": "Full Name is required",
+    "nameLettersOnly": "Name can contain letters and spaces only",
+    "nameNoMultipleSpaces": "Multiple consecutive spaces are not allowed",
+    "emailRequired": "Email is required",
+    "emailInvalid": "Please enter a valid email address",
+    "contactRequired": "Contact Number is required",
+    "contactNumeric": "Contact Number must contain numeric values only",
+    "contactLength": "Contact Number should be exactly 10 digits",
+    "messageRequired": "Message is required"
   },
   "notFound": {
     "heading": "Something is missing.",

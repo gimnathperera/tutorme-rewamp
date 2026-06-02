@@ -98,7 +98,16 @@
     "messageLabel": "පණිවිඩය *",
     "messagePlaceholder": "ඔබේ පණිවිඩය මෙහි ටයිප් කරන්න...",
     "sendMessage": "පණිවිඩය යවන්න",
-    "successMessage": "ඔබේ පණිවිඩය සාර්ථකව යවන ලදී!"
+    "successMessage": "ඔබේ පණිවිඩය සාර්ථකව යවන ලදී!",
+    "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
+    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "nameNoMultipleSpaces": "අනුක්‍රමික හිස්තැන් කිහිපයක් ඉඩ නොදේ",
+    "emailRequired": "ඊමේල් අවශ්‍යයි",
+    "emailInvalid": "වලංගු ඊමේල් ලිපිනයක් ඇතුළත් කරන්න",
+    "contactRequired": "දූරකථන අංකය අවශ්‍යයි",
+    "contactNumeric": "දූරකථන අංකය ඉලක්කම් පමණක් අඩංගු විය යුතුය",
+    "contactLength": "දූරකථන අංකය හරියටම ඉලක්කම් 10ක් විය යුතුය",
+    "messageRequired": "පණිවිඩය අවශ්‍යයි"
   },
   "notFound": {
     "heading": "යමක් අස්ථානගත වී ඇත.",
