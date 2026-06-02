@@ -42,14 +42,8 @@ import {
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
-import {
-  CLASS_TYPE_OPTIONS,
-  MEDIUM_OPTIONS,
-  REQUEST_TUTOR_DURATION_OPTIONS,
-  REQUEST_TUTOR_FREQUENCY_OPTIONS,
-  TUTOR_TYPE_OPTIONS,
-} from "@/configs/options";
 import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -112,16 +106,75 @@ export default function AddRequestForTutor() {
     limit: FETCH_LIMIT,
   });
 
-  const gradeOptions =
-    gradeData?.results.map((g) => ({ value: g.id, text: g.title })) || [];
+  const rawGradeOptions = useMemo(
+    () => gradeData?.results.map((g) => ({ value: g.id, text: g.title })) ?? [],
+    [gradeData],
+  );
+  const gradeOptions = useTranslateItems(
+    rawGradeOptions,
+    (g) => [g.text],
+    (g, [text]) => ({ ...g, text: text ?? g.text }),
+  );
 
-  const subjectOptions =
-    gradeData?.results
-      .find((g) => g.id === selectedGradeId)
-      ?.subjects.map((s: any) => ({
-        value: s.id,
-        text: s.title,
-      })) || [];
+  const rawSubjectOptions = useMemo(
+    () =>
+      gradeData?.results
+        .find((g) => g.id === selectedGradeId)
+        ?.subjects.map((s: any) => ({ value: s.id, text: s.title })) ?? [],
+    [gradeData, selectedGradeId],
+  );
+  const subjectOptions = useTranslateItems(
+    rawSubjectOptions,
+    (s) => [s.text],
+    (s, [text]) => ({ ...s, text: text ?? s.text }),
+  );
+
+  // Static options with translated display text (values stay in English for backend)
+  const mediumOptions = useMemo(
+    () => [
+      { value: "Sinhala", text: t("optMediumSinhala") },
+      { value: "English", text: t("optMediumEnglish") },
+      { value: "Tamil", text: t("optMediumTamil") },
+    ],
+    [t],
+  );
+  const durationOptions = useMemo(
+    () => [
+      { value: "30 Minutes", text: t("optDuration30Min") },
+      { value: "One Hour", text: t("optDuration1Hour") },
+      { value: "Two Hours", text: t("optDuration2Hours") },
+    ],
+    [t],
+  );
+  const frequencyOptions = useMemo(
+    () => [
+      { value: "Once a Week", text: t("optFrequencyOnceWeek") },
+      { value: "Twice a Week", text: t("optFrequencyTwiceWeek") },
+      { value: "Daily", text: t("optFrequencyDaily") },
+    ],
+    [t],
+  );
+  const tutorTypeOptions = useMemo(
+    () => [
+      { value: "International School Teacher", text: t("optTutorTypeInternational") },
+      { value: "Government School Teacher", text: t("optTutorTypeGovernment") },
+      { value: "University Student", text: t("optTutorTypeUniversity") },
+      { value: "A/L Student", text: t("optTutorTypeAL") },
+      { value: "Diploma Holder", text: t("optTutorTypeDiploma") },
+      { value: "Part-time Tutor", text: t("optTutorTypePartTime") },
+      { value: "Full-time Tutor", text: t("optTutorTypeFullTime") },
+    ],
+    [t],
+  );
+  const classTypeOptions = useMemo(
+    () => [
+      { value: "Online - Individual", text: t("optClassTypeOnlineIndividual") },
+      { value: "Online - Group", text: t("optClassTypeOnlineGroup") },
+      { value: "Physical - Individual", text: t("optClassTypePhysicalIndividual") },
+      { value: "Physical - Group", text: t("optClassTypePhysicalGroup") },
+    ],
+    [t],
+  );
 
   const [createTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
 
@@ -253,7 +306,7 @@ export default function AddRequestForTutor() {
                         });
                       },
                     })}
-                    placeholder="e.g. Nimal Perera"
+                    placeholder={t("fullNamePlaceholder")}
                     autoComplete="name"
                     className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
                   />
@@ -275,7 +328,7 @@ export default function AddRequestForTutor() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="e.g. johndoe@gmail.com"
+                      placeholder={t("emailPlaceholder")}
                       autoComplete="email"
                       onKeyDown={preventWhitespaceKey}
                       {...register("email", {
@@ -314,7 +367,7 @@ export default function AddRequestForTutor() {
                       type="tel"
                       inputMode="numeric"
                       maxLength={10}
-                      placeholder="e.g. 0712345678"
+                      placeholder={t("contactNumberPlaceholder")}
                       autoComplete="tel"
                       onKeyDown={preventWhitespaceKey}
                       {...register("phoneNumber", {
@@ -369,6 +422,7 @@ export default function AddRequestForTutor() {
                           }}
                           districts={districts}
                           hasError={!!errors.district}
+                          placeholder={t("selectYourDistrict")}
                         />
                       )}
                     />
@@ -394,6 +448,10 @@ export default function AddRequestForTutor() {
                             if (val) clearErrors("city");
                           }}
                           hasError={!!errors.city}
+                          searchCityPlaceholder={t("searchCity")}
+                          selectDistrictFirstPlaceholder={t("selectDistrictFirst")}
+                          didYouMeanText={t("didYouMean")}
+                          noCityFoundText={t("noCityFound")}
                         />
                       )}
                     />
@@ -440,7 +498,7 @@ export default function AddRequestForTutor() {
                       <option value="" disabled hidden>
                         {t("mediumPlaceholder")}
                       </option>
-                      {MEDIUM_OPTIONS.map((option) => (
+                      {mediumOptions.map((option) => (
                         <option
                           key={option.value}
                           value={option.value}
@@ -568,7 +626,7 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             {t("durationPlaceholder")}
                           </option>
-                          {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
+                          {durationOptions.map((option) => (
                             <option
                               key={option.value}
                               value={option.value}
@@ -601,7 +659,7 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             {t("frequencyPlaceholder")}
                           </option>
-                          {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
+                          {frequencyOptions.map((option) => (
                             <option
                               key={option.value}
                               value={option.value}
@@ -637,7 +695,7 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             {t("preferredTutorTypePlaceholder")}
                           </option>
-                          {TUTOR_TYPE_OPTIONS.map((o) => (
+                          {tutorTypeOptions.map((o) => (
                             <option
                               key={o.value}
                               value={o.value}
@@ -674,7 +732,7 @@ export default function AddRequestForTutor() {
                           <option value="" disabled hidden>
                             {t("preferredClassTypePlaceholder")}
                           </option>
-                          {CLASS_TYPE_OPTIONS.map((o) => (
+                          {classTypeOptions.map((o) => (
                             <option
                               key={o.value}
                               value={o.value}

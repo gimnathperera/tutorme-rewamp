@@ -6,6 +6,7 @@ interface DistrictSelectProps {
   onChange: (v: string) => void;
   districts: string[];
   hasError?: boolean;
+  placeholder?: string;
 }
 
 export default function DistrictSelect({
@@ -13,6 +14,7 @@ export default function DistrictSelect({
   onChange,
   districts,
   hasError = false,
+  placeholder = "Select your district",
 }: DistrictSelectProps) {
   const borderClass = hasError ? "border-red-500" : "border-gray-300";
 
@@ -29,7 +31,7 @@ export default function DistrictSelect({
         ].join(" ")}
       >
         <option value="" disabled hidden>
-          Select your district
+          {placeholder}
         </option>
         {districts.map((district) => (
           <option key={district} value={district} className="text-gray-900">
