@@ -1,23 +1,31 @@
 import { z } from "zod";
 import { normalizeTextSpaces } from "@/utils/form-normalizers";
 
-const requiredTeachingField = (label: string) =>
+const requiredTeachingField = (requiredMsg: string, maxMsg: string) =>
   z.preprocess(
     normalizeTextSpaces,
-    z
-      .string()
-      .min(1, `${label} is required`)
-      .max(500, `${label} cannot exceed 500 characters`),
+    z.string().min(1, requiredMsg).max(500, maxMsg),
   );
 
-export const teachingProfileSchema = z.object({
-  teachingSummary: requiredTeachingField("Short Introduction"),
-  academicDetails: requiredTeachingField(
-    "Summary of Teaching Experience & Academic Achievements",
-  ),
-  studentResults: requiredTeachingField("Student Results"),
-  sellingPoints: requiredTeachingField("Selling Points"),
-});
+export const createTeachingProfileSchema = (t: (key: string) => string) =>
+  z.object({
+    teachingSummary: requiredTeachingField(
+      t("teachingSummaryRequired"),
+      t("teachingSummaryMax"),
+    ),
+    academicDetails: requiredTeachingField(
+      t("academicDetailsRequired"),
+      t("academicDetailsMax"),
+    ),
+    studentResults: requiredTeachingField(
+      t("studentResultsRequired"),
+      t("studentResultsMax"),
+    ),
+    sellingPoints: requiredTeachingField(
+      t("sellingPointsRequired"),
+      t("sellingPointsMax"),
+    ),
+  });
 
 export const initialTeachingProfileFormValues = {
   teachingSummary: "",
@@ -26,4 +34,6 @@ export const initialTeachingProfileFormValues = {
   sellingPoints: "",
 };
 
-export type TeachingProfileSchema = z.infer<typeof teachingProfileSchema>;
+export type TeachingProfileSchema = z.infer<
+  ReturnType<typeof createTeachingProfileSchema>
+>;

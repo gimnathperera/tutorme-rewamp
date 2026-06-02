@@ -5,6 +5,7 @@ import { FormProvider, Controller } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
 import { FC, KeyboardEvent, useEffect, useRef } from "react";
 import { GeneralInfoSchema } from "./schema";
+import { useTranslations } from "next-intl";
 import SubmitButton from "@/components/shared/submit-button";
 import {
   GENDER_OPTIONS,
@@ -80,6 +81,7 @@ const normalizeBirthdayValue = (birthday: unknown) => {
 };
 
 const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
+  const t = useTranslations("profile");
   const onSubmit = (data: GeneralInfoSchema) => {
     onFormSubmit(data);
   };
@@ -143,19 +145,18 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Personal Information
+        {t("personalInfoTitle")}
       </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Keep your tutor profile aligned with the same personal details used
-        during tutor registration.
+        {t("personalInfoDesc")}
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
               <InputText
-                label="Full Name *"
-                placeholder="e.g. Nimal Perera"
+                label={t("fieldFullName")}
+                placeholder={t("placeholderFullName")}
                 name="name"
                 type="text"
                 onChange={(e) => {
@@ -173,16 +174,16 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
               />
 
               <InputText
-                label="Email"
-                placeholder="Email address"
+                label={t("fieldEmail")}
+                placeholder={t("placeholderEmail")}
                 name="email"
                 type="text"
                 disabled
-                helperText="Email is read-only here. Contact support if you need to change it."
+                helperText={t("helperEmail")}
               />
               <InputText
-                label="Contact Number *"
-                placeholder="e.g. 0771234567"
+                label={t("fieldContactNumber")}
+                placeholder={t("placeholderContactNumber")}
                 name="phoneNumber"
                 type="tel"
                 inputMode="numeric"
@@ -216,7 +217,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                       htmlFor="birthday"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      Date of Birth <span className="text-red-500">*</span>
+                      {t("fieldDateOfBirth")} <span className="text-red-500">*</span>
                     </label>
                     <div
                       className="relative cursor-pointer"
@@ -256,27 +257,27 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 )}
               />
               <InputText
-                label="Age *"
+                label={t("fieldAge")}
                 name="age"
                 type="number"
                 disabled
-                placeholder="Auto-calculated"
-                helperText="Age is read-only and updates automatically from your date of birth."
+                placeholder={t("placeholderAge")}
+                helperText={t("helperAge")}
               />
               <InputSelect
-                label="Gender *"
+                label={t("fieldGender")}
                 name="gender"
                 options={genderOptions}
                 className={fieldHeightClass}
               />
               <InputSelect
-                label="Nationality *"
+                label={t("fieldNationality")}
                 name="nationality"
                 options={nationalityOptions}
                 className={fieldHeightClass}
               />
               <InputSelect
-                label="Race *"
+                label={t("fieldRace")}
                 name="race"
                 options={raceOptions}
                 className={fieldHeightClass}
@@ -287,7 +288,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update Personal Information"
+                title={t("updatePersonalInfo")}
                 disabled={isButtonDisabled}
               />
             </div>

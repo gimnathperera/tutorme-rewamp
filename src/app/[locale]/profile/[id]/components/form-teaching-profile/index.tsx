@@ -1,4 +1,5 @@
 import { Controller, FormProvider, SubmitHandler } from "react-hook-form";
+import { useTranslations } from "next-intl";
 import { Textarea } from "@/components/ui/textarea";
 import { FC } from "react";
 import { TeachingProfileSchema } from "./schema";
@@ -13,51 +14,49 @@ type Props = {
 
 const CHAR_LIMIT = 500;
 
-const fields: {
-  name: keyof TeachingProfileSchema;
-  label: string;
-  placeholder: string;
-}[] = [
-  {
-    name: "teachingSummary",
-    label: "Short Introduction About Yourself *",
-    placeholder: "Personal qualities, teaching styles & methodologies",
-  },
-  {
-    name: "academicDetails",
-    label: "Summary of Teaching Experience & Academic Achievements *",
-    placeholder:
-      "Achievements & subjects taught, such as number of students, years, and results",
-  },
-  {
-    name: "studentResults",
-    label: "Results of Students / Track Record *",
-    placeholder:
-      "Past student results, grade improvements, examination outcomes",
-  },
-  {
-    name: "sellingPoints",
-    label: "Other Selling Points as a Tutor *",
-    placeholder: "Teaching methods, commitment level, what makes you stand out",
-  },
-];
-
 const FormTeachingProfile: FC<Props> = ({
   form,
   onFormSubmit,
   isSubmitting,
 }) => {
+  const t = useTranslations("profile");
   const { isDirty, isValid } = form.formState;
   const isButtonDisabled = !isDirty || isSubmitting || !isValid;
+
+  const fields: {
+    name: keyof TeachingProfileSchema;
+    label: string;
+    placeholder: string;
+  }[] = [
+    {
+      name: "teachingSummary",
+      label: `${t("fieldTeachingSummary")} *`,
+      placeholder: t("placeholderTeachingSummary"),
+    },
+    {
+      name: "academicDetails",
+      label: `${t("fieldAcademicDetails")} *`,
+      placeholder: t("placeholderAcademicDetails"),
+    },
+    {
+      name: "studentResults",
+      label: `${t("fieldStudentResults")} *`,
+      placeholder: t("placeholderStudentResults"),
+    },
+    {
+      name: "sellingPoints",
+      label: `${t("fieldSellingPoints")} *`,
+      placeholder: t("placeholderSellingPoints"),
+    },
+  ];
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Teaching Profile
+        {t("teachingProfileTitle")}
       </h3>
       <p className="mb-5 text-sm text-gray-500">
-        Share your teaching background, student results, and what makes you
-        stand out as a tutor.
+        {t("teachingProfileDesc")}
       </p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
@@ -111,7 +110,7 @@ const FormTeachingProfile: FC<Props> = ({
               className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
               type="submit"
               loading={isSubmitting}
-              title="Update Teaching Profile"
+              title={t("updateTeachingProfile")}
               disabled={isButtonDisabled}
             />
           </div>

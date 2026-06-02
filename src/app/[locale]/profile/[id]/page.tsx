@@ -17,8 +17,10 @@ import {
   ShieldCheck,
   UserRound,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const ProfilePage: FC = () => {
+  const t = useTranslations("profile");
   const {
     derivedData: {
       dropdownOptionData,
@@ -46,12 +48,10 @@ const ProfilePage: FC = () => {
       <div className="mx-auto w-full max-w-7xl px-4 py-4 sm:px-6 lg:px-8 sm:py-6">
         <div className="mb-5 text-left sm:mb-6">
           <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
-            {isAdminProfile ? "Admin Profile" : "Tutor Profile"}
+            {isAdminProfile ? t("adminProfileTitle") : t("tutorProfileTitle")}
           </h1>
           <p className="mt-2 max-w-3xl text-sm text-gray-600 sm:text-base">
-            {isAdminProfile
-              ? "View your admin account information without leaving the tutor portal."
-              : "Manage your tutor profile by section so it is easier to update your personal details, qualifications, availability, and security settings."}
+            {isAdminProfile ? t("adminProfileSubtitle") : t("tutorProfileSubtitle")}
           </p>
         </div>
 
@@ -70,38 +70,36 @@ const ProfilePage: FC = () => {
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
                   <UserRound className="h-4 w-4 shrink-0" />
-                  Profile
+                  {t("tabProfile")}
                 </TabsTrigger>
                 <TabsTrigger
                   value="qualifications"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
                   <GraduationCap className="h-4 w-4 shrink-0" />
-                  Qualifications
+                  {t("tabQualifications")}
                 </TabsTrigger>
                 <TabsTrigger
                   value="teaching"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
                   <PenLine className="h-4 w-4 shrink-0" />
-                  Teaching Profile
+                  {t("tabTeaching")}
                 </TabsTrigger>
                 <TabsTrigger
                   value="languages"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
                   <CalendarClock className="h-4 w-4 shrink-0" />
-                  <span className="sm:hidden">Availability</span>
-                  <span className="hidden sm:inline">
-                    Languages, Availability & Rate
-                  </span>
+                  <span className="sm:hidden">{t("tabAvailabilityShort")}</span>
+                  <span className="hidden sm:inline">{t("tabAvailabilityFull")}</span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="security"
                   className="m-0 min-w-fit shrink-0 justify-center gap-2 whitespace-nowrap rounded-3xl border border-gray-200 bg-white px-4 py-2 text-center text-sm font-semibold text-gray-600 shadow-none data-[state=active]:border-primary-200 data-[state=active]:bg-primary-50 data-[state=active]:text-primary-800 data-[state=active]:shadow-none sm:justify-start sm:rounded-xl sm:px-3.5 sm:py-2 sm:text-left"
                 >
                   <ShieldCheck className="h-4 w-4 shrink-0" />
-                  Security
+                  {t("tabSecurity")}
                 </TabsTrigger>
               </TabsList>
             </div>
