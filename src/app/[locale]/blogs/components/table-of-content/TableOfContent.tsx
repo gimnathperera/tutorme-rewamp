@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Heading {
   id: string;
@@ -12,6 +13,7 @@ const slugify = (text: string) =>
   text.trim().replace(/\s+/g, "-").toLowerCase();
 
 const TableOfContents = ({ html }: { html: string }) => {
+  const t = useTranslations("blogs");
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [isOpen, setIsOpen] = useState(true);
 
@@ -75,7 +77,7 @@ const TableOfContents = ({ html }: { html: string }) => {
         onClick={() => setIsOpen(!isOpen)}
       >
         <h3 className="font-semibold text-gray-800 text-base">
-          Table of Contents
+          {t("tableOfContents")}
         </h3>
         {isOpen ? (
           <ChevronUp className="w-5 h-5 text-gray-600" />

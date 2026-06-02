@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -33,8 +33,11 @@ import {
   BLOG_EDITOR_HEADING_OPTIONS,
   BLOG_EDITOR_LIST_STYLE_OPTIONS,
 } from "@/configs/options";
+import { useTranslations } from "next-intl";
 
 const AddBlog = () => {
+  const t = useTranslations("createBlog");
+
   const [createBlog, { isLoading }] = useCreateBlogMutation();
   const { data: blogsData } = useFetchBlogsQuery({});
   const { data: tagData } = useFetchTagsQuery({});
@@ -43,8 +46,10 @@ const AddBlog = () => {
   const [isPreview, setIsPreview] = useState(false);
   const [clearVersion, setClearVersion] = useState(0);
 
+  const schema = useMemo(() => createArticleSchema(t), [t]);
+
   const createBlogForm = useForm<CreateArticleSchema>({
-    resolver: zodResolver(createArticleSchema),
+    resolver: zodResolver(schema),
     defaultValues: initialFormValues,
     mode: "onChange",
   });
@@ -71,6 +76,19 @@ const AddBlog = () => {
     name: "content",
   });
 
+  const blockTypeLabels: Record<string, string> = useMemo(
+    () => ({
+      paragraph: t("blockTypeParagraph"),
+      heading: t("blockTypeHeading"),
+      image: t("blockTypeImage"),
+      table: t("blockTypeTable"),
+      quote: t("blockTypeQuote"),
+      list: t("blockTypeList"),
+      embed: t("blockTypeEmbed"),
+    }),
+    [t],
+  );
+
   const encodeImageUrl = (url: string) => {
     try {
       return encodeURI(decodeURI(url));
@@ -95,7 +113,7 @@ const AddBlog = () => {
 
   const onSubmit = async (data: CreateArticleSchema) => {
     if (!user) {
-      toast.error("Please authenticate");
+      toast.error(t("pleaseAuthenticate"));
       return;
     }
 
@@ -110,19 +128,17 @@ const AddBlog = () => {
               message: value as string,
             });
           });
-          toast.error("Please fix the validation errors.");
+          toast.error(t("fixValidationErrors"));
         } else {
-          toast.error(getErrorInApiResult(result) || "Failed to create blog");
+          toast.error(getErrorInApiResult(result) || t("failedToCreate"));
         }
         return;
       }
-      toast.success(
-        "Your blog has been submitted and is pending admin approval.",
-      );
+      toast.success(t("successSubmitted"));
       onRegisterSuccess();
     } catch (error) {
       console.error("Unexpected error during blog creation:", error);
-      toast.error("An unexpected error occurred while creating the blog.");
+      toast.error(t("unexpectedError"));
     }
   };
 
@@ -149,7 +165,7 @@ const AddBlog = () => {
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            Edit
+            {t("editTab")}
           </button>
           <button
             type="button"
@@ -160,7 +176,7 @@ const AddBlog = () => {
                 : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           >
-            Preview
+            {t("previewTab")}
           </button>
         </div>
 
@@ -168,7 +184,7 @@ const AddBlog = () => {
           <div className="p-6 space-y-6">
             <input
               id="title"
-              placeholder="Blog Title"
+              placeholder={t("titlePlaceholder")}
               className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
               {...register("title")}
             />
@@ -180,7 +196,7 @@ const AddBlog = () => {
 
             <div className="space-y-6">
               <Label className="text-xl font-semibold border-b pb-2 flex">
-                Content Blocks
+                {t("contentBlocksLabel")}
               </Label>
               {contentFields.map((field, index) => {
                 const blockType = watch(`content.${index}.type`);
@@ -191,7 +207,7 @@ const AddBlog = () => {
                   >
                     <div className="flex justify-between items-center mb-4">
                       <span className="font-semibold text-gray-700 capitalize">
-                        {blockType} Block
+                        {blockTypeLabels[blockType] ?? blockType}
                       </span>
                       <div className="flex gap-2">
                         <button
@@ -215,7 +231,7 @@ const AddBlog = () => {
                           onClick={() => removeContent(index)}
                           className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200"
                         >
-                          Remove
+                          {t("removeBtn")}
                         </button>
                       </div>
                     </div>
@@ -231,7 +247,7 @@ const AddBlog = () => {
                               value={field.value || ""}
                               onChange={field.onChange}
                               className="bg-white rounded [&_.ql-toolbar]:rounded-t [&_.ql-container]:rounded-b"
-                              placeholder="Write paragraph text here..."
+                              placeholder={t("paragraphPlaceholder")}
                             />
                           )}
                         />
@@ -242,7 +258,7 @@ const AddBlog = () => {
                       <div className="space-y-2 flex gap-2 w-full">
                         <Input
                           className="flex-1 bg-white"
-                          placeholder="Heading text"
+                          placeholder={t("headingTextPlaceholder")}
                           {...register(`content.${index}.text` as const)}
                         />
                         <select
@@ -279,7 +295,7 @@ const AddBlog = () => {
                         )}
                         <Input
                           className="bg-white"
-                          placeholder="Image caption (optional)"
+                          placeholder={t("imageCaptionPlaceholder")}
                           {...register(`content.${index}.caption` as const)}
                         />
                       </div>
@@ -289,7 +305,7 @@ const AddBlog = () => {
                       <div className="space-y-4 p-4 bg-white rounded-lg border shadow-inner">
                         <div className="flex justify-between items-center">
                           <span className="text-sm font-medium text-gray-600">
-                            Table Configuration
+                            {t("tableConfigLabel")}
                           </span>
                           <div className="flex gap-2">
                             <Button
@@ -318,7 +334,7 @@ const AddBlog = () => {
                                 );
                               }}
                             >
-                              + Column
+                              {t("addColumnBtn")}
                             </Button>
                             <Button
                               type="button"
@@ -340,7 +356,7 @@ const AddBlog = () => {
                                 );
                               }}
                             >
-                              + Row
+                              {t("addRowBtn")}
                             </Button>
                           </div>
                         </div>
@@ -402,7 +418,7 @@ const AddBlog = () => {
                                             );
                                           }}
                                         >
-                                          Remove
+                                          {t("removeBtn")}
                                         </button>
                                       </div>
                                     </th>
@@ -469,13 +485,13 @@ const AddBlog = () => {
                         <Input
                           id={`quote-text-${index}`}
                           className="bg-white"
-                          placeholder="Quote text"
+                          placeholder={t("quotePlaceholder")}
                           {...register(`content.${index}.text` as const)}
                         />
                         <Input
                           id={`quote-citation-${index}`}
                           className="bg-white"
-                          placeholder="Citation (optional)"
+                          placeholder={t("citationPlaceholder")}
                           {...register(`content.${index}.citation` as const)}
                         />
                       </div>
@@ -484,7 +500,7 @@ const AddBlog = () => {
                     {blockType === "list" && (
                       <div className="space-y-4 p-4 bg-white rounded-lg border">
                         <div className="flex gap-4 items-center">
-                          <Label className="text-sm">List Style:</Label>
+                          <Label className="text-sm">{t("listStyleLabel")}</Label>
                           <select
                             id={`list-style-${index}`}
                             className="block w-32 rounded-md border-gray-300 py-1.5 bg-white sm:text-sm"
@@ -561,7 +577,7 @@ const AddBlog = () => {
                               );
                             }}
                           >
-                            + Add Item
+                            {t("addItemBtn")}
                           </Button>
                         </div>
                       </div>
@@ -572,13 +588,13 @@ const AddBlog = () => {
                         <Input
                           id={`embed-src-${index}`}
                           className="bg-white"
-                          placeholder="Embed Src URL (e.g. YouTube)"
+                          placeholder={t("embedSrcPlaceholder")}
                           {...register(`content.${index}.src` as const)}
                         />
                         <Input
                           id={`embed-html-${index}`}
                           className="bg-white"
-                          placeholder="Or raw HTML"
+                          placeholder={t("embedHtmlPlaceholder")}
                           {...register(`content.${index}.html` as const)}
                         />
                       </div>
@@ -593,7 +609,7 @@ const AddBlog = () => {
                   onClick={() => appendContent({ type: "paragraph", text: "" })}
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Text
+                  {t("addTextBtn")}
                 </button>
                 <button
                   type="button"
@@ -602,7 +618,7 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Heading
+                  {t("addHeadingBtn")}
                 </button>
                 <button
                   type="button"
@@ -611,7 +627,7 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Image
+                  {t("addImageBtn")}
                 </button>
                 <button
                   type="button"
@@ -620,7 +636,7 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Quote
+                  {t("addQuoteBtn")}
                 </button>
                 <button
                   type="button"
@@ -629,7 +645,7 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Table
+                  {t("addTableBtn")}
                 </button>
                 <button
                   type="button"
@@ -642,7 +658,7 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + List
+                  {t("addListBtn")}
                 </button>
                 <button
                   type="button"
@@ -651,26 +667,24 @@ const AddBlog = () => {
                   }
                   className="px-3 py-1.5 bg-blue-50 text-blue-600 rounded-md hover:bg-blue-100 text-sm font-medium"
                 >
-                  + Embed
+                  {t("addEmbedBtn")}
                 </button>
               </div>
             </div>
-            <div className="mb-4">
-              <Label htmlFor="coverImage">Cover Image</Label>
 
+            <div className="mb-4">
+              <Label htmlFor="coverImage">{t("coverImageLabel")}</Label>
               <FileUploadDropzone
                 key={`cover-image-${clearVersion}`}
                 onUploaded={(url) =>
                   createBlogForm.setValue("image", encodeImageUrl(url))
                 }
               />
-
               {formState.errors.image && (
                 <p className="text-sm text-red-500">
                   {formState.errors.image.message}
                 </p>
               )}
-
               {watch("image") && (
                 <img
                   src={watch("image")}
@@ -679,8 +693,9 @@ const AddBlog = () => {
                 />
               )}
             </div>
+
             <div className="border-none rounded-lg">
-              <Label className="mx-1">Related Articles</Label>
+              <Label className="mx-1">{t("relatedArticlesLabel")}</Label>
               <Controller
                 name="relatedArticles"
                 control={control}
@@ -697,7 +712,7 @@ const AddBlog = () => {
             </div>
 
             <div className="border-none rounded-lg">
-              <Label className="mx-1">Tags</Label>
+              <Label className="mx-1">{t("tagsLabel")}</Label>
               <Controller
                 name="tags"
                 control={control}
@@ -716,22 +731,21 @@ const AddBlog = () => {
             <div className="p-4 border rounded-lg space-y-4">
               <div className="flex items-center justify-between mb-2">
                 <Label className="text-base font-semibold leading-9">
-                  FAQs
+                  {t("faqsLabel")}
                 </Label>
-
                 <button
                   type="button"
                   onClick={() => appendFaq({ question: "", answer: "" })}
                   className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors flex items-center"
                 >
-                  + Add FAQ
+                  {t("addFaqBtn")}
                 </button>
               </div>
               {faqFields.map((faq, index) => (
                 <div key={faq.id} className="flex gap-2 items-start">
                   <div className="flex-1 space-y-1">
                     <Input
-                      placeholder="Question"
+                      placeholder={t("questionPlaceholder")}
                       {...register(`faqs.${index}.question` as const)}
                     />
                     {formState.errors.faqs?.[index]?.question && (
@@ -740,7 +754,7 @@ const AddBlog = () => {
                       </p>
                     )}
                     <Input
-                      placeholder="Answer"
+                      placeholder={t("answerPlaceholder")}
                       {...register(`faqs.${index}.answer` as const)}
                     />
                     {formState.errors.faqs?.[index]?.answer && (
@@ -754,7 +768,7 @@ const AddBlog = () => {
                     onClick={() => removeFaq(index)}
                     className="h-8 px-3 text-xs font-medium rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors"
                   >
-                    Remove
+                    {t("removeBtn")}
                   </button>
                 </div>
               ))}
@@ -773,7 +787,7 @@ const AddBlog = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
                     <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
-                      {watch("title") || "Your Blog Title Here"}
+                      {watch("title") || t("previewTitleFallback")}
                     </h1>
                   </div>
                 </div>
@@ -803,7 +817,9 @@ const AddBlog = () => {
                 </div>
                 {(watch("faqs") ?? []).length > 0 && (
                   <div className="mt-8 p-4 border rounded-lg">
-                    <h3 className="text-lg font-semibold mb-2">FAQs</h3>
+                    <h3 className="text-lg font-semibold mb-2">
+                      {t("faqsLabel")}
+                    </h3>
                     <ul className="space-y-2">
                       {(watch("faqs") ?? []).map((faq, idx) => (
                         <li key={idx} className="border-b pb-2">
@@ -820,7 +836,7 @@ const AddBlog = () => {
 
               <aside className="w-full md:w-[30%] border rounded-lg p-4 bg-white shadow-sm h-fit">
                 <h3 className="text-lg font-semibold border-b pb-2 mb-4">
-                  Related Articles
+                  {t("relatedArticlesLabel")}
                 </h3>
                 <ul className="space-y-4">
                   {(watch("relatedArticles") ?? []).length > 0 ? (
@@ -838,7 +854,7 @@ const AddBlog = () => {
                             />
                             <div>
                               <p className="text-sm font-medium text-gray-800 hover:underline cursor-pointer">
-                                {related?.title || "Untitled Post"}
+                                {related?.title || t("untitledPost")}
                               </p>
                               <p className="text-xs text-gray-500">
                                 Tuition Lanka
@@ -850,7 +866,7 @@ const AddBlog = () => {
                     )
                   ) : (
                     <p className="text-sm text-gray-500">
-                      No related posts selected.
+                      {t("noRelatedPosts")}
                     </p>
                   )}
                 </ul>
@@ -866,15 +882,14 @@ const AddBlog = () => {
               onClick={() => redirect.back()}
               className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              Cancel
+              {t("cancelBtn")}
             </button>
-
             <button
               type="button"
               onClick={onClear}
               className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              Clear
+              {t("clearBtn")}
             </button>
           </div>
 
@@ -883,7 +898,7 @@ const AddBlog = () => {
             disabled={isLoading}
             className="h-9 px-5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
           >
-            {isLoading ? "Publishing..." : "Publish"}
+            {isLoading ? t("publishingBtn") : t("publishBtn")}
           </button>
         </div>
       </form>
