@@ -3,9 +3,10 @@
 import { Check, ChevronDown, X } from "lucide-react";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
-interface Option {
+export interface Option {
   value: string;
   text: string;
+  selected?: boolean;
 }
 
 interface MultiSelectProps {
@@ -15,6 +16,8 @@ interface MultiSelectProps {
   disabled?: boolean;
   hasError?: boolean;
   searchable?: boolean;
+  singleSelect?: boolean;
+  placeholder?: string;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -24,9 +27,14 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   disabled = false,
   hasError = false,
   searchable = false,
+  singleSelect = false,
+  placeholder = "Select option",
 }) => {
-  const [selectedOptions, setSelectedOptions] =
-    useState<string[]>(defaultSelected);
+  const [selectedOptions, setSelectedOptions] = useState<string[]>(
+    defaultSelected.length > 0
+      ? defaultSelected
+      : options.filter((o) => o.selected).map((o) => o.value),
+  );
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -55,6 +63,13 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   }, [isOpen, searchable]);
 
   const handleSelect = (value: string) => {
+    if (singleSelect) {
+      const updated = [value];
+      setSelectedOptions(updated);
+      onChange?.(updated);
+      setIsOpen(false);
+      return;
+    }
     const updated = selectedOptions.includes(value)
       ? selectedOptions.filter((v) => v !== value)
       : [...selectedOptions, value];
@@ -69,11 +84,20 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     onChange?.(updated);
   };
 
-  // Sync internal selection state when the parent updates defaultSelected
-  // (e.g. when the form filters out subjects after a grade is removed).
+  const defaultSelectedKey = defaultSelected.join("|");
+  const optionSelectedKey = options
+    .filter((o) => o.selected)
+    .map((o) => o.value)
+    .join("|");
+
   useEffect(() => {
-    setSelectedOptions(defaultSelected);
-  }, [defaultSelected]);
+    setSelectedOptions(
+      defaultSelected.length > 0
+        ? defaultSelected
+        : options.filter((o) => o.selected).map((o) => o.value),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultSelectedKey, optionSelectedKey]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -102,31 +126,37 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         className={`flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border ${borderClass} px-3 text-sm ${disabledClass}`}
       >
         {selectedOptions.length > 0 ? (
-          selectedOptions.map((value) => {
-            const option = options.find((o) => o.value === value);
-            return (
-              <span
-                key={value}
-                className="flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs"
-              >
-                {option?.text}
-                <button
-                  type="button"
-                  disabled={disabled}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (disabled) return;
-                    removeOption(value);
-                  }}
-                  className="text-muted-foreground hover:text-foreground disabled:cursor-not-allowed"
+          singleSelect ? (
+            <span className="text-sm text-gray-900">
+              {options.find((o) => o.value === selectedOptions[0])?.text}
+            </span>
+          ) : (
+            selectedOptions.map((value) => {
+              const option = options.find((o) => o.value === value);
+              return (
+                <span
+                  key={value}
+                  className="flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-xs"
                 >
-                  ✕
-                </button>
-              </span>
-            );
-          })
+                  {option?.text}
+                  <button
+                    type="button"
+                    disabled={disabled}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (disabled) return;
+                      removeOption(value);
+                    }}
+                    className="text-muted-foreground hover:text-foreground disabled:cursor-not-allowed"
+                  >
+                    ✕
+                  </button>
+                </span>
+              );
+            })
+          )
         ) : (
-          <span className="text-muted-foreground">Select option</span>
+          <span className="text-muted-foreground">{placeholder}</span>
         )}
 
         <ChevronDown className="ml-auto h-4 w-4 text-muted-foreground" />
