@@ -3,15 +3,10 @@
 import InputText from "@/components/shared/input-text";
 import { FormProvider, Controller } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
-import { FC, KeyboardEvent, useEffect, useRef } from "react";
+import { FC, KeyboardEvent, useEffect, useMemo, useRef } from "react";
 import { GeneralInfoSchema } from "./schema";
 import { useTranslations } from "next-intl";
 import SubmitButton from "@/components/shared/submit-button";
-import {
-  GENDER_OPTIONS,
-  NATIONALITY_OPTIONS,
-  RACE_OPTIONS,
-} from "@/configs/register-tutor";
 import {
   collapseTextSpaces,
   removeWhitespace,
@@ -31,12 +26,6 @@ const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
   }
 };
 
-const toOptions = (options: Array<{ value: string; text: string }>) =>
-  options.map(({ value, text }) => ({ value, label: text }));
-
-const genderOptions = toOptions(GENDER_OPTIONS);
-const nationalityOptions = toOptions(NATIONALITY_OPTIONS);
-const raceOptions = toOptions(RACE_OPTIONS);
 const fieldHeightClass = "h-11";
 
 const calculateAge = (birthday?: string) => {
@@ -82,6 +71,36 @@ const normalizeBirthdayValue = (birthday: unknown) => {
 
 const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const t = useTranslations("profile");
+  const tRegisterTutor = useTranslations("registerTutor");
+  const genderOptions = useMemo(
+    () => [
+      { value: "Male", label: tRegisterTutor("optGenderMale") },
+      { value: "Female", label: tRegisterTutor("optGenderFemale") },
+      { value: "Others", label: tRegisterTutor("optGenderOthers") },
+    ],
+    [tRegisterTutor],
+  );
+  const nationalityOptions = useMemo(
+    () => [
+      {
+        value: "Sri Lankan",
+        label: tRegisterTutor("optNationalitySriLankan"),
+      },
+      { value: "Others", label: tRegisterTutor("optNationalityOthers") },
+    ],
+    [tRegisterTutor],
+  );
+  const raceOptions = useMemo(
+    () => [
+      { value: "Sinhalese", label: tRegisterTutor("optRaceSinhalese") },
+      { value: "Tamil", label: tRegisterTutor("optRaceTamil") },
+      { value: "Muslim", label: tRegisterTutor("optRaceMuslim") },
+      { value: "Burgher", label: tRegisterTutor("optRaceBurgher") },
+      { value: "Others", label: tRegisterTutor("optRaceOthers") },
+    ],
+    [tRegisterTutor],
+  );
+  const selectPlaceholder = tRegisterTutor("selectOption");
   const onSubmit = (data: GeneralInfoSchema) => {
     onFormSubmit(data);
   };
@@ -267,18 +286,21 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 label={t("fieldGender")}
                 name="gender"
                 options={genderOptions}
+                placeholder={selectPlaceholder}
                 className={fieldHeightClass}
               />
               <InputSelect
                 label={t("fieldNationality")}
                 name="nationality"
                 options={nationalityOptions}
+                placeholder={selectPlaceholder}
                 className={fieldHeightClass}
               />
               <InputSelect
                 label={t("fieldRace")}
                 name="race"
                 options={raceOptions}
+                placeholder={selectPlaceholder}
                 className={fieldHeightClass}
               />
             </div>
