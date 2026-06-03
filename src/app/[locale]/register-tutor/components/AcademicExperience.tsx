@@ -20,12 +20,6 @@ import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
-const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
-const selectBorder = (hasError: boolean) =>
-  hasError ? "border-red-500" : "border-gray-300";
-const selectColor = (value: string) =>
-  value ? "text-gray-900" : "text-gray-500";
 type MultiSelectOnChange = NonNullable<
   Parameters<typeof MultiSelect>[0]["onChange"]
 >;
@@ -38,7 +32,6 @@ const AcademicExperience = () => {
   const searchPh = t("searchPlaceholder");
   const noResultsText = (query: string) => t("noResultsFor", { query });
   const {
-    register,
     control,
     watch,
     setValue,
@@ -50,7 +43,6 @@ const AcademicExperience = () => {
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
   const selectedClassTypes = watch("classType");
-  const highestEducation = watch("highestEducation");
 
   const selectedGradeIds = useMemo<string[]>(() => {
     return Array.isArray(selectedGrades) ? selectedGrades : [];
@@ -228,7 +220,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("classType", field.onChange, selected)
                 }
                 hasError={!!errors.classType}
-                placeholder={selectPlaceholder}
+                placeholder={t("classTypePlaceholder")}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
               />
@@ -265,7 +257,7 @@ const AcademicExperience = () => {
                   isPreferredLocationsEnabled && !!errors.preferredLocations
                 }
                 searchable
-                placeholder={selectPlaceholder}
+                placeholder={t("preferredLocationsPlaceholder")}
                 searchPlaceholder={searchPh}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
@@ -301,7 +293,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("tutorType", field.onChange, selected)
                 }
                 hasError={!!errors.tutorType}
-                placeholder={selectPlaceholder}
+                placeholder={t("tutorTypesPlaceholder")}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
               />
@@ -316,30 +308,23 @@ const AcademicExperience = () => {
           <Label className="text-sm" htmlFor="highestEducation">
             {t("highestEducation")} <span className="text-red-500">*</span>
           </Label>
-          <select
-            id="highestEducation"
-            {...register("highestEducation", {
-              onChange: (event: ChangeEvent<HTMLSelectElement>) => {
-                if (event.target.value) {
-                  clearErrors("highestEducation");
-                }
-              },
-            })}
-            className={`${selectClass} ${selectBorder(!!errors.highestEducation)} ${selectColor(highestEducation)}`}
-          >
-            <option value="" disabled hidden>
-              {t("highestEducationPlaceholder")}
-            </option>
-            {highestEducationOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                className="text-gray-900"
-              >
-                {option.text}
-              </option>
-            ))}
-          </select>
+          <Controller
+            name="highestEducation"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={highestEducationOptions}
+                defaultSelected={field.value ? [field.value] : []}
+                onChange={(selected) => {
+                  field.onChange(selected[0] ?? "");
+                  if (selected.length > 0) clearErrors("highestEducation");
+                }}
+                hasError={!!errors.highestEducation}
+                singleSelect
+                placeholder={t("highestEducationPlaceholder")}
+              />
+            )}
+          />
           <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.highestEducation?.message as string}
           </p>
@@ -375,7 +360,7 @@ const AcademicExperience = () => {
                   )
                 }
                 hasError={!!errors.tutorMediums}
-                placeholder={selectPlaceholder}
+                placeholder={t("tutorMediumsPlaceholder")}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
               />
@@ -404,7 +389,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("grades", field.onChange, selected)
                 }
                 hasError={!!errors.grades}
-                placeholder={selectPlaceholder}
+                placeholder={t("gradesPlaceholder")}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
               />
@@ -431,7 +416,7 @@ const AcademicExperience = () => {
                 }
                 hasError={!!errors.subjects}
                 disabled={selectedGradeIds.length === 0}
-                placeholder={selectPlaceholder}
+                placeholder={t("subjectsPlaceholder")}
                 clearSearchLabel={t("clearSearch")}
                 noResultsText={noResultsText}
               />

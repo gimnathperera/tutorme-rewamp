@@ -3,6 +3,6 @@ export { default as DistrictSelect } from "@/components/form-controls/district-s
 export {
   default as MultiSelect,
   type Option as MultiSelectOption,
-} from "@/components/form-controls/multi-select";
+} from "@/components/shared/MultiSelect";
 export { default as FileUploadDropzone } from "@/components/upload/file-upload-dropzone";
 export { default as MultiFileUploadDropzone } from "@/components/upload/multi-file-upload-dropzone";

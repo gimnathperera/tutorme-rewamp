@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
-import { FormProvider } from "react-hook-form";
-import InputSelect from "@/components/shared/input-select";
+import { FormProvider, Controller } from "react-hook-form";
+import MultiSelect from "@/components/shared/MultiSelect";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { useTranslations } from "next-intl";
@@ -18,6 +18,9 @@ type Props = {
   isSubmitting: boolean;
   onFormSubmit: (data: LanguageOptionsSchema) => void;
 };
+
+const toMultiSelectOptions = (opts: Option[]) =>
+  opts.map((o) => ({ value: String(o.value), text: o.label }));
 
 const FormLanguageTime: FC<Props> = ({
   languageOptions,
@@ -74,22 +77,68 @@ const FormLanguageTime: FC<Props> = ({
               <AvailabilityScheduler />
             </div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 mb-4">
-              <InputSelect
-                label={t("fieldLanguage")}
-                name="language"
-                options={languageOptions}
-              />
-              <InputSelect
-                label={t("fieldTimeZone")}
-                name="timeZone"
-                options={timeZoneOptions}
-              />
-              <InputSelect
-                label={t("fieldRate")}
-                name="rate"
-                options={normalizedRateOptions}
-                helperText={t("helperRate")}
-              />
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  {t("fieldLanguage")} <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="language"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(languageOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder={t("fieldLanguage")}
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  {t("fieldTimeZone")} <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="timeZone"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(timeZoneOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder={t("fieldTimeZone")}
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  {t("fieldRate")} <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="rate"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(normalizedRateOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder={t("fieldRate")}
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500">
+                  {t("helperRate")}
+                </span>
+              </div>
             </div>
 
             <div className="col-span-6 sm:col-full">

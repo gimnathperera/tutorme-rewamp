@@ -20,7 +20,7 @@ import {
 import { useFetchTagsQuery } from "@/store/api/splits/tabs";
 import { UpdateArticleSchema, updateArticleSchema } from "../schema";
 
-import MultiSelect, { Option } from "@/components/form-controls/multi-select";
+import MultiSelect, { Option } from "@/components/shared/MultiSelect";
 import TableOfContents from "../../table-of-content/TableOfContent";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
@@ -296,7 +296,8 @@ export default function EditBlogPage() {
   if (isLoading) return <p>Loading...</p>;
 
   return (
-    <div className="flex flex-col bg-white m-5 md:flex-row gap-8">
+    <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
+      <div className="flex flex-col bg-white md:flex-row gap-8">
       <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
         <div className="flex gap-2 mt-6 px-6">
           <Button
@@ -806,98 +807,107 @@ export default function EditBlogPage() {
                 </button>
               </div>
             </div>
-            <div className="mb-4">
-              <Label>Cover Image</Label>
-              <FileUploadDropzone
-                key="cover-dropzone"
-                onUploaded={(url) => setValue("image", encodeImageUrl(url))}
-              />
-              {watch("image") && (
-                <img
-                  src={watch("image")}
-                  alt="Cover Preview"
-                  className="mt-2 max-h-48 w-full rounded-lg object-cover"
+            <div className="flex flex-col gap-6 p-6 border border-gray-100 rounded-xl shadow-sm">
+              {/* Cover Image */}
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-medium text-gray-700">Cover Image</Label>
+                <FileUploadDropzone
+                  key="cover-dropzone"
+                  onUploaded={(url) => setValue("image", encodeImageUrl(url))}
                 />
-              )}
-            </div>
-
-            <div>
-              <Label>Related Articles</Label>
-              <Controller
-                control={control}
-                name="relatedArticles"
-                render={({ field }) => (
-                  <MultiSelect
-                    key={JSON.stringify(field.value)}
-                    options={blogOptions}
-                    defaultSelected={field.value}
-                    onChange={field.onChange}
-                    label={""}
+                {watch("image") && (
+                  <img
+                    src={watch("image")}
+                    alt="Cover Preview"
+                    className="mt-1 max-h-48 w-full rounded-lg object-cover"
                   />
                 )}
-              />
-            </div>
-
-            <div>
-              <Label>Tags</Label>
-              <Controller
-                control={control}
-                name="tags"
-                render={({ field }) => (
-                  <MultiSelect
-                    key={JSON.stringify(field.value)}
-                    options={tagsOptions}
-                    defaultSelected={field.value}
-                    onChange={field.onChange}
-                    label={""}
-                  />
-                )}
-              />
-            </div>
-            <div className="p-4 border rounded-lg space-y-4">
-              <div className="flex items-center justify-between">
-                <Label>FAQs</Label>
-                <Button
-                  type="button"
-                  onClick={() => appendFaq({ question: "", answer: "" })}
-                  variant="default"
-                  className="bg-black text-white hover:transition-opacity"
-                >
-                  Add FAQ
-                </Button>
               </div>
-              {faqFields.map((faq, index) => (
-                <div key={faq.id} className="flex gap-2 items-start">
-                  <div className="flex-1 space-y-1">
-                    <Input
-                      placeholder="Question"
-                      {...register(`faqs.${index}.question` as const)}
+
+              {/* Related Articles */}
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-medium text-gray-700">Related Articles</Label>
+                <Controller
+                  control={control}
+                  name="relatedArticles"
+                  render={({ field }) => (
+                    <MultiSelect
+                      key={JSON.stringify(field.value)}
+                      options={blogOptions}
+                      defaultSelected={field.value}
+                      onChange={field.onChange}
+                      placeholder="Select related articles"
                     />
-                    {formState.errors.faqs?.[index]?.question && (
-                      <p className="text-sm text-red-500">
-                        {formState.errors.faqs[index]?.question?.message}
-                      </p>
-                    )}
-                    <Input
-                      placeholder="Answer"
-                      {...register(`faqs.${index}.answer` as const)}
+                  )}
+                />
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-col gap-1.5">
+                <Label className="text-sm font-medium text-gray-700">Tags</Label>
+                <Controller
+                  control={control}
+                  name="tags"
+                  render={({ field }) => (
+                    <MultiSelect
+                      key={JSON.stringify(field.value)}
+                      options={tagsOptions}
+                      defaultSelected={field.value}
+                      onChange={field.onChange}
+                      placeholder="Select tags"
                     />
-                    {formState.errors.faqs?.[index]?.answer && (
-                      <p className="text-sm text-red-500">
-                        {formState.errors.faqs[index]?.answer?.message}
-                      </p>
-                    )}
-                  </div>
+                  )}
+                />
+              </div>
+
+              {/* FAQs */}
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-medium text-gray-700">FAQs</Label>
                   <Button
                     type="button"
-                    variant="outline"
-                    className="h-fit bg-red-500 text-white"
-                    onClick={() => removeFaq(index)}
+                    onClick={() => appendFaq({ question: "", answer: "" })}
+                    variant="default"
+                    className="bg-black text-white hover:transition-opacity"
                   >
-                    Remove
+                    + Add FAQ
                   </Button>
                 </div>
-              ))}
+                {faqFields.map((faq, index) => (
+                  <div key={faq.id} className="flex gap-2 items-start">
+                    <div className="flex-1 flex flex-col gap-1.5">
+                      <Input
+                        placeholder="Question"
+                        className="text-sm placeholder:text-gray-500"
+                        {...register(`faqs.${index}.question` as const)}
+                      />
+                      {formState.errors.faqs?.[index]?.question && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.faqs[index]?.question?.message}
+                        </p>
+                      )}
+                      <Input
+                        placeholder="Answer"
+                        className="text-sm placeholder:text-gray-500"
+                        {...register(`faqs.${index}.answer` as const)}
+                      />
+                      {formState.errors.faqs?.[index]?.answer && (
+                        <p className="text-xs text-red-500">
+                          {formState.errors.faqs[index]?.answer?.message}
+                        </p>
+                      )}
+                    </div>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="h-fit bg-red-500 text-white"
+                      onClick={() => removeFaq(index)}
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         ) : (
@@ -1017,6 +1027,7 @@ export default function EditBlogPage() {
           </Button>
         </div>
       </form>
+      </div>
     </div>
   );
 }
