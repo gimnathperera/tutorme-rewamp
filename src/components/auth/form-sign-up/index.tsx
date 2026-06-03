@@ -71,13 +71,18 @@ const FormSignUp = ({ onLoginClick }: Props) => {
           </div>
           <div>
             <label className="mb-1 text-sm font-medium text-gray-700">
-              {t("confirmPasswordLabel")} <span className="text-red-500">*</span>
+              {t("confirmPasswordLabel")}{" "}
+              <span className="text-red-500">*</span>
             </label>
             <InputPassword placeholder="*******" name="confirmPassword" />
           </div>
         </div>
         <div className="space-y-2 mt-4">
-          <SubmitButton title={t("registerButton")} type="submit" loading={isLoading} />
+          <SubmitButton
+            title={t("registerButton")}
+            type="submit"
+            loading={isLoading}
+          />
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">

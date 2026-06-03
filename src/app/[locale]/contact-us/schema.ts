@@ -8,10 +8,7 @@ export const createContactUsSchema = (t: (key: string) => string) =>
       .trim()
       .min(1, t("nameRequired"))
       .regex(/^[A-Za-z\s]+$/, t("nameLettersOnly"))
-      .refine(
-        (v) => !/ {2,}/.test(v),
-        t("nameNoMultipleSpaces"),
-      ),
+      .refine((v) => !/ {2,}/.test(v), t("nameNoMultipleSpaces")),
 
     email: z
       .string()
@@ -38,4 +35,6 @@ export const initialFormValues = {
   message: "",
 };
 
-export type ContactUsPageSchema = z.infer<ReturnType<typeof createContactUsSchema>>;
+export type ContactUsPageSchema = z.infer<
+  ReturnType<typeof createContactUsSchema>
+>;

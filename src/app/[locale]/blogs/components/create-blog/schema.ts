@@ -63,7 +63,9 @@ export const createArticleSchema = (t: (key: string) => string) =>
       .optional(),
   });
 
-export type CreateArticleSchema = z.infer<ReturnType<typeof createArticleSchema>>;
+export type CreateArticleSchema = z.infer<
+  ReturnType<typeof createArticleSchema>
+>;
 
 export const initialFormValues: CreateArticleSchema = {
   title: "",

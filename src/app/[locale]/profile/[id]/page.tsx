@@ -51,7 +51,9 @@ const ProfilePage: FC = () => {
             {isAdminProfile ? t("adminProfileTitle") : t("tutorProfileTitle")}
           </h1>
           <p className="mt-2 max-w-3xl text-sm text-gray-600 sm:text-base">
-            {isAdminProfile ? t("adminProfileSubtitle") : t("tutorProfileSubtitle")}
+            {isAdminProfile
+              ? t("adminProfileSubtitle")
+              : t("tutorProfileSubtitle")}
           </p>
         </div>
 
@@ -92,7 +94,9 @@ const ProfilePage: FC = () => {
                 >
                   <CalendarClock className="h-4 w-4 shrink-0" />
                   <span className="sm:hidden">{t("tabAvailabilityShort")}</span>
-                  <span className="hidden sm:inline">{t("tabAvailabilityFull")}</span>
+                  <span className="hidden sm:inline">
+                    {t("tabAvailabilityFull")}
+                  </span>
                 </TabsTrigger>
                 <TabsTrigger
                   value="security"

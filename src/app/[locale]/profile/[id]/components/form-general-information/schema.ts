@@ -106,9 +106,11 @@ export const createGeneralInfoSchema = (t: (key: string) => string) =>
           .min(18, t("ageMinimum"))
           .max(80, t("ageMaximum")),
       ),
-      gender: z.string().refine((v) => ["Male", "Female", "Others"].includes(v), {
-        message: t("genderRequired"),
-      }),
+      gender: z
+        .string()
+        .refine((v) => ["Male", "Female", "Others"].includes(v), {
+          message: t("genderRequired"),
+        }),
       nationality: z
         .string()
         .refine((v) => ["Sri Lankan", "Others"].includes(v), {

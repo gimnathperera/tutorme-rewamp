@@ -156,7 +156,10 @@ export default function AddRequestForTutor() {
   );
   const tutorTypeOptions = useMemo(
     () => [
-      { value: "International School Teacher", text: t("optTutorTypeInternational") },
+      {
+        value: "International School Teacher",
+        text: t("optTutorTypeInternational"),
+      },
       { value: "Government School Teacher", text: t("optTutorTypeGovernment") },
       { value: "University Student", text: t("optTutorTypeUniversity") },
       { value: "A/L Student", text: t("optTutorTypeAL") },
@@ -170,7 +173,10 @@ export default function AddRequestForTutor() {
     () => [
       { value: "Online - Individual", text: t("optClassTypeOnlineIndividual") },
       { value: "Online - Group", text: t("optClassTypeOnlineGroup") },
-      { value: "Physical - Individual", text: t("optClassTypePhysicalIndividual") },
+      {
+        value: "Physical - Individual",
+        text: t("optClassTypePhysicalIndividual"),
+      },
       { value: "Physical - Group", text: t("optClassTypePhysicalGroup") },
     ],
     [t],
@@ -360,7 +366,8 @@ export default function AddRequestForTutor() {
                   </div>
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="phoneNumber">
-                      {t("contactNumber")} <span className="text-red-500">*</span>
+                      {t("contactNumber")}{" "}
+                      <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phoneNumber"
@@ -449,7 +456,9 @@ export default function AddRequestForTutor() {
                           }}
                           hasError={!!errors.city}
                           searchCityPlaceholder={t("searchCity")}
-                          selectDistrictFirstPlaceholder={t("selectDistrictFirst")}
+                          selectDistrictFirstPlaceholder={t(
+                            "selectDistrictFirst",
+                          )}
                           didYouMeanText={t("didYouMean")}
                           noCityFoundText={t("noCityFound")}
                         />
@@ -616,7 +625,8 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
-                          {t("duration")} <span className="text-red-500">*</span>
+                          {t("duration")}{" "}
+                          <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`duration-${index}`}
@@ -649,7 +659,8 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
-                          {t("frequency")} <span className="text-red-500">*</span>
+                          {t("frequency")}{" "}
+                          <span className="text-red-500">*</span>
                         </Label>
                         <select
                           id={`frequency-${index}`}
@@ -855,7 +866,9 @@ export default function AddRequestForTutor() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
+            <Button onClick={() => setSubmissionResult(null)}>
+              {t("tryAgain")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

@@ -160,7 +160,9 @@ export default function CitySelect({
         onFocus={() => {
           if (searchText.trim()) setShowDropdown(true);
         }}
-        placeholder={district ? searchCityPlaceholder : selectDistrictFirstPlaceholder}
+        placeholder={
+          district ? searchCityPlaceholder : selectDistrictFirstPlaceholder
+        }
         disabled={!district}
         autoComplete="off"
         className={`h-11 text-[16px] placeholder:text-gray-500 text-gray-900 disabled:opacity-100 disabled:bg-gray-100 ${hasError ? "border-red-500" : "border-gray-300"}`}

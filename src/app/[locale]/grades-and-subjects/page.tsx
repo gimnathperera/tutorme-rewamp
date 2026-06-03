@@ -487,9 +487,7 @@ const GradesPage: FC = () => {
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto mb-5 max-w-7xl text-center">
-        <h2 className="text-4xl font-bold text-center">
-          {t("pageTitle")}
-        </h2>
+        <h2 className="text-4xl font-bold text-center">{t("pageTitle")}</h2>
         <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal opacity-50">
           {t("pageSubtitle")}
         </h3>

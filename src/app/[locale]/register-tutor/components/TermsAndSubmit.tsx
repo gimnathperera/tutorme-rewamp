@@ -157,8 +157,7 @@ const TermsAndSubmit = () => {
       closePreview: t("closePreview"),
       previewUnavailable: t("previewUnavailable"),
       fileTypeRejection: t("fileTypeRejection"),
-      uploadFailedFor: (fileName: string) =>
-        t("uploadFailedFor", { fileName }),
+      uploadFailedFor: (fileName: string) => t("uploadFailedFor", { fileName }),
       uploading: t("uploading"),
       dropFilesHere: t("dropFilesHere"),
       uploadCertificatesCta: t("uploadCertificatesCta"),
@@ -318,7 +317,9 @@ const TermsAndSubmit = () => {
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             />
           </svg>
-          <h3 className="text-sm font-semibold text-black">{t("agreements")}</h3>
+          <h3 className="text-sm font-semibold text-black">
+            {t("agreements")}
+          </h3>
         </div>
 
         <div className="p-5 space-y-1">
@@ -378,7 +379,8 @@ const TermsAndSubmit = () => {
               className="flex flex-col gap-1 text-sm cursor-pointer"
             >
               <span className="font-semibold">
-                {t("agreeAssignmentLabel")} <span className="text-red-500">*</span>
+                {t("agreeAssignmentLabel")}{" "}
+                <span className="text-red-500">*</span>
               </span>
               <span className="text-xs text-muted-foreground leading-relaxed">
                 {t("agreeAssignmentDesc")}

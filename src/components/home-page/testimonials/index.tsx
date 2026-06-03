@@ -194,7 +194,11 @@ const Testimonials: FC = () => {
   // Translate testimonial content, owner role, and owner name for non-English locales
   const translatedItems = useTranslateItems(
     visibleItems,
-    (item) => [item.content ?? "", item.owner?.role ?? "", item.owner?.name ?? ""],
+    (item) => [
+      item.content ?? "",
+      item.owner?.role ?? "",
+      item.owner?.name ?? "",
+    ],
     (item, [content, role, name]) => ({
       ...item,
       content: content ?? item.content,

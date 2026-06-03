@@ -36,10 +36,7 @@ export const createSignUpSchema = (t: (key: string) => string) =>
           message: t("passwordLetterNumber"),
         }),
 
-      confirmPassword: z
-        .string()
-        .trim()
-        .nonempty(t("confirmPasswordRequired")),
+      confirmPassword: z.string().trim().nonempty(t("confirmPasswordRequired")),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("passwordsNoMatch"),

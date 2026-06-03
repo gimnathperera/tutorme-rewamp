@@ -91,9 +91,7 @@ const ProfilePicSettings = () => {
         <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
           {t("profilePhotoTitle")}
         </h3>
-        <p className="mt-2 text-sm text-gray-500">
-          {t("profilePhotoDesc")}
-        </p>
+        <p className="mt-2 text-sm text-gray-500">{t("profilePhotoDesc")}</p>
       </div>
 
       <div className="flex justify-center">
@@ -145,9 +143,7 @@ const ProfilePicSettings = () => {
               {t("changePhotoTitle")}
             </h3>
 
-            <p className="mb-4 text-sm text-gray-500">
-              {t("changePhotoDesc")}
-            </p>
+            <p className="mb-4 text-sm text-gray-500">{t("changePhotoDesc")}</p>
 
             <FileUploadDropzone onUploaded={handleUploaded} />
 
@@ -181,9 +177,7 @@ const ProfilePicSettings = () => {
               {t("removePhotoTitle")}
             </h3>
 
-            <p className="mb-6 text-sm text-gray-500">
-              {t("removePhotoDesc")}
-            </p>
+            <p className="mb-6 text-sm text-gray-500">{t("removePhotoDesc")}</p>
 
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button

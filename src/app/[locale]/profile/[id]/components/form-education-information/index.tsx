@@ -151,7 +151,10 @@ const DocumentRow = ({
 };
 
 const FormEducationInfo: FC<Props> = ({
-  dropdownOptionData: { gradesOptions: rawGrades, subjectsOptions: rawSubjects },
+  dropdownOptionData: {
+    gradesOptions: rawGrades,
+    subjectsOptions: rawSubjects,
+  },
   form,
   onFormSubmit,
   isSubmitting,
@@ -251,10 +254,10 @@ const FormEducationInfo: FC<Props> = ({
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">{t("qualificationsTitle")}</h3>
-      <p className="mb-5 text-sm text-gray-500">
-        {t("qualificationsDesc")}
-      </p>
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        {t("qualificationsTitle")}
+      </h3>
+      <p className="mb-5 text-sm text-gray-500">{t("qualificationsDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
@@ -383,7 +386,8 @@ const FormEducationInfo: FC<Props> = ({
                 {/* Educational Details — mandatory */}
                 <div>
                   <p className="text-xs font-semibold text-gray-600 mb-2">
-                    {t("educationalDetailsLabel")} <span className="text-red-500">*</span>
+                    {t("educationalDetailsLabel")}{" "}
+                    <span className="text-red-500">*</span>
                   </p>
                   <div className="space-y-3">
                     {eduFields.map((field, index) => (

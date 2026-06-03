@@ -208,34 +208,32 @@ const TestPapers = () => {
     forms: { testPaperSearchForm },
   } = useLogic();
 
-  const {
-    items: translatedPapers,
-    isTranslating: isPapersTranslating,
-  } = useTranslatedDisplayItems<Paper>(
-    availablePapers,
-    (paper) => [
-      paper.subject?.title ?? "",
-      paper.grade?.title ?? "",
-      paper.title ?? "",
-    ],
-    (paper, [subjectTitle, gradeTitle, title]) => ({
-      ...paper,
-      title: title ?? paper.title,
-      subject: paper.subject
-        ? { ...paper.subject, title: subjectTitle }
-        : paper.subject,
-      grade: paper.grade ? { ...paper.grade, title: gradeTitle } : paper.grade,
-    }),
-  );
+  const { items: translatedPapers, isTranslating: isPapersTranslating } =
+    useTranslatedDisplayItems<Paper>(
+      availablePapers,
+      (paper) => [
+        paper.subject?.title ?? "",
+        paper.grade?.title ?? "",
+        paper.title ?? "",
+      ],
+      (paper, [subjectTitle, gradeTitle, title]) => ({
+        ...paper,
+        title: title ?? paper.title,
+        subject: paper.subject
+          ? { ...paper.subject, title: subjectTitle }
+          : paper.subject,
+        grade: paper.grade
+          ? { ...paper.grade, title: gradeTitle }
+          : paper.grade,
+      }),
+    );
 
-  const {
-    items: translatedGradesOptions,
-    isTranslating: isGradesTranslating,
-  } = useTranslatedDisplayItems<Option>(
-    gradesOptions,
-    (opt) => [opt.label],
-    (opt, [label]) => ({ ...opt, label: label ?? opt.label }),
-  );
+  const { items: translatedGradesOptions, isTranslating: isGradesTranslating } =
+    useTranslatedDisplayItems<Option>(
+      gradesOptions,
+      (opt) => [opt.label],
+      (opt, [label]) => ({ ...opt, label: label ?? opt.label }),
+    );
 
   const {
     items: translatedSubjectOptions,
@@ -258,9 +256,7 @@ const TestPapers = () => {
   return (
     <div className="max-w-7xl mx-auto py-10">
       <div className=" py-4 m-3">
-        <h2 className="text-4xl font-bold text-center">
-          {t("pageHeading")}
-        </h2>
+        <h2 className="text-4xl font-bold text-center">{t("pageHeading")}</h2>
         <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal text-center opacity-50">
           {t("pageSubheading")}
         </h3>

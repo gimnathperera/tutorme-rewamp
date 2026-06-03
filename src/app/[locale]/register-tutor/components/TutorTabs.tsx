@@ -196,10 +196,10 @@ export function TutorTabs() {
       const result = await checkTutorEmailAvailability(email, true);
 
       if (result.data && !result.data.available) {
-          setError("email", {
-            type: "server",
-            message: result.data.message || t("emailAlreadyExists"),
-          });
+        setError("email", {
+          type: "server",
+          message: result.data.message || t("emailAlreadyExists"),
+        });
         setFocus("email");
         return;
       }
@@ -235,8 +235,11 @@ export function TutorTabs() {
       }
 
       // Strip front-end-only fields before sending to API
-      const { confirmPassword: _omit, optionalCertificates, ...payload } =
-        processedData;
+      const {
+        confirmPassword: _omit,
+        optionalCertificates,
+        ...payload
+      } = processedData;
       const validOptional = (optionalCertificates ?? []).filter(
         (c) => c.type && c.url,
       );
@@ -311,9 +314,7 @@ export function TutorTabs() {
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
-            <h1 className="text-3xl text-white font-bold">
-              {t("pageTitle")}
-            </h1>
+            <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
           </div>
 
           <Tabs value={tab} className="w-full">
@@ -515,7 +516,9 @@ export function TutorTabs() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
+            <Button onClick={() => setSubmissionResult(null)}>
+              {t("tryAgain")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

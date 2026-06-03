@@ -500,7 +500,9 @@ const AddBlog = () => {
                     {blockType === "list" && (
                       <div className="space-y-4 p-4 bg-white rounded-lg border">
                         <div className="flex gap-4 items-center">
-                          <Label className="text-sm">{t("listStyleLabel")}</Label>
+                          <Label className="text-sm">
+                            {t("listStyleLabel")}
+                          </Label>
                           <select
                             id={`list-style-${index}`}
                             className="block w-32 rounded-md border-gray-300 py-1.5 bg-white sm:text-sm"

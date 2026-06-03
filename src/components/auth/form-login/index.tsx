@@ -91,7 +91,11 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
           </p>
         </div>
         <div className="space-y-2 mt-4">
-          <SubmitButton title={t("loginButton")} type="submit" loading={isLoading} />
+          <SubmitButton
+            title={t("loginButton")}
+            type="submit"
+            loading={isLoading}
+          />
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900">

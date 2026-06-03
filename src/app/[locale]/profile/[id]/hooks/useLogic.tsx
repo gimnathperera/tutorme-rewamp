@@ -555,9 +555,18 @@ const mergeHydratedProfile = (
 
 const useLogic = (): LogicReturnType => {
   const tProfile = useTranslations("profile");
-  const generalInfoSchema = useMemo(() => createGeneralInfoSchema(tProfile), [tProfile]);
-  const educationInfoSchema = useMemo(() => createEducationInfoSchema(tProfile), [tProfile]);
-  const teachingProfileSchema = useMemo(() => createTeachingProfileSchema(tProfile), [tProfile]);
+  const generalInfoSchema = useMemo(
+    () => createGeneralInfoSchema(tProfile),
+    [tProfile],
+  );
+  const educationInfoSchema = useMemo(
+    () => createEducationInfoSchema(tProfile),
+    [tProfile],
+  );
+  const teachingProfileSchema = useMemo(
+    () => createTeachingProfileSchema(tProfile),
+    [tProfile],
+  );
 
   const params = useParams();
   const router = useRouter();

@@ -18,7 +18,10 @@ const FormForgotPassword = ({ onLoginClick, onSuccess }: Props) => {
   const { forgotPassword, isAuthError, setIsAuthError, isLoading } =
     useAuthContext();
 
-  const forgotPasswordSchema = useMemo(() => createForgotPasswordSchema(t), [t]);
+  const forgotPasswordSchema = useMemo(
+    () => createForgotPasswordSchema(t),
+    [t],
+  );
 
   const forgotPasswordForm = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),

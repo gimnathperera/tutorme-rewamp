@@ -84,10 +84,7 @@ const createStep1BaseSchema = (t: (key: string) => string) =>
 
     email: z.preprocess(
       removeWhitespace,
-      z
-        .string()
-        .min(1, t("emailRequired"))
-        .email(t("emailInvalid")),
+      z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
     ),
 
     password: z.preprocess(
@@ -139,11 +136,7 @@ const createStep1BaseSchema = (t: (key: string) => string) =>
       message: t("genderRequired"),
     }),
 
-    age: z
-      .number()
-      .int()
-      .min(18, t("ageMinimum"))
-      .max(80, t("ageMaximum")),
+    age: z.number().int().min(18, t("ageMinimum")).max(80, t("ageMaximum")),
 
     nationality: z
       .string()
@@ -180,10 +173,9 @@ const createStep2Schema = (t: (key: string) => string) =>
 
     highestEducation: z
       .string()
-      .refine(
-        (v) => isConfiguredValue(REGISTER_HIGHEST_EDUCATION_VALUES, v),
-        { message: t("highestEducationRequired") },
-      ),
+      .refine((v) => isConfiguredValue(REGISTER_HIGHEST_EDUCATION_VALUES, v), {
+        message: t("highestEducationRequired"),
+      }),
 
     grades: z.array(z.string()).min(1, t("gradesRequired")),
 

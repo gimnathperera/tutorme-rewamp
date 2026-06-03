@@ -202,9 +202,7 @@ function PreviewModal({ fileItem, onClose, labels }: PreviewModalProps) {
 
           {!isImage && !isPdf && (
             <div className="flex flex-col items-center justify-center gap-3 py-12 text-gray-500">
-              <p className="text-sm">
-                {labels.previewUnavailable}
-              </p>
+              <p className="text-sm">{labels.previewUnavailable}</p>
             </div>
           )}
         </div>

@@ -55,9 +55,7 @@ const FormTeachingProfile: FC<Props> = ({
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
         {t("teachingProfileTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        {t("teachingProfileDesc")}
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("teachingProfileDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div className="grid grid-cols-1 gap-4 sm:gap-5 lg:gap-6">

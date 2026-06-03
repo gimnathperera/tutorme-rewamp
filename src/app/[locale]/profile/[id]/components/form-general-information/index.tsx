@@ -147,9 +147,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
         {t("personalInfoTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        {t("personalInfoDesc")}
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("personalInfoDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
@@ -217,7 +215,8 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                       htmlFor="birthday"
                       className="block text-sm font-medium leading-6 text-gray-900"
                     >
-                      {t("fieldDateOfBirth")} <span className="text-red-500">*</span>
+                      {t("fieldDateOfBirth")}{" "}
+                      <span className="text-red-500">*</span>
                     </label>
                     <div
                       className="relative cursor-pointer"

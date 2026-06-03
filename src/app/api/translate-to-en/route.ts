@@ -53,7 +53,10 @@ async function toEnglish(texts: string[]): Promise<string[]> {
 export async function POST(req: NextRequest) {
   const body = await req.json();
   if (!Array.isArray(body.texts)) {
-    return NextResponse.json({ error: "texts array is required" }, { status: 400 });
+    return NextResponse.json(
+      { error: "texts array is required" },
+      { status: 400 },
+    );
   }
   const translated = await toEnglish(body.texts);
   return NextResponse.json({ translated });

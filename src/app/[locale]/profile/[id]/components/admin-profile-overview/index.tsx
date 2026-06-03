@@ -77,10 +77,16 @@ const getLocation = (profile: ProfileResponse | null) =>
     .filter(Boolean)
     .join(", ") || EMPTY_VALUE;
 
-const getEmailVerification = (profile: ProfileResponse | null, verified?: string, notVerified?: string) => {
+const getEmailVerification = (
+  profile: ProfileResponse | null,
+  verified?: string,
+  notVerified?: string,
+) => {
   if (typeof profile?.isEmailVerified !== "boolean") return EMPTY_VALUE;
 
-  return profile.isEmailVerified ? (verified ?? "Verified") : (notVerified ?? "Not verified");
+  return profile.isEmailVerified
+    ? (verified ?? "Verified")
+    : (notVerified ?? "Not verified");
 };
 
 const AdminProfileOverview: FC<Props> = ({
@@ -98,9 +104,18 @@ const AdminProfileOverview: FC<Props> = ({
 
   const accountDetails = useMemo<DetailItem[]>(
     () => [
-      { label: t("labelRole"), value: formatText(profile?.role || currentUser?.role) },
-      { label: t("labelStatus"), value: formatText(profile?.status || currentUser?.status) },
-      { label: t("labelEmailVerification"), value: getEmailVerification(profile, t("verified"), t("notVerified")) },
+      {
+        label: t("labelRole"),
+        value: formatText(profile?.role || currentUser?.role),
+      },
+      {
+        label: t("labelStatus"),
+        value: formatText(profile?.status || currentUser?.status),
+      },
+      {
+        label: t("labelEmailVerification"),
+        value: getEmailVerification(profile, t("verified"), t("notVerified")),
+      },
       { label: t("labelMemberSince"), value: formatDate(profile?.createdAt) },
     ],
     [currentUser?.role, currentUser?.status, profile, t],
@@ -111,7 +126,10 @@ const AdminProfileOverview: FC<Props> = ({
       { label: t("labelFullName"), value: displayName },
       { label: t("labelEmail"), value: displayEmail },
       { label: t("labelContactNumber"), value: getContactNumber(profile) },
-      { label: t("labelDateOfBirth"), value: formatDate(profile?.birthday || profile?.dateOfBirth) },
+      {
+        label: t("labelDateOfBirth"),
+        value: formatDate(profile?.birthday || profile?.dateOfBirth),
+      },
       { label: t("labelGender"), value: formatText(profile?.gender) },
       { label: t("labelLocation"), value: getLocation(profile) },
     ],

@@ -17,10 +17,7 @@ export const createRequestTutorSchema = (t: (key: string) => string) =>
 
     email: z.preprocess(
       removeWhitespace,
-      z
-        .string()
-        .min(1, t("emailRequired"))
-        .email(t("emailInvalid")),
+      z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
     ),
 
     city: z.preprocess(trimText, z.string().min(1, t("cityRequired"))),

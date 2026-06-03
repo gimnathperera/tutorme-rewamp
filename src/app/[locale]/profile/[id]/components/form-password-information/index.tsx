@@ -93,9 +93,7 @@ const FormPasswordInfo: FC = () => {
       <h3 className="mb-2 text-lg font-semibold sm:text-xl">
         {t("accountSecurityTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        {t("accountSecurityDesc")}
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("accountSecurityDesc")}</p>
 
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>

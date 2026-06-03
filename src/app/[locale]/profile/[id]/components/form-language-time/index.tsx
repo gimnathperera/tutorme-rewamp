@@ -66,9 +66,7 @@ const FormLanguageTime: FC<Props> = ({
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
         {t("languageTimeTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        {t("languageTimeDesc")}
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("languageTimeDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
