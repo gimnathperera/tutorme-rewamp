@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
-import { FormProvider } from "react-hook-form";
-import InputSelect from "@/components/shared/input-select";
+import { FormProvider, Controller } from "react-hook-form";
+import MultiSelect from "@/components/shared/MultiSelect";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
 import { LanguageOptionsSchema } from "./schema";
@@ -17,6 +17,9 @@ type Props = {
   isSubmitting: boolean;
   onFormSubmit: (data: LanguageOptionsSchema) => void;
 };
+
+const toMultiSelectOptions = (opts: Option[]) =>
+  opts.map((o) => ({ value: String(o.value), text: o.label }));
 
 const FormLanguageTime: FC<Props> = ({
   languageOptions,
@@ -75,22 +78,68 @@ const FormLanguageTime: FC<Props> = ({
               <AvailabilityScheduler />
             </div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 mb-4">
-              <InputSelect
-                label="Primary Language *"
-                name="language"
-                options={languageOptions}
-              />
-              <InputSelect
-                label="Operating Time Zone *"
-                name="timeZone"
-                options={timeZoneOptions}
-              />
-              <InputSelect
-                label="Per Hour Charge *"
-                name="rate"
-                options={normalizedRateOptions}
-                helperText="Choose the hourly charge range."
-              />
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  Primary Language <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="language"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(languageOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder="Select primary language"
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  Operating Time Zone <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="timeZone"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(timeZoneOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder="Select time zone"
+                    />
+                  )}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <label className="text-sm font-medium leading-6 text-gray-700">
+                  Per Hour Charge <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="rate"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={toMultiSelectOptions(normalizedRateOptions)}
+                      defaultSelected={field.value ? [field.value] : []}
+                      onChange={(selected) => field.onChange(selected[0] ?? "")}
+                      hasError={!!fieldState.error}
+                      singleSelect
+                      placeholder="Select hourly rate"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500">
+                  Choose the hourly charge range.
+                </span>
+              </div>
             </div>
 
             <div className="col-span-6 sm:col-full">
