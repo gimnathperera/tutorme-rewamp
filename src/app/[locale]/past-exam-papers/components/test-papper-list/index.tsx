@@ -131,6 +131,8 @@ const TestPaperList: FC<Props> = ({
             totalPages={totalPages}
             onPageChange={onPageChange}
             className="mt-6"
+            previousLabel={t("previous")}
+            nextLabel={t("next")}
           />
         </>
       ) : (

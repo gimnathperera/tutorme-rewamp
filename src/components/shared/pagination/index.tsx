@@ -5,6 +5,8 @@ type Props = {
   totalPages: number;
   onPageChange: Dispatch<SetStateAction<number>>;
   className?: string;
+  previousLabel?: string;
+  nextLabel?: string;
 };
 
 const Pagination: FC<Props> = ({
@@ -12,6 +14,8 @@ const Pagination: FC<Props> = ({
   totalPages,
   onPageChange,
   className = "",
+  previousLabel = "Previous",
+  nextLabel = "Next",
 }) => {
   if (totalPages <= 1) return null;
 
@@ -31,7 +35,7 @@ const Pagination: FC<Props> = ({
         onClick={goToPreviousPage}
         className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
-        Previous
+        {previousLabel}
       </button>
       <span className="text-sm text-gray-500 px-2">
         {currentPage} / {totalPages}
@@ -42,7 +46,7 @@ const Pagination: FC<Props> = ({
         onClick={goToNextPage}
         className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
-        Next
+        {nextLabel}
       </button>
     </div>
   );
