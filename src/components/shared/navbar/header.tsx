@@ -209,7 +209,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             <div className="flex flex-shrink-0 items-center">
               <Link
                 href="/"
-                className="relative block h-12 w-[180px] sm:h-14 sm:w-[220px] lg:h-16 lg:w-[250px]"
+                className="relative block h-10 w-[150px] sm:h-14 sm:w-[220px] lg:h-16 lg:w-[250px]"
                 aria-label="Tuition Lanka home"
               >
                 <Image
@@ -218,7 +218,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
                   fill
                   priority
                   sizes="(min-width: 1024px) 250px, (min-width: 640px) 220px, 180px"
-                  className="object-contain"
+                  className="object-contain object-left"
                 />
               </Link>
             </div>
@@ -381,7 +381,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 lg:hidden">
+          <div className="flex items-center gap-2 lg:hidden">
             <LocaleSwitcher />
             {user?.email ? (
               <ProfileDropdown isLoading={!isUserLoaded} user={user} />

@@ -1,6 +1,6 @@
 "use client";
 
-import InputText from "@/components/shared/input-text";
+import NumberStepper from "@/components/shared/number-stepper";
 import {
   Controller,
   FormProvider,
@@ -24,7 +24,7 @@ import {
   OPTIONAL_DOCUMENT_OPTIONS,
 } from "@/configs/options";
 import { Option } from "@/types/shared-types";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { EducationInfoSchema } from "./schema";
@@ -322,15 +322,12 @@ const FormEducationInfo: FC<Props> = ({
                 reserveHelperSpace
               />
 
-              <InputText
-                label={t("fieldYearsExperience")}
-                placeholder={t("placeholderYearsExperience")}
+              <NumberStepper
                 name="yearsExperience"
-                type="number"
                 min={0}
                 max={50}
-                step={1}
-                className={fieldControlHeightClass}
+                label={t("fieldYearsExperience")}
+                required
                 reserveHelperSpace
               />
 

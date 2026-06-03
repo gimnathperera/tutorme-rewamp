@@ -1,9 +1,9 @@
 "use client";
 
 import { useFormContext, Controller } from "react-hook-form";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MultiSelect from "@/components/shared/MultiSelect";
+import NumberStepper from "@/components/shared/number-stepper";
 
 import {
   isPhysicalClassType,
@@ -20,7 +20,6 @@ import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
-const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
 const selectBorder = (hasError: boolean) =>
@@ -349,31 +348,13 @@ const AcademicExperience = () => {
 
       {/* ROW 3 */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
-        <div className={fieldWrapper}>
-          <Label className="text-sm" htmlFor="yearsExperience">
-            {t("yearsExperience")} <span className="text-red-500">*</span>
-          </Label>
-          <Input
-            id="yearsExperience"
-            type="number"
-            min={0}
-            max={50}
-            step={1}
-            className={`${inputClass} !block ${errors.yearsExperience ? "border-red-500" : "border-gray-300"}`}
-            {...register("yearsExperience", {
-              valueAsNumber: true,
-              onChange: (event: ChangeEvent<HTMLInputElement>) => {
-                const value = event.target.valueAsNumber;
-                if (Number.isFinite(value) && value >= 1) {
-                  clearErrors("yearsExperience");
-                }
-              },
-            })}
-          />
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.yearsExperience?.message as string}
-          </p>
-        </div>
+        <NumberStepper
+          name="yearsExperience"
+          min={0}
+          max={50}
+          label={t("yearsExperience")}
+          required
+        />
 
         <div className={fieldWrapper}>
           <Label className="text-sm" htmlFor="tutorMediums">
