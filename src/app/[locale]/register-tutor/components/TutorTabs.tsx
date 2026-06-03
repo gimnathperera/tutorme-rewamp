@@ -198,7 +198,7 @@ export function TutorTabs() {
       if (result.data && !result.data.available) {
         setError("email", {
           type: "server",
-          message: result.data.message || t("emailAlreadyExists"),
+          message: t("emailAlreadyExists"),
         });
         setFocus("email");
         return;

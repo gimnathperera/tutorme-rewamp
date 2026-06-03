@@ -157,7 +157,7 @@ const PersonalInfo = () => {
         setEmailAvailability("unavailable");
         setError("email", {
           type: "server",
-          message: result.data.message || t("emailAlreadyExists"),
+          message: t("emailAlreadyExists"),
         });
         return;
       }
