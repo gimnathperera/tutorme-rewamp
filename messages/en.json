@@ -9,7 +9,11 @@
     "faq": "FAQ",
     "blog": "Blog",
     "contactUs": "Contact Us",
-    "login": "Login"
+    "login": "Login",
+    "profile": "Profile",
+    "logout": "Logout",
+    "logoutConfirmation": "Are you sure you want to logout?",
+    "cancel": "Cancel"
   },
   "footer": {
     "brandName": "Tuition Lanka",

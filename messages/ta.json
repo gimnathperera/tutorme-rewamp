@@ -9,7 +9,11 @@
     "faq": "கேள்விகள்",
     "blog": "வலைப்பதிவு",
     "contactUs": "தொடர்பு",
-    "login": "உள்நுழைவு"
+    "login": "உள்நுழைவு",
+    "profile": "சுயவிவரம்",
+    "logout": "வெளியேறு",
+    "logoutConfirmation": "நீங்கள் வெளியேற விரும்புகிறீர்களா?",
+    "cancel": "ரத்து செய்"
   },
   "footer": {
     "brandName": "Tuition Lanka",

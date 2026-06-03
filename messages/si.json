@@ -9,7 +9,11 @@
     "faq": "ප්‍රශ්න",
     "blog": "ලිපි",
     "contactUs": "අප අමතන්න",
-    "login": "පිවිසෙන්න"
+    "login": "පිවිසෙන්න",
+    "profile": "පැතිකඩ",
+    "logout": "ඉවත් වන්න",
+    "logoutConfirmation": "ඔබට ඉවත් වීමට අවශ්‍ය බව විශ්වාසද?",
+    "cancel": "අවලංගු කරන්න"
   },
   "footer": {
     "brandName": "Tuition Lanka",

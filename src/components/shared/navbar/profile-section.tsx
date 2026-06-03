@@ -8,6 +8,8 @@ import ConfirmationAlert from "../confirm-alert";
 import { useRouter } from "next/navigation";
 import { AuthUserData } from "@/types/auth-types";
 import { useLazyGetProfileQuery } from "@/store/api/splits/users";
+import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 type Props = {
   isLoading: boolean;
@@ -22,6 +24,7 @@ const getFilledString = (value: unknown) =>
 const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const { logout, isUserLogoutLoading, updateUser } = useAuthContext();
   const router = useRouter();
+  const t = useTranslations("nav");
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] =
@@ -38,6 +41,12 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
   const profileEmail = getFilledString(profileData?.email);
   const displayName = getFilledString(user?.name);
   const displayEmail = profileEmail || getFilledString(user?.email);
+  const translatedNameItems = useTranslateItems(
+    [{ name: displayName }],
+    (item) => [item.name],
+    (item, texts) => ({ ...item, name: texts[0] ?? item.name }),
+  );
+  const translatedDisplayName = translatedNameItems[0]?.name || displayName;
   const userNameRef = useRef(user?.name);
   const userEmailRef = useRef(user?.email);
 
@@ -151,7 +160,9 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
       {isOpen && (
         <div className="absolute right-0 z-50 mt-2 w-max min-w-[16rem] max-w-[calc(100vw-2rem)] rounded-lg border border-gray-200 bg-white shadow-lg">
           <div className="px-4 py-2 border-b border-gray-200">
-            <p className="text-gray-900 font-medium truncate">{displayName}</p>
+            <p className="text-gray-900 font-medium truncate">
+              {translatedDisplayName}
+            </p>
             <p
               className="max-w-full overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-500"
               title={displayEmail}
@@ -165,7 +176,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
                 className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                 onClick={handleOnClickProfile}
               >
-                Profile
+                {t("profile")}
               </button>
             </li>
 
@@ -174,7 +185,7 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
                 className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                 onClick={handleLogoutConfirmationVisibility}
               >
-                Logout
+                {t("logout")}
               </button>
             </li>
           </ul>
@@ -185,10 +196,10 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
         isOpen={isLogoutConfirmationOpen}
         closeModal={handleLogoutConfirmationVisibility}
         onConfirm={handleLogoutUser}
-        title="Logout"
-        description="Are you sure you want to logout?"
-        cancelText="Cancel"
-        confirmText="Logout"
+        title={t("logout")}
+        description={t("logoutConfirmation")}
+        cancelText={t("cancel")}
+        confirmText={t("logout")}
         loading={isUserLogoutLoading}
       />
     </div>
