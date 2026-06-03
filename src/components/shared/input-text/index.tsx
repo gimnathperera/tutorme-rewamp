@@ -55,7 +55,7 @@ const InputText: React.FC<InputTextProps> = ({
                 onBlur?.(event);
                 field.onBlur();
               }}
-              className={`h-11 w-full rounded-md border px-3 text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:opacity-100 ${
+              className={`h-11 w-full rounded-md border px-3 text-sm text-darkpurple placeholder:text-darkgrey focus:outline-none focus:ring-2 focus:ring-primary-500 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:opacity-100 ${
                 error ? "border-red-500" : "border-linegrey"
               } ${className}`}
             />
