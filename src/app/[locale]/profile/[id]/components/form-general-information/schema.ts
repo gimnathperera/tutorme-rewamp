@@ -37,7 +37,7 @@ const calculateAge = (birthday: string | Date) => {
   return age;
 };
 
-export const createGeneralInfoSchema = (t: (key: string) => string) =>
+export const createGeneralInfoSchema = (t: (_key: string) => string) =>
   z
     .object({
       name: z.preprocess(

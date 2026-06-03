@@ -1,7 +1,7 @@
 import { removeWhitespace } from "@/utils/form-normalizers";
 import { z } from "zod";
 
-export const createContactUsSchema = (t: (key: string) => string) =>
+export const createContactUsSchema = (t: (_key: string) => string) =>
   z.object({
     name: z
       .string()

@@ -4,7 +4,7 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 interface DistrictSelectProps {
   value: string;
-  onChange: (v: string) => void;
+  onChange: (_v: string) => void;
   districts: string[];
   hasError?: boolean;
   placeholder?: string;

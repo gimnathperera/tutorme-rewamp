@@ -7,7 +7,7 @@ import {
 
 const normalizeText = (value: string) => value.trim().replace(/\s+/g, " ");
 
-export const createSignUpSchema = (t: (key: string) => string) =>
+export const createSignUpSchema = (t: (_key: string) => string) =>
   z
     .object({
       name: z

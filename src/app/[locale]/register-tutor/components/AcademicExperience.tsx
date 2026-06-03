@@ -15,7 +15,7 @@ import {
   useFetchGradesQuery,
   useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
-import { type ChangeEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
@@ -28,7 +28,6 @@ type OptionItem = { value: string; text: string };
 
 const AcademicExperience = () => {
   const t = useTranslations("registerTutor");
-  const selectPlaceholder = t("selectOption");
   const searchPh = t("searchPlaceholder");
   const noResultsText = (query: string) => t("noResultsFor", { query });
   const {

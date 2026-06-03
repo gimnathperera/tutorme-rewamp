@@ -4,7 +4,7 @@ import { isPhysicalClassType } from "@/configs/register-tutor";
 const requiredMultiSelect = (message: string) =>
   z.array(z.string()).min(1, message);
 
-export const createEducationInfoSchema = (t: (key: string) => string) =>
+export const createEducationInfoSchema = (t: (_key: string) => string) =>
   z
     .object({
       classType: requiredMultiSelect(t("classTypeRequired")),

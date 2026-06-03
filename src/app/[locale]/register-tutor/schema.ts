@@ -72,7 +72,7 @@ export const STEP3_FIELDS = [
   "academicDetails",
 ] as const;
 
-const createStep1BaseSchema = (t: (key: string) => string) =>
+const createStep1BaseSchema = (t: (_key: string) => string) =>
   z.object({
     fullName: z.preprocess(
       normalizeTextSpaces,
@@ -149,7 +149,7 @@ const createStep1BaseSchema = (t: (key: string) => string) =>
     }),
   });
 
-const createStep2Schema = (t: (key: string) => string) =>
+const createStep2Schema = (t: (_key: string) => string) =>
   z.object({
     classType: z
       .array(
@@ -198,7 +198,7 @@ const createStep2Schema = (t: (key: string) => string) =>
     ),
   });
 
-const createStep3Schema = (t: (key: string) => string) =>
+const createStep3Schema = (t: (_key: string) => string) =>
   z.object({
     teachingSummary: z.preprocess(
       normalizeTextSpaces,
@@ -233,7 +233,7 @@ const createStep3Schema = (t: (key: string) => string) =>
     ),
   });
 
-const createStep4Schema = (t: (key: string) => string) =>
+const createStep4Schema = (t: (_key: string) => string) =>
   z.object({
     certificatesAndQualifications: z
       .array(
@@ -258,7 +258,7 @@ const createStep4Schema = (t: (key: string) => string) =>
       .refine((v) => v, t("agreeAssignmentRequired")),
   });
 
-export const createFullSchema = (t: (key: string) => string) =>
+export const createFullSchema = (t: (_key: string) => string) =>
   createStep1BaseSchema(t)
     .merge(createStep2Schema(t))
     .merge(createStep3Schema(t))

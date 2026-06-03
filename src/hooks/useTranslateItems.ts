@@ -80,8 +80,8 @@ async function translateBatch(
  */
 export function useTranslateItems<T>(
   items: T[],
-  getTexts: (_item: T) => (string | undefined)[],
-  applyTexts: (_item: T, _texts: string[]) => T,
+  getTexts: (_: T) => (string | undefined)[],
+  applyTexts: (_: T, __: string[]) => T,
 ): T[] {
   const locale = useLocale();
 

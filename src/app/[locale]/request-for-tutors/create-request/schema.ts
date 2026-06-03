@@ -5,7 +5,7 @@ import {
   trimText,
 } from "@/utils/form-normalizers";
 
-export const createRequestTutorSchema = (t: (key: string) => string) =>
+export const createRequestTutorSchema = (t: (_key: string) => string) =>
   z.object({
     name: z.preprocess(
       normalizeTextSpaces,

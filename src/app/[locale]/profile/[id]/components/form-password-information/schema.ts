@@ -6,7 +6,7 @@ import {
 } from "@/configs/password";
 import { removeWhitespace } from "@/utils/form-normalizers";
 
-export const createPasswordInfoSchema = (t: (key: string) => string) =>
+export const createPasswordInfoSchema = (t: (_key: string) => string) =>
   z
     .object({
       currentPassword: z.preprocess(

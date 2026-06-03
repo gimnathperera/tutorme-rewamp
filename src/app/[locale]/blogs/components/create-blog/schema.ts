@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { BLOG_EDITOR_LIST_STYLE_VALUES } from "@/configs/options";
 
-export const createArticleSchema = (t: (key: string) => string) =>
+export const createArticleSchema = (t: (_key: string) => string) =>
   z.object({
     title: z.string().min(1, t("titleRequired")),
     content: z

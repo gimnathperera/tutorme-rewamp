@@ -7,7 +7,7 @@ const requiredTeachingField = (requiredMsg: string, maxMsg: string) =>
     z.string().min(1, requiredMsg).max(500, maxMsg),
   );
 
-export const createTeachingProfileSchema = (t: (key: string) => string) =>
+export const createTeachingProfileSchema = (t: (_key: string) => string) =>
   z.object({
     teachingSummary: requiredTeachingField(
       t("teachingSummaryRequired"),

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createLoginSchema = (t: (key: string) => string) =>
+export const createLoginSchema = (t: (_key: string) => string) =>
   z.object({
     email: z
       .string()
