@@ -16,7 +16,7 @@ export const createSignUpSchema = (t: (key: string) => string) =>
         .refine((val) => val.length > 0, {
           message: t("nameRequired"),
         })
-        .refine((val) => /^[A-Za-z\s]+$/.test(val), {
+        .refine((val) => /^[\p{L}\p{M}\s]+$/u.test(val), {
           message: t("nameLettersOnly"),
         }),
 

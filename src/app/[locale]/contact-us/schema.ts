@@ -7,7 +7,7 @@ export const createContactUsSchema = (t: (key: string) => string) =>
       .string()
       .trim()
       .min(1, t("nameRequired"))
-      .regex(/^[A-Za-z\s]+$/, t("nameLettersOnly"))
+      .regex(/^[\p{L}\p{M}\s]+$/u, t("nameLettersOnly"))
       .refine((v) => !/ {2,}/.test(v), t("nameNoMultipleSpaces")),
 
     email: z

@@ -12,7 +12,7 @@ export const createRequestTutorSchema = (t: (key: string) => string) =>
       z
         .string()
         .min(1, t("nameRequired"))
-        .regex(/^[A-Za-z\s]+$/, t("nameLettersOnly")),
+        .regex(/^[\p{L}\p{M}\s]+$/u, t("nameLettersOnly")),
     ),
 
     email: z.preprocess(
