@@ -366,7 +366,8 @@ const FormEducationInfo: FC<Props> = ({
               {/* Tutor Mediums */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  {t("fieldTutorMediums")} <span className="text-red-500">*</span>
+                  {t("fieldTutorMediums")}{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="tutorMediums"

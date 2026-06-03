@@ -502,7 +502,9 @@ export default function AddRequestForTutor() {
                         <MultiSelect
                           options={mediumOptions}
                           defaultSelected={field.value ? [field.value] : []}
-                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          onChange={(selected) =>
+                            field.onChange(selected[0] ?? "")
+                          }
                           hasError={!!errors.medium}
                           singleSelect
                           placeholder={t("mediumPlaceholder")}
@@ -526,7 +528,9 @@ export default function AddRequestForTutor() {
                         <MultiSelect
                           options={gradeOptions}
                           defaultSelected={field.value ? [field.value] : []}
-                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          onChange={(selected) =>
+                            field.onChange(selected[0] ?? "")
+                          }
                           hasError={!!errors.grade}
                           singleSelect
                           placeholder={t("gradePlaceholder")}
@@ -585,11 +589,17 @@ export default function AddRequestForTutor() {
                           <MultiSelect
                             options={subjectOptions}
                             defaultSelected={field.value ? [field.value] : []}
-                            onChange={(selected) => field.onChange(selected[0] ?? "")}
+                            onChange={(selected) =>
+                              field.onChange(selected[0] ?? "")
+                            }
                             hasError={!!errors.tutors?.[index]?.subject}
                             singleSelect
                             disabled={!selectedGradeId}
-                            placeholder={selectedGradeId ? t("subjectPlaceholder") : t("selectGradeFirst")}
+                            placeholder={
+                              selectedGradeId
+                                ? t("subjectPlaceholder")
+                                : t("selectGradeFirst")
+                            }
                           />
                         )}
                       />
@@ -617,7 +627,9 @@ export default function AddRequestForTutor() {
                             <MultiSelect
                               options={durationOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
                               hasError={!!errors.tutors?.[index]?.duration}
                               singleSelect
                               placeholder={t("durationPlaceholder")}
@@ -647,7 +659,9 @@ export default function AddRequestForTutor() {
                             <MultiSelect
                               options={frequencyOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
                               hasError={!!errors.tutors?.[index]?.frequency}
                               singleSelect
                               placeholder={t("frequencyPlaceholder")}
@@ -679,16 +693,24 @@ export default function AddRequestForTutor() {
                             <MultiSelect
                               options={tutorTypeOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
-                              hasError={!!errors.tutors?.[index]?.preferredTutorType}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
+                              hasError={
+                                !!errors.tutors?.[index]?.preferredTutorType
+                              }
                               singleSelect
                               placeholder={t("preferredTutorTypePlaceholder")}
                             />
                           )}
                         />
-                        {errors.tutors?.[index]?.preferredTutorType?.message && (
+                        {errors.tutors?.[index]?.preferredTutorType
+                          ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredTutorType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredTutorType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
@@ -708,16 +730,24 @@ export default function AddRequestForTutor() {
                             <MultiSelect
                               options={classTypeOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
-                              hasError={!!errors.tutors?.[index]?.preferredClassType}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
+                              hasError={
+                                !!errors.tutors?.[index]?.preferredClassType
+                              }
                               singleSelect
                               placeholder={t("preferredClassTypePlaceholder")}
                             />
                           )}
                         />
-                        {errors.tutors?.[index]?.preferredClassType?.message && (
+                        {errors.tutors?.[index]?.preferredClassType
+                          ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredClassType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredClassType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
