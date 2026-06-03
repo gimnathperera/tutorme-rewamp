@@ -241,6 +241,7 @@ export type FindMyTutorRequest = {
   certificatesAndQualifications: { type: string; url: string }[];
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
+  locale?: string;
 };
 
 export type FetchTutorRequests = {};

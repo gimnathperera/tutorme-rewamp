@@ -254,6 +254,7 @@ export function TutorTabs() {
           : payload.preferredLocations.length > 0
             ? payload.preferredLocations
             : [ONLINE_ONLY_LOCATION_FALLBACK],
+        locale,
       };
       const result = await addTutorRequest(normalizedPayload);
       const error = getErrorInApiResult(result);

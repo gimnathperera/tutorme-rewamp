@@ -79,7 +79,7 @@ const createStep1BaseSchema = (t: (key: string) => string) =>
       z
         .string()
         .min(1, t("nameRequired"))
-        .regex(/^[A-Za-z\s]+$/, t("nameLettersOnly")),
+        .regex(/^[\p{L}\s]+$/u, t("nameLettersOnly")),
     ),
 
     email: z.preprocess(
