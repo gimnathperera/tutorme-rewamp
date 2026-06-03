@@ -59,7 +59,6 @@ const TAB_ORDER: TabKey[] = [
   "verification",
 ];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
-const DUPLICATE_EMAIL_MESSAGE = "Email already exists";
 const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
 
 const isDuplicateEmailError = (error: string) => {
@@ -197,10 +196,10 @@ export function TutorTabs() {
       const result = await checkTutorEmailAvailability(email, true);
 
       if (result.data && !result.data.available) {
-        setError("email", {
-          type: "server",
-          message: result.data.message || DUPLICATE_EMAIL_MESSAGE,
-        });
+          setError("email", {
+            type: "server",
+            message: result.data.message || t("emailAlreadyExists"),
+          });
         setFocus("email");
         return;
       }
@@ -259,11 +258,11 @@ export function TutorTabs() {
         if (typeof error === "string" && isDuplicateEmailError(error)) {
           setError("email", {
             type: "server",
-            message: DUPLICATE_EMAIL_MESSAGE,
+            message: t("emailAlreadyExists"),
           });
           changeStep("personalInfo");
           setTimeout(() => setFocus("email"), 0);
-          toast.error(DUPLICATE_EMAIL_MESSAGE);
+          toast.error(t("emailAlreadyExists"));
           return;
         }
 
@@ -272,10 +271,10 @@ export function TutorTabs() {
           typeof error === "string" &&
           error.toLowerCase().includes("suspended")
         ) {
-          toast.error(
-            "Your email has been suspended. Please contact admin to resolve this.",
-            { duration: 8000, style: { maxWidth: 420 } },
-          );
+          toast.error(t("suspendedEmail"), {
+            duration: 8000,
+            style: { maxWidth: 420 },
+          });
           return;
         }
         setSubmissionResult(error);
@@ -311,7 +310,7 @@ export function TutorTabs() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
-            <Image height={50} width={50} src={LogoImage} alt="Logo image" />
+            <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
             <h1 className="text-3xl text-white font-bold">
               {t("pageTitle")}
             </h1>
@@ -512,7 +511,7 @@ export function TutorTabs() {
             <DialogDescription className="text-center text-base">
               {typeof submissionResult === "string"
                 ? submissionResult
-                : "Something went wrong."}
+                : t("somethingWentWrong")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">

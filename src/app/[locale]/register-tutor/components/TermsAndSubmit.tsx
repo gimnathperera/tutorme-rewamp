@@ -7,12 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useMemo, type ComponentProps } from "react";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
-import {
-  EDUCATIONAL_DOCUMENT_OPTIONS,
-  OPTIONAL_DOCUMENT_OPTIONS,
-} from "@/configs/options";
 
 const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
@@ -32,6 +29,8 @@ const DocumentRow = ({
   documentTypeLabel,
   uploadFileLabel,
   selectTypePlaceholder,
+  removeDocumentTitle,
+  uploadLabels,
 }: {
   fieldName: string;
   index: number;
@@ -43,6 +42,8 @@ const DocumentRow = ({
   documentTypeLabel: string;
   uploadFileLabel: string;
   selectTypePlaceholder: string;
+  removeDocumentTitle: string;
+  uploadLabels: ComponentProps<typeof MultiFileUploadDropzone>["labels"];
 }) => {
   const rowErrors = errors[index] ?? {};
   return (
@@ -89,6 +90,7 @@ const DocumentRow = ({
           render={({ field: f }) => (
             <MultiFileUploadDropzone
               initialUrls={f.value ? [f.value] : []}
+              labels={uploadLabels}
               onUploaded={(urls) => {
                 f.onChange(urls[urls.length - 1] ?? "");
               }}
@@ -106,7 +108,7 @@ const DocumentRow = ({
           onClick={onRemove}
           disabled={!removable}
           className="p-2 text-red-400 hover:text-red-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-          title="Remove this document"
+          title={removeDocumentTitle}
         >
           <Trash2 size={18} />
         </button>
@@ -117,6 +119,55 @@ const DocumentRow = ({
 
 const TermsAndSubmit = () => {
   const t = useTranslations("registerTutor");
+  const educationalDocumentOptions = useMemo(
+    () => [
+      {
+        value: "Advanced Level Certificate",
+        text: t("optDocAdvancedLevelCertificate"),
+      },
+      {
+        value: "Ordinary Level Certificate",
+        text: t("optDocOrdinaryLevelCertificate"),
+      },
+      { value: "Degree Certificate", text: t("optDocDegreeCertificate") },
+      { value: "Diploma Certificate", text: t("optDocDiplomaCertificate") },
+      {
+        value: "Professional Certificate",
+        text: t("optDocProfessionalCertificate"),
+      },
+      { value: "Teaching Certificate", text: t("optDocTeachingCertificate") },
+    ],
+    [t],
+  );
+  const optionalDocumentOptions = useMemo(
+    () => [
+      { value: "NIC", text: t("optDocNIC") },
+      { value: "Passport", text: t("optDocPassport") },
+      { value: "Driving License", text: t("optDocDrivingLicense") },
+      { value: "Police Clearance", text: t("optDocPoliceClearance") },
+      { value: "Other", text: t("optDocOther") },
+    ],
+    [t],
+  );
+  const uploadLabels = useMemo(
+    () => ({
+      certificateFallback: t("certificateFallback"),
+      zoomOut: t("zoomOut"),
+      zoomIn: t("zoomIn"),
+      closePreview: t("closePreview"),
+      previewUnavailable: t("previewUnavailable"),
+      fileTypeRejection: t("fileTypeRejection"),
+      uploadFailedFor: (fileName: string) =>
+        t("uploadFailedFor", { fileName }),
+      uploading: t("uploading"),
+      dropFilesHere: t("dropFilesHere"),
+      uploadCertificatesCta: t("uploadCertificatesCta"),
+      acceptedFileTypes: t("acceptedFileTypes"),
+      previewFile: t("previewFile"),
+      removeFile: t("removeFile"),
+    }),
+    [t],
+  );
   const {
     control,
     formState: { errors },
@@ -177,7 +228,7 @@ const TermsAndSubmit = () => {
                   key={field.id}
                   fieldName="certificatesAndQualifications"
                   index={index}
-                  options={EDUCATIONAL_DOCUMENT_OPTIONS}
+                  options={educationalDocumentOptions}
                   control={control}
                   errors={certErrors}
                   onRemove={() => removeEdu(index)}
@@ -185,6 +236,8 @@ const TermsAndSubmit = () => {
                   documentTypeLabel={t("documentType")}
                   uploadFileLabel={t("uploadFile")}
                   selectTypePlaceholder={t("selectType")}
+                  removeDocumentTitle={t("removeDocument")}
+                  uploadLabels={uploadLabels}
                 />
               ))}
             </div>
@@ -221,7 +274,7 @@ const TermsAndSubmit = () => {
                   key={field.id}
                   fieldName="optionalCertificates"
                   index={index}
-                  options={OPTIONAL_DOCUMENT_OPTIONS}
+                  options={optionalDocumentOptions}
                   control={control}
                   errors={[]}
                   onRemove={() => removeOpt(index)}
@@ -229,6 +282,8 @@ const TermsAndSubmit = () => {
                   documentTypeLabel={t("documentType")}
                   uploadFileLabel={t("uploadFile")}
                   selectTypePlaceholder={t("selectType")}
+                  removeDocumentTitle={t("removeDocument")}
+                  uploadLabels={uploadLabels}
                 />
               ))}
             </div>
@@ -285,14 +340,14 @@ const TermsAndSubmit = () => {
               className="flex flex-col gap-1 text-sm cursor-pointer"
             >
               <span className="font-semibold">
-                I agree to the{" "}
+                {t("agreeTermsPrefix")}{" "}
                 <Link
                   href="/terms-and-conditions"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-primary-600 underline hover:text-primary-700"
                 >
-                  Terms and Conditions
+                  {t("termsAndConditions")}
                 </Link>{" "}
                 <span className="text-red-500">*</span>
               </span>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -13,11 +13,6 @@ import {
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
 import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
-import {
-  GENDER_OPTIONS,
-  NATIONALITY_OPTIONS,
-  RACE_OPTIONS,
-} from "@/configs/register-tutor";
 import { useTranslations } from "next-intl";
 
 /** Shared style tokens for the register-tutor form */
@@ -53,6 +48,30 @@ type EmailAvailabilityState = "available" | "unavailable" | null;
 
 const PersonalInfo = () => {
   const t = useTranslations("registerTutor");
+  const genderOptions = useMemo(
+    () => [
+      { value: "Male", text: t("optGenderMale") },
+      { value: "Female", text: t("optGenderFemale") },
+    ],
+    [t],
+  );
+  const nationalityOptions = useMemo(
+    () => [
+      { value: "Sri Lankan", text: t("optNationalitySriLankan") },
+      { value: "Others", text: t("optNationalityOthers") },
+    ],
+    [t],
+  );
+  const raceOptions = useMemo(
+    () => [
+      { value: "Sinhalese", text: t("optRaceSinhalese") },
+      { value: "Tamil", text: t("optRaceTamil") },
+      { value: "Muslim", text: t("optRaceMuslim") },
+      { value: "Burgher", text: t("optRaceBurgher") },
+      { value: "Others", text: t("optRaceOthers") },
+    ],
+    [t],
+  );
   const {
     register,
     watch,
@@ -119,7 +138,9 @@ const PersonalInfo = () => {
       setEmailAvailability("unavailable");
       setError("email", {
         type: "manual",
-        message: formatError,
+        message: formatError.includes("valid email address")
+          ? t("emailInvalid")
+          : formatError,
       });
       return;
     }
@@ -136,7 +157,7 @@ const PersonalInfo = () => {
         setEmailAvailability("unavailable");
         setError("email", {
           type: "server",
-          message: result.data.message || "Email already exists",
+          message: result.data.message || t("emailAlreadyExists"),
         });
         return;
       }
@@ -148,7 +169,14 @@ const PersonalInfo = () => {
     }, EMAIL_CHECK_DELAY_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [checkTutorEmailAvailability, clearErrors, email, errors.email, setError]);
+  }, [
+    checkTutorEmailAvailability,
+    clearErrors,
+    email,
+    errors.email,
+    setError,
+    t,
+  ]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
@@ -275,7 +303,7 @@ const PersonalInfo = () => {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t("hidePassword") : t("showPassword")}
           >
             {showPassword ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
           </button>
@@ -318,7 +346,7 @@ const PersonalInfo = () => {
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
             className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showConfirm ? "Hide password" : "Show password"}
+            aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
           >
             {showConfirm ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
           </button>
@@ -386,7 +414,7 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             {t("genderPlaceholder")}
           </option>
-          {GENDER_OPTIONS.map((option) => (
+          {genderOptions.map((option) => (
             <option
               key={option.value}
               value={option.value}
@@ -472,7 +500,7 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             {t("nationalityPlaceholder")}
           </option>
-          {NATIONALITY_OPTIONS.map((option) => (
+          {nationalityOptions.map((option) => (
             <option
               key={option.value}
               value={option.value}
@@ -500,7 +528,7 @@ const PersonalInfo = () => {
           <option value="" disabled hidden>
             {t("racePlaceholder")}
           </option>
-          {RACE_OPTIONS.map((option) => (
+          {raceOptions.map((option) => (
             <option
               key={option.value}
               value={option.value}

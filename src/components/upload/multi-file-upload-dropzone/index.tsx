@@ -3,7 +3,14 @@
 "use client";
 
 import { Eye, Loader2, Minus, Plus, X } from "lucide-react";
-import { useCallback, useState, MouseEvent, useRef, useEffect } from "react";
+import {
+  useCallback,
+  useState,
+  MouseEvent,
+  useRef,
+  useEffect,
+  useMemo,
+} from "react";
 import { useDropzone, FileRejection } from "react-dropzone";
 import { CERTIFICATE_UPLOAD_ACCEPTED_TYPES } from "@/configs/upload";
 
@@ -25,7 +32,41 @@ interface MultiFileUploadDropzoneProps {
   onUploaded: (urls: string[]) => void;
   /** Pre-existing URLs to hydrate the list with (e.g. after tab navigation). */
   initialUrls?: string[];
+  labels?: Partial<UploadDropzoneLabels>;
 }
+
+type UploadDropzoneLabels = {
+  certificateFallback: string;
+  zoomOut: string;
+  zoomIn: string;
+  closePreview: string;
+  previewUnavailable: string;
+  fileTypeRejection: string;
+  uploadFailedFor: (fileName: string) => string;
+  uploading: string;
+  dropFilesHere: string;
+  uploadCertificatesCta: string;
+  acceptedFileTypes: string;
+  previewFile: string;
+  removeFile: string;
+};
+
+const defaultLabels: UploadDropzoneLabels = {
+  certificateFallback: "Certificate",
+  zoomOut: "Zoom out",
+  zoomIn: "Zoom in",
+  closePreview: "Close preview",
+  previewUnavailable: "Preview not available for this file type.",
+  fileTypeRejection:
+    "Only image files (JPG, PNG) and PDF documents are allowed.",
+  uploadFailedFor: (fileName) => `Upload failed for ${fileName}`,
+  uploading: "Uploading...",
+  dropFilesHere: "Drop the files here...",
+  uploadCertificatesCta: "Drag & drop or click to upload certificates",
+  acceptedFileTypes: "Accepted: JPG, PNG, PDF",
+  previewFile: "Preview file",
+  removeFile: "Remove file",
+};
 
 // ---------------------------------------------------------------------------
 // Preview Modal
@@ -34,9 +75,10 @@ interface MultiFileUploadDropzoneProps {
 interface PreviewModalProps {
   fileItem: FileItem;
   onClose: () => void;
+  labels: UploadDropzoneLabels;
 }
 
-function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
+function PreviewModal({ fileItem, onClose, labels }: PreviewModalProps) {
   const [scale, setScale] = useState(1);
   const overlayRef = useRef<HTMLDivElement>(null);
 
@@ -70,7 +112,7 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
 
   const fileName = fileItem.file
     ? fileItem.file.name
-    : (fileItem.url?.split("/").pop() ?? "Certificate");
+    : (fileItem.url?.split("/").pop() ?? labels.certificateFallback);
 
   return (
     <div
@@ -92,7 +134,7 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
                 setScale((s) => Math.max(0.25, +(s - 0.25).toFixed(2)))
               }
               className="flex items-center justify-center h-7 w-7 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-              title="Zoom out"
+              title={labels.zoomOut}
             >
               <Minus size={14} />
             </button>
@@ -105,7 +147,7 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
                 setScale((s) => Math.min(4, +(s + 0.25).toFixed(2)))
               }
               className="flex items-center justify-center h-7 w-7 rounded-md border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-              title="Zoom in"
+              title={labels.zoomIn}
             >
               <Plus size={14} />
             </button>
@@ -114,7 +156,7 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
               type="button"
               onClick={onClose}
               className="flex items-center justify-center h-7 w-7 rounded-md text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-gray-700 hover:text-red-500 transition"
-              title="Close preview"
+              title={labels.closePreview}
             >
               <X size={16} />
             </button>
@@ -161,7 +203,7 @@ function PreviewModal({ fileItem, onClose }: PreviewModalProps) {
           {!isImage && !isPdf && (
             <div className="flex flex-col items-center justify-center gap-3 py-12 text-gray-500">
               <p className="text-sm">
-                Preview not available for this file type.
+                {labels.previewUnavailable}
               </p>
             </div>
           )}
@@ -196,7 +238,12 @@ const areUrlsEqual = (items: FileItem[], urls: string[]): boolean => {
 export default function MultiFileUploadDropzone({
   onUploaded,
   initialUrls,
+  labels: labelOverrides,
 }: MultiFileUploadDropzoneProps) {
+  const labels = useMemo(
+    () => ({ ...defaultLabels, ...labelOverrides }),
+    [labelOverrides],
+  );
   const [uploading, setUploading] = useState(false);
   const [rejectionError, setRejectionError] = useState<string | null>(null);
 
@@ -244,9 +291,7 @@ export default function MultiFileUploadDropzone({
     async (acceptedFiles: File[], rejected: FileRejection[]) => {
       // Show rejection errors
       if (rejected.length > 0) {
-        setRejectionError(
-          "Only image files (JPG, PNG) and PDF documents are allowed.",
-        );
+        setRejectionError(labels.fileTypeRejection);
       } else {
         setRejectionError(null);
       }
@@ -317,13 +362,13 @@ export default function MultiFileUploadDropzone({
           });
         } catch (err) {
           console.error(err);
-          alert(`Upload failed for ${file.name}`);
+          alert(labels.uploadFailedFor(file.name));
         } finally {
           setUploading(false);
         }
       }
     },
-    [onUploaded],
+    [labels, onUploaded],
   );
 
   const removeFile = (index: number, e: MouseEvent<HTMLButtonElement>) => {
@@ -359,6 +404,7 @@ export default function MultiFileUploadDropzone({
         <PreviewModal
           fileItem={previewItem}
           onClose={() => setPreviewItem(null)}
+          labels={labels}
         />
       )}
 
@@ -370,21 +416,21 @@ export default function MultiFileUploadDropzone({
         {uploading && (
           <div className="flex flex-col items-center justify-center space-y-2">
             <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
-            <p className="text-gray-500 text-sm">Uploading...</p>
+            <p className="text-gray-500 text-sm">{labels.uploading}</p>
           </div>
         )}
         {!uploading && isDragActive && (
           <p className="text-gray-700 dark:text-gray-200 font-medium text-sm sm:text-base">
-            Drop the files here...
+            {labels.dropFilesHere}
           </p>
         )}
         {!uploading && !isDragActive && (
           <>
             <p className="text-gray-700 dark:text-gray-200 font-medium text-sm sm:text-base">
-              Drag &amp; drop or click to upload certificates
+              {labels.uploadCertificatesCta}
             </p>
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">
-              Accepted: JPG, PNG, PDF
+              {labels.acceptedFileTypes}
             </p>
 
             {files.length > 0 && (
@@ -399,12 +445,14 @@ export default function MultiFileUploadDropzone({
                       title={
                         fileObj.file
                           ? fileObj.file.name
-                          : (fileObj.url?.split("/").pop() ?? "Certificate")
+                          : (fileObj.url?.split("/").pop() ??
+                            labels.certificateFallback)
                       }
                     >
                       {fileObj.file
                         ? fileObj.file.name
-                        : (fileObj.url?.split("/").pop() ?? "Certificate")}
+                        : (fileObj.url?.split("/").pop() ??
+                          labels.certificateFallback)}
                     </p>
                     <div className="flex items-center gap-1.5 shrink-0">
                       {/* Eye / preview button */}
@@ -412,7 +460,7 @@ export default function MultiFileUploadDropzone({
                         type="button"
                         onClick={(e) => openPreview(fileObj, e)}
                         className="text-blue-500 hover:text-blue-700 transition-colors"
-                        title="Preview file"
+                        title={labels.previewFile}
                       >
                         <Eye size={16} />
                       </button>
@@ -421,7 +469,7 @@ export default function MultiFileUploadDropzone({
                         type="button"
                         onClick={(e) => removeFile(index, e)}
                         className="text-red-500 hover:text-red-700 transition-colors"
-                        title="Remove file"
+                        title={labels.removeFile}
                       >
                         <X size={16} />
                       </button>

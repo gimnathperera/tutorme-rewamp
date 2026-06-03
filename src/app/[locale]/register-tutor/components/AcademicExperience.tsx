@@ -6,12 +6,8 @@ import { Label } from "@/components/ui/label";
 import MultiSelect from "@/components/shared/MultiSelect";
 
 import {
-  CLASS_TYPE_OPTIONS,
   isPhysicalClassType,
   PREFERRED_LOCATION_OPTIONS,
-  REGISTER_HIGHEST_EDUCATION_OPTIONS,
-  TUTOR_TYPE_OPTIONS,
-  MEDIUM_OPTIONS,
 } from "@/configs/register-tutor";
 import { useTranslations } from "next-intl";
 
@@ -41,6 +37,7 @@ const AcademicExperience = () => {
   const t = useTranslations("registerTutor");
   const selectPlaceholder = t("selectOption");
   const searchPh = t("searchPlaceholder");
+  const noResultsText = (query: string) => t("noResultsFor", { query });
   const {
     register,
     control,
@@ -67,6 +64,64 @@ const AcademicExperience = () => {
   }, [selectedClassTypes]);
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [subjectOptions, setSubjectOptions] = useState<OptionItem[]>([]);
+  const classTypeOptions = useMemo(
+    () => [
+      { value: "Online - Individual", text: t("optClassTypeOnlineIndividual") },
+      { value: "Online - Group", text: t("optClassTypeOnlineGroup") },
+      {
+        value: "Physical - Individual",
+        text: t("optClassTypePhysicalIndividual"),
+      },
+      { value: "Physical - Group", text: t("optClassTypePhysicalGroup") },
+    ],
+    [t],
+  );
+  const tutorTypeOptions = useMemo(
+    () => [
+      {
+        value: "International School Teacher",
+        text: t("optTutorTypeInternational"),
+      },
+      {
+        value: "Government School Teacher",
+        text: t("optTutorTypeGovernment"),
+      },
+      { value: "University Student", text: t("optTutorTypeUniversity") },
+      { value: "A/L Student", text: t("optTutorTypeAL") },
+      { value: "Diploma Holder", text: t("optTutorTypeDiploma") },
+      { value: "Part-time Tutor", text: t("optTutorTypePartTime") },
+      { value: "Full-time Tutor", text: t("optTutorTypeFullTime") },
+    ],
+    [t],
+  );
+  const highestEducationOptions = useMemo(
+    () => [
+      { value: "PhD", text: t("optHighestEducationPhd") },
+      { value: "Masters", text: t("optHighestEducationMasters") },
+      {
+        value: "Bachelor Degree",
+        text: t("optHighestEducationBachelor"),
+      },
+      {
+        value: "Undergraduate",
+        text: t("optHighestEducationUndergraduate"),
+      },
+      {
+        value: "Diploma and Professional",
+        text: t("optHighestEducationDiplomaProfessional"),
+      },
+      { value: "AL", text: t("optHighestEducationAL") },
+    ],
+    [t],
+  );
+  const mediumOptions = useMemo(
+    () => [
+      { value: "Sinhala", text: t("optMediumSinhala") },
+      { value: "English", text: t("optMediumEnglish") },
+      { value: "Tamil", text: t("optMediumTamil") },
+    ],
+    [t],
+  );
 
   // Raw grade options — values are IDs, text is translated for display
   const rawGradeOptions = useMemo<OptionItem[]>(
@@ -86,6 +141,11 @@ const AcademicExperience = () => {
     subjectOptions,
     (s) => [s.text],
     (s, [text]) => ({ ...s, text: text ?? s.text }),
+  );
+  const preferredLocationOptions = useTranslateItems(
+    isPreferredLocationsEnabled ? PREFERRED_LOCATION_OPTIONS : [],
+    (location) => [location.text],
+    (location, [text]) => ({ ...location, text: text ?? location.text }),
   );
 
   const handleMultiSelectChange = (
@@ -163,13 +223,15 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={CLASS_TYPE_OPTIONS}
+                options={classTypeOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange("classType", field.onChange, selected)
                 }
                 hasError={!!errors.classType}
                 placeholder={selectPlaceholder}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />
@@ -190,7 +252,7 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={PREFERRED_LOCATION_OPTIONS}
+                options={preferredLocationOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange(
@@ -206,6 +268,8 @@ const AcademicExperience = () => {
                 searchable
                 placeholder={selectPlaceholder}
                 searchPlaceholder={searchPh}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />
@@ -232,13 +296,15 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={TUTOR_TYPE_OPTIONS}
+                options={tutorTypeOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange("tutorType", field.onChange, selected)
                 }
                 hasError={!!errors.tutorType}
                 placeholder={selectPlaceholder}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />
@@ -265,7 +331,7 @@ const AcademicExperience = () => {
             <option value="" disabled hidden>
               {t("highestEducationPlaceholder")}
             </option>
-            {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
+            {highestEducationOptions.map((option) => (
               <option
                 key={option.value}
                 value={option.value}
@@ -318,7 +384,7 @@ const AcademicExperience = () => {
             control={control}
             render={({ field }) => (
               <MultiSelect
-                options={MEDIUM_OPTIONS}
+                options={mediumOptions}
                 defaultSelected={field.value || []}
                 onChange={(selected) =>
                   handleMultiSelectChange(
@@ -329,6 +395,8 @@ const AcademicExperience = () => {
                 }
                 hasError={!!errors.tutorMediums}
                 placeholder={selectPlaceholder}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />
@@ -356,6 +424,8 @@ const AcademicExperience = () => {
                 }
                 hasError={!!errors.grades}
                 placeholder={selectPlaceholder}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />
@@ -381,6 +451,8 @@ const AcademicExperience = () => {
                 hasError={!!errors.subjects}
                 disabled={selectedGradeIds.length === 0}
                 placeholder={selectPlaceholder}
+                clearSearchLabel={t("clearSearch")}
+                noResultsText={noResultsText}
               />
             )}
           />

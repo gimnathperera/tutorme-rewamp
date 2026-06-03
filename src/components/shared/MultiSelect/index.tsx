@@ -17,6 +17,8 @@ interface MultiSelectProps {
   searchable?: boolean;
   placeholder?: string;
   searchPlaceholder?: string;
+  clearSearchLabel?: string;
+  noResultsText?: (query: string) => React.ReactNode;
 }
 
 const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -28,6 +30,8 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   searchable = false,
   placeholder = "Select option",
   searchPlaceholder = "Search...",
+  clearSearchLabel = "Clear search",
+  noResultsText = (query) => <>No results for &ldquo;{query}&rdquo;</>,
 }) => {
   const [selectedOptions, setSelectedOptions] =
     useState<string[]>(defaultSelected);
@@ -160,7 +164,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
                       searchInputRef.current?.focus();
                     }}
                     className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label="Clear search"
+                    aria-label={clearSearchLabel}
                   >
                     <X size={14} />
                   </button>
@@ -184,7 +188,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               ))
             ) : (
               <div className="px-3 py-2 text-sm text-gray-400 select-none">
-                No results for &ldquo;{searchQuery}&rdquo;
+                {noResultsText(searchQuery)}
               </div>
             )}
           </div>
