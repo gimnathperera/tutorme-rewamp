@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
 import Icon from "@/components/shared/icon";
+import InputDatePicker from "@/components/shared/input-date-picker";
 import {
   collapseTextSpaces,
   removeWhitespace,
@@ -85,7 +86,6 @@ const PersonalInfo = () => {
   const [checkTutorEmailAvailability, { isFetching: isCheckingEmail }] =
     useLazyGetTutorEmailAvailabilityQuery();
 
-  const dateInputRef = useRef<HTMLInputElement | null>(null);
   const latestEmailRef = useRef("");
 
   const dateOfBirth = watch("dateOfBirth");
@@ -420,39 +420,14 @@ const PersonalInfo = () => {
       </div>
 
       {/* Date of Birth */}
-      <div className={fieldWrapper}>
-        <Label className="text-sm" htmlFor="dateOfBirth">
-          {t("dateOfBirth")} <span className="text-red-500">*</span>
-        </Label>
-        <div
-          className="relative cursor-pointer"
-          onClick={() => dateInputRef.current?.showPicker()}
-        >
-          <Input
-            id="dateOfBirth"
-            type="date"
-            {...register("dateOfBirth")}
-            ref={(el) => {
-              register("dateOfBirth").ref(el);
-              dateInputRef.current = el;
-            }}
-            onKeyDown={(e) => e.preventDefault()}
-            max={maxDate}
-            autoComplete="bday"
-            className={`${inputClass} pr-10 cursor-pointer [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute ${errors.dateOfBirth ? "border-red-500" : "border-gray-300"}`}
-          />
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-            <Icon name="Calendar" size={16} />
-          </span>
-        </div>
-        {errors.dateOfBirth ? (
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.dateOfBirth?.message as string}
-          </p>
-        ) : (
-          <Hint>{t("dateOfBirthHint")}</Hint>
-        )}
-      </div>
+      <InputDatePicker
+        name="dateOfBirth"
+        label={t("dateOfBirth")}
+        required
+        maxDate={maxDate}
+        helperText={t("dateOfBirthHint")}
+        reserveHelperSpace
+      />
 
       {/* Age — auto-calculated */}
       <div className={fieldWrapper}>
