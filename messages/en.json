@@ -16,7 +16,7 @@
     "cancel": "Cancel"
   },
   "footer": {
-    "brandName": "Tuition Lanka",
+    "brandName": "TuitionLanka",
     "menuSection": "Menu",
     "resourcesSection": "Resources",
     "academicsSection": "Academics",
@@ -32,7 +32,7 @@
     "gradesAndSubjects": "Grades & Subjects",
     "pastExamPapers": "Past Exam Papers",
     "tuitionRates": "Tuition Rates",
-    "copyright": "@2026 - All Rights Reserved by Tuition Lanka",
+    "copyright": "@2026 - All Rights Reserved by TuitionLanka",
     "privacyPolicy": "Privacy policy",
     "termsAndConditions": "Terms & conditions"
   },
@@ -453,7 +453,7 @@
   },
   "blogs": {
     "heroLabel": "TuitionLanka Insights",
-    "heroTitle": "Welcome to the Tuition Lanka Blog",
+    "heroTitle": "Welcome to the TuitionLanka Blog",
     "heroSubtitle": "Discover the latest insights, tips, and updates.",
     "allFilter": "All",
     "addBlog": "+ Add Blog",
@@ -463,7 +463,7 @@
     "statusApproved": "Approved",
     "statusPending": "Pending",
     "statusRejected": "Rejected",
-    "authorName": "Tuition Lanka",
+    "authorName": "TuitionLanka",
     "backToBlogs": "Back to Blogs",
     "relatedArticles": "Related Articles",
     "tableOfContents": "Table of Contents",

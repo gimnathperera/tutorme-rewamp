@@ -73,7 +73,7 @@ const Drawer = ({
           <header className="px-4 py-4 flex items-center">
             <div className="flex flex-shrink-0 items-center border-right">
               <Link href="/" className="text-2xl font-bold text-black">
-                Tuition Lanka
+                TuitionLanka
               </Link>
             </div>
             <button

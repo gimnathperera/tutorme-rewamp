@@ -16,7 +16,7 @@
     "cancel": "ரத்து செய்"
   },
   "footer": {
-    "brandName": "Tuition Lanka",
+    "brandName": "TuitionLanka",
     "menuSection": "மெனு",
     "resourcesSection": "வளங்கள்",
     "academicsSection": "கல்வி",
@@ -32,7 +32,7 @@
     "gradesAndSubjects": "தரங்கள் & பாடங்கள்",
     "pastExamPapers": "கடந்த கால தேர்வு வினாத்தாள்கள்",
     "tuitionRates": "பயிற்சி கட்டணங்கள்",
-    "copyright": "@2026 - அனைத்து உரிமைகளும் Tuition Lanka க்கு சொந்தமானவை",
+    "copyright": "@2026 - அனைத்து உரிமைகளும் TuitionLanka க்கு சொந்தமானவை",
     "privacyPolicy": "தனியுரிமைக் கொள்கை",
     "termsAndConditions": "விதிமுறைகள் & நிபந்தனைகள்"
   },
@@ -175,7 +175,7 @@
   },
   "blogs": {
     "heroLabel": "TuitionLanka நுண்ணறிவு",
-    "heroTitle": "Tuition Lanka வலைப்பதிவிற்கு வரவேற்கிறோம்",
+    "heroTitle": "TuitionLanka வலைப்பதிவிற்கு வரவேற்கிறோம்",
     "heroSubtitle": "சமீபத்திய நுண்ணறிவு, குறிப்புகள் மற்றும் புதுப்பிப்புகளை கண்டறியுங்கள்.",
     "allFilter": "அனைத்தும்",
     "addBlog": "+ வலைப்பதிவு சேர்க்கவும்",
@@ -185,7 +185,7 @@
     "statusApproved": "அனுமதிக்கப்பட்டது",
     "statusPending": "நிலுவையில்",
     "statusRejected": "நிராகரிக்கப்பட்டது",
-    "authorName": "Tuition Lanka",
+    "authorName": "TuitionLanka",
     "backToBlogs": "கட்டுரைகளுக்கு திரும்பு",
     "relatedArticles": "தொடர்புடைய கட்டுரைகள்",
     "tableOfContents": "உள்ளடக்க அட்டவணை",

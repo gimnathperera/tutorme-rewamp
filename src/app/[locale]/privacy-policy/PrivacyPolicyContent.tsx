@@ -19,9 +19,9 @@ type Section = { title: string; content: ContentItem[] };
 
 const HERO_TITLE = "Privacy Policy";
 const HERO_SUBTITLE =
-  "How we collect, use, and protect information on Tuition Lanka.";
+  "How we collect, use, and protect information on TuitionLanka.";
 const INTRO_TEXT =
-  "This Privacy Policy explains how Tuition Lanka handles personal information when you use our website, submit a request, register as a tutor, or communicate with us.";
+  "This Privacy Policy explains how TuitionLanka handles personal information when you use our website, submit a request, register as a tutor, or communicate with us.";
 
 const SECTIONS: Section[] = [
   {

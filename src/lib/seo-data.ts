@@ -115,7 +115,7 @@ export function getBlogDescription(
 
   return (
     description ||
-    "Read Tuition Lanka education articles with practical study tips, exam guides, and tutor advice for Sri Lankan students and parents."
+    "Read TuitionLanka education articles with practical study tips, exam guides, and tutor advice for Sri Lankan students and parents."
   );
 }
 

@@ -210,11 +210,11 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
               <Link
                 href="/"
                 className="relative block h-10 w-[150px] sm:h-14 sm:w-[220px] lg:h-16 lg:w-[250px]"
-                aria-label="Tuition Lanka home"
+                aria-label="TuitionLanka home"
               >
                 <Image
                   src={logoSrc}
-                  alt="Tuition Lanka"
+                  alt="TuitionLanka"
                   fill
                   priority
                   sizes="(min-width: 1024px) 250px, (min-width: 640px) 220px, 180px"

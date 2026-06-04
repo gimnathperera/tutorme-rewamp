@@ -30,7 +30,7 @@ export async function generateMetadata({
     const description = toMetaDescription(getBlogDescription(blog));
 
     return createMetadata({
-      title: `${blog.title} | Tuition Lanka`,
+      title: `${blog.title} | TuitionLanka`,
       description,
       path: getBlogPath(blog),
       image: getBlogImage(blog),
@@ -40,9 +40,9 @@ export async function generateMetadata({
 
   return createMetadata({
     ...seoPages.blogs,
-    title: "Study Tips and Exam Preparation Article | Tuition Lanka",
+    title: "Study Tips and Exam Preparation Article | TuitionLanka",
     description:
-      "Read Tuition Lanka education articles with practical study tips, exam guides, and tutor advice for students, parents, and home tutors in Sri Lanka.",
+      "Read TuitionLanka education articles with practical study tips, exam guides, and tutor advice for students, parents, and home tutors in Sri Lanka.",
     path: `/blogs/${params.slug}`,
   });
 }
