@@ -9,17 +9,12 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
+import MultiSelect from "@/components/shared/MultiSelect";
 import {
   EDUCATIONAL_DOCUMENT_OPTIONS,
   OPTIONAL_DOCUMENT_OPTIONS,
 } from "@/configs/options";
 
-const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
-const selectBorder = (hasError: boolean) =>
-  hasError ? "border-red-500" : "border-gray-300";
-const selectColor = (value: string) =>
-  value ? "text-gray-900" : "text-gray-500";
 
 const DocumentRow = ({
   fieldName,
@@ -55,23 +50,14 @@ const DocumentRow = ({
           name={`${fieldName}.${index}.type`}
           control={control}
           render={({ field: f }) => (
-            <select
-              {...f}
-              className={`${selectClass} ${selectBorder(!!rowErrors.type)} ${selectColor(f.value)}`}
-            >
-              <option value="" disabled hidden>
-                {selectTypePlaceholder}
-              </option>
-              {options.map((opt) => (
-                <option
-                  key={opt.value}
-                  value={opt.value}
-                  className="text-gray-900"
-                >
-                  {opt.text}
-                </option>
-              ))}
-            </select>
+            <MultiSelect
+              options={options}
+              defaultSelected={f.value ? [f.value] : []}
+              onChange={(selected) => f.onChange(selected[0] ?? "")}
+              hasError={!!rowErrors.type}
+              singleSelect
+              placeholder={selectTypePlaceholder}
+            />
           )}
         />
         {rowErrors.type && (

@@ -1,1 +1,1 @@
-export { default, type Option } from "@/components/form-controls/multi-select";
+export { default, type Option } from "@/components/shared/MultiSelect";

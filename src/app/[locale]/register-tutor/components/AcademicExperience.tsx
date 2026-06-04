@@ -23,13 +23,6 @@ import { useEffect, useMemo, useState } from "react";
 
 /** Shared style tokens – keep in sync with other register-tutor components */
 const fieldWrapper = "flex flex-col gap-1.5";
-const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
-const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
-const selectBorder = (hasError: boolean) =>
-  hasError ? "border-red-500" : "border-gray-300";
-const selectColor = (value: string) =>
-  value ? "text-gray-900" : "text-gray-500";
 type MultiSelectOnChange = NonNullable<
   Parameters<typeof MultiSelect>[0]["onChange"]
 >;
@@ -37,7 +30,6 @@ type MultiSelectOnChange = NonNullable<
 const AcademicExperience = () => {
   const t = useTranslations("registerTutor");
   const {
-    register,
     control,
     watch,
     setValue,
@@ -49,7 +41,6 @@ const AcademicExperience = () => {
   const { data: gradeData } = useFetchGradesQuery({ page: 1, limit: 50 });
   const selectedGrades = watch("grades");
   const selectedClassTypes = watch("classType");
-  const highestEducation = watch("highestEducation");
 
   const selectedGradeIds = useMemo<string[]>(() => {
     return Array.isArray(selectedGrades) ? selectedGrades : [];
@@ -146,6 +137,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("classType", field.onChange, selected)
                 }
                 hasError={!!errors.classType}
+                placeholder={t("classTypePlaceholder")}
               />
             )}
           />
@@ -180,6 +172,7 @@ const AcademicExperience = () => {
                   isPreferredLocationsEnabled && !!errors.preferredLocations
                 }
                 searchable
+                placeholder={t("preferredLocationsPlaceholder")}
               />
             )}
           />
@@ -212,6 +205,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("tutorType", field.onChange, selected)
                 }
                 hasError={!!errors.tutorType}
+                placeholder={t("tutorTypesPlaceholder")}
               />
             )}
           />
@@ -224,30 +218,23 @@ const AcademicExperience = () => {
           <Label className="text-sm" htmlFor="highestEducation">
             {t("highestEducation")} <span className="text-red-500">*</span>
           </Label>
-          <select
-            id="highestEducation"
-            {...register("highestEducation", {
-              onChange: (event: ChangeEvent<HTMLSelectElement>) => {
-                if (event.target.value) {
-                  clearErrors("highestEducation");
-                }
-              },
-            })}
-            className={`${selectClass} ${selectBorder(!!errors.highestEducation)} ${selectColor(highestEducation)}`}
-          >
-            <option value="" disabled hidden>
-              {t("highestEducationPlaceholder")}
-            </option>
-            {REGISTER_HIGHEST_EDUCATION_OPTIONS.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-                className="text-gray-900"
-              >
-                {option.text}
-              </option>
-            ))}
-          </select>
+          <Controller
+            name="highestEducation"
+            control={control}
+            render={({ field }) => (
+              <MultiSelect
+                options={REGISTER_HIGHEST_EDUCATION_OPTIONS}
+                defaultSelected={field.value ? [field.value] : []}
+                onChange={(selected) => {
+                  field.onChange(selected[0] ?? "");
+                  if (selected.length > 0) clearErrors("highestEducation");
+                }}
+                hasError={!!errors.highestEducation}
+                singleSelect
+                placeholder={t("highestEducationPlaceholder")}
+              />
+            )}
+          />
           <p className="text-xs leading-4 text-red-500 min-h-4">
             {errors.highestEducation?.message as string}
           </p>
@@ -283,6 +270,7 @@ const AcademicExperience = () => {
                   )
                 }
                 hasError={!!errors.tutorMediums}
+                placeholder={t("tutorMediumsPlaceholder")}
               />
             )}
           />
@@ -314,6 +302,7 @@ const AcademicExperience = () => {
                   handleMultiSelectChange("grades", field.onChange, selected)
                 }
                 hasError={!!errors.grades}
+                placeholder={t("gradesPlaceholder")}
               />
             )}
           />
@@ -338,6 +327,7 @@ const AcademicExperience = () => {
                 }
                 hasError={!!errors.subjects}
                 disabled={selectedGradeIds.length === 0}
+                placeholder={t("subjectsPlaceholder")}
               />
             )}
           />

@@ -50,16 +50,13 @@ import {
   TUTOR_TYPE_OPTIONS,
 } from "@/configs/options";
 import { useTranslations } from "next-intl";
+import MultiSelect from "@/components/shared/MultiSelect";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
 const selectClass =
   "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring transition-colors duration-150";
-const selectBorder = (hasError: boolean) =>
-  hasError ? "border-red-500" : "border-gray-300";
-const selectColor = (value: string) =>
-  value ? "text-gray-900" : "text-gray-500";
 const errorMsg = "text-xs text-red-500 min-h-[1.25rem]";
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 
@@ -104,7 +101,6 @@ export default function AddRequestForTutor() {
   const tutors = watch("tutors");
   const selectedGradeId = watch("grade");
   const selectedDistrict = watch("district");
-  const selectedMedium = watch("medium");
 
   const { data: gradeData } = useFetchGradesQuery({
     page: 1,
@@ -433,24 +429,20 @@ export default function AddRequestForTutor() {
                     <Label className="text-sm" htmlFor="medium">
                       {t("medium")} <span className="text-red-500">*</span>
                     </Label>
-                    <select
-                      id="medium"
-                      {...register("medium")}
-                      className={`${selectClass} ${selectBorder(!!errors.medium)} ${selectColor(selectedMedium)}`}
-                    >
-                      <option value="" disabled hidden>
-                        {t("mediumPlaceholder")}
-                      </option>
-                      {MEDIUM_OPTIONS.map((option) => (
-                        <option
-                          key={option.value}
-                          value={option.value}
-                          className="text-gray-900"
-                        >
-                          {option.text}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="medium"
+                      control={control}
+                      render={({ field }) => (
+                        <MultiSelect
+                          options={MEDIUM_OPTIONS}
+                          defaultSelected={field.value ? [field.value] : []}
+                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          hasError={!!errors.medium}
+                          singleSelect
+                          placeholder={t("mediumPlaceholder")}
+                        />
+                      )}
+                    />
                     {errors.medium?.message && (
                       <p className={errorMsg}>{errors.medium.message}</p>
                     )}
@@ -461,24 +453,20 @@ export default function AddRequestForTutor() {
                     <Label className="text-sm" htmlFor="grade">
                       {t("grade")} <span className="text-red-500">*</span>
                     </Label>
-                    <select
-                      id="grade"
-                      {...register("grade")}
-                      className={`${selectClass} ${selectBorder(!!errors.grade)} ${selectColor(selectedGradeId)}`}
-                    >
-                      <option value="" disabled hidden>
-                        {t("gradePlaceholder")}
-                      </option>
-                      {gradeOptions.map((g) => (
-                        <option
-                          key={g.value}
-                          value={g.value}
-                          className="text-gray-900"
-                        >
-                          {g.text}
-                        </option>
-                      ))}
-                    </select>
+                    <Controller
+                      name="grade"
+                      control={control}
+                      render={({ field }) => (
+                        <MultiSelect
+                          options={gradeOptions}
+                          defaultSelected={field.value ? [field.value] : []}
+                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          hasError={!!errors.grade}
+                          singleSelect
+                          placeholder={t("gradePlaceholder")}
+                        />
+                      )}
+                    />
                     {errors.grade?.message && (
                       <p className={errorMsg}>{errors.grade.message}</p>
                     )}
@@ -524,27 +512,21 @@ export default function AddRequestForTutor() {
                       <Label className="text-sm" htmlFor={`subject-${index}`}>
                         {t("subject")} <span className="text-red-500">*</span>
                       </Label>
-                      <select
-                        id={`subject-${index}`}
-                        {...register(`tutors.${index}.subject`)}
-                        disabled={!selectedGradeId}
-                        className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.subject)} ${selectColor(tutors[index]?.subject)} disabled:bg-gray-100 disabled:cursor-not-allowed`}
-                      >
-                        <option value="" disabled hidden>
-                          {selectedGradeId
-                            ? t("subjectPlaceholder")
-                            : t("selectGradeFirst")}
-                        </option>
-                        {subjectOptions.map((s) => (
-                          <option
-                            key={s.value}
-                            value={s.value}
-                            className="text-gray-900"
-                          >
-                            {s.text}
-                          </option>
-                        ))}
-                      </select>
+                      <Controller
+                        name={`tutors.${index}.subject`}
+                        control={control}
+                        render={({ field }) => (
+                          <MultiSelect
+                            options={subjectOptions}
+                            defaultSelected={field.value ? [field.value] : []}
+                            onChange={(selected) => field.onChange(selected[0] ?? "")}
+                            hasError={!!errors.tutors?.[index]?.subject}
+                            singleSelect
+                            disabled={!selectedGradeId}
+                            placeholder={selectedGradeId ? t("subjectPlaceholder") : t("selectGradeFirst")}
+                          />
+                        )}
+                      />
                       {errors.tutors?.[index]?.subject?.message && (
                         <p className={errorMsg}>
                           {errors.tutors?.[index]?.subject?.message}
@@ -561,24 +543,20 @@ export default function AddRequestForTutor() {
                         >
                           {t("duration")} <span className="text-red-500">*</span>
                         </Label>
-                        <select
-                          id={`duration-${index}`}
-                          {...register(`tutors.${index}.duration`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.duration)} ${selectColor(tutors[index]?.duration)}`}
-                        >
-                          <option value="" disabled hidden>
-                            {t("durationPlaceholder")}
-                          </option>
-                          {REQUEST_TUTOR_DURATION_OPTIONS.map((option) => (
-                            <option
-                              key={option.value}
-                              value={option.value}
-                              className="text-gray-900"
-                            >
-                              {option.text}
-                            </option>
-                          ))}
-                        </select>
+                        <Controller
+                          name={`tutors.${index}.duration`}
+                          control={control}
+                          render={({ field }) => (
+                            <MultiSelect
+                              options={REQUEST_TUTOR_DURATION_OPTIONS}
+                              defaultSelected={field.value ? [field.value] : []}
+                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              hasError={!!errors.tutors?.[index]?.duration}
+                              singleSelect
+                              placeholder={t("durationPlaceholder")}
+                            />
+                          )}
+                        />
                         {errors.tutors?.[index]?.duration?.message && (
                           <p className={errorMsg}>
                             {errors.tutors?.[index]?.duration?.message}
@@ -594,24 +572,20 @@ export default function AddRequestForTutor() {
                         >
                           {t("frequency")} <span className="text-red-500">*</span>
                         </Label>
-                        <select
-                          id={`frequency-${index}`}
-                          {...register(`tutors.${index}.frequency`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.frequency)} ${selectColor(tutors[index]?.frequency)}`}
-                        >
-                          <option value="" disabled hidden>
-                            {t("frequencyPlaceholder")}
-                          </option>
-                          {REQUEST_TUTOR_FREQUENCY_OPTIONS.map((option) => (
-                            <option
-                              key={option.value}
-                              value={option.value}
-                              className="text-gray-900"
-                            >
-                              {option.text}
-                            </option>
-                          ))}
-                        </select>
+                        <Controller
+                          name={`tutors.${index}.frequency`}
+                          control={control}
+                          render={({ field }) => (
+                            <MultiSelect
+                              options={REQUEST_TUTOR_FREQUENCY_OPTIONS}
+                              defaultSelected={field.value ? [field.value] : []}
+                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              hasError={!!errors.tutors?.[index]?.frequency}
+                              singleSelect
+                              placeholder={t("frequencyPlaceholder")}
+                            />
+                          )}
+                        />
                         {errors.tutors?.[index]?.frequency?.message && (
                           <p className={errorMsg}>
                             {errors.tutors?.[index]?.frequency?.message}
@@ -630,31 +604,23 @@ export default function AddRequestForTutor() {
                           {t("preferredTutorType")}{" "}
                           <span className="text-red-500">*</span>
                         </Label>
-                        <select
-                          id={`tutorType-${index}`}
-                          {...register(`tutors.${index}.preferredTutorType`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredTutorType)} ${selectColor(tutors[index]?.preferredTutorType)}`}
-                        >
-                          <option value="" disabled hidden>
-                            {t("preferredTutorTypePlaceholder")}
-                          </option>
-                          {TUTOR_TYPE_OPTIONS.map((o) => (
-                            <option
-                              key={o.value}
-                              value={o.value}
-                              className="text-gray-900"
-                            >
-                              {o.text}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.tutors?.[index]?.preferredTutorType
-                          ?.message && (
+                        <Controller
+                          name={`tutors.${index}.preferredTutorType`}
+                          control={control}
+                          render={({ field }) => (
+                            <MultiSelect
+                              options={TUTOR_TYPE_OPTIONS}
+                              defaultSelected={field.value ? [field.value] : []}
+                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              hasError={!!errors.tutors?.[index]?.preferredTutorType}
+                              singleSelect
+                              placeholder={t("preferredTutorTypePlaceholder")}
+                            />
+                          )}
+                        />
+                        {errors.tutors?.[index]?.preferredTutorType?.message && (
                           <p className={errorMsg}>
-                            {
-                              errors.tutors?.[index]?.preferredTutorType
-                                ?.message
-                            }
+                            {errors.tutors?.[index]?.preferredTutorType?.message}
                           </p>
                         )}
                       </div>
@@ -667,31 +633,23 @@ export default function AddRequestForTutor() {
                           {t("preferredClassType")}{" "}
                           <span className="text-red-500">*</span>
                         </Label>
-                        <select
-                          id={`classType-${index}`}
-                          {...register(`tutors.${index}.preferredClassType`)}
-                          className={`${selectClass} ${selectBorder(!!errors.tutors?.[index]?.preferredClassType)} ${selectColor(tutors[index]?.preferredClassType)}`}
-                        >
-                          <option value="" disabled hidden>
-                            {t("preferredClassTypePlaceholder")}
-                          </option>
-                          {CLASS_TYPE_OPTIONS.map((o) => (
-                            <option
-                              key={o.value}
-                              value={o.value}
-                              className="text-gray-900"
-                            >
-                              {o.text}
-                            </option>
-                          ))}
-                        </select>
-                        {errors.tutors?.[index]?.preferredClassType
-                          ?.message && (
+                        <Controller
+                          name={`tutors.${index}.preferredClassType`}
+                          control={control}
+                          render={({ field }) => (
+                            <MultiSelect
+                              options={CLASS_TYPE_OPTIONS}
+                              defaultSelected={field.value ? [field.value] : []}
+                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              hasError={!!errors.tutors?.[index]?.preferredClassType}
+                              singleSelect
+                              placeholder={t("preferredClassTypePlaceholder")}
+                            />
+                          )}
+                        />
+                        {errors.tutors?.[index]?.preferredClassType?.message && (
                           <p className={errorMsg}>
-                            {
-                              errors.tutors?.[index]?.preferredClassType
-                                ?.message
-                            }
+                            {errors.tutors?.[index]?.preferredClassType?.message}
                           </p>
                         )}
                       </div>

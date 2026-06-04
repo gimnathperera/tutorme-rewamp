@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { Controller, useFormContext } from "react-hook-form";
+import MultiSelect from "@/components/shared/MultiSelect";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Spinner } from "@/components/ui/spinner";
@@ -24,12 +25,6 @@ import { useTranslations } from "next-intl";
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-1.5";
 const inputClass = "h-11 text-sm placeholder:text-gray-500 text-gray-900";
-const selectClass =
-  "h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring";
-const selectBorder = (hasError: boolean) =>
-  hasError ? "border-red-500" : "border-gray-300";
-const selectColor = (value: string) =>
-  value ? "text-gray-900" : "text-gray-500";
 const EMAIL_CHECK_DELAY_MS = 500;
 
 /** Hint text shown below a field while it has no error */
@@ -56,6 +51,7 @@ const PersonalInfo = () => {
   const t = useTranslations("registerTutor");
   const {
     register,
+    control,
     watch,
     clearErrors,
     setError,
@@ -75,9 +71,6 @@ const PersonalInfo = () => {
 
   const dateOfBirth = watch("dateOfBirth");
   const email = watch("email");
-  const gender = watch("gender");
-  const nationality = watch("nationality");
-  const race = watch("race");
 
   /** Latest selectable date = today minus 18 years (tutor must be ≥ 18) */
   const maxDate = (() => {
@@ -377,25 +370,22 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="gender">
           {t("gender")} <span className="text-red-500">*</span>
         </Label>
-        <select
-          id="gender"
-          {...register("gender")}
-          autoComplete="sex"
-          className={`${selectClass} ${selectBorder(!!errors.gender)} ${selectColor(gender)}`}
-        >
-          <option value="" disabled hidden>
-            {t("genderPlaceholder")}
-          </option>
-          {GENDER_OPTIONS.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              className="text-gray-900"
-            >
-              {option.text}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="gender"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              options={GENDER_OPTIONS}
+              defaultSelected={field.value ? [field.value] : []}
+              onChange={(selected) => {
+                field.onChange(selected[0] ?? "");
+              }}
+              hasError={!!errors.gender}
+              singleSelect
+              placeholder={t("genderPlaceholder")}
+            />
+          )}
+        />
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.gender?.message as string}
         </p>
@@ -438,25 +428,22 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="nationality">
           {t("nationality")} <span className="text-red-500">*</span>
         </Label>
-        <select
-          id="nationality"
-          {...register("nationality")}
-          autoComplete="country-name"
-          className={`${selectClass} ${selectBorder(!!errors.nationality)} ${selectColor(nationality)}`}
-        >
-          <option value="" disabled hidden>
-            {t("nationalityPlaceholder")}
-          </option>
-          {NATIONALITY_OPTIONS.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              className="text-gray-900"
-            >
-              {option.text}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="nationality"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              options={NATIONALITY_OPTIONS}
+              defaultSelected={field.value ? [field.value] : []}
+              onChange={(selected) => {
+                field.onChange(selected[0] ?? "");
+              }}
+              hasError={!!errors.nationality}
+              singleSelect
+              placeholder={t("nationalityPlaceholder")}
+            />
+          )}
+        />
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.nationality?.message as string}
         </p>
@@ -467,24 +454,22 @@ const PersonalInfo = () => {
         <Label className="text-sm" htmlFor="race">
           {t("race")} <span className="text-red-500">*</span>
         </Label>
-        <select
-          id="race"
-          {...register("race")}
-          className={`${selectClass} ${selectBorder(!!errors.race)} ${selectColor(race)}`}
-        >
-          <option value="" disabled hidden>
-            {t("racePlaceholder")}
-          </option>
-          {RACE_OPTIONS.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-              className="text-gray-900"
-            >
-              {option.text}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="race"
+          control={control}
+          render={({ field }) => (
+            <MultiSelect
+              options={RACE_OPTIONS}
+              defaultSelected={field.value ? [field.value] : []}
+              onChange={(selected) => {
+                field.onChange(selected[0] ?? "");
+              }}
+              hasError={!!errors.race}
+              singleSelect
+              placeholder={t("racePlaceholder")}
+            />
+          )}
+        />
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.race?.message as string}
         </p>

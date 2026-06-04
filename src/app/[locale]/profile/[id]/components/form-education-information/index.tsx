@@ -8,7 +8,6 @@ import {
   SubmitHandler,
   useFieldArray,
 } from "react-hook-form";
-import InputMultiSelect from "@/components/shared/input-multi-select";
 import InputSelect from "@/components/shared/input-select";
 import MultiSelect from "@/components/shared/MultiSelect";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
@@ -45,9 +44,10 @@ type Props = {
 const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
   options.map(({ text, value }) => ({ label: text, value }));
 
-const classTypeOptions = toOptions(CLASS_TYPE_OPTIONS);
-const tutorTypeOptions = toOptions(TUTOR_TYPE_OPTIONS);
-const tutorMediumOptions = toOptions(MEDIUM_OPTIONS);
+// Convert { label, value } → { text, value } for shared MultiSelect
+const msOptions = (opts: Option[]) =>
+  opts.map((o) => ({ value: o.value, text: o.label }));
+
 const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const fieldControlHeightClass = "h-11";
 
@@ -240,14 +240,28 @@ const FormEducationInfo: FC<Props> = ({
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:gap-6">
-              <InputMultiSelect
-                label="Class Type *"
-                name="classType"
-                options={classTypeOptions}
-                className={fieldControlHeightClass}
-                reserveHelperSpace
-              />
+              {/* Class Type */}
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Class Type <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="classType"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={CLASS_TYPE_OPTIONS}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      hasError={!!fieldState.error}
+                      placeholder="Select class type"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500"></span>
+              </div>
 
+              {/* Preferred Locations */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                   Preferred Locations
@@ -287,14 +301,28 @@ const FormEducationInfo: FC<Props> = ({
                 </span>
               </div>
 
-              <InputMultiSelect
-                label="Tutor Types *"
-                name="tutorTypes"
-                options={tutorTypeOptions}
-                className={fieldControlHeightClass}
-                reserveHelperSpace
-              />
+              {/* Tutor Types */}
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Tutor Types <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="tutorTypes"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={TUTOR_TYPE_OPTIONS}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      hasError={!!fieldState.error}
+                      placeholder="Select tutor types"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500"></span>
+              </div>
 
+              {/* Highest Education Level */}
               <InputSelect
                 label="Highest Education Level *"
                 name="highestEducation"
@@ -303,6 +331,7 @@ const FormEducationInfo: FC<Props> = ({
                 reserveHelperSpace
               />
 
+              {/* Years of Experience */}
               <NumberStepper
                 name="yearsExperience"
                 min={0}
@@ -312,30 +341,69 @@ const FormEducationInfo: FC<Props> = ({
                 reserveHelperSpace
               />
 
-              <InputMultiSelect
-                label="Tutor Mediums *"
-                name="tutorMediums"
-                options={tutorMediumOptions}
-                className={fieldControlHeightClass}
-                reserveHelperSpace
-              />
+              {/* Tutor Mediums */}
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Tutor Mediums <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="tutorMediums"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={MEDIUM_OPTIONS}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      hasError={!!fieldState.error}
+                      placeholder="Select tutor mediums"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500"></span>
+              </div>
 
-              <InputMultiSelect
-                label="Grades *"
-                name="grades"
-                options={gradesOptions}
-                className={fieldControlHeightClass}
-                reserveHelperSpace
-              />
+              {/* Grades */}
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Grades <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="grades"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={msOptions(gradesOptions)}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      hasError={!!fieldState.error}
+                      placeholder="Select grades"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500"></span>
+              </div>
 
-              <InputMultiSelect
-                label="Subjects *"
-                name="subjects"
-                options={subjectsOptions}
-                className={fieldControlHeightClass}
-                isDisabled={isEmpty(selectedGrades)}
-                reserveHelperSpace
-              />
+              {/* Subjects */}
+              <div className="flex flex-col gap-1">
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Subjects <span className="text-red-500">*</span>
+                </label>
+                <Controller
+                  name="subjects"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <MultiSelect
+                      options={msOptions(subjectsOptions)}
+                      defaultSelected={field.value ?? []}
+                      onChange={field.onChange}
+                      hasError={!!fieldState.error}
+                      disabled={isEmpty(selectedGrades)}
+                      placeholder="Select subjects"
+                    />
+                  )}
+                />
+                <span className="min-h-4 text-xs text-gray-500"></span>
+              </div>
             </div>
 
             {/* Certificates & Documents */}
