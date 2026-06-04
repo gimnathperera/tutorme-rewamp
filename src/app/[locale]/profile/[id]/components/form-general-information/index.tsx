@@ -98,7 +98,9 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     ],
     [tRegisterTutor],
   );
-  const selectPlaceholder = tRegisterTutor("selectOption");
+  const genderPlaceholder = tRegisterTutor("genderPlaceholder");
+  const nationalityPlaceholder = tRegisterTutor("nationalityPlaceholder");
+  const racePlaceholder = tRegisterTutor("racePlaceholder");
   const onSubmit = (data: GeneralInfoSchema) => {
     onFormSubmit(data);
   };
@@ -241,21 +243,21 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 label={t("fieldGender")}
                 name="gender"
                 options={genderOptions}
-                placeholder={selectPlaceholder}
+                placeholder={genderPlaceholder}
                 className={fieldHeightClass}
               />
               <InputSelect
                 label={t("fieldNationality")}
                 name="nationality"
                 options={nationalityOptions}
-                placeholder={selectPlaceholder}
+                placeholder={nationalityPlaceholder}
                 className={fieldHeightClass}
               />
               <InputSelect
                 label={t("fieldRace")}
                 name="race"
                 options={raceOptions}
-                placeholder={selectPlaceholder}
+                placeholder={racePlaceholder}
                 className={fieldHeightClass}
               />
             </div>
