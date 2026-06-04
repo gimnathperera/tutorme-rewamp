@@ -72,11 +72,11 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const tRegisterTutor = useTranslations("registerTutor");
   const genderOptions = useMemo(
     () => [
-      { value: "Male", label: tRegisterTutor("optGenderMale") },
-      { value: "Female", label: tRegisterTutor("optGenderFemale") },
-      { value: "Others", label: tRegisterTutor("optGenderOthers") },
+      { value: "Male", label: t("optGenderMale") },
+      { value: "Female", label: t("optGenderFemale") },
+      { value: "Others", label: t("optGenderOthers") },
     ],
-    [tRegisterTutor],
+    [t],
   );
   const nationalityOptions = useMemo(
     () => [
