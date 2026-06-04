@@ -661,7 +661,7 @@
     "ageMismatch": "වයස තෝරාගත් උපන් දිනය සමඟ නොගැළපේ",
     "qualificationsTitle": "සුදුසුකම්",
     "qualificationsDesc": "ගුරු ලියාපදිංචිය අතරතුර භාවිතා කළ ඉගැන්වීම් සහ අධ්‍යයන විස්තර සමඟ ඔබේ ගුරු සුදුසුකම් යාවත්කාලීනව තබා ගන්න.",
-    "fieldClassType": "පන්ති වර්ගය *",
+    "fieldClassType": "පන්ති වර්ගය",
     "fieldPreferredLocations": "කැමති ස්ථාන",
     "fieldTutorTypes": "ගුරුවරුන් වර්ග",
     "fieldHighestEducation": "ඉහළම අධ්‍යාපන මට්ටම *",
