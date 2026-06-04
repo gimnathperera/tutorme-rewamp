@@ -3,42 +3,39 @@ import {
   PASSWORD_MIN,
   PASSWORD_MAX,
   PASSWORD_LETTER_NUMBER_REGEX,
-  PASSWORD_TOO_SHORT,
-  PASSWORD_TOO_LONG,
-  PASSWORD_LETTER_NUMBER_MSG,
-  CURRENT_PASSWORD_REQUIRED,
 } from "@/configs/password";
 import { removeWhitespace } from "@/utils/form-normalizers";
 
-export const passwordInfoSchema = z
-  .object({
-    currentPassword: z.preprocess(
-      removeWhitespace,
-      z.string().min(1, { message: CURRENT_PASSWORD_REQUIRED }),
-    ),
+export const createPasswordInfoSchema = (t: (_key: string) => string) =>
+  z
+    .object({
+      currentPassword: z.preprocess(
+        removeWhitespace,
+        z.string().min(1, { message: t("passwordRequired") }),
+      ),
+      newPassword: z.preprocess(
+        removeWhitespace,
+        z
+          .string()
+          .min(PASSWORD_MIN, { message: t("passwordTooShort") })
+          .max(PASSWORD_MAX, { message: t("passwordTooLong") })
+          .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+            message: t("passwordLetterNumber"),
+          }),
+      ),
+      confirmPassword: z.preprocess(
+        removeWhitespace,
+        z.string().min(PASSWORD_MIN, { message: t("passwordTooShort") }),
+      ),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("confirmPasswordMismatch"),
+      path: ["confirmPassword"],
+    });
 
-    newPassword: z.preprocess(
-      removeWhitespace,
-      z
-        .string()
-        .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
-        .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
-        .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-          message: PASSWORD_LETTER_NUMBER_MSG,
-        }),
-    ),
-
-    confirmPassword: z.preprocess(
-      removeWhitespace,
-      z.string().min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT }),
-    ),
-  })
-  .refine((data) => data.newPassword === data.confirmPassword, {
-    message: "Confirm Password must match New Password",
-    path: ["confirmPassword"],
-  });
-
-export type PasswordInfoSchema = z.infer<typeof passwordInfoSchema>;
+export type PasswordInfoSchema = z.infer<
+  ReturnType<typeof createPasswordInfoSchema>
+>;
 
 export const initialFormValues: PasswordInfoSchema = {
   currentPassword: "",

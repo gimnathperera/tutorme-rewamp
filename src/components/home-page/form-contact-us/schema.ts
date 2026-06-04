@@ -7,7 +7,7 @@ export const contactUsSchema = z.object({
     .string()
     .trim()
     .min(1, "Full Name is required")
-    .regex(/^[A-Za-z\s]+$/, {
+    .regex(/^[\p{L}\p{M}\s]+$/u, {
       message: "Name can contain letters and spaces only",
     })
     .transform(normalizeText),

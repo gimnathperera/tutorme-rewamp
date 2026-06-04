@@ -1,11 +1,14 @@
 import { z } from "zod";
 
-export const forgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Invalid email address" }),
-});
+export const createForgotPasswordSchema = (t: (_key: string) => string) =>
+  z.object({
+    email: z
+      .string()
+      .trim()
+      .min(1, { message: t("emailRequired") })
+      .email({ message: t("emailInvalid") }),
+  });
 
-export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
+export type ForgotPasswordSchema = z.infer<
+  ReturnType<typeof createForgotPasswordSchema>
+>;

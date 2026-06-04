@@ -22,6 +22,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { FC, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   profile: ProfileResponse | null;
@@ -35,7 +36,7 @@ type DetailItem = {
 };
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
-const EMPTY_VALUE = "Not provided";
+let EMPTY_VALUE = "Not provided"; // replaced at runtime by t()
 
 const formatText = (value?: string | null) => {
   if (!value?.trim()) return EMPTY_VALUE;
@@ -76,10 +77,16 @@ const getLocation = (profile: ProfileResponse | null) =>
     .filter(Boolean)
     .join(", ") || EMPTY_VALUE;
 
-const getEmailVerification = (profile: ProfileResponse | null) => {
+const getEmailVerification = (
+  profile: ProfileResponse | null,
+  verified?: string,
+  notVerified?: string,
+) => {
   if (typeof profile?.isEmailVerified !== "boolean") return EMPTY_VALUE;
 
-  return profile.isEmailVerified ? "Verified" : "Not verified";
+  return profile.isEmailVerified
+    ? (verified ?? "Verified")
+    : (notVerified ?? "Not verified");
 };
 
 const AdminProfileOverview: FC<Props> = ({
@@ -87,6 +94,8 @@ const AdminProfileOverview: FC<Props> = ({
   currentUser,
   isLoading,
 }) => {
+  const t = useTranslations("profile");
+  EMPTY_VALUE = t("notProvided");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const displayName = getProfileName(profile, currentUser);
@@ -96,53 +105,35 @@ const AdminProfileOverview: FC<Props> = ({
   const accountDetails = useMemo<DetailItem[]>(
     () => [
       {
-        label: "Role",
+        label: t("labelRole"),
         value: formatText(profile?.role || currentUser?.role),
       },
       {
-        label: "Status",
+        label: t("labelStatus"),
         value: formatText(profile?.status || currentUser?.status),
       },
       {
-        label: "Email Verification",
-        value: getEmailVerification(profile),
+        label: t("labelEmailVerification"),
+        value: getEmailVerification(profile, t("verified"), t("notVerified")),
       },
-      {
-        label: "Member Since",
-        value: formatDate(profile?.createdAt),
-      },
+      { label: t("labelMemberSince"), value: formatDate(profile?.createdAt) },
     ],
-    [currentUser?.role, currentUser?.status, profile],
+    [currentUser?.role, currentUser?.status, profile, t],
   );
 
   const personalDetails = useMemo<DetailItem[]>(
     () => [
+      { label: t("labelFullName"), value: displayName },
+      { label: t("labelEmail"), value: displayEmail },
+      { label: t("labelContactNumber"), value: getContactNumber(profile) },
       {
-        label: "Full Name",
-        value: displayName,
-      },
-      {
-        label: "Email",
-        value: displayEmail,
-      },
-      {
-        label: "Contact Number",
-        value: getContactNumber(profile),
-      },
-      {
-        label: "Date of Birth",
+        label: t("labelDateOfBirth"),
         value: formatDate(profile?.birthday || profile?.dateOfBirth),
       },
-      {
-        label: "Gender",
-        value: formatText(profile?.gender),
-      },
-      {
-        label: "Location",
-        value: getLocation(profile),
-      },
+      { label: t("labelGender"), value: formatText(profile?.gender) },
+      { label: t("labelLocation"), value: getLocation(profile) },
     ],
-    [displayEmail, displayName, profile],
+    [displayEmail, displayName, profile, t],
   );
 
   if (isLoading && !profile) {
@@ -183,7 +174,7 @@ const AdminProfileOverview: FC<Props> = ({
             <div>
               <span className="inline-flex items-center gap-1.5 rounded-full border border-primary-100 bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-800">
                 <ShieldCheck className="h-3.5 w-3.5" />
-                Admin
+                {t("adminBadge")}
               </span>
               <h2 className="mt-3 text-xl font-semibold text-gray-900 sm:text-2xl">
                 {displayName}
@@ -201,14 +192,14 @@ const AdminProfileOverview: FC<Props> = ({
             className="h-11 w-full rounded-lg bg-primary-700 px-5 text-sm font-semibold text-white hover:bg-primary-800 sm:w-auto"
           >
             <Pencil className="h-4 w-4" />
-            Edit Profile
+            {t("editProfile")}
           </Button>
         </div>
 
         <div className="mt-8">
           <div className="mb-4 flex items-center gap-2 text-base font-semibold text-gray-900">
             <UserRound className="h-5 w-5 text-primary-700" />
-            Personal Details
+            {t("personalDetails")}
           </div>
           <div className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
             {personalDetails.map((item) => (
@@ -227,7 +218,7 @@ const AdminProfileOverview: FC<Props> = ({
         <div className="mt-8">
           <div className="mb-4 flex items-center gap-2 text-base font-semibold text-gray-900">
             <ShieldCheck className="h-5 w-5 text-primary-700" />
-            Account Details
+            {t("accountDetails")}
           </div>
           <div className="grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
             {accountDetails.map((item) => (
@@ -251,11 +242,10 @@ const AdminProfileOverview: FC<Props> = ({
           </div>
           <DialogHeader className="text-center">
             <DialogTitle className="text-center text-xl font-semibold text-gray-900">
-              Admin Profile
+              {t("adminDialogTitle")}
             </DialogTitle>
             <DialogDescription className="text-center text-base text-gray-600">
-              You are an admin, to edit your profile please login your admin
-              portal.
+              {t("adminDialogDesc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="gap-3 sm:justify-center sm:space-x-0">
@@ -265,7 +255,7 @@ const AdminProfileOverview: FC<Props> = ({
                 variant="outline"
                 className="h-11 rounded-lg px-5 font-semibold"
               >
-                Close
+                {t("close")}
               </Button>
             </DialogClose>
             <Button
@@ -280,7 +270,7 @@ const AdminProfileOverview: FC<Props> = ({
               className="h-11 rounded-lg bg-primary-700 px-5 font-semibold text-white hover:bg-primary-800"
             >
               <ExternalLink className="h-4 w-4" />
-              Admin Portal
+              {t("adminPortal")}
             </Button>
           </DialogFooter>
         </DialogContent>

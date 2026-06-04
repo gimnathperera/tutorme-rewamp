@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   useFetchBlogBySlugQuery,
   useFetchBlogByIdQuery,
@@ -32,6 +33,7 @@ import LoadingIndicator from "./LoadingIndicator";
 const isObjectId = (s: string) => /^[a-f\d]{24}$/i.test(s);
 
 export default function ViewBlogPage() {
+  const t = useTranslations("blogs");
   const params = useParams();
   const slugParam = params?.slug as string;
   const router = useRouter();
@@ -123,7 +125,7 @@ export default function ViewBlogPage() {
   // ─────────────────────────────────────────────────────────────────────────
 
   if (isLoading) return <LoadingIndicator />;
-  if (error || !displayBlog) return <p>Blog not found.</p>;
+  if (error || !displayBlog) return <p>{t("blogNotFound")}</p>;
 
   const tagColors = [
     "bg-red-100 text-red-800",
@@ -145,7 +147,7 @@ export default function ViewBlogPage() {
             className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition-colors duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-            Back to Blogs
+            {t("backToBlogs")}
           </Link>
         </div>
 
@@ -195,25 +197,24 @@ export default function ViewBlogPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4">
               <h2 className="text-lg font-bold text-gray-900 mb-2">
-                Delete Blog?
+                {t("deleteBlogTitle")}
               </h2>
               <p className="text-sm text-gray-600 mb-6">
-                This action cannot be undone. The blog will be permanently
-                removed.
+                {t("deleteBlogBody")}
               </p>
               <div className="flex gap-3 justify-end">
                 <button
                   onClick={() => setConfirmDelete(false)}
                   className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
                 <button
                   onClick={handleDelete}
                   disabled={isDeleting}
                   className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition disabled:opacity-50"
                 >
-                  {isDeleting ? "Deleting…" : "Yes, Delete"}
+                  {isDeleting ? t("deleting") : t("confirmDelete")}
                 </button>
               </div>
             </div>
@@ -339,7 +340,7 @@ export default function ViewBlogPage() {
         <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
             <h3 className="text-xl font-semibold border-b pb-2">
-              Related Articles
+              {t("relatedArticles")}
             </h3>
             <ul className="space-y-4">
               {translatedRelated.length > 0 ? (
@@ -374,7 +375,7 @@ export default function ViewBlogPage() {
                 ))
               ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  No related posts selected.
+                  {t("noRelatedPosts")}
                 </p>
               )}
             </ul>

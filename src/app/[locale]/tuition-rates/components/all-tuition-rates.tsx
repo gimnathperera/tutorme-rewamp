@@ -120,10 +120,26 @@ function MobileRateValue({ rate }: { rate?: Rate }) {
 }
 
 const MOBILE_TUTOR_ROWS = [
-  { key: "universityStudentsRate" as const, label: "University Students", color: "#28BBA3" },
-  { key: "partTimeTutorRate" as const, label: "Part Time Tutor", color: "#FCA627" },
-  { key: "fullTimeTutorRate" as const, label: "Full Time Tutor", color: "#EF4350" },
-  { key: "moeTeacherRate" as const, label: "Gov/International Teachers (Ex / Current)", color: "#434eef" },
+  {
+    key: "universityStudentsRate" as const,
+    label: "University Students",
+    color: "#28BBA3",
+  },
+  {
+    key: "partTimeTutorRate" as const,
+    label: "Part Time Tutor",
+    color: "#FCA627",
+  },
+  {
+    key: "fullTimeTutorRate" as const,
+    label: "Full Time Tutor",
+    color: "#EF4350",
+  },
+  {
+    key: "moeTeacherRate" as const,
+    label: "Gov/International Teachers (Ex / Current)",
+    color: "#434eef",
+  },
 ];
 
 function MobileRateCard({ item }: { item: TuitionRateItem }) {
@@ -167,7 +183,10 @@ function MobileTuitionRates({ items }: { items: TuitionRateItem[] }) {
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -186,8 +205,10 @@ function MobileTuitionRates({ items }: { items: TuitionRateItem[] }) {
     }, 150);
   };
 
-  const selectedItem = items.find((item) => getTuitionRateKey(item) === selectedKey) ?? items[0];
-  const displayItem = items.find((item) => getTuitionRateKey(item) === displayKey) ?? items[0];
+  const selectedItem =
+    items.find((item) => getTuitionRateKey(item) === selectedKey) ?? items[0];
+  const displayItem =
+    items.find((item) => getTuitionRateKey(item) === displayKey) ?? items[0];
 
   return (
     <div className="px-4 py-4 space-y-3">

@@ -4,6 +4,7 @@ import { FormProvider, Controller } from "react-hook-form";
 import MultiSelect from "@/components/shared/MultiSelect";
 import { Option } from "@/types/shared-types";
 import { FC } from "react";
+import { useTranslations } from "next-intl";
 import { LanguageOptionsSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import AvailabilityScheduler from "./availability-scheduler";
@@ -29,6 +30,7 @@ const FormLanguageTime: FC<Props> = ({
   onFormSubmit,
   isSubmitting,
 }) => {
+  const t = useTranslations("profile");
   const { isDirty, isValid } = form.formState;
   const [currentRate, language, timeZone, availability] = form.watch([
     "rate",
@@ -51,7 +53,7 @@ const FormLanguageTime: FC<Props> = ({
     currentRate && !rateOptions.some((option) => option.value === currentRate)
       ? [
           {
-            label: `Current selection: ${currentRate}`,
+            label: `${t("fieldRate")}: ${currentRate}`,
             value: currentRate,
           },
           ...rateOptions,
@@ -65,12 +67,9 @@ const FormLanguageTime: FC<Props> = ({
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-4 text-lg font-semibold sm:text-xl">
-        Languages, Availability & Rate
+        {t("languageTimeTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        Set the communication language, working time zone, weekly availability,
-        and hourly rate used to coordinate lessons.
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("languageTimeDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <div>
@@ -80,7 +79,7 @@ const FormLanguageTime: FC<Props> = ({
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6 mb-4">
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium leading-6 text-gray-700">
-                  Primary Language <span className="text-red-500">*</span>
+                  {t("fieldLanguage")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="language"
@@ -92,7 +91,7 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder="Select primary language"
+                      placeholder={t("fieldLanguage")}
                     />
                   )}
                 />
@@ -100,7 +99,7 @@ const FormLanguageTime: FC<Props> = ({
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium leading-6 text-gray-700">
-                  Operating Time Zone <span className="text-red-500">*</span>
+                  {t("fieldTimeZone")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="timeZone"
@@ -112,7 +111,7 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder="Select time zone"
+                      placeholder={t("fieldTimeZone")}
                     />
                   )}
                 />
@@ -120,7 +119,7 @@ const FormLanguageTime: FC<Props> = ({
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium leading-6 text-gray-700">
-                  Per Hour Charge <span className="text-red-500">*</span>
+                  {t("fieldRate")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="rate"
@@ -132,12 +131,12 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder="Select hourly rate"
+                      placeholder={t("fieldRate")}
                     />
                   )}
                 />
                 <span className="min-h-4 text-xs text-gray-500">
-                  Choose the hourly charge range.
+                  {t("helperRate")}
                 </span>
               </div>
             </div>
@@ -147,7 +146,7 @@ const FormLanguageTime: FC<Props> = ({
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update Languages & Availability"
+                title={t("updateLanguageAvailability")}
                 disabled={isButtonDisabled}
               />
             </div>

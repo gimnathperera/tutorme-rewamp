@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import FileUploadDropzone from "@/components/upload/file-upload-dropzone";
 import { useAuthContext } from "@/contexts";
 import {
@@ -13,6 +14,7 @@ import { Pencil, Trash2 } from "lucide-react";
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
 const ProfilePicSettings = () => {
+  const t = useTranslations("profile");
   const { user, updateUser } = useAuthContext();
   const userId = user?.id;
 
@@ -54,16 +56,16 @@ const ProfilePicSettings = () => {
       updateUser({ avatar: tempAvatar });
       setTempAvatar(null);
       setOpen(false);
-      toast.success("Profile picture updated");
+      toast.success(t("profilePicUpdated"));
     } catch {
-      toast.error("Failed to update avatar");
+      toast.error(t("profilePicUpdateFailed"));
     }
   };
 
   const handleDelete = async () => {
     if (!userId) return;
     if (!hasProfilePicture) {
-      toast.error("No profile picture to remove.");
+      toast.error(t("noProfilePicture"));
       return;
     }
 
@@ -77,9 +79,9 @@ const ProfilePicSettings = () => {
       updateUser({ avatar: DEFAULT_AVATAR });
       setTempAvatar(null);
       setOpen(false);
-      toast.success("Profile picture removed");
+      toast.success(t("profilePicRemoved"));
     } catch {
-      toast.error("Failed to delete avatar");
+      toast.error(t("profilePicDeleteFailed"));
     }
   };
 
@@ -87,11 +89,9 @@ const ProfilePicSettings = () => {
     <div className="rounded-2xl bg-white px-4 py-6 shadow-sm sm:rounded-3xl sm:px-6 sm:py-8">
       <div className="mb-6 text-center">
         <h3 className="text-lg font-semibold text-gray-900 sm:text-xl">
-          Profile Photo
+          {t("profilePhotoTitle")}
         </h3>
-        <p className="mt-2 text-sm text-gray-500">
-          Choose a clear, professional photo for your public tutor profile.
-        </p>
+        <p className="mt-2 text-sm text-gray-500">{t("profilePhotoDesc")}</p>
       </div>
 
       <div className="flex justify-center">
@@ -113,7 +113,7 @@ const ProfilePicSettings = () => {
           <button
             onClick={() => {
               if (!hasProfilePicture) {
-                toast.error("No profile picture to remove.");
+                toast.error(t("noProfilePicture"));
                 return;
               }
 
@@ -140,12 +140,10 @@ const ProfilePicSettings = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-md rounded-xl bg-white p-4 sm:p-6">
             <h3 className="mb-2 text-lg font-semibold sm:text-xl">
-              Change profile photo
+              {t("changePhotoTitle")}
             </h3>
 
-            <p className="mb-4 text-sm text-gray-500">
-              JPG, PNG or GIF - Max 800KB
-            </p>
+            <p className="mb-4 text-sm text-gray-500">{t("changePhotoDesc")}</p>
 
             <FileUploadDropzone onUploaded={handleUploaded} />
 
@@ -157,7 +155,7 @@ const ProfilePicSettings = () => {
                 }}
                 className="rounded-lg border px-4 py-2.5 text-sm font-semibold sm:text-base"
               >
-                Cancel
+                {t("cancel")}
               </button>
 
               <button
@@ -165,7 +163,7 @@ const ProfilePicSettings = () => {
                 onClick={handleSave}
                 className="rounded-lg bg-primary-700 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50 sm:text-base"
               >
-                Save
+                {t("save")}
               </button>
             </div>
           </div>
@@ -176,19 +174,17 @@ const ProfilePicSettings = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-sm rounded-xl bg-white p-4 sm:p-6">
             <h3 className="mb-2 text-lg font-semibold sm:text-xl">
-              Remove profile picture?
+              {t("removePhotoTitle")}
             </h3>
 
-            <p className="mb-6 text-sm text-gray-500">
-              This will permanently remove your current profile photo.
-            </p>
+            <p className="mb-6 text-sm text-gray-500">{t("removePhotoDesc")}</p>
 
             <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
               <button
                 onClick={() => setConfirmDeleteOpen(false)}
                 className="rounded-lg border px-4 py-2.5 text-sm font-semibold sm:text-base"
               >
-                Cancel
+                {t("cancel")}
               </button>
 
               <button
@@ -198,7 +194,7 @@ const ProfilePicSettings = () => {
                 }}
                 className="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white sm:text-base"
               >
-                Delete
+                {t("delete")}
               </button>
             </div>
           </div>

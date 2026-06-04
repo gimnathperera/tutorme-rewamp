@@ -4,9 +4,10 @@ import MultiSelect from "@/components/shared/MultiSelect";
 
 interface DistrictSelectProps {
   value: string;
-  onChange: (v: string) => void;
+  onChange: (_v: string) => void;
   districts: string[];
   hasError?: boolean;
+  placeholder?: string;
 }
 
 export default function DistrictSelect({
@@ -14,6 +15,7 @@ export default function DistrictSelect({
   onChange,
   districts,
   hasError = false,
+  placeholder = "Select your district",
 }: DistrictSelectProps) {
   const options = districts.map((d) => ({ value: d, text: d }));
 
@@ -25,7 +27,7 @@ export default function DistrictSelect({
         onChange={(selected) => onChange(selected[0] ?? "")}
         hasError={hasError}
         singleSelect
-        placeholder="Select your district"
+        placeholder={placeholder}
         searchable
       />
     </div>

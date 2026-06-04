@@ -1,12 +1,4 @@
 import {
-  PASSWORD_LETTER_NUMBER_MSG,
-  PASSWORD_LETTER_NUMBER_REGEX,
-  PASSWORD_MAX,
-  PASSWORD_MIN,
-  PASSWORD_TOO_LONG,
-  PASSWORD_TOO_SHORT,
-} from "@/configs/password";
-import {
   CLASS_TYPE_VALUES,
   GENDER_VALUES,
   isPhysicalClassType,
@@ -15,6 +7,11 @@ import {
   RACE_VALUES,
   REGISTER_HIGHEST_EDUCATION_VALUES,
 } from "@/configs/register-tutor";
+import {
+  PASSWORD_LETTER_NUMBER_REGEX,
+  PASSWORD_MAX,
+  PASSWORD_MIN,
+} from "@/configs/password";
 import {
   normalizeTextSpaces,
   removeWhitespace,
@@ -31,14 +28,12 @@ const parseDateInput = (value: string) => {
   if (dateOnlyMatch) {
     const [, year, month, day] = dateOnlyMatch;
     const y = Number(year);
-    const m = Number(month) - 1; // 0-indexed for Date constructor
+    const m = Number(month) - 1;
     const d = Number(day);
     const parsedDate = new Date(y, m, d);
 
     if (Number.isNaN(parsedDate.getTime())) return undefined;
 
-    // Round-trip check: reject silently-normalised overflow dates
-    // e.g. new Date(2008, 1, 31) → 2008-03-02, not 2008-02-31
     if (
       parsedDate.getFullYear() !== y ||
       parsedDate.getMonth() !== m ||
@@ -59,236 +54,236 @@ const getMinimumAdultBirthDate = () => {
   return new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
 };
 
-/** Plain ZodObject used for .merge() in fullSchema */
-const step1BaseSchema = z.object({
-  fullName: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Full Name is required")
-      .regex(/^[A-Za-z\s]+$/, "Full Name can contain letters and spaces only"),
-  ),
+export const STEP2_FIELDS = [
+  "classType",
+  "preferredLocations",
+  "tutorType",
+  "tutorMediums",
+  "highestEducation",
+  "grades",
+  "subjects",
+  "yearsExperience",
+] as const;
 
-  email: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .min(1, "Email is required")
-      .email("Please enter a valid email address"),
-  ),
+export const STEP3_FIELDS = [
+  "teachingSummary",
+  "studentResults",
+  "sellingPoints",
+  "academicDetails",
+] as const;
 
-  password: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .nonempty("Password is required.")
-      .min(PASSWORD_MIN, { message: PASSWORD_TOO_SHORT })
-      .max(PASSWORD_MAX, { message: PASSWORD_TOO_LONG })
-      .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-        message: PASSWORD_LETTER_NUMBER_MSG,
-      }),
-  ),
+const createStep1BaseSchema = (t: (_key: string) => string) =>
+  z.object({
+    fullName: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("nameRequired"))
+        .regex(/^[\p{L}\p{M}\s]+$/u, t("nameLettersOnly")),
+    ),
 
-  confirmPassword: z.preprocess(
-    removeWhitespace,
-    z.string().nonempty("Confirm Password is required."),
-  ),
+    email: z.preprocess(
+      removeWhitespace,
+      z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
+    ),
 
-  contactNumber: z.preprocess(
-    removeWhitespace,
-    z
-      .string()
-      .min(1, "Contact Number is required")
-      .regex(/^\d+$/, "Contact Number must contain numeric values only")
-      .length(10, "Contact number should be exactly 10 digits"),
-  ),
+    password: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .nonempty(t("passwordRequired"))
+        .min(PASSWORD_MIN, { message: t("passwordTooShort") })
+        .max(PASSWORD_MAX, { message: t("passwordTooLong") })
+        .regex(PASSWORD_LETTER_NUMBER_REGEX, {
+          message: t("passwordLetterNumber"),
+        }),
+    ),
 
-  dateOfBirth: z.preprocess(
-    trimText,
-    z
-      .string()
-      .min(1, "Date of Birth is required")
-      .refine((value) => Boolean(parseDateInput(value)), {
-        message: "Date of Birth is invalid",
-      })
-      .refine(
-        (value) => {
-          const dateOfBirth = parseDateInput(value);
-          return Boolean(
-            dateOfBirth && dateOfBirth <= getMinimumAdultBirthDate(),
-          );
-        },
-        { message: "You must be at least 18 years old" },
-      ),
-  ),
+    confirmPassword: z.preprocess(
+      removeWhitespace,
+      z.string().nonempty(t("confirmPasswordRequired")),
+    ),
 
-  gender: z.string().refine((v) => isConfiguredValue(GENDER_VALUES, v), {
-    message: "Gender is required",
-  }),
+    contactNumber: z.preprocess(
+      removeWhitespace,
+      z
+        .string()
+        .min(1, t("contactRequired"))
+        .regex(/^\d+$/, t("contactNumeric"))
+        .length(10, t("contactLength")),
+    ),
 
-  age: z
-    .number()
-    .int()
-    .min(18, "You must be at least 18 years old")
-    .max(80, "Age must be below 80"),
+    dateOfBirth: z.preprocess(
+      trimText,
+      z
+        .string()
+        .min(1, t("dateRequired"))
+        .refine((value) => Boolean(parseDateInput(value)), {
+          message: t("dateInvalid"),
+        })
+        .refine(
+          (value) => {
+            const dateOfBirth = parseDateInput(value);
+            return Boolean(
+              dateOfBirth && dateOfBirth <= getMinimumAdultBirthDate(),
+            );
+          },
+          { message: t("ageMinimum") },
+        ),
+    ),
 
-  nationality: z
-    .string()
-    .refine((v) => isConfiguredValue(NATIONALITY_VALUES, v), {
-      message: "Nationality is required",
+    gender: z.string().refine((v) => isConfiguredValue(GENDER_VALUES, v), {
+      message: t("genderRequired"),
     }),
 
-  race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
-    message: "Race is required",
-  }),
-});
+    age: z.number().int().min(18, t("ageMinimum")).max(80, t("ageMaximum")),
 
-/** Cross-field refinement shared between step1Schema and fullSchema */
-const passwordMatchRefinement = (
-  password: string,
-  confirmPassword: string,
-  ctx: z.RefinementCtx,
-) => {
-  if (confirmPassword && password !== confirmPassword) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Passwords do not match",
-      path: ["confirmPassword"],
-    });
-  }
-};
-
-/** Step-1 schema with password-match refinement (ZodEffects — cannot .merge) */
-export const step1Schema = step1BaseSchema.superRefine(
-  ({ password, confirmPassword }, ctx) =>
-    passwordMatchRefinement(password, confirmPassword, ctx),
-);
-
-export const step2Schema = z.object({
-  classType: z
-    .array(
-      z.string().refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
-        message: "Invalid class type selected",
+    nationality: z
+      .string()
+      .refine((v) => isConfiguredValue(NATIONALITY_VALUES, v), {
+        message: t("nationalityRequired"),
       }),
-    )
-    .min(1, "Class Type is required"),
 
-  preferredLocations: z.array(z.string()),
-
-  tutorType: z.array(z.string()).min(1, "Tutor Types are required"),
-
-  tutorMediums: z
-    .array(
-      z.string().refine((v) => isConfiguredValue(MEDIUM_VALUES, v), {
-        message: "Invalid medium selected",
-      }),
-    )
-    .min(1, "Tutor Mediums are required"),
-
-  highestEducation: z
-    .string()
-    .refine((v) => isConfiguredValue(REGISTER_HIGHEST_EDUCATION_VALUES, v), {
-      message: "Highest Education is required",
+    race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
+      message: t("raceRequired"),
     }),
+  });
 
-  grades: z.array(z.string()).min(1, "Grades are required"),
+const createStep2Schema = (t: (_key: string) => string) =>
+  z.object({
+    classType: z
+      .array(
+        z.string().refine((v) => isConfiguredValue(CLASS_TYPE_VALUES, v), {
+          message: t("classTypeInvalid"),
+        }),
+      )
+      .min(1, t("classTypeRequired")),
 
-  subjects: z.array(z.string()).min(1, "Subjects are required"),
+    preferredLocations: z.array(z.string()),
 
-  yearsExperience: z.preprocess(
-    (value) => {
-      if (value === "" || value === null || value === undefined) {
-        return undefined;
-      }
-      return Number(value);
-    },
-    z
-      .number({
-        invalid_type_error: "Years of Experience is required",
-        required_error: "Years of Experience is required",
-      })
-      .min(1, "Years of Experience must be greater than 0")
-      .max(50, "Experience cannot exceed 50 years"),
-  ),
-});
+    tutorType: z.array(z.string()).min(1, t("tutorTypesRequired")),
 
-export const step3Schema = z.object({
-  teachingSummary: z.preprocess(
-    normalizeTextSpaces,
-    z
+    tutorMediums: z
+      .array(
+        z.string().refine((v) => isConfiguredValue(MEDIUM_VALUES, v), {
+          message: t("mediumInvalid"),
+        }),
+      )
+      .min(1, t("tutorMediumsRequired")),
+
+    highestEducation: z
       .string()
-      .min(1, "Teaching Summary is required")
-      .max(500, "Teaching Summary cannot exceed 500 characters"),
-  ),
-
-  studentResults: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Student Results is required")
-      .max(500, "Student Results cannot exceed 500 characters"),
-  ),
-
-  sellingPoints: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Selling Points is required")
-      .max(500, "Selling Points cannot exceed 500 characters"),
-  ),
-
-  academicDetails: z.preprocess(
-    normalizeTextSpaces,
-    z
-      .string()
-      .min(1, "Academic Details is required")
-      .max(500, "Academic Details cannot exceed 500 characters"),
-  ),
-});
-
-export const step4Schema = z.object({
-  certificatesAndQualifications: z
-    .array(
-      z.object({
-        type: z.string().min(1, "Document type is required"),
-        url: z.string().min(1, "Please upload a file"),
+      .refine((v) => isConfiguredValue(REGISTER_HIGHEST_EDUCATION_VALUES, v), {
+        message: t("highestEducationRequired"),
       }),
-    )
-    .min(1, "At least one document is required"),
-  optionalCertificates: z
-    .array(
-      z.object({
-        type: z.string(),
-        url: z.string(),
-      }),
-    )
-    .optional()
-    .default([]),
-  agreeTerms: z.boolean().refine((v) => v, "You must agree to Terms"),
-  agreeAssignmentInfo: z
-    .boolean()
-    .refine((v) => v, "You must confirm assignment info"),
-});
 
-export const fullSchema = step1BaseSchema
-  .merge(step2Schema)
-  .merge(step3Schema)
-  .merge(step4Schema)
-  .superRefine(
-    ({ password, confirmPassword, classType, preferredLocations }, ctx) => {
-      passwordMatchRefinement(password, confirmPassword, ctx);
+    grades: z.array(z.string()).min(1, t("gradesRequired")),
 
-      if (
-        classType.some(isPhysicalClassType) &&
-        preferredLocations.length === 0
-      ) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Preferred Locations are required",
-          path: ["preferredLocations"],
-        });
-      }
-    },
-  );
+    subjects: z.array(z.string()).min(1, t("subjectsRequired")),
 
-export type FindMyTutorForm = z.infer<typeof fullSchema>;
+    yearsExperience: z.preprocess(
+      (value) => {
+        if (value === "" || value === null || value === undefined) {
+          return undefined;
+        }
+        return Number(value);
+      },
+      z
+        .number({
+          invalid_type_error: t("yearsExperienceRequired"),
+          required_error: t("yearsExperienceRequired"),
+        })
+        .min(1, t("yearsExperienceMin"))
+        .max(50, t("yearsExperienceMax")),
+    ),
+  });
+
+const createStep3Schema = (t: (_key: string) => string) =>
+  z.object({
+    teachingSummary: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("teachingSummaryRequired"))
+        .max(500, t("teachingSummaryMax")),
+    ),
+
+    studentResults: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("studentResultsRequired"))
+        .max(500, t("studentResultsMax")),
+    ),
+
+    sellingPoints: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("sellingPointsRequired"))
+        .max(500, t("sellingPointsMax")),
+    ),
+
+    academicDetails: z.preprocess(
+      normalizeTextSpaces,
+      z
+        .string()
+        .min(1, t("academicDetailsRequired"))
+        .max(500, t("academicDetailsMax")),
+    ),
+  });
+
+const createStep4Schema = (t: (_key: string) => string) =>
+  z.object({
+    certificatesAndQualifications: z
+      .array(
+        z.object({
+          type: z.string().min(1, t("documentTypeRequired")),
+          url: z.string().min(1, t("uploadRequired")),
+        }),
+      )
+      .min(1, t("documentRequired")),
+    optionalCertificates: z
+      .array(
+        z.object({
+          type: z.string(),
+          url: z.string(),
+        }),
+      )
+      .optional()
+      .default([]),
+    agreeTerms: z.boolean().refine((v) => v, t("agreeTermsRequired")),
+    agreeAssignmentInfo: z
+      .boolean()
+      .refine((v) => v, t("agreeAssignmentRequired")),
+  });
+
+export const createFullSchema = (t: (_key: string) => string) =>
+  createStep1BaseSchema(t)
+    .merge(createStep2Schema(t))
+    .merge(createStep3Schema(t))
+    .merge(createStep4Schema(t))
+    .superRefine(
+      ({ password, confirmPassword, classType, preferredLocations }, ctx) => {
+        if (confirmPassword && password !== confirmPassword) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("passwordsNoMatch"),
+            path: ["confirmPassword"],
+          });
+        }
+
+        if (
+          classType.some(isPhysicalClassType) &&
+          preferredLocations.length === 0
+        ) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: t("preferredLocationsRequired"),
+            path: ["preferredLocations"],
+          });
+        }
+      },
+    );
+
+export type FindMyTutorForm = z.infer<ReturnType<typeof createFullSchema>>;

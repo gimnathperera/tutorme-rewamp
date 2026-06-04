@@ -11,6 +11,10 @@ interface CitySelectProps {
   district: string;
   onChange: (v: string) => void;
   hasError?: boolean;
+  searchCityPlaceholder?: string;
+  selectDistrictFirstPlaceholder?: string;
+  didYouMeanText?: string;
+  noCityFoundText?: string;
 }
 
 /* ── Helpers ── */
@@ -58,6 +62,10 @@ export default function CitySelect({
   district,
   onChange,
   hasError = false,
+  searchCityPlaceholder = "Search city...",
+  selectDistrictFirstPlaceholder = "Select district first",
+  didYouMeanText = "Did you mean?",
+  noCityFoundText = "No city found for",
 }: CitySelectProps) {
   const [searchText, setSearchText] = useState(value ?? "");
   const [showDropdown, setShowDropdown] = useState(false);
@@ -152,7 +160,9 @@ export default function CitySelect({
         onFocus={() => {
           if (searchText.trim()) setShowDropdown(true);
         }}
-        placeholder={district ? "Search city..." : "Select district first"}
+        placeholder={
+          district ? searchCityPlaceholder : selectDistrictFirstPlaceholder
+        }
         disabled={!district}
         autoComplete="off"
         className={`h-11 text-[16px] placeholder:text-gray-500 text-gray-900 disabled:opacity-100 disabled:bg-gray-100 ${hasError ? "border-red-500" : "border-gray-300"}`}
@@ -177,7 +187,7 @@ export default function CitySelect({
           {!hasExact && hasSuggestions && (
             <>
               <li className="px-3 py-1.5 text-xs font-semibold text-gray-400 uppercase tracking-wide select-none border-b border-gray-100">
-                Did you mean?
+                {didYouMeanText}
               </li>
               {suggestions.map((city) => (
                 <li
@@ -195,7 +205,7 @@ export default function CitySelect({
           {/* ── No match at all ── */}
           {noResults && (
             <li className="px-3 py-2 text-sm text-gray-400 select-none">
-              No city found for &ldquo;{searchText}&rdquo;
+              {noCityFoundText} &ldquo;{searchText}&rdquo;
             </li>
           )}
         </ul>

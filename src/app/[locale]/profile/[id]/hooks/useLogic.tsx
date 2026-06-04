@@ -16,17 +16,18 @@ import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { size } from "lodash-es";
 import { useParams, useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 import {
   EducationInfoSchema,
-  educationInfoSchema,
+  createEducationInfoSchema,
   initialEducationInfoFormValues,
 } from "../components/form-education-information/schema";
 import {
   GeneralInfoSchema,
-  generalInfoSchema,
+  createGeneralInfoSchema,
   initialGeneralInfoFormValues,
 } from "../components/form-general-information/schema";
 import {
@@ -36,7 +37,7 @@ import {
 } from "../components/form-language-time/schema";
 import {
   initialTeachingProfileFormValues,
-  teachingProfileSchema,
+  createTeachingProfileSchema,
   TeachingProfileSchema,
 } from "../components/form-teaching-profile/schema";
 import { normalizeAvailabilityValue } from "../components/form-language-time/availability";
@@ -553,6 +554,20 @@ const mergeHydratedProfile = (
 };
 
 const useLogic = (): LogicReturnType => {
+  const tProfile = useTranslations("profile");
+  const generalInfoSchema = useMemo(
+    () => createGeneralInfoSchema(tProfile),
+    [tProfile],
+  );
+  const educationInfoSchema = useMemo(
+    () => createEducationInfoSchema(tProfile),
+    [tProfile],
+  );
+  const teachingProfileSchema = useMemo(
+    () => createTeachingProfileSchema(tProfile),
+    [tProfile],
+  );
+
   const params = useParams();
   const router = useRouter();
   const userId = params?.id as string;

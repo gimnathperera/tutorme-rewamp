@@ -2,6 +2,7 @@
 "use client";
 
 import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Icon from "@/components/shared/icon";
 import {
@@ -94,11 +95,23 @@ const getGradePriority = (title: string) => {
 interface GradeDetailDialogProps {
   gradeId: string | null;
   onClose: () => void;
+  gradeDetailsFallback: string;
+  subjectsHeading: string;
+  noSubjectsAvailable: string;
+  noDescriptionAvailable: string;
+  loadingMoreSubjects: string;
+  loadMoreSubjects: string;
 }
 
 const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
   gradeId,
   onClose,
+  gradeDetailsFallback,
+  subjectsHeading,
+  noSubjectsAvailable,
+  noDescriptionAvailable,
+  loadingMoreSubjects,
+  loadMoreSubjects,
 }) => {
   const { data, isLoading } = useFetchGradeByIdQuery(gradeId!, {
     skip: !gradeId,
@@ -240,7 +253,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                   highlightColor="#ffffff60"
                 />
               ) : (
-                (displayGradeData?.title ?? "Grade Details")
+                (displayGradeData?.title ?? gradeDetailsFallback)
               )}
             </Dialog.Title>
             <Dialog.Close asChild>
@@ -264,7 +277,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
             {/* Subjects accordion */}
             <div>
               <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-400 mb-3">
-                Subjects
+                {subjectsHeading}
               </h3>
               {isLoading || (isSubjectsLoading && subjects.length === 0) ? (
                 <div className="space-y-2">
@@ -274,7 +287,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                 </div>
               ) : subjects.length === 0 ? (
                 <p className="text-sm text-gray-400 text-center py-4">
-                  No subjects available for this grade.
+                  {noSubjectsAvailable}
                 </p>
               ) : (
                 <>
@@ -290,7 +303,7 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                         </AccordionTrigger>
                         <AccordionContent className="px-4 pb-4 pt-1">
                           <p className="text-sm text-gray-500 leading-relaxed mb-3">
-                            {subject.description || "No description available."}
+                            {subject.description || noDescriptionAvailable}
                           </p>
                         </AccordionContent>
                       </AccordionItem>
@@ -304,10 +317,10 @@ const GradeDetailDialog: FC<GradeDetailDialogProps> = ({
                     {isSubjectsLoading && subjects.length > 0 ? (
                       <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
                         <div className="w-5 h-5 rounded-full border-2 border-primary-700 border-t-transparent animate-spin" />
-                        Loading more subjects...
+                        {loadingMoreSubjects}
                       </div>
                     ) : hasMoreSubjects ? (
-                      <span className="sr-only">Load more subjects</span>
+                      <span className="sr-only">{loadMoreSubjects}</span>
                     ) : subjects.length > 0 ? (
                       <div></div>
                     ) : null}
@@ -327,12 +340,14 @@ interface GradeCardProps {
   title: string;
   description: string;
   onShowDetails: () => void;
+  seeMoreLabel: string;
 }
 
 const GradeCard: FC<GradeCardProps> = ({
   title,
   description,
   onShowDetails,
+  seeMoreLabel,
 }) => (
   <Card className="flex h-full flex-col bg-white">
     <CardContent className="flex-grow p-5">
@@ -357,7 +372,7 @@ const GradeCard: FC<GradeCardProps> = ({
         className="py-3 px-5 text-base disabled:opacity-50 font-semibold w-full text-center text-white rounded-lg bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:opacity-90"
         onClick={onShowDetails}
       >
-        See More
+        {seeMoreLabel}
       </button>
     </CardFooter>
   </Card>
@@ -365,6 +380,7 @@ const GradeCard: FC<GradeCardProps> = ({
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 const GradesPage: FC = () => {
+  const t = useTranslations("gradesAndSubjects");
   const [selectedGradeId, setSelectedGradeId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadedGrades, setLoadedGrades] = useState<Grade[]>([]);
@@ -471,12 +487,9 @@ const GradesPage: FC = () => {
   return (
     <div className="px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto mb-5 max-w-7xl text-center">
-        <h2 className="text-4xl font-bold text-center">
-          Grades &amp; Subjects
-        </h2>
+        <h2 className="text-4xl font-bold text-center">{t("pageTitle")}</h2>
         <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal opacity-50">
-          Browse the available grades and explore the subjects offered in each
-          one.
+          {t("pageSubtitle")}
         </h3>
       </div>
 
@@ -506,6 +519,7 @@ const GradesPage: FC = () => {
                 title={title}
                 description={description}
                 onShowDetails={() => setSelectedGradeId(id)}
+                seeMoreLabel={t("seeMore")}
               />
             ))}
       </div>
@@ -517,10 +531,10 @@ const GradesPage: FC = () => {
         {isFetching && loadedGrades.length > 0 ? (
           <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
             <div className="w-5 h-5 rounded-full border-2 border-primary-700 border-t-transparent animate-spin" />
-            Loading more grades...
+            {t("loadingMoreGrades")}
           </div>
         ) : hasMoreGrades ? (
-          <span className="sr-only">Load more grades</span>
+          <span className="sr-only">{t("loadMoreGrades")}</span>
         ) : loadedGrades.length > 0 ? (
           <div></div>
         ) : null}
@@ -530,6 +544,12 @@ const GradesPage: FC = () => {
       <GradeDetailDialog
         gradeId={selectedGradeId}
         onClose={() => setSelectedGradeId(null)}
+        gradeDetailsFallback={t("gradeDetails")}
+        subjectsHeading={t("subjectsHeading")}
+        noSubjectsAvailable={t("noSubjectsAvailable")}
+        noDescriptionAvailable={t("noDescriptionAvailable")}
+        loadingMoreSubjects={t("loadingMoreSubjects")}
+        loadMoreSubjects={t("loadMoreSubjects")}
       />
       <WhatsAppButton />
     </div>

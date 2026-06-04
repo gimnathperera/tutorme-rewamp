@@ -1,6 +1,5 @@
 "use client";
 
-import InputText from "@/components/shared/input-text";
 import NumberStepper from "@/components/shared/number-stepper";
 import {
   Controller,
@@ -25,6 +24,8 @@ import {
 } from "@/configs/options";
 import { Option } from "@/types/shared-types";
 import { FC, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { EducationInfoSchema } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
@@ -65,6 +66,9 @@ const DocumentRow = ({
   errors,
   onRemove,
   removable,
+  documentTypeLabel,
+  uploadFileLabel,
+  selectTypePlaceholder,
 }: {
   fieldName: string;
   index: number;
@@ -73,13 +77,16 @@ const DocumentRow = ({
   errors: any;
   onRemove: () => void;
   removable: boolean;
+  documentTypeLabel: string;
+  uploadFileLabel: string;
+  selectTypePlaceholder: string;
 }) => {
   const rowErrors = errors[index] ?? {};
   return (
     <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50">
       <div className="flex flex-col gap-1">
         <span className="text-xs text-gray-500 font-medium mb-1">
-          Document Type
+          {documentTypeLabel}
         </span>
         <Controller
           name={`${fieldName}.${index}.type`}
@@ -90,7 +97,7 @@ const DocumentRow = ({
               className={`${selectClass} ${selectBorder(!!rowErrors.type)} ${selectColor(f.value)}`}
             >
               <option value="" disabled hidden>
-                Select type…
+                {selectTypePlaceholder}
               </option>
               {options.map((opt) => (
                 <option
@@ -111,7 +118,7 @@ const DocumentRow = ({
 
       <div className="flex flex-col gap-1 min-w-0 overflow-hidden">
         <span className="text-xs text-gray-500 font-medium mb-1">
-          Upload File
+          {uploadFileLabel}
         </span>
         <Controller
           name={`${fieldName}.${index}.url`}
@@ -144,11 +151,27 @@ const DocumentRow = ({
 };
 
 const FormEducationInfo: FC<Props> = ({
-  dropdownOptionData: { gradesOptions, subjectsOptions },
+  dropdownOptionData: {
+    gradesOptions: rawGrades,
+    subjectsOptions: rawSubjects,
+  },
   form,
   onFormSubmit,
   isSubmitting,
 }) => {
+  const t = useTranslations("profile");
+
+  // Translate grade/subject names for display while keeping IDs as values
+  const gradesOptions = useTranslateItems(
+    rawGrades,
+    (g) => [g.label],
+    (g, [label]) => ({ ...g, label: label ?? g.label }),
+  );
+  const subjectsOptions = useTranslateItems(
+    rawSubjects,
+    (s) => [s.label],
+    (s, [label]) => ({ ...s, label: label ?? s.label }),
+  );
   const { isDirty, isValid } = form.formState;
 
   const {
@@ -231,11 +254,10 @@ const FormEducationInfo: FC<Props> = ({
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
-      <h3 className="mb-4 text-lg font-semibold sm:text-xl">Qualifications</h3>
-      <p className="mb-5 text-sm text-gray-500">
-        Keep your tutor qualifications aligned with the same teaching and
-        academic details used during tutor registration.
-      </p>
+      <h3 className="mb-4 text-lg font-semibold sm:text-xl">
+        {t("qualificationsTitle")}
+      </h3>
+      <p className="mb-5 text-sm text-gray-500">{t("qualificationsDesc")}</p>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onFormSubmit)}>
           <div>
@@ -243,7 +265,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Class Type */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Class Type <span className="text-red-500">*</span>
+                  {t("fieldClassType")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="classType"
@@ -254,7 +276,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder="Select class type"
+                      placeholder={t("fieldClassType")}
                     />
                   )}
                 />
@@ -264,7 +286,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Preferred Locations */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Preferred Locations
+                  {t("fieldPreferredLocations")}
                   {isPreferredLocationsEnabled && (
                     <span className="text-red-500"> *</span>
                   )}
@@ -297,14 +319,14 @@ const FormEducationInfo: FC<Props> = ({
                   {isPreferredLocationsEnabled
                     ? ((form.formState.errors.preferredLocations
                         ?.message as string) ?? "")
-                    : "Locations apply to physical classes only"}
+                    : t("locationsPhysicalOnly")}
                 </span>
               </div>
 
               {/* Tutor Types */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Tutor Types <span className="text-red-500">*</span>
+                  {t("fieldTutorTypes")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="tutorTypes"
@@ -315,7 +337,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder="Select tutor types"
+                      placeholder={t("fieldTutorTypes")}
                     />
                   )}
                 />
@@ -324,7 +346,7 @@ const FormEducationInfo: FC<Props> = ({
 
               {/* Highest Education Level */}
               <InputSelect
-                label="Highest Education Level *"
+                label={t("fieldHighestEducation")}
                 name="highestEducation"
                 options={highestEducationOptions}
                 className={fieldControlHeightClass}
@@ -336,7 +358,7 @@ const FormEducationInfo: FC<Props> = ({
                 name="yearsExperience"
                 min={0}
                 max={50}
-                label="Years of Experience"
+                label={t("fieldYearsExperience")}
                 required
                 reserveHelperSpace
               />
@@ -344,7 +366,8 @@ const FormEducationInfo: FC<Props> = ({
               {/* Tutor Mediums */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Tutor Mediums <span className="text-red-500">*</span>
+                  {t("fieldTutorMediums")}{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="tutorMediums"
@@ -355,7 +378,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder="Select tutor mediums"
+                      placeholder={t("fieldTutorMediums")}
                     />
                   )}
                 />
@@ -365,7 +388,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Grades */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Grades <span className="text-red-500">*</span>
+                  {t("fieldGrades")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="grades"
@@ -376,7 +399,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder="Select grades"
+                      placeholder={t("fieldGrades")}
                     />
                   )}
                 />
@@ -386,7 +409,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Subjects */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Subjects <span className="text-red-500">*</span>
+                  {t("fieldSubjects")} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="subjects"
@@ -398,7 +421,7 @@ const FormEducationInfo: FC<Props> = ({
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
                       disabled={isEmpty(selectedGrades)}
-                      placeholder="Select subjects"
+                      placeholder={t("fieldSubjects")}
                     />
                   )}
                 />
@@ -423,7 +446,7 @@ const FormEducationInfo: FC<Props> = ({
                   />
                 </svg>
                 <h3 className="text-sm font-semibold text-gray-900">
-                  Certificates &amp; Documents{" "}
+                  {t("certificatesDocumentsTitle")}{" "}
                   <span className="text-red-500">*</span>
                 </h3>
               </div>
@@ -432,7 +455,8 @@ const FormEducationInfo: FC<Props> = ({
                 {/* Educational Details — mandatory */}
                 <div>
                   <p className="text-xs font-semibold text-gray-600 mb-2">
-                    Educational Details <span className="text-red-500">*</span>
+                    {t("educationalDetailsLabel")}{" "}
+                    <span className="text-red-500">*</span>
                   </p>
                   <div className="space-y-3">
                     {eduFields.map((field, index) => (
@@ -445,6 +469,9 @@ const FormEducationInfo: FC<Props> = ({
                         errors={certErrors}
                         onRemove={() => removeEdu(index)}
                         removable={eduFields.length > 1}
+                        documentTypeLabel={t("documentTypeLabel")}
+                        uploadFileLabel={t("uploadFileLabel")}
+                        selectTypePlaceholder={t("selectTypePlaceholder")}
                       />
                     ))}
                   </div>
@@ -467,7 +494,7 @@ const FormEducationInfo: FC<Props> = ({
                     onClick={() => appendEdu({ type: "", url: "" })}
                   >
                     <Plus size={15} />
-                    Add Document
+                    {t("addDocument")}
                   </Button>
                 </div>
 
@@ -476,7 +503,7 @@ const FormEducationInfo: FC<Props> = ({
                 {/* Optional Details */}
                 <div>
                   <p className="text-xs font-semibold text-gray-600 mb-2">
-                    Optional Details
+                    {t("optionalDetailsLabel")}
                   </p>
                   <div className="space-y-3">
                     {optFields.map((field, index) => (
@@ -489,6 +516,9 @@ const FormEducationInfo: FC<Props> = ({
                         errors={[]}
                         onRemove={() => removeOpt(index)}
                         removable={true}
+                        documentTypeLabel={t("documentTypeLabel")}
+                        uploadFileLabel={t("uploadFileLabel")}
+                        selectTypePlaceholder={t("selectTypePlaceholder")}
                       />
                     ))}
                   </div>
@@ -501,7 +531,7 @@ const FormEducationInfo: FC<Props> = ({
                     onClick={() => appendOpt({ type: "", url: "" })}
                   >
                     <Plus size={15} />
-                    Add Document
+                    {t("addDocument")}
                   </Button>
                 </div>
               </div>
@@ -512,7 +542,7 @@ const FormEducationInfo: FC<Props> = ({
                 className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
                 type="submit"
                 loading={isSubmitting}
-                title="Update Qualifications"
+                title={t("updateQualifications")}
                 disabled={isButtonDisabled}
               />
             </div>

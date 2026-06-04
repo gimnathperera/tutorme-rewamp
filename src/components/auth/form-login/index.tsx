@@ -2,11 +2,12 @@ import InputText from "@/components/shared/input-text";
 import SubmitButton from "@/components/shared/submit-button";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { initialFormValues, LoginSchema, loginSchema } from "./schema";
+import { initialFormValues, LoginSchema, createLoginSchema } from "./schema";
 import InputPassword from "@/components/shared/input-password";
 import { useAuthContext } from "@/contexts";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 
 type Props = {
   onRegisterClick: () => void;
@@ -14,7 +15,10 @@ type Props = {
 };
 
 const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
+  const t = useTranslations("auth");
   const { login, isAuthError, setIsAuthError, isLoading } = useAuthContext();
+
+  const loginSchema = useMemo(() => createLoginSchema(t), [t]);
 
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -66,13 +70,13 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
         <div className="space-y-3">
           <InputText
-            label="Email"
+            label={t("emailLabel")}
             name="email"
             placeholder="jhon@xyz.com"
             type="text"
           />
           <InputPassword
-            label="Password"
+            label={t("passwordLabel")}
             name="password"
             placeholder="*******"
           />
@@ -83,20 +87,24 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             className="block mb-2 text-sm font-medium text-blue cursor-pointer hover:underline"
             onClick={onForgotPasswordClick}
           >
-            Forgot password?
+            {t("forgotPasswordLink")}
           </p>
         </div>
         <div className="space-y-2 mt-4">
-          <SubmitButton title="Login" type="submit" loading={isLoading} />
+          <SubmitButton
+            title={t("loginButton")}
+            type="submit"
+            loading={isLoading}
+          />
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900">
-              {` Don't have an account?   `}
+              {` ${t("noAccount")}   `}
               <span
                 className="text-blue cursor-pointer hover:underline"
                 onClick={onRegisterClick}
               >
-                Register
+                {t("register")}
               </span>
             </p>
           </div>

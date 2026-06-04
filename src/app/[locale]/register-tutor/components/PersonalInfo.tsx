@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import MultiSelect from "@/components/shared/MultiSelect";
 import { Input } from "@/components/ui/input";
@@ -15,11 +15,6 @@ import {
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
 import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
-import {
-  GENDER_OPTIONS,
-  NATIONALITY_OPTIONS,
-  RACE_OPTIONS,
-} from "@/configs/register-tutor";
 import { useTranslations } from "next-intl";
 
 /** Shared style tokens for the register-tutor form */
@@ -49,6 +44,30 @@ type EmailAvailabilityState = "available" | "unavailable" | null;
 
 const PersonalInfo = () => {
   const t = useTranslations("registerTutor");
+  const genderOptions = useMemo(
+    () => [
+      { value: "Male", text: t("optGenderMale") },
+      { value: "Female", text: t("optGenderFemale") },
+    ],
+    [t],
+  );
+  const nationalityOptions = useMemo(
+    () => [
+      { value: "Sri Lankan", text: t("optNationalitySriLankan") },
+      { value: "Others", text: t("optNationalityOthers") },
+    ],
+    [t],
+  );
+  const raceOptions = useMemo(
+    () => [
+      { value: "Sinhalese", text: t("optRaceSinhalese") },
+      { value: "Tamil", text: t("optRaceTamil") },
+      { value: "Muslim", text: t("optRaceMuslim") },
+      { value: "Burgher", text: t("optRaceBurgher") },
+      { value: "Others", text: t("optRaceOthers") },
+    ],
+    [t],
+  );
   const {
     register,
     control,
@@ -112,7 +131,9 @@ const PersonalInfo = () => {
       setEmailAvailability("unavailable");
       setError("email", {
         type: "manual",
-        message: formatError,
+        message: formatError.includes("valid email address")
+          ? t("emailInvalid")
+          : formatError,
       });
       return;
     }
@@ -129,7 +150,7 @@ const PersonalInfo = () => {
         setEmailAvailability("unavailable");
         setError("email", {
           type: "server",
-          message: result.data.message || "Email already exists",
+          message: t("emailAlreadyExists"),
         });
         return;
       }
@@ -141,7 +162,14 @@ const PersonalInfo = () => {
     }, EMAIL_CHECK_DELAY_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [checkTutorEmailAvailability, clearErrors, email, errors.email, setError]);
+  }, [
+    checkTutorEmailAvailability,
+    clearErrors,
+    email,
+    errors.email,
+    setError,
+    t,
+  ]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
@@ -166,7 +194,7 @@ const PersonalInfo = () => {
               });
             },
           })}
-          placeholder="e.g. Nimal Perera"
+          placeholder={t("fullNamePlaceholder")}
           autoComplete="name"
           className={`${inputClass} ${errors.fullName ? "border-red-500" : "border-gray-300"}`}
         />
@@ -210,7 +238,7 @@ const PersonalInfo = () => {
                 });
               },
             })}
-            placeholder="e.g. nimal@example.com"
+            placeholder={t("emailPlaceholder")}
             autoComplete="email"
             className={`${inputClass} pr-10 ${errors.email ? "border-red-500" : "border-gray-300"}`}
           />
@@ -268,7 +296,7 @@ const PersonalInfo = () => {
             type="button"
             onClick={() => setShowPassword((v) => !v)}
             className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t("hidePassword") : t("showPassword")}
           >
             {showPassword ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
           </button>
@@ -311,7 +339,7 @@ const PersonalInfo = () => {
             type="button"
             onClick={() => setShowConfirm((v) => !v)}
             className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showConfirm ? "Hide password" : "Show password"}
+            aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
           >
             {showConfirm ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
           </button>
@@ -352,7 +380,7 @@ const PersonalInfo = () => {
               });
             },
           })}
-          placeholder="e.g. 0771234567"
+          placeholder={t("contactNumberPlaceholder")}
           autoComplete="tel"
           className={`${inputClass} ${errors.contactNumber ? "border-red-500" : "border-gray-300"}`}
         />
@@ -375,7 +403,7 @@ const PersonalInfo = () => {
           control={control}
           render={({ field }) => (
             <MultiSelect
-              options={GENDER_OPTIONS}
+              options={genderOptions}
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");
@@ -433,7 +461,7 @@ const PersonalInfo = () => {
           control={control}
           render={({ field }) => (
             <MultiSelect
-              options={NATIONALITY_OPTIONS}
+              options={nationalityOptions}
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");
@@ -459,7 +487,7 @@ const PersonalInfo = () => {
           control={control}
           render={({ field }) => (
             <MultiSelect
-              options={RACE_OPTIONS}
+              options={raceOptions}
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");

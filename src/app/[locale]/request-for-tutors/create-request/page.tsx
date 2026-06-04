@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -42,14 +42,8 @@ import {
   removeWhitespace,
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
-import {
-  CLASS_TYPE_OPTIONS,
-  MEDIUM_OPTIONS,
-  REQUEST_TUTOR_DURATION_OPTIONS,
-  REQUEST_TUTOR_FREQUENCY_OPTIONS,
-  TUTOR_TYPE_OPTIONS,
-} from "@/configs/options";
 import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import MultiSelect from "@/components/shared/MultiSelect";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
@@ -74,6 +68,7 @@ const TAB_ORDER: TabKey[] = ["contact", "tutorDetails"];
 
 export default function AddRequestForTutor() {
   const t = useTranslations("requestForTutor");
+  const schema = useMemo(() => createRequestTutorSchema(t), [t]);
   const [tab, setTab] = useState<TabKey>("contact");
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
   /** null = closed, "success" = success dialog, string = error message dialog */
@@ -92,7 +87,7 @@ export default function AddRequestForTutor() {
     formState: { errors },
     reset,
   } = useForm<CreateRequestTutorSchema>({
-    resolver: zodResolver(createRequestTutorSchema),
+    resolver: zodResolver(schema),
     mode: "onTouched",
     reValidateMode: "onChange",
     defaultValues: initialFormValues,
@@ -107,16 +102,81 @@ export default function AddRequestForTutor() {
     limit: FETCH_LIMIT,
   });
 
-  const gradeOptions =
-    gradeData?.results.map((g) => ({ value: g.id, text: g.title })) || [];
+  const rawGradeOptions = useMemo(
+    () => gradeData?.results.map((g) => ({ value: g.id, text: g.title })) ?? [],
+    [gradeData],
+  );
+  const gradeOptions = useTranslateItems(
+    rawGradeOptions,
+    (g) => [g.text],
+    (g, [text]) => ({ ...g, text: text ?? g.text }),
+  );
 
-  const subjectOptions =
-    gradeData?.results
-      .find((g) => g.id === selectedGradeId)
-      ?.subjects.map((s: any) => ({
-        value: s.id,
-        text: s.title,
-      })) || [];
+  const rawSubjectOptions = useMemo(
+    () =>
+      gradeData?.results
+        .find((g) => g.id === selectedGradeId)
+        ?.subjects.map((s: any) => ({ value: s.id, text: s.title })) ?? [],
+    [gradeData, selectedGradeId],
+  );
+  const subjectOptions = useTranslateItems(
+    rawSubjectOptions,
+    (s) => [s.text],
+    (s, [text]) => ({ ...s, text: text ?? s.text }),
+  );
+
+  // Static options with translated display text (values stay in English for backend)
+  const mediumOptions = useMemo(
+    () => [
+      { value: "Sinhala", text: t("optMediumSinhala") },
+      { value: "English", text: t("optMediumEnglish") },
+      { value: "Tamil", text: t("optMediumTamil") },
+    ],
+    [t],
+  );
+  const durationOptions = useMemo(
+    () => [
+      { value: "30 Minutes", text: t("optDuration30Min") },
+      { value: "One Hour", text: t("optDuration1Hour") },
+      { value: "Two Hours", text: t("optDuration2Hours") },
+    ],
+    [t],
+  );
+  const frequencyOptions = useMemo(
+    () => [
+      { value: "Once a Week", text: t("optFrequencyOnceWeek") },
+      { value: "Twice a Week", text: t("optFrequencyTwiceWeek") },
+      { value: "Daily", text: t("optFrequencyDaily") },
+    ],
+    [t],
+  );
+  const tutorTypeOptions = useMemo(
+    () => [
+      {
+        value: "International School Teacher",
+        text: t("optTutorTypeInternational"),
+      },
+      { value: "Government School Teacher", text: t("optTutorTypeGovernment") },
+      { value: "University Student", text: t("optTutorTypeUniversity") },
+      { value: "A/L Student", text: t("optTutorTypeAL") },
+      { value: "Diploma Holder", text: t("optTutorTypeDiploma") },
+      { value: "Part-time Tutor", text: t("optTutorTypePartTime") },
+      { value: "Full-time Tutor", text: t("optTutorTypeFullTime") },
+    ],
+    [t],
+  );
+  const classTypeOptions = useMemo(
+    () => [
+      { value: "Online - Individual", text: t("optClassTypeOnlineIndividual") },
+      { value: "Online - Group", text: t("optClassTypeOnlineGroup") },
+      {
+        value: "Physical - Individual",
+        text: t("optClassTypePhysicalIndividual"),
+      },
+      { value: "Physical - Group", text: t("optClassTypePhysicalGroup") },
+    ],
+    [t],
+  );
 
   const [createTutorRequest, { isLoading }] = useCreateTutorRequestsMutation();
 
@@ -195,9 +255,7 @@ export default function AddRequestForTutor() {
       }
     } catch (err) {
       console.error(err);
-      setSubmissionResult(
-        "Unexpected error occurred while creating the request. Please try again.",
-      );
+      setSubmissionResult(t("unexpectedError"));
     }
   };
 
@@ -250,7 +308,7 @@ export default function AddRequestForTutor() {
                         });
                       },
                     })}
-                    placeholder="e.g. Nimal Perera"
+                    placeholder={t("fullNamePlaceholder")}
                     autoComplete="name"
                     className={`${inputClass} ${errors.name ? "border-red-500" : "border-gray-300"}`}
                   />
@@ -272,7 +330,7 @@ export default function AddRequestForTutor() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="e.g. johndoe@gmail.com"
+                      placeholder={t("emailPlaceholder")}
                       autoComplete="email"
                       onKeyDown={preventWhitespaceKey}
                       {...register("email", {
@@ -304,14 +362,15 @@ export default function AddRequestForTutor() {
                   </div>
                   <div className={fieldWrapper}>
                     <Label className="text-sm" htmlFor="phoneNumber">
-                      {t("contactNumber")} <span className="text-red-500">*</span>
+                      {t("contactNumber")}{" "}
+                      <span className="text-red-500">*</span>
                     </Label>
                     <Input
                       id="phoneNumber"
                       type="tel"
                       inputMode="numeric"
                       maxLength={10}
-                      placeholder="e.g. 0712345678"
+                      placeholder={t("contactNumberPlaceholder")}
                       autoComplete="tel"
                       onKeyDown={preventWhitespaceKey}
                       {...register("phoneNumber", {
@@ -366,6 +425,7 @@ export default function AddRequestForTutor() {
                           }}
                           districts={districts}
                           hasError={!!errors.district}
+                          placeholder={t("selectYourDistrict")}
                         />
                       )}
                     />
@@ -391,6 +451,12 @@ export default function AddRequestForTutor() {
                             if (val) clearErrors("city");
                           }}
                           hasError={!!errors.city}
+                          searchCityPlaceholder={t("searchCity")}
+                          selectDistrictFirstPlaceholder={t(
+                            "selectDistrictFirst",
+                          )}
+                          didYouMeanText={t("didYouMean")}
+                          noCityFoundText={t("noCityFound")}
                         />
                       )}
                     />
@@ -434,9 +500,11 @@ export default function AddRequestForTutor() {
                       control={control}
                       render={({ field }) => (
                         <MultiSelect
-                          options={MEDIUM_OPTIONS}
+                          options={mediumOptions}
                           defaultSelected={field.value ? [field.value] : []}
-                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          onChange={(selected) =>
+                            field.onChange(selected[0] ?? "")
+                          }
                           hasError={!!errors.medium}
                           singleSelect
                           placeholder={t("mediumPlaceholder")}
@@ -460,7 +528,9 @@ export default function AddRequestForTutor() {
                         <MultiSelect
                           options={gradeOptions}
                           defaultSelected={field.value ? [field.value] : []}
-                          onChange={(selected) => field.onChange(selected[0] ?? "")}
+                          onChange={(selected) =>
+                            field.onChange(selected[0] ?? "")
+                          }
                           hasError={!!errors.grade}
                           singleSelect
                           placeholder={t("gradePlaceholder")}
@@ -519,11 +589,17 @@ export default function AddRequestForTutor() {
                           <MultiSelect
                             options={subjectOptions}
                             defaultSelected={field.value ? [field.value] : []}
-                            onChange={(selected) => field.onChange(selected[0] ?? "")}
+                            onChange={(selected) =>
+                              field.onChange(selected[0] ?? "")
+                            }
                             hasError={!!errors.tutors?.[index]?.subject}
                             singleSelect
                             disabled={!selectedGradeId}
-                            placeholder={selectedGradeId ? t("subjectPlaceholder") : t("selectGradeFirst")}
+                            placeholder={
+                              selectedGradeId
+                                ? t("subjectPlaceholder")
+                                : t("selectGradeFirst")
+                            }
                           />
                         )}
                       />
@@ -541,16 +617,19 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`duration-${index}`}
                         >
-                          {t("duration")} <span className="text-red-500">*</span>
+                          {t("duration")}{" "}
+                          <span className="text-red-500">*</span>
                         </Label>
                         <Controller
                           name={`tutors.${index}.duration`}
                           control={control}
                           render={({ field }) => (
                             <MultiSelect
-                              options={REQUEST_TUTOR_DURATION_OPTIONS}
+                              options={durationOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
                               hasError={!!errors.tutors?.[index]?.duration}
                               singleSelect
                               placeholder={t("durationPlaceholder")}
@@ -570,16 +649,19 @@ export default function AddRequestForTutor() {
                           className="text-sm"
                           htmlFor={`frequency-${index}`}
                         >
-                          {t("frequency")} <span className="text-red-500">*</span>
+                          {t("frequency")}{" "}
+                          <span className="text-red-500">*</span>
                         </Label>
                         <Controller
                           name={`tutors.${index}.frequency`}
                           control={control}
                           render={({ field }) => (
                             <MultiSelect
-                              options={REQUEST_TUTOR_FREQUENCY_OPTIONS}
+                              options={frequencyOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
                               hasError={!!errors.tutors?.[index]?.frequency}
                               singleSelect
                               placeholder={t("frequencyPlaceholder")}
@@ -609,18 +691,26 @@ export default function AddRequestForTutor() {
                           control={control}
                           render={({ field }) => (
                             <MultiSelect
-                              options={TUTOR_TYPE_OPTIONS}
+                              options={tutorTypeOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
-                              hasError={!!errors.tutors?.[index]?.preferredTutorType}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
+                              hasError={
+                                !!errors.tutors?.[index]?.preferredTutorType
+                              }
                               singleSelect
                               placeholder={t("preferredTutorTypePlaceholder")}
                             />
                           )}
                         />
-                        {errors.tutors?.[index]?.preferredTutorType?.message && (
+                        {errors.tutors?.[index]?.preferredTutorType
+                          ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredTutorType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredTutorType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
@@ -638,18 +728,26 @@ export default function AddRequestForTutor() {
                           control={control}
                           render={({ field }) => (
                             <MultiSelect
-                              options={CLASS_TYPE_OPTIONS}
+                              options={classTypeOptions}
                               defaultSelected={field.value ? [field.value] : []}
-                              onChange={(selected) => field.onChange(selected[0] ?? "")}
-                              hasError={!!errors.tutors?.[index]?.preferredClassType}
+                              onChange={(selected) =>
+                                field.onChange(selected[0] ?? "")
+                              }
+                              hasError={
+                                !!errors.tutors?.[index]?.preferredClassType
+                              }
                               singleSelect
                               placeholder={t("preferredClassTypePlaceholder")}
                             />
                           )}
                         />
-                        {errors.tutors?.[index]?.preferredClassType?.message && (
+                        {errors.tutors?.[index]?.preferredClassType
+                          ?.message && (
                           <p className={errorMsg}>
-                            {errors.tutors?.[index]?.preferredClassType?.message}
+                            {
+                              errors.tutors?.[index]?.preferredClassType
+                                ?.message
+                            }
                           </p>
                         )}
                       </div>
@@ -756,7 +854,9 @@ export default function AddRequestForTutor() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
+            <Button onClick={() => setSubmissionResult(null)}>
+              {t("tryAgain")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

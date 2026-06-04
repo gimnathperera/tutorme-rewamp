@@ -4,6 +4,7 @@ import { StarIcon } from "@heroicons/react/24/solid";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import { useFetchTestimonialsQuery } from "@/store/api/splits/testimonials";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 /* ─── Grid slide-in keyframe injected once ───────────────── */
@@ -164,6 +165,7 @@ const AUTOPLAY_DELAY = 4000; // ms between auto-advances
 
 /* ─── Main component ─────────────────────────────────────── */
 const Testimonials: FC = () => {
+  const t = useTranslations("testimonials");
   const [page, setPage] = useState(1);
   const [animKey, setAnimKey] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -189,14 +191,22 @@ const Testimonials: FC = () => {
   const activeSlide = Math.max(page - 1, 0);
   const visibleItems = currentData?.results || [];
 
-  // Translate testimonial content and owner role for non-English locales
+  // Translate testimonial content, owner role, and owner name for non-English locales
   const translatedItems = useTranslateItems(
     visibleItems,
-    (item) => [item.content ?? "", item.owner?.role ?? ""],
-    (item, [content, role]) => ({
+    (item) => [
+      item.content ?? "",
+      item.owner?.role ?? "",
+      item.owner?.name ?? "",
+    ],
+    (item, [content, role, name]) => ({
       ...item,
       content: content ?? item.content,
-      owner: { ...item.owner, role: role ?? item.owner?.role ?? "" },
+      owner: {
+        ...item.owner,
+        role: role ?? item.owner?.role ?? "",
+        name: name ?? item.owner?.name ?? "",
+      },
     }),
   );
   const hasPreviousPage = page > 1;
@@ -255,7 +265,7 @@ const Testimonials: FC = () => {
         {/* ── Heading ── */}
         <div className="text-center animate-fade-in mb-10">
           <h2 className="text-4xl font-bold text-black leading-[1.2]">
-            See what others are saying.
+            {t("sectionHeading")}
           </h2>
         </div>
 

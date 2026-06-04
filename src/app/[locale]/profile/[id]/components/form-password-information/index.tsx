@@ -7,13 +7,14 @@ import { getErrorInApiResult } from "@/utils/api";
 import { removeWhitespace } from "@/utils/form-normalizers";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams } from "next/navigation";
-import { ChangeEvent, FC, KeyboardEvent } from "react";
+import { ChangeEvent, FC, KeyboardEvent, useMemo } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { useTranslations } from "next-intl";
 import {
   initialFormValues,
   PasswordInfoSchema,
-  passwordInfoSchema,
+  createPasswordInfoSchema,
 } from "./schema";
 
 const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -23,6 +24,8 @@ const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
 };
 
 const FormPasswordInfo: FC = () => {
+  const t = useTranslations("profile");
+  const passwordInfoSchema = useMemo(() => createPasswordInfoSchema(t), [t]);
   const params = useParams();
   const userId = params?.id as string;
 
@@ -64,7 +67,7 @@ const FormPasswordInfo: FC = () => {
       return toast.error(error);
     }
 
-    toast.success("Password updated successfully");
+    toast.success(t("passwordUpdated"));
     passwordInfoForm.reset();
   };
 
@@ -88,33 +91,31 @@ const FormPasswordInfo: FC = () => {
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
       <h3 className="mb-2 text-lg font-semibold sm:text-xl">
-        Account Security
+        {t("accountSecurityTitle")}
       </h3>
-      <p className="mb-5 text-sm text-gray-500">
-        Change your password using your current password for verification.
-      </p>
+      <p className="mb-5 text-sm text-gray-500">{t("accountSecurityDesc")}</p>
 
       <FormProvider {...passwordInfoForm}>
         <form onSubmit={passwordInfoForm.handleSubmit(onSubmit)}>
           <div className="grid max-w-xl grid-cols-1 gap-4 sm:gap-5">
             <InputPassword
-              label="Current password *"
+              label={t("fieldCurrentPassword")}
               name="currentPassword"
-              placeholder="Enter current password"
+              placeholder={t("placeholderCurrentPassword")}
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("currentPassword")}
             />
             <InputPassword
-              label="New password *"
+              label={t("fieldNewPassword")}
               name="newPassword"
-              placeholder="Enter new password"
+              placeholder={t("placeholderNewPassword")}
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("newPassword")}
             />
             <InputPassword
-              label="Confirm password *"
+              label={t("fieldConfirmPassword")}
               name="confirmPassword"
-              placeholder="Re-enter new password"
+              placeholder={t("placeholderConfirmPassword")}
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("confirmPassword")}
             />
@@ -125,7 +126,7 @@ const FormPasswordInfo: FC = () => {
               className="peer mt-4 rounded-lg bg-primary-700 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-primary-800 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-400 sm:mt-5 sm:px-5 sm:text-base"
               type="submit"
               loading={isLoading}
-              title="Change Password"
+              title={t("changePassword")}
               disabled={isButtonDisabled}
             />
           </div>

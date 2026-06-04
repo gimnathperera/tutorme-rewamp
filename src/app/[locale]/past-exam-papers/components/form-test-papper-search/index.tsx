@@ -82,7 +82,7 @@ const FormTestPaperSearch: FC<Props> = ({
                   })
                 }
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                aria-label="Clear search"
+                aria-label={t("clearSearch")}
               >
                 <X size={15} />
               </button>

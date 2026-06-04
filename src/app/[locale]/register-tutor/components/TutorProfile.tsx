@@ -46,8 +46,7 @@ const TutorProfile = () => {
       {/* Teaching Summary */}
       <div className={fieldWrapper}>
         <Label htmlFor="teachingSummary" className="text-sm block">
-          {t("teachingSummary")}{" "}
-          <span className="text-red-500">*</span>
+          {t("teachingSummary")} <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="teachingSummary"
@@ -77,8 +76,7 @@ const TutorProfile = () => {
       {/* Academic Details */}
       <div className={fieldWrapper}>
         <Label htmlFor="academicDetails" className="text-sm block">
-          {t("academicDetails")}{" "}
-          <span className="text-red-500">*</span>
+          {t("academicDetails")} <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="academicDetails"
@@ -108,8 +106,7 @@ const TutorProfile = () => {
       {/* Student Results */}
       <div className={fieldWrapper}>
         <Label htmlFor="studentResults" className="text-sm block">
-          {t("studentResults")}{" "}
-          <span className="text-red-500">*</span>
+          {t("studentResults")} <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="studentResults"
@@ -139,8 +136,7 @@ const TutorProfile = () => {
       {/* Selling Points */}
       <div className={fieldWrapper}>
         <Label htmlFor="sellingPoints" className="text-sm block">
-          {t("sellingPoints")}{" "}
-          <span className="text-red-500">*</span>
+          {t("sellingPoints")} <span className="text-red-500">*</span>
         </Label>
         <Textarea
           id="sellingPoints"

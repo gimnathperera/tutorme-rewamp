@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,12 +29,13 @@ import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
 import TutorProfile from "./TutorProfile";
 import TermsAndSubmit from "./TermsAndSubmit";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
+import { translateTextsToEnglish } from "@/utils/translateToEnglish";
 import {
   FindMyTutorForm,
-  fullSchema,
-  step2Schema,
-  step3Schema,
+  createFullSchema,
+  STEP2_FIELDS,
+  STEP3_FIELDS,
 } from "../schema";
 import {
   useAddTutorRequestMutation,
@@ -58,7 +59,6 @@ const TAB_ORDER: TabKey[] = [
   "verification",
 ];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
-const DUPLICATE_EMAIL_MESSAGE = "Email already exists";
 const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
 
 const isDuplicateEmailError = (error: string) => {
@@ -73,6 +73,8 @@ const isDuplicateEmailError = (error: string) => {
 
 export function TutorTabs() {
   const t = useTranslations("registerTutor");
+  const locale = useLocale();
+  const schema = useMemo(() => createFullSchema(t), [t]);
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
@@ -83,7 +85,7 @@ export function TutorTabs() {
     "success" | string | null
   >(null);
   const methods = useForm<FindMyTutorForm>({
-    resolver: zodResolver(fullSchema),
+    resolver: zodResolver(schema),
     mode: "onTouched",
     reValidateMode: "onChange",
     defaultValues: {
@@ -147,9 +149,9 @@ export function TutorTabs() {
         "race",
       ];
     } else if (tab === "qualifications") {
-      fieldsToValidate = Object.keys(step2Schema.shape);
+      fieldsToValidate = [...STEP2_FIELDS];
     } else if (tab === "teachingProfile") {
-      fieldsToValidate = Object.keys(step3Schema.shape);
+      fieldsToValidate = [...STEP3_FIELDS];
     }
 
     if (fieldsToValidate) {
@@ -183,8 +185,7 @@ export function TutorTabs() {
       if (hasGradeWithoutSubject) {
         setError("subjects", {
           type: "manual",
-          message:
-            "Please select at least one subject for each selected grade.",
+          message: t("subjectPerGradeRequired"),
         });
         return;
       }
@@ -197,7 +198,7 @@ export function TutorTabs() {
       if (result.data && !result.data.available) {
         setError("email", {
           type: "server",
-          message: result.data.message || DUPLICATE_EMAIL_MESSAGE,
+          message: t("emailAlreadyExists"),
         });
         setFocus("email");
         return;
@@ -213,8 +214,32 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
+      // Translate free-text fields to English before sending to backend
+      let processedData = data;
+      if (locale !== "en") {
+        const textFields = [
+          "teachingSummary",
+          "studentResults",
+          "sellingPoints",
+          "academicDetails",
+        ] as const;
+        const texts = textFields.map((f) => data[f] ?? "");
+        const translated = await translateTextsToEnglish(texts, locale);
+        processedData = {
+          ...data,
+          teachingSummary: translated[0] ?? data.teachingSummary,
+          studentResults: translated[1] ?? data.studentResults,
+          sellingPoints: translated[2] ?? data.sellingPoints,
+          academicDetails: translated[3] ?? data.academicDetails,
+        };
+      }
+
       // Strip front-end-only fields before sending to API
-      const { confirmPassword: _omit, optionalCertificates, ...payload } = data;
+      const {
+        confirmPassword: _omit,
+        optionalCertificates,
+        ...payload
+      } = processedData;
       const validOptional = (optionalCertificates ?? []).filter(
         (c) => c.type && c.url,
       );
@@ -229,6 +254,7 @@ export function TutorTabs() {
           : payload.preferredLocations.length > 0
             ? payload.preferredLocations
             : [ONLINE_ONLY_LOCATION_FALLBACK],
+        locale,
       };
       const result = await addTutorRequest(normalizedPayload);
       const error = getErrorInApiResult(result);
@@ -236,11 +262,11 @@ export function TutorTabs() {
         if (typeof error === "string" && isDuplicateEmailError(error)) {
           setError("email", {
             type: "server",
-            message: DUPLICATE_EMAIL_MESSAGE,
+            message: t("emailAlreadyExists"),
           });
           changeStep("personalInfo");
           setTimeout(() => setFocus("email"), 0);
-          toast.error(DUPLICATE_EMAIL_MESSAGE);
+          toast.error(t("emailAlreadyExists"));
           return;
         }
 
@@ -249,10 +275,10 @@ export function TutorTabs() {
           typeof error === "string" &&
           error.toLowerCase().includes("suspended")
         ) {
-          toast.error(
-            "Your email has been suspended. Please contact admin to resolve this.",
-            { duration: 8000, style: { maxWidth: 420 } },
-          );
+          toast.error(t("suspendedEmail"), {
+            duration: 8000,
+            style: { maxWidth: 420 },
+          });
           return;
         }
         setSubmissionResult(error);
@@ -260,7 +286,7 @@ export function TutorTabs() {
       }
       setSubmissionResult("success");
     } catch {
-      setSubmissionResult("Something went wrong. Please try again.");
+      setSubmissionResult(t("somethingWentWrong"));
     }
   };
 
@@ -288,10 +314,8 @@ export function TutorTabs() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
-            <Image height={50} width={50} src={LogoImage} alt="Logo image" />
-            <h1 className="text-3xl text-white font-bold">
-              {t("pageTitle")}
-            </h1>
+            <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
+            <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
           </div>
 
           <Tabs value={tab} className="w-full">
@@ -489,11 +513,13 @@ export function TutorTabs() {
             <DialogDescription className="text-center text-base">
               {typeof submissionResult === "string"
                 ? submissionResult
-                : "Something went wrong."}
+                : t("somethingWentWrong")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
-            <Button onClick={() => setSubmissionResult(null)}>{t("tryAgain")}</Button>
+            <Button onClick={() => setSubmissionResult(null)}>
+              {t("tryAgain")}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

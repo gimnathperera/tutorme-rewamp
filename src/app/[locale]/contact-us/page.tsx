@@ -9,8 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import toast from "react-hot-toast";
 import { FormProvider, useForm } from "react-hook-form";
 import type { KeyboardEvent } from "react";
+import { useMemo } from "react";
 import {
-  contactUsPageSchema,
+  createContactUsSchema,
   ContactUsPageSchema,
   initialFormValues,
 } from "./schema";
@@ -82,6 +83,7 @@ const preventWhitespaceKey = (event: KeyboardEvent<HTMLInputElement>) => {
 
 const ContactUsPage = () => {
   const t = useTranslations("contactUs");
+  const contactUsSchema = useMemo(() => createContactUsSchema(t), [t]);
 
   const CONTACT_INFO = [
     {
@@ -105,7 +107,7 @@ const ContactUsPage = () => {
   ];
 
   const form = useForm<ContactUsPageSchema>({
-    resolver: zodResolver(contactUsPageSchema),
+    resolver: zodResolver(contactUsSchema),
     defaultValues: initialFormValues,
     mode: "onChange",
   });

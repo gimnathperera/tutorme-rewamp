@@ -4,61 +4,61 @@ import { isPhysicalClassType } from "@/configs/register-tutor";
 const requiredMultiSelect = (message: string) =>
   z.array(z.string()).min(1, message);
 
-export const educationInfoSchema = z
-  .object({
-    classType: requiredMultiSelect("Class Type is required"),
-    preferredLocations: z.array(z.string()),
-    tutorTypes: requiredMultiSelect("Tutor Types are required"),
-    highestEducation: z.string().min(1, "Highest Education Level is required"),
-    yearsExperience: z.preprocess(
-      (value) => {
-        if (value === "" || value === null || value === undefined) {
-          return undefined;
-        }
-
-        return Number(value);
-      },
-      z
-        .number({
-          invalid_type_error: "Years of Experience is required",
-          required_error: "Years of Experience is required",
-        })
-        .min(1, "Years of Experience must be greater than 0")
-        .max(50, "Experience cannot exceed 50 years"),
-    ),
-    tutorMediums: requiredMultiSelect("Tutor Mediums are required"),
-    grades: requiredMultiSelect("Grades are required"),
-    subjects: requiredMultiSelect("Subjects are required"),
-    certificatesAndQualifications: z
-      .array(
-        z.object({
-          type: z.string().min(1, "Document type is required"),
-          url: z.string().min(1, "Please upload a file"),
-        }),
-      )
-      .min(1, "Certificates are required"),
-    optionalCertificates: z
-      .array(
-        z.object({
-          type: z.string(),
-          url: z.string(),
-        }),
-      )
-      .optional()
-      .default([]),
-  })
-  .superRefine(({ classType, preferredLocations }, ctx) => {
-    if (
-      classType.some(isPhysicalClassType) &&
-      preferredLocations.length === 0
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Preferred Locations are required",
-        path: ["preferredLocations"],
-      });
-    }
-  });
+export const createEducationInfoSchema = (t: (_key: string) => string) =>
+  z
+    .object({
+      classType: requiredMultiSelect(t("classTypeRequired")),
+      preferredLocations: z.array(z.string()),
+      tutorTypes: requiredMultiSelect(t("tutorTypesRequired")),
+      highestEducation: z.string().min(1, t("highestEducationRequired")),
+      yearsExperience: z.preprocess(
+        (value) => {
+          if (value === "" || value === null || value === undefined) {
+            return undefined;
+          }
+          return Number(value);
+        },
+        z
+          .number({
+            invalid_type_error: t("yearsExperienceRequired"),
+            required_error: t("yearsExperienceRequired"),
+          })
+          .min(1, t("yearsExperienceMin"))
+          .max(50, t("yearsExperienceMax")),
+      ),
+      tutorMediums: requiredMultiSelect(t("tutorMediumsRequired")),
+      grades: requiredMultiSelect(t("gradesRequired")),
+      subjects: requiredMultiSelect(t("subjectsRequired")),
+      certificatesAndQualifications: z
+        .array(
+          z.object({
+            type: z.string().min(1, t("documentTypeRequired")),
+            url: z.string().min(1, t("uploadRequired")),
+          }),
+        )
+        .min(1, t("certificatesRequired")),
+      optionalCertificates: z
+        .array(
+          z.object({
+            type: z.string(),
+            url: z.string(),
+          }),
+        )
+        .optional()
+        .default([]),
+    })
+    .superRefine(({ classType, preferredLocations }, ctx) => {
+      if (
+        classType.some(isPhysicalClassType) &&
+        preferredLocations.length === 0
+      ) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("preferredLocationsRequired"),
+          path: ["preferredLocations"],
+        });
+      }
+    });
 
 export const initialEducationInfoFormValues = {
   classType: [] as string[],
@@ -73,4 +73,6 @@ export const initialEducationInfoFormValues = {
   optionalCertificates: [] as { type: string; url: string }[],
 };
 
-export type EducationInfoSchema = z.infer<typeof educationInfoSchema>;
+export type EducationInfoSchema = z.infer<
+  ReturnType<typeof createEducationInfoSchema>
+>;

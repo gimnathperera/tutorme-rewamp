@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ReactNode, useEffect } from "react";
 import Icon from "../icon";
 import { AuthUserData } from "@/types/auth-types";
+import { useTranslations } from "next-intl";
 
 interface DrawerProps {
   children: ReactNode;
@@ -22,6 +23,8 @@ const Drawer = ({
   user,
   logout,
 }: DrawerProps) => {
+  const t = useTranslations("nav");
+
   useEffect(() => {
     if (!isOpen) return;
 
@@ -104,7 +107,7 @@ const Drawer = ({
                 }
               }}
             >
-              {user?.email ? "Logout" : "Login"}
+              {user?.email ? t("logout") : t("login")}
             </button>
           </footer>
         </article>
