@@ -104,6 +104,142 @@ function RateCell({ rate }: { rate?: Rate }) {
   );
 }
 
+function MobileRateValue({ rate }: { rate?: Rate }) {
+  if (!rate?.minimumRate && !rate?.maximumRate) {
+    return <span className="text-gray-400 text-sm italic">N/A</span>;
+  }
+  const min = formatRateValue(rate.minimumRate);
+  const max = formatRateValue(rate.maximumRate);
+  const isSame = String(rate.minimumRate) === String(rate.maximumRate);
+  return (
+    <span className="text-sm font-semibold text-teal-600 whitespace-nowrap">
+      Rs {min}
+      {!isSame && <> – Rs {max}</>}
+    </span>
+  );
+}
+
+const MOBILE_TUTOR_ROWS = [
+  { key: "universityStudentsRate" as const, label: "University Students", color: "#28BBA3" },
+  { key: "partTimeTutorRate" as const, label: "Part Time Tutor", color: "#FCA627" },
+  { key: "fullTimeTutorRate" as const, label: "Full Time Tutor", color: "#EF4350" },
+  { key: "moeTeacherRate" as const, label: "Gov/International Teachers (Ex / Current)", color: "#434eef" },
+];
+
+function MobileRateCard({ item }: { item: TuitionRateItem }) {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden">
+      {MOBILE_TUTOR_ROWS.map(({ key, label, color }) => (
+        <div
+          key={key}
+          className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 last:border-0"
+        >
+          <div className="flex items-center gap-2.5 min-w-0 mr-3">
+            <span
+              className="w-2.5 h-2.5 rounded-full flex-shrink-0"
+              style={{ backgroundColor: color }}
+            />
+            <span className="text-sm text-gray-700 leading-tight">{label}</span>
+          </div>
+          <MobileRateValue rate={item[key] as Rate | undefined} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function MobileTuitionRates({ items }: { items: TuitionRateItem[] }) {
+  const [selectedKey, setSelectedKey] = useState(() =>
+    items[0] ? getTuitionRateKey(items[0]) : "",
+  );
+  const [displayKey, setDisplayKey] = useState(selectedKey);
+  const [cardVisible, setCardVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!selectedKey && items[0]) {
+      const key = getTuitionRateKey(items[0]);
+      setSelectedKey(key);
+      setDisplayKey(key);
+    }
+  }, [items, selectedKey]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (key: string) => {
+    setIsOpen(false);
+    if (key === selectedKey) return;
+    setSelectedKey(key);
+    setCardVisible(false);
+    setTimeout(() => {
+      setDisplayKey(key);
+      setCardVisible(true);
+    }, 150);
+  };
+
+  const selectedItem = items.find((item) => getTuitionRateKey(item) === selectedKey) ?? items[0];
+  const displayItem = items.find((item) => getTuitionRateKey(item) === displayKey) ?? items[0];
+
+  return (
+    <div className="px-4 py-4 space-y-3">
+      <div className="relative" ref={dropdownRef}>
+        <button
+          type="button"
+          onClick={() => setIsOpen((prev) => !prev)}
+          className="w-full flex items-center justify-between rounded-md border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-400"
+        >
+          <span>{selectedItem?.subject?.title ?? "Select subject"}</span>
+          <ChevronDown
+            className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+
+        {isOpen && (
+          <div className="absolute z-50 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg overflow-hidden">
+            <div className="max-h-52 overflow-y-auto">
+              {items.map((item) => {
+                const key = getTuitionRateKey(item);
+                const isSelected = key === selectedKey;
+                return (
+                  <div
+                    key={key}
+                    onClick={() => handleSelect(key)}
+                    className={`px-3 py-2.5 text-sm cursor-pointer transition-colors duration-150 ${
+                      isSelected
+                        ? "bg-blue-500 text-white"
+                        : "text-gray-800 hover:bg-blue-50 hover:text-blue-600"
+                    }`}
+                  >
+                    {item.subject?.title ?? "Unknown Subject"}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {displayItem && (
+        <div
+          className="transition-opacity duration-150"
+          style={{ opacity: cardVisible ? 1 : 0 }}
+        >
+          <MobileRateCard item={displayItem} />
+        </div>
+      )}
+    </div>
+  );
+}
+
 function TuitionRateTable({
   isInitialLoading,
   items,
@@ -130,79 +266,87 @@ function TuitionRateTable({
   }
 
   return (
-    <div className="w-full overflow-x-auto">
-      <table className="w-full min-w-[1120px] table-auto text-sm">
-        <thead>
-          <tr className="bg-gray-50 border-b border-gray-200">
-            <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
-              {t("subject")}
-            </th>
-            <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
-                {t("universityStudents")}
-              </span>
-            </th>
-            <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
-                {t("partTimeTutor")}
-              </span>
-            </th>
-            <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
-              <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
-                {t("fullTimeTutor")}
-              </span>
-            </th>
-            <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[240px]">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block flex-shrink-0" />
-                <span className="leading-5">
-                  {t("govTeachersLine1")} <br /> {t("govTeachersLine2")}
-                </span>
-              </span>
-            </th>
-          </tr>
-        </thead>
+    <>
+      {/* Mobile: subject picker + rate card */}
+      <div className="md:hidden">
+        <MobileTuitionRates items={items} />
+      </div>
 
-        <tbody>
-          {items.map((item, idx) => (
-            <tr
-              key={item._id || idx}
-              className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
-                idx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
-              }`}
-            >
-              <td className="min-w-[220px] px-5 py-4 align-middle">
-                <span className="inline-flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
-                  <span className="font-semibold text-gray-800">
-                    {item.subject?.title || "Unknown Subject"}
+      {/* Desktop: full table */}
+      <div className="hidden md:block w-full overflow-x-auto">
+        <table className="w-full min-w-[1120px] table-auto text-sm">
+          <thead>
+            <tr className="bg-gray-50 border-b border-gray-200">
+              <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
+                {t("subject")}
+              </th>
+              <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#28BBA3] inline-block" />
+                  {t("universityStudents")}
+                </span>
+              </th>
+              <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#FCA627] inline-block" />
+                  {t("partTimeTutor")}
+                </span>
+              </th>
+              <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[220px] whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#EF4350] inline-block" />
+                  {t("fullTimeTutor")}
+                </span>
+              </th>
+              <th className="text-left px-5 py-3 font-semibold text-gray-600 min-w-[240px]">
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#434eef] inline-block flex-shrink-0" />
+                  <span className="leading-5">
+                    {t("govTeachersLine1")} <br /> {t("govTeachersLine2")}
                   </span>
                 </span>
-              </td>
-
-              <td className="min-w-[220px] px-5 py-4 align-middle">
-                <RateCell rate={item.universityStudentsRate} />
-              </td>
-
-              <td className="min-w-[220px] px-5 py-4 align-middle">
-                <RateCell rate={item.partTimeTutorRate} />
-              </td>
-
-              <td className="min-w-[220px] px-5 py-4 align-middle">
-                <RateCell rate={item.fullTimeTutorRate} />
-              </td>
-
-              <td className="min-w-[240px] px-5 py-4 align-middle">
-                <RateCell rate={item.moeTeacherRate} />
-              </td>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+
+          <tbody>
+            {items.map((item, idx) => (
+              <tr
+                key={item._id || idx}
+                className={`border-b border-gray-100 transition-colors duration-150 hover:bg-[#FCA627]/5 ${
+                  idx % 2 === 0 ? "bg-white" : "bg-gray-50/60"
+                }`}
+              >
+                <td className="min-w-[220px] px-5 py-4 align-middle">
+                  <span className="inline-flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#28BBA3] flex-shrink-0" />
+                    <span className="font-semibold text-gray-800">
+                      {item.subject?.title || "Unknown Subject"}
+                    </span>
+                  </span>
+                </td>
+
+                <td className="min-w-[220px] px-5 py-4 align-middle">
+                  <RateCell rate={item.universityStudentsRate} />
+                </td>
+
+                <td className="min-w-[220px] px-5 py-4 align-middle">
+                  <RateCell rate={item.partTimeTutorRate} />
+                </td>
+
+                <td className="min-w-[220px] px-5 py-4 align-middle">
+                  <RateCell rate={item.fullTimeTutorRate} />
+                </td>
+
+                <td className="min-w-[240px] px-5 py-4 align-middle">
+                  <RateCell rate={item.moeTeacherRate} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
   );
 }
 
@@ -247,7 +391,6 @@ function GradeTuitionRatesItem({
   const visibleCount =
     grade.tuitionRateCount ?? pagination?.totalResults ?? tuitionRates.length;
 
-  // Translate subject titles for non-English locales
   const translatedRates = useTranslateItems(
     tuitionRates,
     (rate) => [rate.subject?.title ?? ""],
@@ -389,7 +532,7 @@ function GradeTuitionRatesItem({
 
               <div
                 ref={sentinelRef}
-                className="flex min-h-16 items-center justify-center py-5"
+                className="flex min-h-4 items-center justify-center py-1"
               >
                 {isRatesFetching && tuitionRates.length > 0 ? (
                   <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
@@ -430,7 +573,6 @@ export default function TuitionRatesByGrade() {
     [gradesData],
   );
 
-  // Translate grade titles for non-English locales
   const translatedGrades = useTranslateItems(
     grades,
     (grade) => [grade.title],
