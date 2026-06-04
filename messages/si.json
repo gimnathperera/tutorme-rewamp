@@ -104,7 +104,7 @@
     "sendMessage": "පණිවිඩය යවන්න",
     "successMessage": "ඔබේ පණිවිඩය සාර්ථකව යවන ලදී!",
     "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
-    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "nameLettersOnly": "නාමය අකුරු සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
     "nameNoMultipleSpaces": "අනුක්‍රමික හිස්තැන් කිහිපයක් ඉඩ නොදේ",
     "emailRequired": "ඊමේල් අවශ්‍යයි",
     "emailInvalid": "වලංගු ඊමේල් ලිපිනයක් ඇතුළත් කරන්න",
@@ -376,7 +376,7 @@
     "errorDesc": "දෝෂයක් ඇති විය.",
     "tryAgain": "නැවත උත්සාහ කරන්න",
     "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
-    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "nameLettersOnly": "නාමය අකුරු සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
     "emailRequired": "විද්‍යුත් තැපෑල අවශ්‍යයි",
     "emailInvalid": "වලංගු විද්‍යුත් තැපැල් ලිපිනයක් ඇතුළත් කරන්න",
     "cityRequired": "නගරය අවශ්‍යයි",
@@ -535,7 +535,7 @@
     "relatedArticleRequired": "සම්බන්ධිත ලිපි ID අවශ්‍යයි"
   },
   "testimonials": {
-    "sectionHeading": "අනෙක් අය කිනම් දේ කියනවාදැයි බලන්න."
+    "sectionHeading": "අනෙක් අයගේ අදහස් බලන්න."
   },
   "auth": {
     "loginTitle": "පිවිසෙන්න",
@@ -567,7 +567,7 @@
     "passwordTooLong": "මුරපදය අකුරු 12 ඉක්මවිය නොහැකිය",
     "passwordLetterNumber": "මුරපදයේ අවම වශයෙන් එක් අකුරක් සහ ඉලක්කමක් තිබිය යුතුය",
     "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
-    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "nameLettersOnly": "නාමය අකුරු සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
     "confirmPasswordRequired": "ඔබේ මුරපදය තහවුරු කරන්න.",
     "passwordsNoMatch": "මුරපද නොගැළපේ"
   },
@@ -645,7 +645,7 @@
     "helperAge": "වයස ස්වයංක්‍රීයව ගණනය වේ.",
     "updatePersonalInfo": "පුද්ගලික තොරතුරු යාවත්කාලීන කරන්න",
     "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
-    "nameLettersOnly": "නාමය ලිපි සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
+    "nameLettersOnly": "නාමය අකුරු සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
     "emailInvalid": "අවලංගු ඊමේල් ලිපිනය",
     "contactRequired": "දූරකථන අංකය අවශ්‍යයි",
     "contactNumeric": "දූරකථන අංකය ඉලක්කම් පමණක් අඩංගු විය යුතුය",
