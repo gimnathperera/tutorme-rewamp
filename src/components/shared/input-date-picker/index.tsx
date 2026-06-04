@@ -105,7 +105,7 @@ const InputDatePicker: React.FC<InputDatePickerProps> = ({
                   dateFormat="MM/dd/yyyy"
                   placeholderText="MM/DD/YYYY"
                   autoComplete="off"
-                  onChangeRaw={(e) => e.preventDefault()}
+                  onChangeRaw={(e) => e?.preventDefault()}
                   className={baseInputClass}
                   wrapperClassName="w-full"
                 />
