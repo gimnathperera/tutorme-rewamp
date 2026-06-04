@@ -17,7 +17,6 @@ const DocumentRow = ({
   index,
   options,
   control,
-  errors,
   onRemove,
   removable,
   documentTypeLabel,
@@ -30,7 +29,6 @@ const DocumentRow = ({
   index: number;
   options: { value: string; text: string }[];
   control: any;
-  errors: any;
   onRemove: () => void;
   removable: boolean;
   documentTypeLabel: string;
@@ -39,7 +37,7 @@ const DocumentRow = ({
   removeDocumentTitle: string;
   uploadLabels: ComponentProps<typeof MultiFileUploadDropzone>["labels"];
 }) => {
-  const rowErrors = errors[index] ?? {};
+  const { trigger } = useFormContext();
   return (
     <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50">
       <div className="flex flex-col gap-1">
@@ -49,20 +47,25 @@ const DocumentRow = ({
         <Controller
           name={`${fieldName}.${index}.type`}
           control={control}
-          render={({ field: f }) => (
-            <MultiSelect
-              options={options}
-              defaultSelected={f.value ? [f.value] : []}
-              onChange={(selected) => f.onChange(selected[0] ?? "")}
-              hasError={!!rowErrors.type}
-              singleSelect
-              placeholder={selectTypePlaceholder}
-            />
+          render={({ field: f, fieldState }) => (
+            <>
+              <MultiSelect
+                options={options}
+                defaultSelected={f.value ? [f.value] : []}
+                onChange={(selected) => {
+                  f.onChange(selected[0] ?? "");
+                  trigger(`${fieldName}.${index}.type`);
+                }}
+                hasError={!!fieldState.error}
+                singleSelect
+                placeholder={selectTypePlaceholder}
+              />
+              {fieldState.error && (
+                <p className="text-xs text-red-500">{fieldState.error.message}</p>
+              )}
+            </>
           )}
         />
-        {rowErrors.type && (
-          <p className="text-xs text-red-500">{rowErrors.type.message}</p>
-        )}
       </div>
 
       <div className="flex flex-col gap-1 min-w-0 overflow-hidden">
@@ -72,19 +75,22 @@ const DocumentRow = ({
         <Controller
           name={`${fieldName}.${index}.url`}
           control={control}
-          render={({ field: f }) => (
-            <MultiFileUploadDropzone
-              initialUrls={f.value ? [f.value] : []}
-              labels={uploadLabels}
-              onUploaded={(urls) => {
-                f.onChange(urls[urls.length - 1] ?? "");
-              }}
-            />
+          render={({ field: f, fieldState }) => (
+            <>
+              <MultiFileUploadDropzone
+                initialUrls={f.value ? [f.value] : []}
+                labels={uploadLabels}
+                onUploaded={(urls) => {
+                  f.onChange(urls[urls.length - 1] ?? "");
+                  trigger(`${fieldName}.${index}.url`);
+                }}
+              />
+              {fieldState.error && (
+                <p className="text-xs text-red-500">{fieldState.error.message}</p>
+              )}
+            </>
           )}
         />
-        {rowErrors.url && (
-          <p className="text-xs text-red-500">{rowErrors.url.message}</p>
-        )}
       </div>
 
       <div className="flex items-start pt-7">
@@ -154,6 +160,7 @@ const TermsAndSubmit = () => {
   );
   const {
     control,
+    trigger,
     formState: { errors },
   } = useFormContext();
 
@@ -174,8 +181,6 @@ const TermsAndSubmit = () => {
     control,
     name: "optionalCertificates",
   });
-
-  const certErrors = (errors.certificatesAndQualifications as any) ?? [];
 
   return (
     <div className="space-y-5">
@@ -214,7 +219,6 @@ const TermsAndSubmit = () => {
                   index={index}
                   options={educationalDocumentOptions}
                   control={control}
-                  errors={certErrors}
                   onRemove={() => removeEdu(index)}
                   removable={eduFields.length > 1}
                   documentTypeLabel={t("documentType")}
@@ -260,7 +264,6 @@ const TermsAndSubmit = () => {
                   index={index}
                   options={optionalDocumentOptions}
                   control={control}
-                  errors={[]}
                   onRemove={() => removeOpt(index)}
                   removable={true}
                   documentTypeLabel={t("documentType")}
@@ -315,7 +318,14 @@ const TermsAndSubmit = () => {
               render={({ field }) => (
                 <Checkbox
                   checked={field.value}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={(checked) => {
+                    field.onChange(checked);
+                    const names = eduFields.flatMap((_, i) => [
+                      `certificatesAndQualifications.${i}.type`,
+                      `certificatesAndQualifications.${i}.url`,
+                    ]);
+                    trigger(names as any);
+                  }}
                   id="agreeTerms"
                   className="mt-0.5"
                 />
@@ -353,7 +363,14 @@ const TermsAndSubmit = () => {
               render={({ field }) => (
                 <Checkbox
                   checked={field.value}
-                  onCheckedChange={field.onChange}
+                  onCheckedChange={(checked) => {
+                    field.onChange(checked);
+                    const names = eduFields.flatMap((_, i) => [
+                      `certificatesAndQualifications.${i}.type`,
+                      `certificatesAndQualifications.${i}.url`,
+                    ]);
+                    trigger(names as any);
+                  }}
                   id="agreeAssignmentInfo"
                   className="mt-0.5"
                 />

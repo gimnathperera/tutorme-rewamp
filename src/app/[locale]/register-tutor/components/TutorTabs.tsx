@@ -298,16 +298,13 @@ export function TutorTabs() {
     router.push("/");
   };
 
-  const certificates = methods.watch("certificatesAndQualifications");
+  const certificates = methods.watch("certificatesAndQualifications") as { type: string; url: string }[];
   const agreeTerms = methods.watch("agreeTerms");
   const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
-  const isSubmitDisabled =
-    isLoading ||
-    !certificates ||
-    certificates.length === 0 ||
-    !certificates.some((c: { type: string; url: string }) => c.type && c.url) ||
-    !agreeTerms ||
-    !agreeAssignmentInfo;
+  const allDocsComplete =
+    certificates?.length > 0 &&
+    certificates.every((c) => c.type && c.url);
+  const isSubmitDisabled = isLoading || !allDocsComplete || !agreeTerms || !agreeAssignmentInfo;
 
   return (
     <FormProvider {...methods}>

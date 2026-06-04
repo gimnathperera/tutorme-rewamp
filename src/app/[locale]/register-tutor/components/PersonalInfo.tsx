@@ -407,6 +407,7 @@ const PersonalInfo = () => {
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");
+                trigger("gender");
               }}
               hasError={!!errors.gender}
               singleSelect
@@ -465,6 +466,7 @@ const PersonalInfo = () => {
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");
+                trigger("nationality");
               }}
               hasError={!!errors.nationality}
               singleSelect
@@ -491,6 +493,7 @@ const PersonalInfo = () => {
               defaultSelected={field.value ? [field.value] : []}
               onChange={(selected) => {
                 field.onChange(selected[0] ?? "");
+                trigger("race");
               }}
               hasError={!!errors.race}
               singleSelect
