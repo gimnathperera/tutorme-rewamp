@@ -45,9 +45,9 @@ const AboutUs = () => {
           {Aboutdata.map((item, i) => (
             <div
               key={i}
-              className={`hover:bg-navyblue bg-white rounded-3xl pt-8 pl-8 pb-8 pr-6 shadow-md group animate-on-scroll transition-all duration-300 hover:shadow-xl ${staggerClasses[i]}`}
+              className={`hover:bg-navyblue bg-white rounded-3xl pt-8 pl-8 pb-8 pr-6 shadow-md group animate-on-scroll transition-all duration-700 ease-in-out hover:shadow-xl ${staggerClasses[i]}`}
             >
-              <h4 className="text-xl font-semibold leading-[1.3] text-black mb-3 group-hover:text-white transition-colors duration-300">
+              <h4 className="text-xl font-semibold leading-[1.3] text-black mb-3 group-hover:text-white transition-colors duration-700 ease-in-out">
                 {item.heading}
               </h4>
               <Image
@@ -57,7 +57,7 @@ const AboutUs = () => {
                 height={72}
                 className="mb-4"
               />
-              <p className="text-base font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-300">
+              <p className="text-base font-normal text-black group-hover:text-offwhite leading-relaxed transition-colors duration-700 ease-in-out">
                 {item.paragraph}
               </p>
             </div>
