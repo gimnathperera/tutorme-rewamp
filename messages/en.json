@@ -753,5 +753,9 @@
     "emailLabel": "Email",
     "whatsappLabel": "WhatsApp",
     "websiteLabel": "Website"
+  },
+  "legalDocument": {
+    "eyebrow": "TuitionLanka Legal",
+    "lastUpdated": "Last updated"
   }
 }

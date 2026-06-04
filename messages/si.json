@@ -753,5 +753,9 @@
     "emailLabel": "විද්‍යුත් තැපෑල",
     "whatsappLabel": "WhatsApp",
     "websiteLabel": "වෙබ් අඩවිය"
+  },
+  "legalDocument": {
+    "eyebrow": "නීති",
+    "lastUpdated": "අවසන් වරට යාවත්කාලීන කිරීම"
   }
 }

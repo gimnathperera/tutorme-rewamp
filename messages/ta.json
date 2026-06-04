@@ -753,5 +753,9 @@
     "emailLabel": "மின்னஞ்சல்",
     "whatsappLabel": "WhatsApp",
     "websiteLabel": "இணையதளம்"
+  },
+  "legalDocument": {
+    "eyebrow": "சட்டம்",
+    "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது"
   }
 }

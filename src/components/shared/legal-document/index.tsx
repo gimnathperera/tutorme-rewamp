@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 export type LegalBlock =
   | {
       type: "paragraph";
@@ -32,6 +34,7 @@ const LegalDocument = ({
   intro,
   sections,
 }: LegalDocumentProps) => {
+  const t = useTranslations("legalDocument");
   return (
     <div className="mx-auto max-w-7xl px-3 py-8 md:px-4 md:py-10">
       <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 px-6 py-8 text-white shadow-sm sm:px-8 md:py-10">
@@ -51,7 +54,7 @@ const LegalDocument = ({
       <div className="mt-8 rounded-3xl bg-lightgrey px-4 py-6 sm:px-8 lg:px-10">
         <section className="mb-6 rounded-2xl border border-blue-100 bg-white p-5 shadow-sm sm:p-6">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-            TuitionLanka Legal
+            {t("eyebrow")}
           </p>
           <p className="mt-3 text-sm leading-7 text-gray-600 md:text-base">
             {intro}
