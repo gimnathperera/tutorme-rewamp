@@ -50,6 +50,34 @@ const FormLanguageTime: FC<Props> = ({
     [languageOptions, tR],
   );
 
+  const tzLabelMap = useMemo<Record<string, string>>(
+    () => ({
+      "UTC-5": t("tzEasternTime"),
+      "UTC+1": t("tzCentralEuropean"),
+      "UTC+9": t("tzJapanStandard"),
+      "UTC+5:30": t("tzSriLankaStandard"),
+    }),
+    [t],
+  );
+
+  const translatedTimeZoneOptions = useMemo(
+    () =>
+      timeZoneOptions.map((opt) => ({
+        ...opt,
+        label: tzLabelMap[opt.value] ?? opt.label,
+      })),
+    [timeZoneOptions, tzLabelMap],
+  );
+
+  const translatedRateOptions = useMemo(
+    () =>
+      rateOptions.map((opt) => ({
+        ...opt,
+        label: opt.label.replace("per hour", t("perHour")),
+      })),
+    [rateOptions, t],
+  );
+
   const { isDirty, isValid } = form.formState;
   const [currentRate, language, timeZone, availability] = form.watch([
     "rate",
@@ -69,15 +97,15 @@ const FormLanguageTime: FC<Props> = ({
   const isButtonDisabled =
     !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
   const normalizedRateOptions =
-    currentRate && !rateOptions.some((option) => option.value === currentRate)
+    currentRate && !translatedRateOptions.some((option) => option.value === currentRate)
       ? [
           {
             label: `${t("fieldRate")}: ${currentRate}`,
             value: currentRate,
           },
-          ...rateOptions,
+          ...translatedRateOptions,
         ]
-      : rateOptions;
+      : translatedRateOptions;
 
   const onSubmit = (data: LanguageOptionsSchema) => {
     onFormSubmit(data);
@@ -125,7 +153,7 @@ const FormLanguageTime: FC<Props> = ({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <MultiSelect
-                      options={toMultiSelectOptions(timeZoneOptions)}
+                      options={toMultiSelectOptions(translatedTimeZoneOptions)}
                       defaultSelected={field.value ? [field.value] : []}
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}

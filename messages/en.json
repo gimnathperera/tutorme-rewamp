@@ -763,7 +763,12 @@
     "dayThu": "Thu",
     "dayFri": "Fri",
     "daySat": "Sat",
-    "daySun": "Sun"
+    "daySun": "Sun",
+    "tzEasternTime": "Eastern Time (US & Canada)",
+    "tzCentralEuropean": "Central European Time",
+    "tzJapanStandard": "Japan Standard Time",
+    "tzSriLankaStandard": "Sri Lanka Standard Time",
+    "perHour": "per hour"
   },
   "gradesAndSubjects": {
     "pageTitle": "Grades & Subjects",

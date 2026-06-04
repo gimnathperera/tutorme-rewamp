@@ -763,7 +763,12 @@
     "dayThu": "வியா",
     "dayFri": "வெள்",
     "daySat": "சனி",
-    "daySun": "ஞாயி"
+    "daySun": "ஞாயி",
+    "tzEasternTime": "கிழக்கு நேரம் (அமெரிக்கா & கனடா)",
+    "tzCentralEuropean": "மத்திய ஐரோப்பிய நேரம்",
+    "tzJapanStandard": "ஜப்பான் நிலையான நேரம்",
+    "tzSriLankaStandard": "இலங்கை நிலையான நேரம்",
+    "perHour": "மணி நேரத்திற்கு"
   },
   "gradesAndSubjects": {
     "pageTitle": "தரங்கள் & பாடங்கள்",
