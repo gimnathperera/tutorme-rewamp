@@ -3,10 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaTiktok } from "react-icons/fa";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const Footer = () => {
   const t = useTranslations("footer");
+  const locale = useLocale();
 
   const products = [
     {
@@ -24,9 +25,9 @@ const Footer = () => {
       section: t("resourcesSection"),
       link: [
         { label: t("blog"), url: "/blogs" },
-        { label: t("testimonials"), url: "/#testimonials-section" },
+        { label: t("testimonials"), url: `/${locale}#testimonials-section` },
         { label: t("faqs"), url: "/faq" },
-        { label: t("aboutUs"), url: "/#aboutus-section" },
+        { label: t("aboutUs"), url: `/${locale}#aboutus-section` },
       ],
     },
     {
@@ -122,16 +123,27 @@ const Footer = () => {
                 {product.section}
               </p>
               <ul>
-                {product.link.map((linkObj, index) => (
-                  <li key={index}>
-                    <Link
-                      href={linkObj.url}
-                      className="text-white text-sm font-normal mb-4 hover:text-gray-300 transition"
-                    >
-                      {linkObj.label}
-                    </Link>
-                  </li>
-                ))}
+                {product.link.map((linkObj, index) =>
+                  linkObj.url.includes("#") ? (
+                    <li key={index}>
+                      <a
+                        href={linkObj.url}
+                        className="text-white text-sm font-normal mb-4 hover:text-gray-300 transition"
+                      >
+                        {linkObj.label}
+                      </a>
+                    </li>
+                  ) : (
+                    <li key={index}>
+                      <Link
+                        href={linkObj.url}
+                        className="text-white text-sm font-normal mb-4 hover:text-gray-300 transition"
+                      >
+                        {linkObj.label}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             </div>
           ))}
