@@ -13,6 +13,7 @@ import {
 import { Controller, useFormContext } from "react-hook-form";
 import { getNestedError } from "@/utils/form";
 import { ChevronDown, Clock3 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import {
   parseAvailabilityValue,
   ScheduleSlot,
@@ -66,6 +67,10 @@ type AlarmTimePickerProps = {
   isOpen: boolean;
   onToggle: Dispatch<TimePickerId>;
   onChange: Dispatch<string>;
+  hourLabel: string;
+  minuteLabel: string;
+  periodLabel: string;
+  setLabel: string;
 };
 
 type WheelOption = {
@@ -233,6 +238,10 @@ const AlarmTimePicker = ({
   isOpen,
   onToggle,
   onChange,
+  hourLabel,
+  minuteLabel,
+  periodLabel,
+  setLabel,
 }: AlarmTimePickerProps) => {
   const timeParts = getTimeParts(value);
   const hourWheelRef = useRef<TimeWheelColumnHandle | null>(null);
@@ -367,7 +376,7 @@ const AlarmTimePicker = ({
             <div className="grid grid-cols-[1fr_0.25rem_1fr_0.82fr] items-stretch gap-2">
               <TimeWheelColumn
                 ref={hourWheelRef}
-                label="Hour"
+                label={hourLabel}
                 options={hourOptions}
                 selectedValue={String(timeParts.hour)}
                 onSelect={(hour) => updateTime({ hour: Number(hour) })}
@@ -379,7 +388,7 @@ const AlarmTimePicker = ({
 
               <TimeWheelColumn
                 ref={minuteWheelRef}
-                label="Minute"
+                label={minuteLabel}
                 options={minuteOptions}
                 selectedValue={timeParts.minute}
                 onSelect={(minute) => updateTime({ minute })}
@@ -387,7 +396,7 @@ const AlarmTimePicker = ({
 
               <TimeWheelColumn
                 ref={periodWheelRef}
-                label="Period"
+                label={periodLabel}
                 options={periodOptions}
                 selectedValue={timeParts.period}
                 onSelect={(period) =>
@@ -401,7 +410,7 @@ const AlarmTimePicker = ({
               onClick={setSelectedTime}
               className="mt-3 h-11 w-full rounded-md bg-primary-700 text-sm font-semibold text-white transition-colors hover:bg-primary-800 sm:hidden"
             >
-              Set
+              {setLabel}
             </button>
           </div>
         </>
@@ -411,6 +420,7 @@ const AlarmTimePicker = ({
 };
 
 const AvailabilityScheduler = () => {
+  const t = useTranslations("profile");
   const { control, formState } = useFormContext();
   const [selectedDay, setSelectedDay] = useState(WEEK_DAY_OPTIONS[0].value);
   const [selectedStart, setSelectedStart] = useState("19:30");
@@ -419,6 +429,32 @@ const AvailabilityScheduler = () => {
   const [localError, setLocalError] = useState("");
 
   const error = getNestedError(formState.errors, "availability");
+
+  const dayFullMap = useMemo<Record<string, string>>(
+    () => ({
+      Monday: t("dayMonday"),
+      Tuesday: t("dayTuesday"),
+      Wednesday: t("dayWednesday"),
+      Thursday: t("dayThursday"),
+      Friday: t("dayFriday"),
+      Saturday: t("daySaturday"),
+      Sunday: t("daySunday"),
+    }),
+    [t],
+  );
+
+  const dayShortMap = useMemo<Record<string, string>>(
+    () => ({
+      Monday: t("dayMon"),
+      Tuesday: t("dayTue"),
+      Wednesday: t("dayWed"),
+      Thursday: t("dayThu"),
+      Friday: t("dayFri"),
+      Saturday: t("daySat"),
+      Sunday: t("daySun"),
+    }),
+    [t],
+  );
 
   const groupedSlots = useMemo(
     () =>
@@ -447,14 +483,12 @@ const AvailabilityScheduler = () => {
 
         const addSlot = () => {
           if (!selectedDay || !selectedStart || !selectedEnd) {
-            setLocalError("Choose a day, start time, and end time.");
+            setLocalError(t("schedulerErrorChooseDay"));
             return;
           }
 
           if (selectedStart >= selectedEnd) {
-            setLocalError(
-              "End time must be later than start time on the same day. Overnight slots are not supported.",
-            );
+            setLocalError(t("schedulerErrorEndTime"));
             return;
           }
 
@@ -472,7 +506,7 @@ const AvailabilityScheduler = () => {
           );
 
           if (duplicateSlot) {
-            setLocalError("That time slot is already added.");
+            setLocalError(t("schedulerErrorDuplicate"));
             return;
           }
 
@@ -482,9 +516,11 @@ const AvailabilityScheduler = () => {
 
           if (overlappingSlot) {
             setLocalError(
-              `This overlaps with an existing slot on ${overlappingSlot.day}: ${getTimeLabel(
-                overlappingSlot.start,
-              )} - ${getTimeLabel(overlappingSlot.end)}.`,
+              t("schedulerErrorOverlap", {
+                day: dayFullMap[overlappingSlot.day] ?? overlappingSlot.day,
+                startTime: getTimeLabel(overlappingSlot.start),
+                endTime: getTimeLabel(overlappingSlot.end),
+              }),
             );
             return;
           }
@@ -511,14 +547,14 @@ const AvailabilityScheduler = () => {
         return (
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-gray-700">
-              Weekly Availability<span className="text-red-500"> *</span>
+              {t("weeklyAvailability")}<span className="text-red-500"> *</span>
             </label>
 
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
               <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
                 <label className="flex flex-col">
                   <span className="mb-1 block text-xs font-medium text-gray-500">
-                    Day
+                    {t("schedulerDay")}
                   </span>
                   <select
                     value={selectedDay}
@@ -527,7 +563,7 @@ const AvailabilityScheduler = () => {
                   >
                     {WEEK_DAY_OPTIONS.map((day) => (
                       <option key={day.value} value={day.value}>
-                        {day.value}
+                        {dayFullMap[day.value] ?? day.value}
                       </option>
                     ))}
                   </select>
@@ -535,7 +571,7 @@ const AvailabilityScheduler = () => {
 
                 <AlarmTimePicker
                   id="start"
-                  label="Start time"
+                  label={t("schedulerStartTime")}
                   value={selectedStart}
                   isOpen={openPicker === "start"}
                   onToggle={(pickerId) =>
@@ -544,11 +580,15 @@ const AvailabilityScheduler = () => {
                     )
                   }
                   onChange={setSelectedStart}
+                  hourLabel={t("schedulerHour")}
+                  minuteLabel={t("schedulerMinute")}
+                  periodLabel={t("schedulerPeriod")}
+                  setLabel={t("setTime")}
                 />
 
                 <AlarmTimePicker
                   id="end"
-                  label="End time"
+                  label={t("schedulerEndTime")}
                   value={selectedEnd}
                   isOpen={openPicker === "end"}
                   onToggle={(pickerId) =>
@@ -557,18 +597,22 @@ const AvailabilityScheduler = () => {
                     )
                   }
                   onChange={setSelectedEnd}
+                  hourLabel={t("schedulerHour")}
+                  minuteLabel={t("schedulerMinute")}
+                  periodLabel={t("schedulerPeriod")}
+                  setLabel={t("setTime")}
                 />
 
                 <div className="flex flex-col">
                   <span className="mb-1 block text-xs font-medium text-transparent">
-                    Action
+                    {t("schedulerDay")}
                   </span>
                   <button
                     type="button"
                     onClick={addSlot}
                     className="h-12 rounded-md bg-primary-700 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-800"
                   >
-                    Add Slot
+                    {t("addSlot")}
                   </button>
                 </div>
               </div>
@@ -586,7 +630,7 @@ const AvailabilityScheduler = () => {
                     className="rounded-lg border border-gray-200 bg-white p-3"
                   >
                     <div className="mb-2 text-sm font-semibold text-gray-900">
-                      {day.label}
+                      {dayShortMap[day.value] ?? day.label}
                     </div>
 
                     {day.slots.length > 0 ? (
@@ -605,14 +649,14 @@ const AvailabilityScheduler = () => {
                               onClick={() => removeSlot(slot)}
                               className="font-medium text-blue-700 hover:text-blue-900"
                             >
-                              Remove
+                              {t("removeSlot")}
                             </button>
                           </div>
                         ))}
                       </div>
                     ) : (
                       <div className="text-sm text-gray-400">
-                        No slots added
+                        {t("noSlotsAdded")}
                       </div>
                     )}
                   </div>
@@ -621,15 +665,13 @@ const AvailabilityScheduler = () => {
 
               {hasLegacyText && (
                 <p className="mt-3 text-xs text-amber-600">
-                  Existing availability is stored as plain text. Add or remove a
-                  slot to replace it with the new schedule format.
+                  {t("schedulerLegacyText")}
                 </p>
               )}
             </div>
 
             <p className="text-xs text-gray-500">
-              Add weekly teaching slots in a calendar-style format, for example
-              Tuesday 7:30 PM to 9:00 PM.
+              {t("schedulerHelperText")}
             </p>
           </div>
         );

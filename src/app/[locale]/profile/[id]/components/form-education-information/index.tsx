@@ -11,19 +11,11 @@ import InputSelect from "@/components/shared/input-select";
 import MultiSelect from "@/components/shared/MultiSelect";
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
 import {
-  CLASS_TYPE_OPTIONS,
-  MEDIUM_OPTIONS,
   PREFERRED_LOCATION_OPTIONS,
-  REGISTER_HIGHEST_EDUCATION_OPTIONS,
-  TUTOR_TYPE_OPTIONS,
   isPhysicalClassType,
 } from "@/configs/register-tutor";
-import {
-  EDUCATIONAL_DOCUMENT_OPTIONS,
-  OPTIONAL_DOCUMENT_OPTIONS,
-} from "@/configs/options";
 import { Option } from "@/types/shared-types";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { EducationInfoSchema } from "./schema";
@@ -42,14 +34,10 @@ type Props = {
   isSubmitting: boolean;
 };
 
-const toOptions = (options: Array<{ value: string; text: string }>): Option[] =>
-  options.map(({ text, value }) => ({ label: text, value }));
-
 // Convert { label, value } → { text, value } for shared MultiSelect
 const msOptions = (opts: Option[]) =>
   opts.map((o) => ({ value: o.value, text: o.label }));
 
-const highestEducationOptions = toOptions(REGISTER_HIGHEST_EDUCATION_OPTIONS);
 const fieldControlHeightClass = "h-11";
 
 const selectClass = `${fieldControlHeightClass} w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring text-gray-900`;
@@ -69,6 +57,7 @@ const DocumentRow = ({
   documentTypeLabel,
   uploadFileLabel,
   selectTypePlaceholder,
+  uploadLabels,
 }: {
   fieldName: string;
   index: number;
@@ -80,6 +69,7 @@ const DocumentRow = ({
   documentTypeLabel: string;
   uploadFileLabel: string;
   selectTypePlaceholder: string;
+  uploadLabels?: Record<string, string | ((fileName: string) => string)>;
 }) => {
   const rowErrors = errors[index] ?? {};
   return (
@@ -127,6 +117,7 @@ const DocumentRow = ({
             <MultiFileUploadDropzone
               initialUrls={f.value ? [f.value] : []}
               onUploaded={(urls) => f.onChange(urls[urls.length - 1] ?? "")}
+              labels={uploadLabels as any}
             />
           )}
         />
@@ -160,6 +151,93 @@ const FormEducationInfo: FC<Props> = ({
   isSubmitting,
 }) => {
   const t = useTranslations("profile");
+  const tR = useTranslations("registerTutor");
+
+  const classTypeOptions = useMemo(
+    () => [
+      { value: "Online - Individual", text: tR("optClassTypeOnlineIndividual") },
+      { value: "Online - Group", text: tR("optClassTypeOnlineGroup") },
+      { value: "Physical - Individual", text: tR("optClassTypePhysicalIndividual") },
+      { value: "Physical - Group", text: tR("optClassTypePhysicalGroup") },
+    ],
+    [tR],
+  );
+
+  const tutorTypeOptions = useMemo(
+    () => [
+      { value: "International School Teacher", text: tR("optTutorTypeInternational") },
+      { value: "Government School Teacher", text: tR("optTutorTypeGovernment") },
+      { value: "University Student", text: tR("optTutorTypeUniversity") },
+      { value: "A/L Student", text: tR("optTutorTypeAL") },
+      { value: "Diploma Holder", text: tR("optTutorTypeDiploma") },
+      { value: "Part-time Tutor", text: tR("optTutorTypePartTime") },
+      { value: "Full-time Tutor", text: tR("optTutorTypeFullTime") },
+    ],
+    [tR],
+  );
+
+  const highestEducationOptions = useMemo(
+    () => [
+      { value: "PhD", label: tR("optHighestEducationPhd") },
+      { value: "Masters", label: tR("optHighestEducationMasters") },
+      { value: "Bachelor Degree", label: tR("optHighestEducationBachelor") },
+      { value: "Undergraduate", label: tR("optHighestEducationUndergraduate") },
+      { value: "Diploma and Professional", label: tR("optHighestEducationDiplomaProfessional") },
+      { value: "AL", label: tR("optHighestEducationAL") },
+    ],
+    [tR],
+  );
+
+  const mediumOptions = useMemo(
+    () => [
+      { value: "Sinhala", text: tR("optMediumSinhala") },
+      { value: "English", text: tR("optMediumEnglish") },
+      { value: "Tamil", text: tR("optMediumTamil") },
+    ],
+    [tR],
+  );
+
+  const educationalDocumentOptions = useMemo(
+    () => [
+      { value: "Advanced Level Certificate", text: tR("optDocAdvancedLevelCertificate") },
+      { value: "Ordinary Level Certificate", text: tR("optDocOrdinaryLevelCertificate") },
+      { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
+      { value: "Diploma Certificate", text: tR("optDocDiplomaCertificate") },
+      { value: "Professional Certificate", text: tR("optDocProfessionalCertificate") },
+      { value: "Teaching Certificate", text: tR("optDocTeachingCertificate") },
+    ],
+    [tR],
+  );
+
+  const optionalDocumentOptions = useMemo(
+    () => [
+      { value: "NIC", text: tR("optDocNIC") },
+      { value: "Passport", text: tR("optDocPassport") },
+      { value: "Driving License", text: tR("optDocDrivingLicense") },
+      { value: "Police Clearance", text: tR("optDocPoliceClearance") },
+      { value: "Other", text: tR("optDocOther") },
+    ],
+    [tR],
+  );
+
+  const uploadLabels = useMemo(
+    () => ({
+      certificateFallback: tR("certificateFallback"),
+      zoomOut: tR("zoomOut"),
+      zoomIn: tR("zoomIn"),
+      closePreview: tR("closePreview"),
+      previewUnavailable: tR("previewUnavailable"),
+      fileTypeRejection: tR("fileTypeRejection"),
+      uploadFailedFor: (fileName: string) => tR("uploadFailedFor", { fileName }),
+      uploading: tR("uploading"),
+      dropFilesHere: tR("dropFilesHere"),
+      uploadCertificatesCta: tR("uploadCertificatesCta"),
+      acceptedFileTypes: tR("acceptedFileTypes"),
+      previewFile: tR("previewFile"),
+      removeFile: tR("removeFile"),
+    }),
+    [tR],
+  );
 
   // Translate grade/subject names for display while keeping IDs as values
   const gradesOptions = useTranslateItems(
@@ -272,7 +350,7 @@ const FormEducationInfo: FC<Props> = ({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <MultiSelect
-                      options={CLASS_TYPE_OPTIONS}
+                      options={classTypeOptions}
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
@@ -333,7 +411,7 @@ const FormEducationInfo: FC<Props> = ({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <MultiSelect
-                      options={TUTOR_TYPE_OPTIONS}
+                      options={tutorTypeOptions}
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
@@ -349,6 +427,7 @@ const FormEducationInfo: FC<Props> = ({
                 label={t("fieldHighestEducation")}
                 name="highestEducation"
                 options={highestEducationOptions}
+                placeholder={tR("selectOption")}
                 className={fieldControlHeightClass}
                 reserveHelperSpace
               />
@@ -374,7 +453,7 @@ const FormEducationInfo: FC<Props> = ({
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <MultiSelect
-                      options={MEDIUM_OPTIONS}
+                      options={mediumOptions}
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
@@ -464,7 +543,7 @@ const FormEducationInfo: FC<Props> = ({
                         key={field.id}
                         fieldName="certificatesAndQualifications"
                         index={index}
-                        options={EDUCATIONAL_DOCUMENT_OPTIONS}
+                        options={educationalDocumentOptions}
                         control={form.control}
                         errors={certErrors}
                         onRemove={() => removeEdu(index)}
@@ -472,6 +551,7 @@ const FormEducationInfo: FC<Props> = ({
                         documentTypeLabel={t("documentTypeLabel")}
                         uploadFileLabel={t("uploadFileLabel")}
                         selectTypePlaceholder={t("selectTypePlaceholder")}
+                        uploadLabels={uploadLabels}
                       />
                     ))}
                   </div>
@@ -511,7 +591,7 @@ const FormEducationInfo: FC<Props> = ({
                         key={field.id}
                         fieldName="optionalCertificates"
                         index={index}
-                        options={OPTIONAL_DOCUMENT_OPTIONS}
+                        options={optionalDocumentOptions}
                         control={form.control}
                         errors={[]}
                         onRemove={() => removeOpt(index)}
@@ -519,6 +599,7 @@ const FormEducationInfo: FC<Props> = ({
                         documentTypeLabel={t("documentTypeLabel")}
                         uploadFileLabel={t("uploadFileLabel")}
                         selectTypePlaceholder={t("selectTypePlaceholder")}
+                        uploadLabels={uploadLabels}
                       />
                     ))}
                   </div>
