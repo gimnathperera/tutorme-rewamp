@@ -92,27 +92,27 @@ const InputDatePicker: React.FC<InputDatePickerProps> = ({
                 ? selectedDate
                 : null;
             return (
-            <>
-              <DatePicker
-                selected={validDate}
-                onChange={(date: Date | null) => {
-                  field.onChange(date ? toDateString(date) : "");
-                }}
-                maxDate={maxDate ? new Date(maxDate) : undefined}
-                showMonthDropdown
-                showYearDropdown
-                dropdownMode="select"
-                dateFormat="MM/dd/yyyy"
-                placeholderText="MM/DD/YYYY"
-                autoComplete="off"
-                onChangeRaw={(e) => e.preventDefault()}
-                className={baseInputClass}
-                wrapperClassName="w-full"
-              />
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
-                <Icon name="Calendar" size={16} />
-              </span>
-            </>
+              <>
+                <DatePicker
+                  selected={validDate}
+                  onChange={(date: Date | null) => {
+                    field.onChange(date ? toDateString(date) : "");
+                  }}
+                  maxDate={maxDate ? new Date(maxDate) : undefined}
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  dateFormat="MM/dd/yyyy"
+                  placeholderText="MM/DD/YYYY"
+                  autoComplete="off"
+                  onChangeRaw={(e) => e.preventDefault()}
+                  className={baseInputClass}
+                  wrapperClassName="w-full"
+                />
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-400">
+                  <Icon name="Calendar" size={16} />
+                </span>
+              </>
             );
           }}
         />
