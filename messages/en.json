@@ -1,5 +1,6 @@
 {
   "nav": {
+    "home": "Home",
     "requestForTutor": "Request for Tutor",
     "registerAsTutor": "Register as a Tutor",
     "academics": "Academics",
