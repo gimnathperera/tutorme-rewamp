@@ -74,7 +74,6 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     () => [
       { value: "Male", label: t("optGenderMale") },
       { value: "Female", label: t("optGenderFemale") },
-      { value: "Others", label: t("optGenderOthers") },
     ],
     [t],
   );
