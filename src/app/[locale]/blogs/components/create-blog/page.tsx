@@ -159,18 +159,7 @@ const AddBlog = () => {
           <div className="flex gap-2 mt-6 px-6">
             <button
               type="button"
-              onClick={() => setIsPreview(false)}
-              className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
-                !isPreview
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {t("editTab")}
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsPreview(true)}
+              onClick={() => setIsPreview((prev) => !prev)}
               className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
                 isPreview
                   ? "bg-blue-600 text-white"
@@ -679,6 +668,11 @@ const AddBlog = () => {
                     {t("addEmbedBtn")}
                   </button>
                 </div>
+                {(formState.errors.content?.root?.message || (formState.errors.content as any)?.message) && (
+                  <p className="text-sm text-red-500 mt-1">
+                    {formState.errors.content?.root?.message || (formState.errors.content as any)?.message}
+                  </p>
+                )}
               </div>
               <div className="flex flex-col gap-6 p-6 border border-gray-100 rounded-xl shadow-sm">
                 {/* Cover Image */}
@@ -689,7 +683,7 @@ const AddBlog = () => {
                   <FileUploadDropzone
                     key={`cover-image-${clearVersion}`}
                     onUploaded={(url) =>
-                      createBlogForm.setValue("image", encodeImageUrl(url))
+                      createBlogForm.setValue("image", encodeImageUrl(url), { shouldValidate: true })
                     }
                   />
                   {formState.errors.image && (
