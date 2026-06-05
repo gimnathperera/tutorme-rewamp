@@ -71,7 +71,9 @@ const FormTestPaperSearch: FC<Props> = ({
                   const numeric = e.target.value.replace(/\D/g, "");
                   if (numeric !== e.target.value) {
                     e.target.value = numeric;
-                    testPaperSearchForm.setValue("search", numeric, { shouldDirty: true });
+                    testPaperSearchForm.setValue("search", numeric, {
+                      shouldDirty: true,
+                    });
                   }
                 },
               })}

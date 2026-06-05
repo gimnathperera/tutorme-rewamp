@@ -155,9 +155,15 @@ const FormEducationInfo: FC<Props> = ({
 
   const classTypeOptions = useMemo(
     () => [
-      { value: "Online - Individual", text: tR("optClassTypeOnlineIndividual") },
+      {
+        value: "Online - Individual",
+        text: tR("optClassTypeOnlineIndividual"),
+      },
       { value: "Online - Group", text: tR("optClassTypeOnlineGroup") },
-      { value: "Physical - Individual", text: tR("optClassTypePhysicalIndividual") },
+      {
+        value: "Physical - Individual",
+        text: tR("optClassTypePhysicalIndividual"),
+      },
       { value: "Physical - Group", text: tR("optClassTypePhysicalGroup") },
     ],
     [tR],
@@ -165,8 +171,14 @@ const FormEducationInfo: FC<Props> = ({
 
   const tutorTypeOptions = useMemo(
     () => [
-      { value: "International School Teacher", text: tR("optTutorTypeInternational") },
-      { value: "Government School Teacher", text: tR("optTutorTypeGovernment") },
+      {
+        value: "International School Teacher",
+        text: tR("optTutorTypeInternational"),
+      },
+      {
+        value: "Government School Teacher",
+        text: tR("optTutorTypeGovernment"),
+      },
       { value: "University Student", text: tR("optTutorTypeUniversity") },
       { value: "A/L Student", text: tR("optTutorTypeAL") },
       { value: "Diploma Holder", text: tR("optTutorTypeDiploma") },
@@ -182,7 +194,10 @@ const FormEducationInfo: FC<Props> = ({
       { value: "Masters", label: tR("optHighestEducationMasters") },
       { value: "Bachelor Degree", label: tR("optHighestEducationBachelor") },
       { value: "Undergraduate", label: tR("optHighestEducationUndergraduate") },
-      { value: "Diploma and Professional", label: tR("optHighestEducationDiplomaProfessional") },
+      {
+        value: "Diploma and Professional",
+        label: tR("optHighestEducationDiplomaProfessional"),
+      },
       { value: "AL", label: tR("optHighestEducationAL") },
     ],
     [tR],
@@ -199,11 +214,20 @@ const FormEducationInfo: FC<Props> = ({
 
   const educationalDocumentOptions = useMemo(
     () => [
-      { value: "Advanced Level Certificate", text: tR("optDocAdvancedLevelCertificate") },
-      { value: "Ordinary Level Certificate", text: tR("optDocOrdinaryLevelCertificate") },
+      {
+        value: "Advanced Level Certificate",
+        text: tR("optDocAdvancedLevelCertificate"),
+      },
+      {
+        value: "Ordinary Level Certificate",
+        text: tR("optDocOrdinaryLevelCertificate"),
+      },
       { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       { value: "Diploma Certificate", text: tR("optDocDiplomaCertificate") },
-      { value: "Professional Certificate", text: tR("optDocProfessionalCertificate") },
+      {
+        value: "Professional Certificate",
+        text: tR("optDocProfessionalCertificate"),
+      },
       { value: "Teaching Certificate", text: tR("optDocTeachingCertificate") },
     ],
     [tR],
@@ -228,7 +252,8 @@ const FormEducationInfo: FC<Props> = ({
       closePreview: tR("closePreview"),
       previewUnavailable: tR("previewUnavailable"),
       fileTypeRejection: tR("fileTypeRejection"),
-      uploadFailedFor: (fileName: string) => tR("uploadFailedFor", { fileName }),
+      uploadFailedFor: (fileName: string) =>
+        tR("uploadFailedFor", { fileName }),
       uploading: tR("uploading"),
       dropFilesHere: tR("dropFilesHere"),
       uploadCertificatesCta: tR("uploadCertificatesCta"),

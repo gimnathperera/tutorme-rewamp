@@ -668,9 +668,11 @@ const AddBlog = () => {
                     {t("addEmbedBtn")}
                   </button>
                 </div>
-                {(formState.errors.content?.root?.message || (formState.errors.content as any)?.message) && (
+                {(formState.errors.content?.root?.message ||
+                  (formState.errors.content as any)?.message) && (
                   <p className="text-sm text-red-500 mt-1">
-                    {formState.errors.content?.root?.message || (formState.errors.content as any)?.message}
+                    {formState.errors.content?.root?.message ||
+                      (formState.errors.content as any)?.message}
                   </p>
                 )}
               </div>
@@ -683,7 +685,9 @@ const AddBlog = () => {
                   <FileUploadDropzone
                     key={`cover-image-${clearVersion}`}
                     onUploaded={(url) =>
-                      createBlogForm.setValue("image", encodeImageUrl(url), { shouldValidate: true })
+                      createBlogForm.setValue("image", encodeImageUrl(url), {
+                        shouldValidate: true,
+                      })
                     }
                   />
                   {formState.errors.image && (
