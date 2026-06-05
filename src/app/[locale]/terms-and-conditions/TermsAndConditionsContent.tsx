@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import LegalContactSection from "@/components/shared/legal-contact-section";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -17,7 +17,7 @@ type Section = { title: string; content: ContentItem[] };
 // ── Static content data ───────────────────────────────────────────────────────
 
 const HERO_TITLE = "Terms and Conditions";
-const HERO_SUBTITLE = "The rules and responsibilities for using Tuition Lanka.";
+const HERO_SUBTITLE = "The rules and responsibilities for using TuitionLanka.";
 const INTRO_TEXT =
   'These Terms and Conditions govern your access to and use of the TuitionLanka platform, available at www.tuitionlanka.com ("Platform"). TuitionLanka is operated by SOFTVIL TECHNOLOGIES (PVT) LTD (Registration No: PV102511).';
 
@@ -393,6 +393,7 @@ function renderItem(item: ContentItem, key: number): React.ReactNode {
 
 export default function TermsAndConditionsContent() {
   const locale = useLocale();
+  const tDoc = useTranslations("legalDocument");
   const [data, setData] = useState<PageData>(ORIGINAL_DATA);
 
   useEffect(() => {
@@ -433,7 +434,7 @@ export default function TermsAndConditionsContent() {
       <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden mb-8">
         <div className="relative z-10">
           <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
-            TuitionLanka Legal
+            {tDoc("eyebrow")}
           </p>
           <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
             {data.heroTitle}
@@ -451,7 +452,7 @@ export default function TermsAndConditionsContent() {
         {/* Intro notice */}
         <div className="mb-6 rounded-2xl border border-blue-100 bg-white p-5 shadow-sm">
           <p className="text-sm font-semibold text-blue-600">
-            Last updated: April 23, 2026
+            {tDoc("lastUpdated")}: April 23, 2026
           </p>
           <p className="mt-2 text-sm leading-relaxed text-gray-600">
             {data.introText}

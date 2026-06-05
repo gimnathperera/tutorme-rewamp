@@ -14,7 +14,7 @@ import {
 
 type Props = {
   form: ReturnType<any>;
-  onFormSubmit: (data: GeneralInfoSchema) => void;
+  onFormSubmit: (_data: GeneralInfoSchema) => void;
   isSubmitting: boolean;
 };
 

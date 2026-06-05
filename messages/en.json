@@ -16,7 +16,7 @@
     "cancel": "Cancel"
   },
   "footer": {
-    "brandName": "Tuition Lanka",
+    "brandName": "TuitionLanka",
     "menuSection": "Menu",
     "resourcesSection": "Resources",
     "academicsSection": "Academics",
@@ -32,7 +32,7 @@
     "gradesAndSubjects": "Grades & Subjects",
     "pastExamPapers": "Past Exam Papers",
     "tuitionRates": "Tuition Rates",
-    "copyright": "@2026 - All Rights Reserved by Tuition Lanka",
+    "copyright": "@2026 - All Rights Reserved by TuitionLanka",
     "privacyPolicy": "Privacy policy",
     "termsAndConditions": "Terms & conditions"
   },
@@ -453,7 +453,7 @@
   },
   "blogs": {
     "heroLabel": "TuitionLanka Insights",
-    "heroTitle": "Welcome to the Tuition Lanka Blog",
+    "heroTitle": "Welcome to the TuitionLanka Blog",
     "heroSubtitle": "Discover the latest insights, tips, and updates.",
     "allFilter": "All",
     "addBlog": "+ Add Blog",
@@ -463,7 +463,7 @@
     "statusApproved": "Approved",
     "statusPending": "Pending",
     "statusRejected": "Rejected",
-    "authorName": "Tuition Lanka",
+    "authorName": "TuitionLanka",
     "backToBlogs": "Back to Blogs",
     "relatedArticles": "Related Articles",
     "tableOfContents": "Table of Contents",
@@ -734,7 +734,43 @@
     "passwordRequired": "Password is required",
     "passwordTooShort": "Password must be at least 8 characters long",
     "passwordTooLong": "Password cannot exceed 12 characters",
-    "passwordLetterNumber": "Password must contain at least one letter and one number"
+    "passwordLetterNumber": "Password must contain at least one letter and one number",
+    "weeklyAvailability": "Weekly Availability",
+    "schedulerDay": "Day",
+    "schedulerStartTime": "Start time",
+    "schedulerEndTime": "End time",
+    "addSlot": "Add Slot",
+    "noSlotsAdded": "No slots added",
+    "removeSlot": "Remove",
+    "setTime": "Set",
+    "schedulerHour": "Hour",
+    "schedulerMinute": "Minute",
+    "schedulerPeriod": "Period",
+    "schedulerHelperText": "Add weekly teaching slots in a calendar-style format, for example Tuesday 7:30 PM to 9:00 PM.",
+    "schedulerLegacyText": "Existing availability is stored as plain text. Add or remove a slot to replace it with the new schedule format.",
+    "schedulerErrorChooseDay": "Choose a day, start time, and end time.",
+    "schedulerErrorEndTime": "End time must be later than start time on the same day. Overnight slots are not supported.",
+    "schedulerErrorDuplicate": "That time slot is already added.",
+    "schedulerErrorOverlap": "This overlaps with an existing slot on {day}: {startTime} - {endTime}.",
+    "dayMonday": "Monday",
+    "dayTuesday": "Tuesday",
+    "dayWednesday": "Wednesday",
+    "dayThursday": "Thursday",
+    "dayFriday": "Friday",
+    "daySaturday": "Saturday",
+    "daySunday": "Sunday",
+    "dayMon": "Mon",
+    "dayTue": "Tue",
+    "dayWed": "Wed",
+    "dayThu": "Thu",
+    "dayFri": "Fri",
+    "daySat": "Sat",
+    "daySun": "Sun",
+    "tzEasternTime": "Eastern Time (US & Canada)",
+    "tzCentralEuropean": "Central European Time",
+    "tzJapanStandard": "Japan Standard Time",
+    "tzSriLankaStandard": "Sri Lanka Standard Time",
+    "perHour": "per hour"
   },
   "gradesAndSubjects": {
     "pageTitle": "Grades & Subjects",
@@ -755,5 +791,9 @@
     "emailLabel": "Email",
     "whatsappLabel": "WhatsApp",
     "websiteLabel": "Website"
+  },
+  "legalDocument": {
+    "eyebrow": "TuitionLanka Legal",
+    "lastUpdated": "Last updated"
   }
 }

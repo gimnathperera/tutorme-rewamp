@@ -5,9 +5,9 @@ import PrivacyPolicyContent from "./PrivacyPolicyContent";
 
 export const metadata = createMetadata({
   path: "/privacy-policy",
-  title: "Privacy Policy for Tuition Lanka Users | Tuition Lanka",
+  title: "Privacy Policy for TuitionLanka Users | TuitionLanka",
   description:
-    "Read how Tuition Lanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
+    "Read how TuitionLanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
 });
 
 const PrivacyPolicyPage = () => {

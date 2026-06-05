@@ -28,7 +28,7 @@ const getWhatsAppContact = () => {
     ? `+94 ${internationalNumber.slice(2, 4)} ${internationalNumber.slice(4, 7)} ${internationalNumber.slice(7)}`
     : env.app.whatsAppNumber;
   const message = encodeURIComponent(
-    "Hello Tuition Lanka, I need help with your legal policies.",
+    "Hello TuitionLanka, I need help with your legal policies.",
   );
 
   return {

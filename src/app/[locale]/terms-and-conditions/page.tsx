@@ -5,9 +5,9 @@ import TermsAndConditionsContent from "./TermsAndConditionsContent";
 
 export const metadata = createMetadata({
   path: "/terms-and-conditions",
-  title: "Terms and Conditions for Tuition Lanka Users | Tuition Lanka",
+  title: "Terms and Conditions for TuitionLanka Users | TuitionLanka",
   description:
-    "Read the Terms and Conditions for using Tuition Lanka as a student, parent, tutor, or website visitor, including service rules and responsibilities.",
+    "Read the Terms and Conditions for using TuitionLanka as a student, parent, tutor, or website visitor, including service rules and responsibilities.",
 });
 
 const TermsAndConditionsPage = () => {

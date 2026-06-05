@@ -254,7 +254,7 @@ export default function ViewBlogPage() {
               </Avatar>
               <div>
                 <p className="font-bold text-xl text-gray-900 dark:text-gray-100">
-                  Tuition Lanka
+                  TuitionLanka
                 </p>
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                   {new Date(displayBlog.createdAt).toLocaleDateString("en-US", {
@@ -368,7 +368,7 @@ export default function ViewBlogPage() {
                         {related.title || "Untitled Post"}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
-                        Tuition Lanka
+                        TuitionLanka
                       </p>
                     </div>
                   </li>

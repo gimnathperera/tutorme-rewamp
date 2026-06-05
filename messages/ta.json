@@ -16,7 +16,7 @@
     "cancel": "ரத்து செய்"
   },
   "footer": {
-    "brandName": "Tuition Lanka",
+    "brandName": "TuitionLanka",
     "menuSection": "மெனு",
     "resourcesSection": "வளங்கள்",
     "academicsSection": "கல்வி",
@@ -32,7 +32,7 @@
     "gradesAndSubjects": "தரங்கள் & பாடங்கள்",
     "pastExamPapers": "கடந்த கால தேர்வு வினாத்தாள்கள்",
     "tuitionRates": "பயிற்சி கட்டணங்கள்",
-    "copyright": "@2026 - அனைத்து உரிமைகளும் Tuition Lanka க்கு சொந்தமானவை",
+    "copyright": "@2026 - அனைத்து உரிமைகளும் TuitionLanka க்கு சொந்தமானவை",
     "privacyPolicy": "தனியுரிமைக் கொள்கை",
     "termsAndConditions": "விதிமுறைகள் & நிபந்தனைகள்"
   },
@@ -175,7 +175,7 @@
   },
   "blogs": {
     "heroLabel": "TuitionLanka நுண்ணறிவு",
-    "heroTitle": "Tuition Lanka வலைப்பதிவிற்கு வரவேற்கிறோம்",
+    "heroTitle": "TuitionLanka வலைப்பதிவிற்கு வரவேற்கிறோம்",
     "heroSubtitle": "சமீபத்திய நுண்ணறிவு, குறிப்புகள் மற்றும் புதுப்பிப்புகளை கண்டறியுங்கள்.",
     "allFilter": "அனைத்தும்",
     "addBlog": "+ வலைப்பதிவு சேர்க்கவும்",
@@ -185,7 +185,7 @@
     "statusApproved": "அனுமதிக்கப்பட்டது",
     "statusPending": "நிலுவையில்",
     "statusRejected": "நிராகரிக்கப்பட்டது",
-    "authorName": "Tuition Lanka",
+    "authorName": "TuitionLanka",
     "backToBlogs": "கட்டுரைகளுக்கு திரும்பு",
     "relatedArticles": "தொடர்புடைய கட்டுரைகள்",
     "tableOfContents": "உள்ளடக்க அட்டவணை",
@@ -734,7 +734,43 @@
     "passwordRequired": "கடவுச்சொல் தேவை",
     "passwordTooShort": "கடவுச்சொல் குறைந்தது 8 எழுத்துக்கள் இருக்க வேண்டும்",
     "passwordTooLong": "கடவுச்சொல் 12 எழுத்துக்களை தாண்டக்கூடாது",
-    "passwordLetterNumber": "கடவுச்சொல்லில் குறைந்தது ஒரு எழுத்தும் ஒரு எண்ணும் இருக்க வேண்டும்"
+    "passwordLetterNumber": "கடவுச்சொல்லில் குறைந்தது ஒரு எழுத்தும் ஒரு எண்ணும் இருக்க வேண்டும்",
+    "weeklyAvailability": "வாராந்திர கிடைக்கும் நேரம்",
+    "schedulerDay": "நாள்",
+    "schedulerStartTime": "தொடக்க நேரம்",
+    "schedulerEndTime": "முடிவு நேரம்",
+    "addSlot": "இடம் சேர்க்கவும்",
+    "noSlotsAdded": "இடங்கள் சேர்க்கப்படவில்லை",
+    "removeSlot": "நீக்கவும்",
+    "setTime": "அமைக்கவும்",
+    "schedulerHour": "மணி",
+    "schedulerMinute": "நிமிடம்",
+    "schedulerPeriod": "காலம்",
+    "schedulerHelperText": "வாராந்திர கற்பித்தல் இடங்களை சேர்க்கவும், எடுத்துக்காட்டாக செவ்வாய் 7:30 PM முதல் 9:00 PM வரை.",
+    "schedulerLegacyText": "தற்போதைய கிடைக்கும் நேரம் சாதாரண உரையாக சேமிக்கப்பட்டுள்ளது. புதிய வடிவத்துடன் மாற்ற ஒரு இடத்தை சேர்க்கவும் அல்லது நீக்கவும்.",
+    "schedulerErrorChooseDay": "ஒரு நாள், தொடக்க நேரம் மற்றும் முடிவு நேரம் தேர்ந்தெடுக்கவும்.",
+    "schedulerErrorEndTime": "முடிவு நேரம் தொடக்க நேரத்திற்கு பிறகு இருக்க வேண்டும். இரவு நேர இடங்கள் ஆதரிக்கப்படவில்லை.",
+    "schedulerErrorDuplicate": "அந்த நேர இடம் ஏற்கனவே சேர்க்கப்பட்டுள்ளது.",
+    "schedulerErrorOverlap": "இது {day} இல் உள்ள இடத்துடன் மேல்-அடுக்கில் உள்ளது: {startTime} - {endTime}.",
+    "dayMonday": "திங்கட்கிழமை",
+    "dayTuesday": "செவ்வாய்க்கிழமை",
+    "dayWednesday": "புதன்கிழமை",
+    "dayThursday": "வியாழக்கிழமை",
+    "dayFriday": "வெள்ளிக்கிழமை",
+    "daySaturday": "சனிக்கிழமை",
+    "daySunday": "ஞாயிற்றுக்கிழமை",
+    "dayMon": "திங்",
+    "dayTue": "செவ்",
+    "dayWed": "புத",
+    "dayThu": "வியா",
+    "dayFri": "வெள்",
+    "daySat": "சனி",
+    "daySun": "ஞாயி",
+    "tzEasternTime": "கிழக்கு நேரம் (அமெரிக்கா & கனடா)",
+    "tzCentralEuropean": "மத்திய ஐரோப்பிய நேரம்",
+    "tzJapanStandard": "ஜப்பான் நிலையான நேரம்",
+    "tzSriLankaStandard": "இலங்கை நிலையான நேரம்",
+    "perHour": "மணி நேரத்திற்கு"
   },
   "gradesAndSubjects": {
     "pageTitle": "தரங்கள் & பாடங்கள்",
@@ -755,5 +791,9 @@
     "emailLabel": "மின்னஞ்சல்",
     "whatsappLabel": "WhatsApp",
     "websiteLabel": "இணையதளம்"
+  },
+  "legalDocument": {
+    "eyebrow": "சட்டம்",
+    "lastUpdated": "கடைசியாக புதுப்பிக்கப்பட்டது"
   }
 }

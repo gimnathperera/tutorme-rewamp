@@ -1005,7 +1005,7 @@ export default function EditBlogPage() {
                                   {related?.title || "Untitled Post"}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                  Tuition Lanka
+                                  TuitionLanka
                                 </p>
                               </div>
                             </li>
