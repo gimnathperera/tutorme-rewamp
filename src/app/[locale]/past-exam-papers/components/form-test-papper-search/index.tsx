@@ -66,7 +66,15 @@ const FormTestPaperSearch: FC<Props> = ({
               aria-hidden="true"
             />
             <input
-              {...testPaperSearchForm.register("search")}
+              {...testPaperSearchForm.register("search", {
+                onChange: (e) => {
+                  const numeric = e.target.value.replace(/\D/g, "");
+                  if (numeric !== e.target.value) {
+                    e.target.value = numeric;
+                    testPaperSearchForm.setValue("search", numeric, { shouldDirty: true });
+                  }
+                },
+              })}
               type="text"
               inputMode="numeric"
               placeholder={t("searchPlaceholder")}
