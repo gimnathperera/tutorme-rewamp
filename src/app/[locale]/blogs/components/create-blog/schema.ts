@@ -46,9 +46,8 @@ export const createArticleSchema = (t: (_key: string) => string) =>
           }),
         ]),
       )
-      .optional()
-      .default([]),
-    image: z.string().optional().default(""),
+      .min(1, t("contentRequired")),
+    image: z.string().min(1, t("coverImageRequired")),
     faqs: z
       .array(
         z.object({
