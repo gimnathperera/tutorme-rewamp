@@ -354,7 +354,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder={t("fieldClassType")}
+                      placeholder={tR("classTypePlaceholder")}
                     />
                   )}
                 />
@@ -383,6 +383,7 @@ const FormEducationInfo: FC<Props> = ({
                         !!form.formState.errors.preferredLocations
                       }
                       searchable
+                      placeholder={tR("preferredLocationsPlaceholder")}
                     />
                   )}
                 />
@@ -415,7 +416,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder={t("fieldTutorTypes")}
+                      placeholder={tR("tutorTypesPlaceholder")}
                     />
                   )}
                 />
@@ -427,7 +428,7 @@ const FormEducationInfo: FC<Props> = ({
                 label={t("fieldHighestEducation")}
                 name="highestEducation"
                 options={highestEducationOptions}
-                placeholder={tR("selectOption")}
+                placeholder={tR("highestEducationPlaceholder")}
                 className={fieldControlHeightClass}
                 reserveHelperSpace
               />
@@ -457,7 +458,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder={t("fieldTutorMediums")}
+                      placeholder={tR("tutorMediumsPlaceholder")}
                     />
                   )}
                 />
@@ -478,7 +479,7 @@ const FormEducationInfo: FC<Props> = ({
                       defaultSelected={field.value ?? []}
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
-                      placeholder={t("fieldGrades")}
+                      placeholder={tR("gradesPlaceholder")}
                     />
                   )}
                 />
@@ -500,7 +501,7 @@ const FormEducationInfo: FC<Props> = ({
                       onChange={field.onChange}
                       hasError={!!fieldState.error}
                       disabled={isEmpty(selectedGrades)}
-                      placeholder={t("fieldSubjects")}
+                      placeholder={tR("subjectsPlaceholder")}
                     />
                   )}
                 />
