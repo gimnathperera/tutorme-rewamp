@@ -101,6 +101,8 @@ const PersonalInfo = () => {
   useEffect(() => {
     if (!dateOfBirth) return;
 
+    trigger("dateOfBirth");
+
     const dob = new Date(dateOfBirth);
     const today = new Date();
 
@@ -114,7 +116,7 @@ const PersonalInfo = () => {
     if (age >= 0) {
       setValue("age", age, { shouldValidate: true });
     }
-  }, [dateOfBirth, setValue]);
+  }, [dateOfBirth, setValue, trigger]);
 
   useEffect(() => {
     const normalizedEmail =
