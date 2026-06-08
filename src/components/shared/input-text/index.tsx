@@ -6,6 +6,7 @@ interface InputTextProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   name: string;
+  required?: boolean;
   reserveHelperSpace?: boolean;
 }
 
@@ -14,6 +15,7 @@ const InputText: React.FC<InputTextProps> = ({
   helperText,
   className = "",
   name,
+  required = false,
   onBlur,
   onChange,
   reserveHelperSpace = false,
@@ -32,7 +34,10 @@ const InputText: React.FC<InputTextProps> = ({
               <span className="text-red-500"> *</span>
             </>
           ) : (
-            label
+            <>
+              {label}
+              {required && <span className="text-red-500"> *</span>}
+            </>
           )}
         </label>
       )}

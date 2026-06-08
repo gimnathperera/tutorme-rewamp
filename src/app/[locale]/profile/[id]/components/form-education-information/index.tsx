@@ -430,6 +430,7 @@ const FormEducationInfo: FC<Props> = ({
                 options={highestEducationOptions}
                 placeholder={tR("highestEducationPlaceholder")}
                 className={fieldControlHeightClass}
+                required
                 reserveHelperSpace
               />
 
