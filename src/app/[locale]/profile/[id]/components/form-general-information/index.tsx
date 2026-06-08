@@ -174,6 +174,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 placeholder={t("placeholderFullName")}
                 name="name"
                 type="text"
+                required
                 onChange={(e) => {
                   const cleaned = stripLeadingSpaces(e.target.value);
                   if (cleaned !== e.target.value) {
@@ -201,6 +202,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 placeholder={t("placeholderContactNumber")}
                 name="phoneNumber"
                 type="tel"
+                required
                 inputMode="numeric"
                 maxLength={10}
                 onKeyDown={preventWhitespaceKey}
@@ -244,6 +246,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={genderOptions}
                 placeholder={genderPlaceholder}
                 className={fieldHeightClass}
+                required
               />
               <InputSelect
                 label={t("fieldNationality")}
@@ -251,6 +254,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={nationalityOptions}
                 placeholder={nationalityPlaceholder}
                 className={fieldHeightClass}
+                required
               />
               <InputSelect
                 label={t("fieldRace")}
@@ -258,6 +262,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={raceOptions}
                 placeholder={racePlaceholder}
                 className={fieldHeightClass}
+                required
               />
             </div>
             <div className="col-span-6 sm:col-full">
