@@ -12,6 +12,7 @@ interface InputSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   helperText?: string;
   options: Option[];
   name: string;
+  required?: boolean;
   loading?: boolean;
   placeholder?: string;
   disablePlaceholder?: boolean;
@@ -24,6 +25,7 @@ const InputSelect: FC<InputSelectProps> = ({
   options,
   name,
   className = "",
+  required = false,
   loading = false,
   placeholder = "Select an option",
   disablePlaceholder = true,
@@ -44,7 +46,10 @@ const InputSelect: FC<InputSelectProps> = ({
               <span className="text-red-500"> *</span>
             </>
           ) : (
-            label
+            <>
+              {label}
+              {required && <span className="text-red-500"> *</span>}
+            </>
           )}
         </label>
       )}

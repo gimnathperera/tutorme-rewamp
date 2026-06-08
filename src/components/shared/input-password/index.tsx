@@ -7,10 +7,11 @@ interface InputPasswordProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helperText?: string;
   name: string;
+  required?: boolean;
 }
 
 const InputPassword: React.FC<InputPasswordProps> = React.memo(
-  ({ label, helperText, className = "", name, onBlur, onChange, ...props }) => {
+  ({ label, helperText, className = "", name, required = false, onBlur, onChange, ...props }) => {
     const { control, formState } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
 
@@ -30,7 +31,10 @@ const InputPassword: React.FC<InputPasswordProps> = React.memo(
                 <span className="text-red-500"> *</span>
               </>
             ) : (
-              label
+              <>
+                {label}
+                {required && <span className="text-red-500"> *</span>}
+              </>
             )}
           </label>
         )}
