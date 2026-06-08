@@ -102,6 +102,7 @@ const FormPasswordInfo: FC = () => {
               label={t("fieldCurrentPassword")}
               name="currentPassword"
               placeholder={t("placeholderCurrentPassword")}
+              required
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("currentPassword")}
             />
@@ -109,6 +110,7 @@ const FormPasswordInfo: FC = () => {
               label={t("fieldNewPassword")}
               name="newPassword"
               placeholder={t("placeholderNewPassword")}
+              required
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("newPassword")}
             />
@@ -116,6 +118,7 @@ const FormPasswordInfo: FC = () => {
               label={t("fieldConfirmPassword")}
               name="confirmPassword"
               placeholder={t("placeholderConfirmPassword")}
+              required
               onKeyDown={preventWhitespaceKey}
               onChange={sanitizePasswordField("confirmPassword")}
             />
