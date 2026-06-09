@@ -195,14 +195,17 @@ const TestPapers = () => {
       gradesOptions,
       subjectOptions,
       mediumOptions,
+      yearOptions,
       isGradesLoading,
       isSubjectsLoading,
-      papers: availablePapers,
       isPapersLoading,
+      isYearLoading,
+      papers: availablePapers,
       currentPage,
       totalPages,
       totalResults,
       isEdexcelGradeSelected,
+      defaultYear,
     },
     actions: { setCurrentPage },
     forms: { testPaperSearchForm },
@@ -270,10 +273,13 @@ const TestPapers = () => {
           gradesOptions={translatedGradesOptions}
           subjectOptions={translatedSubjectOptions}
           mediumOptions={translatedMediumOptions}
+          yearOptions={yearOptions}
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading || isGradesTranslating}
           isSubjectsLoading={isSubjectsLoading || isSubjectsTranslating}
           isMediumsLoading={isMediumsTranslating}
+          isYearLoading={isYearLoading}
+          defaultYear={defaultYear}
         />
       </div>
 
