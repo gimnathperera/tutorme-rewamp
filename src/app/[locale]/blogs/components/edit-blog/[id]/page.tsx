@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
 import toast from "react-hot-toast";
 
+import { ArrowLeft, Eye } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/Button/button";
@@ -299,36 +300,30 @@ export default function EditBlogPage() {
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="flex flex-col bg-white md:flex-row gap-8">
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
-          <div className="flex gap-2 mt-6 px-6">
-            <Button
-              type="button"
-              variant={isPreview ? "outline" : "default"}
-              onClick={() => setIsPreview(false)}
-            >
-              Edit
-            </Button>
-            <Button
-              type="button"
-              variant={isPreview ? "default" : "outline"}
-              onClick={() => setIsPreview(true)}
-            >
-              Preview
-            </Button>
-          </div>
-
           {!isPreview ? (
             <div className="p-6 space-y-6">
-              <input
-                id="title"
-                placeholder="Blog Title"
-                className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
-                {...register("title")}
-              />
-              {formState.errors.title && (
-                <p className="text-sm text-red-500 mt-1">
-                  {formState.errors.title.message}
-                </p>
-              )}
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <input
+                    id="title"
+                    placeholder="Blog Title"
+                    className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400 min-w-0"
+                    {...register("title")}
+                  />
+                  {formState.errors.title && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {formState.errors.title.message}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsPreview(true)}
+                  className="flex-shrink-0 flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white w-fit"
+                >
+                  <Eye size={15} />Preview
+                </button>
+              </div>
 
               <div className="space-y-6">
                 <Label className="text-xl font-semibold border-b pb-2 flex">
@@ -878,21 +873,37 @@ export default function EditBlogPage() {
                     <Label className="text-sm font-medium text-gray-700">
                       FAQs
                     </Label>
-                    <Button
+                    <button
                       type="button"
                       onClick={() => appendFaq({ question: "", answer: "" })}
-                      variant="default"
-                      className="bg-black text-white hover:transition-opacity"
+                      className="h-9 px-4 text-sm font-medium rounded-lg border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
                     >
                       + Add FAQ
-                    </Button>
+                    </button>
                   </div>
+                  {faqFields.length === 0 && (
+                    <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center text-sm text-gray-400">
+                      No FAQs added yet. Click + Add FAQ to add one.
+                    </div>
+                  )}
                   {faqFields.map((faq, index) => (
-                    <div key={faq.id} className="flex gap-2 items-start">
-                      <div className="flex-1 flex flex-col gap-1.5">
+                    <div key={faq.id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="font-semibold text-gray-700 text-sm">
+                          FAQ {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeFaq(index)}
+                          className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
                         <Input
                           placeholder="Question"
-                          className="text-sm placeholder:text-gray-500"
+                          className="text-sm placeholder:text-gray-500 bg-white"
                           {...register(`faqs.${index}.question` as const)}
                         />
                         {formState.errors.faqs?.[index]?.question && (
@@ -902,7 +913,7 @@ export default function EditBlogPage() {
                         )}
                         <Input
                           placeholder="Answer"
-                          className="text-sm placeholder:text-gray-500"
+                          className="text-sm placeholder:text-gray-500 bg-white"
                           {...register(`faqs.${index}.answer` as const)}
                         />
                         {formState.errors.faqs?.[index]?.answer && (
@@ -911,14 +922,6 @@ export default function EditBlogPage() {
                           </p>
                         )}
                       </div>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="h-fit bg-red-500 text-white"
-                        onClick={() => removeFaq(index)}
-                      >
-                        Remove
-                      </Button>
                     </div>
                   ))}
                 </div>
@@ -926,6 +929,18 @@ export default function EditBlogPage() {
             </div>
           ) : (
             <>
+              <div className="flex justify-between items-center mt-6 px-6">
+                <button
+                  type="button"
+                  onClick={() => setIsPreview(false)}
+                  className="flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
+                >
+                  <ArrowLeft size={15} />Back to Edit
+                </button>
+                <span className="flex items-center gap-1.5 px-4 text-sm font-bold text-blue-700 select-none">
+                  <Eye size={15} />Preview
+                </span>
+              </div>
               <div className="m-10">
                 {watch("image") && (
                   <div className="relative w-full mb-8 rounded-lg overflow-hidden">
@@ -936,7 +951,7 @@ export default function EditBlogPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-                      <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
+                      <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg break-words max-w-full">
                         {watch("title") || "Your Blog Title Here"}
                       </h1>
                     </div>
@@ -1023,22 +1038,22 @@ export default function EditBlogPage() {
             </>
           )}
 
-          <div className="flex justify-between items-center mt-6">
-            <Button
+          <div className="flex justify-between items-center mt-6 px-6 mb-4">
+            <button
               type="button"
-              variant="outline"
               onClick={() => router.push(`/blogs/${blogId}`)}
+              className="h-9 px-4 text-sm font-medium rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
             >
               Cancel
-            </Button>
+            </button>
 
-            <Button
+            <button
               type="submit"
-              className="bg-blue-700 text-white hover:bg-blue-500"
-              isLoading={isUpdating}
+              disabled={isUpdating}
+              className="h-9 px-5 text-sm font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
             >
-              Update Blog
-            </Button>
+              {isUpdating ? "Updating..." : "Update Blog"}
+            </button>
           </div>
         </form>
       </div>
