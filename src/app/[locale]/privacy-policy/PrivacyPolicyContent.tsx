@@ -392,7 +392,7 @@ function renderItem(item: ContentItem, key: number): React.ReactNode {
       );
     case "h3":
       return (
-        <h3 key={key} className="font-bold text-gray-800 mb-1">
+        <h3 key={key} className="text-base font-bold text-gray-800 mb-1">
           {item.text}
         </h3>
       );
