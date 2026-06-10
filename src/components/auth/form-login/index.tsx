@@ -1,3 +1,5 @@
+"use client";
+
 import InputText from "@/components/shared/input-text";
 import SubmitButton from "@/components/shared/submit-button";
 import { FormProvider, useForm } from "react-hook-form";
@@ -8,6 +10,15 @@ import { useAuthContext } from "@/contexts";
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
+
+const INCORRECT_CREDENTIALS_ERROR = "Incorrect email or password";
+
+const INCORRECT_CREDENTIALS_BY_LOCALE: Record<string, string> = {
+  en: "Incorrect email or password",
+  si: "ඊමේල් ලිපිනය හෝ මුරපදය වැරදිය",
+  ta: "தவறான மின்னஞ்சல் அல்லது கடவுச்சொல்",
+};
 
 type Props = {
   onRegisterClick: () => void;
@@ -16,6 +27,8 @@ type Props = {
 
 const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const t = useTranslations("auth");
+  const params = useParams();
+  const locale = (params?.locale as string) ?? "en";
   const { login, isAuthError, setIsAuthError, isLoading } = useAuthContext();
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
@@ -51,13 +64,13 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   }, [passwordValue, loginForm]);
 
   useEffect(() => {
-    if (isAuthError) {
-      toast.error(isAuthError, {
-        id: "login-error",
-        duration: 3000,
-      });
-    }
-  }, [isAuthError]);
+    if (!isAuthError) return;
+    const msg =
+      isAuthError === INCORRECT_CREDENTIALS_ERROR
+        ? (INCORRECT_CREDENTIALS_BY_LOCALE[locale] ?? isAuthError)
+        : isAuthError;
+    toast.error(msg, { id: "login-error", duration: 3000 });
+  }, [isAuthError, locale]);
 
   const onSubmit = (data: LoginSchema) => {
     toast.dismiss("login-error");

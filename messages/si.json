@@ -572,7 +572,8 @@
     "nameRequired": "සම්පූර්ණ නම අවශ්‍යයි",
     "nameLettersOnly": "නාමය අකුරු සහ හිස්තැන් පමණක් අඩංගු විය හැකිය",
     "confirmPasswordRequired": "ඔබේ මුරපදය තහවුරු කරන්න.",
-    "passwordsNoMatch": "මුරපද නොගැළපේ"
+    "passwordsNoMatch": "මුරපද නොගැළපේ",
+    "incorrectCredentials": "ඊමේල් ලිපිනය හෝ මුරපදය වැරදිය"
   },
   "profile": {
     "adminProfileTitle": "පරිපාලක පැතිකඩ",

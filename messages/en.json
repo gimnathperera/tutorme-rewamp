@@ -572,7 +572,8 @@
     "nameRequired": "Full Name is required",
     "nameLettersOnly": "Name can contain letters and spaces only",
     "confirmPasswordRequired": "Please confirm your password.",
-    "passwordsNoMatch": "Passwords don't match"
+    "passwordsNoMatch": "Passwords don't match",
+    "incorrectCredentials": "Incorrect email or password"
   },
   "profile": {
     "adminProfileTitle": "Admin Profile",

@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 // ── Client-side in-memory cache (shared across all hook instances) ───────────
 const clientCache = new Map<string, string>();
 
-async function translateBatch(
+export async function translateBatch(
   texts: string[],
   locale: string,
 ): Promise<string[]> {

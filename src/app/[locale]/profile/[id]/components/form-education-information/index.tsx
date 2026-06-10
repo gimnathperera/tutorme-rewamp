@@ -275,6 +275,21 @@ const FormEducationInfo: FC<Props> = ({
     (s) => [s.label],
     (s, [label]) => ({ ...s, label: label ?? s.label }),
   );
+
+  const GRADES_SUBJECTS_LABELS = useMemo(
+    () => [
+      { key: "grades", text: "Grades" },
+      { key: "subjects", text: "Subjects" },
+    ],
+    [],
+  );
+  const translatedGradesSubjectsLabels = useTranslateItems(
+    GRADES_SUBJECTS_LABELS,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
+  const gradesLabel = translatedGradesSubjectsLabels[0]?.text ?? "Grades";
+  const subjectsLabel = translatedGradesSubjectsLabels[1]?.text ?? "Subjects";
   const { isDirty, isValid } = form.formState;
 
   const {
@@ -494,7 +509,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Grades */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  {t("fieldGrades")} <span className="text-red-500">*</span>
+                  {gradesLabel} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="grades"
@@ -515,7 +530,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Subjects */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  {t("fieldSubjects")} <span className="text-red-500">*</span>
+                  {subjectsLabel} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="subjects"

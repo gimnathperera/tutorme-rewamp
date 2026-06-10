@@ -572,7 +572,8 @@
     "nameRequired": "முழு பெயர் தேவை",
     "nameLettersOnly": "பெயரில் எழுத்துக்கள் மற்றும் இடைவெளிகள் மட்டுமே இருக்கலாம்",
     "confirmPasswordRequired": "உங்கள் கடவுச்சொல்லை உறுதிப்படுத்தவும்.",
-    "passwordsNoMatch": "கடவுச்சொற்கள் பொருந்தவில்லை"
+    "passwordsNoMatch": "கடவுச்சொற்கள் பொருந்தவில்லை",
+    "incorrectCredentials": "தவறான மின்னஞ்சல் அல்லது கடவுச்சொல்"
   },
   "profile": {
     "adminProfileTitle": "நிர்வாக சுயவிவரம்",
