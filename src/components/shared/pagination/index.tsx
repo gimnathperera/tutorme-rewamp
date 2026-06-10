@@ -63,7 +63,7 @@ const Pagination: FC<Props> = ({
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
         <ChevronLeft size={15} />
-        {previousLabel}
+        <span className="hidden sm:inline">{previousLabel}</span>
       </button>
 
       {pages.map((page, index) =>
@@ -96,7 +96,7 @@ const Pagination: FC<Props> = ({
         onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
         className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition"
       >
-        {nextLabel}
+        <span className="hidden sm:inline">{nextLabel}</span>
         <ChevronRight size={15} />
       </button>
     </div>

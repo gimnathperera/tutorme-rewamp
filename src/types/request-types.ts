@@ -118,6 +118,8 @@ export type FetchPapersRequest = {
   title?: string;
   year?: string;
   yearSearch?: string;
+  fromYear?: string;
+  toYear?: string;
   grade?: string;
   subject?: string;
   medium?: string;

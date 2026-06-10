@@ -103,7 +103,7 @@ const LegalContactSection = ({
               <Globe2 className="h-4 w-4 shrink-0" aria-hidden="true" />
               <span className="min-w-0 break-all">
                 <span className="text-gray-800">{t("websiteLabel")}:</span>{" "}
-                {WEBSITE_URL}
+                www.tuitionlanka.com
               </span>
               <ArrowUpRight
                 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2"

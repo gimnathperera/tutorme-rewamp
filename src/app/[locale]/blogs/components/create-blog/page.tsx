@@ -34,6 +34,7 @@ import {
   BLOG_EDITOR_LIST_STYLE_OPTIONS,
 } from "@/configs/options";
 import { useTranslations } from "next-intl";
+import { ArrowLeft, Eye } from "lucide-react";
 
 const AddBlog = () => {
   const t = useTranslations("createBlog");
@@ -156,28 +157,24 @@ const AddBlog = () => {
     <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
       <div className="flex flex-col bg-white md:flex-row gap-8">
         <form onSubmit={handleSubmit(onSubmit)} className="flex-1">
-          <div className="flex gap-2 mt-6 px-6">
-            <button
-              type="button"
-              onClick={() => setIsPreview((prev) => !prev)}
-              className={`h-9 px-4 text-sm font-medium rounded-lg transition-colors duration-150 ${
-                isPreview
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
-            >
-              {t("previewTab")}
-            </button>
-          </div>
-
           {!isPreview ? (
             <div className="p-6 space-y-6">
-              <input
-                id="title"
-                placeholder={t("titlePlaceholder")}
-                className="text-4xl h-20 w-full font-semibold focus:outline-none placeholder-gray-400"
-                {...register("title")}
-              />
+              <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+                <input
+                  id="title"
+                  placeholder={t("titlePlaceholder")}
+                  className="text-4xl h-20 flex-1 font-semibold focus:outline-none placeholder-gray-400 min-w-0"
+                  {...register("title")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsPreview(true)}
+                  className="flex-shrink-0 flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white w-fit"
+                >
+                  <Eye size={15} />
+                  {t("previewTab")}
+                </button>
+              </div>
               {formState.errors.title && (
                 <p className="text-sm text-red-500 mt-1">
                   {formState.errors.title.message}
@@ -749,17 +746,34 @@ const AddBlog = () => {
                     <button
                       type="button"
                       onClick={() => appendFaq({ question: "", answer: "" })}
-                      className="h-9 px-4 text-sm font-medium rounded-lg bg-gray-900 text-white hover:bg-gray-700 transition-colors"
+                      className="h-9 px-4 text-sm font-medium rounded-lg border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 transition-colors"
                     >
                       {t("addFaqBtn")}
                     </button>
                   </div>
+                  {faqFields.length === 0 && (
+                    <div className="p-4 border-2 border-dashed border-gray-200 rounded-xl text-center text-sm text-gray-400">
+                      {t("noFaqsAdded")}
+                    </div>
+                  )}
                   {faqFields.map((faq, index) => (
-                    <div key={faq.id} className="flex gap-2 items-start">
-                      <div className="flex-1 flex flex-col gap-1.5">
+                    <div key={faq.id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50">
+                      <div className="flex justify-between items-center mb-4">
+                        <span className="font-semibold text-gray-700 text-sm">
+                          FAQ {index + 1}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => removeFaq(index)}
+                          className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200"
+                        >
+                          {t("removeBtn")}
+                        </button>
+                      </div>
+                      <div className="flex flex-col gap-1.5">
                         <Input
                           placeholder={t("questionPlaceholder")}
-                          className="text-sm placeholder:text-gray-500"
+                          className="text-sm placeholder:text-gray-500 bg-white"
                           {...register(`faqs.${index}.question` as const)}
                         />
                         {formState.errors.faqs?.[index]?.question && (
@@ -769,7 +783,7 @@ const AddBlog = () => {
                         )}
                         <Input
                           placeholder={t("answerPlaceholder")}
-                          className="text-sm placeholder:text-gray-500"
+                          className="text-sm placeholder:text-gray-500 bg-white"
                           {...register(`faqs.${index}.answer` as const)}
                         />
                         {formState.errors.faqs?.[index]?.answer && (
@@ -778,13 +792,6 @@ const AddBlog = () => {
                           </p>
                         )}
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFaq(index)}
-                        className="h-8 px-3 text-xs font-medium rounded-lg bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 transition-colors"
-                      >
-                        {t("removeBtn")}
-                      </button>
                     </div>
                   ))}
                 </div>
@@ -792,6 +799,20 @@ const AddBlog = () => {
             </div>
           ) : (
             <>
+              <div className="flex justify-between items-center mt-6 px-6">
+                <button
+                  type="button"
+                  onClick={() => setIsPreview(false)}
+                  className="flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
+                >
+                  <ArrowLeft size={15} />
+                  {t("backToEdit")}
+                </button>
+                <span className="flex items-center gap-1.5 px-4 text-sm font-bold text-blue-700 select-none">
+                  <Eye size={15} />
+                  {t("previewTab")}
+                </span>
+              </div>
               <div className="m-10">
                 {watch("image") && (
                   <div className="relative w-full mb-8 rounded-lg overflow-hidden">
@@ -802,7 +823,7 @@ const AddBlog = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-                      <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
+                      <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg break-words max-w-full">
                         {watch("title") || t("previewTitleFallback")}
                       </h1>
                     </div>
