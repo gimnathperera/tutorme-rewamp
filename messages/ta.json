@@ -257,7 +257,16 @@
     "faqQuestionRequired": "FAQ கேள்வி தேவை",
     "faqAnswerRequired": "FAQ பதில் தேவை",
     "tagRequired": "குறிச்சொல் சேர்க்கவும்",
-    "relatedArticleRequired": "தொடர்புடைய கட்டுரை ID தேவை"
+    "relatedArticleRequired": "தொடர்புடைய கட்டுரை ID தேவை",
+    "selectRelatedArticles": "தொடர்புடைய கட்டுரைகளை தேர்ந்தெடுக்கவும்",
+    "selectTags": "குறிச்சொற்களை தேர்ந்தெடுக்கவும்",
+    "tagsLabelText": "குறிச்சொற்கள்",
+    "faqsLabelText": "அடிக்கடி கேட்கப்படும் கேள்விகள்"
+  },
+  "upload": {
+    "dragDropCta": "இழுத்து விடுக அல்லது தட்டி பதிவேற்றுக",
+    "dropHere": "கோப்பை இங்கே விடுக...",
+    "optimizingUploading": "மேம்படுத்தி பதிவேற்றுகிறது..."
   },
   "registerTutor": {
     "pageTitle": "ஆசிரியராக பதிவு செய்யுங்கள்",

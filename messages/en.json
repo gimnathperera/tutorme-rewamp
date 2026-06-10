@@ -535,7 +535,16 @@
     "faqQuestionRequired": "FAQ question is required",
     "faqAnswerRequired": "FAQ answer is required",
     "tagRequired": "Please add a tag",
-    "relatedArticleRequired": "Related article ID is required"
+    "relatedArticleRequired": "Related article ID is required",
+    "selectRelatedArticles": "Select related articles",
+    "selectTags": "Select tags",
+    "tagsLabelText": "Tags",
+    "faqsLabelText": "FAQs"
+  },
+  "upload": {
+    "dragDropCta": "Drag & drop or tap to upload",
+    "dropHere": "Drop the file here...",
+    "optimizingUploading": "Optimizing and uploading..."
   },
   "testimonials": {
     "sectionHeading": "See what others are saying."

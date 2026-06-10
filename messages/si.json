@@ -510,7 +510,7 @@
     "addEmbedBtn": "+ Embed",
     "coverImageLabel": "ආවරණ රූපය",
     "relatedArticlesLabel": "සම්බන්ධිත ලිපි",
-    "tagsLabel": "ටැග්",
+    "tagsLabel": "ලේබල්",
     "faqsLabel": "නිතර අසන ප්‍රශ්න",
     "addFaqBtn": "+ ප්‍රශ්නය",
     "questionPlaceholder": "ප්‍රශ්නය",
@@ -535,7 +535,16 @@
     "faqQuestionRequired": "FAQ ප්‍රශ්නය අවශ්‍යයි",
     "faqAnswerRequired": "FAQ පිළිතුර අවශ්‍යයි",
     "tagRequired": "ටැගයක් එකතු කරන්න",
-    "relatedArticleRequired": "සම්බන්ධිත ලිපි ID අවශ්‍යයි"
+    "relatedArticleRequired": "සම්බන්ධිත ලිපි ID අවශ්‍යයි",
+    "selectRelatedArticles": "සම්බන්ධිත ලිපි තෝරන්න",
+    "selectTags": "ලේබල් තෝරන්න",
+    "tagsLabelText": "ලේබල්",
+    "faqsLabelText": "නිතර අසන ප්‍රශ්න"
+  },
+  "upload": {
+    "dragDropCta": "ඇදගෙන දමන්න හෝ ස්පර්ශ කර උඩුගත කරන්න",
+    "dropHere": "ගොනුව මෙහි දමන්න...",
+    "optimizingUploading": "ප්‍රශස්ත කිරීම සහ උඩුගත කිරීම..."
   },
   "testimonials": {
     "sectionHeading": "අනෙක් අයගේ අදහස් බලන්න."

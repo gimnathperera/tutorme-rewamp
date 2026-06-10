@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo, useState } from "react";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import {
@@ -99,17 +100,27 @@ const AddBlog = () => {
 
   const redirect = useRouter();
 
-  const blogOptions: Option[] =
-    blogsData?.results.map((blog) => ({
-      value: blog.id,
-      text: blog.title,
-    })) || [];
+  const rawBlogOptions: Option[] = useMemo(
+    () => blogsData?.results.map((blog) => ({ value: blog.id, text: blog.title })) || [],
+    [blogsData],
+  );
 
-  const tagOptions: Option[] =
-    tagData?.results.map((tag) => ({
-      value: tag.id,
-      text: tag.name,
-    })) || [];
+  const rawTagOptions: Option[] = useMemo(
+    () => tagData?.results.map((tag) => ({ value: tag.id, text: tag.name })) || [],
+    [tagData],
+  );
+
+  const blogOptions = useTranslateItems(
+    rawBlogOptions,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
+
+  const tagOptions = useTranslateItems(
+    rawTagOptions,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
 
   const onSubmit = async (data: CreateArticleSchema) => {
     if (!user) {
@@ -718,7 +729,7 @@ const AddBlog = () => {
                         options={blogOptions}
                         defaultSelected={field.value || []}
                         onChange={field.onChange}
-                        placeholder="Select related articles"
+                        placeholder={t("selectRelatedArticles")}
                       />
                     )}
                   />
@@ -738,7 +749,7 @@ const AddBlog = () => {
                         options={tagOptions}
                         defaultSelected={field.value || []}
                         onChange={field.onChange}
-                        placeholder="Select tags"
+                        placeholder={t("selectTags")}
                       />
                     )}
                   />
