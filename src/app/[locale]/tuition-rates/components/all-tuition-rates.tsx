@@ -148,16 +148,18 @@ function MobileRateCard({ item }: { item: TuitionRateItem }) {
       {MOBILE_TUTOR_ROWS.map(({ key, label, color }) => (
         <div
           key={key}
-          className="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 last:border-0"
+          className="flex flex-col gap-y-1 min-[450px]:flex-row min-[450px]:items-center min-[450px]:justify-between px-4 py-2.5 border-b border-gray-100 last:border-0"
         >
-          <div className="flex items-center gap-2.5 min-w-0 mr-3">
+          <div className="flex items-center gap-2.5 min-w-0">
             <span
               className="w-2.5 h-2.5 rounded-full flex-shrink-0"
               style={{ backgroundColor: color }}
             />
             <span className="text-sm text-gray-700 leading-tight">{label}</span>
           </div>
-          <MobileRateValue rate={item[key] as Rate | undefined} />
+          <div className="pl-5 min-[450px]:pl-0">
+            <MobileRateValue rate={item[key] as Rate | undefined} />
+          </div>
         </div>
       ))}
     </div>

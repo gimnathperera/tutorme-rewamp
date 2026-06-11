@@ -6,6 +6,7 @@ import {
   FormProvider,
   SubmitHandler,
   useFieldArray,
+  useFormContext,
 } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
 import MultiSelect from "@/components/shared/MultiSelect";
@@ -71,6 +72,7 @@ const DocumentRow = ({
   selectTypePlaceholder: string;
   uploadLabels?: Record<string, string | ((fileName: string) => string)>;
 }) => {
+  const { trigger } = useFormContext();
   const rowErrors = errors[index] ?? {};
   return (
     <div className="grid grid-cols-1 md:grid-cols-[220px_1fr_auto] gap-3 items-start p-3 rounded-lg border border-gray-200 bg-gray-50">
@@ -84,6 +86,10 @@ const DocumentRow = ({
           render={({ field: f }) => (
             <select
               {...f}
+              onChange={(e) => {
+                f.onChange(e);
+                trigger(`${fieldName}.${index}.type`);
+              }}
               className={`${selectClass} ${selectBorder(!!rowErrors.type)} ${selectColor(f.value)}`}
             >
               <option value="" disabled hidden>
@@ -116,7 +122,10 @@ const DocumentRow = ({
           render={({ field: f }) => (
             <MultiFileUploadDropzone
               initialUrls={f.value ? [f.value] : []}
-              onUploaded={(urls) => f.onChange(urls[urls.length - 1] ?? "")}
+              onUploaded={(urls) => {
+                f.onChange(urls[urls.length - 1] ?? "");
+                trigger(`${fieldName}.${index}.url`);
+              }}
               labels={uploadLabels as any}
             />
           )}
@@ -312,6 +321,8 @@ const FormEducationInfo: FC<Props> = ({
 
   const certErrors =
     (form.formState.errors.certificatesAndQualifications as any) ?? [];
+  const optErrors =
+    (form.formState.errors.optionalCertificates as any) ?? [];
 
   const [
     classType,
@@ -368,7 +379,7 @@ const FormEducationInfo: FC<Props> = ({
     Array.isArray(certificatesAndQualifications) &&
     certificatesAndQualifications.length > 0;
   const isButtonDisabled =
-    !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
+    !isDirty || isSubmitting || !hasAllRequiredFields;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
@@ -635,7 +646,7 @@ const FormEducationInfo: FC<Props> = ({
                         index={index}
                         options={optionalDocumentOptions}
                         control={form.control}
-                        errors={[]}
+                        errors={optErrors}
                         onRemove={() => removeOpt(index)}
                         removable={true}
                         documentTypeLabel={t("documentTypeLabel")}

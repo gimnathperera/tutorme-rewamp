@@ -2,7 +2,7 @@
 
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
-import { Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { FC } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { initialFormValues, PaperSearchSchema } from "./schema";
@@ -12,20 +12,26 @@ type Props = {
   gradesOptions: Option[];
   subjectOptions: Option[];
   mediumOptions: Option[];
+  yearOptions: Option[];
   testPaperSearchForm: UseFormReturn<PaperSearchSchema>;
   isGradesLoading: boolean;
   isSubjectsLoading: boolean;
   isMediumsLoading: boolean;
+  isYearLoading: boolean;
+  defaultYear: string;
 };
 
 const FormTestPaperSearch: FC<Props> = ({
   gradesOptions,
   subjectOptions,
   mediumOptions,
+  yearOptions,
   testPaperSearchForm,
   isGradesLoading,
   isSubjectsLoading,
   isMediumsLoading,
+  isYearLoading,
+  defaultYear,
 }) => {
   const t = useTranslations("pastExamPapers");
 
@@ -33,11 +39,23 @@ const FormTestPaperSearch: FC<Props> = ({
     console.log("Form Submitted", data);
   };
 
+  const fromYear = testPaperSearchForm.watch("fromYear");
+  const toYear = testPaperSearchForm.watch("toYear");
+
   const hasActiveFilters =
     !!testPaperSearchForm.watch("grade") ||
     !!testPaperSearchForm.watch("subject") ||
     !!testPaperSearchForm.watch("medium") ||
-    !!testPaperSearchForm.watch("search");
+    (!!defaultYear && fromYear !== defaultYear) ||
+    (!!defaultYear && toYear !== defaultYear);
+
+  const handleClear = () => {
+    testPaperSearchForm.reset({
+      ...initialFormValues,
+      fromYear: defaultYear,
+      toYear: defaultYear,
+    });
+  };
 
   return (
     <FormProvider {...testPaperSearchForm}>
@@ -47,7 +65,7 @@ const FormTestPaperSearch: FC<Props> = ({
           {hasActiveFilters && (
             <button
               type="button"
-              onClick={() => testPaperSearchForm.reset(initialFormValues)}
+              onClick={handleClear}
               className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-red-500 transition-colors"
             >
               <X size={14} />
@@ -56,50 +74,27 @@ const FormTestPaperSearch: FC<Props> = ({
           )}
         </div>
 
-        <div className="flex flex-col gap-1 mb-6">
-          <label className="text-sm font-medium text-gray-700">
-            {t("searchByYear")}
-          </label>
-          <div className="relative">
-            <Search
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400"
-              aria-hidden="true"
-            />
-            <input
-              {...testPaperSearchForm.register("search", {
-                onChange: (e) => {
-                  const numeric = e.target.value.replace(/\D/g, "");
-                  if (numeric !== e.target.value) {
-                    e.target.value = numeric;
-                    testPaperSearchForm.setValue("search", numeric, {
-                      shouldDirty: true,
-                    });
-                  }
-                },
-              })}
-              type="text"
-              inputMode="numeric"
-              placeholder={t("searchPlaceholder")}
-              autoComplete="off"
-              className="block w-full rounded-md border border-linegrey px-3 py-2 pl-10 pr-9 text-gray-900 placeholder-gray-500 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm sm:leading-6"
-            />
-            {!!testPaperSearchForm.watch("search") && (
-              <button
-                type="button"
-                onClick={() =>
-                  testPaperSearchForm.setValue("search", "", {
-                    shouldDirty: true,
-                  })
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                aria-label={t("clearSearch")}
-              >
-                <X size={15} />
-              </button>
-            )}
-          </div>
+        {/* Academic Year Range */}
+        <div className="mb-6 grid grid-cols-2 gap-6">
+          <InputSelect
+            label={t("fromYear")}
+            name="fromYear"
+            options={yearOptions}
+            loading={isYearLoading}
+            placeholder="—"
+            disablePlaceholder={true}
+          />
+          <InputSelect
+            label={t("toYear")}
+            name="toYear"
+            options={yearOptions}
+            loading={isYearLoading}
+            placeholder="—"
+            disablePlaceholder={true}
+          />
         </div>
 
+        {/* Grade / Subject / Medium */}
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           <InputSelect
             label={t("selectGrade")}
