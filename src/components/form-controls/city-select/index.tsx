@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import districtsAndCities from "@/configs/districtsAndCities.json";
 
@@ -69,6 +69,9 @@ export default function CitySelect({
 }: CitySelectProps) {
   const [searchText, setSearchText] = useState(value ?? "");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
+  const [listMaxHeight, setListMaxHeight] = useState(208);
+  const triggerRef = useRef<HTMLInputElement>(null);
   /**
    * Tracks the district value from the previous render.
    * Initialised with the current district so that the very first effect run
@@ -118,6 +121,24 @@ export default function CitySelect({
     if (!value) setSearchText("");
   }, [value]);
 
+  useLayoutEffect(() => {
+    if (showDropdown && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const footer = document.querySelector("footer");
+      const limit = footer
+        ? Math.min(footer.getBoundingClientRect().top, window.innerHeight)
+        : window.innerHeight;
+      const spaceBelow = limit - rect.bottom;
+      if (spaceBelow < 220) {
+        setOpenUpward(true);
+        setListMaxHeight(Math.min(Math.max(rect.top - 8, 80), 208));
+      } else {
+        setOpenUpward(false);
+        setListMaxHeight(Math.min(spaceBelow - 8, 208));
+      }
+    }
+  }, [showDropdown]);
+
   /* ── Handle typing ── */
   const handleInputChange = (input: string) => {
     setSearchText(input);
@@ -154,6 +175,7 @@ export default function CitySelect({
   return (
     <div className="relative w-full">
       <Input
+        ref={triggerRef}
         value={searchText}
         onChange={(e) => handleInputChange(e.target.value)}
         onBlur={handleBlur}
@@ -169,7 +191,10 @@ export default function CitySelect({
       />
 
       {showDropdown && (
-        <ul className="absolute z-10 bg-white border border-gray-200 w-full max-h-52 overflow-auto rounded-md mt-1 shadow-lg">
+        <ul
+          className={`absolute z-10 bg-white border border-gray-200 w-full overflow-auto rounded-md shadow-lg ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}
+          style={{ maxHeight: listMaxHeight }}
+        >
           {/* ── Exact / substring matches ── */}
           {hasExact &&
             exactMatches.map((city) => (
