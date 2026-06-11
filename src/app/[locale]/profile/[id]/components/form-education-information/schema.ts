@@ -39,10 +39,30 @@ export const createEducationInfoSchema = (t: (_key: string) => string) =>
         .min(1, t("certificatesRequired")),
       optionalCertificates: z
         .array(
-          z.object({
-            type: z.string(),
-            url: z.string(),
-          }),
+          z
+            .object({
+              type: z.string(),
+              url: z.string(),
+            })
+            .superRefine((doc, ctx) => {
+              const hasType = !!doc.type.trim();
+              const hasUrl = !!doc.url.trim();
+              if (!hasType && !hasUrl) return;
+              if (hasType && !hasUrl) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: t("uploadRequired"),
+                  path: ["url"],
+                });
+              }
+              if (!hasType && hasUrl) {
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: t("documentTypeRequired"),
+                  path: ["type"],
+                });
+              }
+            }),
         )
         .optional()
         .default([]),
