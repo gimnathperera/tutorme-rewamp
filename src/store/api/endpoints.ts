@@ -11,6 +11,7 @@ export const Endpoints = {
   SubjectsByGrades: "/v1/grades/subjects-by-grades",
   Subjects: "/v1/subjects",
   Papers: "/v1/papers",
+  PaperExamTypes: "/v1/papers/exam-types",
   Users: "/v1/users",
   ChangePassword: "/v1/users/change-password",
   RegisterTutor: "/v1/tutors",
