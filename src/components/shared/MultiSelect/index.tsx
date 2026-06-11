@@ -1,7 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Check, ChevronDown, X } from "lucide-react";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 export interface Option {
   value: string;
@@ -46,6 +46,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const [openUpward, setOpenUpward] = useState(false);
+  const [listMaxHeight, setListMaxHeight] = useState(208);
 
   const visibleOptions = useMemo(() => {
     if (!searchable || !searchQuery.trim()) return options;
@@ -118,6 +121,24 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useLayoutEffect(() => {
+    if (isOpen && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const footer = document.querySelector("footer");
+      const limit = footer
+        ? Math.min(footer.getBoundingClientRect().top, window.innerHeight)
+        : window.innerHeight;
+      const spaceBelow = limit - rect.bottom;
+      if (spaceBelow < 240) {
+        setOpenUpward(true);
+        setListMaxHeight(Math.min(Math.max(rect.top - 8, 80), 208));
+      } else {
+        setOpenUpward(false);
+        setListMaxHeight(Math.min(spaceBelow - 8, 208));
+      }
+    }
+  }, [isOpen]);
+
   const borderClass = hasError ? "border-red-500" : "border-gray-300";
   const disabledClass = disabled
     ? "cursor-not-allowed bg-muted/60 text-muted-foreground opacity-70"
@@ -127,6 +148,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     <div className="w-full relative" ref={dropdownRef}>
       {/* CONTROL */}
       <div
+        ref={triggerRef}
         onClick={toggleDropdown}
         aria-disabled={disabled}
         className={`flex min-h-[44px] w-full items-center flex-wrap gap-2 rounded-md border ${borderClass} px-3 text-sm ${disabledClass}`}
@@ -170,7 +192,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
       {/* DROPDOWN */}
       {isOpen && (
-        <div className="absolute z-50 mt-1 w-full rounded-md border border-gray-200 bg-white shadow">
+        <div className={`absolute z-50 w-full rounded-md border border-gray-200 bg-white shadow ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}>
           {searchable && (
             <div className="p-2 border-b border-gray-100">
               <div className="relative">
@@ -200,7 +222,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
               </div>
             </div>
           )}
-          <div className="max-h-52 overflow-y-auto">
+          <div className="overflow-y-auto" style={{ maxHeight: listMaxHeight }}>
             {visibleOptions.length > 0 ? (
               visibleOptions.map((option) => (
                 <div
