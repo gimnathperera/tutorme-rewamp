@@ -6,6 +6,7 @@ export const paperSearchSchema = z.object({
   medium: z.string(),
   fromYear: z.string(),
   toYear: z.string(),
+  exam: z.string(),
 });
 
 export type PaperSearchSchema = z.infer<typeof paperSearchSchema>;
@@ -16,4 +17,5 @@ export const initialFormValues: PaperSearchSchema = {
   medium: "",
   fromYear: "",
   toYear: "",
+  exam: "",
 };
