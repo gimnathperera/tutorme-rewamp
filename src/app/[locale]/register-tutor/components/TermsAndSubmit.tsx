@@ -64,7 +64,9 @@ const DocumentRow = ({
                 ))}
               </select>
               {fieldState.error && (
-                <p className="text-xs text-red-500">{fieldState.error.message}</p>
+                <p className="text-xs text-red-500">
+                  {fieldState.error.message}
+                </p>
               )}
             </>
           )}
@@ -89,7 +91,9 @@ const DocumentRow = ({
                 }}
               />
               {fieldState.error && (
-                <p className="text-xs text-red-500">{fieldState.error.message}</p>
+                <p className="text-xs text-red-500">
+                  {fieldState.error.message}
+                </p>
               )}
             </>
           )}

@@ -6,6 +6,7 @@ import { FC, KeyboardEvent, useEffect, useMemo } from "react";
 import { GeneralInfoSchema } from "./schema";
 import { useTranslations } from "next-intl";
 import SubmitButton from "@/components/shared/submit-button";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import {
   collapseTextSpaces,
   removeWhitespace,
@@ -67,9 +68,18 @@ const normalizeBirthdayValue = (birthday: unknown) => {
   return typeof birthday === "string" ? birthday.trim() : "";
 };
 
+const FULL_NAME_LABEL = [{ key: "fullName", text: "Full Name" }];
+
 const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const t = useTranslations("profile");
   const tRegisterTutor = useTranslations("registerTutor");
+
+  const translatedFullNameLabel = useTranslateItems(
+    FULL_NAME_LABEL,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
+  const fullNameLabel = translatedFullNameLabel[0]?.text ?? "Full Name";
   const genderOptions = useMemo(
     () => [
       { value: "Male", label: t("optGenderMale") },
@@ -170,7 +180,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
           <div>
             <div className="grid grid-cols-1 gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-2 lg:gap-6">
               <InputText
-                label={t("fieldFullName")}
+                label={fullNameLabel}
                 placeholder={t("placeholderFullName")}
                 name="name"
                 type="text"

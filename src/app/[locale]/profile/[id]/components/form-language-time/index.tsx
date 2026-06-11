@@ -97,7 +97,8 @@ const FormLanguageTime: FC<Props> = ({
   const isButtonDisabled =
     !isDirty || isSubmitting || !hasAllRequiredFields || !isValid;
   const normalizedRateOptions =
-    currentRate && !translatedRateOptions.some((option) => option.value === currentRate)
+    currentRate &&
+    !translatedRateOptions.some((option) => option.value === currentRate)
       ? [
           {
             label: `${t("fieldRate")}: ${currentRate}`,

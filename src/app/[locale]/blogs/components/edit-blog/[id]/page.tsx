@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import dynamic from "next/dynamic";
@@ -40,6 +42,7 @@ export default function EditBlogPage() {
   const params = useParams();
   const blogId = params?.id as string;
   const router = useRouter();
+  const t = useTranslations("createBlog");
   const { user, isUserLoaded } = useAuthContext();
 
   const { data: blogsData } = useFetchBlogsQuery({});
@@ -112,14 +115,27 @@ export default function EditBlogPage() {
       : "pending";
   };
 
-  const tagsOptions: Option[] =
-    tagsData?.results?.map((t) => ({ value: t.id, text: t.name })) || [];
+  const rawTagsOptions: Option[] = useMemo(
+    () => tagsData?.results?.map((tag) => ({ value: tag.id, text: tag.name })) || [],
+    [tagsData],
+  );
 
-  const blogOptions: Option[] =
-    blogsData?.results?.map((blog) => ({
-      value: blog.id,
-      text: blog.title,
-    })) || [];
+  const rawBlogOptions: Option[] = useMemo(
+    () => blogsData?.results?.map((blog) => ({ value: blog.id, text: blog.title })) || [],
+    [blogsData],
+  );
+
+  const tagsOptions = useTranslateItems(
+    rawTagsOptions,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
+
+  const blogOptions = useTranslateItems(
+    rawBlogOptions,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
 
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
@@ -841,7 +857,7 @@ export default function EditBlogPage() {
                         options={blogOptions}
                         defaultSelected={field.value}
                         onChange={field.onChange}
-                        placeholder="Select related articles"
+                        placeholder={t("selectRelatedArticles")}
                       />
                     )}
                   />
@@ -850,7 +866,7 @@ export default function EditBlogPage() {
                 {/* Tags */}
                 <div className="flex flex-col gap-1.5">
                   <Label className="text-sm font-medium text-gray-700">
-                    Tags
+                    {t("tagsLabelText")}
                   </Label>
                   <Controller
                     control={control}
@@ -861,7 +877,7 @@ export default function EditBlogPage() {
                         options={tagsOptions}
                         defaultSelected={field.value}
                         onChange={field.onChange}
-                        placeholder="Select tags"
+                        placeholder={t("selectTags")}
                       />
                     )}
                   />
@@ -871,7 +887,7 @@ export default function EditBlogPage() {
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-between">
                     <Label className="text-sm font-medium text-gray-700">
-                      FAQs
+                      {t("faqsLabelText")}
                     </Label>
                     <button
                       type="button"

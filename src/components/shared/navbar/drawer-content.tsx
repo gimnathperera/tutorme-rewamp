@@ -25,6 +25,7 @@ const DrawerContent = ({ isDrawerOpen, onClose }: DrawerContentProps) => {
 
   const navigation: NavigationItem[] = useMemo(
     () => [
+      { name: t("home"), href: "/" },
       { name: t("requestForTutor"), href: "/request-for-tutors" },
       { name: t("registerAsTutor"), href: "/register-tutor" },
       { name: t("pastExamPapers"), href: "/past-exam-papers" },

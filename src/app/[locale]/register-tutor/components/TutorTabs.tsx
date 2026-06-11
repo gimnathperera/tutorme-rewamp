@@ -298,13 +298,16 @@ export function TutorTabs() {
     router.push("/");
   };
 
-  const certificates = methods.watch("certificatesAndQualifications") as { type: string; url: string }[];
+  const certificates = methods.watch("certificatesAndQualifications") as {
+    type: string;
+    url: string;
+  }[];
   const agreeTerms = methods.watch("agreeTerms");
   const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
   const allDocsComplete =
-    certificates?.length > 0 &&
-    certificates.every((c) => c.type && c.url);
-  const isSubmitDisabled = isLoading || !allDocsComplete || !agreeTerms || !agreeAssignmentInfo;
+    certificates?.length > 0 && certificates.every((c) => c.type && c.url);
+  const isSubmitDisabled =
+    isLoading || !allDocsComplete || !agreeTerms || !agreeAssignmentInfo;
 
   return (
     <FormProvider {...methods}>

@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import imageCompression from "browser-image-compression";
 import { IMAGE_UPLOAD_ACCEPTED_TYPES } from "@/configs/upload";
+import { useTranslations } from "next-intl";
 
 interface FileUploadDropzoneProps {
   onUploaded: (url: string) => void;
@@ -30,6 +31,7 @@ const compressImage = async (file: File): Promise<File> => {
 export default function FileUploadDropzone({
   onUploaded,
 }: FileUploadDropzoneProps) {
+  const t = useTranslations("upload");
   const [uploading, setUploading] = useState(false);
   const [fileName, setFileName] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -126,16 +128,16 @@ export default function FileUploadDropzone({
       {uploading ? (
         <div className="flex flex-col items-center justify-center space-y-2">
           <Loader2 className="animate-spin h-6 w-6 text-blue-500" />
-          <p className="text-gray-500 text-sm">Optimizing and uploading...</p>
+          <p className="text-gray-500 text-sm">{t("optimizingUploading")}</p>
         </div>
       ) : isDragActive ? (
         <p className="text-gray-700 dark:text-gray-200 font-medium text-sm sm:text-base">
-          Drop the file here...
+          {t("dropHere")}
         </p>
       ) : (
         <>
           <p className="text-gray-700 dark:text-gray-200 font-medium text-sm sm:text-base">
-            Drag & drop or tap to upload
+            {t("dragDropCta")}
           </p>
 
           {fileName && (

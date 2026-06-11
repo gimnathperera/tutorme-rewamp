@@ -338,6 +338,21 @@ small,
 }
 
 /* Blog content — spec: 16px body, 1.7 line-height, 36px titles */
+.blog-content h1,
+.blog-content h2,
+.blog-content h3,
+.blog-content h4,
+.blog-content h5,
+.blog-content h6,
+.blog-content-renderer h1,
+.blog-content-renderer h2,
+.blog-content-renderer h3,
+.blog-content-renderer h4,
+.blog-content-renderer h5,
+.blog-content-renderer h6 {
+  text-align: left !important;
+}
+
 .blog-content h1 {
   font-size: 2.25rem;
   /* text-4xl = 36px — blog title */

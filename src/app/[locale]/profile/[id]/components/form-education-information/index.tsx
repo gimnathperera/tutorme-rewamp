@@ -164,9 +164,15 @@ const FormEducationInfo: FC<Props> = ({
 
   const classTypeOptions = useMemo(
     () => [
-      { value: "Online - Individual", text: tR("optClassTypeOnlineIndividual") },
+      {
+        value: "Online - Individual",
+        text: tR("optClassTypeOnlineIndividual"),
+      },
       { value: "Online - Group", text: tR("optClassTypeOnlineGroup") },
-      { value: "Physical - Individual", text: tR("optClassTypePhysicalIndividual") },
+      {
+        value: "Physical - Individual",
+        text: tR("optClassTypePhysicalIndividual"),
+      },
       { value: "Physical - Group", text: tR("optClassTypePhysicalGroup") },
     ],
     [tR],
@@ -174,8 +180,14 @@ const FormEducationInfo: FC<Props> = ({
 
   const tutorTypeOptions = useMemo(
     () => [
-      { value: "International School Teacher", text: tR("optTutorTypeInternational") },
-      { value: "Government School Teacher", text: tR("optTutorTypeGovernment") },
+      {
+        value: "International School Teacher",
+        text: tR("optTutorTypeInternational"),
+      },
+      {
+        value: "Government School Teacher",
+        text: tR("optTutorTypeGovernment"),
+      },
       { value: "University Student", text: tR("optTutorTypeUniversity") },
       { value: "A/L Student", text: tR("optTutorTypeAL") },
       { value: "Diploma Holder", text: tR("optTutorTypeDiploma") },
@@ -191,7 +203,10 @@ const FormEducationInfo: FC<Props> = ({
       { value: "Masters", label: tR("optHighestEducationMasters") },
       { value: "Bachelor Degree", label: tR("optHighestEducationBachelor") },
       { value: "Undergraduate", label: tR("optHighestEducationUndergraduate") },
-      { value: "Diploma and Professional", label: tR("optHighestEducationDiplomaProfessional") },
+      {
+        value: "Diploma and Professional",
+        label: tR("optHighestEducationDiplomaProfessional"),
+      },
       { value: "AL", label: tR("optHighestEducationAL") },
     ],
     [tR],
@@ -208,11 +223,20 @@ const FormEducationInfo: FC<Props> = ({
 
   const educationalDocumentOptions = useMemo(
     () => [
-      { value: "Advanced Level Certificate", text: tR("optDocAdvancedLevelCertificate") },
-      { value: "Ordinary Level Certificate", text: tR("optDocOrdinaryLevelCertificate") },
+      {
+        value: "Advanced Level Certificate",
+        text: tR("optDocAdvancedLevelCertificate"),
+      },
+      {
+        value: "Ordinary Level Certificate",
+        text: tR("optDocOrdinaryLevelCertificate"),
+      },
       { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       { value: "Diploma Certificate", text: tR("optDocDiplomaCertificate") },
-      { value: "Professional Certificate", text: tR("optDocProfessionalCertificate") },
+      {
+        value: "Professional Certificate",
+        text: tR("optDocProfessionalCertificate"),
+      },
       { value: "Teaching Certificate", text: tR("optDocTeachingCertificate") },
     ],
     [tR],
@@ -237,7 +261,8 @@ const FormEducationInfo: FC<Props> = ({
       closePreview: tR("closePreview"),
       previewUnavailable: tR("previewUnavailable"),
       fileTypeRejection: tR("fileTypeRejection"),
-      uploadFailedFor: (fileName: string) => tR("uploadFailedFor", { fileName }),
+      uploadFailedFor: (fileName: string) =>
+        tR("uploadFailedFor", { fileName }),
       uploading: tR("uploading"),
       dropFilesHere: tR("dropFilesHere"),
       uploadCertificatesCta: tR("uploadCertificatesCta"),
@@ -259,7 +284,22 @@ const FormEducationInfo: FC<Props> = ({
     (s) => [s.label],
     (s, [label]) => ({ ...s, label: label ?? s.label }),
   );
-  const { isDirty } = form.formState;
+
+  const GRADES_SUBJECTS_LABELS = useMemo(
+    () => [
+      { key: "grades", text: "Grades" },
+      { key: "subjects", text: "Subjects" },
+    ],
+    [],
+  );
+  const translatedGradesSubjectsLabels = useTranslateItems(
+    GRADES_SUBJECTS_LABELS,
+    (item) => [item.text],
+    (item, [text]) => ({ ...item, text: text ?? item.text }),
+  );
+  const gradesLabel = translatedGradesSubjectsLabels[0]?.text ?? "Grades";
+  const subjectsLabel = translatedGradesSubjectsLabels[1]?.text ?? "Subjects";
+  const { isDirty, isValid } = form.formState;
 
   const {
     fields: eduFields,
@@ -480,7 +520,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Grades */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  {t("fieldGrades")} <span className="text-red-500">*</span>
+                  {gradesLabel} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="grades"
@@ -501,7 +541,7 @@ const FormEducationInfo: FC<Props> = ({
               {/* Subjects */}
               <div className="flex flex-col gap-1">
                 <label className="block text-sm font-medium leading-6 text-gray-900">
-                  {t("fieldSubjects")} <span className="text-red-500">*</span>
+                  {subjectsLabel} <span className="text-red-500">*</span>
                 </label>
                 <Controller
                   name="subjects"

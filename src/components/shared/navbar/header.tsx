@@ -41,6 +41,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
     locale === "ta" ? "px-1.5" : locale === "si" ? "px-2" : "px-2.5";
 
   const navigation: NavigationItem[] = [
+    { name: t("home"), href: "/" },
     { name: t("requestForTutor"), href: "/request-for-tutors" },
     { name: t("registerAsTutor"), href: "/register-tutor" },
     { name: t("pastExamPapers"), href: "/past-exam-papers" },
