@@ -1,5 +1,5 @@
 import { getNestedError } from "@/utils/form";
-import { FC, SelectHTMLAttributes } from "react";
+import { FC, ReactNode, SelectHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 
 interface Option {
@@ -17,6 +17,7 @@ interface InputSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   placeholder?: string;
   disablePlaceholder?: boolean;
   reserveHelperSpace?: boolean;
+  icon?: ReactNode;
 }
 
 const InputSelect: FC<InputSelectProps> = ({
@@ -30,6 +31,8 @@ const InputSelect: FC<InputSelectProps> = ({
   placeholder = "Select an option",
   disablePlaceholder = true,
   reserveHelperSpace = false,
+  disabled: isDisabled,
+  icon,
   ...props
 }) => {
   const { control, formState } = useFormContext();
@@ -37,7 +40,7 @@ const InputSelect: FC<InputSelectProps> = ({
   const error = getNestedError(formState.errors, name);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className={`flex flex-col gap-1 ${isDisabled ? "opacity-50" : ""}`}>
       {label && (
         <label className="text-sm font-medium leading-6 text-gray-700">
           {label.includes("*") ? (
@@ -59,12 +62,19 @@ const InputSelect: FC<InputSelectProps> = ({
         control={control}
         render={({ field }) => (
           <div className="relative">
+            {icon && (
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5">
+                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary-100 text-primary-600">
+                  {icon}
+                </div>
+              </div>
+            )}
             <select
               {...field}
-              className={`block w-full appearance-none rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 ${
+              className={`block w-full appearance-none rounded-md border py-2 text-sm text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 ${
                 error ? "border-red-500" : "border-linegrey"
-              } sm:leading-6 ${className}`}
-              disabled={loading}
+              } sm:leading-6 ${icon ? "pl-11 pr-3" : "px-3"} ${className}`}
+              disabled={loading || isDisabled}
               {...props}
             >
               <option
