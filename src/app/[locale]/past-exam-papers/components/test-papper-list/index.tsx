@@ -32,7 +32,7 @@ const TestPaperList: FC<Props> = ({
   return (
     <div className="max-w-7xl mx-auto p-6 bg-white rounded-3xl mt-8">
       {isPapersLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {Array(4)
             .fill(null)
             .map((_, index) => (
@@ -61,7 +61,7 @@ const TestPaperList: FC<Props> = ({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {availablePapers.map((paper) => (
               <div
                 key={paper.id}
