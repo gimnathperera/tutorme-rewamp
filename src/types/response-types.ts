@@ -136,6 +136,7 @@ export type Paper = BaseEntity &
     language?: PaperMedium;
     languages?: PaperMedium[];
     mediums?: PaperMedium[];
+    examType?: string | null;
   };
 
 export type Blogs = BaseEntity &
