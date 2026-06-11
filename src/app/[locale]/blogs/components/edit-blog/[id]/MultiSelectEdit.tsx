@@ -1,6 +1,6 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 
 export interface Option {
   value: string;
@@ -24,7 +24,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>(selected);
   const [isOpen, setIsOpen] = useState(false);
+  const [openUpward, setOpenUpward] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setSelectedOptions(selected);
@@ -41,6 +43,17 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useLayoutEffect(() => {
+    if (isOpen && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      const footer = document.querySelector("footer");
+      const limit = footer
+        ? Math.min(footer.getBoundingClientRect().top, window.innerHeight)
+        : window.innerHeight;
+      setOpenUpward(limit - rect.bottom < 260);
+    }
+  }, [isOpen]);
 
   const toggleDropdown = () => {
     if (disabled) return;
@@ -73,7 +86,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
       </label>
       <div className="relative inline-block w-full">
         <div className="relative flex flex-col">
-          <div onClick={toggleDropdown} className="w-full">
+          <div ref={triggerRef} onClick={toggleDropdown} className="w-full">
             <div className="mb-2 flex h-11 rounded-lg border bg-white border-gray-300 py-1.5 pl-3 pr-3 shadow-theme-xs transition focus-within:border-brand-300 focus-within:shadow-focus-ring dark:border-gray-700 dark:bg-gray-900 dark:focus-within:border-brand-300">
               <div className="flex flex-wrap flex-auto gap-2">
                 {selectedValuesText.length > 0 ? (
@@ -118,7 +131,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
           {isOpen && (
             <div
-              className="absolute left-0 z-40 w-full max-h-60 overflow-y-auto bg-white rounded-lg shadow-sm top-full dark:bg-gray-900"
+              className={`absolute left-0 z-40 w-full max-h-60 overflow-y-auto bg-white rounded-lg shadow-sm dark:bg-gray-900 ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col">
