@@ -2,11 +2,11 @@ import InputText from "@/components/shared/input-text";
 import InputDatePicker from "@/components/shared/input-date-picker";
 import { FormProvider } from "react-hook-form";
 import InputSelect from "@/components/shared/input-select";
-import { FC, KeyboardEvent, useEffect, useMemo } from "react";
+import { FC, KeyboardEvent, useEffect, useMemo, useRef } from "react";
 import { GeneralInfoSchema } from "./schema";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { translateBatch } from "@/hooks/useTranslateItems";
 import SubmitButton from "@/components/shared/submit-button";
-import { useTranslateItems } from "@/hooks/useTranslateItems";
 import {
   collapseTextSpaces,
   removeWhitespace,
@@ -68,18 +68,13 @@ const normalizeBirthdayValue = (birthday: unknown) => {
   return typeof birthday === "string" ? birthday.trim() : "";
 };
 
-const FULL_NAME_LABEL = [{ key: "fullName", text: "Full Name" }];
-
 const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
   const t = useTranslations("profile");
   const tRegisterTutor = useTranslations("registerTutor");
+  const locale = useLocale();
+  const translatedNameRef = useRef(false);
 
-  const translatedFullNameLabel = useTranslateItems(
-    FULL_NAME_LABEL,
-    (item) => [item.text],
-    (item, [text]) => ({ ...item, text: text ?? item.text }),
-  );
-  const fullNameLabel = translatedFullNameLabel[0]?.text ?? "Full Name";
+  const fullNameLabel = t("fieldFullName");
   const genderOptions = useMemo(
     () => [
       { value: "Male", label: t("optGenderMale") },
@@ -168,6 +163,27 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
       shouldDirty: false,
     });
   }, [birthday, form]);
+
+  // Transliterate the stored Latin-script name to the current locale's script
+  // using Google Translate. Runs once when the name value first arrives from
+  // the server. Skips if: English locale, name already contains non-ASCII
+  // characters (already transliterated), or translation already attempted.
+  useEffect(() => {
+    if (locale === "en" || translatedNameRef.current) return;
+    const currentName = form.getValues("name");
+    if (!currentName?.trim()) return;
+    if (/[^\x00-\x7F]/.test(currentName)) {
+      translatedNameRef.current = true;
+      return;
+    }
+    translatedNameRef.current = true;
+    translateBatch([currentName], locale).then(([translated]) => {
+      if (translated && translated !== currentName) {
+        form.setValue("name", translated, { shouldDirty: false });
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, locale]);
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
