@@ -626,6 +626,7 @@
     "changePhotoDesc": "JPG, PNG or GIF - Max 800KB",
     "cancel": "Cancel",
     "save": "Save",
+    "removePhoto": "Remove photo",
     "removePhotoTitle": "Remove profile picture?",
     "removePhotoDesc": "This will permanently remove your current profile photo.",
     "delete": "Delete",

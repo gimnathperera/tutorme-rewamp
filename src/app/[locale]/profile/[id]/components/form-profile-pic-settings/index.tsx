@@ -9,7 +9,7 @@ import {
   useUpdateProfileMutation,
 } from "@/store/api/splits/users";
 import toast from "react-hot-toast";
-import { Pencil, Trash2 } from "lucide-react";
+import { Camera, Pencil, Trash2 } from "lucide-react";
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
 
@@ -95,19 +95,34 @@ const ProfilePicSettings = () => {
       </div>
 
       <div className="flex justify-center">
-        <div className="relative h-28 w-28 sm:h-36 sm:w-36">
-          <img
-            src={avatarUrl}
-            alt="User profile picture"
-            className="h-full w-full rounded-full border object-cover"
-          />
+        <div className="relative h-28 w-28 sm:h-36 sm:w-36 group">
+          {hasProfilePicture ? (
+            <img
+              src={avatarUrl}
+              alt="User profile picture"
+              className="h-full w-full rounded-full border object-cover"
+            />
+          ) : (
+            <div className="h-full w-full rounded-full border border-primary-200 bg-primary-100 flex items-center justify-center select-none">
+              <span className="text-5xl sm:text-6xl font-bold text-primary-700 uppercase leading-none">
+                {(user?.name || user?.email || "?").charAt(0)}
+              </span>
+            </div>
+          )}
+
+          <div
+            onClick={() => setOpen(true)}
+            className="absolute inset-0 rounded-full bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
+          >
+            <Camera size={26} className="text-white" />
+          </div>
 
           <button
             onClick={() => setOpen(true)}
             className="absolute bottom-1 right-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 sm:p-2.5"
             aria-label="Edit profile picture"
           >
-            <Pencil size={16} className="sm:h-[18px] sm:w-[18px]" />
+            <Pencil size={14} className="sm:h-4 sm:w-4" />
           </button>
 
           <button
@@ -116,22 +131,13 @@ const ProfilePicSettings = () => {
                 toast.error(t("noProfilePicture"));
                 return;
               }
-
               setConfirmDeleteOpen(true);
             }}
             disabled={!hasProfilePicture || isLoading}
-            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-50 sm:p-2.5"
+            className="absolute bottom-1 left-1 rounded-full bg-white p-2 shadow transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40 sm:p-2.5"
             aria-label="Delete profile picture"
-            title={
-              hasProfilePicture
-                ? "Delete profile picture"
-                : "No profile picture to remove"
-            }
           >
-            <Trash2
-              size={16}
-              className="text-red-600 sm:h-[18px] sm:w-[18px]"
-            />
+            <Trash2 size={14} className="text-red-500 sm:h-4 sm:w-4" />
           </button>
         </div>
       </div>

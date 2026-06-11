@@ -149,11 +149,19 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
           className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
           onClick={toggleDropdown}
         >
-          <img
-            src={avatarSrc}
-            alt="Profile-image"
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          {avatarSrc !== DEFAULT_AVATAR ? (
+            <img
+              src={avatarSrc}
+              alt="Profile-image"
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center select-none">
+              <span className="text-base font-bold text-primary-700 uppercase leading-none">
+                {(user?.name || user?.email || "?").charAt(0)}
+              </span>
+            </div>
+          )}
         </button>
       )}
 
