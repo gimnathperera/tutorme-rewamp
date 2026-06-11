@@ -10,7 +10,6 @@ import { useTranslations } from "next-intl";
 import { useMemo, type ComponentProps } from "react";
 
 import MultiFileUploadDropzone from "@/components/upload/multi-file-upload-dropzone";
-import MultiSelect from "@/components/shared/MultiSelect";
 
 const DocumentRow = ({
   fieldName,
@@ -49,17 +48,21 @@ const DocumentRow = ({
           control={control}
           render={({ field: f, fieldState }) => (
             <>
-              <MultiSelect
-                options={options}
-                defaultSelected={f.value ? [f.value] : []}
-                onChange={(selected) => {
-                  f.onChange(selected[0] ?? "");
+              <select
+                {...f}
+                onChange={(e) => {
+                  f.onChange(e);
                   trigger(`${fieldName}.${index}.type`);
                 }}
-                hasError={!!fieldState.error}
-                singleSelect
-                placeholder={selectTypePlaceholder}
-              />
+                className={`h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring ${fieldState.error ? "border-red-500" : "border-gray-300"} ${f.value ? "text-gray-900" : "text-gray-500"}`}
+              >
+                <option value="" disabled hidden>{selectTypePlaceholder}</option>
+                {options.map((opt) => (
+                  <option key={opt.value} value={opt.value} className="text-gray-900">
+                    {opt.text}
+                  </option>
+                ))}
+              </select>
               {fieldState.error && (
                 <p className="text-xs text-red-500">{fieldState.error.message}</p>
               )}
