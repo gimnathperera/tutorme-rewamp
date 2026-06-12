@@ -640,7 +640,7 @@
     "profilePicDeleteFailed": "ඡායාරූපය මකා දැමීමට අසමත් විය",
     "personalInfoTitle": "පුද්ගලික තොරතුරු",
     "personalInfoDesc": "ගුරුවරු ලියාපදිංචිය අතරතුර භාවිතා කළ එකම පුද්ගලික විස්තර සමඟ ඔබේ ගුරුවරු පැතිකඩ යාවත්කාලීනව තබා ගන්න.",
-    "fieldFullName": "සම්පූර්ණ නම *",
+    "fieldFullName": "සම්පූර්ණ නම",
     "fieldEmail": "විද්‍යුත් තැපෑල",
     "fieldContactNumber": "දූරකථන අංකය *",
     "fieldDateOfBirth": "උපන් දිනය",

@@ -7,6 +7,55 @@
  * locale is "en".
  */
 
+/**
+ * Brand / proper names that must never be translated.
+ * Add new entries here to extend the protection list.
+ */
+const PROTECTED_BRANDS = ["TuitionLanka"] as const;
+
+/**
+ * Wraps each protected brand in <span translate="no"> so the Cloud
+ * Translation API (HTML mode) leaves them untouched.
+ * Returns the modified texts and a flag indicating whether any wrapping
+ * was needed (so we know whether to force HTML mode).
+ */
+function wrapBrands(
+  texts: string[],
+): { wrapped: string[]; hadBrands: boolean } {
+  let hadBrands = false;
+  const wrapped = texts.map((t) => {
+    let out = t;
+    for (const brand of PROTECTED_BRANDS) {
+      if (out.includes(brand)) {
+        hadBrands = true;
+        out = out.split(brand).join(`<span translate="no">${brand}</span>`);
+      }
+    }
+    return out;
+  });
+  return { wrapped, hadBrands };
+}
+
+/** Removes the <span translate="no">…</span> wrappers added by wrapBrands. */
+function unwrapBrands(texts: string[]): string[] {
+  return texts.map((t) =>
+    t.replace(/<span translate="no">([^<]*)<\/span>/g, "$1"),
+  );
+}
+
+/**
+ * Decodes common HTML entities that Google may introduce when the request
+ * is upgraded from text → HTML format to honour translate="no".
+ */
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'");
+}
+
 const SUPPORTED_LOCALES = ["si", "ta"] as const;
 type TranslatableLocale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -36,16 +85,20 @@ async function callGoogleTranslate(
   const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY;
   if (!apiKey) return texts;
 
+  const { wrapped, hadBrands } = wrapBrands(texts);
+  // Force HTML mode when brands are present so translate="no" is honoured.
+  const effectiveFormat = hadBrands || format === "html" ? "html" : "text";
+
   const res = await fetch(
     `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        q: texts,
+        q: wrapped,
         source: "en",
         target: targetLang,
-        format,
+        format: effectiveFormat,
       }),
       next: { revalidate: 86400 },
     },
@@ -54,11 +107,19 @@ async function callGoogleTranslate(
   if (!res.ok) return texts;
 
   const json = await res.json();
-  return (
+  const raw: string[] =
     json?.data?.translations?.map(
       (t: { translatedText: string }) => t.translatedText,
-    ) ?? texts
-  );
+    ) ?? texts;
+
+  const unprotected = unwrapBrands(raw);
+
+  // When we upgraded a plain-text request to HTML mode, Google may have
+  // HTML-encoded characters (&amp; → & etc.). Decode them back.
+  if (hadBrands && format === "text") {
+    return unprotected.map(decodeEntities);
+  }
+  return unprotected;
 }
 
 /**

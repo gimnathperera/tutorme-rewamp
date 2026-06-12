@@ -158,6 +158,8 @@ export function useTranslateItems<T>(
     run();
     return () => {
       cancelled = true;
+      // Reset so strict-mode remount re-attempts the API call
+      prevKeyRef.current = "";
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contentKey, locale]);

@@ -285,20 +285,8 @@ const FormEducationInfo: FC<Props> = ({
     (s, [label]) => ({ ...s, label: label ?? s.label }),
   );
 
-  const GRADES_SUBJECTS_LABELS = useMemo(
-    () => [
-      { key: "grades", text: "Grades" },
-      { key: "subjects", text: "Subjects" },
-    ],
-    [],
-  );
-  const translatedGradesSubjectsLabels = useTranslateItems(
-    GRADES_SUBJECTS_LABELS,
-    (item) => [item.text],
-    (item, [text]) => ({ ...item, text: text ?? item.text }),
-  );
-  const gradesLabel = translatedGradesSubjectsLabels[0]?.text ?? "Grades";
-  const subjectsLabel = translatedGradesSubjectsLabels[1]?.text ?? "Subjects";
+  const gradesLabel = t("fieldGrades");
+  const subjectsLabel = t("fieldSubjects");
   const { isDirty, isValid } = form.formState;
 
   const {
