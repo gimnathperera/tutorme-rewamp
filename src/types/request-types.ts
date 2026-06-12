@@ -123,6 +123,7 @@ export type FetchPapersRequest = {
   grade?: string;
   subject?: string;
   medium?: string;
+  examType?: string;
   sortBy?: string;
   order?: string;
 };

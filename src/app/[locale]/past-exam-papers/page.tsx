@@ -196,18 +196,21 @@ const TestPapers = () => {
       subjectOptions,
       mediumOptions,
       yearOptions,
+      examTypeOptions,
       isGradesLoading,
       isSubjectsLoading,
       isPapersLoading,
       isYearLoading,
+      isExamTypesLoading,
       papers: availablePapers,
       currentPage,
       totalPages,
       totalResults,
       isEdexcelGradeSelected,
       defaultYear,
+      hasGrade,
     },
-    actions: { setCurrentPage },
+    actions: { setCurrentPage, onSearch },
     forms: { testPaperSearchForm },
   } = useLogic();
 
@@ -274,12 +277,16 @@ const TestPapers = () => {
           subjectOptions={translatedSubjectOptions}
           mediumOptions={translatedMediumOptions}
           yearOptions={yearOptions}
+          examTypeOptions={examTypeOptions}
           testPaperSearchForm={testPaperSearchForm}
           isGradesLoading={isGradesLoading || isGradesTranslating}
           isSubjectsLoading={isSubjectsLoading || isSubjectsTranslating}
           isMediumsLoading={isMediumsTranslating}
           isYearLoading={isYearLoading}
+          isExamTypesLoading={isExamTypesLoading}
           defaultYear={defaultYear}
+          hasGrade={hasGrade}
+          onSearch={onSearch}
         />
       </div>
 

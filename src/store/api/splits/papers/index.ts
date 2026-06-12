@@ -3,6 +3,8 @@ import { PaginatedResponse, Paper } from "@/types/response-types";
 import { baseApi } from "../..";
 import { Endpoints } from "../../endpoints";
 
+export type ExamTypeOption = { id: string; title: string };
+
 export const PaperApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
     fetchPapers: build.query<PaginatedResponse<Paper>, FetchPapersRequest>({
@@ -13,8 +15,18 @@ export const PaperApi = baseApi.injectEndpoints({
       }),
       providesTags: ["Papers"],
     }),
+    fetchPaperExamTypes: build.query<{ examTypes: ExamTypeOption[] }, void>({
+      query: () => ({
+        url: Endpoints.PaperExamTypes,
+        method: "GET",
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
-export const { useFetchPapersQuery, useLazyFetchPapersQuery } = PaperApi;
+export const {
+  useFetchPapersQuery,
+  useLazyFetchPapersQuery,
+  useFetchPaperExamTypesQuery,
+} = PaperApi;
