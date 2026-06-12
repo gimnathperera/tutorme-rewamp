@@ -87,21 +87,16 @@ function useTranslatedDisplayItems<T>(
       .map((item) => getTextsRef.current(item).join("\0"))
       .join("\n")}`;
   }, [items, locale]);
-  const hasPendingTranslations = useMemo(() => {
-    if (locale === "en" || items.length === 0) return false;
 
-    return items.some((item) =>
-      getTextsRef
-        .current(item)
-        .some(
-          (text) =>
-            text?.trim() && !clientTranslationCache.has(`${locale}:${text}`),
-        ),
-    );
-  }, [items, locale]);
-
-  const [translatedItems, setTranslatedItems] = useState(items);
+  const [translatedItems, setTranslatedItems] = useState<T[]>([]);
   const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedContentKey, setTranslatedContentKey] = useState("");
+
+  // hasPendingTranslations is derived from state (translatedContentKey) so it
+  // correctly resets to false once translation for the current contentKey completes,
+  // unlike a useMemo over clientTranslationCache which React can't observe.
+  const hasPendingTranslations =
+    locale !== "en" && items.length > 0 && translatedContentKey !== contentKey;
 
   useEffect(() => {
     if (locale === "en") {
@@ -135,6 +130,7 @@ function useTranslatedDisplayItems<T>(
 
       setTranslatedItems(nextItems);
       setIsTranslating(false);
+      setTranslatedContentKey(contentKey);
     };
 
     run();
