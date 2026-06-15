@@ -256,10 +256,10 @@ const TestPapers = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto py-10">
+    <div className="max-w-7xl mx-auto pb-6 sm:py-10">
       <div className=" py-4 m-3">
-        <h2 className="text-4xl font-bold text-center">{t("pageHeading")}</h2>
-        <h3 className="mx-auto mt-3 max-w-2xl text-xl font-normal text-center opacity-50">
+        <h2 className="text-3xl font-bold text-center">{t("pageHeading")}</h2>
+        <h3 className="mx-auto mt-3 max-w-2xl px-4 sm:px-0 text-sm md:text-base font-normal text-center opacity-50">
           {t("pageSubheading")}
         </h3>
       </div>
