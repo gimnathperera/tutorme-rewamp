@@ -333,7 +333,14 @@
     "optDocDrivingLicense": "Driving License",
     "optDocPoliceClearance": "Police Clearance Report",
     "optDocOther": "Other",
-    "somethingWentWrong": "Something went wrong. Please try again."
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "referredByCode": "Referral Code",
+    "referredByCodePlaceholder": "e.g. TK7J2R9M",
+    "referredByCodeHint": "Optional — enter a code if someone referred you",
+    "referredByCodeChecking": "Checking code...",
+    "referredByCodeValid": "Referral code is valid",
+    "referredByCodeInvalid": "This referral code is not valid",
+    "referredByCodeFormatError": "Referral code must be alphanumeric"
   },
   "requestForTutor": {
     "pageTitle": "Request for Tutor",
