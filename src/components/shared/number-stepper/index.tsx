@@ -62,12 +62,24 @@ const NumberStepper = ({
 
           return (
             <>
-              {/* Mobile: value on left, − + buttons grouped on right */}
+              {/* Mobile: − [input] + centered layout */}
               <div
-                className={`flex sm:hidden h-11 items-center overflow-hidden rounded-md border bg-white ${
+                className={`flex sm:hidden h-11 w-full items-center overflow-hidden rounded-md border bg-white ${
                   error ? "border-red-500" : "border-gray-300"
                 }`}
               >
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = Math.max(min, val - 1);
+                    field.onChange(next);
+                    if (next >= 1) clearErrors(name);
+                  }}
+                  disabled={val <= min}
+                  className="flex h-full w-10 shrink-0 items-center justify-center border-r border-gray-200 bg-gray-50 text-lg font-semibold text-gray-500 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                >
+                  −
+                </button>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -75,34 +87,20 @@ const NumberStepper = ({
                   value={val}
                   onChange={handleChange}
                   onBlur={field.onBlur}
-                  className="h-full flex-1 border-0 bg-transparent px-3 text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
+                  className="h-full min-w-0 flex-1 border-0 bg-transparent text-center text-sm font-medium text-gray-900 focus:outline-none focus:ring-0"
                 />
-                <div className="flex h-full items-center border-l border-gray-200">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const next = Math.max(min, val - 1);
-                      field.onChange(next);
-                      if (next >= 1) clearErrors(name);
-                    }}
-                    disabled={val <= min}
-                    className="flex h-full w-11 items-center justify-center border-r border-gray-200 bg-gray-50 text-lg font-semibold text-gray-500 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
-                  >
-                    −
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const next = Math.min(max, val + 1);
-                      field.onChange(next);
-                      clearErrors(name);
-                    }}
-                    disabled={val >= max}
-                    className="flex h-full w-11 items-center justify-center bg-gray-50 text-lg font-semibold text-gray-500 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
-                  >
-                    +
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const next = Math.min(max, val + 1);
+                    field.onChange(next);
+                    clearErrors(name);
+                  }}
+                  disabled={val >= max}
+                  className="flex h-full w-10 shrink-0 items-center justify-center border-l border-gray-200 bg-gray-50 text-lg font-semibold text-gray-500 hover:bg-gray-100 active:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-40 transition-colors"
+                >
+                  +
+                </button>
               </div>
 
               {/* Desktop (sm+): plain input matching other form fields */}
