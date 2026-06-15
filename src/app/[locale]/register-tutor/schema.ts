@@ -147,6 +147,16 @@ const createStep1BaseSchema = (t: (_key: string) => string) =>
     race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
       message: t("raceRequired"),
     }),
+
+    referredByCode: z.preprocess(
+      (v) => (typeof v === "string" ? v.trim().toUpperCase() : v),
+      z
+        .string()
+        .regex(/^[A-Z0-9]*$/, t("referredByCodeFormatError"))
+        .max(20)
+        .optional()
+        .or(z.literal("")),
+    ),
   });
 
 const createStep2Schema = (t: (_key: string) => string) =>
