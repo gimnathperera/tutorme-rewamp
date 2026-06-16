@@ -11,7 +11,16 @@ interface InputPasswordProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputPassword: React.FC<InputPasswordProps> = React.memo(
-  ({ label, helperText, className = "", name, required = false, onBlur, onChange, ...props }) => {
+  ({
+    label,
+    helperText,
+    className = "",
+    name,
+    required = false,
+    onBlur,
+    onChange,
+    ...props
+  }) => {
     const { control, formState } = useFormContext();
     const [showPassword, setShowPassword] = useState(false);
 

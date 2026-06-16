@@ -41,11 +41,15 @@ type AppliedFilters = {
 /** Returns the allowed exam type IDs for a given grade title, or null = show all. */
 function getExamTypesForGrade(gradeTitle: string): string[] | null {
   const t = gradeTitle.toLowerCase();
-  if (/cambridge/i.test(t)) return ["Cambridge Exam", "Model Paper", "Term Test"];
+  if (/cambridge/i.test(t))
+    return ["Cambridge Exam", "Model Paper", "Term Test"];
   if (/edexcel/i.test(t)) return ["Edexcel Exam", "Model Paper", "Term Test"];
-  if (/ordinary level|o\/l/.test(t) || /grade 1[01]/.test(t)) return ["GCE Exam", "Term Test", "Model Paper"];
-  if (/advanced level|a\/l/.test(t) || /grade 1[23]/.test(t)) return ["GCE Exam", "Term Test", "Model Paper"];
-  if (/grade 5/.test(t)) return ["Scholarship Exam", "Term Test", "Model Paper"];
+  if (/ordinary level|o\/l/.test(t) || /grade 1[01]/.test(t))
+    return ["GCE Exam", "Term Test", "Model Paper"];
+  if (/advanced level|a\/l/.test(t) || /grade 1[23]/.test(t))
+    return ["GCE Exam", "Term Test", "Model Paper"];
+  if (/grade 5/.test(t))
+    return ["Scholarship Exam", "Term Test", "Model Paper"];
   if (/grade [1-4](?!\d)/.test(t)) return ["Term Test", "Model Paper"];
   if (/grade [6-9](?!\d)/.test(t)) return ["Term Test", "Model Paper"];
   return null;
@@ -91,8 +95,21 @@ const useLogic = (): LogicReturnType => {
   });
   const { setValue, reset } = testPaperSearchForm;
 
-  const [selectedGrade, selectedSubject, selectedMedium, fromYear, toYear, selectedExam] =
-    testPaperSearchForm.watch(["grade", "subject", "medium", "fromYear", "toYear", "exam"]);
+  const [
+    selectedGrade,
+    selectedSubject,
+    selectedMedium,
+    fromYear,
+    toYear,
+    selectedExam,
+  ] = testPaperSearchForm.watch([
+    "grade",
+    "subject",
+    "medium",
+    "fromYear",
+    "toYear",
+    "exam",
+  ]);
 
   const hasGrade = !!selectedGrade;
 
@@ -138,9 +155,15 @@ const useLogic = (): LogicReturnType => {
       toYearRef.current = toYear;
       return;
     }
-    if (fromYear !== fromYearRef.current && parseInt(fromYear) > parseInt(toYear)) {
+    if (
+      fromYear !== fromYearRef.current &&
+      parseInt(fromYear) > parseInt(toYear)
+    ) {
       setValue("toYear", fromYear);
-    } else if (toYear !== toYearRef.current && parseInt(toYear) < parseInt(fromYear)) {
+    } else if (
+      toYear !== toYearRef.current &&
+      parseInt(toYear) < parseInt(fromYear)
+    ) {
       setValue("fromYear", toYear);
     }
     fromYearRef.current = fromYear;
@@ -186,7 +209,14 @@ const useLogic = (): LogicReturnType => {
       examType: selectedExam || undefined,
     });
     setCurrentPage(1);
-  }, [selectedGrade, selectedSubject, selectedMedium, fromYear, toYear, selectedExam]);
+  }, [
+    selectedGrade,
+    selectedSubject,
+    selectedMedium,
+    fromYear,
+    toYear,
+    selectedExam,
+  ]);
 
   const gradesOptions = useMemo(
     () =>
@@ -213,7 +243,10 @@ const useLogic = (): LogicReturnType => {
     gradesRowData?.results.forEach((grade) => {
       grade.subjects?.forEach((subject) => {
         if (!subjectsById.has(subject.id)) {
-          subjectsById.set(subject.id, { label: subject.title, value: subject.id });
+          subjectsById.set(subject.id, {
+            label: subject.title,
+            value: subject.id,
+          });
         }
       });
     });
@@ -223,11 +256,21 @@ const useLogic = (): LogicReturnType => {
   // Build exam type options filtered by selected grade
   const examTypeOptions = useMemo<Option[]>(() => {
     const allTypes = examTypesData?.examTypes ?? [];
-    if (!selectedGrade) return allTypes.map((t) => ({ label: t.title, value: t.id }));
+    if (!selectedGrade)
+      return allTypes.map((t) => ({ label: t.title, value: t.id }));
     const selectedGradeTitle =
-      gradesRowData?.results.find((g) => g.id.toString() === selectedGrade)?.title ?? "";
+      gradesRowData?.results.find((g) => g.id.toString() === selectedGrade)
+        ?.title ?? "";
     const allowed = getExamTypesForGrade(selectedGradeTitle);
-    const filtered = allowed ? allTypes.filter((t) => allowed.some((a) => t.title.toLowerCase().includes(a.toLowerCase()) || a.toLowerCase().includes(t.title.toLowerCase()))) : allTypes;
+    const filtered = allowed
+      ? allTypes.filter((t) =>
+          allowed.some(
+            (a) =>
+              t.title.toLowerCase().includes(a.toLowerCase()) ||
+              a.toLowerCase().includes(t.title.toLowerCase()),
+          ),
+        )
+      : allTypes;
     return filtered.map((t) => ({ label: t.title, value: t.id }));
   }, [selectedGrade, examTypesData, gradesRowData]);
 

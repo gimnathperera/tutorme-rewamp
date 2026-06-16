@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Controller, useFormContext } from "react-hook-form";
 import MultiSelect from "@/components/shared/MultiSelect";
 import { Input } from "@/components/ui/input";
@@ -14,7 +15,10 @@ import {
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
-import { useLazyGetTutorEmailAvailabilityQuery } from "@/store/api/splits/tutor-request";
+import {
+  useLazyGetTutorEmailAvailabilityQuery,
+  useLazyValidateReferralCodeQuery,
+} from "@/store/api/splits/tutor-request";
 import { useTranslations } from "next-intl";
 
 /** Shared style tokens for the register-tutor form */
@@ -41,9 +45,11 @@ const formatDateInputValue = (date: Date) =>
   ].join("-");
 
 type EmailAvailabilityState = "available" | "unavailable" | null;
+type ReferralCodeState = "valid" | "invalid" | null;
 
 const PersonalInfo = () => {
   const t = useTranslations("registerTutor");
+  const searchParams = useSearchParams();
   const genderOptions = useMemo(
     () => [
       { value: "Male", text: t("optGenderMale") },
@@ -83,13 +89,29 @@ const PersonalInfo = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [emailAvailability, setEmailAvailability] =
     useState<EmailAvailabilityState>(null);
+  const [referralCodeState, setReferralCodeState] =
+    useState<ReferralCodeState>(null);
   const [checkTutorEmailAvailability, { isFetching: isCheckingEmail }] =
     useLazyGetTutorEmailAvailabilityQuery();
+  const [validateReferralCode, { isFetching: isCheckingReferralCode }] =
+    useLazyValidateReferralCodeQuery();
 
   const latestEmailRef = useRef("");
+  const latestReferralCodeRef = useRef("");
+
+  // Auto-fill referral code from ?referral= query param (one-time on mount)
+  useEffect(() => {
+    const param = searchParams.get("referral");
+    if (param) {
+      const code = param.trim().toUpperCase();
+      setValue("referredByCode", code, { shouldValidate: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const dateOfBirth = watch("dateOfBirth");
   const email = watch("email");
+  const referredByCode = watch("referredByCode") as string | undefined;
 
   /** Latest selectable date = today minus 18 years (tutor must be ≥ 18) */
   const maxDate = (() => {
@@ -172,6 +194,48 @@ const PersonalInfo = () => {
     setError,
     t,
   ]);
+
+  useEffect(() => {
+    const code =
+      typeof referredByCode === "string"
+        ? referredByCode.trim().toUpperCase()
+        : "";
+    latestReferralCodeRef.current = code;
+
+    if (!code) {
+      setReferralCodeState(null);
+      clearErrors("referredByCode");
+      return;
+    }
+
+    if (!/^[A-Z0-9]+$/.test(code)) {
+      setReferralCodeState("invalid");
+      return;
+    }
+
+    const timeoutId = window.setTimeout(async () => {
+      const result = await validateReferralCode(code, true);
+      if (latestReferralCodeRef.current !== code) return;
+
+      if (!result.data) {
+        setReferralCodeState(null);
+        return;
+      }
+
+      if (result.data.valid) {
+        setReferralCodeState("valid");
+        clearErrors("referredByCode");
+      } else {
+        setReferralCodeState("invalid");
+        setError("referredByCode", {
+          type: "server",
+          message: t("referredByCodeInvalid"),
+        });
+      }
+    }, EMAIL_CHECK_DELAY_MS);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [referredByCode, validateReferralCode, clearErrors, setError, t]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
@@ -506,6 +570,66 @@ const PersonalInfo = () => {
         <p className="text-xs leading-4 text-red-500 min-h-4">
           {errors.race?.message as string}
         </p>
+      </div>
+
+      {/* Referral Code (optional) */}
+      <div className={fieldWrapper}>
+        <Label className="text-sm" htmlFor="referredByCode">
+          {t("referredByCode")}
+        </Label>
+        <div className="relative">
+          <Input
+            id="referredByCode"
+            type="text"
+            onKeyDown={preventWhitespaceKey}
+            {...register("referredByCode", {
+              onChange: (e) => {
+                const upper = removeWhitespace(e.target.value).toUpperCase();
+                setReferralCodeState(null);
+                if (
+                  (errors.referredByCode as { type?: string } | undefined)
+                    ?.type === "server"
+                ) {
+                  clearErrors("referredByCode");
+                }
+                if (upper !== e.target.value) {
+                  e.target.value = upper;
+                  setValue("referredByCode", upper, { shouldValidate: false });
+                }
+              },
+              onBlur: (e) => {
+                const upper = removeWhitespace(e.target.value).toUpperCase();
+                setValue("referredByCode", upper, { shouldValidate: true });
+              },
+            })}
+            placeholder={t("referredByCodePlaceholder")}
+            autoComplete="off"
+            maxLength={20}
+            className={`${inputClass} pr-10 ${errors.referredByCode ? "border-red-500" : "border-gray-300"}`}
+          />
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
+            {isCheckingReferralCode ? (
+              <Spinner className="text-gray-400" />
+            ) : errors.referredByCode || referralCodeState === "invalid" ? (
+              <Icon name="CircleX" size={18} className="text-red-500" />
+            ) : referralCodeState === "valid" ? (
+              <Icon name="CircleCheck" size={18} className="text-green-600" />
+            ) : null}
+          </span>
+        </div>
+        {errors.referredByCode ? (
+          <p className="text-xs leading-4 text-red-500 min-h-4">
+            {errors.referredByCode?.message as string}
+          </p>
+        ) : isCheckingReferralCode ? (
+          <Hint>{t("referredByCodeChecking")}</Hint>
+        ) : referralCodeState === "valid" ? (
+          <p className="text-xs leading-4 text-green-600 min-h-4">
+            {t("referredByCodeValid")}
+          </p>
+        ) : (
+          <Hint>{t("referredByCodeHint")}</Hint>
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,13 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import { Check, ChevronDown, X } from "lucide-react";
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 export interface Option {
   value: string;
@@ -192,7 +198,9 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
       {/* DROPDOWN */}
       {isOpen && (
-        <div className={`absolute z-50 w-full rounded-md border border-gray-200 bg-white shadow ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}>
+        <div
+          className={`absolute z-50 w-full rounded-md border border-gray-200 bg-white shadow ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}
+        >
           {searchable && (
             <div className="p-2 border-b border-gray-100">
               <div className="relative">

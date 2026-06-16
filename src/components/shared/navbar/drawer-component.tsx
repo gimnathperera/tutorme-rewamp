@@ -1,10 +1,12 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import Link from "next/link";
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Icon from "../icon";
 import { AuthUserData } from "@/types/auth-types";
 import { useTranslations } from "next-intl";
+import ConfirmationAlert from "../confirm-alert";
+import { useAuthContext } from "@/contexts";
 
 interface DrawerProps {
   children: ReactNode;
@@ -24,6 +26,8 @@ const Drawer = ({
   logout,
 }: DrawerProps) => {
   const t = useTranslations("nav");
+  const { isUserLogoutLoading } = useAuthContext();
+  const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -100,8 +104,7 @@ const Drawer = ({
               className="w-full block bg-blue-600 text-white hover:bg-blue-700 py-2 rounded-full text-center text-base font-semibold"
               onClick={() => {
                 if (user?.email) {
-                  logout?.();
-                  setIsOpen(false);
+                  setIsLogoutConfirmationOpen(true);
                 } else {
                   handleOnChangeSignUpModalVisibility();
                 }
@@ -112,6 +115,21 @@ const Drawer = ({
           </footer>
         </article>
       </section>
+
+      <ConfirmationAlert
+        isOpen={isLogoutConfirmationOpen}
+        closeModal={() => setIsLogoutConfirmationOpen(false)}
+        onConfirm={() => {
+          logout?.();
+          setIsOpen(false);
+          setIsLogoutConfirmationOpen(false);
+        }}
+        title={t("logout")}
+        description={t("logoutConfirmation")}
+        cancelText={t("cancel")}
+        confirmText={t("logout")}
+        loading={isUserLogoutLoading}
+      />
 
       {/* Backdrop */}
       <section

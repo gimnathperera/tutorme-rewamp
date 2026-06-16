@@ -19,9 +19,10 @@ const PROTECTED_BRANDS = ["TuitionLanka"] as const;
  * Returns the modified texts and a flag indicating whether any wrapping
  * was needed (so we know whether to force HTML mode).
  */
-function wrapBrands(
-  texts: string[],
-): { wrapped: string[]; hadBrands: boolean } {
+function wrapBrands(texts: string[]): {
+  wrapped: string[];
+  hadBrands: boolean;
+} {
   let hadBrands = false;
   const wrapped = texts.map((t) => {
     let out = t;

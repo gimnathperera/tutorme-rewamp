@@ -87,6 +87,12 @@ export const TutorRequestApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    validateReferralCode: build.query<{ valid: boolean }, string>({
+      query: (code) => ({
+        url: `${Endpoints.RegisterTutor}/validate-referral?code=${encodeURIComponent(code)}`,
+        method: "GET",
+      }),
+    }),
     getTutorRegistration: build.query<
       TutorRegistrationLookupResponse,
       TutorRegistrationLookupRequest
@@ -121,4 +127,5 @@ export const {
   useAddTutorRequestMutation,
   useLazyGetTutorRegistrationQuery,
   useLazyGetTutorEmailAvailabilityQuery,
+  useLazyValidateReferralCodeQuery,
 } = TutorRequestApi;

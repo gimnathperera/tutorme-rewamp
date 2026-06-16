@@ -333,7 +333,14 @@
     "optDocDrivingLicense": "Driving License",
     "optDocPoliceClearance": "Police Clearance Report",
     "optDocOther": "Other",
-    "somethingWentWrong": "Something went wrong. Please try again."
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "referredByCode": "Referral Code",
+    "referredByCodePlaceholder": "e.g. TK7J2R9M",
+    "referredByCodeHint": "Optional — enter a code if someone referred you",
+    "referredByCodeChecking": "Checking code...",
+    "referredByCodeValid": "Referral code is valid",
+    "referredByCodeInvalid": "This referral code is not valid",
+    "referredByCodeFormatError": "Referral code must be alphanumeric"
   },
   "requestForTutor": {
     "pageTitle": "Request for Tutor",
@@ -425,7 +432,7 @@
   },
   "pastExamPapers": {
     "pageHeading": "Download Sri Lankan Past Exam Papers for Free",
-    "pageSubheading": "Grade 5 Scholarship, O/L, A/L & Grade 1–13. Explore a complete database of Sri Lanka past exam papers, including Grade 5 Scholarship papers, GCE O/L past papers, and GCE A/L past papers. Download free model papers, school test papers, and previous exam questions for all grades and subjects.",
+    "pageSubheading": "Download free Sri Lankan Grade 1–13 past exam papers, including Grade 5 Scholarship, GCE O/L, GCE A/L, model papers, and school term test papers for all subjects and mediums from TuitionLanka",
     "sectionHeading": "Download Past Exam Papers",
     "edexcelHeading": "Edexcel Past Papers",
     "edexcelBody1": "Due to copyright restrictions, we are unable to share Edexcel past papers on our website.",
