@@ -3,7 +3,7 @@
 import { useAuthContext } from "@/contexts";
 import {
   useFetchGradesQuery,
-  useLazyFetchGradeByIdQuery,
+  useFetchSubjectsForGradesMutation,
 } from "@/store/api/splits/grades";
 import {
   useLazyGetProfileQuery,
@@ -11,7 +11,7 @@ import {
 } from "@/store/api/splits/users";
 import { useLazyGetTutorRegistrationQuery } from "@/store/api/splits/tutor-request";
 import { Option } from "@/types/shared-types";
-import { ProfileResponse, Subject } from "@/types/response-types";
+import { ProfileResponse } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { size } from "lodash-es";
@@ -590,7 +590,7 @@ const useLogic = (): LogicReturnType => {
     },
   );
 
-  const [fetchSubjectsByGrade] = useLazyFetchGradeByIdQuery();
+  const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [handleProfileSubmit, { isLoading: isGeneralFormSubmitting }] =
     useUpdateProfileMutation();
 
@@ -620,8 +620,6 @@ const useLogic = (): LogicReturnType => {
 
   const [selectedEducationGrades] = educationInfoForm.watch(["grades"]);
 
-  const educationGradeSubjectsMapRef = useRef<Map<string, string[]>>(new Map());
-  const prevEducationGradesRef = useRef<string[]>([]);
   const hasInitialEducationSubjectsBeenSet = useRef(false);
   const currentUserId = user?.id;
   const userRole = user?.role;
@@ -790,79 +788,33 @@ const useLogic = (): LogicReturnType => {
 
   const syncEducationSubjectOptions = useCallback(async () => {
     const currentGrades: string[] = selectedEducationGrades ?? [];
-    const prevGrades = prevEducationGradesRef.current;
 
-    const removedGrades = prevGrades.filter(
-      (gradeId) => !currentGrades.includes(gradeId),
-    );
+    if (currentGrades.length === 0) {
+      setEducationSubjectsOptions([]);
+      educationInfoForm.setValue("subjects", [], { shouldDirty: true });
+      return;
+    }
 
-    if (removedGrades.length > 0) {
-      const removedSubjectIds = new Set<string>();
+    try {
+      const result = await fetchSubjectsForGrades({ gradeIds: currentGrades }).unwrap();
+      const newOptions = (result.subjects ?? []).map(({ title, id }) => ({
+        label: title,
+        value: id,
+      }));
 
-      removedGrades.forEach((gradeId) => {
-        (educationGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
-          (subjectId) => removedSubjectIds.add(subjectId),
-        );
-        educationGradeSubjectsMapRef.current.delete(gradeId);
-      });
+      setEducationSubjectsOptions(newOptions);
 
-      // Keep subjects that still belong to a remaining selected grade
-      currentGrades.forEach((gradeId) => {
-        (educationGradeSubjectsMapRef.current.get(gradeId) ?? []).forEach(
-          (subjectId) => removedSubjectIds.delete(subjectId),
-        );
-      });
-
-      setEducationSubjectsOptions((prev) =>
-        prev.filter((option) => !removedSubjectIds.has(option.value)),
-      );
-
+      const validIds = new Set(newOptions.map((o) => o.value));
       const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
       educationInfoForm.setValue(
         "subjects",
-        currentSubjects.filter(
-          (subjectId) => !removedSubjectIds.has(subjectId),
-        ),
+        currentSubjects.filter((id) => validIds.has(id)),
         { shouldDirty: true },
       );
+    } catch {
+      toast.error("Failed to load subjects");
     }
-
-    for (const gradeId of currentGrades) {
-      if (educationGradeSubjectsMapRef.current.has(gradeId)) continue;
-
-      const result = await fetchSubjectsByGrade(gradeId);
-      const error = getErrorInApiResult(result);
-
-      if (error) {
-        toast.error(error);
-        continue;
-      }
-
-      if (result.data) {
-        const existingIds = new Set(
-          Array.from(educationGradeSubjectsMapRef.current.values()).flat(),
-        );
-        const newSubjects: Subject[] = result.data.subjects.filter(
-          ({ id }) => !existingIds.has(id),
-        );
-
-        educationGradeSubjectsMapRef.current.set(
-          gradeId,
-          result.data.subjects.map(({ id }) => id),
-        );
-
-        setEducationSubjectsOptions((prev) => [
-          ...prev,
-          ...newSubjects.map(({ title, id }) => ({
-            label: title,
-            value: id,
-          })),
-        ]);
-      }
-    }
-
-    prevEducationGradesRef.current = currentGrades;
-  }, [educationInfoForm, fetchSubjectsByGrade, selectedEducationGrades]);
+  }, [educationInfoForm, fetchSubjectsForGrades, selectedEducationGrades]);
 
   useEffect(() => {
     if (
