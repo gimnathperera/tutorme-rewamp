@@ -2,12 +2,14 @@
 
 import { Check, ChevronDown, X } from "lucide-react";
 import React, {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 
 export interface Option {
   value: string;
@@ -53,8 +55,15 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
+  const portalRef = useRef<HTMLDivElement>(null);
   const [openUpward, setOpenUpward] = useState(false);
   const [listMaxHeight, setListMaxHeight] = useState(208);
+  const [coords, setCoords] = useState({ top: 0, bottom: 0, left: 0, width: 0 });
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const visibleOptions = useMemo(() => {
     if (!searchable || !searchQuery.trim()) return options;
@@ -116,9 +125,11 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Node;
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
+        !dropdownRef.current.contains(target) &&
+        (!portalRef.current || !portalRef.current.contains(target))
       ) {
         setIsOpen(false);
       }
@@ -127,23 +138,47 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Computes where the (portaled) dropdown panel should render, based on the
+  // trigger's current viewport position. Re-run on open, scroll and resize so
+  // the panel stays anchored even though it now renders outside any
+  // ancestor's `overflow: hidden` (which previously clipped it — see the
+  // Certificates & Documents "Optional Details" scrolling bug).
+  const updatePosition = useCallback(() => {
+    if (!triggerRef.current) return;
+    const rect = triggerRef.current.getBoundingClientRect();
+    const footer = document.querySelector("footer");
+    const limit = footer
+      ? Math.min(footer.getBoundingClientRect().top, window.innerHeight)
+      : window.innerHeight;
+    const spaceBelow = limit - rect.bottom;
+    const upward = spaceBelow < 240;
+    const maxHeight = upward
+      ? Math.min(Math.max(rect.top - 8, 80), 208)
+      : Math.min(spaceBelow - 8, 208);
+
+    setOpenUpward(upward);
+    setListMaxHeight(maxHeight);
+    setCoords({
+      top: rect.bottom + 4,
+      bottom: window.innerHeight - rect.top + 4,
+      left: rect.left,
+      width: rect.width,
+    });
+  }, []);
+
   useLayoutEffect(() => {
-    if (isOpen && triggerRef.current) {
-      const rect = triggerRef.current.getBoundingClientRect();
-      const footer = document.querySelector("footer");
-      const limit = footer
-        ? Math.min(footer.getBoundingClientRect().top, window.innerHeight)
-        : window.innerHeight;
-      const spaceBelow = limit - rect.bottom;
-      if (spaceBelow < 240) {
-        setOpenUpward(true);
-        setListMaxHeight(Math.min(Math.max(rect.top - 8, 80), 208));
-      } else {
-        setOpenUpward(false);
-        setListMaxHeight(Math.min(spaceBelow - 8, 208));
-      }
-    }
-  }, [isOpen]);
+    if (isOpen) updatePosition();
+  }, [isOpen, updatePosition]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    window.addEventListener("scroll", updatePosition, true);
+    window.addEventListener("resize", updatePosition);
+    return () => {
+      window.removeEventListener("scroll", updatePosition, true);
+      window.removeEventListener("resize", updatePosition);
+    };
+  }, [isOpen, updatePosition]);
 
   const borderClass = hasError ? "border-red-500" : "border-gray-300";
   const disabledClass = disabled
@@ -196,62 +231,77 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
         <ChevronDown className="ml-auto h-4 w-4 text-muted-foreground" />
       </div>
 
-      {/* DROPDOWN */}
-      {isOpen && (
-        <div
-          className={`absolute z-50 w-full rounded-md border border-gray-200 bg-white shadow ${openUpward ? "bottom-full mb-1" : "top-full mt-1"}`}
-        >
-          {searchable && (
-            <div className="p-2 border-b border-gray-100">
-              <div className="relative">
-                <input
-                  ref={searchInputRef}
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                  placeholder={searchPlaceholder}
-                  className="w-full rounded-md border border-gray-200 px-3 py-1.5 pr-8 text-sm outline-none focus:border-blue-400"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSearchQuery("");
-                      searchInputRef.current?.focus();
-                    }}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                    aria-label={clearSearchLabel}
-                  >
-                    <X size={14} />
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
-          <div className="overflow-y-auto" style={{ maxHeight: listMaxHeight }}>
-            {visibleOptions.length > 0 ? (
-              visibleOptions.map((option) => (
-                <div
-                  key={option.value}
-                  onClick={() => handleSelect(option.value)}
-                  className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-muted"
-                >
-                  <span>{option.text}</span>
-                  {selectedOptions.includes(option.value) && (
-                    <Check size={16} />
+      {/* DROPDOWN — rendered through a portal so it can't be clipped by an
+          ancestor's `overflow: hidden` (e.g. rounded card containers). */}
+      {isOpen &&
+        mounted &&
+        createPortal(
+          <div
+            ref={portalRef}
+            className="fixed z-50 rounded-md border border-gray-200 bg-white shadow"
+            style={{
+              left: coords.left,
+              width: coords.width,
+              ...(openUpward
+                ? { bottom: coords.bottom }
+                : { top: coords.top }),
+            }}
+          >
+            {searchable && (
+              <div className="p-2 border-b border-gray-100">
+                <div className="relative">
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={searchPlaceholder}
+                    className="w-full rounded-md border border-gray-200 px-3 py-1.5 pr-8 text-sm outline-none focus:border-blue-400"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSearchQuery("");
+                        searchInputRef.current?.focus();
+                      }}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                      aria-label={clearSearchLabel}
+                    >
+                      <X size={14} />
+                    </button>
                   )}
                 </div>
-              ))
-            ) : (
-              <div className="px-3 py-2 text-sm text-gray-400 select-none">
-                {noResultsText(searchQuery)}
               </div>
             )}
-          </div>
-        </div>
-      )}
+            <div
+              className="overflow-y-auto"
+              style={{ maxHeight: listMaxHeight }}
+            >
+              {visibleOptions.length > 0 ? (
+                visibleOptions.map((option) => (
+                  <div
+                    key={option.value}
+                    onClick={() => handleSelect(option.value)}
+                    className="flex cursor-pointer items-center justify-between px-3 py-2 text-sm hover:bg-muted"
+                  >
+                    <span>{option.text}</span>
+                    {selectedOptions.includes(option.value) && (
+                      <Check size={16} />
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="px-3 py-2 text-sm text-gray-400 select-none">
+                  {noResultsText(searchQuery)}
+                </div>
+              )}
+            </div>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 };
