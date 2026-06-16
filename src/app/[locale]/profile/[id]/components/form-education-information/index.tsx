@@ -227,17 +227,16 @@ const FormEducationInfo: FC<Props> = ({
         value: "Advanced Level Certificate",
         text: tR("optDocAdvancedLevelCertificate"),
       },
-      {
-        value: "Ordinary Level Certificate",
-        text: tR("optDocOrdinaryLevelCertificate"),
-      },
-      { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       { value: "Diploma Certificate", text: tR("optDocDiplomaCertificate") },
+      { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       {
-        value: "Professional Certificate",
-        text: tR("optDocProfessionalCertificate"),
+        value: "Post Graduate Certificate",
+        text: tR("optDocPostGraduateCertificate"),
       },
-      { value: "Teaching Certificate", text: tR("optDocTeachingCertificate") },
+      {
+        value: "CIMA, AAT, CA, etc... Certificates",
+        text: tR("optDocCimaAatCaCertificates"),
+      },
     ],
     [tR],
   );

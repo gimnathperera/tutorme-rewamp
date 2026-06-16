@@ -224,11 +224,13 @@ export const DOCUMENT_TYPE_OPTIONS: SelectOption[] = [
 
 export const EDUCATIONAL_DOCUMENT_OPTIONS: SelectOption[] = [
   { value: "Advanced Level Certificate", text: "Advanced Level Certificate" },
-  { value: "Ordinary Level Certificate", text: "Ordinary Level Certificate" },
-  { value: "Degree Certificate", text: "Degree Certificate" },
   { value: "Diploma Certificate", text: "Diploma Certificate" },
-  { value: "Professional Certificate", text: "Professional Certificate" },
-  { value: "Teaching Certificate", text: "Teaching Certificate" },
+  { value: "Degree Certificate", text: "Degree Certificate" },
+  { value: "Post Graduate Certificate", text: "Post Graduate Certificate" },
+  {
+    value: "CIMA, AAT, CA, etc... Certificates",
+    text: "CIMA, AAT, CA, etc... Certificates",
+  },
 ];
 
 export const OPTIONAL_DOCUMENT_OPTIONS: SelectOption[] = [

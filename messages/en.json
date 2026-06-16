@@ -328,6 +328,8 @@
     "optDocDiplomaCertificate": "Diploma Certificate",
     "optDocProfessionalCertificate": "Professional Certificate",
     "optDocTeachingCertificate": "Teaching Certificate",
+    "optDocPostGraduateCertificate": "Post Graduate Certificate",
+    "optDocCimaAatCaCertificates": "CIMA, AAT, CA, etc... Certificates",
     "optDocNIC": "NIC (National ID Card)",
     "optDocPassport": "Passport",
     "optDocDrivingLicense": "Driving License",
