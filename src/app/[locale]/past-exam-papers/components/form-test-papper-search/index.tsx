@@ -2,7 +2,14 @@
 
 import InputSelect from "@/components/shared/input-select";
 import { Option } from "@/types/shared-types";
-import { BookOpen, Calendar, Eraser, GraduationCap, Languages, ScrollText } from "lucide-react";
+import {
+  BookOpen,
+  Calendar,
+  Eraser,
+  GraduationCap,
+  Languages,
+  ScrollText,
+} from "lucide-react";
 import { FC } from "react";
 import { FormProvider, UseFormReturn } from "react-hook-form";
 import { initialFormValues, PaperSearchSchema } from "./schema";
@@ -120,7 +127,9 @@ const FormTestPaperSearch: FC<Props> = ({
                 icon={<Calendar size={14} />}
               />
             </div>
-            <span className="mb-2 text-gray-400 font-medium select-none">—</span>
+            <span className="mb-2 text-gray-400 font-medium select-none">
+              —
+            </span>
             <div className="flex-1">
               <InputSelect
                 label={t("toYear")}

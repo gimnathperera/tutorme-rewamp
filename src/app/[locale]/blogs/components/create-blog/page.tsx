@@ -102,12 +102,17 @@ const AddBlog = () => {
   const redirect = useRouter();
 
   const rawBlogOptions: Option[] = useMemo(
-    () => blogsData?.results.map((blog) => ({ value: blog.id, text: blog.title })) || [],
+    () =>
+      blogsData?.results.map((blog) => ({
+        value: blog.id,
+        text: blog.title,
+      })) || [],
     [blogsData],
   );
 
   const rawTagOptions: Option[] = useMemo(
-    () => tagData?.results.map((tag) => ({ value: tag.id, text: tag.name })) || [],
+    () =>
+      tagData?.results.map((tag) => ({ value: tag.id, text: tag.name })) || [],
     [tagData],
   );
 
@@ -772,7 +777,10 @@ const AddBlog = () => {
                     </div>
                   )}
                   {faqFields.map((faq, index) => (
-                    <div key={faq.id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50">
+                    <div
+                      key={faq.id}
+                      className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50"
+                    >
                       <div className="flex justify-between items-center mb-4">
                         <span className="font-semibold text-gray-700 text-sm">
                           FAQ {index + 1}

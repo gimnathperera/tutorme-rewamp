@@ -56,9 +56,15 @@ const DocumentRow = ({
                 }}
                 className={`h-11 w-full rounded-md border bg-transparent px-3 text-sm focus:outline-none focus:ring-1 focus:ring-ring ${fieldState.error ? "border-red-500" : "border-gray-300"} ${f.value ? "text-gray-900" : "text-gray-500"}`}
               >
-                <option value="" disabled hidden>{selectTypePlaceholder}</option>
+                <option value="" disabled hidden>
+                  {selectTypePlaceholder}
+                </option>
                 {options.map((opt) => (
-                  <option key={opt.value} value={opt.value} className="text-gray-900">
+                  <option
+                    key={opt.value}
+                    value={opt.value}
+                    className="text-gray-900"
+                  >
                     {opt.text}
                   </option>
                 ))}

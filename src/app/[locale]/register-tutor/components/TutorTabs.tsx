@@ -208,7 +208,9 @@ export function TutorTabs() {
         return;
       }
 
-      const referredByCode = (getValues("referredByCode") as string | undefined)?.trim().toUpperCase();
+      const referredByCode = (getValues("referredByCode") as string | undefined)
+        ?.trim()
+        .toUpperCase();
       if (referredByCode) {
         const referralResult = await validateReferralCode(referredByCode, true);
         if (referralResult.data && !referralResult.data.valid) {
@@ -258,7 +260,8 @@ export function TutorTabs() {
         referredByCode: rawReferredByCode,
         ...payload
       } = processedData;
-      const referredByCode = rawReferredByCode?.trim().toUpperCase() || undefined;
+      const referredByCode =
+        rawReferredByCode?.trim().toUpperCase() || undefined;
       const validOptional = (optionalCertificates ?? []).filter(
         (c) => c.type && c.url,
       );

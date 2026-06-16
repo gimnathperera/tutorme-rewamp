@@ -106,7 +106,7 @@ const PersonalInfo = () => {
       const code = param.trim().toUpperCase();
       setValue("referredByCode", code, { shouldValidate: true });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dateOfBirth = watch("dateOfBirth");
@@ -196,7 +196,10 @@ const PersonalInfo = () => {
   ]);
 
   useEffect(() => {
-    const code = typeof referredByCode === "string" ? referredByCode.trim().toUpperCase() : "";
+    const code =
+      typeof referredByCode === "string"
+        ? referredByCode.trim().toUpperCase()
+        : "";
     latestReferralCodeRef.current = code;
 
     if (!code) {
@@ -583,7 +586,10 @@ const PersonalInfo = () => {
               onChange: (e) => {
                 const upper = removeWhitespace(e.target.value).toUpperCase();
                 setReferralCodeState(null);
-                if ((errors.referredByCode as { type?: string } | undefined)?.type === "server") {
+                if (
+                  (errors.referredByCode as { type?: string } | undefined)
+                    ?.type === "server"
+                ) {
                   clearErrors("referredByCode");
                 }
                 if (upper !== e.target.value) {

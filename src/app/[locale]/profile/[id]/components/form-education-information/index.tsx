@@ -309,8 +309,7 @@ const FormEducationInfo: FC<Props> = ({
 
   const certErrors =
     (form.formState.errors.certificatesAndQualifications as any) ?? [];
-  const optErrors =
-    (form.formState.errors.optionalCertificates as any) ?? [];
+  const optErrors = (form.formState.errors.optionalCertificates as any) ?? [];
 
   const [
     classType,
@@ -366,8 +365,7 @@ const FormEducationInfo: FC<Props> = ({
     subjects.length > 0 &&
     Array.isArray(certificatesAndQualifications) &&
     certificatesAndQualifications.length > 0;
-  const isButtonDisabled =
-    !isDirty || isSubmitting || !hasAllRequiredFields;
+  const isButtonDisabled = !isDirty || isSubmitting || !hasAllRequiredFields;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
