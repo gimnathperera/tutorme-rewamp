@@ -496,7 +496,7 @@ const PersonalInfo = () => {
         reserveHelperSpace
       />
 
-      {/* Age — auto-calculated */}
+      {/* Age - auto-calculated */}
       <div className={fieldWrapper}>
         <Label className="text-sm" htmlFor="age">
           {t("age")} <span className="text-red-500">*</span>

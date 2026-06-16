@@ -154,7 +154,7 @@ export default function ViewBlogPage() {
         {user &&
           (displayBlog.author?.id === user.id || user.role === "admin") && (
             <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
-              {/* Admin approve/reject — only shown when blog is pending or needs status change */}
+              {/* Admin approve/reject - only shown when blog is pending or needs status change */}
               {user.role === "admin" && (
                 <>
                   {(blog as any).status !== "approved" && (

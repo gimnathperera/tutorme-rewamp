@@ -278,7 +278,7 @@ export default function PrivacyPolicyContent() {
             </section>
           ))}
 
-          {/* Contact section (static — contact details must not be translated) */}
+          {/* Contact section (static - contact details must not be translated) */}
           <LegalContactSection
             sectionNumber={14}
             documentName="Privacy Policy"

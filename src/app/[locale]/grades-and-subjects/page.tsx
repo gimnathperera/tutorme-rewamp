@@ -359,7 +359,7 @@ const GradeCard: FC<GradeCardProps> = ({
       {/* Title */}
       <h2 className="mb-2 text-center text-xl font-semibold">{title}</h2>
 
-      {/* Description — always clamped to 4 lines */}
+      {/* Description - always clamped to 4 lines */}
       <div className="text-center">
         <p className="text-muted-foreground text-sm leading-relaxed line-clamp-4">
           {description}

@@ -29,7 +29,7 @@ const Banner = () => {
     }
   };
 
-  // Signal to <html> that the hero is active — used by CSS to style the navbar
+  // Signal to <html> that the hero is active - used by CSS to style the navbar
   useEffect(() => {
     document.documentElement.setAttribute("data-hero", "true");
     return () => {
@@ -69,7 +69,7 @@ const Banner = () => {
       {/* Dark overlay */}
       <div className="hero-overlay" />
 
-      {/* Main content — centered */}
+      {/* Main content - centered */}
       <div className="hero-content">
         {/* Headline */}
         <div

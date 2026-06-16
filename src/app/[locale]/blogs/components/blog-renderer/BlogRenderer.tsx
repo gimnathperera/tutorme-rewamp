@@ -176,7 +176,7 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
                 </p>
                 {block.citation && (
                   <cite className="mt-2 block text-sm font-semibold text-gray-500 dark:text-gray-400">
-                    — {block.citation}
+                    - {block.citation}
                   </cite>
                 )}
               </blockquote>

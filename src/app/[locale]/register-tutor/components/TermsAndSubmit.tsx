@@ -209,7 +209,7 @@ const TermsAndSubmit = () => {
         </div>
 
         <div className="p-5 space-y-5">
-          {/* Educational Details — mandatory */}
+          {/* Educational Details - mandatory */}
           <div>
             <p className="text-xs font-semibold text-darkgrey mb-2">
               {t("educationalDetails")} <span className="text-red-500">*</span>

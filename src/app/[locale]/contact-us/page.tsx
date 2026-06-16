@@ -140,7 +140,7 @@ const ContactUsPage = () => {
   return (
     <div className="mx-auto max-w-7xl mt-10 px-6 lg:px-8 pb-10">
       <div className="rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
-        {/* ── Left panel — project navyblue → darkblue gradient ── */}
+        {/* ── Left panel - project navyblue → darkblue gradient ── */}
         <div className="relative flex flex-col justify-between px-10 py-12 overflow-hidden bg-navyblue">
           {/* Decorative blurred circles */}
           <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-blue/20 blur-3xl pointer-events-none" />
@@ -198,9 +198,9 @@ const ContactUsPage = () => {
           </div>
         </div>
 
-        {/* ── Right panel — white form card ── */}
+        {/* ── Right panel - white form card ── */}
         <div className="relative bg-white px-10 py-12 flex flex-col justify-center overflow-hidden">
-          {/* Decorative concentric rings — top right */}
+          {/* Decorative concentric rings - top right */}
           <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full border-[30px] border-gray-100 pointer-events-none" />
           <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full border-[20px] border-gray-50 pointer-events-none" />
 

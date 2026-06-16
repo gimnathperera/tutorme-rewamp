@@ -338,7 +338,7 @@
     "somethingWentWrong": "Something went wrong. Please try again.",
     "referredByCode": "Referral Code",
     "referredByCodePlaceholder": "e.g. TK7J2R9M",
-    "referredByCodeHint": "Optional — enter a code if someone referred you",
+    "referredByCodeHint": "Optional - enter a code if someone referred you",
     "referredByCodeChecking": "Checking code...",
     "referredByCodeValid": "Referral code is valid",
     "referredByCodeInvalid": "This referral code is not valid",

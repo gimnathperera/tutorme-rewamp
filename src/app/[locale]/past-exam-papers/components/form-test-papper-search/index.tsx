@@ -112,7 +112,7 @@ const FormTestPaperSearch: FC<Props> = ({
           />
         </div>
 
-        {/* Row 2: From Year — To Year | Select Exam */}
+        {/* Row 2: From Year - To Year | Select Exam */}
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
           <div className="flex items-end gap-2 md:col-span-2">
             <div className="flex-1">
@@ -121,14 +121,14 @@ const FormTestPaperSearch: FC<Props> = ({
                 name="fromYear"
                 options={yearOptions}
                 loading={isYearLoading}
-                placeholder="—"
+                placeholder="-"
                 disablePlaceholder={true}
                 disabled={!hasGrade}
                 icon={<Calendar size={14} />}
               />
             </div>
             <span className="mb-2 text-gray-400 font-medium select-none">
-              —
+              -
             </span>
             <div className="flex-1">
               <InputSelect
@@ -136,7 +136,7 @@ const FormTestPaperSearch: FC<Props> = ({
                 name="toYear"
                 options={yearOptions}
                 loading={isYearLoading}
-                placeholder="—"
+                placeholder="-"
                 disablePlaceholder={true}
                 disabled={!hasGrade}
                 icon={<Calendar size={14} />}

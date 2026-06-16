@@ -475,7 +475,7 @@ export default function TermsAndConditionsContent() {
             </section>
           ))}
 
-          {/* Contact section (static — contact details must not be translated) */}
+          {/* Contact section (static - contact details must not be translated) */}
           <LegalContactSection
             sectionNumber={16}
             documentName="Terms and Conditions"

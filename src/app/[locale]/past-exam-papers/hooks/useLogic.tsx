@@ -199,7 +199,7 @@ const useLogic = (): LogicReturnType => {
     isFetching: isPapersFetching,
   } = useFetchPapersQuery(paperQueryParams);
 
-  // Search handler — only updates appliedFilters on button click
+  // Search handler - only updates appliedFilters on button click
   const onSearch = useCallback(() => {
     setAppliedFilters({
       grade: selectedGrade || undefined,

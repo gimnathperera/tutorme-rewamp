@@ -93,10 +93,10 @@ const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
       {/* Quote text + fade */}
       <div className="relative flex-1 min-h-0">
         <p className="text-sm text-[#4B5563] leading-relaxed">
-          {item.content ?? "—"}
+          {item.content ?? "-"}
         </p>
 
-        {/* Fade overlay — hides when expanded */}
+        {/* Fade overlay - hides when expanded */}
         {!expanded && (
           <div
             className="absolute bottom-0 left-0 right-0 h-10 pointer-events-none"
@@ -108,7 +108,7 @@ const TestimonialCard: FC<{ item: TestimonialItem }> = ({ item }) => {
         )}
       </div>
 
-      {/* Divider + author row — always visible */}
+      {/* Divider + author row - always visible */}
       <div>
         <hr className="border-gray-100 mb-3" />
         <div className="flex items-center justify-between gap-3">
