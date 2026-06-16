@@ -21,6 +21,7 @@ import {
   PaperSearchSchema,
   paperSearchSchema,
 } from "../components/form-test-papper-search/schema";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 const PAPERS_PER_PAGE = 12;
 const PAPER_MEDIUM_OPTIONS: Option[] = [
@@ -274,6 +275,12 @@ const useLogic = (): LogicReturnType => {
     return filtered.map((t) => ({ label: t.title, value: t.id }));
   }, [selectedGrade, examTypesData, gradesRowData]);
 
+  const translatedExamTypeOptions = useTranslateItems(
+    examTypeOptions,
+    (o) => [o.label],
+    (o, [label]) => ({ ...o, label: label ?? o.label }),
+  );
+
   // Reset subject + exam when grade changes
   const isFirstGradeMount = useRef(true);
   useEffect(() => {
@@ -311,7 +318,7 @@ const useLogic = (): LogicReturnType => {
       subjectOptions,
       mediumOptions: PAPER_MEDIUM_OPTIONS,
       yearOptions,
-      examTypeOptions,
+      examTypeOptions: translatedExamTypeOptions,
       isGradesLoading,
       isSubjectsLoading: isGradesLoading,
       isPapersLoading: isPapersInitialLoading || isPapersFetching,
