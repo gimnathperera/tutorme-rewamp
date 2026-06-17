@@ -30,13 +30,13 @@ body[data-scroll-locked] {
   margin-right: 0 !important;
 }
 
-/* Remove focus outline on mouse/touch — preserved for keyboard navigation */
+/* Remove focus outline on mouse/touch - preserved for keyboard navigation */
 :focus:not(:focus-visible) {
   outline: none;
   box-shadow: none;
 }
 
-/* Mobile date picker — brand blue theme */
+/* Mobile date picker - brand blue theme */
 .dob-mobile-picker .react-datepicker-wrapper,
 .dob-mobile-picker .react-datepicker__input-container {
   width: 100%;
@@ -216,28 +216,28 @@ h6 {
   letter-spacing: -0.02em;
 }
 
-/* Hero Title — 48px, weight 800, line-height 1.1 */
+/* Hero Title - 48px, weight 800, line-height 1.1 */
 h1 {
   font-size: 3rem;
   line-height: 1.1;
   font-weight: 800;
 }
 
-/* Section Title — 36px, weight 700, line-height 1.2 */
+/* Section Title - 36px, weight 700, line-height 1.2 */
 h2 {
   font-size: 2.25rem;
   line-height: 1.2;
   font-weight: 700;
 }
 
-/* Sub-Section Title — 30px, weight 700, line-height 1.25 */
+/* Sub-Section Title - 30px, weight 700, line-height 1.25 */
 h3 {
   font-size: 1.875rem;
   line-height: 1.25;
   font-weight: 700;
 }
 
-/* Card Title — 20px, weight 600, line-height 1.4 */
+/* Card Title - 20px, weight 600, line-height 1.4 */
 h4 {
   font-size: 1.25rem;
   line-height: 1.4;
@@ -270,7 +270,7 @@ p {
   Page 47 + 49: open, readable text on digital interfaces matters,
   and small sizes need good clarity
 */
-/* Helper Text — 12px, weight 400 */
+/* Helper Text - 12px, weight 400 */
 small,
 .helper-text {
   font-size: 0.75rem;
@@ -278,14 +278,14 @@ small,
   color: #747474;
 }
 
-/* Form Labels — 14px, weight 500 */
+/* Form Labels - 14px, weight 500 */
 .ui-label {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 500;
 }
 
-/* Buttons — 16px, weight 600 */
+/* Buttons - 16px, weight 600 */
 .ui-button-text {
   font-size: 1rem;
   line-height: 1.25rem;
@@ -293,7 +293,7 @@ small,
   letter-spacing: -0.01em;
 }
 
-/* Hero Title — clamp(3rem → 3.75rem), weight 800 (text-5xl → text-6xl range) */
+/* Hero Title - clamp(3rem → 3.75rem), weight 800 (text-5xl → text-6xl range) */
 .hero-title {
   font-size: 2.5rem;
   font-weight: 800;
@@ -337,7 +337,7 @@ small,
   transition: background 0.3s ease;
 }
 
-/* Blog content — spec: 16px body, 1.7 line-height, 36px titles */
+/* Blog content - spec: 16px body, 1.7 line-height, 36px titles */
 .blog-content h1,
 .blog-content h2,
 .blog-content h3,
@@ -355,7 +355,7 @@ small,
 
 .blog-content h1 {
   font-size: 2.25rem;
-  /* text-4xl = 36px — blog title */
+  /* text-4xl = 36px - blog title */
   line-height: 1.2;
   font-weight: 700;
   margin-top: 2rem;
@@ -504,7 +504,7 @@ small,
   }
 }
 
-/* Base state — elements start hidden */
+/* Base state - elements start hidden */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(40px);
@@ -573,7 +573,7 @@ small,
   transition: transform 0.1s linear;
 }
 
-/* Navbar at the top of the page (over hero video) — transparent */
+/* Navbar at the top of the page (over hero video) - transparent */
 .navbar {
   position: fixed;
   top: 0;
@@ -586,14 +586,14 @@ small,
     box-shadow 0.4s ease;
 }
 
-/* Navbar after scroll — solid background */
+/* Navbar after scroll - solid background */
 html:not([data-scroll="0"]) .navbar {
   background-color: #f9f9f9 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   border-bottom: 0.5px solid rgba(196, 196, 196, 0.75);
 }
 
-/* Navbar on pages with no hero section — always solid regardless of scroll */
+/* Navbar on pages with no hero section - always solid regardless of scroll */
 html[data-hero="0"] .navbar {
   background-color: #f9f9f9 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -613,7 +613,7 @@ html:not([data-scroll="0"]) .border-right {
 }
 
 /* ============================================================
-   HERO SECTION — fullscreen video banner
+   HERO SECTION - fullscreen video banner
    ============================================================ */
 
 .hero-section {

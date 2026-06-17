@@ -227,17 +227,16 @@ const FormEducationInfo: FC<Props> = ({
         value: "Advanced Level Certificate",
         text: tR("optDocAdvancedLevelCertificate"),
       },
-      {
-        value: "Ordinary Level Certificate",
-        text: tR("optDocOrdinaryLevelCertificate"),
-      },
-      { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       { value: "Diploma Certificate", text: tR("optDocDiplomaCertificate") },
+      { value: "Degree Certificate", text: tR("optDocDegreeCertificate") },
       {
-        value: "Professional Certificate",
-        text: tR("optDocProfessionalCertificate"),
+        value: "Post Graduate Certificate",
+        text: tR("optDocPostGraduateCertificate"),
       },
-      { value: "Teaching Certificate", text: tR("optDocTeachingCertificate") },
+      {
+        value: "CIMA, AAT, CA, etc... Certificates",
+        text: tR("optDocCimaAatCaCertificates"),
+      },
     ],
     [tR],
   );
@@ -309,8 +308,7 @@ const FormEducationInfo: FC<Props> = ({
 
   const certErrors =
     (form.formState.errors.certificatesAndQualifications as any) ?? [];
-  const optErrors =
-    (form.formState.errors.optionalCertificates as any) ?? [];
+  const optErrors = (form.formState.errors.optionalCertificates as any) ?? [];
 
   const [
     classType,
@@ -366,8 +364,7 @@ const FormEducationInfo: FC<Props> = ({
     subjects.length > 0 &&
     Array.isArray(certificatesAndQualifications) &&
     certificatesAndQualifications.length > 0;
-  const isButtonDisabled =
-    !isDirty || isSubmitting || !hasAllRequiredFields;
+  const isButtonDisabled = !isDirty || isSubmitting || !hasAllRequiredFields;
 
   return (
     <div className="mb-4 rounded-2xl bg-white p-4 shadow-sm sm:rounded-3xl sm:p-6 2xl:col-span-2">
@@ -572,7 +569,7 @@ const FormEducationInfo: FC<Props> = ({
               </div>
 
               <div className="p-5 space-y-5">
-                {/* Educational Details — mandatory */}
+                {/* Educational Details - mandatory */}
                 <div>
                   <p className="text-xs font-semibold text-gray-600 mb-2">
                     {t("educationalDetailsLabel")}{" "}

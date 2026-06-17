@@ -116,12 +116,18 @@ export default function EditBlogPage() {
   };
 
   const rawTagsOptions: Option[] = useMemo(
-    () => tagsData?.results?.map((tag) => ({ value: tag.id, text: tag.name })) || [],
+    () =>
+      tagsData?.results?.map((tag) => ({ value: tag.id, text: tag.name })) ||
+      [],
     [tagsData],
   );
 
   const rawBlogOptions: Option[] = useMemo(
-    () => blogsData?.results?.map((blog) => ({ value: blog.id, text: blog.title })) || [],
+    () =>
+      blogsData?.results?.map((blog) => ({
+        value: blog.id,
+        text: blog.title,
+      })) || [],
     [blogsData],
   );
 
@@ -337,7 +343,8 @@ export default function EditBlogPage() {
                   onClick={() => setIsPreview(true)}
                   className="flex-shrink-0 flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white w-fit"
                 >
-                  <Eye size={15} />Preview
+                  <Eye size={15} />
+                  Preview
                 </button>
               </div>
 
@@ -903,7 +910,10 @@ export default function EditBlogPage() {
                     </div>
                   )}
                   {faqFields.map((faq, index) => (
-                    <div key={faq.id} className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50">
+                    <div
+                      key={faq.id}
+                      className="p-4 border border-gray-200 rounded-lg shadow-sm bg-gray-50/50"
+                    >
                       <div className="flex justify-between items-center mb-4">
                         <span className="font-semibold text-gray-700 text-sm">
                           FAQ {index + 1}
@@ -951,10 +961,12 @@ export default function EditBlogPage() {
                   onClick={() => setIsPreview(false)}
                   className="flex items-center gap-1.5 h-9 px-4 text-sm font-bold rounded-xl border border-blue-200 bg-blue-50 text-blue-700 transition-colors duration-200 hover:bg-blue-600 hover:text-white"
                 >
-                  <ArrowLeft size={15} />Back to Edit
+                  <ArrowLeft size={15} />
+                  Back to Edit
                 </button>
                 <span className="flex items-center gap-1.5 px-4 text-sm font-bold text-blue-700 select-none">
-                  <Eye size={15} />Preview
+                  <Eye size={15} />
+                  Preview
                 </span>
               </div>
               <div className="m-10">

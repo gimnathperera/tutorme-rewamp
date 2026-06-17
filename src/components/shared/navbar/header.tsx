@@ -34,7 +34,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
   const pathname = usePathname();
   const router = useRouter();
 
-  // Sinhala/Tamil nav text is longer — use locale-specific compact sizes
+  // Sinhala/Tamil nav text is longer - use locale-specific compact sizes
   const navFontSize =
     locale === "ta" ? "13px" : locale === "si" ? "14.5px" : undefined;
   const navPx =

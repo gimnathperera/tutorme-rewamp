@@ -156,7 +156,7 @@ export function useTranslateBlog<T extends BlogLike>(
       // ── Collect all items to translate ──────────────────────────────────
       // Items that are plain text
       const textItems: { path: string; text: string }[] = [];
-      // Items that are HTML (paragraph block.text) — preserve tags
+      // Items that are HTML (paragraph block.text) - preserve tags
       const htmlItems: { path: string; text: string }[] = [];
 
       // Title

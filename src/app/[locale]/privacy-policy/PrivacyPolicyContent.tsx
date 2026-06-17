@@ -67,10 +67,7 @@ export default function PrivacyPolicyContent() {
     },
     {
       title: t("s2Title"),
-      content: [
-        { kind: "p", text: t("s2p1") },
-        { kind: "contact-info" },
-      ],
+      content: [{ kind: "p", text: t("s2p1") }, { kind: "contact-info" }],
     },
     {
       title: t("s3Title"),
@@ -78,22 +75,61 @@ export default function PrivacyPolicyContent() {
         { kind: "h3", text: t("s3h1") },
         { kind: "p", text: t("s3p1") },
         { kind: "label", text: t("s3l1") },
-        { kind: "ul", items: [t("s3ul1i1"), t("s3ul1i2"), t("s3ul1i3"), t("s3ul1i4"), t("s3ul1i5"), t("s3ul1i6")] },
+        {
+          kind: "ul",
+          items: [
+            t("s3ul1i1"),
+            t("s3ul1i2"),
+            t("s3ul1i3"),
+            t("s3ul1i4"),
+            t("s3ul1i5"),
+            t("s3ul1i6"),
+          ],
+        },
         { kind: "label", text: t("s3l2") },
-        { kind: "ul", items: [t("s3ul2i1"), t("s3ul2i2"), t("s3ul2i3"), t("s3ul2i4"), t("s3ul2i5"), t("s3ul2i6"), t("s3ul2i7"), t("s3ul2i8")] },
+        {
+          kind: "ul",
+          items: [
+            t("s3ul2i1"),
+            t("s3ul2i2"),
+            t("s3ul2i3"),
+            t("s3ul2i4"),
+            t("s3ul2i5"),
+            t("s3ul2i6"),
+            t("s3ul2i7"),
+            t("s3ul2i8"),
+          ],
+        },
         { kind: "label", text: t("s3l3") },
-        { kind: "ul", items: [t("s3ul3i1"), t("s3ul3i2"), t("s3ul3i3"), t("s3ul3i4")] },
+        {
+          kind: "ul",
+          items: [t("s3ul3i1"), t("s3ul3i2"), t("s3ul3i3"), t("s3ul3i4")],
+        },
         { kind: "label", text: t("s3l4") },
         { kind: "p", text: t("s3p2") },
         { kind: "label", text: t("s3l5") },
         { kind: "p", text: t("s3p3") },
         { kind: "h3", text: t("s3h2") },
         { kind: "p", text: t("s3p4") },
-        { kind: "ul", items: [t("s3ul4i1"), t("s3ul4i2"), t("s3ul4i3"), t("s3ul4i4"), t("s3ul4i5"), t("s3ul4i6"), t("s3ul4i7")] },
+        {
+          kind: "ul",
+          items: [
+            t("s3ul4i1"),
+            t("s3ul4i2"),
+            t("s3ul4i3"),
+            t("s3ul4i4"),
+            t("s3ul4i5"),
+            t("s3ul4i6"),
+            t("s3ul4i7"),
+          ],
+        },
         { kind: "p", text: t("s3p5") },
         { kind: "h3", text: t("s3h3") },
         { kind: "p", text: t("s3p6") },
-        { kind: "ul", items: [t("s3ul5i1"), t("s3ul5i2"), t("s3ul5i3"), t("s3ul5i4")] },
+        {
+          kind: "ul",
+          items: [t("s3ul5i1"), t("s3ul5i2"), t("s3ul5i3"), t("s3ul5i4")],
+        },
         { kind: "p", text: t("s3p7") },
       ],
     },
@@ -101,7 +137,20 @@ export default function PrivacyPolicyContent() {
       title: t("s4Title"),
       content: [
         { kind: "p", text: t("s4p1") },
-        { kind: "ul", items: [t("s4ul1i1"), t("s4ul1i2"), t("s4ul1i3"), t("s4ul1i4"), t("s4ul1i5"), t("s4ul1i6"), t("s4ul1i7"), t("s4ul1i8"), t("s4ul1i9")] },
+        {
+          kind: "ul",
+          items: [
+            t("s4ul1i1"),
+            t("s4ul1i2"),
+            t("s4ul1i3"),
+            t("s4ul1i4"),
+            t("s4ul1i5"),
+            t("s4ul1i6"),
+            t("s4ul1i7"),
+            t("s4ul1i8"),
+            t("s4ul1i9"),
+          ],
+        },
       ],
     },
     {
@@ -124,7 +173,10 @@ export default function PrivacyPolicyContent() {
       title: t("s7Title"),
       content: [
         { kind: "p", text: t("s7p1") },
-        { kind: "ul", items: [t("s7ul1i1"), t("s7ul1i2"), t("s7ul1i3"), t("s7ul1i4")] },
+        {
+          kind: "ul",
+          items: [t("s7ul1i1"), t("s7ul1i2"), t("s7ul1i3"), t("s7ul1i4")],
+        },
       ],
     },
     {
@@ -157,7 +209,16 @@ export default function PrivacyPolicyContent() {
       title: t("s12Title"),
       content: [
         { kind: "p", text: t("s12p1") },
-        { kind: "ul", items: [t("s12ul1i1"), t("s12ul1i2"), t("s12ul1i3"), t("s12ul1i4"), t("s12ul1i5")] },
+        {
+          kind: "ul",
+          items: [
+            t("s12ul1i1"),
+            t("s12ul1i2"),
+            t("s12ul1i3"),
+            t("s12ul1i4"),
+            t("s12ul1i5"),
+          ],
+        },
         { kind: "p", text: t("s12p2") },
       ],
     },
@@ -217,7 +278,7 @@ export default function PrivacyPolicyContent() {
             </section>
           ))}
 
-          {/* Contact section (static — contact details must not be translated) */}
+          {/* Contact section (static - contact details must not be translated) */}
           <LegalContactSection
             sectionNumber={14}
             documentName="Privacy Policy"

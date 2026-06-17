@@ -40,6 +40,7 @@ import {
 import {
   useAddTutorRequestMutation,
   useLazyGetTutorEmailAvailabilityQuery,
+  useLazyValidateReferralCodeQuery,
 } from "@/store/api/splits/tutor-request";
 import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
@@ -79,6 +80,7 @@ export function TutorTabs() {
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const [checkTutorEmailAvailability] = useLazyGetTutorEmailAvailabilityQuery();
+  const [validateReferralCode] = useLazyValidateReferralCodeQuery();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
@@ -99,6 +101,7 @@ export function TutorTabs() {
       gender: "",
       nationality: "",
       race: "",
+      referredByCode: "",
 
       classType: [],
       preferredLocations: [],
@@ -147,6 +150,7 @@ export function TutorTabs() {
         "age",
         "nationality",
         "race",
+        "referredByCode",
       ];
     } else if (tab === "qualifications") {
       fieldsToValidate = [...STEP2_FIELDS];
@@ -203,6 +207,21 @@ export function TutorTabs() {
         setFocus("email");
         return;
       }
+
+      const referredByCode = (getValues("referredByCode") as string | undefined)
+        ?.trim()
+        .toUpperCase();
+      if (referredByCode) {
+        const referralResult = await validateReferralCode(referredByCode, true);
+        if (referralResult.data && !referralResult.data.valid) {
+          setError("referredByCode", {
+            type: "server",
+            message: t("referredByCodeInvalid"),
+          });
+          setFocus("referredByCode");
+          return;
+        }
+      }
     }
 
     changeStep(TAB_ORDER[currentIndex + 1]);
@@ -238,8 +257,11 @@ export function TutorTabs() {
       const {
         confirmPassword: _omit,
         optionalCertificates,
+        referredByCode: rawReferredByCode,
         ...payload
       } = processedData;
+      const referredByCode =
+        rawReferredByCode?.trim().toUpperCase() || undefined;
       const validOptional = (optionalCertificates ?? []).filter(
         (c) => c.type && c.url,
       );
@@ -254,6 +276,7 @@ export function TutorTabs() {
           : payload.preferredLocations.length > 0
             ? payload.preferredLocations
             : [ONLINE_ONLY_LOCATION_FALLBACK],
+        ...(referredByCode ? { referredByCode } : {}),
         locale,
       };
       const result = await addTutorRequest(normalizedPayload);

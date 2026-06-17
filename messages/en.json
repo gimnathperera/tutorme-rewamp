@@ -328,12 +328,21 @@
     "optDocDiplomaCertificate": "Diploma Certificate",
     "optDocProfessionalCertificate": "Professional Certificate",
     "optDocTeachingCertificate": "Teaching Certificate",
+    "optDocPostGraduateCertificate": "Post Graduate Certificate",
+    "optDocCimaAatCaCertificates": "CIMA, AAT, CA, etc... Certificates",
     "optDocNIC": "NIC (National ID Card)",
     "optDocPassport": "Passport",
     "optDocDrivingLicense": "Driving License",
     "optDocPoliceClearance": "Police Clearance Report",
     "optDocOther": "Other",
-    "somethingWentWrong": "Something went wrong. Please try again."
+    "somethingWentWrong": "Something went wrong. Please try again.",
+    "referredByCode": "Referral Code (Optional)",
+    "referredByCodePlaceholder": "e.g. TK7J2R9M",
+    "referredByCodeHint": "Enter a code if someone referred you",
+    "referredByCodeChecking": "Checking code...",
+    "referredByCodeValid": "Referral code is valid",
+    "referredByCodeInvalid": "This referral code is not valid",
+    "referredByCodeFormatError": "Referral code must be alphanumeric"
   },
   "requestForTutor": {
     "pageTitle": "Request for Tutor",

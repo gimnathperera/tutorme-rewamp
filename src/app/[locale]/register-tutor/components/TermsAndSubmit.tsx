@@ -120,17 +120,16 @@ const TermsAndSubmit = () => {
         value: "Advanced Level Certificate",
         text: t("optDocAdvancedLevelCertificate"),
       },
-      {
-        value: "Ordinary Level Certificate",
-        text: t("optDocOrdinaryLevelCertificate"),
-      },
-      { value: "Degree Certificate", text: t("optDocDegreeCertificate") },
       { value: "Diploma Certificate", text: t("optDocDiplomaCertificate") },
+      { value: "Degree Certificate", text: t("optDocDegreeCertificate") },
       {
-        value: "Professional Certificate",
-        text: t("optDocProfessionalCertificate"),
+        value: "Post Graduate Certificate",
+        text: t("optDocPostGraduateCertificate"),
       },
-      { value: "Teaching Certificate", text: t("optDocTeachingCertificate") },
+      {
+        value: "CIMA, AAT, CA, etc... Certificates",
+        text: t("optDocCimaAatCaCertificates"),
+      },
     ],
     [t],
   );
@@ -210,7 +209,7 @@ const TermsAndSubmit = () => {
         </div>
 
         <div className="p-5 space-y-5">
-          {/* Educational Details — mandatory */}
+          {/* Educational Details - mandatory */}
           <div>
             <p className="text-xs font-semibold text-darkgrey mb-2">
               {t("educationalDetails")} <span className="text-red-500">*</span>

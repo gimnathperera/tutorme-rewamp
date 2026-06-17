@@ -4,7 +4,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# npm is used to bootstrap pnpm — pnpm doesn't exist yet on the base image
+# npm is used to bootstrap pnpm - pnpm doesn't exist yet on the base image
 RUN npm install -g pnpm
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./

@@ -113,7 +113,7 @@ const AcademicExperience = () => {
     [t],
   );
 
-  // Raw grade options — values are IDs, text is translated for display
+  // Raw grade options - values are IDs, text is translated for display
   const rawGradeOptions = useMemo<OptionItem[]>(
     () =>
       gradeData?.results?.map((g: any) => ({ value: g.id, text: g.title })) ??

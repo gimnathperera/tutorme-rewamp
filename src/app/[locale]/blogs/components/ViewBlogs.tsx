@@ -434,7 +434,7 @@ export default function BlogsDashboard() {
         </div>
       </div>
 
-      {/* Floating Action Button — mobile/tablet only */}
+      {/* Floating Action Button - mobile/tablet only */}
       {(user?.role === "admin" || user?.role === "tutor") && (
         <Link
           href="/blogs/components/create-blog"

@@ -458,12 +458,21 @@
     "optDocDiplomaCertificate": "டிப்ளோமா சான்றிதழ்",
     "optDocProfessionalCertificate": "தொழில்முறை சான்றிதழ்",
     "optDocTeachingCertificate": "கற்பித்தல் சான்றிதழ்",
+    "optDocPostGraduateCertificate": "முதுகலை சான்றிதழ்",
+    "optDocCimaAatCaCertificates": "CIMA, AAT, CA, போன்ற சான்றிதழ்கள்",
     "optDocNIC": "தேசிய அடையாள அட்டை",
     "optDocPassport": "கடவுச்சீட்டு",
     "optDocDrivingLicense": "ஓட்டுநர் உரிமம்",
     "optDocPoliceClearance": "போலீஸ் அனுமதி அறிக்கை",
     "optDocOther": "மற்றவை",
-    "somethingWentWrong": "ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்."
+    "somethingWentWrong": "ஏதோ தவறு நடந்தது. மீண்டும் முயற்சிக்கவும்.",
+    "referredByCode": "பரிந்துரை குறியீடு (விருப்பமானது)",
+    "referredByCodePlaceholder": "எ.கா. TK7J2R9M",
+    "referredByCodeHint": "யாரேனும் உங்களை பரிந்துரைத்திருந்தால் குறியீட்டை உள்ளிடுக",
+    "referredByCodeChecking": "குறியீடு சரிபார்க்கிறது...",
+    "referredByCodeValid": "பரிந்துரை குறியீடு சரியானது",
+    "referredByCodeInvalid": "இந்த பரிந்துரை குறியீடு செல்லுபடியாகாது",
+    "referredByCodeFormatError": "பரிந்துரை குறியீடு எழுத்துக்கள் மற்றும் எண்களால் ஆனதாக இருக்க வேண்டும்"
   },
   "requestForTutor": {
     "pageTitle": "ஆசிரியர் கோரிக்கை",

@@ -328,12 +328,21 @@
     "optDocDiplomaCertificate": "ඩිප්ලෝමා සහතිකය",
     "optDocProfessionalCertificate": "වෘත්තීය සහතිකය",
     "optDocTeachingCertificate": "ඉගැන්වීමේ සහතිකය",
+    "optDocPostGraduateCertificate": "පශ්චාත් උපාධි සහතිකය",
+    "optDocCimaAatCaCertificates": "CIMA, AAT, CA, ආදී සහතික",
     "optDocNIC": "ජාතික හැඳුනුම්පත",
     "optDocPassport": "ගමන් බලපත්‍රය",
     "optDocDrivingLicense": "රියදුරු බලපත්‍රය",
     "optDocPoliceClearance": "පොලිස් නිෂ්කාශන වාර්තාව",
     "optDocOther": "වෙනත්",
-    "somethingWentWrong": "දෝෂයක් ඇති විය. කරුණාකර නැවත උත්සාහ කරන්න."
+    "somethingWentWrong": "දෝෂයක් ඇති විය. කරුණාකර නැවත උත්සාහ කරන්න.",
+    "referredByCode": "යොමු කේතය (විකල්ප)",
+    "referredByCodePlaceholder": "උදා: TK7J2R9M",
+    "referredByCodeHint": "යමෙකු ඔබව යොමු කළේ නම් කේතය ඇතුළු කරන්න",
+    "referredByCodeChecking": "කේතය පරීක්ෂා කරමින්...",
+    "referredByCodeValid": "යොමු කේතය වලංගුය",
+    "referredByCodeInvalid": "මෙම යොමු කේතය වලංගු නොවේ",
+    "referredByCodeFormatError": "යොමු කේතය අකුරු සහ ඉලක්කම් වලින් සමන්විත විය යුතුය"
   },
   "requestForTutor": {
     "pageTitle": "ගුරුවරයෙකු ඉල්ලන්න",
@@ -424,9 +433,9 @@
     "optClassTypePhysicalGroup": "භෞතික - කණ්ඩායම්"
   },
   "pastExamPapers": {
-    "pageHeading": "ශ්‍රී ලංකා පසු විභාග ප්‍රශ්න පත්‍ර නොමිලේ බාගත කරන්න",
-    "pageSubheading": "5 ශ්‍රේණිය ශිෂ්‍යත්ව, O/L, A/L & 1–13 ශ්‍රේණිය. GCE O/L, GCE A/L සහ 5 ශ්‍රේණිය ශිෂ්‍යත්ව ප්‍රශ්න ඇතුළත් සම්පූර්ණ ශ්‍රී ලංකා පසු විභාග ප්‍රශ්න පත්‍ර දත්ත සමුදාය ගවේෂණය කරන්න.",
-    "sectionHeading": "පසු විභාග ප්‍රශ්න පත්‍ර බාගත කරන්න",
+    "pageHeading": "ශ්‍රී ලංකා පසුගිය විභාග ප්‍රශ්න පත්‍ර නොමිලේ බාගත කරන්න",
+    "pageSubheading": "5 ශ්‍රේණිය ශිෂ්‍යත්ව, O/L, A/L & 1–13 ශ්‍රේණිය. GCE O/L, GCE A/L සහ 5 ශ්‍රේණිය ශිෂ්‍යත්ව ප්‍රශ්න ඇතුළත් සම්පූර්ණ ශ්‍රී ලංකා පසුගිය විභාග ප්‍රශ්න පත්‍ර දත්ත සමුදාය ගවේෂණය කරන්න.",
+    "sectionHeading": "පසුගිය විභාග ප්‍රශ්න පත්‍ර බාගත කරන්න",
     "edexcelHeading": "Edexcel පසු ප්‍රශ්න පත්‍ර",
     "edexcelBody1": "කතුහිමිකම් සීමාවන් හේතුවෙන්, Edexcel පසු ප්‍රශ්න පත්‍ර අපගේ වෙබ් අඩවියේ බෙදා ගැනීමට නොහැකිය.",
     "edexcelBody2": "කෙසේ වෙතත්, Pearson Edexcel වෙබ් අඩවිය හරහා සියලු නිල පසු ප්‍රශ්න පත්‍ර සෘජුවම ලබා ගත හැකිය.",
@@ -452,9 +461,9 @@
     "previous": "ආපසු",
     "next": "ඊළඟ",
     "clearSearch": "සෙවීම හිස් කරන්න",
-    "showing": "ප්‍රශ්න {total} න් {count} ක් පෙන්වමින්",
-    "downloadPaper": "ප්‍රශ්නය බාගත කරන්න",
-    "noPapersHeading": "පසු විභාග ප්‍රශ්න නොමැත",
+    "showing": "ප්‍රශ්නපත්‍ර {total} න් {count} ක් පෙන්වමින්",
+    "downloadPaper": "ප්‍රශ්නපත්‍රය බාගත කරන්න",
+    "noPapersHeading": "පසුගිය විභාග ප්‍රශ්න නොමැත",
     "noPapersBody": "තෝරාගත් පෙරහන් සඳහා ප්‍රශ්න හමු නොවිණි. ඔබේ සෙවීම සකස් කරන්න."
   },
   "blogs": {
