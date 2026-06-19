@@ -27,7 +27,8 @@ const Drawer = ({
 }: DrawerProps) => {
   const t = useTranslations("nav");
   const { isUserLogoutLoading } = useAuthContext();
-  const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] = useState(false);
+  const [isLogoutConfirmationOpen, setIsLogoutConfirmationOpen] =
+    useState(false);
 
   useEffect(() => {
     if (!isOpen) return;

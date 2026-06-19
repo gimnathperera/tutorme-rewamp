@@ -796,7 +796,9 @@ const useLogic = (): LogicReturnType => {
     }
 
     try {
-      const result = await fetchSubjectsForGrades({ gradeIds: currentGrades }).unwrap();
+      const result = await fetchSubjectsForGrades({
+        gradeIds: currentGrades,
+      }).unwrap();
       const newOptions = (result.subjects ?? []).map(({ title, id }) => ({
         label: title,
         value: id,
