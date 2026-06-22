@@ -383,7 +383,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <LocaleSwitcher />
+            <LocaleSwitcher compact onDark={isHeroTop} />
             {user?.email ? (
               <ProfileDropdown isLoading={!isUserLoaded} user={user} />
             ) : null}
