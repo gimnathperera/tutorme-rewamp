@@ -718,6 +718,7 @@
     "tutorMediumsRequired": "ஆசிரியர் ஊடகங்கள் தேவை",
     "gradesRequired": "தரங்கள் தேவை",
     "subjectsRequired": "பாடங்கள் தேவை",
+    "subjectPerGradeRequired": "தேர்ந்தெடுக்கப்பட்ட சில தரங்களுக்கு பாடங்கள் இல்லை. ஒவ்வொரு தரத்திற்கும் குறைந்தது ஒரு பாடத்தைத் தேர்ந்தெடுக்கவும்.",
     "documentTypeRequired": "ஆவண வகை தேவை",
     "uploadRequired": "கோப்பை பதிவேற்றுங்கள்",
     "certificatesRequired": "சான்றிதழ்கள் தேவை",

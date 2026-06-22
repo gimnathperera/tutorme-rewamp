@@ -718,6 +718,7 @@
     "tutorMediumsRequired": "Tutor Mediums are required",
     "gradesRequired": "Grades are required",
     "subjectsRequired": "Subjects are required",
+    "subjectPerGradeRequired": "Some selected grades have no subjects. Please select at least one subject for each grade.",
     "documentTypeRequired": "Document type is required",
     "uploadRequired": "Please upload a file",
     "certificatesRequired": "Certificates are required",
