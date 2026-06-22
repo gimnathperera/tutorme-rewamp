@@ -17,7 +17,6 @@ const Footer = () => {
         { label: t("home"), url: "/" },
         { label: t("requestForTutor"), url: "/request-for-tutors" },
         { label: t("registerAsTutor"), url: "/register-tutor" },
-        { label: t("registerAsTutorGuide"), url: "/register-tutor-guide" },
         { label: t("contactUs"), url: "/contact-us" },
       ],
     },
@@ -29,6 +28,8 @@ const Footer = () => {
         { label: t("testimonials"), url: `/${locale}#testimonials-section` },
         { label: t("faqs"), url: "/faq" },
         { label: t("aboutUs"), url: `/${locale}#aboutus-section` },
+        { label: t("registerAsTutorGuide"), url: "/register-tutor-guide" },
+        { label: t("requestForTutorGuide"), url: "/request-for-tutor-guide" },
       ],
     },
     {
