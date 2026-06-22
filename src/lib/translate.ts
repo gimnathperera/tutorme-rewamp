@@ -84,7 +84,13 @@ async function callGoogleTranslate(
   format: "text" | "html" = "text",
 ): Promise<string[]> {
   const apiKey = process.env.GOOGLE_TRANSLATE_API_KEY;
-  if (!apiKey) return texts;
+  if (!apiKey) {
+    console.error(
+      "[translate] GOOGLE_TRANSLATE_API_KEY is not set. Translations will fall back to original text. " +
+        "Set this environment variable in your production environment to enable translations.",
+    );
+    return texts;
+  }
 
   const { wrapped, hadBrands } = wrapBrands(texts);
   // Force HTML mode when brands are present so translate="no" is honoured.
