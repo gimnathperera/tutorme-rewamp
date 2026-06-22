@@ -174,7 +174,7 @@ const RegisterTutorGuidePage = () => {
         <div className="mb-10 rounded-lg border border-red-300 bg-red-50 px-5 py-4">
           <p className="text-sm text-red-700 font-medium leading-relaxed">
             <span className="font-bold">Note:</span> The field requiring extra
-            attention is marked in each step's screenshot below. Every field in
+            attention is marked in each step&apos;s screenshot below. Every field in
             each step is required — none should be left empty.
           </p>
         </div>
@@ -203,7 +203,7 @@ const RegisterTutorGuidePage = () => {
                 )}
 
                 {/* Screenshot */}
-                <div className="rounded-lg border border-gray-200 overflow-hidden bg-gray-50">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 overflow-visible">
                   <ZoomableImage
                     src={step.image}
                     alt={`Step ${step.number}: ${step.title}`}
@@ -236,7 +236,7 @@ const RegisterTutorGuidePage = () => {
         </div>
 
         {/* CTA */}
-        <div className="mt-12 rounded-xl bg-primary-600 px-6 py-8 text-center">
+        <div className="mt-6 sm:mt-12 rounded-xl bg-primary-600 px-6 py-8 text-center">
           <h3 className="text-xl font-bold text-white mb-2">
             Ready to get started?
           </h3>
