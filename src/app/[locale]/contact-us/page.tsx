@@ -141,7 +141,7 @@ const ContactUsPage = () => {
     <div className="mx-auto max-w-7xl mt-10 px-6 lg:px-8 pb-10">
       <div className="rounded-3xl overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
         {/* ── Left panel - project navyblue → darkblue gradient ── */}
-        <div className="relative flex flex-col justify-between px-10 py-12 overflow-hidden bg-navyblue">
+        <div className="relative flex flex-col justify-between px-6 sm:px-10 py-12 overflow-hidden bg-navyblue">
           {/* Decorative blurred circles */}
           <div className="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-blue/20 blur-3xl pointer-events-none" />
           <div className="absolute top-10 -right-10 w-48 h-48 rounded-full bg-blue/10 blur-2xl pointer-events-none" />
@@ -163,15 +163,15 @@ const ContactUsPage = () => {
           <div className="relative z-10 flex flex-col gap-6 mt-10">
             {CONTACT_INFO.map((item) => {
               const inner = (
-                <div className="flex items-center gap-4 group">
+                <div className="flex items-center gap-4 group min-w-0">
                   <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:bg-primary-700 group-hover:border-primary-700 transition-colors duration-200">
                     {item.icon}
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-xs font-semibold text-lightblue uppercase tracking-wide">
                       {item.label}
                     </p>
-                    <p className="text-sm font-medium text-white mt-0.5">
+                    <p className="text-sm font-medium text-white mt-0.5 break-all">
                       {item.value}
                     </p>
                   </div>
@@ -199,7 +199,7 @@ const ContactUsPage = () => {
         </div>
 
         {/* ── Right panel - white form card ── */}
-        <div className="relative bg-white px-10 py-12 flex flex-col justify-center overflow-hidden">
+        <div className="relative bg-white px-6 sm:px-10 py-12 flex flex-col justify-center overflow-hidden">
           {/* Decorative concentric rings - top right */}
           <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full border-[30px] border-gray-100 pointer-events-none" />
           <div className="absolute -top-8 -right-8 w-36 h-36 rounded-full border-[20px] border-gray-50 pointer-events-none" />

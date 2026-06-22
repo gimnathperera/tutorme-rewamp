@@ -542,7 +542,15 @@ const FormEducationInfo: FC<Props> = ({
                     />
                   )}
                 />
-                <span className="min-h-4 text-xs text-gray-500"></span>
+                <span
+                  className={`min-h-4 text-xs ${
+                    form.formState.errors.subjects
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {(form.formState.errors.subjects?.message as string) ?? ""}
+                </span>
               </div>
             </div>
 

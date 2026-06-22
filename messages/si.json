@@ -718,6 +718,7 @@
     "tutorMediumsRequired": "ඉගැන්වීම් මාධ්‍ය අවශ්‍යයි",
     "gradesRequired": "ශ්‍රේණි අවශ්‍යයි",
     "subjectsRequired": "විෂයයන් අවශ්‍යයි",
+    "subjectPerGradeRequired": "තෝරාගත් සමහර ශ්‍රේණිවලට විෂයයන් නොමැත. කරුණාකර සෑම ශ්‍රේණියකටම අවම වශයෙන් එක් විෂයයක් තෝරන්න.",
     "documentTypeRequired": "ලේඛන වර්ගය අවශ්‍යයි",
     "uploadRequired": "කරුණාකර ගොනුවක් උඩුගත කරන්න",
     "certificatesRequired": "සහතිකපත් අවශ්‍යයි",

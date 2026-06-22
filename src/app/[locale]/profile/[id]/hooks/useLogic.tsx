@@ -789,6 +789,10 @@ const useLogic = (): LogicReturnType => {
   const syncEducationSubjectOptions = useCallback(async () => {
     const currentGrades: string[] = selectedEducationGrades ?? [];
 
+    // Changing the selected grades invalidates the per-grade subject check,
+    // so clear any stale "subject per grade" error.
+    educationInfoForm.clearErrors("subjects");
+
     if (currentGrades.length === 0) {
       setEducationSubjectsOptions([]);
       educationInfoForm.setValue("subjects", [], { shouldDirty: true });
@@ -904,6 +908,40 @@ const useLogic = (): LogicReturnType => {
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    // Ensure at least one subject is selected for every selected grade.
+    const selectedSubjectSet = new Set(data.subjects);
+    try {
+      const perGradeResults = await Promise.all(
+        data.grades.map(async (gradeId) => {
+          const res = await fetchSubjectsForGrades({
+            gradeIds: [gradeId],
+          }).unwrap();
+          return {
+            gradeId,
+            subjectIds: (res.subjects ?? []).map((subject) => subject.id),
+          };
+        }),
+      );
+
+      const hasGradeWithoutSubject = perGradeResults.some(
+        ({ subjectIds }) =>
+          subjectIds.length > 0 &&
+          !subjectIds.some((id) => selectedSubjectSet.has(id)),
+      );
+
+      if (hasGradeWithoutSubject) {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectPerGradeRequired"),
+        });
+        toast.error(tProfile("subjectPerGradeRequired"));
+        return;
+      }
+    } catch {
+      toast.error("Failed to validate subjects for the selected grades");
+      return;
+    }
+
     const eduRows = data.certificatesAndQualifications
       .map(({ type, url }) => ({ type, url }))
       .filter((c) => Boolean(c.url));

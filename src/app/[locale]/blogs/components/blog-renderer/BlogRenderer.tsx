@@ -91,12 +91,12 @@ export default function BlogRenderer({ content }: BlogRendererProps) {
               block.text?.trim().replace(/\s+/g, "-").toLowerCase() || "";
 
             const headingClass = {
-              1: "scroll-mt-20 text-4xl font-bold text-gray-900 dark:text-white mt-12 mb-5 leading-tight text-left",
-              2: "scroll-mt-20 text-3xl font-bold text-gray-900 dark:text-white mt-10 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug text-left",
-              3: "scroll-mt-20 text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-8 mb-3 leading-snug text-left",
-              4: "scroll-mt-20 text-xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-2 text-left",
-              5: "scroll-mt-20 text-lg font-semibold text-gray-500 dark:text-gray-200 mt-6 mb-2 text-left",
-              6: "scroll-mt-20 text-base font-semibold text-gray-400 dark:text-gray-300 mt-5 mb-2 uppercase tracking-wide text-left",
+              1: "scroll-mt-20 text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mt-10 mb-5 leading-tight text-left",
+              2: "scroll-mt-20 text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700 leading-snug text-left",
+              3: "scroll-mt-20 text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 dark:text-gray-100 mt-7 mb-3 leading-snug text-left",
+              4: "scroll-mt-20 text-base sm:text-lg md:text-xl font-semibold text-gray-800 dark:text-gray-100 mt-6 mb-2 text-left",
+              5: "scroll-mt-20 text-sm sm:text-base md:text-lg font-semibold text-gray-500 dark:text-gray-200 mt-5 mb-2 text-left",
+              6: "scroll-mt-20 text-xs sm:text-sm md:text-base font-semibold text-gray-400 dark:text-gray-300 mt-4 mb-2 uppercase tracking-wide text-left",
             }[level];
 
             return (
