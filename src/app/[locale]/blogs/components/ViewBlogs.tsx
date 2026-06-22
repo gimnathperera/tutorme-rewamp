@@ -165,7 +165,7 @@ export default function BlogsDashboard() {
     return (
       <div className="flex flex-col gap-6">
         {/* Hero banner skeleton */}
-        <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-8 py-6 flex flex-col justify-center overflow-hidden">
+        <div className="relative min-h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl px-5 sm:px-8 py-6 flex flex-col justify-center overflow-hidden">
           <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-white/10" />
           <div className="absolute -right-4 bottom-0 w-24 h-24 rounded-full bg-white/5" />
           <div className="relative z-10 flex flex-col gap-3">
@@ -225,12 +225,12 @@ export default function BlogsDashboard() {
       <div className="flex flex-col lg:flex-row gap-7">
         <div className="flex-1 flex flex-col gap-6 lg:gap-7 min-w-0">
           {/* Hero banner */}
-          <div className="relative h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-8 py-6 flex flex-col justify-center overflow-hidden">
+          <div className="relative min-h-44 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl text-white px-5 sm:px-8 py-6 flex flex-col justify-center overflow-hidden">
             <div className="relative z-10">
               <p className="text-xs font-semibold uppercase tracking-widest text-blue-200 mb-1">
                 {t("heroLabel")}
               </p>
-              <h1 className="text-3xl text-white md:text-3xl font-bold leading-tight">
+              <h1 className="text-2xl sm:text-3xl text-white font-bold leading-tight">
                 {t("heroTitle")}
               </h1>
               <p className="text-sm md:text-base text-white/80 mt-1">
