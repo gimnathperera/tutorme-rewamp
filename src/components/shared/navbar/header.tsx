@@ -385,7 +385,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           <div className="flex items-center gap-2 lg:hidden">
             <LocaleSwitcher compact onDark={isHeroTop} />
             {user?.email ? (
-              <ProfileDropdown isLoading={!isUserLoaded} user={user} />
+              <ProfileDropdown isLoading={!isUserLoaded} user={user} compact />
             ) : null}
             <Bars3Icon
               className="block h-6 w-6 transition-colors duration-300"
