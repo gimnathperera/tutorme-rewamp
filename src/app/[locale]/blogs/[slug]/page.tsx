@@ -244,7 +244,7 @@ export default function ViewBlogPage() {
 
       <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 mt-4 lg:mt-6">
         <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-4 lg:p-8 transition-all overflow-hidden">
-          <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-lg leading-relaxed">
+          <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-base leading-relaxed">
             <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
               <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
                 <AvatarImage src="/images/logo/LightThemeLogoIcon.svg" />
@@ -300,7 +300,7 @@ export default function ViewBlogPage() {
 
             {displayBlog.faqs?.length > 0 && (
               <div className="mt-10 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
                   FAQs
                 </h2>
                 <div className="space-y-2">
@@ -339,7 +339,7 @@ export default function ViewBlogPage() {
 
         <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
           <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
-            <h3 className="text-xl font-semibold border-b pb-2">
+            <h3 className="text-base sm:text-xl font-semibold border-b pb-2">
               {t("relatedArticles")}
             </h3>
             <ul className="space-y-4">
