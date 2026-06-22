@@ -17,6 +17,7 @@ const Footer = () => {
         { label: t("home"), url: "/" },
         { label: t("requestForTutor"), url: "/request-for-tutors" },
         { label: t("registerAsTutor"), url: "/register-tutor" },
+        { label: t("registerAsTutorGuide"), url: "/register-tutor-guide" },
         { label: t("contactUs"), url: "/contact-us" },
       ],
     },
