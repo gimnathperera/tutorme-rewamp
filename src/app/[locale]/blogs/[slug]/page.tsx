@@ -221,7 +221,7 @@ export default function ViewBlogPage() {
           </div>
         )}
         {displayBlog.image && (
-          <div className="relative w-full h-[250px] md:h-[350px] rounded-lg overflow-hidden shadow-lg">
+          <div className="relative w-full min-h-[200px] md:min-h-[350px] rounded-lg overflow-hidden shadow-lg">
             <Image
               src={displayBlog.image}
               alt={displayBlog.title || "Cover Image"}
@@ -231,10 +231,10 @@ export default function ViewBlogPage() {
               className="object-cover"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+            <div className="absolute inset-0 bg-black/60"></div>
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-              <h1 className="text-3xl md:text-5xl font-bold text-white drop-shadow-lg">
+            <div className="relative z-10 flex flex-col items-center justify-center text-center px-5 sm:px-10 py-8 md:py-12">
+              <h1 className="text-lg sm:text-2xl md:text-4xl font-bold text-white drop-shadow-lg leading-snug">
                 {displayBlog.title || "Untitled Blog"}
               </h1>
             </div>
