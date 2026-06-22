@@ -1,6 +1,7 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
 import Link from "next/link";
+import Image from "next/image";
 import { ReactNode, useEffect, useState } from "react";
 import Icon from "../icon";
 import { AuthUserData } from "@/types/auth-types";
@@ -77,8 +78,19 @@ const Drawer = ({
         <article className="relative w-340px max-w-lg h-full flex flex-col">
           <header className="px-4 py-4 flex items-center">
             <div className="flex flex-shrink-0 items-center border-right">
-              <Link href="/" className="text-2xl font-bold text-black">
-                TuitionLanka
+              <Link
+                href="/"
+                className="relative block h-10 w-[150px]"
+                aria-label="TuitionLanka home"
+              >
+                <Image
+                  src="/images/logo/LightThemeLogoFull.svg"
+                  alt="TuitionLanka"
+                  fill
+                  priority
+                  sizes="150px"
+                  className="object-contain object-left"
+                />
               </Link>
             </div>
             <button
