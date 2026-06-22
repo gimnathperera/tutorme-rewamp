@@ -54,6 +54,12 @@ const GRADE_SORT_KEYS = [
   "edexcel advanced",
 ];
 
+function abbreviateGradeTitle(title: string): string {
+  return title
+    .replace(/Advanced Level/gi, "A/L")
+    .replace(/Ordinary Level/gi, "O/L");
+}
+
 function getGradeSortIndex(title: string): number {
   const normalized = title
     .toLowerCase()
@@ -517,13 +523,16 @@ function GradeTuitionRatesItem({
               <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
 
-            <h2 className="text-white font-bold text-base sm:text-lg tracking-wide min-w-0 truncate">
+            <h2 className="text-white font-bold text-sm tracking-wide min-w-0 sm:hidden">
+              {abbreviateGradeTitle(grade.title)}
+            </h2>
+            <h2 className="text-white font-bold text-lg tracking-wide min-w-0 truncate hidden sm:block">
               {grade.title}
             </h2>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <span className="inline-flex items-center bg-white/20 text-white text-xs font-semibold px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap">
+            <span className="hidden sm:inline-flex items-center bg-white/20 text-white text-xs font-semibold px-2.5 sm:px-3 py-1 rounded-full whitespace-nowrap">
               {visibleCount} item
               {visibleCount === 1 ? "" : "s"}
             </span>
