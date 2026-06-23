@@ -139,7 +139,7 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder={t("fieldLanguage")}
+                      placeholder={t("languagePlaceholder")}
                     />
                   )}
                 />
@@ -159,7 +159,7 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder={t("fieldTimeZone")}
+                      placeholder={t("timeZonePlaceholder")}
                     />
                   )}
                 />
@@ -179,7 +179,7 @@ const FormLanguageTime: FC<Props> = ({
                       onChange={(selected) => field.onChange(selected[0] ?? "")}
                       hasError={!!fieldState.error}
                       singleSelect
-                      placeholder={t("fieldRate")}
+                      placeholder={t("ratePlaceholder")}
                     />
                   )}
                 />

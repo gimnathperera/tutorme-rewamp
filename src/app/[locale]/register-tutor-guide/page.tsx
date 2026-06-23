@@ -36,7 +36,7 @@ const steps = [
       {
         label: "Date of Birth",
         description:
-          "You must be at least 18 years old — dates that would make you younger than 18 cannot be selected.",
+          "You must be at least 18 years old - dates that would make you younger than 18 cannot be selected.",
       },
       {
         label: "Age",
@@ -110,7 +110,7 @@ const steps = [
       {
         label: "Summary of Teaching Experience & Academic Achievements",
         description:
-          "Describe your achievements and the subjects you've taught — for example, number of students, years of experience, and results.",
+          "Describe your achievements and the subjects you've taught - for example, number of students, years of experience, and results.",
       },
       {
         label: "Results of Students / Track Record",
@@ -163,7 +163,7 @@ const RegisterTutorGuidePage = () => {
         {/* Page heading */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Register as a Tutor — User Guide
+            Register as a Tutor - User Guide
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-gray-500">
             Follow the steps below to complete your tutor registration on TuitionLanka.
@@ -175,7 +175,7 @@ const RegisterTutorGuidePage = () => {
           <p className="text-sm text-red-700 font-medium leading-relaxed">
             <span className="font-bold">Note:</span> The field requiring extra
             attention is marked in each step&apos;s screenshot below. Every field in
-            each step is required — none should be left empty.
+            each step is required - none should be left empty.
           </p>
         </div>
 
