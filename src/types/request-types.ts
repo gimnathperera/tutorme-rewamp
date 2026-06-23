@@ -223,8 +223,8 @@ export type FindMyTutorRequest = {
   dateOfBirth: string;
   age: number;
   gender: string;
-  nationality: string;
-  race: string;
+  nationality?: string;
+  race?: string;
 
   classType: string[];
   preferredLocations: string[];

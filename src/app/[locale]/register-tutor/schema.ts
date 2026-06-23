@@ -3,8 +3,6 @@ import {
   GENDER_VALUES,
   isPhysicalClassType,
   MEDIUM_VALUES,
-  NATIONALITY_VALUES,
-  RACE_VALUES,
   REGISTER_HIGHEST_EDUCATION_VALUES,
 } from "@/configs/register-tutor";
 import {
@@ -137,16 +135,6 @@ const createStep1BaseSchema = (t: (_key: string) => string) =>
     }),
 
     age: z.number().int().min(18, t("ageMinimum")).max(80, t("ageMaximum")),
-
-    nationality: z
-      .string()
-      .refine((v) => isConfiguredValue(NATIONALITY_VALUES, v), {
-        message: t("nationalityRequired"),
-      }),
-
-    race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
-      message: t("raceRequired"),
-    }),
 
     referredByCode: z.preprocess(
       (v) => (typeof v === "string" ? v.trim().toUpperCase() : v),

@@ -99,8 +99,6 @@ export function TutorTabs() {
       dateOfBirth: "",
       age: 0,
       gender: "",
-      nationality: "",
-      race: "",
       referredByCode: "",
 
       classType: [],
@@ -148,8 +146,6 @@ export function TutorTabs() {
         "dateOfBirth",
         "gender",
         "age",
-        "nationality",
-        "race",
         "referredByCode",
       ];
     } else if (tab === "qualifications") {
