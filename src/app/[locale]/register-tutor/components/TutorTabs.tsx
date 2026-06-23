@@ -106,6 +106,8 @@ export function TutorTabs() {
     setFocus,
     trigger,
     watch,
+    setValue,
+    getValues,
   } = methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
@@ -154,6 +156,11 @@ export function TutorTabs() {
     // Returning to an already-visited step surfaces its validation messages so
     // the user can see what's missing. First-time forward visits stay clean.
     if (visitedTabs.has(nextTab)) {
+      // Mark the fields touched so that, in onTouched mode, typing a valid value
+      // re-validates and clears the message (otherwise it lingers until blur).
+      STEP_FIELDS[nextTab].forEach((field) =>
+        setValue(field as any, getValues(field as any), { shouldTouch: true }),
+      );
       trigger(STEP_FIELDS[nextTab] as any);
     }
     setVisitedTabs((prev) => new Set(prev).add(tab));
@@ -161,8 +168,16 @@ export function TutorTabs() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Steps can be browsed freely; full validation runs only on submit.
-  const nextStep = () => changeStep(TAB_ORDER[currentIndex + 1]);
+  // Steps can be browsed freely. Moving forward from an incomplete step still
+  // works, but shows a warning snackbar about the unfinished current step.
+  const goForward = (nextTab: TabKey) => {
+    if (stepHasError(tab)) {
+      toast.error(t("incompleteStepWarning"));
+    }
+    changeStep(nextTab);
+  };
+
+  const nextStep = () => goForward(TAB_ORDER[currentIndex + 1]);
   const prevStep = () => changeStep(TAB_ORDER[currentIndex - 1]);
 
   const getFieldTab = (field: string): TabKey => {
@@ -296,7 +311,11 @@ export function TutorTabs() {
           <Stepper
             steps={steps}
             currentIndex={currentIndex}
-            onStepSelect={(index) => changeStep(TAB_ORDER[index])}
+            onStepSelect={(index) =>
+              index > currentIndex
+                ? goForward(TAB_ORDER[index])
+                : changeStep(TAB_ORDER[index])
+            }
           />
 
           <Tabs value={tab} className="w-full">

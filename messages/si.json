@@ -344,7 +344,8 @@
     "referredByCodeChecking": "කේතය පරීක්ෂා කරමින්...",
     "referredByCodeValid": "යොමු කේතය වලංගුය",
     "referredByCodeInvalid": "මෙම යොමු කේතය වලංගු නොවේ",
-    "referredByCodeFormatError": "යොමු කේතය අකුරු සහ ඉලක්කම් වලින් සමන්විත විය යුතුය"
+    "referredByCodeFormatError": "යොමු කේතය අකුරු සහ ඉලක්කම් වලින් සමන්විත විය යුතුය",
+    "incompleteStepWarning": "පෙර පියවරේ අවශ්‍ය සමහර ක්ෂේත්‍ර සම්පූර්ණ කර නැත."
   },
   "requestForTutor": {
     "pageTitle": "ගුරුවරයෙකු ඉල්ලන්න",
