@@ -28,7 +28,8 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
         const isCompleted = index < currentIndex;
         const isCurrent = index === currentIndex;
         const isLast = index === steps.length - 1;
-        const isClickable = isCompleted && Boolean(onStepSelect);
+        // Any non-current step can be visited freely (forward or backward).
+        const isClickable = !isCurrent && Boolean(onStepSelect);
 
         const circleColor = isCompleted
           ? "bg-green-500 text-white"

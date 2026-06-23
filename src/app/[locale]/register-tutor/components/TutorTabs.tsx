@@ -31,11 +31,7 @@ import TermsAndSubmit from "./TermsAndSubmit";
 import Stepper from "./Stepper";
 import { useTranslations, useLocale } from "next-intl";
 import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
-import {
-  useAddTutorRequestMutation,
-  useLazyGetTutorEmailAvailabilityQuery,
-  useLazyValidateReferralCodeQuery,
-} from "@/store/api/splits/tutor-request";
+import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
 import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
@@ -64,8 +60,6 @@ export function TutorTabs() {
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
-  const [checkTutorEmailAvailability] = useLazyGetTutorEmailAvailabilityQuery();
-  const [validateReferralCode] = useLazyValidateReferralCodeQuery();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
@@ -102,8 +96,7 @@ export function TutorTabs() {
     },
   });
 
-  const { handleSubmit, trigger, reset, setError, setFocus, getValues } =
-    methods;
+  const { handleSubmit, reset, setError, setFocus } = methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
@@ -121,92 +114,8 @@ export function TutorTabs() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const nextStep = async () => {
-    let fieldsToValidate: string[] | undefined;
-
-    if (tab === "personalInfo") {
-      // step1Schema uses .superRefine, so we list fields explicitly
-      fieldsToValidate = [
-        "fullName",
-        "email",
-        "password",
-        "confirmPassword",
-        "contactNumber",
-        "dateOfBirth",
-        "gender",
-        "age",
-        "referredByCode",
-      ];
-    } else if (tab === "qualifications") {
-      fieldsToValidate = [...STEP2_FIELDS];
-    }
-
-    if (fieldsToValidate) {
-      const valid = await trigger(fieldsToValidate as any);
-      if (!valid) return;
-    }
-
-    if (tab === "qualifications") {
-      const grades = getValues("grades") as string[];
-      const subjects = getValues("subjects") as string[];
-      const selectedSubjectSet = new Set(subjects);
-
-      const perGradeResults = await Promise.all(
-        grades.map(async (gradeId) => {
-          const res = await fetchSubjectsForGrades({
-            gradeIds: [gradeId],
-          }).unwrap();
-          return {
-            gradeId,
-            subjectIds: res.subjects.map((s: any) => s.id as string),
-          };
-        }),
-      );
-
-      const hasGradeWithoutSubject = perGradeResults.some(
-        ({ subjectIds }) =>
-          subjectIds.length > 0 &&
-          !subjectIds.some((id) => selectedSubjectSet.has(id)),
-      );
-
-      if (hasGradeWithoutSubject) {
-        setError("subjects", {
-          type: "manual",
-          message: t("subjectPerGradeRequired"),
-        });
-        return;
-      }
-    }
-
-    if (tab === "personalInfo") {
-      const email = getValues("email").toLowerCase();
-      const result = await checkTutorEmailAvailability(email, true);
-
-      if (result.data && !result.data.available) {
-        setError("email", {
-          type: "server",
-          message: t("emailAlreadyExists"),
-        });
-        setFocus("email");
-        return;
-      }
-
-      const referredByCode = (getValues("referredByCode") as string | undefined)
-        ?.trim()
-        .toUpperCase();
-      if (referredByCode) {
-        const referralResult = await validateReferralCode(referredByCode, true);
-        if (referralResult.data && !referralResult.data.valid) {
-          setError("referredByCode", {
-            type: "server",
-            message: t("referredByCodeInvalid"),
-          });
-          setFocus("referredByCode");
-          return;
-        }
-      }
-    }
-
+  // Steps can be browsed freely; all validation runs on final submit.
+  const nextStep = () => {
     changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
@@ -214,8 +123,58 @@ export function TutorTabs() {
     changeStep(TAB_ORDER[currentIndex - 1]);
   };
 
+  /** Map a form field to the step (tab) it belongs to. */
+  const STEP1_FIELDS = [
+    "fullName",
+    "email",
+    "password",
+    "confirmPassword",
+    "contactNumber",
+    "dateOfBirth",
+    "gender",
+    "age",
+    "referredByCode",
+  ];
+  const getFieldTab = (field: string): TabKey => {
+    if (STEP1_FIELDS.includes(field)) return "personalInfo";
+    if ((STEP2_FIELDS as readonly string[]).includes(field))
+      return "qualifications";
+    return "verification";
+  };
+
+  /** On a failed submit, jump to the earliest step that has an error. */
+  const onInvalid = (formErrors: Record<string, unknown>) => {
+    const erroredTabs = new Set(Object.keys(formErrors).map(getFieldTab));
+    const target = TAB_ORDER.find((tabKey) => erroredTabs.has(tabKey));
+    if (target) changeStep(target);
+  };
+
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
+      // Each selected grade must have at least one matching subject selected.
+      const selectedSubjectSet = new Set(data.subjects);
+      const perGradeSubjectIds = await Promise.all(
+        data.grades.map(async (gradeId) => {
+          const res = await fetchSubjectsForGrades({
+            gradeIds: [gradeId],
+          }).unwrap();
+          return res.subjects.map((s: any) => s.id as string);
+        }),
+      );
+      const hasGradeWithoutSubject = perGradeSubjectIds.some(
+        (subjectIds) =>
+          subjectIds.length > 0 &&
+          !subjectIds.some((id) => selectedSubjectSet.has(id)),
+      );
+      if (hasGradeWithoutSubject) {
+        setError("subjects", {
+          type: "manual",
+          message: t("subjectPerGradeRequired"),
+        });
+        changeStep("qualifications");
+        return;
+      }
+
       // Strip front-end-only fields before sending to API
       const {
         confirmPassword: _omit,
@@ -297,7 +256,7 @@ export function TutorTabs() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
