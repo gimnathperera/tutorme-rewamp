@@ -6,6 +6,8 @@ import Icon from "@/components/shared/icon";
 export type StepperStep = {
   key: string;
   label: string;
+  /** When true, the step has missing/invalid required fields. */
+  hasError?: boolean;
 };
 
 type StepperProps = {
@@ -25,23 +27,30 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
   >
     <ol className="flex items-center">
       {steps.map((step, index) => {
-        const isCompleted = index < currentIndex;
-        const isCurrent = index === currentIndex;
+        const hasError = Boolean(step.hasError);
+        const isActive = index === currentIndex;
         const isLast = index === steps.length - 1;
+        // Error takes priority over completed/current styling.
+        const isCompleted = index < currentIndex && !hasError;
+        const isCurrent = isActive && !hasError;
         // Any non-current step can be visited freely (forward or backward).
-        const isClickable = !isCurrent && Boolean(onStepSelect);
+        const isClickable = !isActive && Boolean(onStepSelect);
 
-        const circleColor = isCompleted
-          ? "bg-green-500 text-white"
-          : isCurrent
-            ? "bg-blue-600 text-white shadow-md ring-4 ring-blue-100"
-            : "bg-gray-200 text-gray-500";
+        const circleColor = hasError
+          ? "bg-red-500 text-white"
+          : isCompleted
+            ? "bg-green-500 text-white"
+            : isCurrent
+              ? "bg-blue-600 text-white shadow-md ring-4 ring-blue-100"
+              : "bg-gray-200 text-gray-500";
 
-        const labelColor = isCompleted
-          ? "text-green-600"
-          : isCurrent
-            ? "text-blue-600 font-semibold"
-            : "text-gray-400";
+        const labelColor = hasError
+          ? "text-red-600"
+          : isCompleted
+            ? "text-green-600"
+            : isCurrent
+              ? "text-blue-600 font-semibold"
+              : "text-gray-400";
 
         return (
           <li
@@ -54,12 +63,14 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
                 type="button"
                 onClick={isClickable ? () => onStepSelect?.(index) : undefined}
                 disabled={!isClickable}
-                aria-current={isCurrent ? "step" : undefined}
+                aria-current={isActive ? "step" : undefined}
                 className={`${circleBase} ${circleColor} ${
                   isClickable ? "cursor-pointer" : "cursor-default"
                 }`}
               >
-                {isCompleted ? (
+                {hasError ? (
+                  <Icon name="X" size={20} />
+                ) : isCompleted ? (
                   <Icon name="Check" size={20} />
                 ) : (
                   index + 1

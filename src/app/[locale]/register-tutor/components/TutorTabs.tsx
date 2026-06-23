@@ -96,47 +96,68 @@ export function TutorTabs() {
     },
   });
 
-  const { handleSubmit, reset, setError, setFocus } = methods;
+  const {
+    handleSubmit,
+    reset,
+    setError,
+    setFocus,
+    trigger,
+    formState: { errors },
+  } = methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
-  const steps = useMemo(
-    () => [
-      { key: "personalInfo", label: t("personalInfo") },
-      { key: "qualifications", label: t("qualifications") },
-      { key: "verification", label: t("verification") },
+  /** Required fields that belong to each step. */
+  const STEP_FIELDS: Record<TabKey, string[]> = {
+    personalInfo: [
+      "fullName",
+      "email",
+      "password",
+      "confirmPassword",
+      "contactNumber",
+      "dateOfBirth",
+      "gender",
+      "age",
+      "referredByCode",
     ],
-    [t],
-  );
+    qualifications: [...STEP2_FIELDS],
+    verification: [
+      "certificatesAndQualifications",
+      "agreeTerms",
+      "agreeAssignmentInfo",
+    ],
+  };
+
+  const stepHasError = (tabKey: TabKey) =>
+    STEP_FIELDS[tabKey].some((field) =>
+      Boolean((errors as Record<string, unknown>)[field]),
+    );
+
+  const steps = [
+    { key: "personalInfo", label: t("personalInfo") },
+    { key: "qualifications", label: t("qualifications") },
+    { key: "verification", label: t("verification") },
+  ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
   const changeStep = (nextTab: TabKey) => {
     setTab(nextTab);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  // Steps can be browsed freely; all validation runs on final submit.
-  const nextStep = () => {
-    changeStep(TAB_ORDER[currentIndex + 1]);
+  /**
+   * Navigate freely between steps. Validate the step being left so an
+   * incomplete one is flagged (red X) in the progress bar — without blocking.
+   */
+  const navigateTo = (nextTab: TabKey) => {
+    trigger(STEP_FIELDS[tab] as any);
+    changeStep(nextTab);
   };
 
-  const prevStep = () => {
-    changeStep(TAB_ORDER[currentIndex - 1]);
-  };
+  const nextStep = () => navigateTo(TAB_ORDER[currentIndex + 1]);
+  const prevStep = () => navigateTo(TAB_ORDER[currentIndex - 1]);
 
-  /** Map a form field to the step (tab) it belongs to. */
-  const STEP1_FIELDS = [
-    "fullName",
-    "email",
-    "password",
-    "confirmPassword",
-    "contactNumber",
-    "dateOfBirth",
-    "gender",
-    "age",
-    "referredByCode",
-  ];
   const getFieldTab = (field: string): TabKey => {
-    if (STEP1_FIELDS.includes(field)) return "personalInfo";
+    if (STEP_FIELDS.personalInfo.includes(field)) return "personalInfo";
     if ((STEP2_FIELDS as readonly string[]).includes(field))
       return "qualifications";
     return "verification";
@@ -266,7 +287,7 @@ export function TutorTabs() {
           <Stepper
             steps={steps}
             currentIndex={currentIndex}
-            onStepSelect={(index) => changeStep(TAB_ORDER[index])}
+            onStepSelect={(index) => navigateTo(TAB_ORDER[index])}
           />
 
           <Tabs value={tab} className="w-full">
