@@ -28,6 +28,7 @@ import {
 import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
 import TermsAndSubmit from "./TermsAndSubmit";
+import Stepper from "./Stepper";
 import { useTranslations, useLocale } from "next-intl";
 import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
 import {
@@ -105,6 +106,15 @@ export function TutorTabs() {
     methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
+
+  const steps = useMemo(
+    () => [
+      { key: "personalInfo", label: t("personalInfo") },
+      { key: "qualifications", label: t("qualifications") },
+      { key: "verification", label: t("verification") },
+    ],
+    [t],
+  );
 
   const changeStep = (nextTab: TabKey) => {
     setTab(nextTab);
@@ -293,6 +303,12 @@ export function TutorTabs() {
             <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
             <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
           </div>
+
+          <Stepper
+            steps={steps}
+            currentIndex={currentIndex}
+            onStepSelect={(index) => changeStep(TAB_ORDER[index])}
+          />
 
           <Tabs value={tab} className="w-full">
             <TabsContent value="personalInfo">
