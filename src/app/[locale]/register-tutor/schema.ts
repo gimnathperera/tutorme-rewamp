@@ -63,13 +63,6 @@ export const STEP2_FIELDS = [
   "yearsExperience",
 ] as const;
 
-export const STEP3_FIELDS = [
-  "teachingSummary",
-  "studentResults",
-  "sellingPoints",
-  "academicDetails",
-] as const;
-
 const createStep1BaseSchema = (t: (_key: string) => string) =>
   z.object({
     fullName: z.preprocess(
@@ -196,41 +189,6 @@ const createStep2Schema = (t: (_key: string) => string) =>
     ),
   });
 
-const createStep3Schema = (t: (_key: string) => string) =>
-  z.object({
-    teachingSummary: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("teachingSummaryRequired"))
-        .max(500, t("teachingSummaryMax")),
-    ),
-
-    studentResults: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("studentResultsRequired"))
-        .max(500, t("studentResultsMax")),
-    ),
-
-    sellingPoints: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("sellingPointsRequired"))
-        .max(500, t("sellingPointsMax")),
-    ),
-
-    academicDetails: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("academicDetailsRequired"))
-        .max(500, t("academicDetailsMax")),
-    ),
-  });
-
 const createStep4Schema = (t: (_key: string) => string) =>
   z.object({
     certificatesAndQualifications: z
@@ -279,7 +237,6 @@ const createStep4Schema = (t: (_key: string) => string) =>
 export const createFullSchema = (t: (_key: string) => string) =>
   createStep1BaseSchema(t)
     .merge(createStep2Schema(t))
-    .merge(createStep3Schema(t))
     .merge(createStep4Schema(t))
     .superRefine(
       ({ password, confirmPassword, classType, preferredLocations }, ctx) => {

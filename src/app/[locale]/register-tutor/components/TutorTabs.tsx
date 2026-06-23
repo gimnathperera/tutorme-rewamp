@@ -27,16 +27,9 @@ import {
 
 import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
-import TutorProfile from "./TutorProfile";
 import TermsAndSubmit from "./TermsAndSubmit";
 import { useTranslations, useLocale } from "next-intl";
-import { translateTextsToEnglish } from "@/utils/translateToEnglish";
-import {
-  FindMyTutorForm,
-  createFullSchema,
-  STEP2_FIELDS,
-  STEP3_FIELDS,
-} from "../schema";
+import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
 import {
   useAddTutorRequestMutation,
   useLazyGetTutorEmailAvailabilityQuery,
@@ -47,18 +40,9 @@ import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
 import { isPhysicalClassType } from "@/configs/register-tutor";
 
-type TabKey =
-  | "personalInfo"
-  | "qualifications"
-  | "teachingProfile"
-  | "verification";
+type TabKey = "personalInfo" | "qualifications" | "verification";
 
-const TAB_ORDER: TabKey[] = [
-  "personalInfo",
-  "qualifications",
-  "teachingProfile",
-  "verification",
-];
+const TAB_ORDER: TabKey[] = ["personalInfo", "qualifications", "verification"];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
 
@@ -110,11 +94,6 @@ export function TutorTabs() {
       subjects: [],
       yearsExperience: 0,
 
-      teachingSummary: "",
-      studentResults: "",
-      sellingPoints: "",
-      academicDetails: "",
-
       certificatesAndQualifications: [{ type: "", url: "" }],
       optionalCertificates: [],
       agreeTerms: false,
@@ -150,8 +129,6 @@ export function TutorTabs() {
       ];
     } else if (tab === "qualifications") {
       fieldsToValidate = [...STEP2_FIELDS];
-    } else if (tab === "teachingProfile") {
-      fieldsToValidate = [...STEP3_FIELDS];
     }
 
     if (fieldsToValidate) {
@@ -229,33 +206,13 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
-      // Translate free-text fields to English before sending to backend
-      let processedData = data;
-      if (locale !== "en") {
-        const textFields = [
-          "teachingSummary",
-          "studentResults",
-          "sellingPoints",
-          "academicDetails",
-        ] as const;
-        const texts = textFields.map((f) => data[f] ?? "");
-        const translated = await translateTextsToEnglish(texts, locale);
-        processedData = {
-          ...data,
-          teachingSummary: translated[0] ?? data.teachingSummary,
-          studentResults: translated[1] ?? data.studentResults,
-          sellingPoints: translated[2] ?? data.sellingPoints,
-          academicDetails: translated[3] ?? data.academicDetails,
-        };
-      }
-
       // Strip front-end-only fields before sending to API
       const {
         confirmPassword: _omit,
         optionalCertificates,
         referredByCode: rawReferredByCode,
         ...payload
-      } = processedData;
+      } = data;
       const referredByCode =
         rawReferredByCode?.trim().toUpperCase() || undefined;
       const validOptional = (optionalCertificates ?? []).filter(
@@ -369,31 +326,6 @@ export function TutorTabs() {
                 </CardHeader>
                 <CardContent>
                   <AcademicExperience />
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button type="button" variant="outline" onClick={prevStep}>
-                    {t("previous")}
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    className={primaryActionButtonClassName}
-                  >
-                    {t("next")}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="teachingProfile">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base font-medium">
-                    {t("teachingProfile")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <TutorProfile />
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button type="button" variant="outline" onClick={prevStep}>
