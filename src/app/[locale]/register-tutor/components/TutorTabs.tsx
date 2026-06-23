@@ -59,6 +59,9 @@ export function TutorTabs() {
   const schema = useMemo(() => createFullSchema(t), [t]);
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
+  const [visitedTabs, setVisitedTabs] = useState<Set<TabKey>>(
+    () => new Set<TabKey>(["personalInfo"]),
+  );
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   /** null = closed | "success" = success dialog | string = error message */
@@ -102,7 +105,7 @@ export function TutorTabs() {
     setError,
     setFocus,
     trigger,
-    formState: { errors },
+    watch,
   } = methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
@@ -128,10 +131,18 @@ export function TutorTabs() {
     ],
   };
 
+  // Silently check which fields are incomplete (without setting form errors, so
+  // no inline validation messages appear) to drive the progress-bar status.
+  const parseResult = schema.safeParse(watch());
+  const erroredFields = new Set<string>();
+  if (!parseResult.success) {
+    for (const issue of parseResult.error.issues) {
+      if (issue.path.length > 0) erroredFields.add(String(issue.path[0]));
+    }
+  }
+
   const stepHasError = (tabKey: TabKey) =>
-    STEP_FIELDS[tabKey].some((field) =>
-      Boolean((errors as Record<string, unknown>)[field]),
-    );
+    STEP_FIELDS[tabKey].some((field) => erroredFields.has(field));
 
   const steps = [
     { key: "personalInfo", label: t("personalInfo") },
@@ -140,21 +151,19 @@ export function TutorTabs() {
   ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
   const changeStep = (nextTab: TabKey) => {
+    // Returning to an already-visited step surfaces its validation messages so
+    // the user can see what's missing. First-time forward visits stay clean.
+    if (visitedTabs.has(nextTab)) {
+      trigger(STEP_FIELDS[nextTab] as any);
+    }
+    setVisitedTabs((prev) => new Set(prev).add(tab));
     setTab(nextTab);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /**
-   * Navigate freely between steps. Validate the step being left so an
-   * incomplete one is flagged (red X) in the progress bar — without blocking.
-   */
-  const navigateTo = (nextTab: TabKey) => {
-    trigger(STEP_FIELDS[tab] as any);
-    changeStep(nextTab);
-  };
-
-  const nextStep = () => navigateTo(TAB_ORDER[currentIndex + 1]);
-  const prevStep = () => navigateTo(TAB_ORDER[currentIndex - 1]);
+  // Steps can be browsed freely; full validation runs only on submit.
+  const nextStep = () => changeStep(TAB_ORDER[currentIndex + 1]);
+  const prevStep = () => changeStep(TAB_ORDER[currentIndex - 1]);
 
   const getFieldTab = (field: string): TabKey => {
     if (STEP_FIELDS.personalInfo.includes(field)) return "personalInfo";
@@ -287,7 +296,7 @@ export function TutorTabs() {
           <Stepper
             steps={steps}
             currentIndex={currentIndex}
-            onStepSelect={(index) => navigateTo(TAB_ORDER[index])}
+            onStepSelect={(index) => changeStep(TAB_ORDER[index])}
           />
 
           <Tabs value={tab} className="w-full">

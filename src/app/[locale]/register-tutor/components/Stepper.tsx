@@ -27,16 +27,17 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
   >
     <ol className="flex items-center">
       {steps.map((step, index) => {
-        const hasError = Boolean(step.hasError);
         const isActive = index === currentIndex;
         const isLast = index === steps.length - 1;
-        // Error takes priority over completed/current styling.
-        const isCompleted = index < currentIndex && !hasError;
-        const isCurrent = isActive && !hasError;
+        // Only flag steps the user has already moved PAST. The current step is
+        // blue, and steps still ahead stay as plain gray "upcoming" steps.
+        const showError = index < currentIndex && Boolean(step.hasError);
+        const isCompleted = index < currentIndex && !showError;
+        const isCurrent = isActive;
         // Any non-current step can be visited freely (forward or backward).
         const isClickable = !isActive && Boolean(onStepSelect);
 
-        const circleColor = hasError
+        const circleColor = showError
           ? "bg-red-500 text-white"
           : isCompleted
             ? "bg-green-500 text-white"
@@ -44,7 +45,7 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
               ? "bg-blue-600 text-white shadow-md ring-4 ring-blue-100"
               : "bg-gray-200 text-gray-500";
 
-        const labelColor = hasError
+        const labelColor = showError
           ? "text-red-600"
           : isCompleted
             ? "text-green-600"
@@ -68,7 +69,7 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
                   isClickable ? "cursor-pointer" : "cursor-default"
                 }`}
               >
-                {hasError ? (
+                {showError ? (
                   <Icon name="X" size={20} />
                 ) : isCompleted ? (
                   <Icon name="Check" size={20} />
