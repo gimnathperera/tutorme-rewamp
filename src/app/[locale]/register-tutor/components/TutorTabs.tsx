@@ -27,38 +27,19 @@ import {
 
 import PersonalInfo from "./PersonalInfo";
 import AcademicExperience from "./AcademicExperience";
-import TutorProfile from "./TutorProfile";
 import TermsAndSubmit from "./TermsAndSubmit";
+import Stepper from "./Stepper";
 import { useTranslations, useLocale } from "next-intl";
-import { translateTextsToEnglish } from "@/utils/translateToEnglish";
-import {
-  FindMyTutorForm,
-  createFullSchema,
-  STEP2_FIELDS,
-  STEP3_FIELDS,
-} from "../schema";
-import {
-  useAddTutorRequestMutation,
-  useLazyGetTutorEmailAvailabilityQuery,
-  useLazyValidateReferralCodeQuery,
-} from "@/store/api/splits/tutor-request";
+import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
+import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
 import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
 import { isPhysicalClassType } from "@/configs/register-tutor";
 
-type TabKey =
-  | "personalInfo"
-  | "qualifications"
-  | "teachingProfile"
-  | "verification";
+type TabKey = "personalInfo" | "qualifications" | "verification";
 
-const TAB_ORDER: TabKey[] = [
-  "personalInfo",
-  "qualifications",
-  "teachingProfile",
-  "verification",
-];
+const TAB_ORDER: TabKey[] = ["personalInfo", "qualifications", "verification"];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
 
@@ -78,9 +59,10 @@ export function TutorTabs() {
   const schema = useMemo(() => createFullSchema(t), [t]);
   const router = useRouter();
   const [tab, setTab] = useState<TabKey>("personalInfo");
+  const [visitedTabs, setVisitedTabs] = useState<Set<TabKey>>(
+    () => new Set<TabKey>(["personalInfo"]),
+  );
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
-  const [checkTutorEmailAvailability] = useLazyGetTutorEmailAvailabilityQuery();
-  const [validateReferralCode] = useLazyValidateReferralCodeQuery();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
@@ -99,8 +81,6 @@ export function TutorTabs() {
       dateOfBirth: "",
       age: 0,
       gender: "",
-      nationality: "",
-      race: "",
       referredByCode: "",
 
       classType: [],
@@ -112,11 +92,6 @@ export function TutorTabs() {
       subjects: [],
       yearsExperience: 0,
 
-      teachingSummary: "",
-      studentResults: "",
-      sellingPoints: "",
-      academicDetails: "",
-
       certificatesAndQualifications: [{ type: "", url: "" }],
       optionalCertificates: [],
       agreeTerms: false,
@@ -124,133 +99,125 @@ export function TutorTabs() {
     },
   });
 
-  const { handleSubmit, trigger, reset, setError, setFocus, getValues } =
-    methods;
+  const {
+    handleSubmit,
+    reset,
+    setError,
+    setFocus,
+    trigger,
+    watch,
+    setValue,
+    getValues,
+  } = methods;
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
+  /** Required fields that belong to each step. */
+  const STEP_FIELDS: Record<TabKey, string[]> = {
+    personalInfo: [
+      "fullName",
+      "email",
+      "password",
+      "confirmPassword",
+      "contactNumber",
+      "dateOfBirth",
+      "gender",
+      "age",
+      "referredByCode",
+    ],
+    qualifications: [...STEP2_FIELDS],
+    verification: [
+      "certificatesAndQualifications",
+      "agreeTerms",
+      "agreeAssignmentInfo",
+    ],
+  };
+
+  // Silently check which fields are incomplete (without setting form errors, so
+  // no inline validation messages appear) to drive the progress-bar status.
+  const parseResult = schema.safeParse(watch());
+  const erroredFields = new Set<string>();
+  if (!parseResult.success) {
+    for (const issue of parseResult.error.issues) {
+      if (issue.path.length > 0) erroredFields.add(String(issue.path[0]));
+    }
+  }
+
+  const stepHasError = (tabKey: TabKey) =>
+    STEP_FIELDS[tabKey].some((field) => erroredFields.has(field));
+
+  const steps = [
+    { key: "personalInfo", label: t("personalInfo") },
+    { key: "qualifications", label: t("qualifications") },
+    { key: "verification", label: t("verification") },
+  ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
+
   const changeStep = (nextTab: TabKey) => {
+    // Returning to an already-visited step surfaces its validation messages so
+    // the user can see what's missing. First-time forward visits stay clean.
+    if (visitedTabs.has(nextTab)) {
+      // Mark the fields touched so that, in onTouched mode, typing a valid value
+      // re-validates and clears the message (otherwise it lingers until blur).
+      STEP_FIELDS[nextTab].forEach((field) =>
+        setValue(field as any, getValues(field as any), { shouldTouch: true }),
+      );
+      trigger(STEP_FIELDS[nextTab] as any);
+    }
+    setVisitedTabs((prev) => new Set(prev).add(tab));
     setTab(nextTab);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const nextStep = async () => {
-    let fieldsToValidate: string[] | undefined;
-
-    if (tab === "personalInfo") {
-      // step1Schema uses .superRefine, so we list fields explicitly
-      fieldsToValidate = [
-        "fullName",
-        "email",
-        "password",
-        "confirmPassword",
-        "contactNumber",
-        "dateOfBirth",
-        "gender",
-        "age",
-        "nationality",
-        "race",
-        "referredByCode",
-      ];
-    } else if (tab === "qualifications") {
-      fieldsToValidate = [...STEP2_FIELDS];
-    } else if (tab === "teachingProfile") {
-      fieldsToValidate = [...STEP3_FIELDS];
+  // Steps can be browsed freely. Moving forward from an incomplete step still
+  // works, but shows a warning snackbar about the unfinished current step.
+  const goForward = (nextTab: TabKey) => {
+    if (stepHasError(tab)) {
+      toast.error(t("incompleteStepWarning"));
     }
+    changeStep(nextTab);
+  };
 
-    if (fieldsToValidate) {
-      const valid = await trigger(fieldsToValidate as any);
-      if (!valid) return;
-    }
+  const nextStep = () => goForward(TAB_ORDER[currentIndex + 1]);
+  const prevStep = () => changeStep(TAB_ORDER[currentIndex - 1]);
 
-    if (tab === "qualifications") {
-      const grades = getValues("grades") as string[];
-      const subjects = getValues("subjects") as string[];
-      const selectedSubjectSet = new Set(subjects);
+  const getFieldTab = (field: string): TabKey => {
+    if (STEP_FIELDS.personalInfo.includes(field)) return "personalInfo";
+    if ((STEP2_FIELDS as readonly string[]).includes(field))
+      return "qualifications";
+    return "verification";
+  };
 
-      const perGradeResults = await Promise.all(
-        grades.map(async (gradeId) => {
+  /** On a failed submit, jump to the earliest step that has an error. */
+  const onInvalid = (formErrors: Record<string, unknown>) => {
+    const erroredTabs = new Set(Object.keys(formErrors).map(getFieldTab));
+    const target = TAB_ORDER.find((tabKey) => erroredTabs.has(tabKey));
+    if (target) changeStep(target);
+  };
+
+  const onSubmit = async (data: FindMyTutorForm) => {
+    try {
+      // Each selected grade must have at least one matching subject selected.
+      const selectedSubjectSet = new Set(data.subjects);
+      const perGradeSubjectIds = await Promise.all(
+        data.grades.map(async (gradeId) => {
           const res = await fetchSubjectsForGrades({
             gradeIds: [gradeId],
           }).unwrap();
-          return {
-            gradeId,
-            subjectIds: res.subjects.map((s: any) => s.id as string),
-          };
+          return res.subjects.map((s: any) => s.id as string);
         }),
       );
-
-      const hasGradeWithoutSubject = perGradeResults.some(
-        ({ subjectIds }) =>
+      const hasGradeWithoutSubject = perGradeSubjectIds.some(
+        (subjectIds) =>
           subjectIds.length > 0 &&
           !subjectIds.some((id) => selectedSubjectSet.has(id)),
       );
-
       if (hasGradeWithoutSubject) {
         setError("subjects", {
           type: "manual",
           message: t("subjectPerGradeRequired"),
         });
+        changeStep("qualifications");
         return;
-      }
-    }
-
-    if (tab === "personalInfo") {
-      const email = getValues("email").toLowerCase();
-      const result = await checkTutorEmailAvailability(email, true);
-
-      if (result.data && !result.data.available) {
-        setError("email", {
-          type: "server",
-          message: t("emailAlreadyExists"),
-        });
-        setFocus("email");
-        return;
-      }
-
-      const referredByCode = (getValues("referredByCode") as string | undefined)
-        ?.trim()
-        .toUpperCase();
-      if (referredByCode) {
-        const referralResult = await validateReferralCode(referredByCode, true);
-        if (referralResult.data && !referralResult.data.valid) {
-          setError("referredByCode", {
-            type: "server",
-            message: t("referredByCodeInvalid"),
-          });
-          setFocus("referredByCode");
-          return;
-        }
-      }
-    }
-
-    changeStep(TAB_ORDER[currentIndex + 1]);
-  };
-
-  const prevStep = () => {
-    changeStep(TAB_ORDER[currentIndex - 1]);
-  };
-
-  const onSubmit = async (data: FindMyTutorForm) => {
-    try {
-      // Translate free-text fields to English before sending to backend
-      let processedData = data;
-      if (locale !== "en") {
-        const textFields = [
-          "teachingSummary",
-          "studentResults",
-          "sellingPoints",
-          "academicDetails",
-        ] as const;
-        const texts = textFields.map((f) => data[f] ?? "");
-        const translated = await translateTextsToEnglish(texts, locale);
-        processedData = {
-          ...data,
-          teachingSummary: translated[0] ?? data.teachingSummary,
-          studentResults: translated[1] ?? data.studentResults,
-          sellingPoints: translated[2] ?? data.sellingPoints,
-          academicDetails: translated[3] ?? data.academicDetails,
-        };
       }
 
       // Strip front-end-only fields before sending to API
@@ -259,7 +226,7 @@ export function TutorTabs() {
         optionalCertificates,
         referredByCode: rawReferredByCode,
         ...payload
-      } = processedData;
+      } = data;
       const referredByCode =
         rawReferredByCode?.trim().toUpperCase() || undefined;
       const validOptional = (optionalCertificates ?? []).filter(
@@ -334,12 +301,22 @@ export function TutorTabs() {
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
         <div className="mx-auto max-w-7xl my-10 px-6 lg:px-8">
           <div className="text-3xl flex flex-row gap-2 items-center px-6 font-bold mb-6 bg-gradient-to-r from-blue-500 to-indigo-600 text-white py-3 rounded-xl">
             <Image height={50} width={50} src={LogoImage} alt={t("logoAlt")} />
             <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
           </div>
+
+          <Stepper
+            steps={steps}
+            currentIndex={currentIndex}
+            onStepSelect={(index) =>
+              index > currentIndex
+                ? goForward(TAB_ORDER[index])
+                : changeStep(TAB_ORDER[index])
+            }
+          />
 
           <Tabs value={tab} className="w-full">
             <TabsContent value="personalInfo">
@@ -373,31 +350,6 @@ export function TutorTabs() {
                 </CardHeader>
                 <CardContent>
                   <AcademicExperience />
-                </CardContent>
-                <CardFooter className="flex justify-between">
-                  <Button type="button" variant="outline" onClick={prevStep}>
-                    {t("previous")}
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    className={primaryActionButtonClassName}
-                  >
-                    {t("next")}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="teachingProfile">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base font-medium">
-                    {t("teachingProfile")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <TutorProfile />
                 </CardContent>
                 <CardFooter className="flex justify-between">
                   <Button type="button" variant="outline" onClick={prevStep}>

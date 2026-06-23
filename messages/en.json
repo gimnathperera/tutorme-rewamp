@@ -344,7 +344,8 @@
     "referredByCodeChecking": "Checking code...",
     "referredByCodeValid": "Referral code is valid",
     "referredByCodeInvalid": "This referral code is not valid",
-    "referredByCodeFormatError": "Referral code must be alphanumeric"
+    "referredByCodeFormatError": "Referral code must be alphanumeric",
+    "incompleteStepWarning": "Some required fields in last step are not completed."
   },
   "requestForTutor": {
     "pageTitle": "Request for Tutor",

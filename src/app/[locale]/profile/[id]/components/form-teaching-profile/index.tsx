@@ -30,22 +30,22 @@ const FormTeachingProfile: FC<Props> = ({
   }[] = [
     {
       name: "teachingSummary",
-      label: `${t("fieldTeachingSummary")} *`,
+      label: t("fieldTeachingSummary"),
       placeholder: t("placeholderTeachingSummary"),
     },
     {
       name: "academicDetails",
-      label: `${t("fieldAcademicDetails")} *`,
+      label: t("fieldAcademicDetails"),
       placeholder: t("placeholderAcademicDetails"),
     },
     {
       name: "studentResults",
-      label: `${t("fieldStudentResults")} *`,
+      label: t("fieldStudentResults"),
       placeholder: t("placeholderStudentResults"),
     },
     {
       name: "sellingPoints",
-      label: `${t("fieldSellingPoints")} *`,
+      label: t("fieldSellingPoints"),
       placeholder: t("placeholderSellingPoints"),
     },
   ];

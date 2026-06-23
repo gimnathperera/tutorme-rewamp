@@ -474,7 +474,8 @@
     "referredByCodeChecking": "குறியீடு சரிபார்க்கிறது...",
     "referredByCodeValid": "பரிந்துரை குறியீடு சரியானது",
     "referredByCodeInvalid": "இந்த பரிந்துரை குறியீடு செல்லுபடியாகாது",
-    "referredByCodeFormatError": "பரிந்துரை குறியீடு எழுத்துக்கள் மற்றும் எண்களால் ஆனதாக இருக்க வேண்டும்"
+    "referredByCodeFormatError": "பரிந்துரை குறியீடு எழுத்துக்கள் மற்றும் எண்களால் ஆனதாக இருக்க வேண்டும்",
+    "incompleteStepWarning": "முந்தைய படிநிலையில் தேவையான சில புலங்கள் பூர்த்தி செய்யப்படவில்லை."
   },
   "requestForTutor": {
     "pageTitle": "ஆசிரியர் கோரிக்கை",
