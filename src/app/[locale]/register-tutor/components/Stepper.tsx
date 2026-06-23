@@ -19,7 +19,10 @@ const circleBase =
   "relative z-10 flex h-9 w-9 sm:h-11 sm:w-11 items-center justify-center rounded-full text-sm sm:text-base font-semibold transition-colors duration-300";
 
 const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
-  <nav aria-label="Progress" className="mb-10 sm:mb-12">
+  <nav
+    aria-label="Progress"
+    className="mx-auto mb-10 max-w-2xl px-2 sm:mb-12"
+  >
     <ol className="flex items-center">
       {steps.map((step, index) => {
         const isCompleted = index < currentIndex;
@@ -62,7 +65,7 @@ const Stepper: FC<StepperProps> = ({ steps, currentIndex, onStepSelect }) => (
                 )}
               </button>
               <span
-                className={`absolute top-full mt-2 w-20 sm:w-28 -translate-x-1/2 left-1/2 text-center text-[11px] leading-tight sm:text-sm ${labelColor}`}
+                className={`absolute top-full mt-2 w-24 whitespace-normal sm:w-max sm:whitespace-nowrap -translate-x-1/2 left-1/2 text-center text-[11px] leading-tight sm:text-sm ${labelColor}`}
               >
                 {step.label}
               </span>
