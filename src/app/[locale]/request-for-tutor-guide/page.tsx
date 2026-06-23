@@ -56,7 +56,7 @@ const steps = [
       {
         label: "Number of Tutors",
         description:
-          "The number of tutors being requested for the selected grade. Select a tutor count, then fill in the required fields — including Subject — for each individual tutor.",
+          "The number of tutors being requested for the selected grade. Select a tutor count, then fill in the required fields - including Subject - for each individual tutor.",
       },
       {
         label: "Subject",
@@ -96,7 +96,7 @@ const RequestForTutorGuidePage = () => {
         {/* Page heading */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
-            Request for Tutor — User Guide
+            Request for Tutor - User Guide
           </h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-gray-500">
             Follow the steps below to submit your tutor request on TuitionLanka.
@@ -108,7 +108,7 @@ const RequestForTutorGuidePage = () => {
           <p className="text-sm text-red-700 font-medium leading-relaxed">
             <span className="font-bold">Note:</span> The field requiring extra
             attention is marked in each step&apos;s screenshot below. Every field in
-            each step is required — none should be left empty.
+            each step is required - none should be left empty.
           </p>
         </div>
 
