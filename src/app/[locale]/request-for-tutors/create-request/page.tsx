@@ -45,6 +45,8 @@ import {
 import { useTranslations } from "next-intl";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 import MultiSelect from "@/components/shared/MultiSelect";
+import Stepper from "./Stepper";
+import toast from "react-hot-toast";
 
 /** ── Shared style tokens (mirrors register-tutor standard) ── */
 const fieldWrapper = "flex flex-col gap-2";
@@ -70,6 +72,9 @@ export default function AddRequestForTutor() {
   const t = useTranslations("requestForTutor");
   const schema = useMemo(() => createRequestTutorSchema(t), [t]);
   const [tab, setTab] = useState<TabKey>("contact");
+  const [visitedTabs, setVisitedTabs] = useState<Set<TabKey>>(
+    () => new Set<TabKey>(["contact"]),
+  );
   const [selectedTutorCount, setSelectedTutorCount] = useState(1);
   /** null = closed, "success" = success dialog, string = error message dialog */
   const [submissionResult, setSubmissionResult] = useState<
@@ -82,6 +87,7 @@ export default function AddRequestForTutor() {
     control,
     watch,
     setValue,
+    getValues,
     trigger,
     clearErrors,
     formState: { errors },
@@ -182,9 +188,47 @@ export default function AddRequestForTutor() {
 
   const currentIndex = TAB_ORDER.indexOf(tab);
 
+  const STEP_FIELDS: Record<TabKey, string[]> = {
+    contact: ["name", "email", "phoneNumber", "district", "city"],
+    tutorDetails: ["medium", "grade", "tutors"],
+  };
+
+  const parseResult = schema.safeParse(watch());
+  const erroredFields = new Set<string>();
+  if (!parseResult.success) {
+    for (const issue of parseResult.error.issues) {
+      if (issue.path.length > 0) erroredFields.add(String(issue.path[0]));
+    }
+  }
+
+  const stepHasError = (tabKey: TabKey) =>
+    STEP_FIELDS[tabKey].some((field) => erroredFields.has(field));
+
+  const steps = [
+    { key: "contact", label: t("contactDetails") },
+    { key: "tutorDetails", label: t("tutorDetails") },
+  ].map((step) => ({
+    ...step,
+    hasError: stepHasError(step.key as TabKey),
+  }));
+
   const changeStep = (nextTab: TabKey) => {
+    if (visitedTabs.has(nextTab)) {
+      STEP_FIELDS[nextTab].forEach((field) =>
+        setValue(field as any, getValues(field as any), { shouldTouch: true }),
+      );
+      trigger(STEP_FIELDS[nextTab] as any);
+    }
+    setVisitedTabs((prev) => new Set(prev).add(tab));
     setTab(nextTab);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const goForward = (nextTab: TabKey) => {
+    if (stepHasError(tab)) {
+      toast.error(t("incompleteStepWarning"));
+    }
+    changeStep(nextTab);
   };
 
   useEffect(() => {
@@ -234,12 +278,11 @@ export default function AddRequestForTutor() {
       ]);
       if (!valid) return;
     }
+    setVisitedTabs((prev) => new Set(prev).add(tab));
     changeStep(TAB_ORDER[currentIndex + 1]);
   };
 
-  const prevStep = () => {
-    changeStep(TAB_ORDER[currentIndex - 1]);
-  };
+  const prevStep = () => changeStep(TAB_ORDER[currentIndex - 1]);
 
   const onSubmit = async (data: CreateRequestTutorSchema) => {
     try {
@@ -264,6 +307,7 @@ export default function AddRequestForTutor() {
     reset();
     clearErrors();
     setTab("contact");
+    setVisitedTabs(new Set<TabKey>(["contact"]));
     setSelectedTutorCount(1);
   };
 
@@ -273,6 +317,16 @@ export default function AddRequestForTutor() {
         <Image height={50} width={50} src={LogoImage} alt="Logo image" />
         <h1 className="text-3xl text-white font-bold">{t("pageTitle")}</h1>
       </div>
+
+      <Stepper
+        steps={steps}
+        currentIndex={currentIndex}
+        onStepSelect={(index) =>
+          index > currentIndex
+            ? goForward(TAB_ORDER[index])
+            : changeStep(TAB_ORDER[index])
+        }
+      />
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Tabs value={tab} className="w-full">

@@ -563,7 +563,8 @@
     "optClassTypeOnlineIndividual": "ஆன்லைன் - தனிப்பட்ட",
     "optClassTypeOnlineGroup": "ஆன்லைன் - குழு",
     "optClassTypePhysicalIndividual": "நேரடி - தனிப்பட்ட",
-    "optClassTypePhysicalGroup": "நேரடி - குழு"
+    "optClassTypePhysicalGroup": "நேரடி - குழு",
+    "incompleteStepWarning": "தற்போதைய படிநிலையில் தேவையான சில புலங்கள் பூர்த்தி செய்யப்படவில்லை."
   },
   "testimonials": {
     "sectionHeading": "மற்றவர்கள் என்ன சொல்கிறார்கள் என்று பாருங்கள்."
