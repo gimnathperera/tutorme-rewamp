@@ -288,6 +288,20 @@ const FormEducationInfo: FC<Props> = ({
   const subjectsLabel = t("fieldSubjects");
   const { isDirty, isValid } = form.formState;
 
+  // Run validation whenever a multi-select changes (including when the user
+  // removes the last value) so the "<field> is required" message appears
+  // immediately. MultiSelect never fires onBlur, so the form's "onTouched"
+  // mode would otherwise never re-validate these fields on deselect.
+  const handleMultiSelectChange =
+    (fieldName: string, onChange: (selected: string[]) => void) =>
+    (value: string[]) => {
+      onChange(value);
+      form.trigger(fieldName);
+    };
+
+  const fieldErrorMessage = (fieldName: string) =>
+    (form.formState.errors[fieldName]?.message as string | undefined) ?? "";
+
   const {
     fields: eduFields,
     append: appendEdu,
@@ -388,13 +402,24 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={classTypeOptions}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "classType",
+                        field.onChange,
+                      )}
                       hasError={!!fieldState.error}
                       placeholder={tR("classTypePlaceholder")}
                     />
                   )}
                 />
-                <span className="min-h-4 text-xs text-gray-500"></span>
+                <span
+                  className={`min-h-4 text-xs ${
+                    fieldErrorMessage("classType")
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {fieldErrorMessage("classType")}
+                </span>
               </div>
 
               {/* Preferred Locations */}
@@ -412,7 +437,10 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={PREFERRED_LOCATION_OPTIONS}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "preferredLocations",
+                        field.onChange,
+                      )}
                       disabled={!isPreferredLocationsEnabled}
                       hasError={
                         isPreferredLocationsEnabled &&
@@ -450,13 +478,24 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={tutorTypeOptions}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "tutorTypes",
+                        field.onChange,
+                      )}
                       hasError={!!fieldState.error}
                       placeholder={tR("tutorTypesPlaceholder")}
                     />
                   )}
                 />
-                <span className="min-h-4 text-xs text-gray-500"></span>
+                <span
+                  className={`min-h-4 text-xs ${
+                    fieldErrorMessage("tutorTypes")
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {fieldErrorMessage("tutorTypes")}
+                </span>
               </div>
 
               {/* Highest Education Level */}
@@ -493,13 +532,24 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={mediumOptions}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "tutorMediums",
+                        field.onChange,
+                      )}
                       hasError={!!fieldState.error}
                       placeholder={tR("tutorMediumsPlaceholder")}
                     />
                   )}
                 />
-                <span className="min-h-4 text-xs text-gray-500"></span>
+                <span
+                  className={`min-h-4 text-xs ${
+                    fieldErrorMessage("tutorMediums")
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {fieldErrorMessage("tutorMediums")}
+                </span>
               </div>
 
               {/* Grades */}
@@ -514,13 +564,24 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={msOptions(gradesOptions)}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "grades",
+                        field.onChange,
+                      )}
                       hasError={!!fieldState.error}
                       placeholder={tR("gradesPlaceholder")}
                     />
                   )}
                 />
-                <span className="min-h-4 text-xs text-gray-500"></span>
+                <span
+                  className={`min-h-4 text-xs ${
+                    fieldErrorMessage("grades")
+                      ? "text-red-500"
+                      : "text-gray-500"
+                  }`}
+                >
+                  {fieldErrorMessage("grades")}
+                </span>
               </div>
 
               {/* Subjects */}
@@ -535,7 +596,10 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={msOptions(subjectsOptions)}
                       defaultSelected={field.value ?? []}
-                      onChange={field.onChange}
+                      onChange={handleMultiSelectChange(
+                        "subjects",
+                        field.onChange,
+                      )}
                       hasError={!!fieldState.error}
                       disabled={isEmpty(selectedGrades)}
                       placeholder={tR("subjectsPlaceholder")}
