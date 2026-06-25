@@ -223,9 +223,15 @@ const AcademicExperience = () => {
   ) => {
     onChange(selected);
     if (selected.length === 0) {
-      // An empty selection is governed by the "subjects required" rule; drop
-      // any lingering per-grade error.
-      if (errors.subjects?.type === "manual") clearErrors("subjects");
+      // Empty selection: required while a grade is selected, otherwise clear.
+      if (selectedGradeIds.length > 0) {
+        setError("subjects", {
+          type: "manual",
+          message: t("subjectsRequired"),
+        });
+      } else {
+        clearErrors("subjects");
+      }
       return;
     }
     validateSubjectCoverage(selected, subjectsByGrade);
@@ -273,9 +279,12 @@ const AcademicExperience = () => {
           setValue("subjects", filtered);
         }
         if (filtered.length === 0) {
-          // No subjects left — the "subjects required" rule governs; drop any
-          // stale per-grade error.
-          clearErrors("subjects");
+          // A grade is selected but no subject is chosen yet — surface the
+          // "subjects required" error immediately (the field is now mandatory).
+          setError("subjects", {
+            type: "manual",
+            message: t("subjectsRequired"),
+          });
         } else {
           validateSubjectCoverage(filtered, subjectsByGradeRef.current);
         }
@@ -296,7 +305,9 @@ const AcademicExperience = () => {
     fetchSubjectsForGrades,
     getValues,
     setValue,
+    setError,
     clearErrors,
+    t,
     validateSubjectCoverage,
   ]);
 
