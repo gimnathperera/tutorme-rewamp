@@ -142,6 +142,13 @@ export function TutorTabs() {
       if (issue.path.length > 0) erroredFields.add(String(issue.path[0]));
     }
   }
+  // The per-grade subject rule lives outside the Zod schema (it needs the
+  // grade→subject mapping), so also fold any live form errors — e.g. the
+  // manual "subjects" error — into the step status so the stepper doesn't
+  // mark a step complete while one of its fields is actually invalid.
+  Object.keys(methods.formState.errors).forEach((field) =>
+    erroredFields.add(field),
+  );
 
   const stepHasError = (tabKey: TabKey) =>
     STEP_FIELDS[tabKey].some((field) => erroredFields.has(field));
@@ -152,16 +159,29 @@ export function TutorTabs() {
     { key: "verification", label: t("verification") },
   ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
-  const changeStep = (nextTab: TabKey) => {
+  const changeStep = (
+    nextTab: TabKey,
+    options?: { revalidate?: boolean },
+  ) => {
+    // `revalidate` re-runs schema validation for the destination step. Skip it
+    // when the caller has already set a manual error that isn't part of the
+    // schema (e.g. the per-grade subject check), otherwise the re-validation
+    // would immediately clear that error before the user can see it.
+    const revalidate = options?.revalidate ?? true;
     // Returning to an already-visited step surfaces its validation messages so
     // the user can see what's missing. First-time forward visits stay clean.
-    if (visitedTabs.has(nextTab)) {
+    if (revalidate && visitedTabs.has(nextTab)) {
+      // "subjects" is validated per-grade by the Qualifications step itself —
+      // a rule that isn't expressible in the Zod schema. Re-running the schema
+      // here would clear that manual error (subjects passes the schema's
+      // min(1) check), so exclude it and let AcademicExperience own it.
+      const fields = STEP_FIELDS[nextTab].filter((field) => field !== "subjects");
       // Mark the fields touched so that, in onTouched mode, typing a valid value
       // re-validates and clears the message (otherwise it lingers until blur).
-      STEP_FIELDS[nextTab].forEach((field) =>
+      fields.forEach((field) =>
         setValue(field as any, getValues(field as any), { shouldTouch: true }),
       );
-      trigger(STEP_FIELDS[nextTab] as any);
+      trigger(fields as any);
     }
     setVisitedTabs((prev) => new Set(prev).add(tab));
     setTab(nextTab);
@@ -216,7 +236,10 @@ export function TutorTabs() {
           type: "manual",
           message: t("subjectPerGradeRequired"),
         });
-        changeStep("qualifications");
+        // Navigate without re-validating so the manual error survives (the
+        // per-grade rule isn't part of the Zod schema).
+        changeStep("qualifications", { revalidate: false });
+        toast.error(t("subjectPerGradeRequired"));
         return;
       }
 
@@ -296,8 +319,15 @@ export function TutorTabs() {
   const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
   const allDocsComplete =
     certificates?.length > 0 && certificates.every((c) => c.type && c.url);
+  // Block submission while any step still has an error — including the
+  // per-grade subjects error, which isn't part of the Zod schema.
+  const hasStepErrors = steps.some((step) => step.hasError);
   const isSubmitDisabled =
-    isLoading || !allDocsComplete || !agreeTerms || !agreeAssignmentInfo;
+    isLoading ||
+    !allDocsComplete ||
+    !agreeTerms ||
+    !agreeAssignmentInfo ||
+    hasStepErrors;
 
   return (
     <FormProvider {...methods}>
