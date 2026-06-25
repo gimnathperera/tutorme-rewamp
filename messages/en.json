@@ -433,7 +433,8 @@
     "optClassTypeOnlineIndividual": "Online - Individual",
     "optClassTypeOnlineGroup": "Online - Group",
     "optClassTypePhysicalIndividual": "Physical - Individual",
-    "optClassTypePhysicalGroup": "Physical - Group"
+    "optClassTypePhysicalGroup": "Physical - Group",
+    "incompleteStepWarning": "Some required fields in the current step are not completed."
   },
   "pastExamPapers": {
     "pageHeading": "Download Sri Lankan Past Exam Papers for Free",
