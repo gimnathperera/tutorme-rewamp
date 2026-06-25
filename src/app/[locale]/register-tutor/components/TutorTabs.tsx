@@ -31,7 +31,10 @@ import TermsAndSubmit from "./TermsAndSubmit";
 import Stepper from "./Stepper";
 import { useTranslations, useLocale } from "next-intl";
 import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
-import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+import {
+  useAddTutorRequestMutation,
+  useLazyValidateReferralCodeQuery,
+} from "@/store/api/splits/tutor-request";
 import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
@@ -53,6 +56,21 @@ const isDuplicateEmailError = (error: string) => {
   );
 };
 
+const isInvalidReferralError = (error: string) => {
+  const normalizedError = error.toLowerCase();
+  return (
+    (normalizedError.includes("referral") ||
+      normalizedError.includes("referred") ||
+      normalizedError.includes("referrer")) &&
+    (normalizedError.includes("invalid") ||
+      normalizedError.includes("not valid") ||
+      normalizedError.includes("not found") ||
+      normalizedError.includes("does not exist") ||
+      normalizedError.includes("doesn't exist") ||
+      normalizedError.includes("incorrect"))
+  );
+};
+
 export function TutorTabs() {
   const t = useTranslations("registerTutor");
   const locale = useLocale();
@@ -64,6 +82,7 @@ export function TutorTabs() {
   );
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
+  const [validateReferralCode] = useLazyValidateReferralCodeQuery();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
     "success" | string | null
@@ -171,11 +190,13 @@ export function TutorTabs() {
     // Returning to an already-visited step surfaces its validation messages so
     // the user can see what's missing. First-time forward visits stay clean.
     if (revalidate && visitedTabs.has(nextTab)) {
-      // "subjects" is validated per-grade by the Qualifications step itself —
-      // a rule that isn't expressible in the Zod schema. Re-running the schema
-      // here would clear that manual error (subjects passes the schema's
-      // min(1) check), so exclude it and let AcademicExperience own it.
-      const fields = STEP_FIELDS[nextTab].filter((field) => field !== "subjects");
+      // "subjects" (per-grade coverage) and "referredByCode" (server-side
+      // existence check) are validated outside the Zod schema. Re-running the
+      // schema here would clear those manual errors (both pass their schema
+      // checks), so exclude them and let their own logic own them.
+      const fields = STEP_FIELDS[nextTab].filter(
+        (field) => field !== "subjects" && field !== "referredByCode",
+      );
       // Mark the fields touched so that, in onTouched mode, typing a valid value
       // re-validates and clears the message (otherwise it lingers until blur).
       fields.forEach((field) =>
@@ -216,6 +237,30 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
+      // Validate the referral code (if any) up front so an invalid one is
+      // surfaced on its field — red highlight, assistive message and a jump
+      // back to Personal Information — instead of a generic submit error.
+      const referralCode = data.referredByCode?.trim().toUpperCase();
+      if (referralCode) {
+        try {
+          const referralResult =
+            await validateReferralCode(referralCode).unwrap();
+          if (referralResult && referralResult.valid === false) {
+            setError("referredByCode", {
+              type: "server",
+              message: t("referredByCodeInvalid"),
+            });
+            changeStep("personalInfo");
+            setTimeout(() => setFocus("referredByCode"), 0);
+            toast.error(t("referredByCodeInvalid"));
+            return;
+          }
+        } catch {
+          // Endpoint unavailable — let the submit endpoint validate it instead
+          // (handled by isInvalidReferralError below).
+        }
+      }
+
       // Each selected grade must have at least one matching subject selected.
       const selectedSubjectSet = new Set(data.subjects);
       const perGradeSubjectIds = await Promise.all(
@@ -280,6 +325,19 @@ export function TutorTabs() {
           changeStep("personalInfo");
           setTimeout(() => setFocus("email"), 0);
           toast.error(t("emailAlreadyExists"));
+          return;
+        }
+
+        // Invalid/non-existent referral code: highlight the field, jump back to
+        // Personal Information and focus it (mirrors the duplicate-email flow).
+        if (typeof error === "string" && isInvalidReferralError(error)) {
+          setError("referredByCode", {
+            type: "server",
+            message: t("referredByCodeInvalid"),
+          });
+          changeStep("personalInfo");
+          setTimeout(() => setFocus("referredByCode"), 0);
+          toast.error(t("referredByCodeInvalid"));
           return;
         }
 
