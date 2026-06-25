@@ -433,7 +433,8 @@
     "optClassTypeOnlineIndividual": "මාර්ගගත - තනි පුද්ගල",
     "optClassTypeOnlineGroup": "මාර්ගගත - කණ්ඩායම්",
     "optClassTypePhysicalIndividual": "භෞතික - තනි පුද්ගල",
-    "optClassTypePhysicalGroup": "භෞතික - කණ්ඩායම්"
+    "optClassTypePhysicalGroup": "භෞතික - කණ්ඩායම්",
+    "incompleteStepWarning": "මෙම පියවරේ අවශ්‍ය සමහර ක්ෂේත්‍ර සම්පූර්ණ කර නැත."
   },
   "pastExamPapers": {
     "pageHeading": "ශ්‍රී ලංකා පසුගිය විභාග ප්‍රශ්න පත්‍ර නොමිලේ බාගත කරන්න",
