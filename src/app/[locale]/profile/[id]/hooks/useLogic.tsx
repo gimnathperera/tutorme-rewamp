@@ -23,6 +23,7 @@ import { useTranslations } from "next-intl";
 import {
   EducationInfoSchema,
   createEducationInfoSchema,
+  getSubjectCoverageState,
   initialEducationInfoFormValues,
 } from "../components/form-education-information/schema";
 import {
@@ -590,6 +591,18 @@ const useLogic = (): LogicReturnType => {
     },
   );
 
+  // Subject IDs available for each grade (from the nested grade data), used to
+  // validate that every selected grade has at least one selected subject.
+  const educationSubjectsByGrade = useMemo<Record<string, string[]>>(() => {
+    const map: Record<string, string[]> = {};
+    (gradeRawData?.results ?? []).forEach((grade: any) => {
+      map[grade.id.toString()] = (grade.subjects ?? []).map((subject: any) =>
+        typeof subject === "string" ? subject : subject.id?.toString(),
+      );
+    });
+    return map;
+  }, [gradeRawData]);
+
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [handleProfileSubmit, { isLoading: isGeneralFormSubmitting }] =
     useUpdateProfileMutation();
@@ -812,15 +825,42 @@ const useLogic = (): LogicReturnType => {
 
       const validIds = new Set(newOptions.map((o) => o.value));
       const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
-      educationInfoForm.setValue(
-        "subjects",
-        currentSubjects.filter((id) => validIds.has(id)),
-        { shouldDirty: true },
+      const filteredSubjects = currentSubjects.filter((id) =>
+        validIds.has(id),
       );
+      educationInfoForm.setValue("subjects", filteredSubjects, {
+        shouldDirty: true,
+      });
+
+      // Surface the right subjects error immediately on a grade change:
+      // "required" when empty, or per-grade coverage when a selected grade has
+      // no matching subject.
+      const coverage = getSubjectCoverageState(
+        currentGrades,
+        filteredSubjects,
+        educationSubjectsByGrade,
+      );
+      if (coverage === "required") {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectsRequired"),
+        });
+      } else if (coverage === "perGrade") {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectPerGradeRequired"),
+        });
+      }
     } catch {
       toast.error("Failed to load subjects");
     }
-  }, [educationInfoForm, fetchSubjectsForGrades, selectedEducationGrades]);
+  }, [
+    educationInfoForm,
+    educationSubjectsByGrade,
+    fetchSubjectsForGrades,
+    selectedEducationGrades,
+    tProfile,
+  ]);
 
   useEffect(() => {
     if (
@@ -1053,6 +1093,7 @@ const useLogic = (): LogicReturnType => {
       dropdownOptionData: {
         gradesOptions,
         educationSubjectsOptions,
+        educationSubjectsByGrade,
         languageOptions,
         timeZoneOptions,
         rateOptions,

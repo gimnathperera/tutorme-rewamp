@@ -19,7 +19,7 @@ import { Option } from "@/types/shared-types";
 import { FC, useEffect, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { useTranslateItems } from "@/hooks/useTranslateItems";
-import { EducationInfoSchema } from "./schema";
+import { EducationInfoSchema, getSubjectCoverageState } from "./schema";
 import SubmitButton from "@/components/shared/submit-button";
 import { isEmpty } from "lodash-es";
 import { Plus, Trash2 } from "lucide-react";
@@ -29,6 +29,7 @@ type Props = {
   dropdownOptionData: {
     gradesOptions: Option[];
     subjectsOptions: Option[];
+    subjectsByGrade: Record<string, string[]>;
   };
   form: ReturnType<any>;
   onFormSubmit: SubmitHandler<EducationInfoSchema>;
@@ -154,6 +155,7 @@ const FormEducationInfo: FC<Props> = ({
   dropdownOptionData: {
     gradesOptions: rawGrades,
     subjectsOptions: rawSubjects,
+    subjectsByGrade,
   },
   form,
   onFormSubmit,
@@ -301,6 +303,30 @@ const FormEducationInfo: FC<Props> = ({
 
   const fieldErrorMessage = (fieldName: string) =>
     (form.formState.errors[fieldName]?.message as string | undefined) ?? "";
+
+  // Subjects-specific handler: update the value, then validate per-grade
+  // coverage immediately (required when empty, per-grade when a selected grade
+  // has no matching subject). Driven imperatively so it reacts on every pick
+  // without relying on the schema (which can't express the per-grade rule).
+  const handleSubjectsChange =
+    (onChange: (selected: string[]) => void) => (value: string[]) => {
+      onChange(value);
+      const grades = (form.getValues("grades") as string[]) ?? [];
+      const coverage = getSubjectCoverageState(grades, value, subjectsByGrade);
+      if (coverage === "required") {
+        form.setError("subjects", {
+          type: "manual",
+          message: t("subjectsRequired"),
+        });
+      } else if (coverage === "perGrade") {
+        form.setError("subjects", {
+          type: "manual",
+          message: t("subjectPerGradeRequired"),
+        });
+      } else {
+        form.clearErrors("subjects");
+      }
+    };
 
   const {
     fields: eduFields,
@@ -596,10 +622,7 @@ const FormEducationInfo: FC<Props> = ({
                     <MultiSelect
                       options={msOptions(subjectsOptions)}
                       defaultSelected={field.value ?? []}
-                      onChange={handleMultiSelectChange(
-                        "subjects",
-                        field.onChange,
-                      )}
+                      onChange={handleSubjectsChange(field.onChange)}
                       hasError={!!fieldState.error}
                       disabled={isEmpty(selectedGrades)}
                       placeholder={tR("subjectsPlaceholder")}
