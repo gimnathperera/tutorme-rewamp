@@ -4,6 +4,7 @@ import {
   removeWhitespace,
   trimText,
 } from "@/utils/form-normalizers";
+import { hasValidEmailTld } from "@/utils/email-validation";
 
 export const createRequestTutorSchema = (t: (_key: string) => string) =>
   z.object({
@@ -17,7 +18,14 @@ export const createRequestTutorSchema = (t: (_key: string) => string) =>
 
     email: z.preprocess(
       removeWhitespace,
-      z.string().min(1, t("emailRequired")).email(t("emailInvalid")),
+      z
+        .string()
+        .min(1, t("emailRequired"))
+        .email(t("emailInvalid"))
+        // Reject unknown TLDs (e.g. ".mjk") the way the backend's Joi does,
+        // so an invalid email is flagged inline as the user types instead of
+        // only failing on submit.
+        .refine((value) => hasValidEmailTld(value), t("emailInvalid")),
     ),
 
     city: z.preprocess(trimText, z.string().min(1, t("cityRequired"))),
