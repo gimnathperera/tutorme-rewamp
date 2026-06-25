@@ -128,6 +128,7 @@ const ProfilePage: FC = () => {
                 dropdownOptionData={{
                   gradesOptions: dropdownOptionData.gradesOptions,
                   subjectsOptions: dropdownOptionData.educationSubjectsOptions,
+                  subjectsByGrade: dropdownOptionData.educationSubjectsByGrade,
                 }}
                 form={educationInfoForm}
                 onFormSubmit={onEducationInfoFormSubmission}

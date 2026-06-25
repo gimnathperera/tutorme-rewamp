@@ -4,6 +4,33 @@ import { isPhysicalClassType } from "@/configs/register-tutor";
 const requiredMultiSelect = (message: string) =>
   z.array(z.string()).min(1, message);
 
+/**
+ * Subjects validation state for the selected grades:
+ * - "required": a grade is selected but no subject is chosen.
+ * - "perGrade": at least one selected grade (that offers subjects) has none
+ *   of its subjects selected.
+ * - "ok": nothing to flag.
+ */
+export const getSubjectCoverageState = (
+  grades: string[],
+  subjects: string[],
+  subjectsByGrade: Record<string, string[]>,
+): "required" | "perGrade" | "ok" => {
+  if (grades.length === 0) return "ok";
+  if (subjects.length === 0) return "required";
+
+  const selected = new Set(subjects);
+  const hasGradeWithoutSubject = grades.some((gradeId) => {
+    const gradeSubjects = subjectsByGrade[gradeId] ?? [];
+    return (
+      gradeSubjects.length > 0 &&
+      !gradeSubjects.some((id) => selected.has(id))
+    );
+  });
+
+  return hasGradeWithoutSubject ? "perGrade" : "ok";
+};
+
 export const createEducationInfoSchema = (t: (_key: string) => string) =>
   z
     .object({
