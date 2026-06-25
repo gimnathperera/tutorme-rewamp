@@ -31,7 +31,10 @@ import TermsAndSubmit from "./TermsAndSubmit";
 import Stepper from "./Stepper";
 import { useTranslations, useLocale } from "next-intl";
 import { FindMyTutorForm, createFullSchema, STEP2_FIELDS } from "../schema";
-import { useAddTutorRequestMutation } from "@/store/api/splits/tutor-request";
+import {
+  useAddTutorRequestMutation,
+  useLazyValidateReferralCodeQuery,
+} from "@/store/api/splits/tutor-request";
 import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
@@ -53,6 +56,21 @@ const isDuplicateEmailError = (error: string) => {
   );
 };
 
+const isInvalidReferralError = (error: string) => {
+  const normalizedError = error.toLowerCase();
+  return (
+    (normalizedError.includes("referral") ||
+      normalizedError.includes("referred") ||
+      normalizedError.includes("referrer")) &&
+    (normalizedError.includes("invalid") ||
+      normalizedError.includes("not valid") ||
+      normalizedError.includes("not found") ||
+      normalizedError.includes("does not exist") ||
+      normalizedError.includes("doesn't exist") ||
+      normalizedError.includes("incorrect"))
+  );
+};
+
 export function TutorTabs() {
   const t = useTranslations("registerTutor");
   const locale = useLocale();
@@ -64,6 +82,7 @@ export function TutorTabs() {
   );
   const [addTutorRequest, { isLoading }] = useAddTutorRequestMutation();
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
+  const [validateReferralCode] = useLazyValidateReferralCodeQuery();
   /** null = closed | "success" = success dialog | string = error message */
   const [submissionResult, setSubmissionResult] = useState<
     "success" | string | null
@@ -142,6 +161,13 @@ export function TutorTabs() {
       if (issue.path.length > 0) erroredFields.add(String(issue.path[0]));
     }
   }
+  // The per-grade subject rule lives outside the Zod schema (it needs the
+  // grade→subject mapping), so also fold any live form errors — e.g. the
+  // manual "subjects" error — into the step status so the stepper doesn't
+  // mark a step complete while one of its fields is actually invalid.
+  Object.keys(methods.formState.errors).forEach((field) =>
+    erroredFields.add(field),
+  );
 
   const stepHasError = (tabKey: TabKey) =>
     STEP_FIELDS[tabKey].some((field) => erroredFields.has(field));
@@ -152,16 +178,31 @@ export function TutorTabs() {
     { key: "verification", label: t("verification") },
   ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
-  const changeStep = (nextTab: TabKey) => {
+  const changeStep = (
+    nextTab: TabKey,
+    options?: { revalidate?: boolean },
+  ) => {
+    // `revalidate` re-runs schema validation for the destination step. Skip it
+    // when the caller has already set a manual error that isn't part of the
+    // schema (e.g. the per-grade subject check), otherwise the re-validation
+    // would immediately clear that error before the user can see it.
+    const revalidate = options?.revalidate ?? true;
     // Returning to an already-visited step surfaces its validation messages so
     // the user can see what's missing. First-time forward visits stay clean.
-    if (visitedTabs.has(nextTab)) {
+    if (revalidate && visitedTabs.has(nextTab)) {
+      // "subjects" (per-grade coverage) and "referredByCode" (server-side
+      // existence check) are validated outside the Zod schema. Re-running the
+      // schema here would clear those manual errors (both pass their schema
+      // checks), so exclude them and let their own logic own them.
+      const fields = STEP_FIELDS[nextTab].filter(
+        (field) => field !== "subjects" && field !== "referredByCode",
+      );
       // Mark the fields touched so that, in onTouched mode, typing a valid value
       // re-validates and clears the message (otherwise it lingers until blur).
-      STEP_FIELDS[nextTab].forEach((field) =>
+      fields.forEach((field) =>
         setValue(field as any, getValues(field as any), { shouldTouch: true }),
       );
-      trigger(STEP_FIELDS[nextTab] as any);
+      trigger(fields as any);
     }
     setVisitedTabs((prev) => new Set(prev).add(tab));
     setTab(nextTab);
@@ -196,6 +237,30 @@ export function TutorTabs() {
 
   const onSubmit = async (data: FindMyTutorForm) => {
     try {
+      // Validate the referral code (if any) up front so an invalid one is
+      // surfaced on its field — red highlight, assistive message and a jump
+      // back to Personal Information — instead of a generic submit error.
+      const referralCode = data.referredByCode?.trim().toUpperCase();
+      if (referralCode) {
+        try {
+          const referralResult =
+            await validateReferralCode(referralCode).unwrap();
+          if (referralResult && referralResult.valid === false) {
+            setError("referredByCode", {
+              type: "server",
+              message: t("referredByCodeInvalid"),
+            });
+            changeStep("personalInfo");
+            setTimeout(() => setFocus("referredByCode"), 0);
+            toast.error(t("referredByCodeInvalid"));
+            return;
+          }
+        } catch {
+          // Endpoint unavailable — let the submit endpoint validate it instead
+          // (handled by isInvalidReferralError below).
+        }
+      }
+
       // Each selected grade must have at least one matching subject selected.
       const selectedSubjectSet = new Set(data.subjects);
       const perGradeSubjectIds = await Promise.all(
@@ -216,7 +281,10 @@ export function TutorTabs() {
           type: "manual",
           message: t("subjectPerGradeRequired"),
         });
-        changeStep("qualifications");
+        // Navigate without re-validating so the manual error survives (the
+        // per-grade rule isn't part of the Zod schema).
+        changeStep("qualifications", { revalidate: false });
+        toast.error(t("subjectPerGradeRequired"));
         return;
       }
 
@@ -260,6 +328,19 @@ export function TutorTabs() {
           return;
         }
 
+        // Invalid/non-existent referral code: highlight the field, jump back to
+        // Personal Information and focus it (mirrors the duplicate-email flow).
+        if (typeof error === "string" && isInvalidReferralError(error)) {
+          setError("referredByCode", {
+            type: "server",
+            message: t("referredByCodeInvalid"),
+          });
+          changeStep("personalInfo");
+          setTimeout(() => setFocus("referredByCode"), 0);
+          toast.error(t("referredByCodeInvalid"));
+          return;
+        }
+
         // Show a prominent toast for suspended emails, generic dialog for anything else
         if (
           typeof error === "string" &&
@@ -296,8 +377,15 @@ export function TutorTabs() {
   const agreeAssignmentInfo = methods.watch("agreeAssignmentInfo");
   const allDocsComplete =
     certificates?.length > 0 && certificates.every((c) => c.type && c.url);
+  // Block submission while any step still has an error — including the
+  // per-grade subjects error, which isn't part of the Zod schema.
+  const hasStepErrors = steps.some((step) => step.hasError);
   const isSubmitDisabled =
-    isLoading || !allDocsComplete || !agreeTerms || !agreeAssignmentInfo;
+    isLoading ||
+    !allDocsComplete ||
+    !agreeTerms ||
+    !agreeAssignmentInfo ||
+    hasStepErrors;
 
   return (
     <FormProvider {...methods}>

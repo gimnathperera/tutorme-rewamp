@@ -20,6 +20,7 @@ import {
   serializeAvailabilitySlots,
 } from "./availability";
 import { WEEK_DAY_OPTIONS } from "@/configs/options";
+import MultiSelect from "@/components/shared/MultiSelect";
 
 type TimePickerId = "start" | "end";
 type TimePeriod = "AM" | "PM";
@@ -456,6 +457,15 @@ const AvailabilityScheduler = () => {
     [t],
   );
 
+  const dayOptions = useMemo(
+    () =>
+      WEEK_DAY_OPTIONS.map((day) => ({
+        value: day.value,
+        text: dayFullMap[day.value] ?? day.value,
+      })),
+    [dayFullMap],
+  );
+
   const groupedSlots = useMemo(
     () =>
       WEEK_DAY_OPTIONS.map((day) => ({
@@ -553,22 +563,20 @@ const AvailabilityScheduler = () => {
 
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
               <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
-                <label className="flex flex-col">
+                <div className="flex flex-col">
                   <span className="mb-1 block text-xs font-medium text-gray-500">
                     {t("schedulerDay")}
                   </span>
-                  <select
-                    value={selectedDay}
-                    onChange={(event) => setSelectedDay(event.target.value)}
-                    className="h-12 rounded-md border border-linegrey px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  >
-                    {WEEK_DAY_OPTIONS.map((day) => (
-                      <option key={day.value} value={day.value}>
-                        {dayFullMap[day.value] ?? day.value}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                  <MultiSelect
+                    options={dayOptions}
+                    defaultSelected={[selectedDay]}
+                    onChange={(selected) =>
+                      setSelectedDay(selected[0] ?? selectedDay)
+                    }
+                    singleSelect
+                    placeholder={t("schedulerDay")}
+                  />
+                </div>
 
                 <AlarmTimePicker
                   id="start"

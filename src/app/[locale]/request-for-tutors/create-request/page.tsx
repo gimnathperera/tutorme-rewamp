@@ -89,6 +89,7 @@ export default function AddRequestForTutor() {
     setValue,
     getValues,
     trigger,
+    setError,
     clearErrors,
     formState: { errors },
     reset,
@@ -267,29 +268,47 @@ export default function AddRequestForTutor() {
     tutors.forEach((_, i) => setValue(`tutors.${i}.subject`, ""));
   }, [selectedGradeId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const nextStep = async () => {
-    if (tab === "contact") {
-      const valid = await trigger([
-        "name",
-        "email",
-        "phoneNumber",
-        "district",
-        "city",
-      ]);
-      if (!valid) return;
-    }
-    setVisitedTabs((prev) => new Set(prev).add(tab));
-    changeStep(TAB_ORDER[currentIndex + 1]);
-  };
+  // Mirrors the Register-as-a-Tutor form: advancing always works; an incomplete
+  // step surfaces a warning toast and inline validation messages rather than
+  // silently blocking navigation.
+  const nextStep = () => goForward(TAB_ORDER[currentIndex + 1]);
 
   const prevStep = () => changeStep(TAB_ORDER[currentIndex - 1]);
 
+  const getFieldTab = (field: string): TabKey =>
+    STEP_FIELDS.contact.includes(field) ? "contact" : "tutorDetails";
+
+  /** On a failed submit, jump to the earliest step that has an error. */
+  const onInvalid = (formErrors: Record<string, unknown>) => {
+    const erroredTabs = new Set(Object.keys(formErrors).map(getFieldTab));
+    const target = TAB_ORDER.find((tabKey) => erroredTabs.has(tabKey));
+    if (target) changeStep(target);
+  };
+
   const onSubmit = async (data: CreateRequestTutorSchema) => {
     try {
+      // The /v1/requestTutor endpoint expects the flat form values plus a
+      // status. (Field names/enums already match the backend's Joi schema.)
       const payload = { ...data, status: "Pending" };
+
       const result = await createTutorRequest(payload);
       const error = getErrorInApiResult(result);
       if (error) {
+        // The backend validates the email more strictly than the client — its
+        // Joi .email() rejects unknown TLDs (e.g. ".mjk") that pass on the
+        // client. Surface that on the field instead of a generic dialog, and
+        // navigate without re-validating so the manual error isn't cleared.
+        if (typeof error === "string" && /e-?mail/i.test(error)) {
+          setError("email", {
+            type: "server",
+            message: t("emailInvalid"),
+          });
+          setVisitedTabs((prev) => new Set(prev).add(tab));
+          setTab("contact");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          toast.error(t("emailInvalid"));
+          return;
+        }
         setSubmissionResult(error);
         return;
       }
@@ -328,7 +347,7 @@ export default function AddRequestForTutor() {
         }
       />
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
         <Tabs value={tab} className="w-full">
           {/* ── STEP 1: Contact Details ── */}
           <TabsContent value="contact">
@@ -903,8 +922,11 @@ export default function AddRequestForTutor() {
             <DialogTitle className="text-center text-xl font-semibold">
               {t("errorTitle")}
             </DialogTitle>
-            <DialogDescription className="text-center text-base">
-              {t("errorDesc")}
+            <DialogDescription className="text-center text-base whitespace-pre-line">
+              {typeof submissionResult === "string" &&
+              submissionResult !== "success"
+                ? submissionResult
+                : t("errorDesc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="justify-center mt-2">
