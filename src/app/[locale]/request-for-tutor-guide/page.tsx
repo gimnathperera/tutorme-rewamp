@@ -13,12 +13,12 @@ const steps = [
       {
         label: "Full Name",
         description:
-          "Must include at least two parts of your name (e.g., first name and surname). Only letters and spaces are allowed.",
+          "Enter your full name. Only letters and spaces are allowed.",
       },
       {
         label: "Email",
         description:
-          "Enter a valid email address (e.g., johndoe@gmail.com).",
+          "Enter a valid email address (e.g., johndoe@gmail.com). Made-up domains are rejected.",
       },
       {
         label: "Contact Number",
@@ -41,7 +41,7 @@ const steps = [
   {
     number: 2,
     title: "Tutor Details",
-    image: "/images/guides/request-for-tutor/step-2-tutor-details.png.png",
+    image: "/images/guides/request-for-tutor/step-2-tutor-details.png",
     fields: [
       {
         label: "Medium",
@@ -56,7 +56,7 @@ const steps = [
       {
         label: "Number of Tutors",
         description:
-          "The number of tutors being requested for the selected grade. Select a tutor count, then fill in the required fields - including Subject - for each individual tutor.",
+          "The number of tutors being requested for the selected grade. Defaults to 1. Increase the count to request multiple tutors. A separate set of required fields (Subject, Duration, Frequency, Preferred Tutor Type, Preferred Class Type) will appear for each tutor.",
       },
       {
         label: "Subject",
@@ -106,9 +106,10 @@ const RequestForTutorGuidePage = () => {
         {/* Top note */}
         <div className="mb-10 rounded-lg border border-red-300 bg-red-50 px-5 py-4">
           <p className="text-sm text-red-700 font-medium leading-relaxed">
-            <span className="font-bold">Note:</span> The field requiring extra
-            attention is marked in each step&apos;s screenshot below. Every field in
-            each step is required - none should be left empty.
+            <span className="font-bold">Note:</span> All fields marked with an
+            asterisk (*) are required. The &quot;Number of Tutors&quot; field defaults to 1
+            and can be increased. Fill in the required details for each tutor
+            you add.
           </p>
         </div>
 
