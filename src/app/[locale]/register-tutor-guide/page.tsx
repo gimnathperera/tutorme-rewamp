@@ -13,7 +13,12 @@ const steps = [
       {
         label: "Full Name",
         description:
-          "Must include at least two parts of your name (e.g., first name and surname). Only letters and spaces are allowed.",
+          "Enter your full name. Only letters and spaces are allowed.",
+      },
+      {
+        label: "Email",
+        description:
+          "Enter a valid email address. It is checked for availability, so it must not already be registered.",
       },
       {
         label: "Password",
@@ -21,9 +26,8 @@ const steps = [
           "Must be 8–12 characters long and contain both letters and numbers.",
       },
       {
-        label: "Email and Confirm Password",
-        description:
-          "Enter a valid, available email address. Re-enter your password exactly to confirm it.",
+        label: "Confirm Password",
+        description: "Re-enter your password exactly to confirm it.",
       },
       {
         label: "Contact Number",
@@ -31,7 +35,7 @@ const steps = [
       },
       {
         label: "Gender",
-        description: "Select one of the available options.",
+        description: "Select Male or Female.",
       },
       {
         label: "Date of Birth",
@@ -41,11 +45,12 @@ const steps = [
       {
         label: "Age",
         description:
-          "Automatically calculated based on the Date of Birth you select. This field cannot be edited directly.",
+          "Automatically calculated from the Date of Birth you select. This field cannot be edited directly.",
       },
       {
-        label: "Nationality and Race",
-        description: "Choose the appropriate option from the provided list.",
+        label: "Referral Code (Optional)",
+        description:
+          "If someone referred you, enter their referral code. It is validated against our system - an invalid code is highlighted in red and must be corrected or cleared before you can submit.",
       },
     ],
     note: null,
@@ -58,7 +63,12 @@ const steps = [
       {
         label: "Class Type",
         description:
-          "A multi-select field. You can select all the class types that apply to you.",
+          "A multi-select field. You can select all the class types that apply to you (Online or Physical, Individual or Group).",
+      },
+      {
+        label: "Preferred Locations",
+        description:
+          "A searchable multi-select field. You can select any number of cities. This field is only enabled (and becomes required) when at least one Physical class type is selected. It is optional when only Online class types are chosen.",
       },
       {
         label: "Tutor Types",
@@ -66,23 +76,13 @@ const steps = [
           "A multi-select field. You can select all the tutor types that suit you.",
       },
       {
-        label: "Years of Experience",
-        description: "Enter the number of years you have spent teaching.",
-      },
-      {
-        label: "Grades",
-        description:
-          "A multi-select field. You can select all the grades you're interested in teaching.",
-      },
-      {
-        label: "Preferred Locations",
-        description:
-          "A multi-select field. You can search for and select any number of cities. This field is only enabled when the Class Type is set to \"Physical.\"",
-      },
-      {
         label: "Highest Education Level",
         description:
-          "Your most advanced level of education. You'll need to provide supporting documents to verify this status in a later step.",
+          "Your most advanced level of education. You'll need to provide supporting documents to verify it in the next step.",
+      },
+      {
+        label: "Years of Experience",
+        description: "Enter the number of years you have spent teaching.",
       },
       {
         label: "Tutor Mediums",
@@ -90,45 +90,22 @@ const steps = [
           "A multi-select field. You can select all the mediums you're able to teach in.",
       },
       {
+        label: "Grades",
+        description:
+          "A multi-select field. You can select all the grades you're interested in teaching.",
+      },
+      {
         label: "Subjects",
         description:
-          "A multi-select field. You can select all the subjects you're interested in teaching for the grades you've selected.",
+          "A multi-select field, enabled after you select at least one grade. You must select at least one subject for every selected grade - otherwise the field is highlighted and you cannot continue.",
       },
     ],
     note: null,
   },
   {
     number: 3,
-    title: "Teaching Profile",
-    image: "/images/guides/register-tutor/step-3-teaching-profile.png",
-    fields: [
-      {
-        label: "Short Introduction About Yourself",
-        description:
-          "Describe your personal qualities, teaching style, and methodology.",
-      },
-      {
-        label: "Summary of Teaching Experience & Academic Achievements",
-        description:
-          "Describe your achievements and the subjects you've taught - for example, number of students, years of experience, and results.",
-      },
-      {
-        label: "Results of Students / Track Record",
-        description:
-          "Describe your past students' results, grade improvements, and examination outcomes.",
-      },
-      {
-        label: "Other Selling Points as a Tutor",
-        description:
-          "Mention your teaching methods, level of commitment, and what makes you stand out as a tutor.",
-      },
-    ],
-    note: "If you have nothing to mention for a field, please leave it with a \"-\" mark rather than leaving it blank.",
-  },
-  {
-    number: 4,
     title: "Verification & Agreement",
-    image: "/images/guides/register-tutor/step-4-verification.png",
+    image: "/images/guides/register-tutor/step-3-verification.png",
     fields: [
       {
         label: "Educational Details (Mandatory)",
@@ -143,15 +120,15 @@ const steps = [
       {
         label: "I agree to the Terms and Conditions",
         description:
-          "By checking this box, you agree to receive assignment information via SMS and understand that rates are subject to negotiation. Admin fees apply for successful assignments.",
+          "By checking this box, you agree to receive assignment information via email and understand that rates are subject to negotiation. Admin fees may apply for successful assignments.",
       },
       {
         label: "I agree to receive assignment information regarding new Tuition Assignments",
         description:
-          "By checking this box, you agree to receive SMS and email notifications about new tutoring assignments that match your preferences.",
+          "By checking this box, you agree to receive email notifications about new tutoring assignments that match your preferences.",
       },
     ],
-    note: "The Document Type and Uploaded File must match.",
+    note: "The Document Type and the Uploaded File must match. Submit is only enabled once every document row has both a type selected and a file uploaded, and both agreement boxes are checked.",
   },
 ];
 
@@ -173,9 +150,10 @@ const RegisterTutorGuidePage = () => {
         {/* Top note */}
         <div className="mb-10 rounded-lg border border-red-300 bg-red-50 px-5 py-4">
           <p className="text-sm text-red-700 font-medium leading-relaxed">
-            <span className="font-bold">Note:</span> The field requiring extra
-            attention is marked in each step&apos;s screenshot below. Every field in
-            each step is required - none should be left empty.
+            <span className="font-bold">Note:</span> Fields marked with an
+            asterisk (*) are required. A few fields are optional - the Referral
+            Code, Preferred Locations (unless you teach Physical classes), and
+            the Optional Details documents.
           </p>
         </div>
 
