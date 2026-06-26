@@ -1,181 +1,84 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import ZoomableImage from "@/components/shared/zoomable-image";
 
-const steps = [
-  {
-    number: 1,
-    title: "Personal Information",
-    image: "/images/guides/register-tutor/step-1-personal-info.png",
-    fields: [
-      {
-        label: "Full Name",
-        description:
-          "Must include at least two parts of your name (e.g., first name and surname). Only letters and spaces are allowed.",
-      },
-      {
-        label: "Password",
-        description:
-          "Must be 8–12 characters long and contain both letters and numbers.",
-      },
-      {
-        label: "Email and Confirm Password",
-        description:
-          "Enter a valid, available email address. Re-enter your password exactly to confirm it.",
-      },
-      {
-        label: "Contact Number",
-        description: "Must be a valid number containing exactly 10 digits.",
-      },
-      {
-        label: "Gender",
-        description: "Select one of the available options.",
-      },
-      {
-        label: "Date of Birth",
-        description:
-          "You must be at least 18 years old - dates that would make you younger than 18 cannot be selected.",
-      },
-      {
-        label: "Age",
-        description:
-          "Automatically calculated based on the Date of Birth you select. This field cannot be edited directly.",
-      },
-      {
-        label: "Nationality and Race",
-        description: "Choose the appropriate option from the provided list.",
-      },
-    ],
-    note: null,
-  },
-  {
-    number: 2,
-    title: "Qualifications",
-    image: "/images/guides/register-tutor/step-2-qualifications.png",
-    fields: [
-      {
-        label: "Class Type",
-        description:
-          "A multi-select field. You can select all the class types that apply to you.",
-      },
-      {
-        label: "Tutor Types",
-        description:
-          "A multi-select field. You can select all the tutor types that suit you.",
-      },
-      {
-        label: "Years of Experience",
-        description: "Enter the number of years you have spent teaching.",
-      },
-      {
-        label: "Grades",
-        description:
-          "A multi-select field. You can select all the grades you're interested in teaching.",
-      },
-      {
-        label: "Preferred Locations",
-        description:
-          "A multi-select field. You can search for and select any number of cities. This field is only enabled when the Class Type is set to \"Physical.\"",
-      },
-      {
-        label: "Highest Education Level",
-        description:
-          "Your most advanced level of education. You'll need to provide supporting documents to verify this status in a later step.",
-      },
-      {
-        label: "Tutor Mediums",
-        description:
-          "A multi-select field. You can select all the mediums you're able to teach in.",
-      },
-      {
-        label: "Subjects",
-        description:
-          "A multi-select field. You can select all the subjects you're interested in teaching for the grades you've selected.",
-      },
-    ],
-    note: null,
-  },
-  {
-    number: 3,
-    title: "Teaching Profile",
-    image: "/images/guides/register-tutor/step-3-teaching-profile.png",
-    fields: [
-      {
-        label: "Short Introduction About Yourself",
-        description:
-          "Describe your personal qualities, teaching style, and methodology.",
-      },
-      {
-        label: "Summary of Teaching Experience & Academic Achievements",
-        description:
-          "Describe your achievements and the subjects you've taught - for example, number of students, years of experience, and results.",
-      },
-      {
-        label: "Results of Students / Track Record",
-        description:
-          "Describe your past students' results, grade improvements, and examination outcomes.",
-      },
-      {
-        label: "Other Selling Points as a Tutor",
-        description:
-          "Mention your teaching methods, level of commitment, and what makes you stand out as a tutor.",
-      },
-    ],
-    note: "If you have nothing to mention for a field, please leave it with a \"-\" mark rather than leaving it blank.",
-  },
-  {
-    number: 4,
-    title: "Verification & Agreement",
-    image: "/images/guides/register-tutor/step-4-verification.png",
-    fields: [
-      {
-        label: "Educational Details (Mandatory)",
-        description:
-          "Upload at least one document to verify your profile. First select the Document Type, then upload the matching original document. AI-generated or edited certificates are not accepted. Accepted formats: JPG, PNG, PDF. Click \"+ Add Document\" to add more.",
-      },
-      {
-        label: "Optional Details",
-        description:
-          "Not mandatory. You may upload any additional documents that support your tutor profile. Providing details here can directly affect the outcome of your profile's verification process.",
-      },
-      {
-        label: "I agree to the Terms and Conditions",
-        description:
-          "By checking this box, you agree to receive assignment information via SMS and understand that rates are subject to negotiation. Admin fees apply for successful assignments.",
-      },
-      {
-        label: "I agree to receive assignment information regarding new Tuition Assignments",
-        description:
-          "By checking this box, you agree to receive SMS and email notifications about new tutoring assignments that match your preferences.",
-      },
-    ],
-    note: "The Document Type and Uploaded File must match.",
-  },
-];
-
 const RegisterTutorGuidePage = () => {
+  const t = useTranslations("registerTutorGuide");
+  const locale = useLocale();
+  const img = (base: string) =>
+    locale === "en" ? base : base.replace(".png", `-${locale}.png`);
+
+  const steps = useMemo(
+    () => [
+      {
+        number: 1,
+        title: t("step1Title"),
+        image: img("/images/guides/register-tutor/step-1-personal-info.png"),
+        fields: [
+          { label: t("step1FullNameLabel"), description: t("step1FullNameDesc") },
+          { label: t("step1EmailLabel"), description: t("step1EmailDesc") },
+          { label: t("step1PasswordLabel"), description: t("step1PasswordDesc") },
+          { label: t("step1ConfirmPasswordLabel"), description: t("step1ConfirmPasswordDesc") },
+          { label: t("step1ContactNumberLabel"), description: t("step1ContactNumberDesc") },
+          { label: t("step1GenderLabel"), description: t("step1GenderDesc") },
+          { label: t("step1DateOfBirthLabel"), description: t("step1DateOfBirthDesc") },
+          { label: t("step1AgeLabel"), description: t("step1AgeDesc") },
+          { label: t("step1ReferralCodeLabel"), description: t("step1ReferralCodeDesc") },
+        ],
+        note: null,
+      },
+      {
+        number: 2,
+        title: t("step2Title"),
+        image: img("/images/guides/register-tutor/step-2-qualifications.png"),
+        fields: [
+          { label: t("step2ClassTypeLabel"), description: t("step2ClassTypeDesc") },
+          { label: t("step2PreferredLocationsLabel"), description: t("step2PreferredLocationsDesc") },
+          { label: t("step2TutorTypesLabel"), description: t("step2TutorTypesDesc") },
+          { label: t("step2HighestEducationLabel"), description: t("step2HighestEducationDesc") },
+          { label: t("step2YearsExperienceLabel"), description: t("step2YearsExperienceDesc") },
+          { label: t("step2TutorMediumsLabel"), description: t("step2TutorMediumsDesc") },
+          { label: t("step2GradesLabel"), description: t("step2GradesDesc") },
+          { label: t("step2SubjectsLabel"), description: t("step2SubjectsDesc") },
+        ],
+        note: null,
+      },
+      {
+        number: 3,
+        title: t("step3Title"),
+        image: img("/images/guides/register-tutor/step-3-verification.png"),
+        fields: [
+          { label: t("step3EduDetailsLabel"), description: t("step3EduDetailsDesc") },
+          { label: t("step3OptionalDetailsLabel"), description: t("step3OptionalDetailsDesc") },
+          { label: t("step3AgreeTermsLabel"), description: t("step3AgreeTermsDesc") },
+          { label: t("step3AgreeAssignmentLabel"), description: t("step3AgreeAssignmentDesc") },
+        ],
+        note: t("step3Note"),
+      },
+    ],
+    [t],
+  );
+
   return (
     <div className="px-4 lg:px-8">
       <div className="mx-auto max-w-4xl py-6 sm:py-10">
 
         {/* Page heading */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Register as a Tutor - User Guide
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("pageTitle")}</h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-gray-500">
-            Follow the steps below to complete your tutor registration on TuitionLanka.
+            {t("pageSubtitle")}
           </p>
         </div>
 
         {/* Top note */}
         <div className="mb-10 rounded-lg border border-red-300 bg-red-50 px-5 py-4">
           <p className="text-sm text-red-700 font-medium leading-relaxed">
-            <span className="font-bold">Note:</span> The field requiring extra
-            attention is marked in each step&apos;s screenshot below. Every field in
-            each step is required - none should be left empty.
+            <span className="font-bold">Note:</span> {t("topNote")}
           </p>
         </div>
 
@@ -237,17 +140,13 @@ const RegisterTutorGuidePage = () => {
 
         {/* CTA */}
         <div className="mt-6 sm:mt-12 rounded-xl bg-primary-600 px-6 py-8 text-center">
-          <h3 className="text-xl font-bold text-white mb-2">
-            Ready to get started?
-          </h3>
-          <p className="text-sm text-blue-100 mb-5">
-            Create your tutor profile and connect with students across Sri Lanka.
-          </p>
+          <h3 className="text-xl font-bold text-white mb-2">{t("ctaTitle")}</h3>
+          <p className="text-sm text-blue-100 mb-5">{t("ctaDesc")}</p>
           <Link
             href="/register-tutor"
             className="inline-block rounded-full bg-white px-8 py-2.5 text-sm font-semibold text-primary-600 hover:bg-blue-50 transition-colors"
           >
-            Register as a Tutor
+            {t("ctaButton")}
           </Link>
         </div>
 
