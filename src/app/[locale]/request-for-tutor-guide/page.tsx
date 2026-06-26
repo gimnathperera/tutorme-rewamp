@@ -1,115 +1,68 @@
 "use client";
 
+import { useMemo } from "react";
 import Link from "next/link";
+import { useTranslations, useLocale } from "next-intl";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import ZoomableImage from "@/components/shared/zoomable-image";
 
-const steps = [
-  {
-    number: 1,
-    title: "Contact Details",
-    image: "/images/guides/request-for-tutor/step-1-contact-details.png",
-    fields: [
-      {
-        label: "Full Name",
-        description:
-          "Enter your full name. Only letters and spaces are allowed.",
-      },
-      {
-        label: "Email",
-        description:
-          "Enter a valid email address (e.g., johndoe@gmail.com). Made-up domains are rejected.",
-      },
-      {
-        label: "Contact Number",
-        description:
-          "Must be a valid number containing exactly 10 digits (e.g., 0712345678).",
-      },
-      {
-        label: "District",
-        description:
-          "The area where the student or parent is requesting tuition from the tutor.",
-      },
-      {
-        label: "City",
-        description:
-          "The specific city where the student or parent is requesting tuition. You can only search and select a city after a District has been chosen.",
-      },
-    ],
-    note: null,
-  },
-  {
-    number: 2,
-    title: "Tutor Details",
-    image: "/images/guides/request-for-tutor/step-2-tutor-details.png",
-    fields: [
-      {
-        label: "Medium",
-        description:
-          "Select the medium of instruction you'd like the tutor to teach in.",
-      },
-      {
-        label: "Grade",
-        description:
-          "The grade level for which the student or parent is requesting tutors.",
-      },
-      {
-        label: "Number of Tutors",
-        description:
-          "The number of tutors being requested for the selected grade. Defaults to 1. Increase the count to request multiple tutors. A separate set of required fields (Subject, Duration, Frequency, Preferred Tutor Type, Preferred Class Type) will appear for each tutor.",
-      },
-      {
-        label: "Subject",
-        description:
-          "The subject for which a tutor is being requested, based on the selected grade. A grade must be selected first before choosing a subject.",
-      },
-      {
-        label: "Duration",
-        description:
-          "Select the preferred length of each tutoring session.",
-      },
-      {
-        label: "Frequency",
-        description:
-          "Select the preferred number of sessions per week.",
-      },
-      {
-        label: "Preferred Tutor Type",
-        description:
-          "The type of tutor the student prefers to learn from.",
-      },
-      {
-        label: "Preferred Class Type",
-        description:
-          "Select the preferred class format (e.g., physical or online).",
-      },
-    ],
-    note: null,
-  },
-];
-
 const RequestForTutorGuidePage = () => {
+  const t = useTranslations("requestForTutorGuide");
+  const locale = useLocale();
+  const img = (base: string) =>
+    locale === "en" ? base : base.replace(".png", `-${locale}.png`);
+
+  const steps = useMemo(
+    () => [
+      {
+        number: 1,
+        title: t("step1Title"),
+        image: img("/images/guides/request-for-tutor/step-1-contact-details.png"),
+        fields: [
+          { label: t("step1FullNameLabel"), description: t("step1FullNameDesc") },
+          { label: t("step1EmailLabel"), description: t("step1EmailDesc") },
+          { label: t("step1ContactNumberLabel"), description: t("step1ContactNumberDesc") },
+          { label: t("step1DistrictLabel"), description: t("step1DistrictDesc") },
+          { label: t("step1CityLabel"), description: t("step1CityDesc") },
+        ],
+        note: null,
+      },
+      {
+        number: 2,
+        title: t("step2Title"),
+        image: img("/images/guides/request-for-tutor/step-2-tutor-details.png"),
+        fields: [
+          { label: t("step2MediumLabel"), description: t("step2MediumDesc") },
+          { label: t("step2GradeLabel"), description: t("step2GradeDesc") },
+          { label: t("step2NumberOfTutorsLabel"), description: t("step2NumberOfTutorsDesc") },
+          { label: t("step2SubjectLabel"), description: t("step2SubjectDesc") },
+          { label: t("step2DurationLabel"), description: t("step2DurationDesc") },
+          { label: t("step2FrequencyLabel"), description: t("step2FrequencyDesc") },
+          { label: t("step2PreferredTutorTypeLabel"), description: t("step2PreferredTutorTypeDesc") },
+          { label: t("step2PreferredClassTypeLabel"), description: t("step2PreferredClassTypeDesc") },
+        ],
+        note: null,
+      },
+    ],
+    [t],
+  );
+
   return (
     <div className="px-4 lg:px-8">
       <div className="mx-auto max-w-4xl py-6 sm:py-10">
 
         {/* Page heading */}
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Request for Tutor - User Guide
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-900">{t("pageTitle")}</h1>
           <p className="mx-auto mt-3 max-w-2xl text-sm md:text-base text-gray-500">
-            Follow the steps below to submit your tutor request on TuitionLanka.
+            {t("pageSubtitle")}
           </p>
         </div>
 
         {/* Top note */}
         <div className="mb-10 rounded-lg border border-red-300 bg-red-50 px-5 py-4">
           <p className="text-sm text-red-700 font-medium leading-relaxed">
-            <span className="font-bold">Note:</span> All fields marked with an
-            asterisk (*) are required. The &quot;Number of Tutors&quot; field defaults to 1
-            and can be increased. Fill in the required details for each tutor
-            you add.
+            <span className="font-bold">Note:</span> {t("topNote")}
           </p>
         </div>
 
@@ -171,17 +124,13 @@ const RequestForTutorGuidePage = () => {
 
         {/* CTA */}
         <div className="mt-6 sm:mt-12 rounded-xl bg-primary-600 px-6 py-8 text-center">
-          <h3 className="text-xl font-bold text-white mb-2">
-            Ready to find a tutor?
-          </h3>
-          <p className="text-sm text-blue-100 mb-5">
-            Submit your request and get matched with the right tutor for your needs.
-          </p>
+          <h3 className="text-xl font-bold text-white mb-2">{t("ctaTitle")}</h3>
+          <p className="text-sm text-blue-100 mb-5">{t("ctaDesc")}</p>
           <Link
             href="/request-for-tutors"
             className="inline-block rounded-full bg-white px-8 py-2.5 text-sm font-semibold text-primary-600 hover:bg-blue-50 transition-colors"
           >
-            Request for Tutor
+            {t("ctaButton")}
           </Link>
         </div>
 
