@@ -3,8 +3,6 @@ import {
   GENDER_VALUES,
   isPhysicalClassType,
   MEDIUM_VALUES,
-  NATIONALITY_VALUES,
-  RACE_VALUES,
   REGISTER_HIGHEST_EDUCATION_VALUES,
 } from "@/configs/register-tutor";
 import {
@@ -63,13 +61,6 @@ export const STEP2_FIELDS = [
   "grades",
   "subjects",
   "yearsExperience",
-] as const;
-
-export const STEP3_FIELDS = [
-  "teachingSummary",
-  "studentResults",
-  "sellingPoints",
-  "academicDetails",
 ] as const;
 
 const createStep1BaseSchema = (t: (_key: string) => string) =>
@@ -138,16 +129,6 @@ const createStep1BaseSchema = (t: (_key: string) => string) =>
 
     age: z.number().int().min(18, t("ageMinimum")).max(80, t("ageMaximum")),
 
-    nationality: z
-      .string()
-      .refine((v) => isConfiguredValue(NATIONALITY_VALUES, v), {
-        message: t("nationalityRequired"),
-      }),
-
-    race: z.string().refine((v) => isConfiguredValue(RACE_VALUES, v), {
-      message: t("raceRequired"),
-    }),
-
     referredByCode: z.preprocess(
       (v) => (typeof v === "string" ? v.trim().toUpperCase() : v),
       z
@@ -208,41 +189,6 @@ const createStep2Schema = (t: (_key: string) => string) =>
     ),
   });
 
-const createStep3Schema = (t: (_key: string) => string) =>
-  z.object({
-    teachingSummary: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("teachingSummaryRequired"))
-        .max(500, t("teachingSummaryMax")),
-    ),
-
-    studentResults: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("studentResultsRequired"))
-        .max(500, t("studentResultsMax")),
-    ),
-
-    sellingPoints: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("sellingPointsRequired"))
-        .max(500, t("sellingPointsMax")),
-    ),
-
-    academicDetails: z.preprocess(
-      normalizeTextSpaces,
-      z
-        .string()
-        .min(1, t("academicDetailsRequired"))
-        .max(500, t("academicDetailsMax")),
-    ),
-  });
-
 const createStep4Schema = (t: (_key: string) => string) =>
   z.object({
     certificatesAndQualifications: z
@@ -291,7 +237,6 @@ const createStep4Schema = (t: (_key: string) => string) =>
 export const createFullSchema = (t: (_key: string) => string) =>
   createStep1BaseSchema(t)
     .merge(createStep2Schema(t))
-    .merge(createStep3Schema(t))
     .merge(createStep4Schema(t))
     .superRefine(
       ({ password, confirmPassword, classType, preferredLocations }, ctx) => {

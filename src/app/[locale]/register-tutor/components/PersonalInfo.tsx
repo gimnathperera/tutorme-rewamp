@@ -57,23 +57,6 @@ const PersonalInfo = () => {
     ],
     [t],
   );
-  const nationalityOptions = useMemo(
-    () => [
-      { value: "Sri Lankan", text: t("optNationalitySriLankan") },
-      { value: "Others", text: t("optNationalityOthers") },
-    ],
-    [t],
-  );
-  const raceOptions = useMemo(
-    () => [
-      { value: "Sinhalese", text: t("optRaceSinhalese") },
-      { value: "Tamil", text: t("optRaceTamil") },
-      { value: "Muslim", text: t("optRaceMuslim") },
-      { value: "Burgher", text: t("optRaceBurgher") },
-      { value: "Others", text: t("optRaceOthers") },
-    ],
-    [t],
-  );
   const {
     register,
     control,
@@ -516,60 +499,6 @@ const PersonalInfo = () => {
         ) : (
           <Hint>{t("ageHint")}</Hint>
         )}
-      </div>
-
-      {/* Nationality */}
-      <div className={fieldWrapper}>
-        <Label className="text-sm" htmlFor="nationality">
-          {t("nationality")} <span className="text-red-500">*</span>
-        </Label>
-        <Controller
-          name="nationality"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              options={nationalityOptions}
-              defaultSelected={field.value ? [field.value] : []}
-              onChange={(selected) => {
-                field.onChange(selected[0] ?? "");
-                trigger("nationality");
-              }}
-              hasError={!!errors.nationality}
-              singleSelect
-              placeholder={t("nationalityPlaceholder")}
-            />
-          )}
-        />
-        <p className="text-xs leading-4 text-red-500 min-h-4">
-          {errors.nationality?.message as string}
-        </p>
-      </div>
-
-      {/* Race */}
-      <div className={fieldWrapper}>
-        <Label className="text-sm" htmlFor="race">
-          {t("race")} <span className="text-red-500">*</span>
-        </Label>
-        <Controller
-          name="race"
-          control={control}
-          render={({ field }) => (
-            <MultiSelect
-              options={raceOptions}
-              defaultSelected={field.value ? [field.value] : []}
-              onChange={(selected) => {
-                field.onChange(selected[0] ?? "");
-                trigger("race");
-              }}
-              hasError={!!errors.race}
-              singleSelect
-              placeholder={t("racePlaceholder")}
-            />
-          )}
-        />
-        <p className="text-xs leading-4 text-red-500 min-h-4">
-          {errors.race?.message as string}
-        </p>
       </div>
 
       {/* Referral Code (optional) */}

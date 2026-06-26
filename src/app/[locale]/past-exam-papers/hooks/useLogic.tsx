@@ -24,6 +24,14 @@ import {
 import { useTranslateItems } from "@/hooks/useTranslateItems";
 
 const PAPERS_PER_PAGE = 12;
+const EXCLUDED_GRADE_TITLES = new Set([
+  "Sports & Fitness",
+  "Communication & Public Speaking",
+  "Computing",
+  "Multimedia Design",
+  "Diplomas",
+  "Languages",
+]);
 const PAPER_MEDIUM_OPTIONS: Option[] = [
   { label: "Sinhala", value: "Sinhala" },
   { label: "English", value: "English" },
@@ -221,10 +229,12 @@ const useLogic = (): LogicReturnType => {
 
   const gradesOptions = useMemo(
     () =>
-      gradesRowData?.results.map((grade) => ({
-        label: grade.title,
-        value: grade.id.toString(),
-      })) || [],
+      gradesRowData?.results
+        .filter((grade) => !EXCLUDED_GRADE_TITLES.has(grade.title))
+        .map((grade) => ({
+          label: grade.title,
+          value: grade.id.toString(),
+        })) || [],
     [gradesRowData],
   );
 

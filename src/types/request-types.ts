@@ -223,8 +223,8 @@ export type FindMyTutorRequest = {
   dateOfBirth: string;
   age: number;
   gender: string;
-  nationality: string;
-  race: string;
+  nationality?: string;
+  race?: string;
 
   classType: string[];
   preferredLocations: string[];
@@ -236,10 +236,10 @@ export type FindMyTutorRequest = {
   subjects: string[];
   yearsExperience: number;
 
-  teachingSummary: string;
-  studentResults: string;
-  sellingPoints: string;
-  academicDetails: string;
+  teachingSummary?: string;
+  studentResults?: string;
+  sellingPoints?: string;
+  academicDetails?: string;
 
   certificatesAndQualifications: { type: string; url: string }[];
   agreeTerms: boolean;

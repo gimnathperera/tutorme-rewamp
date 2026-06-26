@@ -58,7 +58,12 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
   const portalRef = useRef<HTMLDivElement>(null);
   const [openUpward, setOpenUpward] = useState(false);
   const [listMaxHeight, setListMaxHeight] = useState(208);
-  const [coords, setCoords] = useState({ top: 0, bottom: 0, left: 0, width: 0 });
+  const [coords, setCoords] = useState({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: 0,
+  });
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -242,9 +247,7 @@ const MultiSelect: React.FC<MultiSelectProps> = ({
             style={{
               left: coords.left,
               width: coords.width,
-              ...(openUpward
-                ? { bottom: coords.bottom }
-                : { top: coords.top }),
+              ...(openUpward ? { bottom: coords.bottom } : { top: coords.top }),
             }}
           >
             {searchable && (

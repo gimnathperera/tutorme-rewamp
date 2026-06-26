@@ -14,6 +14,7 @@ import { useTranslateItems } from "@/hooks/useTranslateItems";
 type Props = {
   isLoading: boolean;
   user?: AuthUserData;
+  compact?: boolean;
 };
 
 const DEFAULT_AVATAR = "/images/profile/pp.png";
@@ -21,7 +22,7 @@ const DEFAULT_AVATAR = "/images/profile/pp.png";
 const getFilledString = (value: unknown) =>
   typeof value === "string" && value.trim().length > 0 ? value.trim() : "";
 
-const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
+const ProfileDropdown: FC<Props> = ({ isLoading, user, compact = false }) => {
   const { logout, isUserLogoutLoading, updateUser } = useAuthContext();
   const router = useRouter();
   const t = useTranslations("nav");
@@ -139,25 +140,25 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user }) => {
       {isLoading ? (
         <Skeleton
           circle
-          height={48}
-          width={48}
+          height={compact ? 40 : 44}
+          width={compact ? 40 : 44}
           baseColor="#f3f3f3"
           highlightColor="#ecebeb"
         />
       ) : (
         <button
-          className="flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none"
+          className={`flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none ${compact ? "w-10 h-10" : "w-11 h-11"}`}
           onClick={toggleDropdown}
         >
           {avatarSrc !== DEFAULT_AVATAR ? (
             <img
               src={avatarSrc}
               alt="Profile-image"
-              className="w-10 h-10 rounded-full object-cover"
+              className="rounded-full object-cover w-9 h-9"
             />
           ) : (
-            <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center select-none">
-              <span className="text-base font-bold text-primary-700 uppercase leading-none">
+            <div className="rounded-full bg-primary-100 flex items-center justify-center select-none w-9 h-9">
+              <span className={`font-bold text-primary-700 uppercase leading-none ${compact ? "text-sm" : "text-base"}`}>
                 {(user?.name || user?.email || "?").charAt(0)}
               </span>
             </div>

@@ -357,7 +357,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
 
             <div className="inset-y-0 right-0 flex items-center gap-3 pr-2 sm:static sm:inset-auto sm:pr-0">
               <div className="hidden lg:flex items-center">
-                <LocaleSwitcher />
+                <LocaleSwitcher onDark={isHeroTop} />
               </div>
               <div className="hidden lg:block">
                 {user?.email ? (
@@ -383,9 +383,9 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
           </div>
 
           <div className="flex items-center gap-2 lg:hidden">
-            <LocaleSwitcher />
+            <LocaleSwitcher onDark={isHeroTop} />
             {user?.email ? (
-              <ProfileDropdown isLoading={!isUserLoaded} user={user} />
+              <ProfileDropdown isLoading={!isUserLoaded} user={user} compact />
             ) : null}
             <Bars3Icon
               className="block h-6 w-6 transition-colors duration-300"

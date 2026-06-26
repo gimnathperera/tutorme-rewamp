@@ -132,10 +132,6 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
     age !== undefined &&
     typeof gender === "string" &&
     gender.trim().length > 0 &&
-    typeof nationality === "string" &&
-    nationality.trim().length > 0 &&
-    typeof race === "string" &&
-    race.trim().length > 0 &&
     hasBirthday;
   const hasMeaningfulChanges =
     collapseTextSpaces(name ?? "") !==
@@ -280,7 +276,6 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={nationalityOptions}
                 placeholder={nationalityPlaceholder}
                 className={fieldHeightClass}
-                required
               />
               <InputSelect
                 label={t("fieldRace")}
@@ -288,7 +283,6 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={raceOptions}
                 placeholder={racePlaceholder}
                 className={fieldHeightClass}
-                required
               />
             </div>
             <div className="col-span-6 sm:col-full">

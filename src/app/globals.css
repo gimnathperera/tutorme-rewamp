@@ -23,9 +23,10 @@ html {
   scrollbar-gutter: stable;
 }
 
-/* Belt-and-suspenders: also zero out any padding/margin Radix injects
-   via the data-scroll-locked attribute as an inline style fallback. */
-body[data-scroll-locked] {
+/* Override react-remove-scroll-bar's runtime-injected margin/padding compensation.
+   We use html body (specificity 0,1,2) to beat the dynamic style's body[attr]
+   (specificity 0,1,1) — same !important level, higher specificity wins. */
+html body[data-scroll-locked] {
   padding-right: 0 !important;
   margin-right: 0 !important;
 }

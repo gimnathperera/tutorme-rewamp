@@ -21,14 +21,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "locale is required" }, { status: 400 });
   }
 
+  const translationEnabled = Boolean(process.env.GOOGLE_TRANSLATE_API_KEY);
+
   if (Array.isArray(body.texts)) {
     const translated = await translateMany(body.texts, locale, format);
-    return NextResponse.json({ translated });
+    return NextResponse.json({ translated, translationEnabled });
   }
 
   if (typeof body.text === "string") {
     const translated = await translate(body.text, locale, format);
-    return NextResponse.json({ translated });
+    return NextResponse.json({ translated, translationEnabled });
   }
 
   return NextResponse.json(

@@ -23,6 +23,7 @@ import { useTranslations } from "next-intl";
 import {
   EducationInfoSchema,
   createEducationInfoSchema,
+  getSubjectCoverageState,
   initialEducationInfoFormValues,
 } from "../components/form-education-information/schema";
 import {
@@ -590,6 +591,18 @@ const useLogic = (): LogicReturnType => {
     },
   );
 
+  // Subject IDs available for each grade (from the nested grade data), used to
+  // validate that every selected grade has at least one selected subject.
+  const educationSubjectsByGrade = useMemo<Record<string, string[]>>(() => {
+    const map: Record<string, string[]> = {};
+    (gradeRawData?.results ?? []).forEach((grade: any) => {
+      map[grade.id.toString()] = (grade.subjects ?? []).map((subject: any) =>
+        typeof subject === "string" ? subject : subject.id?.toString(),
+      );
+    });
+    return map;
+  }, [gradeRawData]);
+
   const [fetchSubjectsForGrades] = useFetchSubjectsForGradesMutation();
   const [handleProfileSubmit, { isLoading: isGeneralFormSubmitting }] =
     useUpdateProfileMutation();
@@ -789,6 +802,10 @@ const useLogic = (): LogicReturnType => {
   const syncEducationSubjectOptions = useCallback(async () => {
     const currentGrades: string[] = selectedEducationGrades ?? [];
 
+    // Changing the selected grades invalidates the per-grade subject check,
+    // so clear any stale "subject per grade" error.
+    educationInfoForm.clearErrors("subjects");
+
     if (currentGrades.length === 0) {
       setEducationSubjectsOptions([]);
       educationInfoForm.setValue("subjects", [], { shouldDirty: true });
@@ -796,7 +813,9 @@ const useLogic = (): LogicReturnType => {
     }
 
     try {
-      const result = await fetchSubjectsForGrades({ gradeIds: currentGrades }).unwrap();
+      const result = await fetchSubjectsForGrades({
+        gradeIds: currentGrades,
+      }).unwrap();
       const newOptions = (result.subjects ?? []).map(({ title, id }) => ({
         label: title,
         value: id,
@@ -806,15 +825,42 @@ const useLogic = (): LogicReturnType => {
 
       const validIds = new Set(newOptions.map((o) => o.value));
       const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
-      educationInfoForm.setValue(
-        "subjects",
-        currentSubjects.filter((id) => validIds.has(id)),
-        { shouldDirty: true },
+      const filteredSubjects = currentSubjects.filter((id) =>
+        validIds.has(id),
       );
+      educationInfoForm.setValue("subjects", filteredSubjects, {
+        shouldDirty: true,
+      });
+
+      // Surface the right subjects error immediately on a grade change:
+      // "required" when empty, or per-grade coverage when a selected grade has
+      // no matching subject.
+      const coverage = getSubjectCoverageState(
+        currentGrades,
+        filteredSubjects,
+        educationSubjectsByGrade,
+      );
+      if (coverage === "required") {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectsRequired"),
+        });
+      } else if (coverage === "perGrade") {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectPerGradeRequired"),
+        });
+      }
     } catch {
       toast.error("Failed to load subjects");
     }
-  }, [educationInfoForm, fetchSubjectsForGrades, selectedEducationGrades]);
+  }, [
+    educationInfoForm,
+    educationSubjectsByGrade,
+    fetchSubjectsForGrades,
+    selectedEducationGrades,
+    tProfile,
+  ]);
 
   useEffect(() => {
     if (
@@ -902,6 +948,40 @@ const useLogic = (): LogicReturnType => {
   };
 
   const onEducationInfoFormSubmission = async (data: EducationInfoSchema) => {
+    // Ensure at least one subject is selected for every selected grade.
+    const selectedSubjectSet = new Set(data.subjects);
+    try {
+      const perGradeResults = await Promise.all(
+        data.grades.map(async (gradeId) => {
+          const res = await fetchSubjectsForGrades({
+            gradeIds: [gradeId],
+          }).unwrap();
+          return {
+            gradeId,
+            subjectIds: (res.subjects ?? []).map((subject) => subject.id),
+          };
+        }),
+      );
+
+      const hasGradeWithoutSubject = perGradeResults.some(
+        ({ subjectIds }) =>
+          subjectIds.length > 0 &&
+          !subjectIds.some((id) => selectedSubjectSet.has(id)),
+      );
+
+      if (hasGradeWithoutSubject) {
+        educationInfoForm.setError("subjects", {
+          type: "manual",
+          message: tProfile("subjectPerGradeRequired"),
+        });
+        toast.error(tProfile("subjectPerGradeRequired"));
+        return;
+      }
+    } catch {
+      toast.error("Failed to validate subjects for the selected grades");
+      return;
+    }
+
     const eduRows = data.certificatesAndQualifications
       .map(({ type, url }) => ({ type, url }))
       .filter((c) => Boolean(c.url));
@@ -1013,6 +1093,7 @@ const useLogic = (): LogicReturnType => {
       dropdownOptionData: {
         gradesOptions,
         educationSubjectsOptions,
+        educationSubjectsByGrade,
         languageOptions,
         timeZoneOptions,
         rateOptions,

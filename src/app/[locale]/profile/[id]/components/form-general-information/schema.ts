@@ -111,18 +111,8 @@ export const createGeneralInfoSchema = (t: (_key: string) => string) =>
         .refine((v) => ["Male", "Female", "Others"].includes(v), {
           message: t("genderRequired"),
         }),
-      nationality: z
-        .string()
-        .refine((v) => ["Sri Lankan", "Others"].includes(v), {
-          message: t("nationalityRequired"),
-        }),
-      race: z
-        .string()
-        .refine(
-          (v) =>
-            ["Sinhalese", "Tamil", "Muslim", "Burgher", "Others"].includes(v),
-          { message: t("raceRequired") },
-        ),
+      nationality: z.string().optional(),
+      race: z.string().optional(),
     })
     .superRefine((data, context) => {
       const derivedAge = data.birthday

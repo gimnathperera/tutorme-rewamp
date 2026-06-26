@@ -26,6 +26,8 @@ interface FileItem {
   previewUrl?: string;
   /** Object URL created for PDF preview (needs revoke on unmount). */
   blobUrl?: string;
+  /** MIME type resolved from the stored blob (used when there is no File). */
+  contentType?: string;
 }
 
 interface MultiFileUploadDropzoneProps {
@@ -82,15 +84,19 @@ function PreviewModal({ fileItem, onClose, labels }: PreviewModalProps) {
   const [scale, setScale] = useState(1);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Determine what to preview
-  const isImage = fileItem.file
-    ? fileItem.file.type.startsWith("image/")
-    : !!fileItem.previewUrl ||
-      /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(fileItem.url ?? "");
+  // Determine what to preview. Prefer the real MIME type (from the File or the
+  // blob's resolved content type), then fall back to URL extension so previews
+  // work even when the stored URL has no recognizable extension.
+  const contentType = fileItem.file?.type ?? fileItem.contentType ?? "";
 
-  const isPdf = fileItem.file
-    ? fileItem.file.type === "application/pdf"
-    : fileItem.url?.toLowerCase().endsWith(".pdf");
+  const isImage =
+    contentType.startsWith("image/") ||
+    !!fileItem.previewUrl ||
+    /\.(jpg|jpeg|png|gif|webp|svg)(\?|$)/i.test(fileItem.url ?? "");
+
+  const isPdf =
+    contentType === "application/pdf" ||
+    /\.pdf(\?|$)/i.test(fileItem.url ?? "");
 
   // The src to use
   const imageSrc = fileItem.previewUrl ?? fileItem.url;
@@ -112,7 +118,8 @@ function PreviewModal({ fileItem, onClose, labels }: PreviewModalProps) {
 
   const fileName = fileItem.file
     ? fileItem.file.name
-    : (fileItem.url?.split("/").pop() ?? labels.certificateFallback);
+    : (fileItem.url?.split("/").pop()?.split("?")[0] ??
+      labels.certificateFallback);
 
   return (
     <div
@@ -381,11 +388,44 @@ export default function MultiFileUploadDropzone({
     onUploaded(getUploadedUrls(updatedFiles));
   };
 
-  const openPreview = (
+  const openPreview = async (
     fileItem: FileItem,
     e: MouseEvent<HTMLButtonElement>,
   ) => {
     e.stopPropagation();
+
+    // For items that only carry a stored URL (e.g. after a tab switch/remount
+    // or when editing an existing profile), the in-memory preview is gone and
+    // the bare blob URL won't load if the container is private (production).
+    // Fetch a short-lived read SAS so the preview works there too.
+    const needsReadUrl =
+      !!fileItem.url &&
+      !fileItem.file &&
+      !fileItem.previewUrl &&
+      !fileItem.blobUrl;
+
+    if (needsReadUrl) {
+      try {
+        const res = await fetch("/api/read-url", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: fileItem.url }),
+        }).then((r) => r.json());
+
+        if (res?.url) {
+          setPreviewItem({
+            ...fileItem,
+            url: res.url,
+            contentType: res.contentType ?? fileItem.contentType,
+          });
+          return;
+        }
+      } catch (err) {
+        // Fall back to the raw URL (works when the container is public).
+        console.error(err);
+      }
+    }
+
     setPreviewItem(fileItem);
   };
 

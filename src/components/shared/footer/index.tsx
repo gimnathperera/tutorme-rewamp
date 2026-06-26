@@ -28,6 +28,8 @@ const Footer = () => {
         { label: t("testimonials"), url: `/${locale}#testimonials-section` },
         { label: t("faqs"), url: "/faq" },
         { label: t("aboutUs"), url: `/${locale}#aboutus-section` },
+        { label: t("registerAsTutorGuide"), url: "/register-tutor-guide" },
+        { label: t("requestForTutorGuide"), url: "/request-for-tutor-guide" },
       ],
     },
     {

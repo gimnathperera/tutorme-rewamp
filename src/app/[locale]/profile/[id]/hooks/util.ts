@@ -13,6 +13,7 @@ export type LogicReturnType = {
     dropdownOptionData: {
       gradesOptions: Option[];
       educationSubjectsOptions: Option[];
+      educationSubjectsByGrade: Record<string, string[]>;
       languageOptions: Option[];
       timeZoneOptions: Option[];
       rateOptions: Option[];
