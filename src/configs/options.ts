@@ -103,7 +103,6 @@ export const TUTOR_TYPE_OPTIONS: SelectOption[] = [
   },
   { value: "Government School Teacher", text: "Government School Teacher" },
   { value: "University Student", text: "University Student" },
-  { value: "A/L Student", text: "A/L Student" },
   { value: "Diploma Holder", text: "Diploma Holder" },
   { value: "Part-time Tutor", text: "Part-time Tutor" },
   { value: "Full-time Tutor", text: "Full-time Tutor" },
