@@ -273,6 +273,7 @@
     "preferredLocationsRequired": "Preferred Locations are required",
     "subjectPerGradeRequired": "Please select at least one subject for each selected grade.",
     "emailAlreadyExists": "Email already exists",
+    "emailPendingApproval": "A registration with this email is already pending approval",
     "suspendedEmail": "Your email has been suspended. Please contact admin to resolve this.",
     "logoAlt": "Register tutor",
     "showPassword": "Show password",

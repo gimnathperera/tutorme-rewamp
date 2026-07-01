@@ -15,6 +15,7 @@ import {
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
+import { isPendingEmailError } from "@/utils/tutor-registration-errors";
 import {
   useLazyGetTutorEmailAvailabilityQuery,
   useLazyValidateReferralCodeQuery,
@@ -157,7 +158,9 @@ const PersonalInfo = () => {
         setEmailAvailability("unavailable");
         setError("email", {
           type: "server",
-          message: t("emailAlreadyExists"),
+          message: isPendingEmailError(result.data.message ?? "")
+            ? t("emailPendingApproval")
+            : t("emailAlreadyExists"),
         });
         return;
       }
