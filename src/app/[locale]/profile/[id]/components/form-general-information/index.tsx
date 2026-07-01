@@ -276,6 +276,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={nationalityOptions}
                 placeholder={nationalityPlaceholder}
                 className={fieldHeightClass}
+                disablePlaceholder={false}
               />
               <InputSelect
                 label={t("fieldRace")}
@@ -283,6 +284,7 @@ const FormGeneralInfo: FC<Props> = ({ form, onFormSubmit, isSubmitting }) => {
                 options={raceOptions}
                 placeholder={racePlaceholder}
                 className={fieldHeightClass}
+                disablePlaceholder={false}
               />
             </div>
             <div className="col-span-6 sm:col-full">

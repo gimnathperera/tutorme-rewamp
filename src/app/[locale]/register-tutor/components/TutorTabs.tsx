@@ -39,22 +39,16 @@ import { useFetchSubjectsForGradesMutation } from "@/store/api/splits/grades";
 import { getErrorInApiResult } from "@/utils/api";
 import { Spinner } from "@/components/ui/spinner";
 import { isPhysicalClassType } from "@/configs/register-tutor";
+import {
+  isDuplicateEmailError,
+  isPendingEmailError,
+} from "@/utils/tutor-registration-errors";
 
 type TabKey = "personalInfo" | "qualifications" | "verification";
 
 const TAB_ORDER: TabKey[] = ["personalInfo", "qualifications", "verification"];
 const primaryActionButtonClassName = "bg-blue-600 text-white hover:bg-blue-700";
 const ONLINE_ONLY_LOCATION_FALLBACK = "No Preference";
-
-const isDuplicateEmailError = (error: string) => {
-  const normalizedError = error.toLowerCase();
-  return (
-    normalizedError.includes("email") &&
-    (normalizedError.includes("already exists") ||
-      normalizedError.includes("already in use") ||
-      normalizedError.includes("already taken"))
-  );
-};
 
 const isInvalidReferralError = (error: string) => {
   const normalizedError = error.toLowerCase();
@@ -325,6 +319,17 @@ export function TutorTabs() {
           changeStep("personalInfo");
           setTimeout(() => setFocus("email"), 0);
           toast.error(t("emailAlreadyExists"));
+          return;
+        }
+
+        if (typeof error === "string" && isPendingEmailError(error)) {
+          setError("email", {
+            type: "server",
+            message: t("emailPendingApproval"),
+          });
+          changeStep("personalInfo");
+          setTimeout(() => setFocus("email"), 0);
+          toast.error(t("emailPendingApproval"));
           return;
         }
 
