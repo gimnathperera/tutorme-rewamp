@@ -191,7 +191,6 @@ const FormEducationInfo: FC<Props> = ({
         text: tR("optTutorTypeGovernment"),
       },
       { value: "University Student", text: tR("optTutorTypeUniversity") },
-      { value: "A/L Student", text: tR("optTutorTypeAL") },
       { value: "Diploma Holder", text: tR("optTutorTypeDiploma") },
       { value: "Part-time Tutor", text: tR("optTutorTypePartTime") },
       { value: "Full-time Tutor", text: tR("optTutorTypeFullTime") },

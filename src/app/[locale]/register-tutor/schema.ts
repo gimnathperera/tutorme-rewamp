@@ -184,7 +184,7 @@ const createStep2Schema = (t: (_key: string) => string) =>
           invalid_type_error: t("yearsExperienceRequired"),
           required_error: t("yearsExperienceRequired"),
         })
-        .min(1, t("yearsExperienceMin"))
+        .min(0, t("yearsExperienceMin"))
         .max(50, t("yearsExperienceMax")),
     ),
   });

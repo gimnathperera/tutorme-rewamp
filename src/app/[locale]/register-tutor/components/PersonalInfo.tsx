@@ -15,6 +15,7 @@ import {
   stripLeadingSpaces,
 } from "@/utils/form-normalizers";
 import { getEmailFormatError } from "@/utils/email-validation";
+import { isPendingEmailError } from "@/utils/tutor-registration-errors";
 import {
   useLazyGetTutorEmailAvailabilityQuery,
   useLazyValidateReferralCodeQuery,
@@ -157,7 +158,9 @@ const PersonalInfo = () => {
         setEmailAvailability("unavailable");
         setError("email", {
           type: "server",
-          message: t("emailAlreadyExists"),
+          message: isPendingEmailError(result.data.message ?? "")
+            ? t("emailPendingApproval")
+            : t("emailAlreadyExists"),
         });
         return;
       }
@@ -528,7 +531,16 @@ const PersonalInfo = () => {
               },
               onBlur: (e) => {
                 const upper = removeWhitespace(e.target.value).toUpperCase();
-                setValue("referredByCode", upper, { shouldValidate: true });
+                // Schema validation only checks format, so re-validating here
+                // would silently wipe the async "code doesn't exist" error set
+                // by the server-side check. Keep that error; onChange clears
+                // it as soon as the user edits the code.
+                const hasServerError =
+                  (errors.referredByCode as { type?: string } | undefined)
+                    ?.type === "server";
+                setValue("referredByCode", upper, {
+                  shouldValidate: !hasServerError,
+                });
               },
             })}
             placeholder={t("referredByCodePlaceholder")}

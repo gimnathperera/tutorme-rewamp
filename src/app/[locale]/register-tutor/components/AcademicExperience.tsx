@@ -107,7 +107,6 @@ const AcademicExperience = () => {
         text: t("optTutorTypeGovernment"),
       },
       { value: "University Student", text: t("optTutorTypeUniversity") },
-      { value: "A/L Student", text: t("optTutorTypeAL") },
       { value: "Diploma Holder", text: t("optTutorTypeDiploma") },
       { value: "Part-time Tutor", text: t("optTutorTypePartTime") },
       { value: "Full-time Tutor", text: t("optTutorTypeFullTime") },
