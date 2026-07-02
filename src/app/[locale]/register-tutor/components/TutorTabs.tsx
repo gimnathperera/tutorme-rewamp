@@ -203,9 +203,43 @@ export function TutorTabs() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  /**
+   * Server-side referral code check — the Zod schema only enforces format, so
+   * a well-formed but non-existent code passes every client-side validation.
+   * When the code is invalid this surfaces the error on the field (red border,
+   * assistive message, focus) and returns false. Fails open when the endpoint
+   * is unavailable; the submit-time fallback (isInvalidReferralError) covers
+   * that case.
+   */
+  const ensureReferralCodeValid = async () => {
+    const code = getValues("referredByCode")?.trim().toUpperCase();
+    if (!code) return true;
+    try {
+      const result = await validateReferralCode(code, true).unwrap();
+      if (result && result.valid === false) {
+        setError("referredByCode", {
+          type: "server",
+          message: t("referredByCodeInvalid"),
+        });
+        setTimeout(() => setFocus("referredByCode"), 0);
+        toast.error(t("referredByCodeInvalid"));
+        return false;
+      }
+    } catch {
+      // Endpoint unavailable — let the submit-time validation handle it.
+    }
+    return true;
+  };
+
   // Steps can be browsed freely. Moving forward from an incomplete step still
   // works, but shows a warning snackbar about the unfinished current step.
-  const goForward = (nextTab: TabKey) => {
+  // The referral code is the exception: an invalid code blocks forward
+  // navigation, because its server-side check is invisible to the schema-based
+  // step status and would otherwise surface only at submit.
+  const goForward = async (nextTab: TabKey) => {
+    if (tab === "personalInfo" && !(await ensureReferralCodeValid())) {
+      return;
+    }
     if (stepHasError(tab)) {
       toast.error(t("incompleteStepWarning"));
     }
@@ -234,25 +268,9 @@ export function TutorTabs() {
       // Validate the referral code (if any) up front so an invalid one is
       // surfaced on its field — red highlight, assistive message and a jump
       // back to Personal Information — instead of a generic submit error.
-      const referralCode = data.referredByCode?.trim().toUpperCase();
-      if (referralCode) {
-        try {
-          const referralResult =
-            await validateReferralCode(referralCode).unwrap();
-          if (referralResult && referralResult.valid === false) {
-            setError("referredByCode", {
-              type: "server",
-              message: t("referredByCodeInvalid"),
-            });
-            changeStep("personalInfo");
-            setTimeout(() => setFocus("referredByCode"), 0);
-            toast.error(t("referredByCodeInvalid"));
-            return;
-          }
-        } catch {
-          // Endpoint unavailable — let the submit endpoint validate it instead
-          // (handled by isInvalidReferralError below).
-        }
+      if (!(await ensureReferralCodeValid())) {
+        changeStep("personalInfo");
+        return;
       }
 
       // Each selected grade must have at least one matching subject selected.
