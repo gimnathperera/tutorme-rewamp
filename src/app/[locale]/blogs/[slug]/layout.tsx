@@ -16,13 +16,13 @@ import {
 
 type BlogDetailLayoutProps = {
   children: React.ReactNode;
-  params: { slug: string };
+  params: { slug: string; locale: string };
 };
 
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: { slug: string; locale: string };
 }): Promise<Metadata> {
   const blog = await fetchSeoBlogBySlugOrId(params.slug);
 
@@ -35,6 +35,7 @@ export async function generateMetadata({
       path: getBlogPath(blog),
       image: getBlogImage(blog),
       imageAlt: blog.title,
+      locale: params.locale,
     });
   }
 
@@ -44,6 +45,7 @@ export async function generateMetadata({
     description:
       "Read TuitionLanka education articles with practical study tips, exam guides, and tutor advice for students, parents, and home tutors in Sri Lanka.",
     path: `/blogs/${params.slug}`,
+    locale: params.locale,
   });
 }
 
@@ -71,14 +73,18 @@ export default async function BlogDetailLayout({
                   datePublished: blog.createdAt,
                   dateModified: blog.updatedAt,
                   path: blogPath,
+                  locale: params.locale,
                 }),
               ]
             : []),
-          createBreadcrumbJsonLd([
-            { name: "Home", path: "/" },
-            { name: "Blogs", path: seoPages.blogs.path },
-            { name: title, path: blogPath },
-          ]),
+          createBreadcrumbJsonLd(
+            [
+              { name: "Home", path: "/" },
+              { name: "Blogs", path: seoPages.blogs.path },
+              { name: title, path: blogPath },
+            ],
+            params.locale,
+          ),
         ]}
       />
       {children}

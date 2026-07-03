@@ -7,7 +7,7 @@ import { useTranslateItems } from "@/hooks/useTranslateItems";
 import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthContext } from "@/contexts";
-import Link from "next/link";
+import { Link } from "@/navigation";
 import Image from "next/image";
 import { Blogs } from "@/types/response-types";
 
@@ -19,16 +19,23 @@ const getPageSize = (): number => {
   return window.innerWidth >= 768 ? 6 : 4;
 };
 
-export default function BlogsDashboard() {
+export default function BlogsDashboard({
+  initialBlogs = [],
+}: {
+  initialBlogs?: Blogs[];
+}) {
   const t = useTranslations("blogs");
-  const [blogs, setBlogs] = useState<Blogs[]>([]);
+  const [blogs, setBlogs] = useState<Blogs[]>(initialBlogs);
   const [serverPage, setServerPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(
+    initialBlogs.length === 0,
+  );
   const [isFiltering, setIsFiltering] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isError, setIsError] = useState(false);
   const isFirstRender = useRef(true);
+  const hasRenderedOnceRef = useRef(initialBlogs.length > 0);
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [pageSize, setPageSize] = useState(6);
   const [visibleCount, setVisibleCount] = useState(6);
@@ -59,7 +66,10 @@ export default function BlogsDashboard() {
         if (pageNum === 1) {
           if (filtering) {
             setIsFiltering(true);
-          } else {
+          } else if (!hasRenderedOnceRef.current) {
+            // Only show the full skeleton if we truly have nothing on screen
+            // yet. If SSR already seeded `initialBlogs`, do a silent
+            // background refresh instead of blanking out real content.
             setIsInitialLoading(true);
           }
           setIsError(false);
@@ -87,18 +97,28 @@ export default function BlogsDashboard() {
         setIsInitialLoading(false);
         setIsFiltering(false);
         setIsFetchingMore(false);
+        hasRenderedOnceRef.current = true;
       }
     },
     [fetchBlogs],
   );
 
   useEffect(() => {
+    const isMount = isFirstRender.current;
+    isFirstRender.current = false;
+
+    // On the very first mount, if SSR already seeded real blogs, keep them
+    // visible and refresh in the background instead of clearing first (which
+    // would otherwise flash the grid to empty before the fetch resolves).
+    if (isMount && hasRenderedOnceRef.current) {
+      loadBlogs(1, false);
+      return;
+    }
+
     setServerPage(1);
     setBlogs([]);
     setHasMore(true);
-    const filtering = !isFirstRender.current;
-    isFirstRender.current = false;
-    loadBlogs(1, filtering);
+    loadBlogs(1, !isMount);
   }, [activeTag, loadBlogs]);
 
   useEffect(() => {
@@ -161,7 +181,10 @@ export default function BlogsDashboard() {
     return () => observer.disconnect();
   }, [handleSentinel, hasMoreToShow]);
 
-  if (isInitialLoading || isTagsLoading)
+  // Tags load client-side only; don't let them block showing SSR-seeded
+  // blog content (which must be present in the server-rendered HTML for
+  // crawlers). Only show the full skeleton when there are no blogs to show.
+  if ((isInitialLoading || isTagsLoading) && blogs.length === 0)
     return (
       <div className="flex flex-col gap-6">
         {/* Hero banner skeleton */}

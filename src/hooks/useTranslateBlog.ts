@@ -146,7 +146,6 @@ export function useTranslateBlog<T extends BlogLike>(
     }
 
     if (contentKey && contentKey === prevKeyRef.current) return;
-    prevKeyRef.current = contentKey;
 
     let cancelled = false;
 
@@ -264,6 +263,10 @@ export function useTranslateBlog<T extends BlogLike>(
         applyPath(result, path, translatedHtmls[idx] ?? htmlItems[idx].text);
       });
 
+      // Only mark this key "done" once the translation actually lands, so a
+      // cancelled run (e.g. React Strict Mode's dev-only double-invoke of
+      // effects) never blocks the real run from retrying.
+      prevKeyRef.current = contentKey;
       setTranslatedBlog(result as T);
     };
 

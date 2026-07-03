@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import NavBar from "@/components/shared/navbar";
 import Script from "next/script";
 import { Suspense } from "react";
@@ -11,17 +12,23 @@ import { getMessages } from "next-intl/server";
 
 export const dynamic = "force-dynamic";
 
-export const metadata = {
-  ...createMetadata(seoPages.home),
-  verification: {
-    google: "euNzGr2NazmC3paB9xamB2El7bk8uGq0wYv_l90lj7Q",
-  },
-  icons: {
-    icon: "/images/logo/LightThemeLogoIcon.svg",
-    shortcut: "/images/logo/LightThemeLogoIcon.svg",
-    apple: "/images/logo/LightThemeLogoIcon.svg",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return {
+    ...createMetadata({ ...seoPages.home, locale: params.locale }),
+    verification: {
+      google: "euNzGr2NazmC3paB9xamB2El7bk8uGq0wYv_l90lj7Q",
+    },
+    icons: {
+      icon: "/images/logo/LightThemeLogoIcon.svg",
+      shortcut: "/images/logo/LightThemeLogoIcon.svg",
+      apple: "/images/logo/LightThemeLogoIcon.svg",
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,
