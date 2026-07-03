@@ -23,6 +23,7 @@ export const createSignUpSchema = (t: (_key: string) => string) =>
       email: z
         .string()
         .trim()
+        .toLowerCase()
         .nonempty(t("emailRequired"))
         .email({ message: t("emailInvalid") }),
 
