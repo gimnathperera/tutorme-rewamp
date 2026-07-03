@@ -1,14 +1,22 @@
+import type { Metadata } from "next";
 import { PageBreadcrumbJsonLd } from "@/components/seo/json-ld";
 import WhatsAppButton from "@/components/shared/whatapp-button";
 import { createMetadata } from "@/lib/seo";
 import PrivacyPolicyContent from "./PrivacyPolicyContent";
 
-export const metadata = createMetadata({
-  path: "/privacy-policy",
-  title: "Privacy Policy for TuitionLanka Users | TuitionLanka",
-  description:
-    "Read how TuitionLanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
-});
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return createMetadata({
+    path: "/privacy-policy",
+    title: "Privacy Policy for TuitionLanka Users | TuitionLanka",
+    description:
+      "Read how TuitionLanka collects, uses, protects, and shares personal information when students, parents, and tutors use our platform.",
+    locale: params.locale,
+  });
+}
 
 const PrivacyPolicyPage = () => {
   return (
