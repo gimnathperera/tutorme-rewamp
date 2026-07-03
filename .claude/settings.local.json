@@ -7,7 +7,11 @@
       "Bash(pnpm add *)",
       "Bash(Copy-Item messages\\\\en.json messages\\\\si.json)",
       "Bash(Copy-Item messages\\\\en.json messages\\\\ta.json)",
-      "Bash(pnpm run *)"
+      "Bash(pnpm run *)",
+      "Bash(curl -s -D - -o /dev/null https://www.tuitionlanka.com/robots.txt)",
+      "Bash(curl -s https://www.tuitionlanka.com/robots.txt)",
+      "Bash(curl -s -D - -o /dev/null \"https://www.tuitionlanka.com/blogs/why-one-to-one-tuition-helps-sri-lankan-students-achieve-better-academic-results\")",
+      "Bash(curl -s -D - -o /dev/null \"https://www.tuitionlanka.com/en/blogs/beyond-the-billboards-the-hidden-truth-behind-sri-lankas-mega-tuition-classes\")"
     ]
   }
 }
