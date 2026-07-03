@@ -1,9 +1,13 @@
+import { cache } from "react";
 import { env } from "@/configs/env";
 import { defaultImage } from "@/lib/seo";
 import type { Blogs, Faq, PaginatedResponse } from "@/types/response-types";
 
-const BLOG_LIMIT = 9999;
-const FAQ_LIMIT = 9999;
+// The backend rejects `limit` above 100 (400 "limit must be less than or
+// equal to 100"), so a naive single request with a huge limit silently
+// returns zero rows once the try/catch below swallows the error. Fetch in
+// pages of 100 and concatenate instead.
+const MAX_PAGE_LIMIT = 100;
 
 const isObjectId = (value: string) => /^[a-f\d]{24}$/i.test(value);
 
@@ -65,31 +69,45 @@ async function fetchSeoJson<T>(
   }
 }
 
-export async function fetchSeoBlogs() {
-  const data = await fetchSeoJson<PaginatedResponse<Blogs>>("/v1/blogs", {
-    page: 1,
-    limit: BLOG_LIMIT,
-  });
+/** Fetches every page of a paginated endpoint (capped at MAX_PAGE_LIMIT per request). */
+async function fetchAllPages<T>(path: string): Promise<T[]> {
+  const results: T[] = [];
+  let page = 1;
 
-  return data?.results || [];
+  while (true) {
+    const data = await fetchSeoJson<PaginatedResponse<T>>(path, {
+      page,
+      limit: MAX_PAGE_LIMIT,
+    });
+    if (!data?.results?.length) break;
+
+    results.push(...data.results);
+
+    const totalPages = data.totalPages ?? page;
+    if (page >= totalPages) break;
+    page += 1;
+  }
+
+  return results;
 }
+
+export const fetchSeoBlogs = cache(async function fetchSeoBlogs() {
+  return fetchAllPages<Blogs>("/v1/blogs");
+});
 
 export async function fetchSeoFaqs() {
-  const data = await fetchSeoJson<PaginatedResponse<Faq>>("/v1/faqs", {
-    page: 1,
-    limit: FAQ_LIMIT,
-  });
-
-  return data?.results || [];
+  return fetchAllPages<Faq>("/v1/faqs");
 }
 
-export async function fetchSeoBlogBySlugOrId(slugOrId: string) {
+export const fetchSeoBlogBySlugOrId = cache(async function fetchSeoBlogBySlugOrId(
+  slugOrId: string,
+) {
   const path = isObjectId(slugOrId)
     ? `/v1/blogs/${slugOrId}`
     : `/v1/blogs/slug/${slugOrId}`;
 
   return fetchSeoJson<Blogs>(path);
-}
+});
 
 export function getBlogPath(blog: Pick<Blogs, "id" | "slug">) {
   return `/blogs/${blog.slug || blog.id}`;
