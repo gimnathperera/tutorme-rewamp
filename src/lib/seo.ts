@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultLocale } from "@/i18n/config";
 
 export const siteUrl = "https://www.tuitionlanka.com";
 export const siteName = "TuitionLanka";
@@ -14,6 +15,7 @@ export type SeoConfig = {
   imageAlt?: string;
   keywords?: string[];
   noIndex?: boolean;
+  locale?: string;
 };
 
 type BreadcrumbItem = {
@@ -61,8 +63,19 @@ export function normalizePath(path: string) {
   return path.startsWith("/") ? path : `/${path}`;
 }
 
-export function getCanonicalUrl(path: string) {
-  return new URL(normalizePath(path), siteUrl).toString();
+/** Builds a locale-prefixed path, e.g. ("en", "/blogs/x") -> "/en/blogs/x". */
+function buildLocalizedPath(locale: string, path: string) {
+  const normalized = normalizePath(path);
+  return normalized === "/" ? `/${locale}` : `/${locale}${normalized}`;
+}
+
+/**
+ * Locale-prefixed canonical URL. next-intl's `localePrefix: "always"` means
+ * every real page requires a locale prefix and redirects otherwise, so the
+ * canonical must include it to avoid pointing at a redirecting URL.
+ */
+export function getCanonicalUrl(path: string, locale: string = defaultLocale) {
+  return new URL(buildLocalizedPath(locale, path), siteUrl).toString();
 }
 
 export function toAbsoluteUrl(url?: string | null) {
@@ -82,10 +95,11 @@ export function createMetadata({
   imageAlt = siteName,
   keywords = seoKeywords,
   noIndex = false,
+  locale = defaultLocale,
 }: SeoConfig): Metadata {
   const safeTitle = cleanTitleText(title);
   const safeDescription = cleanMetaText(description);
-  const canonicalUrl = getCanonicalUrl(path);
+  const canonicalUrl = getCanonicalUrl(path, locale);
   const imageUrl = toAbsoluteUrl(image);
 
   return {
@@ -96,10 +110,13 @@ export function createMetadata({
     alternates: {
       canonical: canonicalUrl,
       languages: {
-        en: `${siteUrl}/en${normalizePath(path)}`,
-        si: `${siteUrl}/si${normalizePath(path)}`,
-        ta: `${siteUrl}/ta${normalizePath(path)}`,
-        "x-default": `${siteUrl}/en${normalizePath(path)}`,
+        en: new URL(buildLocalizedPath("en", path), siteUrl).toString(),
+        si: new URL(buildLocalizedPath("si", path), siteUrl).toString(),
+        ta: new URL(buildLocalizedPath("ta", path), siteUrl).toString(),
+        "x-default": new URL(
+          buildLocalizedPath("en", path),
+          siteUrl,
+        ).toString(),
       },
     },
     openGraph: {
@@ -145,7 +162,10 @@ export function createOrganizationJsonLd() {
   };
 }
 
-export function createBreadcrumbJsonLd(items: BreadcrumbItem[]) {
+export function createBreadcrumbJsonLd(
+  items: BreadcrumbItem[],
+  locale: string = defaultLocale,
+) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -153,7 +173,7 @@ export function createBreadcrumbJsonLd(items: BreadcrumbItem[]) {
       "@type": "ListItem",
       position: index + 1,
       name: item.name,
-      item: getCanonicalUrl(item.path),
+      item: getCanonicalUrl(item.path, locale),
     })),
   };
 }
@@ -183,8 +203,9 @@ export function createArticleJsonLd({
   datePublished,
   dateModified,
   path,
-}: ArticleJsonLdConfig) {
-  const canonicalUrl = getCanonicalUrl(path);
+  locale = defaultLocale,
+}: ArticleJsonLdConfig & { locale?: string }) {
+  const canonicalUrl = getCanonicalUrl(path, locale);
   const publishedDate =
     datePublished || dateModified || new Date().toISOString();
   const modifiedDate = dateModified || publishedDate;

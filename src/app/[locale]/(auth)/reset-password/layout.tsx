@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import { createMetadata, seoPages } from "@/lib/seo";
 
-export const metadata = createMetadata(seoPages.resetPassword);
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  return createMetadata({ ...seoPages.resetPassword, locale: params.locale });
+}
 
 export default function ResetPasswordLayout({
   children,

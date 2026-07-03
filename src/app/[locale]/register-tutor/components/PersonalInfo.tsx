@@ -82,6 +82,8 @@ const PersonalInfo = () => {
 
   const latestEmailRef = useRef("");
   const latestReferralCodeRef = useRef("");
+  const emailErrorRef = useRef<{ type?: string } | undefined>(undefined);
+  emailErrorRef.current = errors.email as { type?: string } | undefined;
 
   // Auto-fill referral code from ?referral= query param (one-time on mount)
   useEffect(() => {
@@ -127,10 +129,22 @@ const PersonalInfo = () => {
   useEffect(() => {
     const normalizedEmail =
       typeof email === "string" ? removeWhitespace(email).toLowerCase() : "";
+    const emailChanged = latestEmailRef.current !== normalizedEmail;
     latestEmailRef.current = normalizedEmail;
 
-    if (!normalizedEmail) {
+    // The moment the value changes, the previous verdict no longer applies:
+    // drop the stale icon/message (only ours — manual/server — never the
+    // resolver's own validation errors) so the field shows a neutral state
+    // until the new check resolves.
+    if (emailChanged) {
       setEmailAvailability(null);
+      const currentError = emailErrorRef.current;
+      if (currentError?.type === "server" || currentError?.type === "manual") {
+        clearErrors("email");
+      }
+    }
+
+    if (!normalizedEmail) {
       return;
     }
 
@@ -147,7 +161,10 @@ const PersonalInfo = () => {
     }
 
     const timeoutId = window.setTimeout(async () => {
-      const result = await checkTutorEmailAvailability(normalizedEmail, true);
+      // preferCacheValue must stay false: availability is time-sensitive (an email
+      // that was free a minute ago may be a pending registration now), so every
+      // check must ask the server instead of reusing a cached answer.
+      const result = await checkTutorEmailAvailability(normalizedEmail, false);
       if (latestEmailRef.current !== normalizedEmail) return;
       if (!result.data) {
         setEmailAvailability(null);
@@ -166,20 +183,13 @@ const PersonalInfo = () => {
       }
 
       setEmailAvailability("available");
-      if ((errors.email as { type?: string } | undefined)?.type === "server") {
+      if (emailErrorRef.current?.type === "server") {
         clearErrors("email");
       }
     }, EMAIL_CHECK_DELAY_MS);
 
     return () => window.clearTimeout(timeoutId);
-  }, [
-    checkTutorEmailAvailability,
-    clearErrors,
-    email,
-    errors.email,
-    setError,
-    t,
-  ]);
+  }, [checkTutorEmailAvailability, clearErrors, email, setError, t]);
 
   useEffect(() => {
     const code =

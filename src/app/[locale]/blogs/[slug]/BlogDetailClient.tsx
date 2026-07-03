@@ -1,0 +1,402 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import {
+  useFetchBlogBySlugQuery,
+  useFetchBlogByIdQuery,
+  useFetchBlogsQuery,
+  useDeleteBlogMutation,
+  useUpdateBlogStatusMutation,
+} from "@/store/api/splits/blogs";
+import { useAuthContext } from "@/contexts";
+import { Link } from "@/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import TableOfContents from "../components/table-of-content/TableOfContent";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useTranslateBlog } from "@/hooks/useTranslateBlog";
+import { useTranslateItems } from "@/hooks/useTranslateItems";
+import toast from "react-hot-toast";
+import { ArrowLeft, ChevronDownIcon } from "lucide-react";
+import Image from "next/image";
+import type { BlogModerationStatus } from "@/configs/options";
+import type { Blogs } from "@/types/response-types";
+
+import LoadingIndicator from "./LoadingIndicator";
+
+// isomorphic-dompurify (used inside BlogRenderer) relies on jsdom when
+// executed in a Node/server context. jsdom's internal asset loading breaks
+// when Next's webpack server compiler bundles it, so BlogRenderer must be
+// excluded from SSR and only rendered client-side.
+const BlogRenderer = dynamic(
+  () => import("../components/blog-renderer/BlogRenderer"),
+  { ssr: false },
+);
+
+/** Returns true if the string looks like a MongoDB ObjectId (24 hex chars). */
+const isObjectId = (s: string) => /^[a-f\d]{24}$/i.test(s);
+
+type BlogDetailClientProps = {
+  slug: string;
+  initialBlog: Blogs | null;
+};
+
+export default function BlogDetailClient({
+  slug: slugParam,
+  initialBlog,
+}: BlogDetailClientProps) {
+  const t = useTranslations("blogs");
+  const router = useRouter();
+
+  const isLegacyId = isObjectId(slugParam);
+
+  // Slug-based fetch (new SEO path)
+  const {
+    data: blogBySlug,
+    isLoading: loadingBySlug,
+    error: errorBySlug,
+  } = useFetchBlogBySlugQuery(slugParam, { skip: isLegacyId });
+
+  // Fallback: ObjectId-based fetch (backwards compat for old links)
+  const {
+    data: blogById,
+    isLoading: loadingById,
+    error: errorById,
+  } = useFetchBlogByIdQuery(slugParam, { skip: !isLegacyId });
+
+  const queryBlog = isLegacyId ? blogById : blogBySlug;
+  const isLoading = isLegacyId ? loadingById : loadingBySlug;
+  const error = isLegacyId ? errorById : errorBySlug;
+
+  // Server-fetched data wins on first paint (SSR pass and the client's first
+  // render before RTK Query resolves both read from here), so hydration never
+  // mismatches. Once the client query resolves, live data takes over.
+  const blog = queryBlog ?? initialBlog ?? undefined;
+
+  const { data: allBlogs } = useFetchBlogsQuery({});
+  const { user } = useAuthContext();
+  const [deleteBlog, { isLoading: isDeleting }] = useDeleteBlogMutation();
+  const [updateBlogStatus, { isLoading: isStatusUpdating }] =
+    useUpdateBlogStatusMutation();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
+  const handleDelete = async () => {
+    if (!blog) return;
+    try {
+      await deleteBlog(blog.id).unwrap();
+      toast.success("Blog deleted successfully");
+      router.push("/blogs");
+    } catch {
+      toast.error("Failed to delete blog");
+    }
+  };
+
+  const handleStatusChange = async (status: BlogModerationStatus) => {
+    if (!blog) return;
+    try {
+      await updateBlogStatus({ id: blog.id, status }).unwrap();
+      toast.success(
+        status === "approved" ? "Blog approved successfully" : "Blog rejected",
+      );
+    } catch {
+      toast.error("Failed to update blog status");
+    }
+  };
+
+  const [openFaqs, setOpenFaqs] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    if (blog?.faqs?.length) {
+      setOpenFaqs(blog.faqs.map(() => false));
+    }
+  }, [blog]);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqs((prev) =>
+      prev.map((isOpen, i) => (i === index ? !isOpen : isOpen)),
+    );
+  };
+
+  // ── Translations (hooks must run before any early return) ─────────────────
+  // Translate entire blog: title, content blocks, inline FAQs, tag names
+  const displayBlog = useTranslateBlog(blog);
+
+  // Compute related articles list (empty while blog is loading)
+  const relatedArticlesRaw =
+    blog != null
+      ? allBlogs?.results.filter((b) =>
+          blog.relatedArticles?.some((ra) => ra.id === b.id),
+        ) ||
+        blog.relatedArticles ||
+        []
+      : [];
+
+  // Translate related article titles
+  const translatedRelated = useTranslateItems(
+    relatedArticlesRaw,
+    (a) => [(a as any).title ?? ""],
+    (a, [title]) => ({ ...a, title }),
+  );
+  // ─────────────────────────────────────────────────────────────────────────
+
+  if (isLoading && !blog) return <LoadingIndicator />;
+  if ((error && !blog) || !displayBlog)
+    return <p>{t("blogNotFound")}</p>;
+
+  const tagColors = [
+    "bg-red-100 text-red-800",
+    "bg-green-100 text-green-800",
+    "bg-blue-100 text-blue-800",
+    "bg-yellow-100 text-yellow-800",
+    "bg-purple-100 text-purple-800",
+    "bg-pink-100 text-pink-800",
+    "bg-indigo-100 text-indigo-800",
+    "bg-teal-100 text-teal-800",
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 lg:py-10">
+      <div className="mb-2 lg:mb-4">
+        <div className="mb-4 mt-6 lg:mt-0 lg:mb-6">
+          <Link
+            href="/blogs"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-gray-700 shadow-sm transition-colors duration-200 hover:border-blue-200 hover:bg-blue-50 hover:text-blue-600"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+            {t("backToBlogs")}
+          </Link>
+        </div>
+
+        {user &&
+          (displayBlog.author?.id === user.id || user.role === "admin") && (
+            <div className="flex flex-wrap justify-end gap-2 mb-4 mt-6 lg:mt-0 lg:mb-6">
+              {/* Admin approve/reject - only shown when blog is pending or needs status change */}
+              {user.role === "admin" && (
+                <>
+                  {(blog as any).status !== "approved" && (
+                    <button
+                      onClick={() => handleStatusChange("approved")}
+                      disabled={isStatusUpdating}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 transition-colors duration-200 shadow-sm disabled:opacity-50"
+                    >
+                      ✓ Approve
+                    </button>
+                  )}
+                  {(blog as any).status !== "rejected" && (
+                    <button
+                      onClick={() => handleStatusChange("rejected")}
+                      disabled={isStatusUpdating}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-orange-500 hover:bg-orange-600 transition-colors duration-200 shadow-sm disabled:opacity-50"
+                    >
+                      ✕ Reject
+                    </button>
+                  )}
+                </>
+              )}
+              <Link
+                href={`/blogs/components/edit-blog/${displayBlog.id}`}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors duration-200 shadow-sm"
+              >
+                ✏️ Edit Blog
+              </Link>
+              <button
+                onClick={() => setConfirmDelete(true)}
+                className="inline-flex items-center gap-2 text-sm font-semibold text-white px-5 py-2.5 rounded-lg bg-red-600 hover:bg-red-700 transition-colors duration-200 shadow-sm"
+              >
+                🗑️ Delete
+              </button>
+            </div>
+          )}
+
+        {/* Confirm delete dialog */}
+        {confirmDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+            <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-full mx-4">
+              <h2 className="text-lg font-bold text-gray-900 mb-2">
+                {t("deleteBlogTitle")}
+              </h2>
+              <p className="text-sm text-gray-600 mb-6">
+                {t("deleteBlogBody")}
+              </p>
+              <div className="flex gap-3 justify-end">
+                <button
+                  onClick={() => setConfirmDelete(false)}
+                  className="px-4 py-2 text-sm rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition"
+                >
+                  {t("cancel")}
+                </button>
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 text-sm rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition disabled:opacity-50"
+                >
+                  {isDeleting ? t("deleting") : t("confirmDelete")}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {displayBlog.image && (
+          <div className="relative w-full min-h-[200px] md:min-h-[350px] rounded-lg overflow-hidden shadow-lg">
+            <Image
+              src={displayBlog.image}
+              alt={displayBlog.title || "Cover Image"}
+              fill
+              priority
+              sizes="(min-width: 1280px) 1280px, 100vw"
+              className="object-cover"
+            />
+
+            <div className="absolute inset-0 bg-black/60"></div>
+
+            <div className="relative z-10 flex flex-col items-center justify-center text-center px-5 sm:px-10 py-8 md:py-12">
+              <h1 className="text-lg sm:text-2xl md:text-4xl font-bold text-white drop-shadow-lg leading-snug">
+                {displayBlog.title || "Untitled Blog"}
+              </h1>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 mt-4 lg:mt-6">
+        <div className="flex-1 bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-4 lg:p-8 transition-all overflow-hidden">
+          <div className="max-w-4xl mx-auto space-y-3 lg:space-y-4 text-base leading-relaxed">
+            <div className="flex items-center gap-5 p-5 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border dark:border-gray-700">
+              <Avatar className="h-14 w-14 ring-2 ring-white dark:ring-gray-800 shadow-sm">
+                <AvatarImage src="/images/logo/LightThemeLogoIcon.svg" />
+                <AvatarFallback className="bg-blue-100 text-blue-700 font-bold text-xl uppercase">
+                  TL
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="font-bold text-xl text-gray-900 dark:text-gray-100">
+                  TuitionLanka
+                </p>
+                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                  {new Date(displayBlog.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2.5">
+              {displayBlog.tags?.map((t: any, idx: number) => (
+                <span
+                  key={t.id}
+                  className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider transition transform hover:-translate-y-0.5 ${
+                    tagColors[idx % tagColors.length]
+                  }`}
+                >
+                  {t.name}
+                </span>
+              ))}
+            </div>
+
+            <TableOfContents
+              html={
+                displayBlog.content
+                  ?.filter(
+                    (b: any) => b.type === "heading" || b.type === "paragraph",
+                  )
+                  ?.map((b: any) =>
+                    b.type === "heading"
+                      ? `<h${b.level}>${b.text}</h${b.level}>`
+                      : b.text,
+                  )
+                  .join("\n") || ""
+              }
+            />
+
+            <div className="mt-10 blog-renderer-wrapper">
+              <BlogRenderer content={displayBlog.content} />
+            </div>
+
+            {displayBlog.faqs?.length > 0 && (
+              <div className="mt-10 p-2 bg-gray-50 dark:bg-gray-900 rounded-xl shadow-sm">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                  FAQs
+                </h2>
+                <div className="space-y-2">
+                  {displayBlog.faqs.map((faq: any, idx: number) => (
+                    <div key={idx} className="border-b last:border-b-0 pb-2">
+                      <button
+                        type="button"
+                        onClick={() => toggleFaq(idx)}
+                        className="w-full text-left flex justify-between items-center py-2 font-medium text-gray-800 dark:text-gray-200 hover:text-blue-600 transition"
+                      >
+                        <span>{faq.question}</span>
+                        <span className="ml-2 transform transition-transform duration-300">
+                          <ChevronDownIcon
+                            className={`w-5 h-5 ml-2 transition-transform duration-300 ${
+                              openFaqs[idx] ? "rotate-180" : ""
+                            }`}
+                          />
+                        </span>
+                      </button>
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${
+                          openFaqs[idx] ? "max-h-96 mt-1" : "max-h-0"
+                        }`}
+                      >
+                        <p className="text-gray-700 dark:text-gray-400 mt-1">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <aside className="w-full md:w-[30%] flex flex-col gap-6 lg:sticky lg:top-28 lg:self-start">
+          <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-sm">
+            <h3 className="text-base sm:text-xl font-semibold border-b pb-2">
+              {t("relatedArticles")}
+            </h3>
+            <ul className="space-y-4">
+              {translatedRelated.length > 0 ? (
+                translatedRelated.map((related: any, idx: number) => (
+                  <li key={idx}>
+                    <Link
+                      href={`/blogs/${related.slug || related.id}`}
+                      className="flex items-center gap-3 p-2 rounded-lg shadow-sm transition-transform hover:scale-105 cursor-pointer bg-white dark:bg-gray-800"
+                    >
+                      <Image
+                        src={related.image || "/images/profile/pp.png"}
+                        alt={related.title || "Related blog thumbnail"}
+                        width={200}
+                        height={200}
+                        className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                        onError={(e) => {
+                          e.currentTarget.src = "/images/profile/pp.png";
+                        }}
+                      />
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 dark:text-gray-200 hover:underline">
+                          {related.title || "Untitled Post"}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          TuitionLanka
+                        </p>
+                      </div>
+                    </Link>
+                  </li>
+                ))
+              ) : (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {t("noRelatedPosts")}
+                </p>
+              )}
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  );
+}
