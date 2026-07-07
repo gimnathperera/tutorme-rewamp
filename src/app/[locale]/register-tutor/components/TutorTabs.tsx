@@ -172,10 +172,7 @@ export function TutorTabs() {
     { key: "verification", label: t("verification") },
   ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
-  const changeStep = (
-    nextTab: TabKey,
-    options?: { revalidate?: boolean },
-  ) => {
+  const changeStep = (nextTab: TabKey, options?: { revalidate?: boolean }) => {
     // `revalidate` re-runs schema validation for the destination step. Skip it
     // when the caller has already set a manual error that isn't part of the
     // schema (e.g. the per-grade subject check), otherwise the re-validation

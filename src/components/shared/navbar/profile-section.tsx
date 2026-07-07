@@ -158,7 +158,9 @@ const ProfileDropdown: FC<Props> = ({ isLoading, user, compact = false }) => {
             />
           ) : (
             <div className="rounded-full bg-primary-100 flex items-center justify-center select-none w-9 h-9">
-              <span className={`font-bold text-primary-700 uppercase leading-none ${compact ? "text-sm" : "text-base"}`}>
+              <span
+                className={`font-bold text-primary-700 uppercase leading-none ${compact ? "text-sm" : "text-base"}`}
+              >
                 {(user?.name || user?.email || "?").charAt(0)}
               </span>
             </div>

@@ -40,10 +40,7 @@ const LocaleSwitcher = ({ onDark = false }: LocaleSwitcherProps) => {
 
   return (
     <Select value={locale} onValueChange={(val) => handleChange(val as Locale)}>
-      <SelectTrigger
-        className={triggerClass}
-        aria-label="Select language"
-      >
+      <SelectTrigger className={triggerClass} aria-label="Select language">
         <SelectValue>
           {LOCALE_LABELS[locale]?.short ?? locale.toUpperCase()}
         </SelectValue>

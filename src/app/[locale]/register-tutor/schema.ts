@@ -75,7 +75,11 @@ const createStep1BaseSchema = (t: (_key: string) => string) =>
 
     email: z.preprocess(
       removeWhitespace,
-      z.string().toLowerCase().min(1, t("emailRequired")).email(t("emailInvalid")),
+      z
+        .string()
+        .toLowerCase()
+        .min(1, t("emailRequired"))
+        .email(t("emailInvalid")),
     ),
 
     password: z.preprocess(

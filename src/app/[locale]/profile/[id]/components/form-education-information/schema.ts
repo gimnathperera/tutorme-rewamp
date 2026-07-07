@@ -23,8 +23,7 @@ export const getSubjectCoverageState = (
   const hasGradeWithoutSubject = grades.some((gradeId) => {
     const gradeSubjects = subjectsByGrade[gradeId] ?? [];
     return (
-      gradeSubjects.length > 0 &&
-      !gradeSubjects.some((id) => selected.has(id))
+      gradeSubjects.length > 0 && !gradeSubjects.some((id) => selected.has(id))
     );
   });
 

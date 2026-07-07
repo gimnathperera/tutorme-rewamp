@@ -40,18 +40,12 @@ const ENV_VARIABLES = {
 
   NODE_ENV:
     (process.env.NODE_ENV as
-      | "development"
-      | "test"
-      | "production"
-      | undefined) || "development",
+      "development" | "test" | "production" | undefined) || "development",
 
   NEXT_PUBLIC_APP_ENV:
     (process.env.NEXT_PUBLIC_APP_ENV as
-      | "development"
-      | "test"
-      | "staging"
-      | "production"
-      | undefined) || "development",
+      "development" | "test" | "staging" | "production" | undefined) ||
+    "development",
 
   NEXT_PUBLIC_WHATSAPP_NUMBER:
     process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "0707491400",
@@ -70,9 +64,7 @@ const ENV_VARIABLES = {
 
   NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER:
     (process.env.NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER as
-      | "true"
-      | "false"
-      | undefined) || "false",
+      "true" | "false" | undefined) || "false",
 };
 
 /**
