@@ -23,14 +23,6 @@ export type ResetPasswordRequest = {
   token: string;
 };
 
-export type UserRefreshTokenRequest = {
-  refreshToken: string;
-};
-
-export type UserLogoutRequest = {
-  refreshToken: string;
-};
-
 export type UserRegisterRequest = {
   email: string;
   password: string;
