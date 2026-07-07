@@ -1,9 +1,5 @@
 import { env } from "@/configs/env";
-import {
-  getAccessToken,
-  handleForceLogout,
-  handleRefreshTokenProcess,
-} from "@/utils/auth";
+import { handleForceLogout } from "@/utils/auth";
 import {
   BaseQueryFn,
   FetchArgs,
@@ -14,18 +10,10 @@ import {
 } from "@reduxjs/toolkit/query/react";
 import { Endpoints } from "./endpoints";
 
-const ENDPOINTS_TO_AVOID_RETRY = [Endpoints.RefreshToken];
-
 const staggeredBaseQuery = retry(
   fetchBaseQuery({
     baseUrl: env.urls.apiUrl,
-    prepareHeaders: (headers) => {
-      const token = getAccessToken();
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      return headers;
-    },
+    credentials: "include",
   }),
   {
     retryCondition: (
@@ -33,7 +21,6 @@ const staggeredBaseQuery = retry(
       baseQueryArgs,
       { attempt },
     ) => {
-      if (ENDPOINTS_TO_AVOID_RETRY.includes(baseQueryArgs.url)) return false;
       if (attempt > 5) return false;
 
       return (
@@ -51,19 +38,15 @@ const baseQueryWithAuth: BaseQueryFn<
   unknown,
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-  let result = await staggeredBaseQuery(args, api, extraOptions);
+  const result = await staggeredBaseQuery(args, api, extraOptions);
 
-  if (result.error?.status === 401 && args?.url !== Endpoints.Login) {
-    console.log("Access token expired. Attempting to refresh token...");
+  const requestUrl = typeof args?.url === "string" ? args.url : "";
+  const isAuthBootstrapOrLogin =
+    requestUrl === Endpoints.Login || requestUrl === Endpoints.Me;
 
-    const isTokenRefreshed = await handleRefreshTokenProcess();
-    if (isTokenRefreshed) {
-      console.log("Retrying original request with new access token...");
-      result = await staggeredBaseQuery(args, api, extraOptions);
-    } else {
-      console.log("Refresh token expired or invalid. Forcing logout.");
-      handleForceLogout();
-    }
+  if (result.error?.status === 401 && !isAuthBootstrapOrLogin) {
+    console.log("Session expired or invalid. Forcing logout.");
+    handleForceLogout();
   }
 
   return result;
