@@ -95,8 +95,8 @@ const ContactUsPage = () => {
     {
       icon: PHONE_ICON,
       label: t("callLabel"),
-      value: "0707491400",
-      href: "tel:0707491400",
+      value: "0707491400 / 0707491490",
+      href: "tel:0707491400 / 0707491490",
     },
     {
       icon: LOCATION_ICON,
