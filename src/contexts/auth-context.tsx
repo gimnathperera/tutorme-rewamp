@@ -6,19 +6,14 @@ import { ForgotPasswordSchema } from "@/components/auth/form-forgot-password/sch
 import { LoginSchema } from "@/components/auth/form-login/schema";
 import {
   useForgotPasswordMutation,
+  useLazyMeQuery,
   useLoginMutation,
   useLogoutMutation,
 } from "@/store/api/splits/auth";
 import { useLazyGetProfileQuery } from "@/store/api/splits/users";
-import { AuthUserData, Tokens } from "@/types/auth-types";
+import { AuthUserData } from "@/types/auth-types";
 import { UserLoginResponse } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
-import {
-  getLocalStorageItem,
-  LocalStorageKey,
-  removeLocalStorageItem,
-  setLocalStorageItem,
-} from "@/utils/local-storage";
 import {
   createContext,
   useState,
@@ -90,6 +85,14 @@ const getRestrictedStatusMessage = (status: RestrictedUserStatus) =>
     ? "Your account has been suspended by an administrator."
     : "Your account has been rejected by an administrator.";
 
+const toAuthUserData = (user: UserLoginResponse["user"]): AuthUserData => ({
+  id: user.id,
+  role: user.role,
+  name: user.name,
+  email: user.email,
+  status: user.status,
+});
+
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<AuthUserData | null>(null);
   const [isUserLoaded, setIsUserLoaded] = useState(false);
@@ -104,16 +107,18 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [handleUserLogout, { isLoading: isUserLogoutLoading }] =
     useLogoutMutation();
   const [fetchCurrentUserProfile] = useLazyGetProfileQuery();
+  const [fetchCurrentUser] = useLazyMeQuery();
 
   useEffect(() => {
-    const existingUserData = getLocalStorageItem<AuthUserData>(
-      LocalStorageKey.USER_DATA,
-    );
-    if (existingUserData) {
-      setUser(existingUserData);
-    }
-    setIsUserLoaded(true);
-  }, []);
+    const bootstrapSession = async () => {
+      const result = await fetchCurrentUser();
+      if (result.data?.user) {
+        setUser(toAuthUserData(result.data.user));
+      }
+      setIsUserLoaded(true);
+    };
+    bootstrapSession();
+  }, [fetchCurrentUser]);
 
   const login = async (credentials: LoginSchema) => {
     const result = await handleUserLogin(credentials);
@@ -141,45 +146,19 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
   };
 
-  const handleLoginSuccess = ({ user, tokens }: UserLoginResponse) => {
-    const userData: AuthUserData = {
-      id: user.id,
-      role: user.role,
-      name: user.name,
-      email: user.email,
-      status: user.status,
-    };
-
-    setLocalStorageItem(LocalStorageKey.USER_DATA, userData);
-    setLocalStorageItem(LocalStorageKey.TOKENS, tokens);
-    setUser(userData);
+  const handleLoginSuccess = ({ user }: UserLoginResponse) => {
+    setUser(toAuthUserData(user));
     setRestrictedStatus(null);
     setLogoutCountdown(LOGOUT_COUNTDOWN_SECONDS);
   };
 
   const clearSession = useCallback(() => {
-    removeLocalStorageItem(LocalStorageKey.USER_DATA);
-    removeLocalStorageItem(LocalStorageKey.TOKENS);
-    localStorage.clear();
     window.location.assign("/");
   }, []);
 
   const logout = useCallback(async () => {
-    const tokens = getLocalStorageItem<LocalStorageKey.TOKENS>(
-      LocalStorageKey.TOKENS,
-    ) as unknown as Tokens;
-
-    if (!tokens?.refresh?.token) {
-      clearSession();
-      return;
-    }
-
-    const existingRefreshToken = tokens.refresh.token;
-
     try {
-      await handleUserLogout({
-        refreshToken: existingRefreshToken,
-      });
+      await handleUserLogout();
     } finally {
       clearSession();
     }
@@ -188,9 +167,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const updateUser = (userData: Partial<AuthUserData>) => {
     if (!user) return;
 
-    const updatedUser = { ...user, ...userData };
-    setUser(updatedUser);
-    setLocalStorageItem(LocalStorageKey.USER_DATA, updatedUser);
+    setUser({ ...user, ...userData });
   };
 
   useEffect(() => {
@@ -216,9 +193,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       const restrictedLatestStatus = getRestrictedUserStatus(latestStatus);
 
       if (latestStatus !== user.status) {
-        const updatedUser = { ...user, status: latestStatus };
-        setUser(updatedUser);
-        setLocalStorageItem(LocalStorageKey.USER_DATA, updatedUser);
+        setUser({ ...user, status: latestStatus });
       }
 
       if (restrictedLatestStatus) {
