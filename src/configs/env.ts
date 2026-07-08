@@ -21,6 +21,7 @@ const envSchema = z
       .default("development"),
     NEXT_PUBLIC_WHATSAPP_NUMBER: z.string().min(10).max(15),
     NEXT_PUBLIC_ADMIN_PORTAL_URL: z.string().url(),
+    NEXT_PUBLIC_GOOGLE_CLIENT_ID: z.string().optional(),
     NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
     NEXT_PUBLIC_SENTRY_RELEASE: z.string().optional(),
     NEXT_PUBLIC_ENABLE_SENTRY_TEST_LOGGER: z
@@ -53,6 +54,8 @@ const ENV_VARIABLES = {
   NEXT_PUBLIC_ADMIN_PORTAL_URL:
     process.env.NEXT_PUBLIC_ADMIN_PORTAL_URL ||
     "https://admin.tuitionlanka.com/signin",
+
+  NEXT_PUBLIC_GOOGLE_CLIENT_ID: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
 
   NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN || "",
 
@@ -95,5 +98,9 @@ export const env = {
   urls: {
     apiUrl: ENV.NEXT_PUBLIC_API_URL,
     adminPortalUrl: ENV.NEXT_PUBLIC_ADMIN_PORTAL_URL,
+  },
+
+  google: {
+    clientId: ENV.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   },
 };
