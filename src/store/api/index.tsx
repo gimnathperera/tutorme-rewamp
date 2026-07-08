@@ -42,7 +42,9 @@ const baseQueryWithAuth: BaseQueryFn<
 
   const requestUrl = typeof args?.url === "string" ? args.url : "";
   const isAuthBootstrapOrLogin =
-    requestUrl === Endpoints.Login || requestUrl === Endpoints.Me;
+    requestUrl === Endpoints.Login ||
+    requestUrl === Endpoints.Me ||
+    requestUrl === Endpoints.GoogleAuth;
 
   if (result.error?.status === 401 && !isAuthBootstrapOrLogin) {
     console.log("Session expired or invalid. Forcing logout.");

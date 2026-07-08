@@ -3,6 +3,7 @@ export const Endpoints = {
   Login: "/v1/auth/login",
   Logout: "/v1/auth/logout",
   Me: "/v1/auth/me",
+  GoogleAuth: "/v1/auth/google",
   ContactUs: "/v1/inquiries",
   Blogs: "/v1/blogs",
   Testimonials: "/v1/testimonials",

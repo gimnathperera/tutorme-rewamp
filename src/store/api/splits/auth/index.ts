@@ -2,6 +2,7 @@ import { UserLoginRequest, ForgotPasswordRequest } from "@/types/request-types";
 import {
   MeResponse,
   UserLoginResponse,
+  GoogleAuthResponse,
   ForgotPasswordResponse,
 } from "@/types/response-types";
 import { baseApi } from "../..";
@@ -34,6 +35,15 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
+    googleAuth: build.mutation<GoogleAuthResponse, { idToken: string }>({
+      query: (payload) => {
+        return {
+          url: Endpoints.GoogleAuth,
+          method: "POST",
+          body: payload,
+        };
+      },
+    }),
     forgotPassword: build.mutation<
       ForgotPasswordResponse,
       ForgotPasswordRequest
@@ -55,5 +65,6 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useLazyMeQuery,
+  useGoogleAuthMutation,
   useForgotPasswordMutation,
 } = usersApi;
