@@ -242,6 +242,19 @@ export type UserLoginResponse = {
 export type MeResponse = {
   user: UserBase;
 };
+
+export type GoogleAuthResponse =
+  | { isNewProfile: false; user: UserBase }
+  | {
+      isNewProfile: true;
+      profile: {
+        googleId: string;
+        email: string;
+        name: string;
+        picture?: string;
+      };
+    };
+
 export type ForgotPasswordResponse = {
   success: boolean;
   message: string;
