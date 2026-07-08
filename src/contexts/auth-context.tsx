@@ -12,7 +12,7 @@ import {
 } from "@/store/api/splits/auth";
 import { useLazyGetProfileQuery } from "@/store/api/splits/users";
 import { AuthUserData } from "@/types/auth-types";
-import { UserLoginResponse } from "@/types/response-types";
+import { UserBase, UserLoginResponse } from "@/types/response-types";
 import { getErrorInApiResult } from "@/utils/api";
 import {
   createContext,
@@ -33,6 +33,7 @@ export type AuthProviderType = {
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
   updateUser: (user: Partial<AuthUserData>) => void;
+  setAuthenticatedUser: (user: UserBase) => void;
 };
 
 interface AuthContextType {
@@ -46,6 +47,7 @@ interface AuthContextType {
   logout: () => void;
   setIsAuthError: (error: string | null) => void;
   updateUser: (user: Partial<AuthUserData>) => void;
+  setAuthenticatedUser: (user: UserBase) => void;
 }
 
 const authProvider = {
@@ -59,6 +61,7 @@ const authProvider = {
   forgotPassword: () => {},
   setIsAuthError: () => {},
   updateUser: () => {},
+  setAuthenticatedUser: () => {},
 };
 
 const AuthContext = createContext<AuthContextType>(authProvider);
@@ -151,6 +154,10 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     setRestrictedStatus(null);
     setLogoutCountdown(LOGOUT_COUNTDOWN_SECONDS);
   };
+
+  // Used by the "Continue with Google" flow, which authenticates via a
+  // different mutation/response shape than the regular login form.
+  const setAuthenticatedUser = (user: UserBase) => handleLoginSuccess({ user });
 
   const clearSession = useCallback(() => {
     window.location.assign("/");
@@ -245,6 +252,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         isUserLoaded,
         isUserLogoutLoading,
         updateUser,
+        setAuthenticatedUser,
       }}
     >
       {children}
