@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaTiktok } from "react-icons/fa";
+import { FaTiktok, FaYoutube } from "react-icons/fa";
 import { useLocale, useTranslations } from "next-intl";
 
 const Footer = () => {
@@ -111,6 +111,16 @@ const Footer = () => {
                   width={20}
                   height={20}
                 />
+              </a>
+
+              <a
+                className="footer-icons"
+                href={process.env.NEXT_PUBLIC_YOUTUBE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+              >
+                <FaYoutube className="text-white" size={20} />
               </a>
             </div>
           </div>
