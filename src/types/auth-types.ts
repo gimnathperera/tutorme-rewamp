@@ -15,14 +15,3 @@ export type AuthUserData = {
   avatar?: string;
   status: string;
 };
-
-export type Tokens = {
-  access: {
-    token: string;
-    expires: string;
-  };
-  refresh: {
-    token: string;
-    expires: string;
-  };
-};

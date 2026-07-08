@@ -23,14 +23,6 @@ export type ResetPasswordRequest = {
   token: string;
 };
 
-export type UserRefreshTokenRequest = {
-  refreshToken: string;
-};
-
-export type UserLogoutRequest = {
-  refreshToken: string;
-};
-
 export type UserRegisterRequest = {
   email: string;
   password: string;
@@ -218,7 +210,8 @@ export type FetchTuitionAssignmentsRequest = {
 export type FindMyTutorRequest = {
   fullName: string;
   email: string;
-  password: string;
+  password?: string;
+  googleIdToken?: string;
   contactNumber: string;
   dateOfBirth: string;
   age: number;
@@ -244,6 +237,7 @@ export type FindMyTutorRequest = {
   certificatesAndQualifications: { type: string; url: string }[];
   agreeTerms: boolean;
   agreeAssignmentInfo: boolean;
+  referredByCode?: string;
   locale?: string;
 };
 

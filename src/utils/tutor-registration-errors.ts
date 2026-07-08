@@ -10,5 +10,7 @@ export const isDuplicateEmailError = (error: string) => {
 
 export const isPendingEmailError = (error: string) => {
   const normalizedError = error.toLowerCase();
-  return normalizedError.includes("email") && normalizedError.includes("pending");
+  return (
+    normalizedError.includes("email") && normalizedError.includes("pending")
+  );
 };

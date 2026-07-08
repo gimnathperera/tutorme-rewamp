@@ -141,8 +141,7 @@ export default function BlogDetailClient({
   // ─────────────────────────────────────────────────────────────────────────
 
   if (isLoading && !blog) return <LoadingIndicator />;
-  if ((error && !blog) || !displayBlog)
-    return <p>{t("blogNotFound")}</p>;
+  if ((error && !blog) || !displayBlog) return <p>{t("blogNotFound")}</p>;
 
   const tagColors = [
     "bg-red-100 text-red-800",

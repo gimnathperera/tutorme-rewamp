@@ -11,6 +11,11 @@ import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { GoogleLogin, CredentialResponse } from "@react-oauth/google";
+import { env } from "@/configs/env";
+import { useGoogleAuthMutation } from "@/store/api/splits/auth";
+import { getErrorInApiResult } from "@/utils/api";
+import { writeGooglePrefill } from "@/utils/google-prefill";
 
 const INCORRECT_CREDENTIALS_ERROR = "Incorrect email or password";
 
@@ -29,7 +34,9 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const t = useTranslations("auth");
   const params = useParams();
   const locale = (params?.locale as string) ?? "en";
-  const { login, isAuthError, setIsAuthError, isLoading } = useAuthContext();
+  const { login, isAuthError, setIsAuthError, isLoading, setAuthenticatedUser } =
+    useAuthContext();
+  const [googleAuth] = useGoogleAuthMutation();
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
 
@@ -78,6 +85,38 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
     login(data);
   };
 
+  const handleGoogleSuccess = async (
+    credentialResponse: CredentialResponse,
+  ) => {
+    if (!credentialResponse.credential) return;
+
+    const idToken = credentialResponse.credential;
+    const result = await googleAuth({ idToken });
+    const error = getErrorInApiResult(result);
+    if (error) {
+      setIsAuthError(error);
+      return;
+    }
+    if (!result.data) return;
+
+    if (!result.data.isNewProfile) {
+      // An account already exists for this Google identity — log in directly.
+      setAuthenticatedUser(result.data.user);
+      return;
+    }
+
+    // No account exists yet — hand the verified profile off to the tutor
+    // registration page so it can prefill Step 1, then navigate there.
+    const { profile } = result.data;
+    writeGooglePrefill({
+      name: profile.name,
+      email: profile.email,
+      picture: profile.picture,
+      idToken,
+    });
+    onRegisterClick();
+  };
+
   return (
     <FormProvider {...loginForm}>
       <form onSubmit={loginForm.handleSubmit(onSubmit)}>
@@ -109,6 +148,17 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
             type="submit"
             loading={isLoading}
           />
+
+          {env.google.clientId && (
+            <div className="flex justify-center pt-2">
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setIsAuthError("Google sign-in failed")}
+                useOneTap={false}
+                width="100%"
+              />
+            </div>
+          )}
 
           <div className="text-center">
             <p className="block mb-2 text-sm font-medium text-gray-900">

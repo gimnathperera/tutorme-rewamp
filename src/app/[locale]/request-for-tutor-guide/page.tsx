@@ -17,12 +17,23 @@ const RequestForTutorGuidePage = () => {
       {
         number: 1,
         title: t("step1Title"),
-        image: img("/images/guides/request-for-tutor/step-1-contact-details.png"),
+        image: img(
+          "/images/guides/request-for-tutor/step-1-contact-details.png",
+        ),
         fields: [
-          { label: t("step1FullNameLabel"), description: t("step1FullNameDesc") },
+          {
+            label: t("step1FullNameLabel"),
+            description: t("step1FullNameDesc"),
+          },
           { label: t("step1EmailLabel"), description: t("step1EmailDesc") },
-          { label: t("step1ContactNumberLabel"), description: t("step1ContactNumberDesc") },
-          { label: t("step1DistrictLabel"), description: t("step1DistrictDesc") },
+          {
+            label: t("step1ContactNumberLabel"),
+            description: t("step1ContactNumberDesc"),
+          },
+          {
+            label: t("step1DistrictLabel"),
+            description: t("step1DistrictDesc"),
+          },
           { label: t("step1CityLabel"), description: t("step1CityDesc") },
         ],
         note: null,
@@ -34,12 +45,27 @@ const RequestForTutorGuidePage = () => {
         fields: [
           { label: t("step2MediumLabel"), description: t("step2MediumDesc") },
           { label: t("step2GradeLabel"), description: t("step2GradeDesc") },
-          { label: t("step2NumberOfTutorsLabel"), description: t("step2NumberOfTutorsDesc") },
+          {
+            label: t("step2NumberOfTutorsLabel"),
+            description: t("step2NumberOfTutorsDesc"),
+          },
           { label: t("step2SubjectLabel"), description: t("step2SubjectDesc") },
-          { label: t("step2DurationLabel"), description: t("step2DurationDesc") },
-          { label: t("step2FrequencyLabel"), description: t("step2FrequencyDesc") },
-          { label: t("step2PreferredTutorTypeLabel"), description: t("step2PreferredTutorTypeDesc") },
-          { label: t("step2PreferredClassTypeLabel"), description: t("step2PreferredClassTypeDesc") },
+          {
+            label: t("step2DurationLabel"),
+            description: t("step2DurationDesc"),
+          },
+          {
+            label: t("step2FrequencyLabel"),
+            description: t("step2FrequencyDesc"),
+          },
+          {
+            label: t("step2PreferredTutorTypeLabel"),
+            description: t("step2PreferredTutorTypeDesc"),
+          },
+          {
+            label: t("step2PreferredClassTypeLabel"),
+            description: t("step2PreferredClassTypeDesc"),
+          },
         ],
         note: null,
       },
@@ -50,7 +76,6 @@ const RequestForTutorGuidePage = () => {
   return (
     <div className="px-4 lg:px-8">
       <div className="mx-auto max-w-4xl py-6 sm:py-10">
-
         {/* Page heading */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">{t("pageTitle")}</h1>
@@ -69,8 +94,10 @@ const RequestForTutorGuidePage = () => {
         {/* Steps */}
         <div className="space-y-14">
           {steps.map((step) => (
-            <div key={step.number} className="rounded-xl border border-gray-200 overflow-hidden">
-
+            <div
+              key={step.number}
+              className="rounded-xl border border-gray-200 overflow-hidden"
+            >
               {/* Step header */}
               <div className="flex items-center gap-3 bg-primary-600 px-6 py-4">
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-sm font-bold text-primary-600">
@@ -107,7 +134,10 @@ const RequestForTutorGuidePage = () => {
                   </h3>
                   <ul className="space-y-3">
                     {step.fields.map((field) => (
-                      <li key={field.label} className="flex gap-2 text-sm text-gray-700">
+                      <li
+                        key={field.label}
+                        className="flex gap-2 text-sm text-gray-700"
+                      >
                         <span className="mt-1 shrink-0 h-2 w-2 rounded-full bg-primary-600" />
                         <span>
                           <span className="font-semibold">{field.label}:</span>{" "}
@@ -133,7 +163,6 @@ const RequestForTutorGuidePage = () => {
             {t("ctaButton")}
           </Link>
         </div>
-
       </div>
       <WhatsAppButton />
     </div>

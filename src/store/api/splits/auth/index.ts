@@ -1,12 +1,8 @@
+import { UserLoginRequest, ForgotPasswordRequest } from "@/types/request-types";
 import {
-  UserLoginRequest,
-  UserLogoutRequest,
-  ForgotPasswordRequest,
-  UserRefreshTokenRequest,
-} from "@/types/request-types";
-import {
-  TokenResponse,
+  MeResponse,
   UserLoginResponse,
+  GoogleAuthResponse,
   ForgotPasswordResponse,
 } from "@/types/response-types";
 import { baseApi } from "../..";
@@ -23,19 +19,26 @@ export const usersApi = baseApi.injectEndpoints({
         };
       },
     }),
-    logout: build.mutation<void, UserLogoutRequest>({
-      query: (payload) => {
+    logout: build.mutation<void, void>({
+      query: () => {
         return {
           url: Endpoints.Logout,
           method: "POST",
-          body: payload,
         };
       },
     }),
-    fetchAccessToken: build.mutation<TokenResponse, UserRefreshTokenRequest>({
+    me: build.query<MeResponse, void>({
+      query: () => {
+        return {
+          url: Endpoints.Me,
+          method: "GET",
+        };
+      },
+    }),
+    googleAuth: build.mutation<GoogleAuthResponse, { idToken: string }>({
       query: (payload) => {
         return {
-          url: Endpoints.RefreshToken,
+          url: Endpoints.GoogleAuth,
           method: "POST",
           body: payload,
         };
@@ -61,6 +64,7 @@ export const usersApi = baseApi.injectEndpoints({
 export const {
   useLoginMutation,
   useLogoutMutation,
-  useFetchAccessTokenMutation,
+  useLazyMeQuery,
+  useGoogleAuthMutation,
   useForgotPasswordMutation,
 } = usersApi;
