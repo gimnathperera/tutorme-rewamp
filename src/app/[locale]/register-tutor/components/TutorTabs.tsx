@@ -302,6 +302,8 @@ export function TutorTabs() {
         confirmPassword: _omit,
         optionalCertificates,
         referredByCode: rawReferredByCode,
+        password,
+        googleIdToken,
         ...payload
       } = data;
       const referredByCode =
@@ -311,6 +313,9 @@ export function TutorTabs() {
       );
       const normalizedPayload = {
         ...payload,
+        // A Google-authenticated applicant has no password to send — only one
+        // of these two ever gets included in the request.
+        ...(googleIdToken ? { googleIdToken } : { password }),
         certificatesAndQualifications: [
           ...payload.certificatesAndQualifications,
           ...validOptional,

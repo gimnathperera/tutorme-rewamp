@@ -82,22 +82,17 @@ const createStep1BaseSchema = (t: (_key: string) => string) =>
         .email(t("emailInvalid")),
     ),
 
-    password: z.preprocess(
-      removeWhitespace,
-      z
-        .string()
-        .nonempty(t("passwordRequired"))
-        .min(PASSWORD_MIN, { message: t("passwordTooShort") })
-        .max(PASSWORD_MAX, { message: t("passwordTooLong") })
-        .regex(PASSWORD_LETTER_NUMBER_REGEX, {
-          message: t("passwordLetterNumber"),
-        }),
-    ),
+    // Optional at the field level — required unless googleIdToken is set (a
+    // Google-linked account doesn't set a password). Enforced in superRefine
+    // below, where both fields are visible together.
+    password: z.preprocess(removeWhitespace, z.string().optional()),
 
-    confirmPassword: z.preprocess(
-      removeWhitespace,
-      z.string().nonempty(t("confirmPasswordRequired")),
-    ),
+    confirmPassword: z.preprocess(removeWhitespace, z.string().optional()),
+
+    // Set when the applicant authenticated via "Continue with Google" —
+    // carries the verified ID token through to submission, re-verified
+    // server-side. Never rendered as a visible field.
+    googleIdToken: z.string().optional(),
 
     contactNumber: z.preprocess(
       removeWhitespace,
@@ -243,7 +238,52 @@ export const createFullSchema = (t: (_key: string) => string) =>
     .merge(createStep2Schema(t))
     .merge(createStep4Schema(t))
     .superRefine(
-      ({ password, confirmPassword, classType, preferredLocations }, ctx) => {
+      (
+        {
+          password,
+          confirmPassword,
+          googleIdToken,
+          classType,
+          preferredLocations,
+        },
+        ctx,
+      ) => {
+        if (!googleIdToken) {
+          if (!password) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("passwordRequired"),
+              path: ["password"],
+            });
+          } else if (password.length < PASSWORD_MIN) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("passwordTooShort"),
+              path: ["password"],
+            });
+          } else if (password.length > PASSWORD_MAX) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("passwordTooLong"),
+              path: ["password"],
+            });
+          } else if (!PASSWORD_LETTER_NUMBER_REGEX.test(password)) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("passwordLetterNumber"),
+              path: ["password"],
+            });
+          }
+
+          if (!confirmPassword) {
+            ctx.addIssue({
+              code: z.ZodIssueCode.custom,
+              message: t("confirmPasswordRequired"),
+              path: ["confirmPassword"],
+            });
+          }
+        }
+
         if (confirmPassword && password !== confirmPassword) {
           ctx.addIssue({
             code: z.ZodIssueCode.custom,

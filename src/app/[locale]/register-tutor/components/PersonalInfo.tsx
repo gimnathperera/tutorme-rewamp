@@ -21,6 +21,7 @@ import {
   useLazyValidateReferralCodeQuery,
 } from "@/store/api/splits/tutor-request";
 import { useTranslations } from "next-intl";
+import { readAndClearGooglePrefill } from "@/utils/google-prefill";
 
 /** Shared style tokens for the register-tutor form */
 const fieldWrapper = "flex flex-col gap-1.5";
@@ -71,6 +72,7 @@ const PersonalInfo = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isGoogleSignup, setIsGoogleSignup] = useState(false);
   const [emailAvailability, setEmailAvailability] =
     useState<EmailAvailabilityState>(null);
   const [referralCodeState, setReferralCodeState] =
@@ -92,6 +94,20 @@ const PersonalInfo = () => {
       const code = param.trim().toUpperCase();
       setValue("referredByCode", code, { shouldValidate: true });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Prefill from a verified Google identity handed off by the login modal's
+  // "Continue with Google" button (one-time on mount). Password isn't needed
+  // for a Google-linked account, so those fields are hidden entirely.
+  useEffect(() => {
+    const prefill = readAndClearGooglePrefill();
+    if (!prefill) return;
+
+    setValue("fullName", prefill.name, { shouldValidate: true });
+    setValue("email", prefill.email, { shouldValidate: true });
+    setValue("googleIdToken", prefill.idToken);
+    setIsGoogleSignup(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -279,6 +295,7 @@ const PersonalInfo = () => {
             id="email"
             type="email"
             onKeyDown={preventWhitespaceKey}
+            readOnly={isGoogleSignup}
             {...register("email", {
               onChange: (e) => {
                 const noSpaces = removeWhitespace(e.target.value);
@@ -302,14 +319,14 @@ const PersonalInfo = () => {
             })}
             placeholder={t("emailPlaceholder")}
             autoComplete="email"
-            className={`${inputClass} pr-10 ${errors.email ? "border-red-500" : "border-gray-300"}`}
+            className={`${inputClass} pr-10 ${isGoogleSignup ? "bg-muted" : ""} ${errors.email ? "border-red-500" : "border-gray-300"}`}
           />
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3">
             {isCheckingEmail ? (
               <Spinner className="text-gray-400" />
             ) : errors.email || emailAvailability === "unavailable" ? (
               <Icon name="CircleX" size={18} className="text-red-500" />
-            ) : emailAvailability === "available" ? (
+            ) : emailAvailability === "available" || isGoogleSignup ? (
               <Icon name="CircleCheck" size={18} className="text-green-600" />
             ) : null}
           </span>
@@ -320,6 +337,10 @@ const PersonalInfo = () => {
           </p>
         ) : isCheckingEmail ? (
           <Hint>{t("emailChecking")}</Hint>
+        ) : isGoogleSignup ? (
+          <p className="text-xs leading-4 text-green-600 min-h-4">
+            Verified via Google
+          </p>
         ) : emailAvailability === "available" ? (
           <p className="text-xs leading-4 text-green-600 min-h-4">
             {t("emailAvailable")}
@@ -329,91 +350,97 @@ const PersonalInfo = () => {
         )}
       </div>
 
-      {/* Password */}
-      <div className={fieldWrapper}>
-        <Label className="text-sm" htmlFor="password">
-          {t("password")} <span className="text-red-500">*</span>
-        </Label>
-        <div className="relative">
-          <Input
-            id="password"
-            type={showPassword ? "text" : "password"}
-            onKeyDown={preventWhitespaceKey}
-            {...register("password", {
-              onChange: (e) => {
-                const noSpaces = removeWhitespace(e.target.value);
-                if (noSpaces !== e.target.value) {
-                  e.target.value = noSpaces;
-                  setValue("password", noSpaces, { shouldValidate: true });
+      {!isGoogleSignup && (
+        <>
+          {/* Password */}
+          <div className={fieldWrapper}>
+            <Label className="text-sm" htmlFor="password">
+              {t("password")} <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                onKeyDown={preventWhitespaceKey}
+                {...register("password", {
+                  onChange: (e) => {
+                    const noSpaces = removeWhitespace(e.target.value);
+                    if (noSpaces !== e.target.value) {
+                      e.target.value = noSpaces;
+                      setValue("password", noSpaces, { shouldValidate: true });
+                    }
+                    trigger("password");
+                    // Re-validate confirmPassword so mismatch clears when password changes
+                    trigger("confirmPassword");
+                  },
+                })}
+                autoComplete="new-password"
+                className={`${inputClass} pr-10 ${errors.password ? "border-red-500" : "border-gray-300"}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                aria-label={
+                  showPassword ? t("hidePassword") : t("showPassword")
                 }
-                trigger("password");
-                // Re-validate confirmPassword so mismatch clears when password changes
-                trigger("confirmPassword");
-              },
-            })}
-            autoComplete="new-password"
-            className={`${inputClass} pr-10 ${errors.password ? "border-red-500" : "border-gray-300"}`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowPassword((v) => !v)}
-            className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showPassword ? t("hidePassword") : t("showPassword")}
-          >
-            {showPassword ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
-          </button>
-        </div>
-        {errors.password ? (
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.password?.message as string}
-          </p>
-        ) : (
-          <Hint>{t("passwordHint")}</Hint>
-        )}
-      </div>
+              >
+                {showPassword ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
+              </button>
+            </div>
+            {errors.password ? (
+              <p className="text-xs leading-4 text-red-500 min-h-4">
+                {errors.password?.message as string}
+              </p>
+            ) : (
+              <Hint>{t("passwordHint")}</Hint>
+            )}
+          </div>
 
-      {/* Confirm Password */}
-      <div className={fieldWrapper}>
-        <Label className="text-sm" htmlFor="confirmPassword">
-          {t("confirmPassword")} <span className="text-red-500">*</span>
-        </Label>
-        <div className="relative">
-          <Input
-            id="confirmPassword"
-            type={showConfirm ? "text" : "password"}
-            onKeyDown={preventWhitespaceKey}
-            {...register("confirmPassword", {
-              onChange: (e) => {
-                const noSpaces = removeWhitespace(e.target.value);
-                if (noSpaces !== e.target.value) {
-                  e.target.value = noSpaces;
-                  setValue("confirmPassword", noSpaces, {
-                    shouldValidate: true,
-                  });
-                }
-                trigger("confirmPassword");
-              },
-            })}
-            autoComplete="new-password"
-            className={`${inputClass} pr-10 ${errors.confirmPassword ? "border-red-500" : "border-gray-300"}`}
-          />
-          <button
-            type="button"
-            onClick={() => setShowConfirm((v) => !v)}
-            className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
-            aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
-          >
-            {showConfirm ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
-          </button>
-        </div>
-        {errors.confirmPassword ? (
-          <p className="text-xs leading-4 text-red-500 min-h-4">
-            {errors.confirmPassword?.message as string}
-          </p>
-        ) : (
-          <Hint>{t("confirmPasswordHint")}</Hint>
-        )}
-      </div>
+          {/* Confirm Password */}
+          <div className={fieldWrapper}>
+            <Label className="text-sm" htmlFor="confirmPassword">
+              {t("confirmPassword")} <span className="text-red-500">*</span>
+            </Label>
+            <div className="relative">
+              <Input
+                id="confirmPassword"
+                type={showConfirm ? "text" : "password"}
+                onKeyDown={preventWhitespaceKey}
+                {...register("confirmPassword", {
+                  onChange: (e) => {
+                    const noSpaces = removeWhitespace(e.target.value);
+                    if (noSpaces !== e.target.value) {
+                      e.target.value = noSpaces;
+                      setValue("confirmPassword", noSpaces, {
+                        shouldValidate: true,
+                      });
+                    }
+                    trigger("confirmPassword");
+                  },
+                })}
+                autoComplete="new-password"
+                className={`${inputClass} pr-10 ${errors.confirmPassword ? "border-red-500" : "border-gray-300"}`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirm((v) => !v)}
+                className="absolute inset-y-0 right-0 flex items-center px-3 text-gray-500 hover:text-gray-700 focus:outline-none"
+                aria-label={showConfirm ? t("hidePassword") : t("showPassword")}
+              >
+                {showConfirm ? <Icon name="Eye" /> : <Icon name="EyeClosed" />}
+              </button>
+            </div>
+            {errors.confirmPassword ? (
+              <p className="text-xs leading-4 text-red-500 min-h-4">
+                {errors.confirmPassword?.message as string}
+              </p>
+            ) : (
+              <Hint>{t("confirmPasswordHint")}</Hint>
+            )}
+          </div>
+        </>
+      )}
 
       {/* Contact Number */}
       <div className={fieldWrapper}>
