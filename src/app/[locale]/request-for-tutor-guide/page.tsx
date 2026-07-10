@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import Link from "next/link";
 import { useTranslations, useLocale } from "next-intl";
 import WhatsAppButton from "@/components/shared/whatapp-button";
@@ -9,8 +9,11 @@ import ZoomableImage from "@/components/shared/zoomable-image";
 const RequestForTutorGuidePage = () => {
   const t = useTranslations("requestForTutorGuide");
   const locale = useLocale();
-  const img = (base: string) =>
-    locale === "en" ? base : base.replace(".png", `-${locale}.png`);
+  const img = useCallback(
+    (base: string) =>
+      locale === "en" ? base : base.replace(".png", `-${locale}.png`),
+    [locale],
+  );
 
   const steps = useMemo(
     () => [
@@ -70,7 +73,7 @@ const RequestForTutorGuidePage = () => {
         note: null,
       },
     ],
-    [t],
+    [t, img],
   );
 
   return (

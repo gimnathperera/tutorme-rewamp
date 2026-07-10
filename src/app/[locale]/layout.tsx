@@ -44,7 +44,7 @@ export default async function LocaleLayout({
       <body>
         <Script src="/env-config.js" strategy="afterInteractive" />
         <NextIntlClientProvider locale={params.locale} messages={messages}>
-          <WithProviders>
+          <WithProviders locale={params.locale}>
             <>
               <RouteScrollManager />
               <main className="site-shell bg-lightwhite flex flex-col">

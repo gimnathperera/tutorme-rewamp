@@ -9,6 +9,7 @@ import { WithStore } from "../with-store";
 
 interface Props {
   children: ReactElement;
+  locale?: string;
 }
 
 const TOAST_GUTTER = 16;
@@ -16,23 +17,26 @@ const TOAST_DURATION = 3000;
 const TOAST_POSITION = "bottom-right";
 export const FOOTER_HEIGHT = 80;
 
-const WithGoogleOAuth: FC<{ children: ReactElement }> = ({ children }) => {
+const WithGoogleOAuth: FC<{ children: ReactElement; locale?: string }> = ({
+  children,
+  locale,
+}) => {
   if (!env.google.clientId) {
     // No client ID configured (e.g. local dev without Google OAuth set up) —
     // render children as-is; the "Continue with Google" button hides itself.
     return children;
   }
   return (
-    <GoogleOAuthProvider clientId={env.google.clientId}>
+    <GoogleOAuthProvider clientId={env.google.clientId} locale={locale}>
       {children}
     </GoogleOAuthProvider>
   );
 };
 
-export const WithProviders: FC<Props> = ({ children }) => {
+export const WithProviders: FC<Props> = ({ children, locale }) => {
   return (
     <WithStore>
-      <WithGoogleOAuth>
+      <WithGoogleOAuth locale={locale}>
         <AuthProvider>{children}</AuthProvider>
       </WithGoogleOAuth>
       <Toaster

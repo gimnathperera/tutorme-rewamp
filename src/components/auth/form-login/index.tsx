@@ -193,7 +193,6 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
                   onError={() => setIsAuthError("Google sign-in failed")}
                   useOneTap={false}
                   width="320"
-                  locale={locale}
                 />
               </div>
             </div>
