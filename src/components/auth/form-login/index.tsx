@@ -34,8 +34,13 @@ const FormLogin = ({ onRegisterClick, onForgotPasswordClick }: Props) => {
   const t = useTranslations("auth");
   const params = useParams();
   const locale = (params?.locale as string) ?? "en";
-  const { login, isAuthError, setIsAuthError, isLoading, setAuthenticatedUser } =
-    useAuthContext();
+  const {
+    login,
+    isAuthError,
+    setIsAuthError,
+    isLoading,
+    setAuthenticatedUser,
+  } = useAuthContext();
   const [googleAuth] = useGoogleAuthMutation();
 
   const loginSchema = useMemo(() => createLoginSchema(t), [t]);
