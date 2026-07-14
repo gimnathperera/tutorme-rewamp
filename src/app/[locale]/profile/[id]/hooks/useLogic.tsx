@@ -825,9 +825,7 @@ const useLogic = (): LogicReturnType => {
 
       const validIds = new Set(newOptions.map((o) => o.value));
       const currentSubjects = educationInfoForm.getValues("subjects") ?? [];
-      const filteredSubjects = currentSubjects.filter((id) =>
-        validIds.has(id),
-      );
+      const filteredSubjects = currentSubjects.filter((id) => validIds.has(id));
       educationInfoForm.setValue("subjects", filteredSubjects, {
         shouldDirty: true,
       });

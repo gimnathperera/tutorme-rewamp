@@ -172,10 +172,7 @@ export function TutorTabs() {
     { key: "verification", label: t("verification") },
   ].map((step) => ({ ...step, hasError: stepHasError(step.key as TabKey) }));
 
-  const changeStep = (
-    nextTab: TabKey,
-    options?: { revalidate?: boolean },
-  ) => {
+  const changeStep = (nextTab: TabKey, options?: { revalidate?: boolean }) => {
     // `revalidate` re-runs schema validation for the destination step. Skip it
     // when the caller has already set a manual error that isn't part of the
     // schema (e.g. the per-grade subject check), otherwise the re-validation
@@ -305,6 +302,8 @@ export function TutorTabs() {
         confirmPassword: _omit,
         optionalCertificates,
         referredByCode: rawReferredByCode,
+        password,
+        googleIdToken,
         ...payload
       } = data;
       const referredByCode =
@@ -314,6 +313,9 @@ export function TutorTabs() {
       );
       const normalizedPayload = {
         ...payload,
+        // A Google-authenticated applicant has no password to send — only one
+        // of these two ever gets included in the request.
+        ...(googleIdToken ? { googleIdToken } : { password }),
         certificatesAndQualifications: [
           ...payload.certificatesAndQualifications,
           ...validOptional,

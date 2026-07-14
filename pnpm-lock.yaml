@@ -3,10 +3,6 @@ lockfileVersion: "9.0"
 settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
-  onlyBuiltDependencies:
-    - "@sentry/cli"
-    - core-js
-    - sharp
 
 importers:
   .:
@@ -56,6 +52,9 @@ importers:
       "@radix-ui/react-tabs":
         specifier: ^1.1.13
         version: 1.1.13(@types/react-dom@18.2.4)(@types/react@18.2.6)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      "@react-oauth/google":
+        specifier: ^0.13.5
+        version: 0.13.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       "@reduxjs/toolkit":
         specifier: ^2.4.0
         version: 2.4.0(react-redux@9.1.2(@types/react@18.2.6)(react@18.2.0)(redux@5.0.1))(react@18.2.0)
@@ -2885,6 +2884,15 @@ packages:
       {
         integrity: sha512-HPwpGIzkl28mWyZqG52jiqDJ12waP11Pa1lGoiyUkIEuMLBP0oeK/C89esbXrxsky5we7dfd8U58nm0SgAWpVw==,
       }
+
+  "@react-oauth/google@0.13.5":
+    resolution:
+      {
+        integrity: sha512-xQWri2s/3nNekZJ4uuov2aAfQYu83bN3864KcFqw2pK1nNbFurQIjPFDXhWaKH3IjYJ2r/9yyIIpsn5lMqrheQ==,
+      }
+    peerDependencies:
+      react: ">=16.8.0"
+      react-dom: ">=16.8.0"
 
   "@reduxjs/toolkit@2.4.0":
     resolution:
@@ -10909,6 +10917,11 @@ snapshots:
       "@types/react-dom": 18.2.4
 
   "@radix-ui/rect@1.1.1": {}
+
+  "@react-oauth/google@0.13.5(react-dom@18.2.0(react@18.2.0))(react@18.2.0)":
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
 
   "@reduxjs/toolkit@2.4.0(react-redux@9.1.2(@types/react@18.2.6)(react@18.2.0)(redux@5.0.1))(react@18.2.0)":
     dependencies:

@@ -3,8 +3,7 @@ import { FetchBaseQueryError } from "@reduxjs/toolkit/dist/query";
 import { isUndefined } from "lodash-es";
 
 type ApiResult =
-  | { data: unknown }
-  | { error?: FetchBaseQueryError | SerializedError };
+  { data: unknown } | { error?: FetchBaseQueryError | SerializedError };
 
 // INFO: optional returnType param is to return either the error or message
 export const getErrorInApiResult = (result: ApiResult): string | null => {

@@ -5,9 +5,7 @@ type BlogDetailPageProps = {
   params: { slug: string; locale: string };
 };
 
-export default async function BlogDetailPage({
-  params,
-}: BlogDetailPageProps) {
+export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   const initialBlog = await fetchSeoBlogBySlugOrId(params.slug);
 
   return (

@@ -71,7 +71,7 @@ const DocumentRow = ({
   documentTypeLabel: string;
   uploadFileLabel: string;
   selectTypePlaceholder: string;
-  uploadLabels?: Record<string, string | ((fileName: string) => string)>;
+  uploadLabels?: Record<string, string | ((_fileName: string) => string)>;
 }) => {
   const { trigger } = useFormContext();
   const rowErrors = errors[index] ?? {};
@@ -287,14 +287,14 @@ const FormEducationInfo: FC<Props> = ({
 
   const gradesLabel = t("fieldGrades");
   const subjectsLabel = t("fieldSubjects");
-  const { isDirty, isValid } = form.formState;
+  const { isDirty } = form.formState;
 
   // Run validation whenever a multi-select changes (including when the user
   // removes the last value) so the "<field> is required" message appears
   // immediately. MultiSelect never fires onBlur, so the form's "onTouched"
   // mode would otherwise never re-validate these fields on deselect.
   const handleMultiSelectChange =
-    (fieldName: string, onChange: (selected: string[]) => void) =>
+    (fieldName: string, onChange: (_selected: string[]) => void) =>
     (value: string[]) => {
       onChange(value);
       form.trigger(fieldName);
@@ -308,7 +308,7 @@ const FormEducationInfo: FC<Props> = ({
   // has no matching subject). Driven imperatively so it reacts on every pick
   // without relying on the schema (which can't express the per-grade rule).
   const handleSubjectsChange =
-    (onChange: (selected: string[]) => void) => (value: string[]) => {
+    (onChange: (_selected: string[]) => void) => (value: string[]) => {
       onChange(value);
       const grades = (form.getValues("grades") as string[]) ?? [];
       const coverage = getSubjectCoverageState(grades, value, subjectsByGrade);

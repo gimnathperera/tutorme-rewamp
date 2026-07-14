@@ -11,7 +11,13 @@ interface ZoomableImageProps {
   className?: string;
 }
 
-const ZoomableImage = ({ src, alt, width, height, className }: ZoomableImageProps) => {
+const ZoomableImage = ({
+  src,
+  alt,
+  width,
+  height,
+  className,
+}: ZoomableImageProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {

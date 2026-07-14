@@ -99,15 +99,15 @@ export async function fetchSeoFaqs() {
   return fetchAllPages<Faq>("/v1/faqs");
 }
 
-export const fetchSeoBlogBySlugOrId = cache(async function fetchSeoBlogBySlugOrId(
-  slugOrId: string,
-) {
-  const path = isObjectId(slugOrId)
-    ? `/v1/blogs/${slugOrId}`
-    : `/v1/blogs/slug/${slugOrId}`;
+export const fetchSeoBlogBySlugOrId = cache(
+  async function fetchSeoBlogBySlugOrId(slugOrId: string) {
+    const path = isObjectId(slugOrId)
+      ? `/v1/blogs/${slugOrId}`
+      : `/v1/blogs/slug/${slugOrId}`;
 
-  return fetchSeoJson<Blogs>(path);
-});
+    return fetchSeoJson<Blogs>(path);
+  },
+);
 
 export function getBlogPath(blog: Pick<Blogs, "id" | "slug">) {
   return `/blogs/${blog.slug || blog.id}`;

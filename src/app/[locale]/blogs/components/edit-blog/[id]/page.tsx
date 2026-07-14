@@ -212,8 +212,7 @@ export default function EditBlogPage() {
                 type: "list",
                 items: "items" in c ? (c.items as string[]) : [""],
                 style: ("style" in c ? c.style : "unordered") as
-                  | "ordered"
-                  | "unordered",
+                  "ordered" | "unordered",
               };
             case "embed":
               return {
