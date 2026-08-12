@@ -9,7 +9,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   return createMetadata({
     ...seoPages.requestForTutors,
-    title: "Submit a Home Tutor Request in Sri Lanka | TuitionLanka",
+    title: "Find a Home Tutor in Sri Lanka | TuitionLanka",
     description:
       "Complete your tutor request with grade, subject, medium, location, and learning needs so TuitionLanka can match the right home tutor.",
     path: "/request-for-tutors/create-request",
@@ -29,7 +29,7 @@ export default function CreateTutorRequestLayout({
         path="/request-for-tutors/create-request"
         parents={[
           {
-            name: "Request for Tutors",
+            name: "Find a Tutor",
             path: seoPages.requestForTutors.path,
           },
         ]}

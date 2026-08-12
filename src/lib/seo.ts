@@ -249,7 +249,7 @@ export const seoPages = {
   },
   requestForTutors: {
     path: "/request-for-tutors",
-    title: "Request a Home Tutor in Sri Lanka | TuitionLanka",
+    title: "Find a Home Tutor in Sri Lanka | TuitionLanka",
     description:
       "Submit your tutor request and get matched with a verified home tutor in Sri Lanka. One-to-one and small group classes for primary, O Level, and A Level.",
   },

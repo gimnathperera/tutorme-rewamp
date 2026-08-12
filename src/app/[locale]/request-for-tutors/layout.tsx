@@ -21,7 +21,7 @@ export default function RequestForTutorsLayout({
   return (
     <>
       <PageBreadcrumbJsonLd
-        name="Request for Tutors"
+        name="Find a Tutor"
         path={seoPages.requestForTutors.path}
       />
       {children}
