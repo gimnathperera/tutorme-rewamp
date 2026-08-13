@@ -160,7 +160,7 @@ const RequestForTutorGuidePage = () => {
           <h3 className="text-xl font-bold text-white mb-2">{t("ctaTitle")}</h3>
           <p className="text-sm text-blue-100 mb-5">{t("ctaDesc")}</p>
           <Link
-            href="/request-for-tutors"
+            href="/find-a-tutor"
             className="inline-block rounded-full bg-white px-8 py-2.5 text-sm font-semibold text-primary-600 hover:bg-blue-50 transition-colors"
           >
             {t("ctaButton")}

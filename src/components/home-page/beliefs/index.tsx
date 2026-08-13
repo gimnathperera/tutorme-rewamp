@@ -11,7 +11,7 @@ const Beliefs = () => {
     route.push("/register-tutor");
   };
   const handleOnLearnMoreClick = () => {
-    route.push("/request-for-tutors");
+    route.push("/find-a-tutor");
   };
 
   return (

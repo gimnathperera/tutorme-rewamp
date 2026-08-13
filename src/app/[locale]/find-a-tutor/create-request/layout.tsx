@@ -12,7 +12,7 @@ export async function generateMetadata({
     title: "Find a Home Tutor in Sri Lanka | TuitionLanka",
     description:
       "Complete your tutor request with grade, subject, medium, location, and learning needs so TuitionLanka can match the right home tutor.",
-    path: "/request-for-tutors/create-request",
+    path: "/find-a-tutor/create-request",
     locale: params.locale,
   });
 }
@@ -26,7 +26,7 @@ export default function CreateTutorRequestLayout({
     <>
       <PageBreadcrumbJsonLd
         name="Create Tutor Request"
-        path="/request-for-tutors/create-request"
+        path="/find-a-tutor/create-request"
         parents={[
           {
             name: "Find a Tutor",

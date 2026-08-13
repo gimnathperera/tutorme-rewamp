@@ -248,7 +248,7 @@ export const seoPages = {
       "Join TuitionLanka as a verified home tutor in Sri Lanka. Earn flexible income by offering one-to-one or small group tuition.",
   },
   requestForTutors: {
-    path: "/request-for-tutors",
+    path: "/find-a-tutor",
     title: "Find a Home Tutor in Sri Lanka | TuitionLanka",
     description:
       "Submit your tutor request and get matched with a verified home tutor in Sri Lanka. One-to-one and small group classes for primary, O Level, and A Level.",
@@ -290,7 +290,7 @@ export const seoPages = {
       "Contact TuitionLanka for help with finding a home tutor or registering as a tutor in Sri Lanka. Support for all tutor matching enquiries.",
   },
   findTutor: {
-    path: "/find-a-tutor",
+    path: "/find-a-tutor-form",
     title: "Find a Tutor in Sri Lanka | Request Home Tuition Support",
     description:
       "Find a verified tutor in Sri Lanka for one-to-one and small group home tuition across grades, subjects, mediums, and learning needs.",
