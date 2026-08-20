@@ -100,7 +100,7 @@ const useAuthModalState = (): LogicReturnType => {
           <FormLogin
             onRegisterClick={() => {
               handleCloseAuthModal();
-              router.push("/request-for-tutors/create-request");
+              router.push("/find-a-tutor/create-request");
             }}
             onForgotPasswordClick={() =>
               handleOnChangeForm(FormType.ForgotPassword)

@@ -14,7 +14,7 @@ const Banner = () => {
     "w-full max-w-[18rem] !px-5 !py-3 !text-sm sm:w-auto sm:max-w-none sm:!px-9 sm:!py-3.5 sm:!text-base";
 
   const handleOnFindATutorClick = () => {
-    route.push("/request-for-tutors");
+    route.push("/find-a-tutor");
   };
 
   const handleScrollDown = () => {

@@ -6,7 +6,7 @@ const Digital = () => {
   const route = useRouter();
 
   const handleOnLearnMoreClick = () => {
-    route.push("/request-for-tutors");
+    route.push("/find-a-tutor");
   };
 
   return (
