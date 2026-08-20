@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 const OurTeam = () => {
   const t = useTranslations("ourTeam");
   const videoWrapperRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoVisible, setIsVideoVisible] = useState(false);
 
   useEffect(() => {
@@ -31,6 +32,12 @@ const OurTeam = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    if (isVideoVisible) {
+      videoRef.current?.play();
+    }
+  }, [isVideoVisible]);
+
   return (
     <div className="px-4 pb-8 lg:px-8 lg:pb-12">
       <div className="mx-auto max-w-7xl">
@@ -48,16 +55,16 @@ const OurTeam = () => {
             ref={videoWrapperRef}
             className="lg:w-1/2 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2 aspect-video"
           >
-            {isVideoVisible && (
-              <iframe
-                className="w-full h-full"
-                src="https://www.youtube.com/embed/iH7i5RI0Tek?autoplay=1&mute=1&loop=1&playlist=iH7i5RI0Tek"
-                title="Tuition Lanka | Best platform to find home tuition"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-            )}
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              src="/videos/home/tuitionlankavideo.mp4"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              controls
+            />
           </div>
         </div>
       </div>
