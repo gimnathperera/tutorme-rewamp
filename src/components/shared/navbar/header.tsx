@@ -42,7 +42,7 @@ const Navbar = ({ isHeroTop = false }: NavbarProps) => {
 
   const navigation: NavigationItem[] = [
     { name: t("home"), href: "/" },
-    { name: t("requestForTutor"), href: "/request-for-tutors" },
+    { name: t("requestForTutor"), href: "/find-a-tutor" },
     { name: t("registerAsTutor"), href: "/register-tutor" },
     { name: t("pastExamPapers"), href: "/past-exam-papers" },
     { name: t("tuitionRates"), href: "/tuition-rates" },

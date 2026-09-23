@@ -54,6 +54,17 @@ const nextConfig = withNextIntl({
         destination: "https://www.tuitionlanka.com/:path*",
         permanent: true,
       },
+      // "Request for Tutor" was renamed to "Find a Tutor" - keep old links/bookmarks working.
+      {
+        source: "/:locale(en|si|ta)/request-for-tutors/create-request",
+        destination: "/:locale/find-a-tutor/create-request",
+        permanent: true,
+      },
+      {
+        source: "/:locale(en|si|ta)/request-for-tutors",
+        destination: "/:locale/find-a-tutor",
+        permanent: true,
+      },
     ];
   },
 });

@@ -7,10 +7,13 @@ export async function generateMetadata({
 }: {
   params: { locale: string };
 }): Promise<Metadata> {
-  return createMetadata({ ...seoPages.findTutor, locale: params.locale });
+  return createMetadata({
+    ...seoPages.requestForTutors,
+    locale: params.locale,
+  });
 }
 
-export default function FindATutorLayout({
+export default function RequestForTutorsLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -19,7 +22,7 @@ export default function FindATutorLayout({
     <>
       <PageBreadcrumbJsonLd
         name="Find a Tutor"
-        path={seoPages.findTutor.path}
+        path={seoPages.requestForTutors.path}
       />
       {children}
     </>

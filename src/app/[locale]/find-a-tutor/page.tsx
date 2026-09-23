@@ -1,16 +1,16 @@
-"use client";
-import MainForm from "./components/form-find-a-tutor";
-import { useTranslations } from "next-intl";
+import React from "react";
+import AddRequestForTutorPage from "./create-request/page";
+import WhatsAppButton from "@/components/shared/whatapp-button";
+//import RequestTutorTabs from './components/requestTutorTabs';
 
-const FindATutorForm = () => {
-  const t = useTranslations("findATutor");
-
+const RequestForTutorsPage = () => {
   return (
-    <div className="px-4 sm:px-8 md:px-16 lg:px-32 mb-8">
-      <p className="font-extrabold text-4xl py-8">{t("heading")}</p>
-      <MainForm />
+    <div>
+      <AddRequestForTutorPage />
+      {/* <RequestTutorTabs /> */}
+      <WhatsAppButton />
     </div>
   );
 };
 
-export default FindATutorForm;
+export default RequestForTutorsPage;

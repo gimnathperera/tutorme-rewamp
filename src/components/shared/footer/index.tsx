@@ -15,7 +15,7 @@ const Footer = () => {
       section: t("menuSection"),
       link: [
         { label: t("home"), url: "/" },
-        { label: t("requestForTutor"), url: "/request-for-tutors" },
+        { label: t("requestForTutor"), url: "/find-a-tutor" },
         { label: t("registerAsTutor"), url: "/register-tutor" },
         { label: t("contactUs"), url: "/contact-us" },
       ],

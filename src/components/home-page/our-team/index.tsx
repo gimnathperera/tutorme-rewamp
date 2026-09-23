@@ -1,11 +1,42 @@
 "use client";
 
-import Image from "next/image";
-import TutorImage from "/images/beliefs/teaching.png";
+import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 const OurTeam = () => {
   const t = useTranslations("ourTeam");
+  const videoWrapperRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoVisible, setIsVideoVisible] = useState(false);
+
+  useEffect(() => {
+    const el = videoWrapperRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVideoVisible(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.4,
+      },
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (isVideoVisible) {
+      videoRef.current?.play();
+    }
+  }, [isVideoVisible]);
 
   return (
     <div className="px-4 pb-8 lg:px-8 lg:pb-12">
@@ -20,13 +51,19 @@ const OurTeam = () => {
               {t("body")}
             </p>
           </div>
-          <div className="lg:w-1/2 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2">
-            <Image
-              src={TutorImage}
-              alt="office-image"
-              height={684}
-              width={1296}
-              className="w-full h-auto object-cover"
+          <div
+            ref={videoWrapperRef}
+            className="lg:w-1/2 rounded-3xl overflow-hidden shadow-lg animate-on-scroll stagger-2 aspect-video"
+          >
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover"
+              src="/videos/home/tuitionlankavideo.mp4"
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              controls
             />
           </div>
         </div>

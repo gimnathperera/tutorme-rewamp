@@ -14,10 +14,10 @@ type SitemapEntry = {
 
 const staticRoutes = [
   { path: "/", priority: 1 },
-  { path: "/request-for-tutors", priority: 0.8 },
-  { path: "/request-for-tutors/create-request", priority: 0.7 },
-  { path: "/register-tutor", priority: 0.8 },
   { path: "/find-a-tutor", priority: 0.8 },
+  { path: "/find-a-tutor/create-request", priority: 0.7 },
+  { path: "/register-tutor", priority: 0.8 },
+  { path: "/find-a-tutor-form", priority: 0.8 },
   { path: "/grades-and-subjects", priority: 0.8 },
   { path: "/past-exam-papers", priority: 0.8 },
   { path: "/tuition-rates", priority: 0.8 },

@@ -11,7 +11,12 @@
       "Bash(curl -s -D - -o /dev/null https://www.tuitionlanka.com/robots.txt)",
       "Bash(curl -s https://www.tuitionlanka.com/robots.txt)",
       "Bash(curl -s -D - -o /dev/null \"https://www.tuitionlanka.com/blogs/why-one-to-one-tuition-helps-sri-lankan-students-achieve-better-academic-results\")",
-      "Bash(curl -s -D - -o /dev/null \"https://www.tuitionlanka.com/en/blogs/beyond-the-billboards-the-hidden-truth-behind-sri-lankas-mega-tuition-classes\")"
+      "Bash(curl -s -D - -o /dev/null \"https://www.tuitionlanka.com/en/blogs/beyond-the-billboards-the-hidden-truth-behind-sri-lankas-mega-tuition-classes\")",
+      "Bash(npx tsc *)",
+      "Bash(node -e \"require\\('./next.config.js'\\); console.log\\('config OK'\\)\")",
+      "Bash(npx next *)",
+      "Read(//tmp/**)",
+      "Bash(sleep 8; cat /tmp/dev.log 2>/dev/null | tail -30)"
     ]
   }
 }

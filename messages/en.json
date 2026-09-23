@@ -1,7 +1,7 @@
 {
   "nav": {
     "home": "Home",
-    "requestForTutor": "Request for Tutor",
+    "requestForTutor": "Find a Tutor",
     "registerAsTutor": "Register as a Tutor",
     "academics": "Academics",
     "gradesAndSubjects": "Grades & Subjects",
@@ -23,8 +23,8 @@
     "academicsSection": "Academics",
     "tuitionSection": "Tuition",
     "home": "Home",
-    "requestForTutor": "Request for Tutor",
-    "requestForTutorGuide": "Request for Tutor Guide",
+    "requestForTutor": "Find a Tutor",
+    "requestForTutorGuide": "Find a Tutor Guide",
     "registerAsTutor": "Register as a Tutor",
     "registerAsTutorGuide": "Register as a Tutor Guide",
     "contactUs": "Contact Us",
@@ -41,7 +41,7 @@
   },
   "banner": {
     "headline": "Personalized & Verified Home Tuition",
-    "requestForTutor": "Request for Tutor",
+    "requestForTutor": "Find a Tutor",
     "registerAsTutor": "Register as a Tutor",
     "enquireWhatsapp": "Enquire on Whatsapp"
   },
@@ -62,7 +62,7 @@
     "findHeadingHighlight": "Find",
     "findHeadingMain": "the perfect tutor for any subject, anytime.",
     "findBody": "Discover experienced tutors who match your learning goals and schedule.",
-    "requestForTutor": "Request for Tutor"
+    "requestForTutor": "Find a Tutor"
   },
   "ourTeam": {
     "heading": "Our team believes you deserve only the best learning experience.",
@@ -122,7 +122,7 @@
     "backToHome": "Back to Homepage"
   },
   "findATutor": {
-    "heading": "Request for Tutor"
+    "heading": "Find a Tutor"
   },
   "tuitionAssignments": {
     "heading": "Find An Assignment"
@@ -348,7 +348,7 @@
     "incompleteStepWarning": "Some required fields in last step are not completed."
   },
   "requestForTutor": {
-    "pageTitle": "Request for Tutor",
+    "pageTitle": "Find a Tutor",
     "contactDetails": "Contact Details",
     "fullName": "Full Name",
     "fullNameHint": "Letters and spaces only",
@@ -994,7 +994,7 @@
     "ctaButton": "Register as a Tutor"
   },
   "requestForTutorGuide": {
-    "pageTitle": "Request for Tutor - User Guide",
+    "pageTitle": "Find a Tutor - User Guide",
     "pageSubtitle": "Follow the steps below to submit your tutor request on TuitionLanka.",
     "topNote": "All fields marked with an asterisk (*) are required. The \"Number of Tutors\" field defaults to 1 and can be increased. Fill in the required details for each tutor you add.",
     "step1Title": "Contact Details",
@@ -1027,6 +1027,6 @@
     "step2PreferredClassTypeDesc": "Select the preferred class format (e.g., physical or online).",
     "ctaTitle": "Ready to find a tutor?",
     "ctaDesc": "Submit your request and get matched with the right tutor for your needs.",
-    "ctaButton": "Request for Tutor"
+    "ctaButton": "Find a Tutor"
   }
 }
